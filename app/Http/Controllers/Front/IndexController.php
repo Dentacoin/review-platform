@@ -256,6 +256,7 @@ class IndexController extends FrontController {
 			],
 			'css' => [
                 'flickity.min.css',
+                'trp-index.css',
 			]
         );
 
@@ -614,6 +615,9 @@ class IndexController extends FrontController {
 	            'seo_description' => $seos->seo_description,
 	            'social_title' => $seos->social_title,
 	            'social_description' => $seos->social_description,
+	            'css' => [
+	            	'trp-lead-magnet.css'
+	            ],
 	        ));
     	} else {
     		if(!empty($this->user)) {

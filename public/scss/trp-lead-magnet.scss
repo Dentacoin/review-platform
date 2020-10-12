@@ -1,0 +1,533 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+
+
+
+.lead-magnet-wrapper {
+
+	.sign {
+		max-width: 76px;
+
+		@media #{$phone} {
+			max-width: 50px;
+		}
+	}
+
+	.lead-magnet-top {
+		position: relative;
+		height: 1px;
+		margin-bottom: 100px;
+
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			margin-bottom: 50px;
+		}
+
+		@media #{$tablet} {
+			border-top: 40px solid #1591d9;
+    		padding-top: 40px;
+    		margin-bottom: 10px;
+		}
+
+		@media #{$phone} {
+    		padding-top: 30px;
+    		margin-bottom: 0px;
+		}
+
+		&:after {
+			content: '';
+			background: url(../img-trp/index-bottom-gradient.svg) 50% 0% no-repeat;
+			background-size: cover;
+			height: 140px;
+			top: -1px;
+			width: 100%;
+			left: 0;
+			right: 0;
+			position: absolute;
+		}
+	}
+
+	.lead-magnet-overall {
+		text-align: center;
+
+		h1 {
+			font-size: 35px;
+			font-weight: bold;
+		    max-width: 550px;
+		    margin-left: auto;
+		    margin-right: auto;
+		    margin-top: 10px;
+		    margin-bottom: 20px;
+
+		    @media screen and (max-height: 800px) and (min-width: 769px ) {
+			    font-size: 30px;
+			}
+
+		    @media #{$phone} {
+		    	font-size: 26px;
+		    }
+
+		    &.red {
+		    	color: #f34760;
+		    }
+
+		    &.yellow {
+		    	color: #f3c447;
+		    }
+
+		    &.green {
+		    	color: #6ebdbe;
+		    }
+		}
+
+		h4 {
+			font-weight: bold;
+			color: #333;
+			font-size: 24px;
+
+			@media screen and (max-height: 800px) and (min-width: 769px ) {
+			    font-size: 22px;
+			}
+
+			@media #{$phone} {
+		    	font-size: 19px;
+		    }
+		}
+	}
+
+	.flex-charts {
+		max-width: 840px;
+		margin: 50px auto 70px;
+
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			margin: 30px auto;
+		}
+
+		@media #{$tablet} {
+			margin-bottom: 130px;
+		}
+
+		@media #{$phone} {
+			margin-top: 30px;
+		}
+	}
+
+	.pie-chart {
+	  	width: 250px;
+	  	justify-content: space-around;
+	  	margin-right: 40px;
+
+	  	@media screen and (max-height: 800px) and (min-width: 769px ) {
+			width: 170px;
+		}
+
+	  	@media #{$tablet} {
+	  		width: 200px;
+	  	}
+
+	  	@media #{$phone} {
+	  		margin-left: auto;
+	  		margin-right: auto;
+	  		margin-bottom: 20px;
+	  		width: 150px;
+	  	}
+
+		.circular-chart {
+			display: block;
+			max-height: 250px;
+		}
+
+		.circle-bg {
+			fill: none;
+			stroke: #e1e1e1;
+			stroke-width: 2.3;
+		}
+
+		.circle {
+			fill: none;
+			stroke-width: 2.3;
+			animation: progress 1s ease-out forwards;
+			//animation-delay: 1s;
+			stroke: #37bde9;
+		}
+
+		@keyframes progress {
+			0% {
+				stroke-dasharray: 0 100;
+			}
+		}
+
+		.percentage {
+			fill: #333;
+			font-size: 0.8em;
+			font-weight: bold;
+			text-anchor: middle;
+		}
+
+		.info {
+			fill: #333;
+			font-size: 0.22em;
+			font-weight: bold;
+			text-anchor: middle;
+		}
+	}
+
+	.column-chart {
+		flex: 1;
+    	text-align: left;
+
+    	h4 {
+    		color: black;
+    		margin-bottom: 10px;
+    		font-size: 26px;
+
+    		@media screen and (max-height: 800px) and (min-width: 769px ) {
+				margin-bottom: 5px;
+    			font-size: 20px;
+			}
+
+    		@media #{$tablet} {
+    			font-size: 22px;
+    		}
+
+    		@media #{$phone} {
+    			font-size: 18px;
+    		}
+
+    		&:first-child {
+    			margin-top: 10px;
+
+    			@media screen and (max-height: 800px) and (min-width: 769px ) {
+					margin-top: 0px;
+				}
+    		}
+    	}
+
+    	.result-column {
+    		height: 11px;
+		    width: 100%;
+		    background-color: #e1e1e1;
+		    border-radius: 10px;
+		    position: relative;
+		    overflow: hidden;
+		    margin-bottom: 18px;
+
+		    @media #{$phone} {
+		    	margin-bottom: 7px;
+		    }
+
+		    .result-percentage {
+		    	background-image: url('../img-trp/gradient-magnet.jpg');
+		    	position: absolute;
+			    left: 0px;
+			    height: 100%;
+			    background-size: cover;
+			    background-position: 0% 50%;
+		    }
+    	}
+	}
+
+	.lead-magnet-tips {
+		align-items: center;
+	    box-shadow: 0px 0 61px -7px #00000029;
+	    border-radius: 20px;
+	    margin-bottom: 85px;
+
+	    @media #{$tablet} {
+	    	display: block;
+	    }
+
+	    @media #{$phone} {
+	    	margin-bottom: 55px;
+	    }
+
+		.tips-content {
+			text-align: left;
+		    font-size: 20px;
+		    padding-right: 25px;
+		    padding-top: 20px;
+		    padding-bottom: 30px;
+		    line-height: 29px;
+
+		    @media #{$tablet} {
+		    	padding-left: 25px;
+		    }
+
+		    @media #{$phone} {
+		    	padding: 20px;
+		    	font-size: 18px;
+		    	line-height: 27px;
+		    }
+
+			h2 {
+				font-size: 34px;
+			    font-weight: 900;
+			    color: black;
+			    margin-bottom: 20px;
+
+			    @media #{$tablet} {
+			    	text-align: center;
+			    }
+
+			    img {
+					max-width: 45px;
+					vertical-align: bottom;
+					margin-right: 5px;
+			    }
+			}
+
+			b {
+				font-size: 20px;
+
+				@media #{$phone} {
+					font-size: 18px;
+				}
+			}
+		}
+
+		.tips-image {
+			min-width: 318px;
+
+			@media screen and (max-height: 800px) and (min-width: 769px ) {
+			    min-width: 238px;
+			}
+
+			@media #{$tablet} {
+				min-width: auto;
+			}
+
+			img {
+				transform: scale(1.2);
+    			margin-left: -140px;
+
+    			@media #{$tablet} {
+    				transform: none;
+    				margin-left: 0px;
+					margin-top: -90px;
+					max-width: 200px;
+    			}
+			}
+		}
+	}
+
+	.country-dentist-rating {
+		background-image: url('../img-trp/country-background.jpg');
+		background-size: cover;
+		text-align: center;
+		margin-top: 85px;
+		padding: 30px 0px;
+
+		@media #{$phone} {
+			margin-top: 55px;
+		}
+
+		h2 {
+			font-size: 34px;
+			color: white;
+			text-transform: uppercase;
+			font-weight: bold;
+
+			img {
+				max-width: 22px;
+				margin-right: 3px;
+			}
+
+			span {
+				font-size: 39px;
+				text-transform: none;
+				color: white;
+				font-weight: bold;
+			}
+
+			nl {
+				@media #{$phone} {
+					display: block;
+				}
+			}
+		}
+
+		.rating-wrapper {
+			display: flex;
+			max-width: 796px;
+			margin-right: auto;
+			margin-left: auto;
+
+			@media #{$phone} {
+				display: block;
+			}
+
+			.block {
+				background-color: #085c82;
+				flex: 1;
+				text-align: center;
+				padding: 15px;
+				border-radius: 20px;
+
+				img {
+					max-width: 122px;
+				}
+
+				h3 {
+					max-width: 250px;
+					color: white;
+				    margin-right: auto;
+				    margin-left: auto;
+				    margin-bottom: 10px;
+
+				    @media #{$phone} {
+				    	font-size: 30px;
+				    }
+				}
+
+				p {
+					font-size: 34px;
+				    font-weight: 900;
+				    color: white;
+				}
+			}
+
+			.avg-rating {
+				margin-right: 15px;
+
+				@media #{$phone} {
+					margin-right: 0px;
+					margin-bottom: 20px;
+				}
+
+				.ratings {
+					margin-top: 0px;
+				}
+			}
+
+			.avg-reviews {
+
+			}
+		}
+
+		.rating-info {
+			font-size: 20px;
+		    font-weight: 300;
+		    color: white;
+		    margin-top: 30px;
+		    margin-bottom: 10px;
+		}
+	}
+
+	.lead-magnet-info {
+		padding: 50px 10px;
+		
+		.trp-logo {
+			max-width: 160px;
+			margin-bottom: 30px;
+		}
+
+		h2 {
+			font-size: 34px;
+			font-weight: bold;
+			color: black;
+			margin-bottom: 60px;
+			max-width: 600px;
+		    margin-left: auto;
+		    margin-right: auto;
+		    text-transform: uppercase;
+
+		    @media #{$phone} {
+		    	font-size: 30px;
+		    	margin-bottom: 40px;
+		    }
+		}
+
+		.info-box {
+			align-items: center;
+		    margin-bottom: 30px;
+		    max-width: 840px;
+		    margin-left: auto;
+		    margin-right: auto;
+
+		    @media #{$phone} {
+		    	margin-bottom: 40px;
+		    }
+
+			.info-icon {
+				margin-right: 40px;
+
+				@media #{$phone} {
+					margin-right: 0px;
+					margin-bottom: 10px;
+				}
+
+				img {
+					max-width: 206px;
+				}
+			}
+
+			.info-text {
+				text-align: left;
+
+				@media #{$phone} {
+					text-align: center;
+				}
+
+				h3 {
+					font-size: 34px;
+					margin-bottom: 10px;
+
+					@media #{$phone} {
+						font-size: 30px;
+					}
+				}
+
+				p {
+					font-weight: 300;
+					color: #232323;
+					font-size: 20px;
+				}
+			}
+		}
+
+		.get-started {
+			margin-top: 60px;
+			margin-bottom: 46px;
+
+			@media #{$phone} {
+				margin-top: 30px;
+				margin-bottom: 10px;
+			}
+		}
+	}
+}
+
+.get-started {
+	display: inline-block;
+	background-color: #46afda;
+	color: white;
+	text-transform: uppercase;
+	position: relative;
+	font-size: 25px;
+	font-weight: bold;
+	padding: 12px 38px;
+	border-radius: 5px;
+
+	@media #{$phone} {
+		margin-right: -30px;
+	}
+
+	&:after {
+		content: '';
+	    position: absolute;
+	    left: -80px;
+	    background-image: url('../img-trp/button-logo.png');
+	    width: 96px;
+	    height: 96px;
+	    background-size: 100%;
+	    top: 50%;
+	    transform: translateY(-50%);
+
+	    @media #{$phone} {
+	    	width: 76px;
+			height: 76px;
+			left: -40px;
+	    }
+	}
+}

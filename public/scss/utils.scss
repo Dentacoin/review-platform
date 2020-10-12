@@ -540,3 +540,693 @@ h4 {
 		}
 	}
 }
+
+
+a.text {
+	color: #126585;
+	text-decoration: underline;
+    font-size: inherit;
+
+	&:hover {
+		color: #268db5;
+	}
+}
+
+.site-content {
+	overflow-x: hidden; 
+}
+
+.gray-background {
+	background-color: #f7f7f7;
+}
+
+.black-overflow {
+	position: fixed;
+    background: rgba(0, 0, 0, 0.6);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 101;
+}
+
+body.dark {
+	.black-overflow {
+		display: block !important;
+	}
+
+	&.guided-tour {
+		overflow-y: hidden;
+		
+		.black-overflow {
+			display: none !important;
+		}
+
+		.strength-parent {
+			display: none !important;
+		}
+	}
+}
+
+body.popup-visible {
+	overflow-y: hidden;
+}
+
+.button {
+	color: white;
+	font-size: 20px;
+	text-transform: uppercase;
+	background-color: #126585;
+	padding: 10px 20px;
+    display: inline-block;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    outline: none;
+    border: none;
+
+    &:hover {
+    	background-color: #268db5;
+    	transition: all 0.3s ease;
+    }
+
+    &.button-white {
+    	background-color: white;
+    	color: #126585;
+    }
+
+    &.button-yellow {
+    	background-color: #fdc734;
+    	color: black;
+		font-size: 24px;
+
+    	&:hover {
+    		background-color: #f7d16a;
+    	}
+    }
+}
+
+.button-inner-white {
+	background-color: #f7f7f7;
+    border: 1px solid #126585;
+    color: #126585;
+
+    &:hover {
+    	background-color: #f7f7f7;
+    	transition: all 0.3s ease;
+    }
+}
+.ratings {
+    margin-top: 20px;
+
+    .stars {
+        width: 74px;
+        height: 14px;
+        display: inline-block;
+        background: url('../img-trp/stars-gray.png') 50% 50% no-repeat;
+        background-size: contain;
+
+        .bar {
+            background: url('../img-trp/stars-blue.png') 0% 50% no-repeat;
+            background-size: cover;
+            height: 14px;
+        }
+    }
+
+    .rating {
+		font-size: 12px;
+		font-weight: 300;
+    }
+
+    &.big {
+	    .stars {
+	        width: 186px;
+	        height: 35px;
+	        background: url('../img-trp/stars-gray-big.png') 50% 50% no-repeat;
+	        background-size: contain;
+
+	        .bar {
+	            background: url('../img-trp/stars-blue-big.png') 0% 50% no-repeat;
+	            background-size: cover;
+	            height: 35px;
+	        }
+	    }
+    }	
+
+    &.biggest {
+	    .stars {
+	        width: 230px;
+	        height: 43px;
+	        background: url('../img-trp/stars-gray-big.png') 50% 50% no-repeat;
+	        background-size: contain;
+
+	        .bar {
+	            background: url('../img-trp/stars-blue-big.png') 0% 50% no-repeat;
+	            background-size: cover;
+	            height: 43px;
+	        }
+	    }
+    }	
+
+    &.average {
+	    .stars {
+	        width: 132px;
+	        height: 25px;
+	        background: url('../img-trp/stars-gray-average.png') 50% 50% no-repeat;
+	        background-size: contain;
+
+	        .bar {
+	            background: url('../img-trp/stars-blue-average.png') 0% 50% no-repeat;
+	            background-size: cover;
+	            height: 25px;
+	        }
+	    }
+    }
+}
+
+.input {
+	display: block;
+	width: 100%;
+    height: 32px;
+    margin-bottom: 13px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    box-shadow: -3px 3px 7px 1px #d8d8d8;
+    padding: 0px 15px;
+    background: white;
+
+    @media #{$tablet} {
+		width: 100%;
+	}
+
+    &:focus {
+    	box-shadow: rgba(10, 173, 226, 0.41);
+    	outline: none;
+    }
+
+    &.has-error {
+    	background: rgba(255, 0, 0, 0.2);
+    }
+
+	&[disabled] {
+		background: #e5e9ed;
+		opacity: .6;
+		cursor: not-allowed;
+	}
+}
+
+textarea.input {
+	width: 100%;
+	padding-top: 10px;
+	height: 260px;
+	font: inherit;
+	font-size: 16px;
+
+	&::placeholder {
+		font: inherit;
+		font-size: 16px;
+	}
+}
+
+.image-label {
+	cursor: pointer;
+	width: 150px;
+    height: 150px;
+    display: block;
+    background-color: #e3e3e3;
+    border: 2px dashed #777777;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    background-size: cover;
+    background-position: 50% 50%;
+
+    @media #{$phone} {
+    	width: 120px;
+    	height: 120px;
+    }
+
+    p {
+    	font-size: 18px;
+	    color: #777777;
+	    font-weight: 300;
+    }
+
+    i {
+    	font-size: 30px;
+    	color: #777777;
+    }
+
+	input {
+		display: none;
+	}
+
+
+    .loader {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        text-align: center;
+        padding: 20px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.3);
+        color: white;
+        width: 100px;
+        height: 100px;
+        line-height: 80px;
+
+        i {
+        	color: white;
+        	background: none;
+        	font-size: 40px;
+        }
+    }
+
+    &.loading {
+        .loader {
+            display: block;
+        }
+
+        .centered-hack {
+            display: none;
+        }
+    }
+}
+
+.radio-label {
+	input {
+	    display: none;
+	}
+
+	label {
+	    padding-left: 0px;
+	    display: inline;
+	    font-size: 16px;
+	    cursor: pointer;
+
+	    i {
+		    padding-right: 4px;
+		    font-size: 13px;
+		    color: #138ab8;
+		}
+
+		&.active {
+			i:before {
+			    content: "\f192";
+			}
+		}
+	}
+}
+
+.checkbox-label {
+	display: block;
+	min-width: 150px;
+	text-align: center;
+    font-size: 16px;
+    font-weight: normal;
+	color: #333333;
+	cursor: pointer;
+
+	&.has-error {
+	    i {
+			color: rgba(255, 0, 0, 0.6);
+	    }
+	}
+
+	input {
+		display: none;
+	}
+
+	i {
+		vertical-align: bottom;
+    	margin-top: 10px;
+    	margin-right: 5px;
+    	color: #126585;
+    	vertical-align: text-bottom;
+    	font-size: 20px;
+
+    	@media #{$tablet} {
+    		vertical-align: inherit;
+    		font-size: 16px;
+    	}
+	}
+
+	&.active {
+		i {
+			font-weight: 900;
+			color: #126585;
+
+			&:before {
+				content: '\f14a';
+			}
+		}
+	}
+
+	a {
+		color: #38a2e5;
+		font-size: 14px;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	&.agree-label {
+		a {
+			color: black;
+			font-size: 16px;
+			color: #126585;
+		}
+	}
+}
+
+.modern-field {
+	margin-bottom: 25px;
+	position: relative;
+
+	@media #{$phone} {
+		margin-bottom: 15px;
+	}
+
+	& + .ajax-alert {
+		margin-top: -20px;
+
+		@media #{$phone} {
+			margin-top: -10px;
+		}
+	}
+
+	p {
+		font-size: 14px;
+		font-weight: 300;
+		color: #888888;
+		padding-left: 10px;
+
+		@media #{$tablet} {
+			font-size: 12px;
+		}
+	}
+
+	.modern-input,
+	span,
+	label {
+		display: block;
+		margin: 10px;
+		padding: 5px;
+		border: none;
+		font-size: 22px;
+	}
+
+	.modern-input:focus {
+		outline: 0;
+	}
+
+	.modern-input {
+		padding-left: 20px;
+		font-size: 17px;
+		height: 58px;
+		font-weight: 300;
+		border-radius: 4px;
+		margin: 0;
+		border: 2px solid #cccccc;
+		width: 100%;
+		transition: padding-top 0.2s ease, margin-top 0.2s ease;
+		overflow-x: hidden;
+		background-color: white;
+		/* Hack to make "rows" attribute apply in Firefox. */
+
+		@media #{$tablet} {
+			font-size: 14px;
+    		height: 45px;
+		}
+
+		&.has-error {
+			border-color: rgba(255, 0, 0, 0.2);
+		}
+
+		&:-webkit-autofill {
+		    background-color: transparent !important;
+		}
+
+		&.disabled {
+			background: #f1f1f1;
+    		cursor: no-drop;
+		}
+	}
+
+	textarea.modern-input {
+		height: 96px;
+		resize: none;
+	}
+
+	.modern-input+label {
+		display: block;
+		position: relative;
+		white-space: nowrap;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		-webkit-transition: width 0.4s ease;
+		transition: width 0.4s ease;
+		height: 3px;
+	}
+
+	.modern-input+label>span {
+		font-weight: 300;
+		margin: 0;
+		position: absolute;
+		color: #888888;
+		font-size: 16px;
+		top: -46px;
+		left: 0px;
+		margin-left: 9px;
+		background-color: white;
+		-webkit-transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+		transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+
+		@media #{$tablet} {
+			font-size: 14px;
+    		top: -37px;
+		}
+	}
+
+	textarea.modern-input+label>span {
+		top: -86px;
+	}
+
+	@keyframes appear {
+		100% {
+			opacity: 1;
+		}
+	}
+
+	&.active {
+		label {
+			width: 100%;
+		}
+
+		.modern-input {
+			padding-top: 5px;
+			border-color: #126585;
+
+			&.has-error {
+				border-color: rgba(255, 0, 0, 0.2);
+			}
+		}
+
+		textarea.modern-input {
+			padding-top: 15px;
+		}
+
+		.modern-input+label>span {
+			top: -73px;
+			color: #126585;
+
+			@media #{$tablet} {				
+	    		top: -60px;
+			}
+		}
+
+		textarea.modern-input+label>span {
+			top: -111px;
+		}
+
+		.search-icon {
+			background-color: #126585;
+		}
+	}
+
+	.suggest-results {
+		top: calc(100% - 16px) !important;
+	}
+
+	.search-icon {
+		position: absolute;
+		right: 1px;
+		top: 1px;
+		height: 56px;
+		width: 45px;
+		background-color: #888888;
+		color: white;
+		text-align: center;
+		line-height: 56px;
+		border-radius: 3px;
+
+		@media #{$tablet} {
+		    height: 43px;
+		    line-height: 43px;
+		}
+	}
+
+	&.modern-file {
+
+		label {
+			padding-left: 20px;
+		    font-size: 17px;
+		    height: 58px;
+		    font-weight: 300;
+		    border-radius: 4px;
+		    margin: 0;
+		    border: 2px solid #cccccc;
+		    width: 100%;
+		    transition: padding-top 0.2s ease, margin-top 0.2s ease;
+		    overflow-x: hidden;
+		    position: relative;
+
+		    @media #{$tablet} {
+				height: 45px;
+			}
+
+		    .file-name {
+		    	line-height: 42px;
+
+		    	@media #{$tablet} {
+		    		line-height: 31px;
+		    	}
+		    }
+
+		    .file-submit {
+		    	position: absolute;
+		    	width: 130px;
+		    	background-color: #ccc;
+		    	color: black;
+		    	font-size: 18px;
+		    	right: 0px;
+				top: 0;
+				bottom: 0;
+				line-height: 54px;
+				text-align: center;
+				font-weight: 500;
+
+				@media #{$tablet} {
+					line-height: 40px;
+					font-size: 16px;
+				}
+		    }
+		}
+
+		input {
+			display: none;
+		}
+
+		&.has-error {
+			label {
+				border-color: rgba(255, 0, 0, 0.2);
+
+				.file-submit {
+					background-color: rgba(255, 0, 0, 0.2);
+				}
+			}
+			
+		}
+
+		&.active {
+			label {
+				border-color: #126585;
+
+				.file-submit {
+					background-color: #126585;
+					color: white;
+				}
+			}
+		}
+	}
+}
+
+.modern-radios {
+	display: flex;
+
+	.radio-label {
+		label {
+			display: block;
+			border: 2px solid #ccc;
+			padding: 7px 9px;
+			border-radius: 4px;
+			font-size: 18px;
+			color: #888888;
+
+			@media #{$tablet} {
+				font-size: 14px;
+				padding: 11px 9px;
+			}
+
+			.modern-radio {
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				border: 1px solid #ccc;
+				display: inline-block;
+				background-color: white;
+				position: relative;
+				vertical-align: sub;
+
+				@media #{$tablet} {
+					width: 16px;
+					height: 16px;
+					margin-right: 5px;
+				}
+
+				span {
+					position: absolute;
+					border-radius: 50%;
+					top: 50%;
+					left: 50%;
+					transform: translateX(-50%) translateY(-50%);
+					width: 10px;
+					height: 10px;
+				}
+			}
+			&.active {
+				color: black;
+				border-color: #126585;		
+				span {
+					span {
+						background-color: #666666;
+					}
+				}
+			}
+		}
+
+		&:first-child {
+			margin-right: 38px;
+		}
+
+		>span {
+			font-size: 12px;
+			color: #888888;
+		}
+	}
+
+	&.has-error {
+		.radio-label {
+			label {
+				border-color: #ffd7d7;
+			}
+		}
+	}
+}

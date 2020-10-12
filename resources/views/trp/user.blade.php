@@ -691,9 +691,7 @@
 	    			{!! nl2br(trans('trp.page.user.overview')) !!}
 	    		</h2>
 	    	</div>
-
 	    	<div class="review-chart {{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'with-three-columns' : '' }}">
-		    	<img class="slide-animation" src="{{ url('img-trp/slide.gif') }}">
 	    		<div class="chart-stars">
 		    		<img src="{{ url('img-trp/five-stars.png') }}">
 		    		<img src="{{ url('img-trp/four-stars.png') }}">
@@ -703,8 +701,17 @@
 		    	</div>
 		    	<div class="review-charts-wrapper">
 	    			<div id="reviews-chart" class="{{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'three-columns' : '' }}">
-	    				
-	    				<div class="chart-overlap"></div>
+	    				<div class="chart-outher">
+	    					@for($i=0;$i<=5;$i++)
+	    						<div class="chart-line"></div>
+	    					@endfor 
+	    					@foreach($aggregated as $lab => $rat)
+	    						<div class="chart-parent">
+	    							<div class="chart tooltip-text" text="{{ number_format($rat,2) }}" to-height="{{ number_format($rat,2) }}" style="transition-delay: {{ $loop->iteration == 1 ? 0.5 : 0.5+ ($loop->iteration / 10) }}s;"></div>
+	    							<div class="chart-label">{{ $lab }}</div>
+	    						</div>
+	    					@endforeach
+		    			</div>
 	    			</div>
 	    		</div>
 	    	</div>
@@ -1490,6 +1497,8 @@
 <script type="text/javascript">
 	var aggregated_reviews = {!! json_encode($aggregated, JSON_HEX_QUOT) !!};
 	var load_maps = {!! $load_maps !!};
+	var load_lightbox = {!! $load_lightbox !!};
+	var load_flickity = {!! $load_flickity !!};
 </script>
 
 @endsection

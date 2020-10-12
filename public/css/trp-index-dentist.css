@@ -530,3 +530,20 @@
       top: 30%; } }
   .testimonials-section .flickity-button {
     color: #6fb6d4 !important; }
+
+body.page-welcome-dentist .site-content {
+  overflow: visible; }
+body.page-welcome-dentist .site-content > .container:first-child .button {
+  display: none;
+  margin-top: 30px;
+  margin-bottom: -10px; }
+  @media screen and (max-width: 768px) {
+    body.page-welcome-dentist .site-content > .container:first-child .button {
+      display: inline-block; } }
+@media screen and (max-width: 768px) {
+  body.page-welcome-dentist .site-content > .container:first-child {
+    background-color: #f7f7f7; } }
+
+@media screen and (max-width: 998px) {
+  .tablet-fixes input {
+    min-width: unset !important; } }

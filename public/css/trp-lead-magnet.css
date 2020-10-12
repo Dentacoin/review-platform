@@ -1,0 +1,370 @@
+.lead-magnet-wrapper .sign {
+  max-width: 76px; }
+  @media screen and (max-width: 768px) {
+    .lead-magnet-wrapper .sign {
+      max-width: 50px; } }
+.lead-magnet-wrapper .lead-magnet-top {
+  position: relative;
+  height: 1px;
+  margin-bottom: 100px; }
+  @media screen and (max-height: 800px) and (min-width: 769px) {
+    .lead-magnet-wrapper .lead-magnet-top {
+      margin-bottom: 50px; } }
+  @media screen and (max-width: 998px) {
+    .lead-magnet-wrapper .lead-magnet-top {
+      border-top: 40px solid #1591d9;
+      padding-top: 40px;
+      margin-bottom: 10px; } }
+  @media screen and (max-width: 768px) {
+    .lead-magnet-wrapper .lead-magnet-top {
+      padding-top: 30px;
+      margin-bottom: 0px; } }
+  .lead-magnet-wrapper .lead-magnet-top:after {
+    content: '';
+    background: url(../img-trp/index-bottom-gradient.svg) 50% 0% no-repeat;
+    background-size: cover;
+    height: 140px;
+    top: -1px;
+    width: 100%;
+    left: 0;
+    right: 0;
+    position: absolute; }
+.lead-magnet-wrapper .lead-magnet-overall {
+  text-align: center; }
+  .lead-magnet-wrapper .lead-magnet-overall h1 {
+    font-size: 35px;
+    font-weight: bold;
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 20px; }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .lead-magnet-wrapper .lead-magnet-overall h1 {
+        font-size: 30px; } }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .lead-magnet-overall h1 {
+        font-size: 26px; } }
+    .lead-magnet-wrapper .lead-magnet-overall h1.red {
+      color: #f34760; }
+    .lead-magnet-wrapper .lead-magnet-overall h1.yellow {
+      color: #f3c447; }
+    .lead-magnet-wrapper .lead-magnet-overall h1.green {
+      color: #6ebdbe; }
+  .lead-magnet-wrapper .lead-magnet-overall h4 {
+    font-weight: bold;
+    color: #333;
+    font-size: 24px; }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .lead-magnet-wrapper .lead-magnet-overall h4 {
+        font-size: 22px; } }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .lead-magnet-overall h4 {
+        font-size: 19px; } }
+.lead-magnet-wrapper .flex-charts {
+  max-width: 840px;
+  margin: 50px auto 70px; }
+  @media screen and (max-height: 800px) and (min-width: 769px) {
+    .lead-magnet-wrapper .flex-charts {
+      margin: 30px auto; } }
+  @media screen and (max-width: 998px) {
+    .lead-magnet-wrapper .flex-charts {
+      margin-bottom: 130px; } }
+  @media screen and (max-width: 768px) {
+    .lead-magnet-wrapper .flex-charts {
+      margin-top: 30px; } }
+.lead-magnet-wrapper .pie-chart {
+  width: 250px;
+  justify-content: space-around;
+  margin-right: 40px; }
+  @media screen and (max-height: 800px) and (min-width: 769px) {
+    .lead-magnet-wrapper .pie-chart {
+      width: 170px; } }
+  @media screen and (max-width: 998px) {
+    .lead-magnet-wrapper .pie-chart {
+      width: 200px; } }
+  @media screen and (max-width: 768px) {
+    .lead-magnet-wrapper .pie-chart {
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 20px;
+      width: 150px; } }
+  .lead-magnet-wrapper .pie-chart .circular-chart {
+    display: block;
+    max-height: 250px; }
+  .lead-magnet-wrapper .pie-chart .circle-bg {
+    fill: none;
+    stroke: #e1e1e1;
+    stroke-width: 2.3; }
+  .lead-magnet-wrapper .pie-chart .circle {
+    fill: none;
+    stroke-width: 2.3;
+    animation: progress 1s ease-out forwards;
+    stroke: #37bde9; }
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100; } }
+  .lead-magnet-wrapper .pie-chart .percentage {
+    fill: #333;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-anchor: middle; }
+  .lead-magnet-wrapper .pie-chart .info {
+    fill: #333;
+    font-size: 0.22em;
+    font-weight: bold;
+    text-anchor: middle; }
+.lead-magnet-wrapper .column-chart {
+  flex: 1;
+  text-align: left; }
+  .lead-magnet-wrapper .column-chart h4 {
+    color: black;
+    margin-bottom: 10px;
+    font-size: 26px; }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .lead-magnet-wrapper .column-chart h4 {
+        margin-bottom: 5px;
+        font-size: 20px; } }
+    @media screen and (max-width: 998px) {
+      .lead-magnet-wrapper .column-chart h4 {
+        font-size: 22px; } }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .column-chart h4 {
+        font-size: 18px; } }
+    .lead-magnet-wrapper .column-chart h4:first-child {
+      margin-top: 10px; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .lead-magnet-wrapper .column-chart h4:first-child {
+          margin-top: 0px; } }
+  .lead-magnet-wrapper .column-chart .result-column {
+    height: 11px;
+    width: 100%;
+    background-color: #e1e1e1;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 18px; }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .column-chart .result-column {
+        margin-bottom: 7px; } }
+    .lead-magnet-wrapper .column-chart .result-column .result-percentage {
+      background-image: url("../img-trp/gradient-magnet.jpg");
+      position: absolute;
+      left: 0px;
+      height: 100%;
+      background-size: cover;
+      background-position: 0% 50%; }
+.lead-magnet-wrapper .lead-magnet-tips {
+  align-items: center;
+  box-shadow: 0px 0 61px -7px #00000029;
+  border-radius: 20px;
+  margin-bottom: 85px; }
+  @media screen and (max-width: 998px) {
+    .lead-magnet-wrapper .lead-magnet-tips {
+      display: block; } }
+  @media screen and (max-width: 768px) {
+    .lead-magnet-wrapper .lead-magnet-tips {
+      margin-bottom: 55px; } }
+  .lead-magnet-wrapper .lead-magnet-tips .tips-content {
+    text-align: left;
+    font-size: 20px;
+    padding-right: 25px;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    line-height: 29px; }
+    @media screen and (max-width: 998px) {
+      .lead-magnet-wrapper .lead-magnet-tips .tips-content {
+        padding-left: 25px; } }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .lead-magnet-tips .tips-content {
+        padding: 20px;
+        font-size: 18px;
+        line-height: 27px; } }
+    .lead-magnet-wrapper .lead-magnet-tips .tips-content h2 {
+      font-size: 34px;
+      font-weight: 900;
+      color: black;
+      margin-bottom: 20px; }
+      @media screen and (max-width: 998px) {
+        .lead-magnet-wrapper .lead-magnet-tips .tips-content h2 {
+          text-align: center; } }
+      .lead-magnet-wrapper .lead-magnet-tips .tips-content h2 img {
+        max-width: 45px;
+        vertical-align: bottom;
+        margin-right: 5px; }
+    .lead-magnet-wrapper .lead-magnet-tips .tips-content b {
+      font-size: 20px; }
+      @media screen and (max-width: 768px) {
+        .lead-magnet-wrapper .lead-magnet-tips .tips-content b {
+          font-size: 18px; } }
+  .lead-magnet-wrapper .lead-magnet-tips .tips-image {
+    min-width: 318px; }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .lead-magnet-wrapper .lead-magnet-tips .tips-image {
+        min-width: 238px; } }
+    @media screen and (max-width: 998px) {
+      .lead-magnet-wrapper .lead-magnet-tips .tips-image {
+        min-width: auto; } }
+    .lead-magnet-wrapper .lead-magnet-tips .tips-image img {
+      transform: scale(1.2);
+      margin-left: -140px; }
+      @media screen and (max-width: 998px) {
+        .lead-magnet-wrapper .lead-magnet-tips .tips-image img {
+          transform: none;
+          margin-left: 0px;
+          margin-top: -90px;
+          max-width: 200px; } }
+.lead-magnet-wrapper .country-dentist-rating {
+  background-image: url("../img-trp/country-background.jpg");
+  background-size: cover;
+  text-align: center;
+  margin-top: 85px;
+  padding: 30px 0px; }
+  @media screen and (max-width: 768px) {
+    .lead-magnet-wrapper .country-dentist-rating {
+      margin-top: 55px; } }
+  .lead-magnet-wrapper .country-dentist-rating h2 {
+    font-size: 34px;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold; }
+    .lead-magnet-wrapper .country-dentist-rating h2 img {
+      max-width: 22px;
+      margin-right: 3px; }
+    .lead-magnet-wrapper .country-dentist-rating h2 span {
+      font-size: 39px;
+      text-transform: none;
+      color: white;
+      font-weight: bold; }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .country-dentist-rating h2 nl {
+        display: block; } }
+  .lead-magnet-wrapper .country-dentist-rating .rating-wrapper {
+    display: flex;
+    max-width: 796px;
+    margin-right: auto;
+    margin-left: auto; }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .country-dentist-rating .rating-wrapper {
+        display: block; } }
+    .lead-magnet-wrapper .country-dentist-rating .rating-wrapper .block {
+      background-color: #085c82;
+      flex: 1;
+      text-align: center;
+      padding: 15px;
+      border-radius: 20px; }
+      .lead-magnet-wrapper .country-dentist-rating .rating-wrapper .block img {
+        max-width: 122px; }
+      .lead-magnet-wrapper .country-dentist-rating .rating-wrapper .block h3 {
+        max-width: 250px;
+        color: white;
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: 10px; }
+        @media screen and (max-width: 768px) {
+          .lead-magnet-wrapper .country-dentist-rating .rating-wrapper .block h3 {
+            font-size: 30px; } }
+      .lead-magnet-wrapper .country-dentist-rating .rating-wrapper .block p {
+        font-size: 34px;
+        font-weight: 900;
+        color: white; }
+    .lead-magnet-wrapper .country-dentist-rating .rating-wrapper .avg-rating {
+      margin-right: 15px; }
+      @media screen and (max-width: 768px) {
+        .lead-magnet-wrapper .country-dentist-rating .rating-wrapper .avg-rating {
+          margin-right: 0px;
+          margin-bottom: 20px; } }
+      .lead-magnet-wrapper .country-dentist-rating .rating-wrapper .avg-rating .ratings {
+        margin-top: 0px; }
+  .lead-magnet-wrapper .country-dentist-rating .rating-info {
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+    margin-top: 30px;
+    margin-bottom: 10px; }
+.lead-magnet-wrapper .lead-magnet-info {
+  padding: 50px 10px; }
+  .lead-magnet-wrapper .lead-magnet-info .trp-logo {
+    max-width: 160px;
+    margin-bottom: 30px; }
+  .lead-magnet-wrapper .lead-magnet-info h2 {
+    font-size: 34px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 60px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-transform: uppercase; }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .lead-magnet-info h2 {
+        font-size: 30px;
+        margin-bottom: 40px; } }
+  .lead-magnet-wrapper .lead-magnet-info .info-box {
+    align-items: center;
+    margin-bottom: 30px;
+    max-width: 840px;
+    margin-left: auto;
+    margin-right: auto; }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .lead-magnet-info .info-box {
+        margin-bottom: 40px; } }
+    .lead-magnet-wrapper .lead-magnet-info .info-box .info-icon {
+      margin-right: 40px; }
+      @media screen and (max-width: 768px) {
+        .lead-magnet-wrapper .lead-magnet-info .info-box .info-icon {
+          margin-right: 0px;
+          margin-bottom: 10px; } }
+      .lead-magnet-wrapper .lead-magnet-info .info-box .info-icon img {
+        max-width: 206px; }
+    .lead-magnet-wrapper .lead-magnet-info .info-box .info-text {
+      text-align: left; }
+      @media screen and (max-width: 768px) {
+        .lead-magnet-wrapper .lead-magnet-info .info-box .info-text {
+          text-align: center; } }
+      .lead-magnet-wrapper .lead-magnet-info .info-box .info-text h3 {
+        font-size: 34px;
+        margin-bottom: 10px; }
+        @media screen and (max-width: 768px) {
+          .lead-magnet-wrapper .lead-magnet-info .info-box .info-text h3 {
+            font-size: 30px; } }
+      .lead-magnet-wrapper .lead-magnet-info .info-box .info-text p {
+        font-weight: 300;
+        color: #232323;
+        font-size: 20px; }
+  .lead-magnet-wrapper .lead-magnet-info .get-started {
+    margin-top: 60px;
+    margin-bottom: 46px; }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-wrapper .lead-magnet-info .get-started {
+        margin-top: 30px;
+        margin-bottom: 10px; } }
+
+.get-started {
+  display: inline-block;
+  background-color: #46afda;
+  color: white;
+  text-transform: uppercase;
+  position: relative;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 12px 38px;
+  border-radius: 5px; }
+  @media screen and (max-width: 768px) {
+    .get-started {
+      margin-right: -30px; } }
+  .get-started:after {
+    content: '';
+    position: absolute;
+    left: -80px;
+    background-image: url("../img-trp/button-logo.png");
+    width: 96px;
+    height: 96px;
+    background-size: 100%;
+    top: 50%;
+    transform: translateY(-50%); }
+    @media screen and (max-width: 768px) {
+      .get-started:after {
+        width: 76px;
+        height: 76px;
+        left: -40px; } }

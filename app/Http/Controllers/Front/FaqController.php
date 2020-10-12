@@ -27,6 +27,9 @@ class FaqController extends FrontController {
             'seo_description' => $seos->seo_description,
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
+            'css' => [
+            	'trp-faq.css'
+            ],
 			'js' => [
 				'faq.js'
 			]

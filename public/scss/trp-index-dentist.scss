@@ -726,3 +726,33 @@ $phone: "screen and (max-width: 768px)";
     	color: #6fb6d4 !important;
     }
 }
+body.page-welcome-dentist {
+
+	.site-content {
+		overflow: visible;
+	}
+
+	.site-content > .container:first-child {
+
+		.button {
+			display: none;
+			margin-top: 30px;
+			margin-bottom: -10px;
+
+			@media #{$phone} {
+				display: inline-block;
+			}
+		}
+
+		@media #{$phone} {
+			background-color: #f7f7f7;
+		}			
+	}
+}
+.tablet-fixes {
+	input {
+		@media #{$tablet} {
+			min-width: unset !important;
+		}
+	}
+}

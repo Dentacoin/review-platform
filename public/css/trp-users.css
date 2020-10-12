@@ -1291,7 +1291,7 @@ body.edit-user .information {
   margin-left: auto;
   margin-bottom: 60px; }
   .review-chart.with-three-columns {
-    max-width: 660px; }
+    max-width: 560px; }
   @media screen and (max-width: 768px) {
     .review-chart {
       height: 250px; } }
@@ -1307,10 +1307,19 @@ body.edit-user .information {
     .review-chart .slide-animation.active {
       display: block;
       animation: HandAnimation 5s infinite; }
+@keyframes HandAnimation {
+  0% {
+    opacity: 1; }
+  40% {
+    opacity: 1; }
+  80% {
+    opacity: 0; }
+  100% {
+    opacity: 0; } }
   .review-chart .chart-stars {
     position: absolute;
-    left: 0px;
-    height: 265px;
+    left: -2px;
+    height: 250px;
     width: 80px;
     background-color: white;
     z-index: 100; }
@@ -1321,47 +1330,47 @@ body.edit-user .information {
         left: -2px; } }
     .review-chart .chart-stars img:first-child {
       position: absolute;
-      top: 9px; }
+      top: -5px; }
       @media screen and (max-width: 768px) {
         .review-chart .chart-stars img:first-child {
           width: 33px;
-          top: 10px; } }
+          top: -2px; } }
     .review-chart .chart-stars img:nth-child(2) {
       position: absolute;
-      top: 59px;
+      top: 45px;
       left: 13px; }
       @media screen and (max-width: 768px) {
         .review-chart .chart-stars img:nth-child(2) {
           width: 26px;
           left: 7px;
-          top: 47px; } }
+          top: 38px; } }
     .review-chart .chart-stars img:nth-child(3) {
       position: absolute;
-      top: 109px;
+      top: 95px;
       left: 26px; }
       @media screen and (max-width: 768px) {
         .review-chart .chart-stars img:nth-child(3) {
           width: 19px;
           left: 14px;
-          top: 83px; } }
+          top: 78px; } }
     .review-chart .chart-stars img:nth-child(4) {
       position: absolute;
-      top: 159px;
+      top: 145px;
       left: 39px; }
       @media screen and (max-width: 768px) {
         .review-chart .chart-stars img:nth-child(4) {
           width: 13px;
           left: 21px;
-          top: 120px; } }
+          top: 118px; } }
     .review-chart .chart-stars img:nth-child(5) {
       position: absolute;
-      top: 209px;
+      top: 195px;
       left: 52px; }
       @media screen and (max-width: 768px) {
         .review-chart .chart-stars img:nth-child(5) {
           width: 6px;
           left: 28px;
-          top: 156px; } }
+          top: 158px; } }
   .review-chart ::-webkit-scrollbar {
     width: 5px;
     border-radius: 15px; }
@@ -1422,7 +1431,7 @@ body.edit-user .information {
     width: 100%;
     position: relative;
     overflow-x: auto;
-    height: 320px;
+    height: 310px;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch; }
     @media screen and (max-width: 768px) {
@@ -1434,7 +1443,7 @@ body.edit-user .information {
       top: 0;
       left: 14px;
       right: 0;
-      height: 320px; }
+      height: 310px; }
       @media screen and (max-width: 768px) {
         .review-chart .review-charts-wrapper #reviews-chart {
           height: 250px;
@@ -1444,19 +1453,85 @@ body.edit-user .information {
         @media screen and (max-width: 570px) {
           .review-chart .review-charts-wrapper #reviews-chart.three-columns {
             width: 500px; } }
-
-.chart-overlap {
-  display: none;
-  position: absolute;
-  right: 0;
-  left: 0;
-  top: 0;
-  bottom: 53px;
-  z-index: 100;
-  -webkit-overflow-scrolling: touch; }
-  @media screen and (max-width: 998px) {
-    .chart-overlap {
-      display: block; } }
+    .review-chart .review-charts-wrapper .chart-outher {
+      height: 250px; }
+      @media screen and (max-width: 768px) {
+        .review-chart .review-charts-wrapper .chart-outher {
+          height: 200px; } }
+      .review-chart .review-charts-wrapper .chart-outher .chart-line {
+        position: absolute;
+        height: 1px;
+        background-color: #d9d9d9;
+        width: 100%; }
+        .review-chart .review-charts-wrapper .chart-outher .chart-line:first-child {
+          top: 0px; }
+        .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(2) {
+          top: 50px; }
+          @media screen and (max-width: 768px) {
+            .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(2) {
+              top: 40px; } }
+        .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(3) {
+          top: 100px; }
+          @media screen and (max-width: 768px) {
+            .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(3) {
+              top: 80px; } }
+        .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(4) {
+          top: 150px; }
+          @media screen and (max-width: 768px) {
+            .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(4) {
+              top: 120px; } }
+        .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(5) {
+          top: 200px; }
+          @media screen and (max-width: 768px) {
+            .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(5) {
+              top: 160px; } }
+        .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(6) {
+          background-color: #b9b9b9;
+          top: 249px; }
+          @media screen and (max-width: 768px) {
+            .review-chart .review-charts-wrapper .chart-outher .chart-line:nth-child(6) {
+              top: 199px; } }
+      .review-chart .review-charts-wrapper .chart-outher .chart-parent {
+        border-bottom: 1px solid #b9b9b9;
+        display: inline-block;
+        width: 152px;
+        height: 100%;
+        float: left;
+        vertical-align: top;
+        text-align: right;
+        position: relative; }
+        .review-chart .review-charts-wrapper .chart-outher .chart-parent .chart {
+          height: 0px;
+          transition: all 0.7s ease;
+          cursor: pointer;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 53px;
+          /*height: 250px;*/
+          border-top-right-radius: 5px;
+          border-top-left-radius: 5px;
+          /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#02a5d9+0,2ccdc3+100 */
+          background: #02a5d9;
+          /* Old browsers */
+          background: -moz-linear-gradient(left, #02a5d9 0%, #2ccdc3 100%);
+          /* FF3.6-15 */
+          background: -webkit-linear-gradient(left, #02a5d9 0%, #2ccdc3 100%);
+          /* Chrome10-25,Safari5.1-6 */
+          background: linear-gradient(to right, #02a5d9 0%, #2ccdc3 100%);
+          /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#02a5d9', endColorstr='#2ccdc3',GradientType=1 );
+          /* IE6-9 */ }
+          .review-chart .review-charts-wrapper .chart-outher .chart-parent .chart:hover {
+            border: 1px solid #2ccdc4; }
+        .review-chart .review-charts-wrapper .chart-outher .chart-parent .chart-label {
+          position: absolute;
+          bottom: -30px;
+          z-index: 100;
+          left: 32px;
+          text-align: center;
+          min-width: 202px;
+          font-weight: 700; }
 
 .popup#recommend-dentist .popup-inner h2 {
   margin-bottom: 25px; }
@@ -2431,3 +2506,583 @@ body.reviews-guided-tour .widget-code-wrap {
     left: 0;
     width: 100%;
     height: 100%; }
+
+.black-left-line {
+  position: relative; }
+  @media screen and (max-width: 768px) {
+    .black-left-line {
+      text-align: center; } }
+  .black-left-line::after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    width: 100vw;
+    right: 100%;
+    background-color: black;
+    top: 50%;
+    margin-right: 10px; }
+
+body.guided-tour {
+  overflow-y: hidden; }
+  body.guided-tour .black-overflow {
+    display: none !important; }
+  body.guided-tour .strength-parent {
+    display: none !important; }
+
+.delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 23px;
+  height: 23px;
+  background: #898989;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .delete-button i {
+    background: none;
+    color: white; }
+
+@media screen and (max-width: 768px) {
+  #view-review-popup .average {
+    margin-top: 10px;
+    margin-bottom: 6px; } }
+@media screen and (max-width: 768px) {
+  #view-review-popup .average .stars {
+    width: 74px;
+    height: 14px;
+    vertical-align: middle;
+    background: url(../img-trp/stars-gray.png) 50% 50% no-repeat;
+    background-size: contain; } }
+@media screen and (max-width: 768px) {
+  #view-review-popup .average .stars .bar {
+    background: url(../img-trp/stars-blue.png) 0% 50% no-repeat;
+    background-size: cover;
+    height: 14px; } }
+@media screen and (max-width: 768px) {
+  #view-review-popup .average .rating {
+    font-size: 14px;
+    vertical-align: middle; } }
+@media screen and (max-width: 768px) {
+  #view-review-popup .review-date {
+    vertical-align: middle; } }
+#view-review-popup .treatment {
+  vertical-align: super; }
+  @media screen and (max-width: 768px) {
+    #view-review-popup .treatment {
+      vertical-align: inherit; } }
+#view-review-popup .review-replied-wrapper {
+  margin-left: 30px;
+  margin-bottom: 0px; }
+  @media screen and (max-width: 768px) {
+    #view-review-popup .review-replied-wrapper {
+      margin-left: 10px; } }
+  #view-review-popup .review-replied-wrapper .review-date {
+    vertical-align: middle; }
+  #view-review-popup .review-replied-wrapper .review-footer {
+    text-align: right; }
+    @media screen and (max-width: 768px) {
+      #view-review-popup .review-replied-wrapper .review-footer {
+        text-align: left; } }
+
+@media screen and (max-width: 768px) {
+  #submit-review-popup .review-tabs a {
+    font-size: 16px;
+    height: 40px;
+    line-height: 40px; } }
+@media screen and (max-width: 998px) {
+  #submit-review-popup .review-tabs span {
+    line-height: 45px; } }
+@media screen and (max-width: 768px) {
+  #submit-review-popup .review-tabs span {
+    min-width: 40px;
+    font-size: 16px;
+    color: #126585;
+    line-height: 40px; } }
+
+.invited-dentist {
+  margin-top: -40px;
+  margin-bottom: 25px;
+  color: #14c9b9;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 20px; }
+  @media screen and (max-width: 1200px) {
+    .invited-dentist {
+      font-size: 18px;
+      margin-top: 0px;
+      margin-bottom: 5px; } }
+  @media screen and (max-width: 998px) {
+    .invited-dentist {
+      margin-top: -20px;
+      text-align: center;
+      margin-left: 10px; } }
+  @media screen and (max-width: 768px) {
+    .invited-dentist {
+      font-size: 16px;
+      margin-top: -8px; } }
+
+.pager {
+  text-align: center;
+  margin: 1em 0; }
+  @media screen and (max-width: 768px) {
+    .pager {
+      margin-bottom: 40px; } }
+  .pager span {
+    border: 1px solid #126585;
+    background-color: white;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 1.8;
+    text-align: center;
+    cursor: pointer;
+    color: #126585;
+    margin-right: 10px;
+    font-weight: bold;
+    margin-bottom: 10px; }
+    .pager span.active {
+      background-color: #126585;
+      color: white; }
+
+.CodeMirror {
+  border: 1px solid #d6d6d7;
+  border-radius: 10px;
+  width: 100%;
+  height: 140px !important;
+  margin-bottom: 30px !important; }
+  @media screen and (max-width: 768px) {
+    .CodeMirror {
+      margin-bottom: 0px !important; } }
+  .CodeMirror pre.CodeMirror-line {
+    padding-left: 35px !important; }
+  .CodeMirror pre.CodeMirror-placeholder {
+    color: #afb0b9 !important;
+    padding-left: 35px !important; }
+
+.CodeMirror-gutters {
+  border-color: #ebebeb;
+  width: 28px !important;
+  left: 0px !important; }
+
+.CodeMirror-linenumber {
+  min-width: 15px !important; }
+
+.CodeMirror-gutter-wrapper {
+  left: 0px !important; }
+
+.ip-country {
+  margin-bottom: 20px; }
+
+.header-success-tab {
+  background-color: transparent; }
+  .header-success-tab img {
+    max-width: 120px;
+    margin-bottom: 10px; }
+    @media screen and (max-width: 768px) {
+      .header-success-tab img {
+        max-width: 60px; } }
+  .header-success-tab h2 {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 38px;
+    color: #126585 !important;
+    margin-bottom: 13px !important;
+    margin-top: 30px !important; }
+    @media screen and (max-width: 768px) {
+      .header-success-tab h2 {
+        font-size: 24px;
+        margin-top: 0px !important;
+        margin-bottom: 20px !important; } }
+  .header-success-tab h4 {
+    color: #333;
+    max-width: 620px;
+    margin-right: auto;
+    margin-left: auto; }
+    @media screen and (max-width: 768px) {
+      .header-success-tab h4 {
+        font-size: 16px;
+        margin-bottom: 25px; } }
+
+.fixed-popup .popup-inner .detailed-review-wrapper h4 {
+  margin-top: 40px; }
+.fixed-popup .popup-inner .detailed-review-wrapper .detailed-review-column {
+  width: 230px;
+  float: left;
+  margin-bottom: 30px; }
+  @media screen and (max-width: 768px) {
+    .fixed-popup .popup-inner .detailed-review-wrapper .detailed-review-column {
+      width: 33.3%;
+      font-size: 14px; } }
+  .fixed-popup .popup-inner .detailed-review-wrapper .detailed-review-column:nth-child(3n + 2) {
+    width: 170px; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .detailed-review-wrapper .detailed-review-column:nth-child(3n + 2) {
+        width: 33.3%; } }
+  @media screen and (max-width: 768px) {
+    .fixed-popup .popup-inner .detailed-review-wrapper .detailed-review-column .ratings {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%); } }
+.fixed-popup .popup-inner .detailed-review-wrapper .detailed-container {
+  position: relative;
+  margin-bottom: 30px; }
+  .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container:last-child::after {
+    display: none; }
+  .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container::after {
+    position: absolute;
+    content: "";
+    width: 137px;
+    height: 1px;
+    background-color: #c9c9c9;
+    left: 50%;
+    transform: translateX(-50%); }
+  .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .detailed-title {
+    margin-bottom: 30px; }
+    .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .detailed-title span {
+      font-size: 18px; }
+    .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .detailed-title .ratings {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px; }
+    .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .detailed-title .rating {
+      font-size: 14px;
+      font-weight: normal; }
+  .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .treating-dentist {
+    display: block;
+    text-align: center;
+    margin-top: -20px;
+    margin-bottom: 30px;
+    font-size: 18px; }
+    .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .treating-dentist a {
+      font-size: 18px; }
+      .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .treating-dentist a:hover {
+        color: #0fb0e5; }
+.fixed-popup .popup-inner .question {
+  padding-bottom: 50px; }
+  @media screen and (max-width: 768px) {
+    .fixed-popup .popup-inner .question {
+      padding-bottom: 20px; } }
+  .fixed-popup .popup-inner .question .rating-error {
+    text-align: center;
+    color: red; }
+  .fixed-popup .popup-inner .question .review-answers .answer {
+    width: 300px;
+    float: left;
+    font-size: 16px;
+    margin-bottom: 30px; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .question .review-answers .answer {
+        width: 50%;
+        float: none;
+        margin-bottom: 10px; } }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .question .review-answers .answer:nth-child(3n + 1) {
+        padding-right: 15px;
+        border-right: 1px solid #eeeeee; } }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .question .review-answers .answer:nth-child(3n + 3) {
+        padding-left: 15px; } }
+    .fixed-popup .popup-inner .question .review-answers .answer:nth-child(3n + 2) {
+      width: 170px; }
+      @media screen and (max-width: 998px) {
+        .fixed-popup .popup-inner .question .review-answers .answer:nth-child(3n + 2) {
+          margin-left: 20px;
+          margin-right: 20px; } }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .question .review-answers .answer:nth-child(3n + 2) {
+          order: 3;
+          min-width: 100%;
+          margin-left: 0px;
+          margin-right: 0px;
+          padding-top: 5px;
+          border-bottom: 2px solid #eeeeee;
+          padding-bottom: 10px;
+          margin-bottom: 13px; } }
+    .fixed-popup .popup-inner .question .review-answers .answer .ratings {
+      margin-top: -2px;
+      cursor: pointer; }
+  .fixed-popup .popup-inner .question .treatment-wrapper .treatment-category {
+    font-size: 16px;
+    color: #888888;
+    margin-bottom: 25px; }
+    .fixed-popup .popup-inner .question .treatment-wrapper .treatment-category.more-treatments-title {
+      margin-top: 25px; }
+  .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments {
+    font-weight: bold;
+    display: inline-block;
+    font-size: 20px;
+    color: #126585;
+    border: 1px solid #126585;
+    border-radius: 5px;
+    padding: 6px 15px;
+    margin-bottom: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments {
+        font-size: 16px;
+        margin-bottom: 10px; } }
+    .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active {
+      padding-right: 15px;
+      background-color: #126585;
+      color: white; }
+      .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active i {
+        color: white; }
+        .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active i:before {
+          content: '\f068'; }
+    .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments i {
+      color: #126585; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments i {
+          font-size: 13px; } }
+  .fixed-popup .popup-inner .question .treatment-wrapper label {
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+    color: #126585;
+    border: 1px solid #126585;
+    border-radius: 5px;
+    padding: 6px 15px;
+    margin-bottom: 25px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .question .treatment-wrapper label {
+        font-size: 16px;
+        margin-bottom: 10px;
+        margin-right: 4px; } }
+    .fixed-popup .popup-inner .question .treatment-wrapper label:hover {
+      background-color: #e6f1ff;
+      transition: all 0.3s ease; }
+    .fixed-popup .popup-inner .question .treatment-wrapper label .tooltip-text {
+      color: #126585;
+      font-size: 20px; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .question .treatment-wrapper label .tooltip-text {
+          font-size: 16px; } }
+    .fixed-popup .popup-inner .question .treatment-wrapper label input {
+      display: none; }
+    .fixed-popup .popup-inner .question .treatment-wrapper label .close-treatment {
+      display: none;
+      position: absolute;
+      right: 13px;
+      top: 46%;
+      transform: translateY(-50%);
+      font-size: 21px;
+      color: #12b4e8; }
+    .fixed-popup .popup-inner .question .treatment-wrapper label.active {
+      font-weight: bold;
+      background-color: #e6f1ff;
+      color: #4b607d;
+      border-color: #e6f1ff;
+      transition: all 0.3s ease;
+      padding-right: 30px; }
+      .fixed-popup .popup-inner .question .treatment-wrapper label.active .tooltip-text {
+        color: #4b607d; }
+      .fixed-popup .popup-inner .question .treatment-wrapper label.active .close-treatment {
+        display: inline-block; }
+  .fixed-popup .popup-inner .question .treatment-wrapper .treatments-hidden {
+    padding-left: 33px;
+    display: none; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .question .treatment-wrapper .treatments-hidden {
+        padding-left: 15px; } }
+    .fixed-popup .popup-inner .question .treatment-wrapper .treatments-hidden.active {
+      display: block; }
+    .fixed-popup .popup-inner .question .treatment-wrapper .treatments-hidden .treatment-category {
+      margin-top: 10px; }
+@media screen and (max-width: 998px) {
+  .fixed-popup .popup-inner .subquestion {
+    display: flex; } }
+@media screen and (max-width: 768px) {
+  .fixed-popup .popup-inner .subquestion {
+    flex-flow: row wrap; } }
+@media screen and (max-width: 768px) {
+  .fixed-popup .popup-inner .subquestion:last-child .answer:nth-child(3n + 2) {
+    border-bottom: none; } }
+.fixed-popup .popup-inner .question,
+.fixed-popup .popup-inner .subquestion {
+  transition: all 600ms ease;
+  transform: none;
+  transform-origin: 100% 50%;
+  animation: slide-down .5s ease-out; }
+@keyframes slide-down {
+  0% {
+    transform: translate3d(0, 100px, -100px) rotateX(-90deg); }
+  100% {
+    transform: none; } }
+.fixed-popup .popup-inner .reviews-wrapper {
+  margin-bottom: 40px; }
+  @media screen and (max-width: 768px) {
+    .fixed-popup .popup-inner .reviews-wrapper {
+      margin-bottom: 20px; } }
+  .fixed-popup .popup-inner .reviews-wrapper .review-tabs a {
+    position: relative;
+    width: 352px;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #126585;
+    background-color: #eeeeee;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 300;
+    transition: all 0.3s ease; }
+    .fixed-popup .popup-inner .reviews-wrapper .review-tabs a.active, .fixed-popup .popup-inner .reviews-wrapper .review-tabs a:hover {
+      background-color: #126585;
+      color: white;
+      transition: all 0.3s ease; }
+    .fixed-popup .popup-inner .reviews-wrapper .review-tabs a .video-dcn {
+      position: absolute;
+      right: 13px;
+      top: -30px;
+      width: 60px;
+      height: 60px;
+      background-color: #126585;
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      line-height: 16px;
+      padding-top: 12px;
+      text-align: center; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .reviews-wrapper .review-tabs a .video-dcn {
+          position: absolute;
+          right: 13px;
+          top: -14px;
+          width: 28px;
+          height: 28px;
+          font-size: 10px;
+          line-height: 8px;
+          padding-top: 5px; } }
+  .fixed-popup .popup-inner .reviews-wrapper .review-tabs span {
+    display: inline-block;
+    width: 58px;
+    text-align: center;
+    font-size: 29px;
+    font-weight: 300; }
+  .fixed-popup .popup-inner .reviews-wrapper .review-box {
+    border: 2px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 20px 15px 10px; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .reviews-wrapper .review-box {
+        padding: 10px 5px 5px; } }
+    .fixed-popup .popup-inner .reviews-wrapper .review-box .input {
+      border: 1px solid #c8c8ca;
+      box-shadow: none;
+      font-size: 16px;
+      height: 35px;
+      margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .reviews-wrapper .review-box .input {
+          margin-bottom: 10px; } }
+      .fixed-popup .popup-inner .reviews-wrapper .review-box .input::placeholder {
+        color: #afb0b2; }
+    .fixed-popup .popup-inner .reviews-wrapper .review-box textarea.input {
+      height: 260px; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .reviews-wrapper .review-box textarea.input {
+          height: 130px; } }
+    .fixed-popup .popup-inner .reviews-wrapper .review-box .checkbox-label {
+      font-size: 16px;
+      font-weight: normal;
+      color: black; }
+      .fixed-popup .popup-inner .reviews-wrapper .review-box .checkbox-label i,
+      .fixed-popup .popup-inner .reviews-wrapper .review-box .checkbox-label a {
+        color: #116684; }
+    .fixed-popup .popup-inner .reviews-wrapper .review-box label[for="video-agree"] {
+      margin-top: 8px; }
+    .fixed-popup .popup-inner .reviews-wrapper .review-box p {
+      margin-bottom: 15px; }
+    .fixed-popup .popup-inner .reviews-wrapper .review-box .myVideo-dimensions {
+      display: none;
+      position: relative;
+      width: 100% !important;
+      height: auto; }
+      .fixed-popup .popup-inner .reviews-wrapper .review-box .myVideo-dimensions * {
+        display: none; }
+      .fixed-popup .popup-inner .reviews-wrapper .review-box .myVideo-dimensions #myVideo_html5_api {
+        display: block;
+        position: absolute;
+        top: 0;
+        width: 100%; }
+.fixed-popup .popup-inner .widget-wrapper h3 {
+  margin-bottom: 30px; }
+.fixed-popup .popup-inner .widget-wrapper .widget-options {
+  margin-top: 20px;
+  margin-bottom: 30px; }
+.fixed-popup .popup-inner .widget-wrapper .widget-content {
+  margin-bottom: 40px; }
+
+.blue-background {
+  background-image: url("../img-trp/header-dentist.svg");
+  background-size: cover;
+  padding-top: 18%;
+  background-color: transparent;
+  height: auto; }
+  @media screen and (max-width: 768px) {
+    .blue-background {
+      padding-top: 30%; } }
+  .blue-background:after {
+    display: none; }
+
+.edit-profile-wrapper {
+  margin-top: -12%; }
+  @media screen and (max-width: 1200px) {
+    .edit-profile-wrapper {
+      margin-top: -9%; } }
+
+.home-search-form {
+  display: none; }
+  @media screen and (max-width: 768px) {
+    .home-search-form {
+      top: 50px; } }
+
+.symbols-wrapper {
+  margin-bottom: 20px; }
+  .symbols-wrapper span.red {
+    color: red; }
+
+@media screen and (max-width: 998px) {
+  #select-reviews-popup,
+  #popup-widget {
+    background-color: white; } }
+#select-reviews-popup .popup-inner,
+#popup-widget .popup-inner {
+  overflow-x: initial;
+  overflow-y: unset;
+  box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8); }
+  @media screen and (max-width: 998px) {
+    #select-reviews-popup .popup-inner,
+    #popup-widget .popup-inner {
+      box-shadow: none; } }
+  #select-reviews-popup .popup-inner h2,
+  #popup-widget .popup-inner h2 {
+    margin-bottom: 25px; }
+    @media screen and (max-width: 768px) {
+      #select-reviews-popup .popup-inner h2,
+      #popup-widget .popup-inner h2 {
+        font-size: 30px;
+        margin-top: 40px; } }
+  @media screen and (max-width: 768px) {
+    #select-reviews-popup .popup-inner .popup-title,
+    #popup-widget .popup-inner .popup-title {
+      font-size: 20px; } }
+  @media screen and (max-width: 768px) {
+    #select-reviews-popup .popup-inner .popup-description,
+    #popup-widget .popup-inner .popup-description {
+      font-size: 18px;
+      font-weight: 300; } }
+
+#select-reviews-popup .button {
+  border: 1px solid #46afda;
+  font-size: 25px;
+  background-color: #46afda;
+  padding: 12px 73px;
+  margin-top: 30px;
+  margin-bottom: 20px; }

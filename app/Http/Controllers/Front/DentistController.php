@@ -626,11 +626,9 @@ class DentistController extends FrontController {
             'js' => [
                 'user.js',
                 'search.js',
-                'flickity.min.js',
             ],
             'css' => [
                 'trp-users.css',
-                'flickity.min.css',
             ],
         ];
 
@@ -641,21 +639,27 @@ class DentistController extends FrontController {
             $view_params['js'][] = 'videojs.record.min.js';
             $view_params['js'][] = 'codemirror.min.js';
             $view_params['js'][] = 'codemirror-placeholder.js';
+            $view_params['js'][] = 'user-logged.js';
             $view_params['css'][] = 'codemirror.css';
         }
 
-        if($item->photos->isNotEmpty()) {
+        if($item->photos->isNotEmpty() && empty($item->reviews_in())) {
+            $load_lightbox = 'true';
             $view_params['css'][] = 'lightbox.css';
             $view_params['js'][] = '../js/lightbox.js';
+        } else {
+            $load_lightbox = 'false';
         }
+        $view_params['load_lightbox'] = $load_lightbox;
 
-        if(!empty($item->reviews_in())) {
-            $view_params['js'][] = '../js/jquery-ui.min.js';
-            $view_params['js'][] = '../js/jquery-ui-touch.min.js';
-            $view_params['js'][] = 'amcharts-core.js';
-            $view_params['js'][] = 'amcharts-animated.js';
-            $view_params['js'][] = 'amcharts-charts.js';
+        if((!empty($this->user) && $this->user->id == $item->id) || ($item->photos->isNotEmpty() || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty()) && empty($item->reviews_in())) {
+            $load_flickity = 'true';
+            $view_params['css'][] = 'flickity.min.css';
+            $view_params['js'][] = 'flickity.min.js';
+        } else {
+            $load_flickity = 'false';
         }
+        $view_params['load_flickity'] = $load_flickity;
 
         if( $is_review ) {
             $seos = PageSeo::find(33);

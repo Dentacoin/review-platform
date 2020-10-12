@@ -441,6 +441,9 @@ class DentistsController extends FrontController {
             'is_ajax' => $ajax,
             'noIndex' => $nonCannonicalUrl || !$items->count(),            
             'countries' => Country::with('translations')->get(),
+            'css' => [
+                'trp-search.css',
+            ],
             'js' => [
                 'search.js',
                 'address.js'
@@ -544,6 +547,9 @@ class DentistsController extends FrontController {
             'social_image' => $seos->getImageUrl(),
             'countries_groups' => $countries_groups,
             'breakpoints' => $breakpoints,
+            'css' => [
+                'trp-search.css',
+            ],
             'js' => [
                 'search.js'
             ],
@@ -630,6 +636,9 @@ class DentistsController extends FrontController {
             'country' => $country,
             'total_rows' => $total_rows,
             'noIndex' => !count($cities_groups),
+            'css' => [
+                'trp-search.css',
+            ],
             'js' => [
                 'search.js'
             ],
@@ -711,6 +720,9 @@ class DentistsController extends FrontController {
             'country' => $country,
             'total_rows' => $total_rows,
             'noIndex' => !count($states_groups),
+            'css' => [
+                'trp-search.css',
+            ],
             'js' => [
                 'search.js'
             ],
