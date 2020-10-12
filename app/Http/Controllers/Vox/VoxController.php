@@ -1156,10 +1156,16 @@ class VoxController extends FrontController
 
 	                                    $inv->rewarded = true;
 	                                    $inv->save();
-	                                    	
-	                                    $this->user->invitor->sendGridTemplate( 82, [
-	                                        'who_joined_name' => $this->user->getNames()
-	                                    ], 'vox' );
+	                                    
+	                                    if($this->user->invitor->is_dentist) {
+		                                    $this->user->invitor->sendGridTemplate( 82, [
+		                                        'who_joined_name' => $this->user->getNames()
+		                                    ], 'vox' );
+	                                    } else {
+	                                    	$this->user->invitor->sendGridTemplate( 113, [
+		                                        'who_joined_name' => $this->user->getNames()
+		                                    ], 'vox' );
+	                                    }
 	                                }
 	                            }
 

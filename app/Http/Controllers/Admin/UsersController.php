@@ -1718,11 +1718,8 @@ class UsersController extends AdminController {
             ->groupBy('vox_id')
             ->orderBy('created_at')
             ->get();
-            $rewarder_questions = DcnReward::where('user_id', $id)->where('platform' , 'vox')->get();
-            $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $rewarder_questions->pluck('reference_id')->toArray() );
-            foreach ($unanswerd_questions as $value) {
-                $unfinished[$value] = [];
-            }
+
+            $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $item->filledVoxes() );
             $unfinishedVoxes = Vox::whereIn('id', $unanswerd_questions)->get();
             $unfinished = [];
             
@@ -1786,7 +1783,8 @@ class UsersController extends AdminController {
                     $habits_test_ans = true;
                 }
 
-                $old_an = !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->first()->old_answer : '';
+                $vcc = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->first();
+                $old_an = !empty($vcc) ? $vcc->old_answer : '';
                 if ($old_an) {
                     $i=1;
                     foreach ($v['values'] as $key => $value) {
@@ -1798,12 +1796,15 @@ class UsersController extends AdminController {
                     }
                 }
 
+                $habits_last = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->orderBy('id', 'desc')->first();
+                $habits_count = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->count();
+
                 $habits_tests[] = [
                     'question' => $v['label'],
                     'old_answer' => $old_an ? $old_an : (!empty($item->$k) ? $v['values'][$item->$k] : ''),
                     'answer' => $old_an && !empty($item->$k) ? $v['values'][$item->$k] : '',
-                    'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->orderBy('id', 'desc')->first()->created_at : '',
-                    'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->count() : '',
+                    'last_updated' => !empty($habits_last) ? $habits_last->created_at : '',
+                    'updates_count' => $habits_count ? $habits_count : '',
                 ];
             }
 
