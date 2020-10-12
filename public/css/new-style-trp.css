@@ -2535,9 +2535,6 @@ footer {
 .page-dentist .main-top,
 .page-dentists .main-top {
   padding-bottom: 170px; }
-  .page-dentist .main-top::after,
-  .page-dentists .main-top::after {
-    display: block; }
 
 .blue-background {
   background-color: #12b3e7;
