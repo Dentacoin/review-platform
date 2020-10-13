@@ -594,7 +594,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $item->save();
 
-        $to_be_send = $this->sendgridEmailValidation($template_id);
+        $to_be_send = $this->sendgridEmailValidation($template_id, $this->email);
 
         if(!$to_be_send) {
             $item->invalid_email = true;
@@ -637,7 +637,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
-        $to_be_send = $this->sendgridEmailValidation($template_id);
+        $to_be_send = $this->sendgridEmailValidation($template_id, $this->email);
 
         if(!$to_be_send) {
             $item->invalid_email = true;
@@ -750,10 +750,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return checkdnsrr($domain, $record);
     }
 
-    public function sendgridEmailValidation($template_id) {
+    public function sendgridEmailValidation($template_id, $email) {
         $to_be_send = false;
 
-        if(!self::domain_exists($this->email)) {
+        if(!self::domain_exists($email)) {
             return false;
         }
 
@@ -765,11 +765,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if(!StopEmailValidation::find(1)->stopped) {
 
-            $email_validation = EmailValidation::where('email', 'like', $this->email)->first();
+            $email_validation = EmailValidation::where('email', 'like', $email)->first();
 
             if(empty($email_validation)) {
                 $query_params = new \stdClass();
-                $query_params->email = $this->email;
+                $query_params->email = $email;
 
                 $curl = curl_init();
 
@@ -794,7 +794,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 curl_close($curl);
 
                 $new_email_validation = new EmailValidation;
-                $new_email_validation->email = $this->email;
+                $new_email_validation->email = $email;
 
                 if ($err) {
                     $new_email_validation->meta = 'resp_err: '.$err;

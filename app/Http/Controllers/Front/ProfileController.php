@@ -126,6 +126,12 @@ class ProfileController extends FrontController {
                 return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
             } else {
 
+                $valid_email = $this->user->sendgridEmailValidation(68, Request::Input('email'));
+
+                if(!$valid_email) {
+                    return Response::json(['success' => false, 'message' => 'Not sent - suspicious email address.' ] );
+                }
+
                 $is_dentist = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 1)->first();
 
                 if (!empty($is_dentist)) {
@@ -463,6 +469,12 @@ class ProfileController extends FrontController {
                 $already_invited = 0;
                 foreach ($emails as $key => $email) {
                     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $invalid++;
+                    }
+
+                    $valid_email = $this->user->sendgridEmailValidation(68, $email);
+
+                    if(!$valid_email) {
                         $invalid++;
                     }
 
@@ -925,6 +937,12 @@ class ProfileController extends FrontController {
 
                         if (!filter_var(Request::input('email'), FILTER_VALIDATE_EMAIL)) {
                             return Response::json(['success' => false, 'message' => trans('trp.popup.verification-popup.clinic.invalid-email-error') ] );
+                        }
+
+                        $valid_email = $this->user->sendgridEmailValidation(92, Request::input('email'));
+
+                        if(!$valid_email) {
+                            return Response::json(['success' => false, 'message' => 'Not sent - suspicious email address.' ] );
                         }
 
                         $existing_dentist = User::where('email', 'LIKE', Request::input('email'))->withTrashed()->first();
