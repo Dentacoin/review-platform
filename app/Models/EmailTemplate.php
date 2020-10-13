@@ -29,6 +29,7 @@ class EmailTemplate extends Model
         "category",
         "subscribe_category",
         "sendgrid_template_id",
+        "validate_email",
         "not_used",
         "note",
     ];

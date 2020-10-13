@@ -58,6 +58,9 @@ return [
                 'common' => 'common',
             ),
         ),
+        'email_validations' => array(
+            'icon' => 'lock',
+        ),
         'trp' => array(
             'icon' => 'list-alt',
             'subpages' => array(
@@ -143,6 +146,7 @@ return [
                 'trp' => 'trp',
                 'trp-urgent' => 'trp-urgent',
                 'api' => 'api',
+                'api_civic' => 'api_civic',
             ),
         ),
     )

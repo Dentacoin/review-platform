@@ -25,7 +25,9 @@ use Laravel\Passport\HasApiTokens;
 use WebPConvert\WebPConvert;
 use Carbon\Carbon;
 
+use App\Models\StopEmailValidation;
 use App\Models\DentistPageview;
+use App\Models\EmailValidation;
 use App\Models\BlacklistBlock;
 use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
@@ -592,7 +594,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $item->save();
 
-        if(!$unsubscribed) {
+        $to_be_send = $this->sendgridEmailValidation($template_id);
+
+        if(!$to_be_send) {
+            $item->invalid_email = true;
+            $item->save();
+        }
+
+        if(!$unsubscribed && $to_be_send) {
 
             $item->send($anonymous_email);
         }
@@ -628,7 +637,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
-        if (empty($is_skipped) && empty($item->unsubscribed)) {
+        $to_be_send = $this->sendgridEmailValidation($template_id);
+
+        if(!$to_be_send) {
+            $item->invalid_email = true;
+            $item->save();
+        }
+
+        if (empty($is_skipped) && empty($item->unsubscribed) && $to_be_send) {
 
             $sender = $item->platform=='vox' ? config('mail.from.address-vox') : ($item->platform == 'trp' ? config('mail.from.address') : config('mail.from.address-dentacoin'));
             $sender_name = $item->platform=='vox' ? config('mail.from.name-vox') : ($item->platform == 'trp' ? config('mail.from.name') : config('mail.from.name-dentacoin'));
@@ -728,6 +744,83 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $item;
     }
+
+    public static function domain_exists($email, $record = 'MX'){
+        list($user, $domain) = explode('@', $email);
+        return checkdnsrr($domain, $record);
+    }
+
+    public function sendgridEmailValidation($template_id) {
+        $to_be_send = false;
+
+        if(!self::domain_exists($this->email)) {
+            return false;
+        }
+
+        $validation_templates = EmailTemplate::select('id')->where('validate_email', 1)->get()->pluck('id')->toArray();
+
+        if (!in_array($template_id,  $validation_templates)) {
+            return true;
+        }
+
+        if(!StopEmailValidation::find(1)->stopped) {
+
+            $email_validation = EmailValidation::where('email', 'like', $this->email)->first();
+
+            if(empty($email_validation)) {
+                $query_params = new \stdClass();
+                $query_params->email = $this->email;
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://api.sendgrid.com/v3/validations/email",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => json_encode($query_params),
+                    CURLOPT_HTTPHEADER => array(
+                        "authorization: Bearer ".env('SENDGRID_EMAIL_VALIDATION'),
+                        "content-type: application/json"
+                    ),
+                ));
+
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
+
+                curl_close($curl);
+
+                $new_email_validation = new EmailValidation;
+                $new_email_validation->email = $this->email;
+
+                if ($err) {
+                    $new_email_validation->meta = 'resp_err: '.$err;
+                    $new_email_validation->valid = false;
+                } else {
+                    $new_email_validation->meta = $response;
+                    if(json_decode($response)->result->verdict == 'Valid') {
+                        $new_email_validation->valid = true;
+                        $to_be_send = true;
+                    } else {
+                        $new_email_validation->valid = false;
+                    }
+                }
+
+                $new_email_validation->save();
+            } else {
+                if($email_validation->valid) {
+                    $to_be_send = true;
+                }
+            }
+        } else {
+            $to_be_send = true;
+        }
+
+        return $to_be_send;
+    } 
 
 
     public function setEmailAttribute($value) {

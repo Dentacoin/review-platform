@@ -1,0 +1,1 @@
+{!! $item->validate_email ? '<span class="label label-success">'.trans('admin.common.yes').'</span>' : '<span class="label label-warning">'.trans('admin.common.no').'</span>' !!}

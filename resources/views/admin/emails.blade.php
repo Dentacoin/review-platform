@@ -70,8 +70,6 @@
     </div>
 </div>
 
-@include('admin.errors')
-
 <!-- end page-header -->
 <div class="row">
     <div class="col-md-12">
@@ -90,6 +88,7 @@
                             'name'              => array(),
                             'email_categories'  => array('template' => 'admin.parts.table-emails-categories'),
                             'sendgrid_template_id'  => array(),
+                            'validate_email'  => array('template' => 'admin.parts.table-emails-validate'),
                             'note'  => array(),
                             'update'            => array('template' => 'admin.parts.table-emails-edit'),
 						],

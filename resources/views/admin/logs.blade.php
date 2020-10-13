@@ -29,7 +29,11 @@
 					</div>
 
 					<pre>
-						{!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel.log' ) !!}
+                        @if($type == 'api_civic')
+                            {!! @file_get_contents( base_path().'\/../api-dev/storage/logs/civic.log' ) !!}
+                        @else
+                            {!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel.log' ) !!}
+                        @endif
 					</pre>
                 </div>
             </div>

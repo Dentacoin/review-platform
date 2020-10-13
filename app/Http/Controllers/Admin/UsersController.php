@@ -1257,7 +1257,10 @@ class UsersController extends AdminController {
 
         if(!empty($item)) {
 
-            $emails = Email::where('user_id', $id )->where('sent', 1)->orderBy('created_at', 'DESC')->get();
+            $emails = Email::where('user_id', $id )->where( function($query) {
+                $query->where('sent', 1)
+                ->orWhere('invalid_email', 1);
+            })->orderBy('created_at', 'DESC')->get();
 
             if($item->is_dentist) {
                 $this->fields['password'] = [

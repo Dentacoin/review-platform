@@ -30,6 +30,7 @@ class Email extends Model
     	"template_id",
     	"meta",
     	"sent",
+    	"invalid_email",
     	"platform",
     	"unsubscribed",
 	];

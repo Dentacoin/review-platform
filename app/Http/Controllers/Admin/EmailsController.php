@@ -4,19 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use App\Models\StopEmailValidation;
+use App\Models\EmailValidation;
 use App\Models\EmailTemplate;
 use App\Models\Country;
 use App\Models\Review;
 use App\Models\Email;
 use App\Models\User;
 
-use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 use Validator;
+use Request;
 
-class EmailsController extends AdminController
-{
+class EmailsController extends AdminController {
+
     public function list( $what=null ) {
         
 
@@ -96,6 +98,7 @@ class EmailsController extends AdminController
                 $translation->save();
             }
             $template->subscribe_category = $this->request->input('subscribe_category');
+            $template->validate_email = $this->request->input('validate-email');
             $template->note = $this->request->input('note');
             $template->save();
 
@@ -295,6 +298,64 @@ class EmailsController extends AdminController
 
         $this->request->session()->flash('success-message', 'Emails send');
         return redirect('cms/'.$this->current_page);
+    }
+
+    public function list_validations( ) {
+
+        $validations = EmailValidation::orderBy('id', 'desc');
+
+        if(!empty(request('search-email'))) {
+            $validations = $validations->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
+        }
+        if(request('search-valid') == 'valid') {
+            $validations = $validations->where('valid', 1 );
+        } else if(request('search-valid') == 'invalid') {
+            $validations = $validations->where('valid', 0 );
+        }
+
+        $validations = $validations->get();
+
+        return $this->showView('email-validations', array(
+            'validations' => $validations,
+            'search_email' => request('search-email'),
+            'search_valid' => request('search-valid'),
+            'stopped_validations' => StopEmailValidation::find(1)->stopped,
+        ));
+    }
+
+    public function stop_validations() {
+
+        $item = StopEmailValidation::find(1);
+        $item->stopped = true;
+        $item->save();
+
+        $this->request->session()->flash('success-message', 'Validations are inactive!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations');
+    }
+
+    public function start_validations() {
+
+        $item = StopEmailValidation::find(1);
+        $item->stopped = false;
+        $item->save();
+
+        $this->request->session()->flash('success-message', 'Validations are active!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations');
+    }
+
+    public function mark_valid($id) {
+
+        $item = EmailValidation::find($id);
+
+        if($item) {
+
+            $item->valid = true;
+            $item->save();
+
+            $this->request->session()->flash('success-message', 'Marked as valid!' );
+        }
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations');
     }
 
 }

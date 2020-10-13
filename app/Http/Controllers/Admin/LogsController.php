@@ -10,7 +10,7 @@ class LogsController extends AdminController
 
         if(!empty($type)) {
 
-        	if(request('clear')) {
+        	if(request('clear') && $type != 'api_civic') {
         		file_put_contents( base_path().'\/../'.$type.'/storage/logs/laravel.log', '');
 
                 request()->session()->flash('success-message', 'Errors deleted');

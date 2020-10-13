@@ -1342,6 +1342,7 @@
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime','width' => '20%'),
                             'template_id'       => array('template' => 'admin.parts.table-email-template','width' => '100%'),
+                            'invalid_email'       => array('template' => 'admin.parts.table-email-invalid','width' => '100%'),
                             'platform'       => array('label' => 'Platform', 'template' => 'admin.parts.table-platforms'),
                         ],
                         'table_data' => $emails,
