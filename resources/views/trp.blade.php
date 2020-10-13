@@ -301,6 +301,7 @@
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 
 		@if(empty($user))
+        	<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css"/>
 			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js"></script>
 			<script type="text/javascript">
 				dcnGateway.init({
