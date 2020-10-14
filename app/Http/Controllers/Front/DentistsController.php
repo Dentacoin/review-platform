@@ -663,9 +663,9 @@ class DentistsController extends FrontController {
             return redirect('page-not-found');
         }
 
-        $states = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();
+        $states = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->where('country_id', $country->id)->whereNotNull('state_name')->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();
 
-        $all_dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->where('country_id', $country->id)->whereNotNull('city_name')->count();
+        $all_dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->where('country_id', $country->id)->whereNotNull('state_name')->whereNotNull('city_name')->count();
 
         $states_groups = [];
         $letter = null;

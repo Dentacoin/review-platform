@@ -228,24 +228,7 @@ class VoxController extends FrontController
 
 			$suggested_voxes = $this->user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
 
-			if ($this->user->country_id) {
-				$arrr = [];
-				foreach ($suggested_voxes as $vl) {
-					$has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->user->id)->first();
-
-		            if(!empty($vl->country_percentage) && !empty($vl->users_percentage) && array_key_exists($this->user->country_id, $vl->users_percentage) && $vl->users_percentage[$this->user->country_id] >= $vl->country_percentage  && empty($has_started_the_survey)) {
-		                $arrr[] = $vl->id;
-		            }
-				}
-
-				if (!empty($arrr)) {
-					foreach ($arrr as $ar) {
-						$suggested_voxes = $suggested_voxes->filter(function($item) use ($ar) {
-						    return $item->id != $ar;
-						});
-					}
-				}
-			}
+			$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
 
 	        $seos = PageSeo::find(17);
 
@@ -274,9 +257,10 @@ class VoxController extends FrontController
 			]);
 		}
 
-		if (!$testmode) {
+		if (true || !$testmode) {
+
 			$has_started_the_survey = VoxAnswer::where('vox_id', $vox->id)->where('user_id', $this->user->id)->first();
-			if ($this->user->isVoxRestricted($vox) || (!empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($this->user->country_id, $vox->users_percentage) && $vox->users_percentage[$this->user->country_id] >= $vox->country_percentage && empty($has_started_the_survey))) {
+			if ($this->user->isVoxRestricted($vox) || (!empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($this->user->country_id, $vox->users_percentage) && $vox->users_percentage[$this->user->country_id] >= $vox->country_percentage && empty($has_started_the_survey) && (!empty($vox->exclude_countries_ids) && !in_array($this->user->country_id, $vox->exclude_countries_ids)) || empty($vox->exclude_countries_ids))) {
 				$related_voxes = [];
 				$related_voxes_ids = [];
 				if ($vox->related->isNotEmpty()) {
@@ -290,24 +274,7 @@ class VoxController extends FrontController
 
 				$suggested_voxes = $this->user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
 
-				if ($this->user->country_id) {
-					$arrr = [];
-					foreach ($suggested_voxes as $vl) {
-						$has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->user->id)->first();
-
-			            if(!empty($vl->country_percentage) && !empty($vl->users_percentage) && array_key_exists($this->user->country_id, $vl->users_percentage) && $vl->users_percentage[$this->user->country_id] >= $vl->country_percentage  && empty($has_started_the_survey)) {
-			                $arrr[] = $vl->id;
-			            }
-					}
-
-					if (!empty($arrr)) {
-						foreach ($arrr as $ar) {
-							$suggested_voxes = $suggested_voxes->filter(function($item) use ($ar) {
-							    return $item->id != $ar;
-							});
-						}
-					}
-				}
+				$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
 
 				if ($this->user->isVoxRestricted($vox)) {
 					$res_desc = 'The target group of this survey consists of respondents with different demographics. No worries: We have plenty of other opportunities for you! ';
@@ -1315,34 +1282,7 @@ class VoxController extends FrontController
 		}
 		$suggested_voxes = Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $filled_voxes)->take(9)->get();
 
-		if ($this->user->country_id) {
-
-
-			$user = $this->user;
-			$suggested_voxes = $suggested_voxes->filter(function($vox) use ($user) {
-	         	return !empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($user->country_id, $vox->users_percentage) && $vox->users_percentage[$user->country_id] >= $vox->country_percentage;
-	       	});
-
-			$arr = [];
-
-			if($suggested_voxes->count()) {
-				foreach ($suggested_voxes as $vl) {
-					$has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->user->id)->first();
-
-		            if(empty($has_started_the_survey)) {
-		                $arr[] = $vl->id;
-		            }
-				}
-
-				if (!empty($arr)) {
-					foreach ($arr as $ar) {
-						$suggested_voxes = $suggested_voxes->filter(function($item) use ($ar) {
-						    return $item->id != $ar;
-						});
-					}
-				}
-			}
-		}
+		$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
 
 		$seos = PageSeo::find(15);
 

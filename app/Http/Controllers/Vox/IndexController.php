@@ -52,31 +52,8 @@ class IndexController extends FrontController {
         });
 		// $voxList = $voxList->slice($slice_from, $slice_count);
 
-		if ($this->user && !empty($this->user->country_id)) {
-			$user = $this->user;
-			$restricted_voxes = $voxList->filter(function($vox) use ($user) {
-	         	return !empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($user->country_id, $vox->users_percentage) && $vox->users_percentage[$user->country_id] >= $vox->country_percentage;
-	       	});
-
-			$arr = [];
-
-			if($restricted_voxes->count()) {
-				foreach ($restricted_voxes as $vl) {
-					$has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->user->id)->first();
-
-		            if(empty($has_started_the_survey)) {
-		                $arr[] = $vl->id;
-		            }
-				}
-
-				if (!empty($arr)) {
-					foreach ($arr as $ar) {
-						$voxList = $voxList->filter(function($item) use ($ar) {
-						    return $item->id != $ar;
-						});
-					}
-				}
-			}
+		if ($this->user) {
+			$voxList = $this->user->notRestrictedVoxesList($voxList);
 		}
 
 		//sort

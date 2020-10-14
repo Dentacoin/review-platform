@@ -829,6 +829,7 @@ class VoxesController extends AdminController
         $item->income = $this->request->input('income');
         $item->age = $this->request->input('age');
         $item->countries_ids = $this->request->input('countries_ids');
+        $item->exclude_countries_ids = $this->request->input('exclude_countries_ids');
         $item->country_percentage = $this->request->input('country_percentage');
         $item->dentists_patients = $this->request->input('dentists_patients');
         $item->manually_calc_reward = !empty($this->request->input('manually_calc_reward')) ? 1 : null;

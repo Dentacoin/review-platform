@@ -79,6 +79,7 @@ class Vox extends Model {
 
     protected $casts = [
         'countries_ids' => 'array',
+        'exclude_countries_ids' => 'array',
         'users_percentage' => 'array',
         'dcn_questions_triggers' => 'array',
     ];

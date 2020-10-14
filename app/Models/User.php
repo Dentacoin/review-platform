@@ -2231,7 +2231,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if (!empty($country_id)) {
             $voxlist = $voxlist->where(function($query) use ($country_id) {
                 $query->whereNull('countries_ids')
-                ->orWhereRaw('JSON_CONTAINS( `countries_ids`, \'"'.$country_id.'"\')');
+                ->orWhereRaw('not JSON_CONTAINS( `countries_ids`, \'"'.$country_id.'"\')');
             });
         }
 
@@ -2318,8 +2318,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
 
         if (!empty($this->country_id)) {
-            if (!empty($vox->countries_ids) && !in_array($this->country_id, $vox->countries_ids)) {
-                $is_restricted = true;
+            if(!empty($vox->exclude_countries_ids) && in_array($this->country_id, $vox->exclude_countries_ids) ) {
+            } else {
+
+                if (!empty($vox->countries_ids) && !in_array($this->country_id, $vox->countries_ids)) {
+                    $is_restricted = true;
+                }
             }
 
             // if (!empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($this->country_id, $vox->users_percentage) && $vox->users_percentage[$this->country_id] > $vox->country_percentage) {
@@ -2443,5 +2447,38 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function getRewardForSurvey($vox_id) {
         return DcnReward::where('user_id', $this->id)->where('type', 'survey')->where('platform', 'vox')->where('reference_id', $vox_id)->first();
+    }
+
+
+    public function notRestrictedVoxesList($voxList) {
+
+        if(!empty($this->country_id)) {
+            $user = $this;
+            $restricted_voxes = $voxList->filter(function($vox) use ($user) {
+                return ((!empty($vox->exclude_countries_ids) && !in_array($user->country_id, $vox->exclude_countries_ids)) || empty($vox->exclude_countries_ids)) && !empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($user->country_id, $vox->users_percentage) && $vox->users_percentage[$user->country_id] >= $vox->country_percentage;
+            });
+
+            $arr = [];
+
+            if($restricted_voxes->count()) {
+                foreach ($restricted_voxes as $vl) {
+                    $has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->id)->first();
+
+                    if(empty($has_started_the_survey)) {
+                        $arr[] = $vl->id;
+                    }
+                }
+
+                if (!empty($arr)) {
+                    foreach ($arr as $ar) {
+                        $voxList = $voxList->filter(function($item) use ($ar) {
+                            return $item->id != $ar;
+                        });
+                    }
+                }
+            }
+        }
+
+        return $voxList;
     }
 }

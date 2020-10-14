@@ -328,14 +328,22 @@
 
                                 <div class="form-group">
                                     <label class="col-md-1 control-label">Countries</label>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <select class="form-control select2" name="countries_ids[]" multiple>
                                             @foreach( \App\Models\Country::with('translations')->get() as $country )
                                                 <option value="{{ $country->id }}" {!! !empty($item) && !empty($item->countries_ids) && in_array($country->id, $item->countries_ids) ? 'selected="selected"' : null !!}>{{ $country->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <label class="col-md-3 control-label">
+                                    <label class="col-md-1 control-label">Limit not valid for countries</label>
+                                    <div class="col-md-2">
+                                        <select class="form-control select2" name="exclude_countries_ids[]" multiple>
+                                            @foreach( \App\Models\Country::with('translations')->get() as $country )
+                                                <option value="{{ $country->id }}" {!! !empty($item) && !empty($item->exclude_countries_ids) && in_array($country->id, $item->exclude_countries_ids) ? 'selected="selected"' : null !!}>{{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <label class="col-md-1 control-label">
                                         Max percentage of users from one country
                                         <!-- <br/> (this will not apply if there is only one selected country) -->
                                     </label>
@@ -344,13 +352,13 @@
                                         <style type="text/css">
                                             input::-webkit-outer-spin-button,
                                             input::-webkit-inner-spin-button {
-                                              -webkit-appearance: none;
-                                              margin: 0;
+                                                -webkit-appearance: none;
+                                                margin: 0;
                                             }
 
                                             /* Firefox */
                                             input[type=number] {
-                                              -moz-appearance: textfield;
+                                                -moz-appearance: textfield;
                                             }
                                         </style>
                                         {{ Form::number( 'country_percentage', !empty($item) ? $item->country_percentage : '' , array('class' => 'form-control', 'placeholder' => 'Number from 1 to 100') ) }}
