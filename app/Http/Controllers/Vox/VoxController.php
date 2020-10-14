@@ -257,7 +257,7 @@ class VoxController extends FrontController
 			]);
 		}
 
-		if (true || !$testmode) {
+		if (!$testmode) {
 
 			$has_started_the_survey = VoxAnswer::where('vox_id', $vox->id)->where('user_id', $this->user->id)->first();
 			if ($this->user->isVoxRestricted($vox) || (!empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($this->user->country_id, $vox->users_percentage) && $vox->users_percentage[$this->user->country_id] >= $vox->country_percentage && empty($has_started_the_survey) && (!empty($vox->exclude_countries_ids) && !in_array($this->user->country_id, $vox->exclude_countries_ids)) || empty($vox->exclude_countries_ids))) {
