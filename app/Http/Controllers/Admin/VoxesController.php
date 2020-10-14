@@ -1847,8 +1847,8 @@ class VoxesController extends AdminController
     private function exportQuestionTriggers($question) {
         if($question->question_trigger) {
 
-            if($question->question_trigger == -1) {
-                $cols3[] = 'Trigger: SAME AS BEFORE';
+            if($question->question_trigger == '-1') {
+                return 'Trigger: SAME AS BEFORE';
             } else {
 
                 $trigger_qs = [];
