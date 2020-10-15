@@ -59,7 +59,7 @@
 				@foreach($details_question['values'] as $answer_id => $answer)
 					<label class="answer answer" data-num="{{ $answer_id }}" for="answer-{{ $details_question_id }}-{{ $answer_id }}">
 						<input id="answer-{{ $details_question_id }}-{{ $answer_id }}" type="radio" name="answer" class="answer" value="{{ $answer_id }}"  demogr-index="{{ $loop->iteration }}" style="display: none;">
-						{{ $answer }}											
+						{{ $answer }}
 					</label>
 				@endforeach
 			@endif

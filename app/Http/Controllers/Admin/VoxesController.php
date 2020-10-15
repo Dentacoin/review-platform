@@ -590,23 +590,37 @@ class VoxesController extends AdminController
             if(request('used_for_stats')=='standard' && !request('stats_fields')) {
                 Request::session()->flash('error-message', 'Please, select the demographic details which should be used for the statistics.');
                 return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
-            } else if ($question->type == 'scale' && request('used_for_stats')=='standard' && !request('stats_fields') && !request('stats_scale_answers')) {
+            }
+
+            if ($question->type == 'scale' && request('used_for_stats')=='standard' && !request('stats_fields') && !request('stats_scale_answers')) {
                 Request::session()->flash('error-message', 'Please, select the demographic details and scale answers which should be used for the statistics.');
                 return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
-            } else if ($question->type == 'scale' && !request('question_scale')) {
+            }
+
+            if ($question->type == 'scale' && !request('question_scale')) {
                 Request::session()->flash('error-message', 'Please, pick a scale.');
                 return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
-            } else if(!empty(request('used_for_stats')) && empty(request('stats_title_question')) && empty(request('stats_title-en'))) {
+            }
+
+            if(!empty(request('used_for_stats')) && empty(request('stats_title_question')) && empty(request('stats_title-en'))) {
                 Request::session()->flash('error-message', 'Stats title required' );
                 return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
-            } else if($question->type == 'number' && empty($question->number_limit)) {
+            } 
+
+            if($question->type == 'number' && empty($question->number_limit)) {
                 Request::session()->flash('error-message', 'Number limit requited' );
                 return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
-            } else {
-                Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
-                return redirect('cms/'.$this->current_page.'/edit/'.$id);
             }
-        
+
+            if(!empty($question->prev_q_id_answers) && (VoxQuestion::find($question->prev_q_id_answers)->type != 'multiple_choice' || ($question->type!='single_choice' || $question->type!='multiple_choice'))) {
+                Request::session()->flash('error-message', 'The current question must be a single choice or a multiple choice and the previous question must be a multiple choice type' );
+                $question->prev_q_id_answers=null;
+                $question->save();
+                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+            }
+            
+            Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
+            return redirect('cms/'.$this->current_page.'/edit/'.$id);
 
         } else {
             return redirect('cms/'.$this->current_page);

@@ -1526,7 +1526,6 @@ class VoxController extends FrontController
 
 							if(!empty($question_id)) {
 								//question order
-								//proverki za triguri, skipvane
 								$next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
 								$array['question'] = $next_question;
 							} else {
@@ -1567,12 +1566,18 @@ class VoxController extends FrontController
 
 									$prev_answers = VoxAnswer::where('vox_id', $vox_id)->where('question_id', $prev_q->id)->where('user_id', $this->user->id)->get();
 									if($prev_answers->count() == 1) {
-										return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+										$prev_q_answers_text = $prev_q->vox_scale_id && !empty($scales[$prev_q->vox_scale_id]) ? explode(',', $scales[$prev_q->vox_scale_id]->answers) :  json_decode($prev_q->answers, true);
+
+										if(mb_strpos($prev_q_answers_text[$prev_answers->pluck('answer')->toArray()[0] - 1], '!') !== false) {
+											return 'skip-dvq:'.$next_question->id;
+										} else {
+											return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+										}
+
 									} else {
 										$array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
 									}
 								}
-
 
 								if(!empty($next_question->question_trigger)) {
 

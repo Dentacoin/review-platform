@@ -190,6 +190,22 @@
                         </div>
                     @endforeach
 
+                    @if($item->questions->isNotEmpty())
+                        <div class="form-group clearfix">
+                            <label class="col-md-2 control-label">Show only the answers chosen <br/> in previous question </label>
+                            <div class="col-md-4">
+                                <select name="prev_q_id_answers" class="form-control select2" style="width: 50%; float: left;">
+                                    <option value="">Select question</option>
+                                    @foreach($item->questions as $iq)
+                                        @if(empty($question) || ($iq->order < $question->order && $iq->type == 'multiple_choice'))
+                                            <option value="{{ $iq->id }}" {{ !empty($question) && $question->prev_q_id_answers == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="form-group clearfix">
                         <h3 class="col-md-1" style="margin-top: 0px;">Settings</h3>
                         @if(empty($question) || empty($question->question_trigger) )
@@ -304,22 +320,6 @@
                             </div>
                         </div>
                     </div>
-
-                    @if($item->questions->isNotEmpty())
-                        <div class="form-group clearfix">
-                            <label class="col-md-2 control-label">Show only the answers chosen in previous question </label>
-                            <div class="col-md-4">
-                                <select name="prev_q_id_answers" class="form-control select2" style="width: 50%; float: left;">
-                                    <option value="">Select question</option>
-                                    @foreach($item->questions as $iq)
-                                        @if(empty($question) || $iq->order < $question->order)
-                                            <option value="{{ $iq->id }}" {{ !empty($question) && $question->prev_q_id_answers == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    @endif
 
                     <div class="form-group question-control-wrap">
                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.question-control') }}</label>

@@ -596,7 +596,7 @@
                                     </div>
                                 </form>
                                 <br/>
-                                <a href="{{ url('survey-import-template.xlsx') }}">Download sample</a>
+                                <a href="{{ url('survey-import-template.xlsx') }}">Download sample</a> (also hints for Prevous question)
                             </div>
                             <div class="col-md-4">
                                 <h4>{{ trans('admin.page.'.$current_page.'.questions-export') }}</h4>
