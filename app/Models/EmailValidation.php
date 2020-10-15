@@ -12,6 +12,8 @@ class EmailValidation extends Model {
     	"email",
         "meta",
         "valid",
+        "from_user_id",
+        "template_id",
     ];
     
     protected $dates = [

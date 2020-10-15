@@ -795,6 +795,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
                 $new_email_validation = new EmailValidation;
                 $new_email_validation->email = $email;
+                $new_email_validation->from_user_id = $this->id;
+                $new_email_validation->template_id = $template_id;
 
                 if ($err) {
                     $new_email_validation->meta = 'resp_err: '.$err;
