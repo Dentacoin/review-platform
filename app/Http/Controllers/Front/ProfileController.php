@@ -129,6 +129,16 @@ class ProfileController extends FrontController {
                 $valid_email = $this->user->sendgridEmailValidation(68, Request::Input('email'));
 
                 if(!$valid_email) {
+                    $invitation = new UserInvite;
+                    $invitation->user_id = $this->user->id;
+                    $invitation->invited_email = Request::Input('email');
+                    $invitation->invited_name = Request::Input('name');
+                    $invitation->platform = 'trp';
+                    $invitation->review = true;
+                    $invitation->suspicious_email = true;
+                    $invitation->save();
+
+                    // sendgridEmailValidation
                     return Response::json(['success' => false, 'message' => 'Not sent - suspicious email address.' ] );
                 }
 
@@ -565,15 +575,24 @@ class ProfileController extends FrontController {
                                     }
                                 }
                             } else {
+
+                                $valid_email = $this->user->sendgridEmailValidation(68, $email);
+
                                 $invitation = new UserInvite;
                                 $invitation->user_id = $this->user->id;
                                 $invitation->invited_email = $email;
                                 $invitation->invited_name = $names[$key];
                                 $invitation->platform = 'trp';
                                 $invitation->review = true;
+
+                                if(!$valid_email) {
+                                    $invitation->suspicious_email = true;
+                                } else {
+                                    $send_mail = true;
+                                }
+
                                 $invitation->save();
 
-                                $send_mail = true;
                             }
 
                             if ($send_mail) {
