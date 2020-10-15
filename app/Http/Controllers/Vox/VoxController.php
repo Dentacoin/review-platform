@@ -537,6 +537,9 @@ class VoxController extends FrontController
 		        			$valid = true;
 		        			$a = 0;
 
+		        		} else if($type == 'previous') {
+		        			$valid = true;
+		        			$a = Request::input('answer');
 		        		} else if ( isset( $this->details_fields[$type] ) ) {
 
 		        			$should_reward = false;
@@ -763,6 +766,21 @@ class VoxController extends FrontController
 							        $answer->question_id = $q;
 							        $answer->answer = 0;
 							        $answer->is_skipped = true;
+							        $answer->country_id = $this->user->country_id;
+							        
+							        if($testmode) {
+							        	$answer->is_admin = true;
+							        }
+							        $answer->save();
+							        $answered[$q] = 0;
+							        
+			        			} else if($type == 'previous') {
+			        				$answer = new VoxAnswer;
+							        $answer->user_id = $this->user->id;
+							        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+							        $answer->question_id = $q;
+						        	$answer->answer = $a;
+						        	$this->setupAnswerStats($answer);
 							        $answer->country_id = $this->user->country_id;
 							        
 							        if($testmode) {
@@ -1544,6 +1562,17 @@ class VoxController extends FrontController
 
 							if(!empty($question_id) && is_numeric($question_id)) {
 								$next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
+								if(!empty($next_question->prev_q_id_answers)) {
+									$prev_q = VoxQuestion::find($next_question->prev_q_id_answers);
+
+									$prev_answers = VoxAnswer::where('vox_id', $vox_id)->where('question_id', $prev_q->id)->where('user_id', $this->user->id)->get();
+									if($prev_answers->count() == 1) {
+										return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+									} else {
+										$array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+									}
+								}
+
 
 								if(!empty($next_question->question_trigger)) {
 

@@ -94,31 +94,33 @@
 				<div class="answers-column"> 
 			@endif
 			@foreach( $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $k => $answer)
-				<div class="checkbox {!! mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}">
-					<label class="answer-checkbox no-mobile-tooltips {{ !empty($question->hasAnswerTooltip($answer, $question)) ? 'tooltip-text' : '' }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!}
-					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $k).'"' : '' !!}>
-						<i class="far fa-square"></i>
-						<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="checkbox" name="answer" class="answer{!! mb_substr($answer, 0, 1)=='!' ? ' disabler' : '' !!} input-checkbox" value="{{ $loop->index+1 }}">
+				@if(empty($answers_shown) || (!empty($answers_shown) && in_array($loop->iteration, $answers_shown)))
+					<div class="checkbox {!! mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}">
+						<label class="answer-checkbox no-mobile-tooltips {{ !empty($question->hasAnswerTooltip($answer, $question)) ? 'tooltip-text' : '' }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!}
+						{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $k).'"' : '' !!}>
+							<i class="far fa-square"></i>
+							<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="checkbox" name="answer" class="answer{!! mb_substr($answer, 0, 1)=='!' ? ' disabler' : '' !!} input-checkbox" value="{{ $loop->index+1 }}">
 
-						@if($question->allAnswersHaveImages() && !empty($question->getAnswerImageUrl(false, $k)))
-							<div class="answer-image" style="background-image: url({{ $question->getAnswerImageUrl(true, $k ) }})">
-								<img class="img-unchecked" src="{{ url('new-vox-img/non-selected-img-answer-icon.svg') }}">
-								<img class="img-checked" src="{{ url('new-vox-img/selected-img-answer-icon.svg') }}"/>
-								<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $k }}" href="{{ $question->getAnswerImageUrl(false, $k ) }}">
-									<img src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
-								</a>
-							</div>
+							@if($question->allAnswersHaveImages() && !empty($question->getAnswerImageUrl(false, $k)))
+								<div class="answer-image" style="background-image: url({{ $question->getAnswerImageUrl(true, $k ) }})">
+									<img class="img-unchecked" src="{{ url('new-vox-img/non-selected-img-answer-icon.svg') }}">
+									<img class="img-checked" src="{{ url('new-vox-img/selected-img-answer-icon.svg') }}"/>
+									<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $k }}" href="{{ $question->getAnswerImageUrl(false, $k ) }}">
+										<img src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
+									</a>
+								</div>
 
-						@endif
-						{!! nl2br(App\Models\VoxQuestion::handleAnswerTooltip( mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer))  !!}
+							@endif
+							{!! nl2br(App\Models\VoxQuestion::handleAnswerTooltip( mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer))  !!}
 
-						@if(!empty($question->hasAnswerTooltip($answer, $question)))
-							<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
-							</div>
-						@endif
-					</label>
-					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? '<img src="'.$question->getAnswerImageUrl(false, $k).'" style="display: none !important;" />' : '' !!}
-				</div>
+							@if(!empty($question->hasAnswerTooltip($answer, $question)))
+								<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
+								</div>
+							@endif
+						</label>
+						{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? '<img src="'.$question->getAnswerImageUrl(false, $k).'" style="display: none !important;" />' : '' !!}
+					</div>
+				@endif
 				@if(!$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 && round(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) / 2) == $loop->iteration )
 					</div> 
 					<div class="answers-column"> 
@@ -337,7 +339,6 @@
 								<img src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
 							</a>
 						</div>
-
 					@endif
 
 					{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}

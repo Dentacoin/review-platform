@@ -515,6 +515,13 @@ class VoxesController extends AdminController
 
                     if(empty($text) && $text != '0') {
                         if($q && !empty($a)) {
+
+                            $prev_q_answ = null;
+                            if (mb_strpos($q, 'prev_q') !== false) {
+                                $prev_q_answ = intval(explode(':', explode('|', $q)[0])[1]);
+                                $q = explode('|', $q)[1];
+                            }
+
                             $qdata = [
                                 'order' => $i,
                                 'type' => 'single_choice',
@@ -524,6 +531,10 @@ class VoxesController extends AdminController
                                 'question-en' => $q,
                                 'answers-en' => $a,
                             ];
+
+                            if($prev_q_answ) {
+                                $qdata['prev_q_order'] = $prev_q_answ; 
+                            }
 
                             $qobj = new VoxQuestion;
                             $qobj->vox_id = $item->id;
@@ -922,6 +933,7 @@ class VoxesController extends AdminController
         $question->dont_randomize_answers = !empty($data['dont_randomize_answers']) ? $data['dont_randomize_answers'] : null;
         $question->image_in_tooltip = !empty($data['image_in_tooltip']) ? $data['image_in_tooltip'] : null;  
         $question->image_in_question = !empty($data['image_in_question']) ? $data['image_in_question'] : null;  
+        $question->prev_q_id_answers = !empty($data['prev_q_id_answers']) ? $data['prev_q_id_answers'] : null;  
               
         if( !empty($data['trigger_type']) ) {
             $question->trigger_type = $data['trigger_type'];
@@ -968,6 +980,11 @@ class VoxesController extends AdminController
         }
         
         $question->save();
+
+        if(isset($data['prev_q_order'])) {
+            $question->prev_q_id_answers = VoxQuestion::where('vox_id', $question->vox_id)->where('order', $data['prev_q_order'])->first()->id;
+            $question->save();
+        }
 
         if (!empty(session('brackets'))) {
             $sess = session('brackets');

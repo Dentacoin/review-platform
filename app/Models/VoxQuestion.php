@@ -33,6 +33,7 @@ class VoxQuestion extends Model {
         'answers_images_filename',
         'vox_scale_id',
         'is_control',
+        'prev_q_id_answers',
         'order',
         'number_limit',
         'used_for_stats',

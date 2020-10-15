@@ -61,10 +61,22 @@ $(document).ready(function(){
                 $('.question-group').find('.loader').remove();
                 if(data) {
                     if(data.indexOf("skip-dvq") >= 0) {
-                        var next_q_id = data.split(':')[1];
-                        $('#loader-survey').show();
-                        $('.question-group').hide();
-                        sendSkipAnswer(next_q_id);
+
+                        if(data.indexOf("answer") >= 0) {
+                            var arr = data.split(';');
+                            var next_q_id = arr[0].split(':')[1];
+                            var ans = arr[1].split(':')[1];
+
+                            $('#loader-survey').show();
+                            $('.question-group').hide();
+                            sendSkipAnswer(next_q_id, ans);
+                        } else {
+
+                            var next_q_id = data.split(':')[1];
+                            $('#loader-survey').show();
+                            $('.question-group').hide();
+                            sendSkipAnswer(next_q_id);
+                        }
                     } else {
                         $('#loader-survey').hide();
                         $('#questions-box').html('');
@@ -522,13 +534,13 @@ $(document).ready(function(){
         });;
     }
 
-    var sendSkipAnswer = function(next_q_id) {
+    var sendSkipAnswer = function(next_q_id, ans=null) {
         $.post( 
             VoxTest.url, 
             {
                 question: next_q_id,
-                answer: 0,
-                type: 'skip',
+                answer: ans ? ans : 0,
+                type: ans ? 'previous' : 'skip',
                 _token: $('input[name="_token"]').val()
             }, 
             function( data ) {

@@ -13,7 +13,7 @@
 
 @if(!empty($item) && !empty($questions_order_bug))
     <div class="alert alert-danger m-b-15">
-        Please, reorder the questions. There are duplicate or missing order numbers.
+        Please, reorder the questions. There are duplicated or missing order numbers.
     </div>
 @endif
 <!-- end page-header -->
