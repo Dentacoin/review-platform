@@ -72,8 +72,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                        	@foreach($items as $invite)
-	                            <tr>
+                            @foreach($items as $invite)
+                                <tr>
                                     <td>
                                         {{ date('d.m.Y, H:i:s', $invite->created_at->timestamp) }}
                                     </td>
@@ -101,8 +101,8 @@
                                     <td>
                                         <a class="btn btn-sm btn-deafult" href="{{ url('cms/invites/delete/'.$invite->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>
                                     </td>
-	                            </tr>
-	                        @endforeach
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>                    
                 </div>

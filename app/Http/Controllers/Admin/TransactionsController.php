@@ -105,7 +105,7 @@ class TransactionsController extends AdminController
 
         $pagination_link = "";
         foreach (Request::all() as $key => $value) {
-            if($key != 'search') {
+            if($key != 'search' && $key != 'page') {
                 $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
             }
         }
