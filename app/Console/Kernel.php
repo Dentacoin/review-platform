@@ -268,16 +268,31 @@ class Kernel extends ConsoleKernel
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => 'https://indacoin.com/api/GetCoinConvertAmount/USD/DCN/100/dentacoin',
+                CURLOPT_URL => "https://api.coingecko.com/api/v3/coins/dentacoin",
                 CURLOPT_SSL_VERIFYPEER => 0
             ));
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             $resp = json_decode(curl_exec($curl));
             curl_close($curl);
-
             if(!empty($resp))   {
-                $price = 1 / (int)((int)$resp / 100);
+                if(!empty($resp->market_data->current_price->usd))  {
+                   $price = floatval($resp->market_data->current_price->usd);
+                }
             }
+
+            // $curl = curl_init();
+            // curl_setopt_array($curl, array(
+            //     CURLOPT_RETURNTRANSFER => 1,
+            //     CURLOPT_URL => 'https://indacoin.com/api/GetCoinConvertAmount/USD/DCN/100/dentacoin',
+            //     CURLOPT_SSL_VERIFYPEER => 0
+            // ));
+            // curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            // $resp = json_decode(curl_exec($curl));
+            // curl_close($curl);
+
+            // if(!empty($resp))   {
+            //     $price = 1 / (int)((int)$resp / 100);
+            // }
 
             if(!empty($price)) {
                 file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
