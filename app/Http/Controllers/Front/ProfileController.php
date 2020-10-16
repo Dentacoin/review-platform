@@ -476,7 +476,10 @@ class ProfileController extends FrontController {
                 $names = session('bulk_names');
 
                 $invalid = 0;
+                $invalid_emails = [];
                 $already_invited = 0;
+                $already_invited_emails = [];
+
                 foreach ($emails as $key => $email) {
                     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                         $invalid++;
@@ -486,6 +489,8 @@ class ProfileController extends FrontController {
 
                     if(!$valid_email) {
                         $invalid++;
+
+                        $invalid_emails[] = $email;
                     }
 
                     $invitation = UserInvite::where([
@@ -495,6 +500,8 @@ class ProfileController extends FrontController {
 
                     if ($invitation) {
                         $already_invited++;
+
+                        $already_invited_emails[] = $email;
                     }
                 }
 
@@ -503,23 +510,23 @@ class ProfileController extends FrontController {
                 $gtag_tracking = true;
 
                 if (!empty($invalid) && $invalid == count($emails)) {
-                    $final_message = trans('trp.page.profile.invite.copypaste.all-not-sent');
+                    $final_message = trans('trp.page.profile.invite.copypaste.all-not-sent').'<br/>'.implode(',', $invalid_emails);
                     $alert_color = 'warning';
                     $gtag_tracking = false;
                 } else if(!empty($invalid) && $invalid != count($emails)) {
                     if (empty($already_invited)) {
-                        $final_message = trans('trp.page.profile.invite.copypaste.unvalid-emails');
+                        $final_message = trans('trp.page.profile.invite.copypaste.unvalid-emails').'<br/>'.implode(',', $invalid_emails);
                         $alert_color = 'orange';
                     } else {
-                        $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback');
+                        $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback').'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
                         $alert_color = 'orange';
                     }
                 } else if(!empty($already_invited) && ($already_invited == count($emails))) {
-                    $final_message = trans('trp.page.profile.invite.copypaste.all-submitted-feedback');
+                    $final_message = trans('trp.page.profile.invite.copypaste.all-submitted-feedback').'<br/>'.implode(',', $already_invited_emails);
                     $alert_color = 'warning';
                     $gtag_tracking = false;
                 } else if(!empty($already_invited) && $already_invited != count($emails)) {
-                    $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback-invalid-emails');
+                    $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback-invalid-emails').'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
                     $alert_color = 'orange';
                 } else {
                     $final_message = trans('trp.page.profile.invite.success');
