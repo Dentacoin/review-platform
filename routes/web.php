@@ -175,6 +175,10 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/polls/change-question/{id}', 	'PollsController@change_poll_question');
 	Route::any('vox/polls/duplicate/{id}', 			'PollsController@duplicate_poll');
 	Route::any('vox/polls-explorer/{id?}', 			'PollsController@polls_explorer');
+	Route::any('vox/polls-monthly-description', 	'PollsController@pollsMonthlyDescriptions');
+	Route::any('vox/polls-monthly-description/add', 'PollsController@pollsMonthlyDescriptionsAdd');
+	Route::any('vox/polls-monthly-description/edit/{id}', 'PollsController@pollsMonthlyDescriptionsEdit');
+	Route::any('vox/polls-monthly-description/delete/{id}', 'PollsController@pollsMonthlyDescriptionsDelete');
 
 	Route::get('emails', 							'EmailsController@list');
 	Route::get('emails/{what?}', 					'EmailsController@list');

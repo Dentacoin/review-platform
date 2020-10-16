@@ -112,6 +112,13 @@ $(document).ready(function(){
                 		}
                 	}
 
+                    if(ret.monthly_descr) {
+                        $('.monthly-description p').html(ret.monthly_descr);
+                        $('.monthly-description').show();
+                    } else {
+                        $('.monthly-description').hide();
+                    }
+
                     if (go_to_date !== undefined && go_to_date) {
                         clickOnDate({
                             dayEl: $('td[data-date="'+go_to_date+'"]')[0]

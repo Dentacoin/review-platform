@@ -6,6 +6,7 @@ use App\Http\Controllers\FrontController;
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
+use App\Models\PollsMonthlyDescription;
 use App\Models\VoxCategory;
 use App\Models\PollAnswer;
 use App\Models\DcnReward;
@@ -38,6 +39,8 @@ class PollsController extends FrontController
 	public function list($locale=null) {
 
 		$seos = PageSeo::find(14);
+
+		$monthly_descr = PollsMonthlyDescription::where('month', date('n'))->where('year', date('Y'))->first();
 		
 		return $this->ShowVoxView('daily-polls', array(
 			'js' => [
@@ -51,6 +54,7 @@ class PollsController extends FrontController
             'seo_description' => $seos->seo_description,
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
+            'monthly_descr' => $monthly_descr,
         ));
 	}
 
@@ -191,9 +195,12 @@ class PollsController extends FrontController
 			$daily_polls = null;
 		}
 
+		$monthly_descr = PollsMonthlyDescription::where('month', Request::input('month'))->where('year', Request::input('year'))->first();
+
 		$ret = [
         	'success' => true,
         	'daily_polls' => $daily_polls,
+        	'monthly_descr' => $monthly_descr ? $monthly_descr->description : null,
         ];
         return Response::json( $ret );
 	}

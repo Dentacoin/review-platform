@@ -383,3 +383,34 @@ $main-color: #38ace5;
 		}
 	}
 }
+
+.monthly-description {
+	margin-top: 70px;
+    margin-bottom: 40px;
+
+	@media #{$phone} {
+		margin-top: 50px;
+		margin-bottom: 20px;
+	}
+
+    h2 {
+    	font-size: 25px;
+	    font-weight: bold;
+	    color: black;
+	    margin-bottom: 22px;
+
+		@media #{$phone} {
+			font-size: 18px;
+		}
+    }
+
+    p {
+    	font-size: 18px;
+	    color: #333333;
+	    margin-bottom: 45px;
+
+		@media #{$phone} {
+			font-size: 15px;
+		}
+    }
+}

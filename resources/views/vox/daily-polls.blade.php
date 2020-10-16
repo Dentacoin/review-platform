@@ -12,6 +12,17 @@
 		
 		<div id="calendar" data-link="{{ getLangUrl('get-polls') }}"></div>
 
+		<div class="monthly-description tac" style="{!! !empty($monthly_descr) ? '' : 'display:none;' !!}">
+			<div class="container">
+				<h2>MONTHLY POLLS</h2>
+				<p>
+					@if(!empty($monthly_descr))
+						{{ $monthly_descr->description }}
+					@endif
+				</p>
+			</div>
+		</div>
+
 		@if(!empty($date_poll))
 			<script type="text/javascript">
 				var go_to_date = '{!! $date_poll !!}';

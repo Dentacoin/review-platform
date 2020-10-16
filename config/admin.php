@@ -88,6 +88,7 @@ return [
                 'explorer' => 'explorer',
                 'export-survey-data' => 'export-survey-data',
                 'polls' => 'polls',
+                'polls-monthly-description' => 'polls-monthly-description',
                 'polls-explorer' => 'polls-explorer',
                 'recommendations' => 'recommendations',
             ),

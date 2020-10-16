@@ -262,3 +262,26 @@
         @media screen and (max-width: 1080px) {
           #calendar .fc-list-empty-wrap1 .list-event .poll-stat-image {
             max-width: 16px; } }
+
+.monthly-description {
+  margin-top: 70px;
+  margin-bottom: 40px; }
+  @media screen and (max-width: 768px) {
+    .monthly-description {
+      margin-top: 50px;
+      margin-bottom: 20px; } }
+  .monthly-description h2 {
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 22px; }
+    @media screen and (max-width: 768px) {
+      .monthly-description h2 {
+        font-size: 18px; } }
+  .monthly-description p {
+    font-size: 18px;
+    color: #333333;
+    margin-bottom: 45px; }
+    @media screen and (max-width: 768px) {
+      .monthly-description p {
+        font-size: 15px; } }

@@ -5,7 +5,8 @@
 <h1 class="page-header">
     Daily Polls
     
-    <a class="btn btn-primary pull-right" href="{{ url('cms/vox/polls/add') }}">Add new daily poll</a>
+    <a class="btn btn-primary pull-right" href="{{ url('cms/vox/polls-monthly-description/add') }}">Add new monthly description</a>
+    <a class="btn btn-primary pull-right" href="{{ url('cms/vox/polls/add') }}" style="margin-right: 10px;">Add new daily poll</a>
 </h1>
 <!-- end page-header -->
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
+use App\Models\PollsMonthlyDescription;
 use App\Models\VoxCategory;
 use App\Models\PollAnswer;
 use App\Models\DcnReward;
@@ -432,6 +433,181 @@ class PollsController extends AdminController {
         } else {
             return redirect('cms/vox/polls/');
         }
+    }
+
+    public function pollsMonthlyDescriptions() {
+
+        $descriptions = PollsMonthlyDescription::orderBy('month', 'desc')->orderBy('year', 'desc');
+
+        if(!empty($this->request->input('month'))) {
+            $descriptions = $descriptions->where('month', $this->request->input('month'));
+        }
+        if(!empty($this->request->input('year'))) {
+            $descriptions = $descriptions->where('year', $this->request->input('year'));
+        }
+
+        $total_count = $descriptions->count();
+        $page = max(1,intval(request('page')));
+        
+        $ppp = 100;
+        $adjacents = 2;
+        $total_pages = ceil($total_count/$ppp);
+
+        //Here we generates the range of the page numbers which will display.
+        if($total_pages <= (1+($adjacents * 2))) {
+          $start = 1;
+          $end   = $total_pages;
+        } else {
+          if(($page - $adjacents) > 1) { 
+            if(($page + $adjacents) < $total_pages) { 
+              $start = ($page - $adjacents);            
+              $end   = ($page + $adjacents);         
+            } else {             
+              $start = ($total_pages - (1+($adjacents*2)));  
+              $end   = $total_pages;               
+            }
+          } else {               
+            $start = 1;                                
+            $end   = (1+($adjacents * 2));             
+          }
+        }
+
+        $descriptions = $descriptions->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        //If you want to display all page links in the pagination then
+        //uncomment the following two lines
+        //and comment out the whole if condition just above it.
+        /*$start = 1;
+        $end = $total_pages;*/
+
+        $current_url = url('cms/vox/polls-monthly-description');
+
+        $pagination_link = "";
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search' && $key != 'page') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
+        }
+
+        return $this->showView('polls-monthly-description', array(
+            'month' => $this->request->input('month'),
+            'year' => $this->request->input('year'),
+            'descriptions' => $descriptions,
+            'total_count' => $total_count,
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
+            'pagination_link' => $pagination_link,
+            'current_url' => $current_url,
+        ));
+    }
+
+
+
+    public function pollsMonthlyDescriptionsAdd() {
+
+        if(Request::isMethod('post')) {
+
+            $newdesc = new PollsMonthlyDescription;
+            $newdesc->month = !empty($this->request->input('month')) ? $this->request->input('month') : null ;
+            $newdesc->year = !empty($this->request->input('year')) ? $this->request->input('year') : null;
+            $newdesc->save();
+
+            foreach ($this->langs as $key => $value) {
+                if(!empty($this->request->input('description-'.$key))) {
+                    $translation = $newdesc->translateOrNew($key);
+                    $translation->polls_monthly_description_id = $newdesc->id;
+                    $translation->description = $this->request->input('description-'.$key);
+                    $translation->save();
+                }
+            }
+            $newdesc->save();
+
+            $exisiting_date = PollsMonthlyDescription::where('id', '!=', $newdesc->id)->where('month', $this->request->input('month'))->where('year', $this->request->input('year'))->first();
+
+            if(!empty($exisiting_date)) {
+                Request::session()->flash('error-message', 'Daily Polls monthly description date ('.$this->request->input('month').'.'.$this->request->input('year').') is already taken');
+                return redirect('cms/vox/polls-monthly-description/edit/'.$newdesc->id);
+            }
+
+            $validator = Validator::make($this->request->all(), [
+                'month' => array('required'),
+                'year' => array('required'),
+            ]);
+
+            if ($validator->fails()) {
+                return redirect('cms/vox/polls-monthly-description/edit/'.$newdesc->id)
+                ->withInput()
+                ->withErrors($validator);
+            } else {
+                Request::session()->flash('success-message', 'Daily Polls monthly description added');
+                return redirect('cms/vox/polls-monthly-description');
+            }
+        }
+
+        return $this->showView('polls-monthly-description-form');
+    }
+
+    public function pollsMonthlyDescriptionsEdit( $id ) {
+        $item = PollsMonthlyDescription::find($id);
+
+        if(!empty($item)) {
+
+            if(Request::isMethod('post')) {
+
+                $validator = Validator::make($this->request->all(), [
+                    'month' => array('required'),
+                    'year' => array('required'),
+                ]);
+
+                if ($validator->fails()) {
+                    return redirect('cms/vox/polls-monthly-description/edit/'.$item->id)
+                    ->withInput()
+                    ->withErrors($validator);
+                } else {
+
+                    $exisiting_date = PollsMonthlyDescription::where('id', '!=', $item->id)->where('month', $this->request->input('month'))->where('year', $this->request->input('year'))->first();
+
+                    if(!empty($exisiting_date)) {
+                        Request::session()->flash('error-message', 'Daily Polls monthly description date ('.$this->request->input('month').'.'.$this->request->input('year').') is already taken');
+                        return redirect('cms/vox/polls-monthly-description/edit/'.$item->id);
+                    }
+
+                    $item->month = $this->request->input('month');
+                    $item->year = $this->request->input('year');
+                    $item->save();
+
+                    foreach ($this->langs as $key => $value) {
+                        if(!empty($this->request->input('description-'.$key))) {
+                            $translation = $item->translateOrNew($key);
+                            $translation->polls_monthly_description_id = $item->id;
+                            $translation->description = $this->request->input('description-'.$key);
+                        }
+
+                        $translation->save();
+                    }
+                    $item->save();
+
+                    Request::session()->flash('success-message', 'Daily Polls monthly description edited');
+                    return redirect('cms/vox/polls-monthly-description/');
+                }
+            }
+
+            return $this->showView('polls-monthly-description-form', array(
+                'item' => $item,
+            ));
+        } else {
+            return redirect('cms/'.$this->current_page.'/polls-monthly-description/');
+        }
+    }
+
+    public function pollsMonthlyDescriptionsDelete( $id ) {
+        PollsMonthlyDescription::destroy( $id );
+
+        $this->request->session()->flash('success-message', 'Polls monthly description deleted' );
+        return redirect('cms/vox/polls-monthly-description/');
     }
 
 }
