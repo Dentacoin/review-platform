@@ -1879,7 +1879,6 @@ class StatsController extends FrontController
                         return (new MultipleStatSheetExport($flist, $breakdown_rows_count))->download($pdf_title.'.xlsx');
 
                     } else {
-
                         return $this->ShowVoxView('download-stats', array(
                             'vox' => $vox,
                             'question' => $q,
@@ -1941,53 +1940,40 @@ class StatsController extends FrontController
                     }
                 }
             }
-    		return $this->ShowVoxView('stats-survey', array(
+
+            $items_array = [
                 'demogr' => $demogr,
                 'taken' => $this->user ? $this->user->filledVoxes() : [],
                 'respondents' => $respondents_count,
                 'respondents_country' => $respondents_country_count,
-    			'filters' => $filters,
-    			'active_filter' => $active_filter,
-    			'vox' => $vox,
+                'filters' => $filters,
+                'active_filter' => $active_filter,
+                'vox' => $vox,
                 'launched_date' => $launched_date,
-    			'scales' => config('vox.stats_scales'),
+                'scales' => config('vox.stats_scales'),
                 'blurred_stats' => $blurred_stats,
-
-    			// 'cats' => VoxCategory::get(),
-    			// 'start' => $start,
-    			// 'end' => $end,
-    			// 'country' => $country,
-    			// 'countryobj' => $countryobj,
-    			// 'prev' => $prev,
-    			// 'next' => $next,
-    			// 'question' => $question,
-    			// 'my_answer' => $my_answer,
-    			// 'voxes' => $voxes,
-    			// 'answered' => $answered,
-    			// 'answer_aggregates' => $answer_aggregates,
-    			// 'chart_data' => $chart_data,
-    			// 'colors' => $colors,
-    			'js' => [
-    				'stats.js',
-                    'moment.js',
-                    'daterangepicker.min.js',
-                    'amcharts-core.js',
-                    'amcharts-maps.js',
-                    'amcharts-worldLow.js',
-                    'gstatic-charts-loader.js',
-    			],
-    			'css' => [
-                    'daterangepicker.min.css',
-                    'vox-stats.css'
-    			],
-
+                'js' => [
+                    'stats.js',
+                ],
+                'css' => [
+                    'vox-stats-single.css'
+                ],
                 'canonical' => $vox->getStatsList(),
                 'social_image' => $vox->getSocialImageUrl('stats'),
                 'seo_title' => $seo_title,
                 'seo_description' => $seo_description,
                 'social_title' => $social_title,
                 'social_description' => $social_description,
-            ));
+            ];
+
+            if(!empty($this->user)) {
+                $items_array['js'][] = 'amcharts-core.js';
+                $items_array['js'][] = 'amcharts-maps.js';
+                $items_array['js'][] = 'amcharts-worldLow.js';
+                $items_array['js'][] = 'gstatic-charts-loader.js';
+            }
+
+    		return $this->ShowVoxView('stats-survey', $items_array);
         }
 	}
 

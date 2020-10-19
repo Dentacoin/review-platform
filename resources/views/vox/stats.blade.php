@@ -27,21 +27,6 @@
 				<input type="text" id="survey-search" name="survey-search" class="tal" value="{{ !empty($name) ? $name : '' }}">
 			</div>
 		</form>
-
-		@if(false)
-			<!-- <div class="questions-menu clearfix" style="display: none;">
-				<div class="sort-menu">
-					@foreach($sorts as $key => $val)
-						<a href="javascript:;" sort="{{ $key }}"  {!! $key == 'all' ? 'class="active"' : '' !!}>
-							@if($key == 'featured')
-								<i class="fas fa-star"></i>
-							@endif
-							{{ $val }}
-						</a>
-					@endforeach
-				</div>
-			</div> -->
-		@endif
 		<br/>
 		<br/>
 	</div>

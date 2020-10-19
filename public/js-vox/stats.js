@@ -63,6 +63,8 @@ var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 var open_download_popup = false;
 var colors = [];
+var load_js = false;
+var user_id;
 
 
 // stats ordering answers logic:
@@ -479,136 +481,6 @@ $(document).ready(function(){
         window.location.href = $('#download-link-png').attr('href');
     }
 
-
-    // var handleFilters = function() {
-    //     if(!$('.sort-menu a.active').length) {
-    //         return;
-    //     }
-
-    //     //$('#survey-search').val('');
-
-    //     var sort = $('.sort-menu a.active').attr('sort');
-    //     var wrapper = $('.stats-holder');
-    //     var list = wrapper.children('.vox-stat');
-
-    //     if (sort == 'featured') {
-
-    //         list.hide().attr("found", 0);
-
-    //         list.sort(function(a, b) {
-    //             if( parseInt($(a).attr('published')) > parseInt($(b).attr('published')) ) {
-    //                 return -1;
-    //             } else {
-    //                 return 1;
-    //             }
-    //         });
-            
-    //         list.each( function() {
-    //             if ($(this).attr('featured')=='1') {
-    //                 $(this).show().attr("found", 1)
-    //             }
-    //         });
-
-    //         list.each(function() {
-    //             wrapper.append(this);
-    //         });
-
-    //     } else if (sort == 'all') {
-
-    //         list.show().attr("found", 1);
-
-    //         list.sort(function(a, b) {
-    //             if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
-    //                 return -1;
-    //             } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
-    //                 return 1;
-    //             } else {
-    //                 return parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ? -1 : 1;
-    //             }
-    //         });
-
-    //         list.each(function() {
-    //             wrapper.append(this);
-    //         });
-
-    //         // list.show().attr("found", 1);
-
-    //         // list.sort(function(a, b) {
-    //         //     if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
-    //         //         return -1;
-    //         //     } else {
-    //         //         return 1;
-    //         //     }
-    //         // });
-
-    //         // list.each(function() {
-    //         //     wrapper.append(this);
-    //         // });
-
-    //     } else {
-
-    //         list.show().attr("found", 1);
-
-    //         if(sort=='newest') {
-    //             list.sort(function(a, b) {
-    //                 if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
-    //                     return -1;
-    //                 } else {
-    //                     return 1;
-    //                 }
-    //             });
-    //         } else if(sort=='popular') {
-    //             list.sort(function(a, b) {
-    //                 if( parseInt($(a).attr('popular')) > parseInt($(b).attr('popular')) ) {
-    //                     return -1;
-    //                 } else {
-    //                     return 1;
-    //                 }
-    //             });
-    //         }
-
-    //         list.each(function() {
-    //             wrapper.append(this);
-    //         });
-
-    //         list.hide();
-    //         list.slice( 0, 5 ).show();
-    //     }
-    // }
-    // handleFilters();
-
-
-    // $('.sort-menu a').click( function(e) {
-    //     if (!$(this).hasClass('active')) {
-    //         $('.sort-menu a').removeClass('active');
-    //         $(this).addClass('active');
-    //     }
-
-    //     window.location.hash = $(this).attr('sort');
-
-    //     handleFilters();
-    //     scroll_ribbon();
-    // } );
-
-    // if (window.location.hash.length && $('a[sort="'+window.location.hash.substring(1)+'"]').length) {
-    //     $('a[sort="'+window.location.hash.substring(1)+'"]').trigger( "click" );
-    // }
-
-
-    function scroll_ribbon() {
-        if (window.location.hash == '#all') {
-            if($(window).scrollTop() > $('.stats-holder .vox-stat:nth-of-type(3)').offset().top / 2) {
-                $('body').addClass('scrolled-ribbon');
-                $('body').css('padding-bottom', $('#stat-ribbon').outerHeight());
-            } else {
-                $('body').removeClass('scrolled-ribbon');
-                $('body').css('padding-bottom', '0px');
-            }
-        }        
-    }
-
-    $(window).scroll(scroll_ribbon);
-
     $('#survey-search').on('keypress keyup', function(e) {
         if ($('#survey-search').val().length > 3) {
             var keyCode = e.keyCode || e.which;
@@ -620,55 +492,6 @@ $(document).ready(function(){
 
     if ($('.normal-stat').length < 1) {
         $('#survey-not-found').show();
-    }
-
-    // $('#survey-search').on('change keyup', function() {
-    //     handleSearch();
-    // });    
-
-
-    // var handleSearch = function() {
-    //     $('.sort-menu a.active').removeClass('active');
-
-    //     $('.vox-stat').show().attr("found", 1);;
-
-    //     if ($('#survey-search').val().length > 3) {
-    //         $('.vox-stat').each( function() {
-    //             if( $(this).find('h3').text().toLowerCase().indexOf($('#survey-search').val().toLowerCase()) == -1) {
-    //                 $(this).hide().attr("found", 0);
-    //             }
-    //         });
-    //     }
-
-    //     if ( !$('.vox-stat:visible').length ) {
-    //         $('#survey-not-found').show();
-    //     } else {
-    //         $('#survey-not-found').hide();
-    //     }
-    // }
-
-    //Individual Survey
-
-    //vmetso 'current' da probvam s '43' zaradi greshkata s `font not loaded`
-
-    if(typeof google !== 'undefined') {
-        
-        google.charts.load('current', {
-            packages: ['corechart', 'bar'],
-        });
-        google.charts.setOnLoadCallback(function() {
-            gc_loaded = true;
-
-            $('.stat.active').each( function() {
-                if($(this).find('.scale-stat-q').length) {
-                    $(this).find('.scale-stat-q').first().addClass('active');
-                    reloadGraph($(this).find('.scale-stat-q').first());
-                } else {
-                    reloadGraph(this);
-                }
-                
-            } );
-        });
     }
 
     var handleFilterChange  = function() {
@@ -718,58 +541,67 @@ $(document).ready(function(){
         $('.filters a').removeClass('active');
         $(this).addClass('active');
         if( $(this).attr('filter')=='custom' ) {
-            $(this).closest('.filters-wrapper').find('.filters-custom').show();
 
-            if( !$('#custom-datepicker').attr('inited') ) {
-                var start_date = $('#custom-datepicker').attr('launched-date');
-                var dateToday = new Date();
+            var that = $(this);
 
-                $('#custom-datepicker').dateRangePicker({
-                    inline:true,
-                    container: '#custom-datepicker', 
-                    alwaysOpen: true ,
-                    endDate: dateToday,
-                    startDate: start_date,
-                    minDays: 1,
-                    singleMonth: $(window).outerWidth() > 768 ? false : true,
-                    setValue: function(s,s1,s2)
-                    {
-                        var day_from = new Date(s1);
-                        var day_to = new Date(s2);
+            $.getScript(window.location.origin+'/js-vox/moment.js', function() {
+                $.getScript(window.location.origin+'/js-vox/daterangepicker.min.js', function() {
+                    $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/daterangepicker.min.css">');
 
-                        timeframe = [];
-                        timeframe.push(day_from);
-                        timeframe.push(day_to);
+                    that.closest('.filters-wrapper').find('.filters-custom').show();
 
-                        var options = { 
-                        //    weekday: 'long', 
-                            year: 'numeric', 
-                            month: 'short', 
-                            day: 'numeric' 
-                        };
+                    if( !$('#custom-datepicker').attr('inited') ) {
+                        var start_date = $('#custom-datepicker').attr('launched-date');
+                        var dateToday = new Date();
 
-                        var from = timeframe[0].toLocaleDateString('en', options);
-                        var to = timeframe[1].toLocaleDateString('en', options);
-                        $('#date-from').val(from);
-                        $('#date-to').val(to);
+                        $('#custom-datepicker').dateRangePicker({
+                            inline:true,
+                            container: '#custom-datepicker', 
+                            alwaysOpen: true ,
+                            endDate: dateToday,
+                            startDate: start_date,
+                            minDays: 1,
+                            singleMonth: $(window).outerWidth() > 768 ? false : true,
+                            setValue: function(s,s1,s2)
+                            {
+                                var day_from = new Date(s1);
+                                var day_to = new Date(s2);
+
+                                timeframe = [];
+                                timeframe.push(day_from);
+                                timeframe.push(day_to);
+
+                                var options = { 
+                                //    weekday: 'long', 
+                                    year: 'numeric', 
+                                    month: 'short', 
+                                    day: 'numeric' 
+                                };
+
+                                var from = timeframe[0].toLocaleDateString('en', options);
+                                var to = timeframe[1].toLocaleDateString('en', options);
+                                $('#date-from').val(from);
+                                $('#date-to').val(to);
+                            }
+                        });
+
+                        $('.datepicker, .datepickerContainer').css({
+                            height: 'auto',
+                            width: 'auto'
+                        });
+
+                        $('.datepickerContainer').after( $('#datepicker-extras') );
+
+                        $('#custom-datepicker').attr('inited', '1');
+                        $('#custom-datepicker').parent().prepend('<a href="javascript:;" class="close-custom-datepicker"><i class="fas fa-times"></i></a>');
+
+                        $('.close-custom-datepicker').click( function(e) {
+                            e.preventDefault();
+                            that.closest('.filters-custom').hide();
+                        });
                     }
-                });
-
-                $('.datepicker, .datepickerContainer').css({
-                    height: 'auto',
-                    width: 'auto'
-                });
-
-                $('.datepickerContainer').after( $('#datepicker-extras') );
-
-                $('#custom-datepicker').attr('inited', '1');
-                $('#custom-datepicker').parent().prepend('<a href="javascript:;" class="close-custom-datepicker"><i class="fas fa-times"></i></a>');
-
-                $('.close-custom-datepicker').click( function(e) {
-                    e.preventDefault();
-                    $(this).closest('.filters-custom').hide();
-                });
-            }
+                } );
+            } );
         } else {
             $('.filters-custom').hide();
             handleFilterChange();
@@ -779,27 +611,77 @@ $(document).ready(function(){
     $('#custom-dates-save').click(handleFilterChange);
     handleFilterChange();
 
-    $('.stats .stat .title').click( function() {
-        if( $( '.stat.restore-me' ).length || $('.loader-mask:visible').length) {
-            return;
-        }
-        var stat = $(this).closest('.stat');
+    $('.stats .stat .title').click( function(e) {
+        e.preventDefault();
+        
+        var that = $(this);
 
-        if( !stat.hasClass('active') ) {
-            if (stat.find('.scale-stat-q').length) {
-                stat.addClass('active');
-                stat.find('.scale-stat-q').first().addClass('active');
-                reloadGraph(stat.find('.scale-stat-q').first());
-            } else {
-                stat.addClass('active');
-                stat.find('.loader').fadeIn();
-                stat.find('.loader-mask').fadeIn();
-                $('input').prop('disabled', true);
-                reloadGraph( stat );
-            }
+        if(!load_js && !user_id) {
+            $('#main-loader').fadeIn();
+            $('#main-loader').find('.loader-mask').fadeIn();
+
+            $.getScript(window.location.origin+'/js-vox/amcharts-core.js', function() {
+                $.getScript(window.location.origin+'/js-vox/amcharts-maps.js', function() {
+                    $.getScript(window.location.origin+'/js-vox/amcharts-worldLow.js', function() {
+                        $.getScript(window.location.origin+'/js-vox/gstatic-charts-loader.js', function() {
+                            google.charts.load('current', {
+                                packages: ['corechart', 'bar'],
+                            });
+                            google.charts.setOnLoadCallback(function() {
+                                gc_loaded = true;
+
+                                $('#main-loader').fadeOut();
+                                $('#main-loader').find('.loader-mask').delay(350).fadeOut('slow');
+
+                                $('.stats-image-wrapper').hide();
+
+                                var stat = that.closest('.stat');
+                                
+                                if( !stat.hasClass('active') ) {
+                                    if (stat.find('.scale-stat-q').length) {
+                                        stat.addClass('active');
+                                        stat.find('.scale-stat-q').first().addClass('active');
+                                        reloadGraph(stat.find('.scale-stat-q').first());
+                                    } else {
+                                        stat.addClass('active');
+                                        stat.find('.loader').fadeIn();
+                                        stat.find('.loader-mask').fadeIn();
+                                        $('input').prop('disabled', true);
+                                        reloadGraph( stat );
+                                    }
+                                } else {
+                                    stat.removeClass('active');
+                                }
+                            });
+                            load_js = true;
+                        } );
+                    } );
+                } );
+            } );
         } else {
-            stat.removeClass('active');
+
+            if( $( '.stat.restore-me' ).length || $('.loader-mask:visible').length) {
+                return;
+            }
+            var stat = $(this).closest('.stat');
+
+            if( !stat.hasClass('active') ) {
+                if (stat.find('.scale-stat-q').length) {
+                    stat.addClass('active');
+                    stat.find('.scale-stat-q').first().addClass('active');
+                    reloadGraph(stat.find('.scale-stat-q').first());
+                } else {
+                    stat.addClass('active');
+                    stat.find('.loader').fadeIn();
+                    stat.find('.loader-mask').fadeIn();
+                    $('input').prop('disabled', true);
+                    reloadGraph( stat );
+                }
+            } else {
+                stat.removeClass('active');
+            }
         }
+
     } );
 
     $('.scale-checkbox').change( function(r) {
@@ -849,7 +731,6 @@ $(document).ready(function(){
     var removeCurrentAnswer = function() {
 
         $('.hint .to-all').click( function() {
-
             if ($(window).outerWidth() <= 992) {
 
                 $(this).closest('.stat').find('.loader').fadeIn();
@@ -881,7 +762,6 @@ $(document).ready(function(){
                     $(this).closest('.stat').find('.main-chart').find('.custom-legend:not(.inactive)').trigger('click');
                 }
             }
-            
         });
     }
     removeCurrentAnswer();
@@ -917,25 +797,6 @@ $(document).ready(function(){
             reloadGraph( $(this).closest('.stat') );
         }
     } );
-
-    // $('.stat .nav').click( function() {
-    //     var active = $(this).closest('.stat').find('.scales a.active');
-    //     active.removeClass('active');
-    //     if($(this).hasClass('nav-left')) {
-    //         if(active.prev().length) {
-    //             active.prev().addClass('active');
-    //         } else {
-    //             $(this).closest('.stat').find('.scales a').last().addClass('active');
-    //         }
-    //     } else {
-    //         if(active.next().length) {
-    //             active.next().addClass('active');
-    //         } else {
-    //             $(this).closest('.stat').find('.scales a').first().addClass('active');
-    //         }
-    //     }
-    //     reloadGraph( $(this).closest('.stat') );
-    // });
 
     $('.mobile-button-legend').click( function(e) {
         e.preventDefault();
@@ -1667,8 +1528,70 @@ $(document).ready(function(){
 
     }
 
+    $('#load-stats').click( function(е) {
+        е.preventDefault();
+        if(!load_js && !user_id) {
 
-    $('.stats .stat:first-child').addClass('active');
+            $('#main-loader').fadeIn();
+            $('#main-loader').find('.loader-mask').fadeIn();
+
+            $.getScript(window.location.origin+'/js-vox/amcharts-core.js', function() {
+                $.getScript(window.location.origin+'/js-vox/amcharts-maps.js', function() {
+                    $.getScript(window.location.origin+'/js-vox/amcharts-worldLow.js', function() {
+                        $.getScript(window.location.origin+'/js-vox/gstatic-charts-loader.js', function() {
+
+                            google.charts.load('current', {
+                                packages: ['corechart', 'bar'],
+                            });
+                            google.charts.setOnLoadCallback(function() {
+                                gc_loaded = true;
+
+                                $('.stats-image-wrapper').hide();
+
+                                $('#main-loader').fadeOut();
+                                $('#main-loader').find('.loader-mask').delay(350).fadeOut('slow');
+
+                                $('.stats .stat:first-child').addClass('active');
+
+                                $('.stat.active').each( function() {
+                                    if($(this).find('.scale-stat-q').length) {
+                                        $(this).find('.scale-stat-q').first().addClass('active');
+                                        reloadGraph($(this).find('.scale-stat-q').first());
+                                    } else {
+                                        reloadGraph(this);
+                                    }
+                                    
+                                } );
+                            });
+                            load_js = true;
+                        } );
+                    } );
+                } );
+            } );
+        }
+    });
+
+    if(user_id) {
+        $('.stats .stat:first-child').addClass('active');
+        google.charts.load('current', {
+            packages: ['corechart', 'bar'],
+        });
+        google.charts.setOnLoadCallback(function() {
+            gc_loaded = true;
+
+            $('.stats .stat:first-child').addClass('active');
+
+            $('.stat.active').each( function() {
+                if($(this).find('.scale-stat-q').length) {
+                    $(this).find('.scale-stat-q').first().addClass('active');
+                    reloadGraph($(this).find('.scale-stat-q').first());
+                } else {
+                    reloadGraph(this);
+                }
+                
+            } );
+        });
+    }
 
     $('.social-share').click( function() {
         $('.share-popup').addClass('active');

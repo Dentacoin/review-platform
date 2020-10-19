@@ -1,0 +1,1728 @@
+.page-stats .fb_chb {
+  display: none !important; }
+.page-stats h2 {
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+  font-weight: normal;
+  margin-bottom: 40px; }
+  @media screen and (max-width: 768px) {
+    .page-stats h2 {
+      font-size: 16px;
+      margin-bottom: 20px;
+      max-width: 200px;
+      margin-left: auto;
+      margin-right: auto; } }
+
+.page-statistics h1 {
+  font-size: 25px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #020202;
+  text-align: center;
+  margin-bottom: 45px;
+  position: relative; }
+  @media screen and (max-width: 768px) {
+    .page-statistics h1 {
+      font-size: 18px;
+      margin-bottom: 35px;
+      padding: 0px 20px; } }
+.page-statistics .take-test {
+  margin-top: -10px;
+  margin-bottom: 35px; }
+  @media screen and (max-width: 768px) {
+    .page-statistics .take-test {
+      margin-bottom: 20px; } }
+  .page-statistics .take-test .red-button {
+    padding: 11px 20px;
+    margin-left: 15px; }
+    .page-statistics .take-test .red-button img {
+      margin-right: 10px; }
+.page-statistics .filters-wrapper {
+  margin-bottom: 25px;
+  text-align: center; }
+  .page-statistics .filters-wrapper .filters {
+    text-align: center; }
+    @media screen and (max-width: 768px) {
+      .page-statistics .filters-wrapper .filters {
+        display: block;
+        margin-bottom: 5px; } }
+    .page-statistics .filters-wrapper .filters b {
+      font-weight: bold;
+      color: black; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .filters-wrapper .filters b {
+          display: block;
+          margin-bottom: 15px;
+          font-size: 15px;
+          font-weight: normal; } }
+    .page-statistics .filters-wrapper .filters a {
+      color: #373737;
+      padding: 0px 10px;
+      border-right: 2px solid #525252; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .filters-wrapper .filters a {
+          margin-bottom: 3px;
+          display: inline-block;
+          border-width: 1px; } }
+      .page-statistics .filters-wrapper .filters a:nth-last-child(2) {
+        border-right: none; }
+      .page-statistics .filters-wrapper .filters a.active, .page-statistics .filters-wrapper .filters a:hover {
+        color: #38a2e5; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .filters-wrapper .filters a {
+          display: none; } }
+    .page-statistics .filters-wrapper .filters select {
+      display: none;
+      margin-right: auto;
+      margin-left: auto;
+      border: 1px solid #61b1f6;
+      background-color: white;
+      border-radius: 10px;
+      padding: 2px 35px 2px 6px; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .filters-wrapper .filters select {
+          display: block; } }
+  .page-statistics .filters-wrapper .filters-custom {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    background-color: #F7F7F7;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    padding: 10px;
+    position: relative; }
+    @media screen and (max-width: 768px) {
+      .page-statistics .filters-wrapper .filters-custom {
+        flex-direction: column; } }
+    .page-statistics .filters-wrapper .filters-custom .close-custom-datepicker {
+      position: absolute;
+      right: 4px;
+      z-index: 10;
+      top: 0px;
+      padding: 5px; }
+    .page-statistics .filters-wrapper .filters-custom #custom-datepicker {
+      position: relative;
+      display: inline-block; }
+      .page-statistics .filters-wrapper .filters-custom #custom-datepicker .date-picker-wrapper {
+        border: none;
+        background: transparent;
+        padding: 0px;
+        display: block; }
+        .page-statistics .filters-wrapper .filters-custom #custom-datepicker .date-picker-wrapper .drp_top-bar {
+          display: none; }
+        .page-statistics .filters-wrapper .filters-custom #custom-datepicker .date-picker-wrapper .month-wrapper {
+          border: none;
+          background: none; }
+          .page-statistics .filters-wrapper .filters-custom #custom-datepicker .date-picker-wrapper .month-wrapper table {
+            background: white; }
+            .page-statistics .filters-wrapper .filters-custom #custom-datepicker .date-picker-wrapper .month-wrapper table .caption {
+              background-color: #38a2e5;
+              height: auto; }
+              .page-statistics .filters-wrapper .filters-custom #custom-datepicker .date-picker-wrapper .month-wrapper table .caption div, .page-statistics .filters-wrapper .filters-custom #custom-datepicker .date-picker-wrapper .month-wrapper table .caption span {
+                color: white; }
+            .page-statistics .filters-wrapper .filters-custom #custom-datepicker .date-picker-wrapper .month-wrapper table .day.real-today {
+              background-color: #00c9b7;
+              color: white !important; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .filters-wrapper .filters-custom #custom-datepicker .date-picker-wrapper .month-wrapper .time1 {
+              width: auto; } }
+      .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker {
+        display: flex; }
+        @media screen and (max-width: 992px) {
+          .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker {
+            display: block;
+            padding-top: 30px; } }
+        @media screen and (max-width: 992px) {
+          .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker table {
+            width: 100%; } }
+        @media screen and (max-width: 992px) {
+          .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker tbody.datepickerDays a {
+            text-align: center;
+            width: 100%; } }
+      @media screen and (max-width: 992px) {
+        .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepickerSpace,
+        .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepickerBlock,
+        .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepickerContainer > table > tbody > tr {
+          display: block; } }
+    .page-statistics .filters-wrapper .filters-custom #datepicker-extras {
+      margin-left: 25px;
+      padding-top: 32px; }
+      @media screen and (max-width: 992px) {
+        .page-statistics .filters-wrapper .filters-custom #datepicker-extras {
+          margin-left: 0px;
+          padding-top: 12px; } }
+      .page-statistics .filters-wrapper .filters-custom #datepicker-extras .flex {
+        line-height: 30px;
+        align-items: baseline; }
+      .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder {
+        display: flex;
+        align-items: center;
+        margin-top: 35px; }
+        @media screen and (max-width: 992px) {
+          .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder {
+            display: block;
+            margin-top: 15px; } }
+        .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .btn {
+          height: 30px;
+          line-height: 30px;
+          border-radius: 15px;
+          color: white;
+          background: #38ace5;
+          padding: 0px 20px;
+          text-align: center;
+          display: inline-block;
+          float: left;
+          margin-left: 10px; }
+          @media screen and (max-width: 992px) {
+            .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .btn {
+              float: none;
+              display: block; } }
+        .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .text {
+          display: inline-block;
+          margin-left: 10px;
+          cursor: pointer;
+          color: #38ace5; }
+          .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .text:hover {
+            text-decoration: underline; }
+          @media screen and (max-width: 992px) {
+            .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .text {
+              display: block;
+              text-align: center;
+              margin-left: 0px;
+              margin-top: 10px; } }
+      .page-statistics .filters-wrapper .filters-custom #datepicker-extras input {
+        height: 30px;
+        line-height: 30px;
+        border-radius: 15px;
+        width: 90px;
+        border-color: #a3a3a3;
+        margin: 0px 10px;
+        border: none;
+        padding: 0px 5px;
+        border: 1px solid #38a2e5;
+        text-align: center; }
+.page-statistics .stats:not(.st-download) .stat {
+  border-bottom: 1px solid #f3f3f3; }
+  @media screen and (max-width: 1200px) {
+    .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .chart {
+      min-width: 100%; } }
+  @media screen and (max-width: 1200px) {
+    .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .chart div[dir="ltr"] {
+      margin-left: auto;
+      margin-right: auto; } }
+  .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .chart.chart-1 {
+    min-width: 33.3%;
+    justify-content: normal; }
+    @media screen and (max-width: 1200px) {
+      .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .chart.chart-1 {
+        flex: 1; } }
+    .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .chart.chart-1 .main-chart {
+      height: 100%; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .chart.chart-1 .main-chart .mobile-chart {
+          margin-top: 30px; } }
+  .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .more-q-content .chart .second-chart {
+    margin-left: 0px !important; }
+  .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs {
+    min-height: 380px; }
+    .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .total {
+      top: calc(100% - 40px); }
+      @media screen and (max-width: 1200px) {
+        .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .total {
+          top: auto; } }
+    .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .main-chart {
+      padding-bottom: 70px; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .main-chart {
+          padding-bottom: 30px; } }
+    @media screen and (max-width: 1200px) {
+      .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs.multiple-stat .hint {
+        top: 50px; } }
+    @media screen and (max-width: 768px) {
+      .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs.multiple-stat .hint {
+        top: 46px; } }
+    .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-1.with-relation-hint .relation-hint {
+      position: absolute;
+      bottom: 80px;
+      font-style: italic;
+      font-size: 14px;
+      padding: 0px 10px;
+      width: 100%;
+      text-align: center; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-1.with-relation-hint .relation-hint {
+          bottom: auto;
+          top: 40px; } }
+    .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-2[chart-scale="dependency"] {
+      justify-content: unset; }
+      .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-2[chart-scale="dependency"].verticle-align-chart .second-chart {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        margin-top: -40px; }
+        @media screen and (max-width: 1200px) {
+          .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-2[chart-scale="dependency"].verticle-align-chart .second-chart {
+            top: auto;
+            transform: none;
+            margin-top: 0px; } }
+  @media screen and (max-width: 768px) {
+    .page-statistics .stats:not(.st-download) .stat[cur-scale="country_id"] .contents .scales.mobile-scales {
+      order: 5; } }
+  .page-statistics .stats:not(.st-download) .stat[cur-scale="country_id"] .contents .graphs.multiple-stat .sort-stat {
+    margin-bottom: 0px; }
+  @media screen and (max-width: 768px) {
+    .page-statistics .stats:not(.st-download) .stat[cur-scale="gender"] .contents .multiple-stat .scales.mobile-scales {
+      margin-bottom: 10px; } }
+  @media screen and (max-width: 768px) {
+    .page-statistics .stats:not(.st-download) .stat[cur-scale="gender"] .contents .multiple-stat.mobile-bottom-margin .scales.mobile-scales {
+      margin-bottom: 80px; } }
+  .page-statistics .stats:not(.st-download) .stat.last-stat {
+    border-bottom: none; }
+  .page-statistics .stats:not(.st-download) .stat:first-child .share-buttons .share-button, .page-statistics .stats:not(.st-download) .stat:first-child .share-buttons span {
+    display: block; }
+  .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .contents .graphs {
+    flex-direction: column; }
+    .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .contents .graphs .legend {
+      order: -1; }
+  .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-legend {
+    flex-direction: row !important; }
+    @media screen and (max-width: 768px) {
+      .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-legend {
+        display: block;
+        order: 4 !important;
+        margin-left: 10px !important; } }
+  @media screen and (max-width: 1200px) {
+    .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content {
+      display: block; } }
+  @media screen and (max-width: 768px) {
+    .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content {
+      display: flex;
+      flex-direction: column; } }
+  .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content .chart {
+    flex: 1; }
+    @media screen and (max-width: 1200px) {
+      .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content .chart {
+        flex: none; } }
+    .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content .chart .second-chart > div div[dir="ltr"],
+    .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content .chart .third-chart > div div[dir="ltr"] {
+      margin: 0 auto; }
+    .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content .chart .second-chart {
+      margin-left: 110px; }
+      @media screen and (max-width: 1200px) {
+        .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content .chart .second-chart {
+          margin-left: 0px; } }
+      .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content .chart .second-chart.gender, .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content .chart .second-chart.country_id {
+        margin-left: 0px; }
+    @media screen and (max-width: 1200px) {
+      .page-statistics .stats:not(.st-download) .stat.stat-with-many-qs .more-q-content .chart .main-chart > div div[dir="ltr"] {
+        margin: 0 auto; } }
+  .page-statistics .stats:not(.st-download) .stat .more-q-content .chart-1 {
+    max-width: 33.3%; }
+    @media screen and (max-width: 1200px) {
+      .page-statistics .stats:not(.st-download) .stat .more-q-content .chart-1 {
+        max-width: 100%; } }
+  .page-statistics .stats:not(.st-download) .stat .loader-mask {
+    z-index: 99; }
+  .page-statistics .stats:not(.st-download) .stat .top-answers {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    font-weight: bold;
+    text-transform: uppercase; }
+  .page-statistics .stats:not(.st-download) .stat .box {
+    align-items: baseline;
+    justify-content: space-between; }
+    @media screen and (max-width: 1200px) {
+      .page-statistics .stats:not(.st-download) .stat .box {
+        flex-flow: row wrap; } }
+    @media screen and (max-width: 768px) {
+      .page-statistics .stats:not(.st-download) .stat .box {
+        padding-top: 10px; } }
+  .page-statistics .stats:not(.st-download) .stat .share-buttons {
+    align-items: center;
+    z-index: 100;
+    display: flex; }
+    @media screen and (max-width: 1200px) {
+      .page-statistics .stats:not(.st-download) .stat .share-buttons {
+        margin-bottom: 10px;
+        order: -1;
+        width: 100%; } }
+    @media screen and (max-width: 768px) {
+      .page-statistics .stats:not(.st-download) .stat .share-buttons {
+        text-align: center;
+        background-color: #f6f6f6;
+        justify-content: center;
+        margin-bottom: 0px;
+        padding: 10px 0px;
+        border-top-right-radius: 30px;
+        border-top-left-radius: 30px; } }
+    .page-statistics .stats:not(.st-download) .stat .share-buttons span {
+      margin-right: 5px;
+      display: none; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .share-buttons span {
+          margin-right: 0px; } }
+    .page-statistics .stats:not(.st-download) .stat .share-buttons .share-button {
+      padding-left: 5px;
+      padding-right: 5px;
+      display: none; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .share-buttons .share-button {
+          display: inline-block; } }
+      .page-statistics .stats:not(.st-download) .stat .share-buttons .share-button.fb a {
+        background-color: #3a559f; }
+      .page-statistics .stats:not(.st-download) .stat .share-buttons .share-button.twt a {
+        background-color: #50abf1; }
+    .page-statistics .stats:not(.st-download) .stat .share-buttons a:not(.red-button) {
+      border-radius: 3px;
+      display: block;
+      background-color: #3a559f;
+      color: white;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px; }
+      .page-statistics .stats:not(.st-download) .stat .share-buttons a:not(.red-button) i {
+        color: white; }
+    .page-statistics .stats:not(.st-download) .stat .share-buttons .red-button {
+      padding: 6px 10px;
+      font-size: 14px;
+      text-transform: none;
+      margin-left: 20px; }
+      .page-statistics .stats:not(.st-download) .stat .share-buttons .red-button img {
+        max-width: 12px;
+        margin-right: 7px; }
+  .page-statistics .stats:not(.st-download) .stat .title {
+    font-size: 20px;
+    display: block;
+    line-height: 28px;
+    padding: 11px 0px;
+    padding-left: 35px;
+    background-color: #d3ebfb;
+    cursor: pointer; }
+    @media screen and (max-width: 768px) {
+      .page-statistics .stats:not(.st-download) .stat .title {
+        font-size: 14px;
+        line-height: 1;
+        padding-left: 25px; } }
+    .page-statistics .stats:not(.st-download) .stat .title h2 {
+      font-weight: bold;
+      font-size: 20px;
+      text-align: left;
+      margin-bottom: 0px;
+      line-height: 28px;
+      background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
+      background-size: 29px;
+      padding-left: 40px;
+      margin-top: 0px; }
+      @media screen and (max-width: 1080px) {
+        .page-statistics .stats:not(.st-download) .stat .title h2 {
+          width: 100%; } }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .title h2 {
+          font-size: 16px;
+          line-height: normal;
+          max-width: 100%;
+          background-size: 20px;
+          padding-left: 30px; } }
+      .page-statistics .stats:not(.st-download) .stat .title h2 a {
+        color: #41afff; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .title h2 a {
+            font-size: 16px; } }
+  .page-statistics .stats:not(.st-download) .stat .stats-subtitle {
+    margin-bottom: 30px;
+    font-size: 16px; }
+    @media screen and (max-width: 768px) {
+      .page-statistics .stats:not(.st-download) .stat .stats-subtitle {
+        font-size: 14px; } }
+  .page-statistics .stats:not(.st-download) .stat .contents {
+    display: none;
+    margin: 25px auto 40px; }
+    @media screen and (max-width: 768px) {
+      .page-statistics .stats:not(.st-download) .stat .contents {
+        margin: 10px auto; } }
+    .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend {
+      display: none;
+      background-color: #38ace5;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-transform: uppercase;
+      order: 3;
+      min-height: 38px; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend {
+          display: flex; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend img {
+        max-width: 20px; }
+      .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend i {
+        display: none;
+        color: white; }
+        .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend i:before {
+          font-size: 20px; }
+      .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend.active {
+        font-size: 0px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend.active img {
+          display: none; }
+        .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend.active i {
+          display: block; }
+    .page-statistics .stats:not(.st-download) .stat .contents .scales {
+      margin-bottom: 25px; }
+      @media screen and (max-width: 1200px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .scales {
+          display: block;
+          text-align: left; } }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .scales {
+          font-size: 0;
+          text-align: center;
+          margin-bottom: 10px;
+          display: none; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .scales.mobile-scales {
+        display: none; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .scales.mobile-scales {
+            display: block;
+            order: 4;
+            margin-top: 20px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .scales a {
+        height: 30px;
+        line-height: 30px;
+        border-radius: 15px;
+        background: #f6f6f6;
+        padding: 0px 20px;
+        color: #0e1f2b;
+        font-size: 14px;
+        margin-left: 6px;
+        display: inline-block;
+        cursor: pointer; }
+        @media screen and (max-width: 1200px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .scales a {
+            margin-bottom: 10px; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .scales a:hover {
+          color: #f7f9fb;
+          background: #64c1e0; }
+          @media screen and (max-width: 1080px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .scales a:hover {
+              background: #f6f6f6;
+              color: #0e1f2b; } }
+          .page-statistics .stats:not(.st-download) .stat .contents .scales a:hover.with-children:after {
+            color: white; }
+            @media screen and (max-width: 1080px) {
+              .page-statistics .stats:not(.st-download) .stat .contents .scales a:hover.with-children:after {
+                color: #888888; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .scales a.active {
+          color: #f7f9fb;
+          background: #64c1e0; }
+          .page-statistics .stats:not(.st-download) .stat .contents .scales a.active.with-children:after {
+            color: white; }
+        .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children {
+          position: relative;
+          padding-right: 26px;
+          padding-left: 15px; }
+          .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children:after {
+            content: '\f0d7';
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            color: #888888;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%); }
+          .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter {
+            text-align: left;
+            display: none;
+            position: absolute;
+            z-index: 100011;
+            background-color: white;
+            left: 0px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.11);
+            min-width: 210px; }
+            @media screen and (max-width: 768px) {
+              .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter {
+                min-width: 180px;
+                left: 50%;
+                transform: translateX(-50%); } }
+            .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label {
+              display: block;
+              cursor: pointer;
+              font-weight: normal;
+              color: #333;
+              padding: 5px 0px; }
+              .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.select-all-scales-label {
+                color: #64c1e0;
+                font-weight: bold;
+                border-bottom: 1px solid #65c1e0;
+                margin-bottom: 5px;
+                padding-bottom: 10px; }
+                .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.select-all-scales-label i {
+                  display: none; }
+                .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.select-all-scales-label:hover {
+                  color: #43b1e7; }
+              .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.active i:before {
+                content: "\f14a"; }
+              .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label i {
+                margin-right: 5px; }
+              .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label input {
+                display: none; }
+          .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children.open .scales-filter {
+            display: block; }
+    .page-statistics .stats:not(.st-download) .stat .contents .graphs {
+      min-height: 300px;
+      border: 1px solid #eaeaea;
+      border-radius: 30px;
+      box-shadow: 0px 0px 5px 5px rgba(234, 234, 234, 0.75);
+      position: relative;
+      overflow: hidden; }
+      @media screen and (max-width: 1200px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs {
+          flex-flow: wrap; } }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs {
+          flex-direction: column;
+          overflow: visible; } }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs:not(.multiple-stat) .legend {
+          max-height: 0px;
+          opacity: 0;
+          transition: all 0.3s ease;
+          z-index: -1; } }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs:not(.multiple-stat) .legend.open {
+          max-height: 100%;
+          opacity: 1;
+          transition: all 0.3s ease;
+          z-index: 0; } }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs:not(.multiple-stat) .map-hint {
+          top: 30px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs:not(.multiple-stat) .total-gender {
+        top: 10px; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs:not(.multiple-stat) .total-gender {
+            top: -55px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs:not(.multiple-stat) .main-chart {
+        display: flex;
+        align-items: center;
+        margin-top: -10px; }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .total-gender {
+        position: absolute;
+        top: -55px;
+        left: 50%;
+        width: 100%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .total-gender img {
+          max-width: 36px;
+          vertical-align: middle;
+          margin-right: 7px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .total-gender .total {
+          position: static;
+          width: auto;
+          transform: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          left: auto;
+          width: 300px;
+          cursor: pointer; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .total-gender b {
+          margin-left: 3px; }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat {
+        padding-top: 70px; }
+        @media screen and (max-width: 1200px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat {
+            padding-top: 0px; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .total {
+          z-index: -1;
+          top: -35px; }
+          @media screen and (max-width: 1200px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .total {
+              top: 15px;
+              height: 20px; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .main-chart {
+          padding-bottom: 0px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .chart.country-legend {
+          margin-top: 0px !important;
+          padding-top: 0px !important; }
+          @media screen and (max-width: 1200px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .chart.country-legend {
+              padding-top: 30px !important; } }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .chart.country-legend .map-hint {
+            top: -47px; }
+            @media screen and (max-width: 1200px) {
+              .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .chart.country-legend .map-hint {
+                top: 4px; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .sort-stat {
+          margin-bottom: 30px; }
+          @media screen and (max-width: 1200px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .sort-stat {
+              margin-bottom: 0px; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .legend {
+          display: none; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .legend,
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .chart {
+          flex: 1; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .second-chart > div {
+          margin: 0 auto; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .main-multiple-gender {
+          min-height: 300px;
+          padding-top: 45px; }
+          @media screen and (max-width: 1200px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .main-multiple-gender {
+              margin-bottom: 90px; } }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .main-multiple-gender {
+              min-height: auto;
+              margin-bottom: 0px;
+              padding-top: 20px; } }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .main-multiple-gender .custom-legend {
+            height: 48px;
+            margin-bottom: 30px; }
+            @media screen and (max-width: 1200px) {
+              .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .main-multiple-gender .custom-legend {
+                margin-bottom: 0px; } }
+            @media screen and (max-width: 768px) {
+              .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .main-multiple-gender .custom-legend {
+                height: auto; } }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .main-multiple-gender.lower-margin .custom-legend {
+            height: auto;
+            margin-bottom: 10px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .chart .mobile-chart {
+          padding: 0px 20px 50px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .hint {
+          top: 10px; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .hint {
+              top: 46px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .custom-legend {
+        cursor: pointer; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .custom-legend.inactive {
+          opacity: 0.2; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .custom-legend:first-child {
+          margin-top: 20px; }
+          @media screen and (max-width: 1200px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .custom-legend:first-child {
+              margin-top: 30px; } }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .custom-legend:first-child {
+              margin-top: 10px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .nav {
+        position: absolute;
+        top: 50%;
+        margin-top: -41px;
+        width: 36px;
+        height: 82px;
+        opacity: 0.8;
+        cursor: pointer;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        z-index: 10; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .nav {
+            display: none; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .nav:hover {
+          opacity: 1; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .nav.nav-left {
+          left: -47px;
+          background-image: url(../new-vox-img/stats-left.png); }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .nav.nav-right {
+          right: -47px;
+          background-image: url(../new-vox-img/stats-right.png); }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .main-title {
+        position: absolute;
+        width: 350px;
+        top: 5px;
+        left: 0px;
+        text-align: center;
+        z-index: 20; }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .map-hint,
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .hint,
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .total {
+        color: #020202;
+        font-size: 15px;
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        text-align: center;
+        display: block;
+        transform: translateX(-50%);
+        width: 100%; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .map-hint b,
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .hint b,
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .total b {
+          color: #1c96d5;
+          font-weight: bold; }
+      @media screen and (min-width: 1220px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .total {
+          bottom: auto;
+          top: calc(50% + 135px);
+          transform: translateX(-50%) translateY(-50%); } }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .hint {
+        bottom: auto;
+        top: 10px;
+        font-style: italic;
+        font-size: 14px;
+        padding: 0px 10px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .hint a {
+          text-decoration: underline; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .hint span {
+          font-size: 14px; }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .dependency-question {
+        font-style: italic;
+        font-size: 14px;
+        padding: 0px 10px;
+        text-align: center;
+        margin-top: 10px; }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .map-hint {
+        transform: none;
+        left: 0px;
+        z-index: 100;
+        text-align: left;
+        font-size: 14px;
+        top: 20px;
+        width: 100%;
+        text-align: center;
+        bottom: auto; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .map-hint b {
+          color: #119c88; }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .icon {
+        z-index: -1;
+        width: 47px;
+        height: 77px;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        background-image: url(../new-vox-img/women-icon.svg); }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .icon.total-m {
+          background-image: url(../new-vox-img/man-icon.svg); }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .multiple-gender-nav {
+        display: none;
+        order: 4;
+        margin-bottom: 90px;
+        background-color: #f6f6f6;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .multiple-gender-nav .multiple-gender-nav-content {
+          display: flex;
+          align-items: center;
+          margin: 0px 20px; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .multiple-gender-nav .multiple-gender-nav-content .nav-color {
+            display: inline-block;
+            width: 15px;
+            min-width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 7px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .multiple-gender-nav a {
+          display: block;
+          padding: 0px 10px; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .multiple-gender-nav a i:before {
+            font-size: 25px;
+            color: #555555; }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart {
+        z-index: 10;
+        position: relative;
+        order: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around; }
+        @media screen and (max-width: 1200px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart {
+            order: 3; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart:first-child {
+          order: 1; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart:first-child {
+              order: 2; } }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart.chart-1 .mobile-chart {
+            padding-top: 60px; } }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart.chart-2 {
+            order: 4; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart.chart-2.chart-flex {
+          flex: 1; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart.chart-3 {
+            order: 5;
+            overflow: hidden; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart.country-legend {
+          max-width: 33.3%;
+          min-width: 33.3%;
+          background: #f6f6f6;
+          padding-top: 40px; }
+          @media screen and (max-width: 1200px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart.country-legend {
+              max-width: 100%;
+              min-width: auto;
+              flex: 1;
+              min-width: 100%;
+              padding-top: 70px; } }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart.country-legend .mobile-chart {
+            width: auto !important; }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .third-chart.country_id {
+          width: 600px;
+          height: 300px;
+          margin-left: auto;
+          margin-right: auto; }
+          @media screen and (max-width: 1200px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .third-chart.country_id {
+              width: 940px;
+              height: 450px; } }
+          @media (max-width: 992px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .third-chart.country_id {
+              width: 720px; } }
+          @media (max-width: 768px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .third-chart.country_id {
+              height: 250px;
+              width: 100%; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart {
+          padding: 20px; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart .custombar {
+            display: block;
+            width: 100%;
+            font-size: 12px;
+            line-height: 20px; }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart .custombar span {
+              width: 0%;
+              display: block;
+              height: 10px;
+              margin-right: 10px;
+              transform: translateY(50%);
+              float: left;
+              transition: all 0.5s ease; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart .group-heading {
+            display: block;
+            margin-top: 5px;
+            font-weight: 600; }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart .group-heading a {
+              color: #41afff; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart {
+            padding: 0px 70px; }
+            @media screen and (max-width: 1200px) {
+              .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart {
+                padding: 0px 20px; } }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart img {
+              max-width: 15px;
+              float: left;
+              margin-right: 5px;
+              margin-bottom: 5px; }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart .custom-legend {
+              margin-bottom: 30px;
+              cursor: auto !important; }
+              @media screen and (max-width: 768px) {
+                .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart .custom-legend {
+                  margin-bottom: 10px; } }
+              .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart .custom-legend.verticle-gender {
+                display: flex;
+                align-items: flex-end;
+                min-height: 250px; }
+                @media screen and (max-width: 768px) {
+                  .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart .custom-legend.verticle-gender {
+                    min-height: 150px; } }
+                .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart .custom-legend.verticle-gender img {
+                  display: none; }
+                .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart .custom-legend.verticle-gender span {
+                  float: none; }
+                .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart .custom-legend.verticle-gender .custombar {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center; }
+                  .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart .custom-legend.verticle-gender .custombar span {
+                    max-height: 350px; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart div[dir="ltr"] {
+            margin-right: auto;
+            margin-left: auto; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .main-chart {
+        flex: 1;
+        padding-bottom: 30px;
+        background: #f6f6f6;
+        padding-top: 40px; }
+      .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend {
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 20px;
+        padding-right: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        order: 3; }
+        @media screen and (max-width: 1200px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend {
+            order: 2;
+            flex: 1; } }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend {
+            order: 3;
+            padding: 10px 0px; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div {
+          color: #070707;
+          font-size: 14px;
+          cursor: pointer; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div a {
+            color: #41afff; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div.inactive {
+            opacity: 0.2; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div.standard {
+            margin: 10px 0px; }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div.standard span {
+              display: inline-block;
+              width: 15px;
+              height: 15px;
+              border-radius: 50%;
+              vertical-align: sub;
+              margin-right: 7px; }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div.standard .mobile-percentage {
+              width: auto;
+              vertical-align: baseline; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div.short {
+            margin: 5px 0px; }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div.short span {
+              display: inline-block;
+              width: 10px;
+              height: 10px;
+              border-radius: 50%;
+              margin-right: 6px; }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div.short .mobile-percentage {
+              width: auto;
+              vertical-align: baseline; }
+    .page-statistics .stats:not(.st-download) .stat .contents .multiple-hint {
+      text-align: center;
+      margin-top: 10px; }
+    .page-statistics .stats:not(.st-download) .stat .contents .stat {
+      border: 1px solid #eaeaea;
+      border-radius: 15px;
+      box-shadow: 0px 0px 5px 5px rgba(234, 234, 234, 0.75);
+      margin-bottom: 14px;
+      position: relative; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat .contents .stat {
+          padding-left: 0px;
+          padding-right: 0px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .stat:last-child {
+        margin-bottom: 15px; }
+      .page-statistics .stats:not(.st-download) .stat .contents .stat.scale-stat-q .share-buttons {
+        position: unset;
+        margin-right: 20px; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .stat.scale-stat-q .share-buttons {
+            position: absolute;
+            margin-right: 0px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .stat .title {
+        padding: 16px 0px;
+        padding-left: 30px;
+        padding-right: 20px;
+        font-weight: bold;
+        background-color: transparent; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .stat .title {
+            padding-left: 10px;
+            padding-right: 10px; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .stat .title h2 {
+          font-weight: bold;
+          background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
+          background-size: 29px; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .stat .title h2 {
+              background-size: 20px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .stat .share-buttons {
+        position: absolute;
+        top: 23px;
+        right: 30px; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .stat .share-buttons {
+            top: 0px;
+            right: 0px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .stat .box {
+        padding-left: 30px; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .stat .box {
+            padding-left: 0px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .stat .contents {
+        display: none;
+        margin: 6px 0px 0px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .stat .contents .graphs {
+          border: none;
+          box-shadow: none;
+          border-radius: 0px; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .stat .contents .graphs .hint {
+              top: 53px; } }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .stat .contents .graphs .map-hint {
+              top: 56px; } }
+        .page-statistics .stats:not(.st-download) .stat .contents .stat .contents .scales {
+          margin-bottom: 30px; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats:not(.st-download) .stat .contents .stat .contents .scales {
+              margin-bottom: 0px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .stat .main-chart {
+        border-bottom-left-radius: 30px; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .contents .stat .main-chart {
+            border-bottom-left-radius: 0px;
+            padding-top: 70px; } }
+      .page-statistics .stats:not(.st-download) .stat .contents .stat.active {
+        border-radius: 30px;
+        margin-bottom: 35px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .stat.active .title h2 {
+          background-image: url(../new-vox-img/stats-up.png); }
+        .page-statistics .stats:not(.st-download) .stat .contents .stat.active .contents {
+          display: block; }
+  .page-statistics .stats:not(.st-download) .stat:hover .title {
+    color: black; }
+  @media screen and (max-width: 768px) {
+    .page-statistics .stats:not(.st-download) .stat.active {
+      padding-bottom: 20px; } }
+  .page-statistics .stats:not(.st-download) .stat.active .title h2 {
+    background-image: url(../new-vox-img/stats-up.png); }
+  .page-statistics .stats:not(.st-download) .stat.active .contents {
+    display: block; }
+
+.all-stats-section {
+  margin-top: 70px;
+  margin-bottom: 40px;
+  padding-top: 50px;
+  position: relative; }
+  @media screen and (max-width: 768px) {
+    .all-stats-section {
+      margin-top: 50px;
+      padding-top: 30px;
+      margin-bottom: 20px; } }
+  .all-stats-section:after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 585px;
+    height: 1px;
+    background-color: black; }
+    @media screen and (max-width: 768px) {
+      .all-stats-section:after {
+        width: 165px; } }
+  .all-stats-section h2 {
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 22px; }
+    @media screen and (max-width: 768px) {
+      .all-stats-section h2 {
+        font-size: 18px; } }
+  .all-stats-section p {
+    font-size: 18px;
+    color: #333333;
+    margin-bottom: 45px; }
+    @media screen and (max-width: 768px) {
+      .all-stats-section p {
+        font-size: 15px; } }
+
+.stats-blurred .blurred-title {
+  font-size: 20px;
+  display: block;
+  line-height: 28px;
+  padding: 11px 0px;
+  padding-left: 35px;
+  background-color: #d3ebfb;
+  box-shadow: 0 3px 5px #d3ebfb;
+  margin-bottom: 4px; }
+  @media screen and (max-width: 768px) {
+    .stats-blurred .blurred-title {
+      font-size: 14px;
+      line-height: 1;
+      padding-left: 25px;
+      box-shadow: 0 0px 5px #d3ebfb; } }
+  .stats-blurred .blurred-title h2 {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: left;
+    margin-bottom: 0px;
+    line-height: 28px;
+    background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
+    background-size: 29px;
+    padding-left: 40px;
+    color: #333; }
+    @media screen and (max-width: 1080px) {
+      .stats-blurred .blurred-title h2 {
+        width: 100%; } }
+    @media screen and (max-width: 768px) {
+      .stats-blurred .blurred-title h2 {
+        font-size: 16px;
+        line-height: normal;
+        max-width: 100%;
+        background-size: 20px;
+        padding-left: 30px; } }
+    .stats-blurred .blurred-title h2 a {
+      color: #41afff; }
+.stats-blurred .blurred-stat {
+  position: relative; }
+  .stats-blurred .blurred-stat img {
+    display: block;
+    max-width: 100%; }
+    .stats-blurred .blurred-stat img.mobile-blurred {
+      display: none; }
+      @media screen and (max-width: 768px) {
+        .stats-blurred .blurred-stat img.mobile-blurred {
+          display: block; } }
+    @media screen and (max-width: 768px) {
+      .stats-blurred .blurred-stat img.pc-blurred {
+        display: none; } }
+  .stats-blurred .blurred-stat .blurred-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    width: 570px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 17px -2px rgba(0, 0, 0, 0.5);
+    padding-top: 50px;
+    padding-bottom: 30px;
+    background-image: url("../new-vox-img/stats-pdf-background.jpg");
+    background-position: 50% 100%;
+    background-repeat: no-repeat; }
+    @media screen and (max-width: 1080px) {
+      .stats-blurred .blurred-stat .blurred-text {
+        background-position: 50% 120%; } }
+    @media screen and (max-width: 768px) {
+      .stats-blurred .blurred-stat .blurred-text {
+        width: 100%; } }
+    .stats-blurred .blurred-stat .blurred-text .free-text {
+      position: absolute;
+      top: -33px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 50px;
+      font-weight: 900;
+      color: #3daee6;
+      background-color: white;
+      box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.5);
+      text-transform: uppercase;
+      padding: 0px 50px;
+      border-radius: 10px; }
+      @media screen and (max-width: 1080px) {
+        .stats-blurred .blurred-stat .blurred-text .free-text {
+          top: -27px;
+          font-size: 40px; } }
+    .stats-blurred .blurred-stat .blurred-text h2 {
+      font-size: 39px;
+      font-weight: 900;
+      margin-bottom: 0px;
+      max-width: 100%; }
+      @media screen and (max-width: 1080px) {
+        .stats-blurred .blurred-stat .blurred-text h2 {
+          font-size: 30px; } }
+      @media screen and (max-width: 768px) {
+        .stats-blurred .blurred-stat .blurred-text h2 {
+          font-size: 25px; } }
+    .stats-blurred .blurred-stat .blurred-text p {
+      font-size: 24px;
+      margin-bottom: 45px; }
+      @media screen and (max-width: 1080px) {
+        .stats-blurred .blurred-stat .blurred-text p {
+          font-size: 20px; } }
+      @media screen and (max-width: 768px) {
+        .stats-blurred .blurred-stat .blurred-text p {
+          font-size: 16px; } }
+    .stats-blurred .blurred-stat .blurred-text .download-functions-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px; }
+      .stats-blurred .blurred-stat .blurred-text .download-functions-wrap .download-functions p {
+        font-weight: bold;
+        color: white;
+        font-size: 20px;
+        margin-bottom: 6px;
+        text-align: left; }
+        @media screen and (max-width: 1080px) {
+          .stats-blurred .blurred-stat .blurred-text .download-functions-wrap .download-functions p {
+            font-size: 16px; } }
+    .stats-blurred .blurred-stat .blurred-text .blue-button {
+      font-weight: bold;
+      border: 2px solid #ff0045;
+      background-color: #ff0045;
+      padding: 9px 40px; }
+      .stats-blurred .blurred-stat .blurred-text .blue-button:hover {
+        background-color: #e6013f; }
+    .stats-blurred .blurred-stat .blurred-text span {
+      display: block;
+      margin-top: 15px;
+      color: white;
+      font-size: 20px; }
+      @media screen and (max-width: 1080px) {
+        .stats-blurred .blurred-stat .blurred-text span {
+          font-size: 18px; } }
+      .stats-blurred .blurred-stat .blurred-text span a {
+        font-size: 20px;
+        color: white;
+        font-weight: 900;
+        text-transform: uppercase;
+        text-decoration: underline; }
+        @media screen and (max-width: 1080px) {
+          .stats-blurred .blurred-stat .blurred-text span a {
+            font-size: 18px; } }
+
+@media screen and (max-width: 768px) {
+  .popup.login-register .wrapper {
+    overflow-y: auto; } }
+.popup.login-register .wrapper .vox-not-logged {
+  max-width: calc(100%);
+  padding: 20px;
+  border-radius: 8px;
+  clear: both;
+  text-align: center; }
+  .popup.login-register .wrapper .vox-not-logged h2 {
+    margin-bottom: 55px;
+    font-size: 30px;
+    font-weight: bold;
+    color: black; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged h2 {
+        margin-bottom: 30px;
+        font-size: 24px; } }
+  .popup.login-register .wrapper .vox-not-logged img {
+    margin-right: 23px;
+    min-width: 78px;
+    height: 64px; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged img {
+        margin: 0 auto 20px auto;
+        display: block; } }
+  .popup.login-register .wrapper .vox-not-logged h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #090909; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged h3 {
+        margin-bottom: 10px;
+        font-size: 18px; } }
+  .popup.login-register .wrapper .vox-not-logged p {
+    font-size: 18px;
+    color: #090909; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged p {
+        font-size: 14px; } }
+  .popup.login-register .wrapper .vox-not-logged .flex .col {
+    padding: 0px 15px;
+    display: flex;
+    text-align: left; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged .flex .col {
+        padding: 20px 0px;
+        display: block;
+        text-align: center; } }
+  .popup.login-register .wrapper .vox-not-logged a.btn {
+    height: 45px;
+    line-height: 45px;
+    background: #3daee6;
+    color: white;
+    min-width: 180px;
+    padding: 0px 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-top: 40px; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged a.btn {
+        margin-top: 10px; } }
+.popup.download-stats-popup {
+  overflow-y: auto; }
+  @media screen and (max-width: 768px) {
+    .popup.download-stats-popup {
+      padding: 0px 10px; } }
+  .popup.download-stats-popup .popup-inner {
+    width: 830px;
+    position: relative;
+    top: 100px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    padding: 50px 150px 40px;
+    text-align: center;
+    box-shadow: 0 0 23px 0px #a3a2a2; }
+    @media screen and (max-width: 768px) {
+      .popup.download-stats-popup .popup-inner {
+        width: 100%;
+        padding: 30px 10px 18px;
+        top: 80px; } }
+    .popup.download-stats-popup .popup-inner .closer {
+      position: absolute;
+      right: -14px;
+      top: -14px;
+      z-index: 100;
+      box-shadow: 0 0 7px 0px #a3a2a2;
+      border-radius: 50%;
+      display: block; }
+      @media screen and (max-width: 768px) {
+        .popup.download-stats-popup .popup-inner .closer {
+          right: auto;
+          left: 50%;
+          transform: translateX(-50%); } }
+      .popup.download-stats-popup .popup-inner .closer img {
+        display: block; }
+    @media screen and (max-width: 768px) {
+      .popup.download-stats-popup .popup-inner .content {
+        width: 100%; } }
+    .popup.download-stats-popup .popup-inner .content .h1 {
+      font-size: 39px;
+      font-weight: 900;
+      margin-top: 0px;
+      margin-bottom: 30px; }
+      @media screen and (max-width: 768px) {
+        .popup.download-stats-popup .popup-inner .content .h1 {
+          font-size: 22px;
+          max-width: 300px;
+          margin-right: auto;
+          margin-left: auto;
+          margin-bottom: 20px; } }
+    .popup.download-stats-popup .popup-inner .content .download-formats {
+      display: flex;
+      margin-bottom: 15px; }
+      .popup.download-stats-popup .popup-inner .content .download-formats label {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        border: 1px solid #38ace5;
+        color: black;
+        flex: 1;
+        margin-right: 12px;
+        padding: 11px 0px;
+        border-radius: 10px; }
+        @media screen and (max-width: 768px) {
+          .popup.download-stats-popup .popup-inner .content .download-formats label {
+            font-size: 16px; } }
+        .popup.download-stats-popup .popup-inner .content .download-formats label:last-child {
+          margin-right: 0px; }
+        .popup.download-stats-popup .popup-inner .content .download-formats label:hover, .popup.download-stats-popup .popup-inner .content .download-formats label.active {
+          background-color: #38ace5;
+          color: white; }
+          .popup.download-stats-popup .popup-inner .content .download-formats label:hover i, .popup.download-stats-popup .popup-inner .content .download-formats label.active i {
+            color: white; }
+        .popup.download-stats-popup .popup-inner .content .download-formats label.active i:before {
+          content: '\f192'; }
+        .popup.download-stats-popup .popup-inner .content .download-formats label i {
+          font-size: 24px;
+          color: #38ace5;
+          margin-left: -32px;
+          margin-right: 15px; }
+          @media screen and (max-width: 768px) {
+            .popup.download-stats-popup .popup-inner .content .download-formats label i {
+              font-size: 16px;
+              margin-left: -5px;
+              margin-right: 7px; } }
+          @media screen and (max-width: 768px) {
+            .popup.download-stats-popup .popup-inner .content .download-formats label i:before {
+              font-size: inherit; } }
+        .popup.download-stats-popup .popup-inner .content .download-formats label input {
+          display: none; }
+    .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper {
+      margin-top: 30px; }
+      .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap {
+        text-align: left; }
+        .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap b {
+          font-size: 19px; }
+        .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label {
+          font-size: 19px;
+          padding: 0px 10px;
+          cursor: pointer; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label span {
+            font-size: 19px; }
+            @media screen and (max-width: 768px) {
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label span.d {
+                display: none; } }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label span.m {
+              display: none; }
+              @media screen and (max-width: 768px) {
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label span.m {
+                  display: inline-block; } }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label:hover, .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label.active {
+            color: #38a2e5; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label:hover span, .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label.active span {
+              color: #38a2e5; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label:nth-last-child(2) {
+            border-right: 2px solid #525252; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label:last-child {
+            border-right: none; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label input {
+            display: none; }
+      .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom {
+        display: block; }
+        .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom .close-custom-datepicker {
+          position: absolute;
+          right: 4px;
+          z-index: 10;
+          top: 0px;
+          padding: 5px; }
+        .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download {
+          position: relative;
+          display: inline-block; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper {
+            border: none;
+            background: transparent;
+            padding: 0px;
+            display: block; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .drp_top-bar {
+              display: none; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper {
+              border: none;
+              background: none; }
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table {
+                background: white; }
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table .caption {
+                  background-color: #38a2e5;
+                  height: auto; }
+                  .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table .caption div, .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table .caption span {
+                    color: white; }
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table .day.real-today {
+                  background-color: #00c9b7;
+                  color: white !important; }
+              @media screen and (max-width: 768px) {
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper .time1 {
+                  width: auto; } }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepicker {
+            display: flex; }
+            @media screen and (max-width: 992px) {
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepicker {
+                display: block;
+                padding-top: 30px; } }
+            @media screen and (max-width: 992px) {
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepicker table {
+                width: 100%; } }
+            @media screen and (max-width: 992px) {
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepicker tbody.datepickerDays a {
+                text-align: center;
+                width: 100%; } }
+          @media screen and (max-width: 992px) {
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepickerSpace,
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepickerBlock,
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepickerContainer > table > tbody > tr {
+              display: block; } }
+        .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download {
+          text-align: center;
+          align-items: center;
+          display: flex;
+          margin-bottom: 10px;
+          justify-content: center; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .flex {
+            line-height: 30px;
+            align-items: baseline; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder {
+            display: flex;
+            align-items: center;
+            margin-top: 35px; }
+            @media screen and (max-width: 992px) {
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder {
+                display: block;
+                margin-top: 15px; } }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .btn {
+              height: 30px;
+              line-height: 30px;
+              border-radius: 15px;
+              color: white;
+              background: #38ace5;
+              padding: 0px 20px;
+              text-align: center;
+              display: inline-block;
+              float: left;
+              margin-left: 10px; }
+              @media screen and (max-width: 992px) {
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .btn {
+                  float: none;
+                  display: block; } }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .text {
+              display: inline-block;
+              margin-left: 10px;
+              cursor: pointer;
+              color: #38ace5; }
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .text:hover {
+                text-decoration: underline; }
+              @media screen and (max-width: 992px) {
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .text {
+                  display: block;
+                  text-align: center;
+                  margin-left: 0px;
+                  margin-top: 10px; } }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download input {
+            height: 30px;
+            line-height: 30px;
+            border-radius: 15px;
+            width: 90px;
+            border-color: #a3a3a3;
+            margin: 0px 10px;
+            border: none;
+            padding: 0px 5px;
+            border: 1px solid #38a2e5;
+            text-align: center; }
+    .popup.download-stats-popup .popup-inner .content .download-demographics {
+      text-align: left; }
+      .popup.download-stats-popup .popup-inner .content .download-demographics b {
+        font-size: 19px;
+        display: block;
+        margin-bottom: 20px; }
+      .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label {
+        position: relative;
+        margin-bottom: 15px;
+        margin-right: 6px;
+        display: inline-block;
+        vertical-align: text-top;
+        cursor: pointer;
+        border: 1px solid #55b4dd;
+        color: #888888;
+        padding: 5px 20px;
+        border-radius: 5px;
+        font-size: 18px; }
+        .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:hover, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:focus, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active {
+          background-color: #e6f1ff;
+          color: #4b607d; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:hover .dem-arrow i, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:focus .dem-arrow i, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active .dem-arrow i {
+            color: #4b607d; }
+        .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active {
+          font-weight: bold;
+          padding-right: 50px; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active .active-removal {
+            display: block; }
+        .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .active-removal {
+          display: none;
+          background-color: #55b4dd;
+          position: absolute;
+          top: -1px;
+          right: -1px;
+          bottom: -1px;
+          width: 30px;
+          border-top-right-radius: 4px;
+          border-bottom-right-radius: 4px; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .active-removal span {
+            position: absolute;
+            top: 46%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            color: white;
+            display: block;
+            font-size: 20px; }
+        .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .dem-arrow {
+          display: inline-block;
+          margin-left: 6px;
+          margin-right: -8px; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .dem-arrow i {
+            color: #55b4dd; }
+        .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options {
+          display: none;
+          text-align: left;
+          position: absolute;
+          z-index: 10;
+          background-color: white;
+          top: 35px;
+          left: 0px;
+          padding: 10px 15px;
+          border-radius: 10px;
+          box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.11);
+          min-width: 210px; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options .close-dem-options {
+            position: absolute;
+            top: 12px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 18px;
+            border-radius: 50%;
+            box-shadow: 0 0 3px black; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label {
+            display: block;
+            cursor: pointer;
+            font-weight: normal;
+            color: #333;
+            padding: 5px 0px;
+            font-size: 14px; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.active i:before {
+              content: '\f14a'; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.select-all-dem-label {
+              color: #64c1e0;
+              font-weight: bold;
+              border-bottom: 1px solid #65c1e0;
+              margin-bottom: 5px;
+              padding-bottom: 10px; }
+              .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.select-all-dem-label i {
+                display: none; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label i {
+              margin-right: 5px;
+              font-size: 14px; }
+      .popup.download-stats-popup .popup-inner .content .download-demographics input {
+        display: none; }
+    .popup.download-stats-popup .popup-inner .content .red-button {
+      font-size: 20px;
+      padding: 18px 51px;
+      margin-top: 35px; }
+      @media screen and (max-width: 768px) {
+        .popup.download-stats-popup .popup-inner .content .red-button {
+          padding: 13px 40px;
+          margin-top: 15px; } }
+
+.stats-image-wrapper {
+  padding-top: 15px;
+  background-color: #d3ebfb;
+  border-bottom: 1px solid #f3f3f3; }
+  @media screen and (max-width: 768px) {
+    .stats-image-wrapper {
+      padding-bottom: 10px; } }
+  @media screen and (max-width: 1080px) {
+    .stats-image-wrapper .container {
+      width: 100%; } }
+  .stats-image-wrapper .col {
+    text-align: center; }
+    @media screen and (max-width: 768px) {
+      .stats-image-wrapper .col {
+        flex: none;
+        width: 100%;
+        text-align: center; } }
+    .stats-image-wrapper .col .red-button {
+      display: inline;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 15px 20px; }
+      @media screen and (max-width: 1080px) {
+        .stats-image-wrapper .col .red-button {
+          font-size: 14px;
+          padding: 15px 20px; } }
+      @media screen and (max-width: 768px) {
+        .stats-image-wrapper .col .red-button {
+          font-size: 16px;
+          min-width: 230px;
+          display: inline-block;
+          padding: 12px 20px; } }
+      .stats-image-wrapper .col .red-button img {
+        max-width: 39px;
+        vertical-align: middle;
+        margin-right: 10px;
+        margin-top: -4px; }
+        @media screen and (max-width: 768px) {
+          .stats-image-wrapper .col .red-button img {
+            max-width: 30px; } }
+    .stats-image-wrapper .col img.mobile-stat-img {
+      display: none;
+      max-width: 250px; }
+      @media screen and (max-width: 768px) {
+        .stats-image-wrapper .col img.mobile-stat-img {
+          display: inline-block; } }
+    @media screen and (max-width: 768px) {
+      .stats-image-wrapper .col img.pc-stat-img {
+        display: none; } }

@@ -3,6 +3,14 @@
 @section('content')
 
 	<div class="page-statistics">
+		@if(empty($user))
+			<div class="loader-mask" id="main-loader" style="display: none;">
+			    <div class="loader">
+			      	"Loading..."
+			    </div>
+			</div>
+		@endif
+
 		<div class="container">
 			<a class="back-home" href="{{ getLangUrl('dental-survey-stats') }}">
 				{!! trans('vox.page.stats.go-back-stats') !!}
@@ -75,6 +83,23 @@
 				</div>
 			</div>
 		</div>
+
+		@if(empty($user))
+			<div class="stats-image-wrapper">
+				<div class="container flex flex-center">
+					<div class="col">
+						<img src="{{ url('new-vox-img/dv-stats-banner-left-img.svg') }}" class="pc-stat-img">
+						<img src="{{ url('new-vox-img/mobile-dv-stats-banner-left-img.svg') }}" class="mobile-stat-img" />
+					</div>
+					<div class="col">
+						<a href="javascript::" id="load-stats" class="red-button"><img src="{{ url('new-vox-img/chart-icon.svg') }}"/>Show live stats</a>
+					</div>
+					<div class="col">
+						<img src="{{ url('new-vox-img/dv-stats-banner-right-img.svg') }}" class="pc-stat-img" style="width: 92%;">
+					</div>
+				</div>
+			</div>
+		@endif
 		
 		<div class="stats" id="all-stat-wrap">
 			@foreach($vox->stats_questions as $question)

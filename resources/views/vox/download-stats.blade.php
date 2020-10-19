@@ -12,8 +12,8 @@
 
         <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,900&amp;subset=latin-ext" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="{{ url('css/new-style-vox.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ url('css/daterangepicker.min.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url('css/vox-stats.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url('css/vox-stats-single.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url('css/vox-download-stats.css') }}">
 
         <style type="text/css">
         	.hint {
@@ -244,11 +244,17 @@
 		<script src="{{ url('/js-vox/dom-to-image.min.js') }}"></script>
 		<script src="{{ url('/js-vox/main-new.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js-vox/moment.js') }}"></script>
-		<script src="{{ url('/js-vox/daterangepicker.min.js') }}"></script>
 		<script src="{{ url('/js-vox/stats.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js-vox/amcharts-core.js') }}"></script>
 		<script src="{{ url('/js-vox/amcharts-maps.js') }}"></script>
 		<script src="{{ url('/js-vox/amcharts-worldLow.js') }}"></script>
 		<script src="{{ url('/js-vox/gstatic-charts-loader.js') }}"></script>
+		<script type="text/javascript">
+        	var images_path = '{{ url('img-trp') }}'; //Map pins
+        	var lang = '{{ App::getLocale() }}';
+        	var user_id = {{ !empty($user) ? $user->id : 'null' }};
+        	var user_type = '{{ !empty($user) ? ($user->is_dentist ? 'dentist' : 'patient') : 'null' }}';
+        	var featured_coin_text = '{!! nl2br( trans('vox.common.featured-tooltip') ) !!}';
+        </script>
     </body>
 </html>
