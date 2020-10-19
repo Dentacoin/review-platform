@@ -746,8 +746,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public static function domain_exists($email, $record = 'MX'){
-        list($user, $domain) = explode('@', $email);
-        return checkdnsrr($domain, $record);
+        if (mb_strpos($email, '@') !== false) {
+            list($user, $domain) = explode('@', $email);
+            return checkdnsrr($domain, $record);
+        } else {
+            return false;
+        }
     }
 
     public function sendgridEmailValidation($template_id, $email) {
