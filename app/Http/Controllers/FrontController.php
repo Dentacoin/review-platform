@@ -509,7 +509,7 @@ class FrontController extends BaseController {
 
         $params['poll_scales'] = $poll_scales;
 
-        $params['dark_mode'] = !empty($this->user) && $this->user->id == 37530 ? true : false;
+        $params['dark_mode'] = !empty($this->user) && $this->user->dark_mode ? true : false;
 
         if(!isset($params['xframe'])) {
             return response()->view('vox.'.$page, $params, $statusCode ? $statusCode : 200)->header('X-Frame-Options', 'DENY');
@@ -594,6 +594,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '20201016';
+        $params['cache_version'] = '20201019';
     }
 }

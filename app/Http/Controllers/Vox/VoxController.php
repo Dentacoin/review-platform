@@ -1203,7 +1203,7 @@ class VoxController extends FrontController
 
         $first_question = null;
         $first_question_num = 0;
-        if($not_bot) {
+        // if($not_bot) {
         	if (!empty($welcome_vox)) {
 	        	foreach ($welcome_vox->questions as $question) {
 		    		$first_question_num++;
@@ -1227,9 +1227,9 @@ class VoxController extends FrontController
 			    	}
         		}
         	}
-        } else {
-	    	$first_question_num++;
-        }
+      //   } else {
+	    	// $first_question_num++;
+      //   }
 
 
         $total_questions = $vox->questions->count();
