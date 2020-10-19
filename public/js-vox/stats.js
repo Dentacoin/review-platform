@@ -635,6 +635,10 @@ $(document).ready(function(){
 
                                 $('.stats-image-wrapper').hide();
 
+                                $('.stat').each( function() {
+                                    $(this).find('.graphs .stats-mask').append('<img class="stats-loader" src="'+window.location.origin+'/new-vox-img/dentavox-statistics-loader.gif" alt="Dentavox statistics loader">');
+                                });
+
                                 var stat = that.closest('.stat');
                                 
                                 if( !stat.hasClass('active') ) {
@@ -1547,6 +1551,10 @@ $(document).ready(function(){
                                 gc_loaded = true;
 
                                 $('.stats-image-wrapper').hide();
+
+                                $('.stat').each( function() {
+                                    $(this).find('.graphs .stats-mask').append('<img class="stats-loader" src="'+window.location.origin+'/new-vox-img/dentavox-statistics-loader.gif" alt="Dentavox statistics loader">');
+                                });
 
                                 $('#main-loader').fadeOut();
                                 $('#main-loader').find('.loader-mask').delay(350).fadeOut('slow');

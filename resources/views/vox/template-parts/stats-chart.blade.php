@@ -36,8 +36,10 @@
 		<div class="flex more-q-content">
 	@endif
 	<div class="loader-mask stats-mask">
-	    <img class="stats-loader" src="{{ url('new-vox-img/dentavox-statistics-loader.gif') }}" alt="Dentavox statistics loader">
-  	</div>
+		@if(!empty($user))
+		    <img class="stats-loader" src="{{ url('new-vox-img/dentavox-statistics-loader.gif') }}" alt="Dentavox statistics loader">
+		@endif
+	</div>
 
 	<div class="chart chart-1">
 		<div class="main-chart" chart></div>
