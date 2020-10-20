@@ -40,8 +40,8 @@ use App;
 use PDF;
 use DB;
 
-class StatsController extends FrontController
-{
+class StatsController extends FrontController {
+
     public function home($locale=null) {
 
         $this->current_page = 'stats';
@@ -71,7 +71,6 @@ class StatsController extends FrontController
                 }
             })->orderBy('stats_featured', 'DESC')
             ->get();
-
 
         } else {
 

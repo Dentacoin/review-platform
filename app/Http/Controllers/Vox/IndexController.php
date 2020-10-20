@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Vox;
 
 use App\Http\Controllers\FrontController;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+
 use App\Models\StopTransaction;
 use App\Models\Recommendation;
 use App\Models\UserStrength;
@@ -26,44 +29,145 @@ use App;
 
 class IndexController extends FrontController {
 
-	private function getVoxList($slice_from=0) {
+	private function getVoxList() {
+
+		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
+
 		if( $this->user ) {
 			$voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
+			if(request('filter-item')) {
+				if(request('filter-item') == 'taken') {
+					$voxes = $voxes->whereIn('id', $this->user->filledVoxes());
+				} else if(request('filter-item') == 'untaken') {
+					$voxes = $voxes->whereNotIn('id', $this->user->filledVoxes());
+				} else if(request('filter-item') == 'all') {
+
+				}
+			} else {
+				if($taken) {
+					$voxes = $voxes->whereNotIn('id', $this->user->filledVoxes());
+				}
+			}
 		} else {
 			$voxes = User::getAllVoxes();
 		}
 
-		if(!empty($this->user) && $this->user->is_dentist && !$slice_from) {
-			$slice_count = 5;
-		} else {
-			$slice_count = 6;
+		$voxes = $voxes->where('type', 'normal');
+
+		if(request('category') && request('category') != 'all') {
+			$cat = request('category');
+			$voxes->whereHas('categories', function($query) use ($cat) {
+				$query->whereHas('category', function($q) use ($cat) {
+					$q->where('id', $cat);
+				});
+			});
 		}
 
-		$voxList = $voxes->where('type', 'normal')->get();
+		if(request('survey-search')) {
+			$title = request('survey-search');
+			$voxes->whereHas('translations', function ($query) use ($title) {
+				$query->where('title', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
+			});
+		}
 
-		$sort = 'featured';
+		$voxList = $voxes->get();
+
+		$sort = request('sortable-items') ?? 'newest-desc';
 		$voxList = $voxList->sortByDesc(function ($voxlist) use ($sort) {
+			$sort_name = explode('-', $sort)[0];
+			$sort_type = explode('-', $sort)[1];
 
-            if(!empty($voxlist->$sort)) {
-                return 100000;
-            } else {
-                return 10000 - $voxlist->sort_order;
-            }
+			if($sort_name == 'newest') {
+
+				if($sort_type == 'desc') {
+
+		            if(!empty($voxlist->featured)) {
+		                return 100000 - $voxlist->sort_order;
+		            } else {
+		                return 10000 - $voxlist->sort_order;
+		            }
+				} else {
+					if(!empty($voxlist->featured)) {
+		                return 100000 + $voxlist->sort_order;
+		            } else {
+		                return 10000 + $voxlist->sort_order;
+		            }
+				}
+			} else if($sort_name == 'popular') {
+
+				if($sort_type == 'desc') {
+
+		            if(!empty($voxlist->featured)) {
+		                return 100000 + $voxlist->rewardsCount();
+		            } else {
+		                return 10000 + $voxlist->rewardsCount();
+		            }
+				} else {
+					if(!empty($voxlist->featured)) {
+		                return 100000 - $voxlist->rewardsCount();
+		            } else {
+		                return 10000 - $voxlist->rewardsCount();
+		            }
+				}
+			} else if($sort_name == 'reward') {
+
+				if($sort_type == 'desc') {
+
+		            if(!empty($voxlist->featured)) {
+		                return 10000000000 + $voxlist->getRewardTotal();
+		            } else {
+		                return 10 + $voxlist->getRewardTotal();
+		            }
+				} else {
+					if(!empty($voxlist->featured)) {
+		                return 10000000000 - $voxlist->getRewardTotal();
+		            } else {
+		                return 10 - $voxlist->getRewardTotal();
+		            }
+				}
+			} else if($sort_name == 'duration') {
+
+				$duration = !empty($voxlist->manually_calc_reward) && !empty($voxlist->dcn_questions_count) ? ceil( $voxlist->dcn_questions_count/6) : ceil( $voxlist->questionsCount()/6);
+
+				if($sort_type == 'desc') {
+
+		            if(!empty($voxlist->featured)) {
+		                return 100000 + $duration;
+		            } else {
+		                return 10000 + $duration;
+		            }
+				} else {
+					if(!empty($voxlist->featured)) {
+		                return 100000 - $duration;
+		            } else {
+		                return 10000 - $duration;
+		            }
+				}
+			}
         });
-		// $voxList = $voxList->slice($slice_from, $slice_count);
+
+        $get = request()->query();
+        unset($get['page']);
+        unset($get['submit']);
 
 		if ($this->user) {
 			$voxList = $this->user->notRestrictedVoxesList($voxList);
+			$voxList = $this->paginate($voxList, 6, request('slice') ?? 1 )->appends($get);
+		} else {
+			$voxList = $this->paginate($voxList, 6, request('slice') ?? 1)->withPath(App::getLocale().'/paid-dental-surveys/')->appends($get);
 		}
-
-		//sort
-
-		// if($voxList->count() < 6) {
-
-		// }
 
 		return $voxList;
 	}
+
+    private function paginate($items, $perPage, $page, $options = []) {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $pageItems = $perPage;
+        if(!empty($this->user) && $this->user->is_dentist && $page == 1) {
+        	$pageItems = $pageItems - 1;
+        }
+        return new LengthAwarePaginator($items->forPage($page, $pageItems), $items->count(), $pageItems, $page, $options);
+    }
 
 	public function survey_list($locale=null) {
 		$sorts = [
@@ -80,14 +184,25 @@ class IndexController extends FrontController {
 			'all' => trans('vox.page.home.sort-all'),
 		];
 
+		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
+
 		$voxList = $this->getVoxList();
 
-		// session('voxes-sort');
+		$all_taken = false;
+		if(!empty($this->user)) {
+
+			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
+			$untaken_voxes = $untaken_voxes->where('type', 'normal')->count();
+			if($untaken_voxes == count($taken)) {
+				$all_taken = false;
+			}
+		}
 
 		$seos = PageSeo::find(2);
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
         $arr = array(
+        	'all_taken' => $all_taken,
             'is_warning_message_shown' => $is_warning_message_shown,
 			'countries' => Country::with('translations')->get(),
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
@@ -98,7 +213,7 @@ class IndexController extends FrontController {
             'social_description' => $seos->social_description,
 			'sorts' => $sorts,
 			'filters' => $filters,
-			'taken' => !empty($this->user) ? $this->user->filledVoxes() : null,
+			'taken' => $taken,
         	'voxes' => $voxList,
         	'vox_categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
         	'js' => [

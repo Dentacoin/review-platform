@@ -663,8 +663,8 @@ class UsersController extends AdminController {
                     $info['value'] = 0;
                 }
 
-                if ($u->vox_rewards->isNotEmpty()) {
-                    $info['surveys'] = $u->vox_rewards->count() - 1;
+                if ($u->surveys_rewards->isNotEmpty()) {
+                    $info['surveys'] = $u->surveys_rewards->count() - 1;
                 } else {
                     $info['surveys'] = 0;
                 }

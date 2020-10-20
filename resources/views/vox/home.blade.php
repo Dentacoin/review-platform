@@ -84,15 +84,14 @@
 		    </div>
 		@endif
 		
-		<div class="another-questions">
-
+		<form  method="get" class="another-questions">
   			@include('front.errors')
   			
 			<h1 class="bold">
 				{{ trans('vox.page.home.title') }}
 			</h1>
 
-			@if(!empty($user) && $voxes->count() == count($taken))
+			@if($all_taken)
 				<div class="alert alert-info alert-done-all-surveys">
 					@if($user->is_dentist)
 						{!! nl2br(trans('vox.page.home.dentist.alert-done-all-surveys', [
@@ -116,7 +115,7 @@
 				<div class="filters-section">
 					<div class="search-survey tal">
 						<i class="fas fa-search"></i>
-						<input type="text" id="survey-search" name="survey-search">
+						<input type="text" id="survey-search" name="survey-search" value="{{ request('survey-search') ?? '' }}">
 					</div>
 					<div class="questions-menu clearfix">
 						<div class="sort-menu tal"> 
@@ -124,7 +123,7 @@
 								@if($key == 'taken' && empty($taken))
 
 								@else
-									<a href="javascript:;" sort="{{ $key }}"  class="{!! $key == 'newest' ? 'active sortable' : ( $key == 'featured' || $key == 'untaken' ? 'active' : ($key == 'all' || $key == 'taken' ? '' : 'sortable')) !!}">
+									<a href="javascript:;" sort="{{ $key }}" class="{!! request('sortable-items') ? (explode('-', request('sortable-items'))[0] == $key ? 'active sortable' : 'sortable') : ($key == 'newest' ? 'active sortable' : 'sortable') !!} {!! request('sortable-items') && explode('-', request('sortable-items'))[1] == 'asc' ? 'order-asc' : '' !!}">
 
 										@if($key == 'featured')
 											<i class="fas fa-star"></i>
@@ -135,11 +134,12 @@
 								@endif
 							@endforeach
 						</div>
+						<input type="hidden" name="sortable-items" value="">
 						<div class="sort-category tar"> 
 							<span>
 								{{ trans('vox.page.home.filter') }}:
 							</span>
-							{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
+							{{ Form::select('category', ['all' => 'All'] + $vox_categories, request('category') ?? null , ['id' => 'surveys-categories']) }} 
 						</div>
 					</div>
 
@@ -150,59 +150,64 @@
 									@if($k == 'taken' && empty($taken))
 
 									@else
-										<a href="javascript:;" filter="{{ $k }}"  class="{!! $k == 'untaken' ? 'active' : '' !!}">
+										<label for="filter-{{ $k }}" class="{!! request('filter-item') ? (request('filter-item') == $k ? 'active' : '') : ($k == 'untaken' ? 'active' : '') !!}">
 											{{ $v }}
-										</a>
+											<input type="radio" value="{{ $k }}" name="filter-item" id="filter-{{ $k }}" class="filter-item" {!! request('filter-item') && request('filter-item') == $k ? 'checked="checked"' : ($k=='untaken' ? 'checked="checked"' : '') !!} style="display: none;">
+										</label>
 									@endif
 								@endforeach
 							</div>
 						</div>
 					@endif
 				</div>
+				<div class="section-recent-surveys new-style-swiper" id="questions-wrapper">
+					<div class="questions-inner" id="questions-inner">
+						@if(!empty($user) && $user->is_dentist)
+							<div class="swiper-slide request-vox">
+								<div class="slider-inner">
+									<div class="slide-padding">
+										<a href="javascript:;" class="cover" style="background-image: url('{{ url('new-vox-img/request-survey.jpg') }}');"></a>		
+										<div class="vox-header clearfix">
+											<h4 class="survey-title bold">{{ trans('vox.page.home.request-survey.title') }}</h4>
+											<div class="survey-cats"> 
+												<span>{{ trans('vox.page.home.request-survey.cat1') }}</span>
+												<span>{{ trans('vox.page.home.request-survey.cat2') }}</span>
+												<span>{{ trans('vox.page.home.request-survey.cat3') }}</span>
+											</div>
+											<div class="survey-time flex">
+												<p class="vox-description tac">
+													{{ trans('vox.page.home.request-survey.description') }}
+												</p>
+											</div>
+											<div class="btns">
+												<a class="blue-button" href="javascript:;" data-popup="request-survey-popup">
+													{{ trans('vox.page.home.request-survey.request') }}
+												</a>
+											</div>
+										</div>
+								  	</div>
+								</div>
+						    </div>
+						@endif
+						
+					    @include('vox.template-parts.home-voxes')
+					</div>
+
+					<div class="tac" style="display: none;"> 
+						{{ $voxes->render() }}
+					</div>
+
+					<a class="give-me-more" id="survey-more" href="javascript:;">
+						{{ trans('vox.common.load-more') }}					
+					</a>
+
+					<div class="alert alert-info" id="survey-not-found" style="display: none;">
+						{{ trans('vox.page.home.no-results') }}
+					</div>
+				</div>
 			@endif
-			<div class="section-recent-surveys new-style-swiper" id="questions-wrapper">
-				<div class="questions-inner" id="questions-inner">
-					@if(!empty($user) && $user->is_dentist)
-						<div class="swiper-slide request-vox">
-							<div class="slider-inner">
-								<div class="slide-padding">
-									<a href="javascript:;" class="cover" style="background-image: url('{{ url('new-vox-img/request-survey.jpg') }}');"></a>		
-									<div class="vox-header clearfix">
-										<h4 class="survey-title bold">{{ trans('vox.page.home.request-survey.title') }}</h4>
-										<div class="survey-cats"> 
-											<span>{{ trans('vox.page.home.request-survey.cat1') }}</span>
-											<span>{{ trans('vox.page.home.request-survey.cat2') }}</span>
-											<span>{{ trans('vox.page.home.request-survey.cat3') }}</span>
-										</div>
-										<div class="survey-time flex">
-											<p class="vox-description tac">
-												{{ trans('vox.page.home.request-survey.description') }}
-											</p>
-										</div>
-										<div class="btns">
-											<a class="blue-button" href="javascript:;" data-popup="request-survey-popup">
-												{{ trans('vox.page.home.request-survey.request') }}
-											</a>
-										</div>
-									</div>
-							  	</div>
-							</div>
-					    </div>
-					@endif
-					
-				    @include('vox.template-parts.home-voxes')
-				</div>
-
-				<a class="give-me-more" id="survey-more" href="javascript:;">
-					{{ trans('vox.common.load-more') }}					
-				</a>
-
-				<div class="alert alert-info" id="survey-not-found" style="display: none;">
-					{{ trans('vox.page.home.no-results') }}
-				</div>
-			</div>
-	            
-		</div>
+	        <input type="submit" name="submit" style="display: none;">
+		</form>
 	</div>
     	
 @endsection

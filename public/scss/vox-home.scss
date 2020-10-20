@@ -390,7 +390,8 @@ $main-color: #38ace5;
 			text-align: center;
 		}
 
-		a {
+		label {
+			cursor: pointer;
 			border: 1px solid #61b1f6 !important;
 			border-radius: 10px;
 			min-width: 100px;
@@ -579,6 +580,7 @@ $main-color: #38ace5;
 		    	margin-left: 30px;
 		    	margin-right: 30px;
 		    	margin-bottom: 50px;
+		    	display: block !important; 
 				
 				@media #{$pc} {
 					width: 430px;
@@ -625,6 +627,7 @@ $main-color: #38ace5;
 
 		    	.slider-inner {
 		    		padding: 0px;
+		    		height: 100%;
 
 			    	.vox-header {
 			    		padding: 10px;
@@ -666,6 +669,15 @@ $main-color: #38ace5;
 							    	max-height: 79px;
 							    }
 							}
+			    		}
+
+			    		.btns {
+			    			a {
+			    				@media (max-width: 768px) {
+			    					font-size: 15px;
+			    					padding: 10px;
+			    				}
+			    			}
 			    		}
 			    	}
 		    	}
