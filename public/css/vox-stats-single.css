@@ -1093,15 +1093,18 @@
     display: block; }
 
 .all-stats-section {
-  margin-top: 70px;
+  margin-top: 34px;
   margin-bottom: 40px;
-  padding-top: 50px;
+  padding-top: 30px;
   position: relative; }
   @media screen and (max-width: 768px) {
     .all-stats-section {
-      margin-top: 50px;
+      margin-top: 30px;
       padding-top: 30px;
       margin-bottom: 20px; } }
+  @media screen and (max-width: 768px) {
+    .all-stats-section .flex {
+      display: block; } }
   .all-stats-section:after {
     content: '';
     position: absolute;
@@ -1128,7 +1131,21 @@
     margin-bottom: 45px; }
     @media screen and (max-width: 768px) {
       .all-stats-section p {
-        font-size: 15px; } }
+        font-size: 15px;
+        margin-bottom: 25px; } }
+  .all-stats-section .white-button {
+    padding: 12px 20px;
+    color: #38ace5;
+    margin-right: 15px; }
+    @media screen and (max-width: 768px) {
+      .all-stats-section .white-button {
+        font-size: 16px;
+        display: block;
+        max-width: 200px;
+        margin: 0 auto;
+        margin-bottom: 10px; } }
+    .all-stats-section .white-button:hover {
+      color: white; }
 
 .stats-blurred .blurred-title {
   font-size: 20px;

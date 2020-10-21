@@ -1747,15 +1747,21 @@ $main-color: #38ace5;
 }
 
 .all-stats-section {
-	margin-top: 70px;
-	margin-bottom: 40px;
-	padding-top: 50px;
+	margin-top: 34px;
+    margin-bottom: 40px;
+    padding-top: 30px;
 	position: relative;
 
 	@media #{$phone} {
-		margin-top: 50px;
+		margin-top: 30px;
 		padding-top: 30px;
 		margin-bottom: 20px;
+	}
+
+	.flex {
+		@media #{$phone} {
+			display: block;
+		}
 	}
 
 	&:after {
@@ -1791,7 +1797,26 @@ $main-color: #38ace5;
 
 		@media #{$phone} {
 			font-size: 15px;
+			margin-bottom: 25px;
 		}
+	}
+
+	.white-button {
+		padding: 12px 20px;
+	    color: #38ace5;
+	    margin-right: 15px;
+
+	    @media #{$phone} {
+	    	font-size: 16px;
+		    display: block;
+		    max-width: 200px;
+		    margin: 0 auto;
+		    margin-bottom: 10px;
+		}
+
+	    &:hover {
+	    	color: white;
+	    }
 	}
 }
 
