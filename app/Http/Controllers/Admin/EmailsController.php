@@ -26,7 +26,18 @@ class EmailsController extends AdminController {
             $templates = EmailTemplate::whereNull('not_used')->orderBy('id', 'ASC');
 
             if(!empty(request('search-name'))) {
-                $templates = $templates->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
+                $s_name = '%'.trim(request('search-name')).'%';
+                $templates = $templates->where( function($query) use ($s_name) {
+                    $query->where('name', 'LIKE', $s_name)
+                    ->orWhereHas('translations', function ($queryy) use ($s_name) {
+                        $queryy->where('title', 'LIKE', $s_name);
+                    });
+                });
+
+
+                // $templates = $templates->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
+                // $templates = $templates->where('title', 'LIKE', '%'.trim(request('search-name')).'%');
+                // $templates = $templates->where('subject', 'LIKE', '%'.trim(request('search-name')).'%');
             }
             if(!empty(request('search-id'))) {
                 $templates = $templates->where('id', request('search-id') );

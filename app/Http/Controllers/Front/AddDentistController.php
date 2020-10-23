@@ -152,7 +152,6 @@ Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/use
                         $sender_name = config('mail.from.name');
 
                         $message->from($sender, $sender_name);
-                        $message->to( 'ali.hashem@dentacoin.com' );
                         $message->to( 'betina.bogdanova@dentacoin.com' );
                         $message->replyTo($patient->email, $patient->name);
                         $message->subject('Patient invites dentist to register');
@@ -166,7 +165,6 @@ Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/use
                         $sender_name = config('mail.from.name');
 
                         $message->from($sender, $sender_name);
-                        $message->to( 'ali.hashem@dentacoin.com' );
                         $message->to( 'betina.bogdanova@dentacoin.com' );
                         $message->subject('Not registered patient invites dentist to register');
                     });

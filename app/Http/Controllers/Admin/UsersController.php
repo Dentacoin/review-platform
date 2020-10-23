@@ -1429,18 +1429,9 @@ class UsersController extends AdminController {
                                     ];
 
                                     $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
-
-                                    $olde = $item->email;
-                                    $item->email = 'ali.hashem@dentacoin.com';
-                                    $item->save();
-
-                                    $to_ali = $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
-
-                                    $item->email = $olde;
                                     $item->ownership = 'approved';
                                     $item->verified_on = Carbon::now();
                                     $item->save();
-                                    $to_ali->delete();
 
                                     $item->product_news = ['dentacoin', 'trp'];
                                     $item->save();
@@ -1573,14 +1564,7 @@ class UsersController extends AdminController {
                                     $item->save();
 
                                 } else if( $this->request->input($key)=='pending' ) {
-                                    $olde = $item->email;
-                                    $item->email = 'ali.hashem@dentacoin.com';
-                                    $item->save();
-                                    $to_ali = $item->sendTemplate(40);
-                                    $item->email = $olde;
-                                    $item->save();
                                     $item->sendTemplate(40);
-                                    $to_ali->delete();
                                 } else if( $this->request->input($key)=='rejected' ) {
                                     $item->sendTemplate(14);
                                 }

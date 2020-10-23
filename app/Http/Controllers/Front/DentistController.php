@@ -994,7 +994,6 @@ class DentistController extends FrontController {
                             $sender_name = config('mail.from.name');
 
                             $message->from($sender, $sender_name);
-                            $message->to( 'ali.hashem@dentacoin.com' );
                             $message->to( 'betina.bogdanova@dentacoin.com' );
                             $message->to( 'petya.ivanova@dentacoin.com' );
                             $message->replyTo($user->email, $user->getNames());
