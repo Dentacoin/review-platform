@@ -3237,20 +3237,71 @@ body.strength-pb {
     @media screen and (max-width: 768px) {
       .index-gradient .flickity-oval .container {
         padding: 0px; } }
+    .index-gradient .flickity-oval .container .slider-right {
+      position: absolute;
+      right: 18px;
+      background: url(../img-trp/slider-new-arrow-right.png) 50% 50% no-repeat;
+      width: 41px;
+      height: 112px;
+      top: 50%;
+      transform: translateY(-50%); }
+      @media screen and (max-width: 998px) {
+        .index-gradient .flickity-oval .container .slider-right {
+          right: -4px; } }
+      @media screen and (max-width: 768px) {
+        .index-gradient .flickity-oval .container .slider-right {
+          display: none; } }
+    .index-gradient .flickity-oval .container .slider-left {
+      position: absolute;
+      left: 18px;
+      background: url(../img-trp/slider-new-arrow-left.png) 50% 50% no-repeat;
+      width: 41px;
+      height: 112px;
+      top: 50%;
+      transform: translateY(-50%); }
+      @media screen and (max-width: 998px) {
+        .index-gradient .flickity-oval .container .slider-left {
+          left: -4px; } }
+      @media screen and (max-width: 768px) {
+        .index-gradient .flickity-oval .container .slider-left {
+          display: none; } }
     .index-gradient .flickity-oval .flickity {
-      padding-bottom: 0px; }
-      .index-gradient .flickity-oval .flickity .flickity-prev-next-button.next {
-        background: url(../img-trp/slider-new-arrow-right.png) 50% 50% no-repeat; }
-      .index-gradient .flickity-oval .flickity .flickity-prev-next-button.previous {
-        background: url(../img-trp/slider-new-arrow-left.png) 50% 50% no-repeat; }
+      position: relative;
+      height: 492px;
+      overflow-y: hidden;
+      overflow-x: scroll;
+      padding-bottom: 30px;
+      padding-top: 30px;
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */ }
+      @media screen and (max-width: 768px) {
+        .index-gradient .flickity-oval .flickity {
+          height: 432px; } }
+      .index-gradient .flickity-oval .flickity::-webkit-scrollbar {
+        display: none; }
+      .index-gradient .flickity-oval .flickity .index-slider {
+        position: absolute;
+        width: 3120px;
+        height: 100%; }
       .index-gradient .flickity-oval .flickity .flickity-prev-next-button {
         width: 41px !important;
         height: 112px !important; }
       .index-gradient .flickity-oval .flickity .slider-wrapper {
-        padding: 30px 20px; }
+        max-width: 220px;
+        padding: 0px;
+        margin: 0px 20px;
+        float: left; }
+        @media screen and (max-width: 1200px) {
+          .index-gradient .flickity-oval .flickity .slider-wrapper {
+            max-width: 178px; } }
+        @media screen and (max-width: 998px) {
+          .index-gradient .flickity-oval .flickity .slider-wrapper {
+            max-width: 298px; } }
         @media screen and (max-width: 768px) {
           .index-gradient .flickity-oval .flickity .slider-wrapper {
-            width: 260px; } }
+            max-width: 220px; } }
         .index-gradient .flickity-oval .flickity .slider-wrapper .slider-inner {
           position: relative;
           border-radius: 5px;

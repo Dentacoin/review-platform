@@ -252,10 +252,8 @@ class IndexController extends FrontController {
 				'index.js',
                 'search.js',
                 'address.js',
-                'flickity.min.js',
 			],
 			'css' => [
-                'flickity.min.css',
                 'trp-index.css',
 			]
         );

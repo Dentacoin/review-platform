@@ -3439,21 +3439,76 @@ body.strength-pb {
 			display: none;
 		}
 
+
 		.container {
+
 			@media #{$phone} {
 				padding: 0px;
+			}
+
+			.slider-right {
+				position: absolute;
+			    right: 18px;
+			    background: url(../img-trp/slider-new-arrow-right.png) 50% 50% no-repeat;
+			    width: 41px;
+			    height: 112px;
+			    top: 50%;
+			    transform: translateY(-50%);
+
+			    @media #{$tablet} {
+			    	right: -4px;
+			    }
+
+			    @media #{$phone} {
+			    	display: none;
+			    }
+			}
+			.slider-left {
+				position: absolute;
+			    left: 18px;
+			    background: url(../img-trp/slider-new-arrow-left.png) 50% 50% no-repeat;
+			    width: 41px;
+			    height: 112px;
+			    top: 50%;
+			    transform: translateY(-50%);
+
+			    @media #{$tablet} {
+			    	left: -4px;
+			    }
+
+			    @media #{$phone} {
+			    	display: none;
+			    }
 			}
 		}
 
 		.flickity {
-			padding-bottom: 0px;
+			position: relative;
+		    height: 492px;
+		    overflow-y: hidden;
+		    overflow-x: scroll;
+		    padding-bottom: 30px;
+		    padding-top: 30px;
 
-			.flickity-prev-next-button.next {
-			    background: url(../img-trp/slider-new-arrow-right.png) 50% 50% no-repeat;
+			-ms-overflow-style: none;  /* IE and Edge */
+			scrollbar-width: none;  /* Firefox */
+
+			@media #{$phone} {
+				height: 432px;
 			}
-			.flickity-prev-next-button.previous {
-			    background: url(../img-trp/slider-new-arrow-left.png) 50% 50% no-repeat;
+
+			&::-webkit-scrollbar {
+			  display: none;
 			}
+
+			.index-slider {
+			    position: absolute;
+    			width: 3120px;
+    		    height: 100%;
+    		 //    display: flex;
+    			// flex-flow: row wrap;
+			}
+
 
 			.flickity-prev-next-button {
 			    width: 41px !important;
@@ -3461,10 +3516,21 @@ body.strength-pb {
 			}
 
 			.slider-wrapper {
-				padding: 30px 20px;
+				max-width: 220px;
+			    padding: 0px;
+			    margin: 0px 20px;
+			    float: left;
+
+				@media #{$pc} {
+					max-width: 178px;
+				}
+
+				@media #{$tablet} {
+					max-width: 298px;
+				}
 
 				@media #{$phone} {
-					width: 260px;
+					max-width: 220px;
 				}
 
 				.slider-inner {

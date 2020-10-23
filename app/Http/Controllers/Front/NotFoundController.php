@@ -67,12 +67,8 @@ class NotFoundController extends FrontController {
 			'featured' => $homeDentists,
 			'js' => [
 				'index.js',
-                'flickity.min.js',
 			],
 			'gray_footer' => true,
-			'css' => [
-                'flickity.min.css',
-			],
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,
             'seo_description' => $seos->seo_description,
