@@ -1021,7 +1021,6 @@ class ProfileController extends FrontController {
                                         $message->from($sender, $sender_name);
                                         $message->to( 'petya.ivanova@dentacoin.com' );
                                         $message->to( 'donika.kraeva@dentacoin.com' );
-                                        $message->to( 'ali.hashem@dentacoin.com' );
                                         $message->to( 'betina.bogdanova@dentacoin.com' );
                                         $message->subject('Clinic '.$current_user->getNames().' added a new team member that is with status Test');
                                     });
@@ -1077,7 +1076,6 @@ class ProfileController extends FrontController {
                                     $message->from($sender, $sender_name);
                                     $message->to( 'petya.ivanova@dentacoin.com' );
                                     $message->to( 'donika.kraeva@dentacoin.com' );
-                                    $message->to( 'ali.hashem@dentacoin.com' );
                                     $message->to( 'betina.bogdanova@dentacoin.com' );
                                     $message->subject('Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious');
                                 });
@@ -1142,7 +1140,6 @@ class ProfileController extends FrontController {
                             $sender_name = config('mail.from.name');
 
                             $message->from($sender, $sender_name);
-                            $message->to( 'ali.hashem@dentacoin.com' );
                             $message->to( 'betina.bogdanova@dentacoin.com' );
                             $message->subject('Clinic '.$current_user->getNames().' added a new team member');
                         });
