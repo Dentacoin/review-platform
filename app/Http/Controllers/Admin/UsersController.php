@@ -24,6 +24,7 @@ use App\Models\LeadMagnet;
 use App\Models\UserLogin;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
+use App\Models\OldEmail;
 use App\Models\UserBan;
 use App\Models\UserAsk;
 use App\Models\OldSlug;
@@ -1372,6 +1373,14 @@ class UsersController extends AdminController {
                                     }
                                     
                                 } else {
+                                    if ($item->$key != $this->request->input($key)) {
+                                        
+                                        $oldemail = new OldEmail;
+                                        $oldemail->user_id = $item->id;
+                                        $oldemail->email = $item->email;
+                                        $oldemail->save();
+                                    }
+
                                     $item->$key = $this->request->input($key);
                                 }
                             }
