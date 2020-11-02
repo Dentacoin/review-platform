@@ -123,13 +123,13 @@
 								@if($key == 'taken' && empty($taken))
 
 								@else
-									<a href="javascript:;" sort="{{ $key }}" class="{!! request('sortable-items') ? (explode('-', request('sortable-items'))[0] == $key ? 'active sortable' : 'sortable') : ($key == 'newest' ? 'active sortable' : 'sortable') !!} {!! request('sortable-items') && explode('-', request('sortable-items'))[1] == 'asc' ? 'order-asc' : '' !!}">
+									<a href="javascript:;" desktop-val="{{ $val }}" sort="{{ $key }}" class="{!! request('sortable-items') ? (explode('-', request('sortable-items'))[0] == $key ? 'active sortable' : 'sortable') : ($key == 'newest' ? 'active sortable' : 'sortable') !!} {!! request('sortable-items') && explode('-', request('sortable-items'))[1] == 'asc' ? 'order-asc' : '' !!}">
 
 										@if($key == 'featured')
 											<i class="fas fa-star"></i>
 										@endif
 
-										{{ $val }}
+										{{ isset(explode(' ', $val)[1]) ? explode(' ', $val)[1] : explode(' ', $val)[0] }}
 									</a>
 								@endif
 							@endforeach

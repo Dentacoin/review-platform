@@ -4,11 +4,9 @@ var slice = 1;
 
 $(document).ready(function(){
 
-	if($(window).outerWidth() <= 768) {
+	if($(window).outerWidth() > 768) {
 		$('.another-questions .sort-menu').children().each( function() {
-			if($(this).text().split(" ").length > 1) {
-				$(this).text($(this).text().split(" ")[1]);
-			}
+			$(this).text($(this).attr('desktop-val'));
 		});
 	}
 
