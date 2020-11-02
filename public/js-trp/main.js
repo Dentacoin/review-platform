@@ -824,6 +824,10 @@ jQuery(document).ready(function($){
 	    	loadMapScript();
 	    });
 
+	    $('#search-input').on('focus keyup', function() {
+	    	loadMapScript();
+	    });
+
 	    $('.lead-magnet-form-step2').submit( function(e) {
 	        e.preventDefault();
 
