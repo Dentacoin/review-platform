@@ -853,7 +853,7 @@ class UsersController extends AdminController {
     public function delete( $id ) {
         $item = User::find($id);
 
-        if(!empty($item)) {
+        if(!empty($item) && $item->id != 3) {
 
             if (!empty(Request::input('deleted_reason'))) {
                 $action = new UserAction;
@@ -873,27 +873,27 @@ class UsersController extends AdminController {
                 $this->request->session()->flash('error-message', "You have to write a reason why this user has to be deleted" );
                 return redirect('cms/users/edit/'.$item->id);
             }
-            
         } else {
             return redirect('cms/'.$this->current_page);
         }
-        
-
     }
 
     public function massdelete(  ) {
         if( Request::input('ids') ) {
             $delusers = User::whereIn('id', Request::input('ids'))->get();
             foreach ($delusers as $du) {
-                $action = new UserAction;
-                $action->user_id = $du->id;
-                $action->action = 'deleted';
-                $action->reason = Request::input('mass-delete-reasons');
-                $action->actioned_at = Carbon::now();
-                $action->save();
+                if($du->id != 3) {
 
-                $du->deleteActions();
-                $du->delete();
+                    $action = new UserAction;
+                    $action->user_id = $du->id;
+                    $action->action = 'deleted';
+                    $action->reason = Request::input('mass-delete-reasons');
+                    $action->actioned_at = Carbon::now();
+                    $action->save();
+
+                    $du->deleteActions();
+                    $du->delete();
+                }
             }
         }
 

@@ -62,13 +62,6 @@
                             </label>
                         </div>
 
-                        <div class="col-md-2">
-                            <label for="exclude-unsubscribed" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
-                                <input id="exclude-unsubscribed" type="checkbox" name="exclude-unsubscribed" value="1" {!! !empty($exclude_unsubscribed) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
-                                Exclude Unsubscribed
-                            </label>
-                        </div>
-
                         <style type="text/css">
                             .select2-container--default .select2-selection--multiple {
                                 height: auto !important;

@@ -715,9 +715,11 @@
                                             Restore
                                         </a>
                                     @else
-                                        <a class="btn btn-sm btn-danger form-control user-b" href="javascript:;" data-toggle="modal" data-target="#deleteModal">
-                                            Delete
-                                        </a>
+                                        @if($item->id != 3)
+                                            <a class="btn btn-sm btn-danger form-control user-b" href="javascript:;" data-toggle="modal" data-target="#deleteModal">
+                                                Delete
+                                            </a>
+                                        @endif
                                     @endif
                                 </div>
                             </div>
