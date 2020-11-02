@@ -961,19 +961,37 @@ class UsersController extends AdminController {
         if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
             $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
 
-            if($ban->domain == 'trp') {
-                $group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
-            } else {
-                $group_id = config('email-preferences')['product_news']['vox']['sendgrid_group_id'];
-            }
-
-            $email = $item->email;
-            $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->_($email)->delete();
+            $item->sendgridSubscribeToGroup($ban->domain);
 
             UserBan::destroy( $ban_id );
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.ban-deleted') );
+        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+    }
+
+    public function restore_ban( $id, $ban_id ) {
+        $item = User::withTrashed()->find($id);
+        $ban = UserBan::withTrashed()->find($ban_id);
+
+        if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
+
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+            $request_body = new \stdClass();
+            $request_body->recipient_emails = [$item->email];
+
+            if($ban->domain == 'trp') {
+                $group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+            } else {
+                $group_id = config('email-preferences')['product_news']['vox']['sendgrid_group_id'];
+            }
+        
+            $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->post($request_body);
+
+            $ban->restore();
+        }
+
+        $this->request->session()->flash('success-message', 'Ban restored!' );
         return redirect('cms/'.$this->current_page.'/edit/'.$id);
     }
 
@@ -1074,6 +1092,8 @@ class UsersController extends AdminController {
                 $patient->save();
             }
 
+
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
             $request_body = new \stdClass();
             $request_body->recipient_emails = [$patient->email];
             

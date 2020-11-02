@@ -1224,7 +1224,7 @@
     </div>
 @endif
 
-@if($item->bans->isNotEmpty())
+@if($item->bansWithDeleted->isNotEmpty())
     
     <div class="row">
         <div class="col-md-12">
@@ -1248,7 +1248,7 @@
                                 'ban_for'              => array('template' => 'admin.parts.table-bans-for'),
                                 'delete'              => array('template' => 'admin.parts.table-bans-delete'),
                             ],
-                            'table_data' => $item->bans,
+                            'table_data' => $item->bansWithDeleted,
                             'table_pagination' => false,
                             'pagination_link' => array()
                         ])

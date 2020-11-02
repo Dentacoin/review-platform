@@ -260,6 +260,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function bans() {
         return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->orderBy('id', 'DESC');
     }
+    public function bansWithDeleted() {
+        return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->orderBy('id', 'DESC')->withTrashed();
+    }
     public function vox_bans() {
         return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->where('domain', 'vox')->orderBy('id', 'DESC');
     }
