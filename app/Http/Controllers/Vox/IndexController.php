@@ -259,7 +259,6 @@ class IndexController extends FrontController {
 	        if($this->user->is_dentist && $this->user->status != 'approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status != 'test') {
 	            return redirect(getLangUrl('/'));
 	        }
-
 	        if($this->user->isBanned('vox')) {
 	            return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
 	        }

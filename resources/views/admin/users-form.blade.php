@@ -314,6 +314,14 @@
                                     <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dm->id) }}">{{ $dm->name }} {{ $dm->is_dentist ? '('.config('user-statuses')[$dm->status].')' : '' }}</a></p>
                                 @endforeach
                             @endif
+                            @if($item->oldEmails->isNotEmpty())
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Old emails</label>
+                                    @foreach($item->oldEmails as $oe)
+                                        <p style="color: gray; {{ $loop->iteration == 1 ? 'margin-top: -17px;' : '' }}" class="col-md-10 col-md-offset-2">{{ $oe->email }}</p>
+                                    @endforeach
+                                </div>
+                            @endif
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Public Email</label>
                                 <div class="col-md-10">

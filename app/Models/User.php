@@ -174,6 +174,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function allBanAppeals() {
         return $this->hasMany('App\Models\BanAppeal', 'user_id', 'id')->orderBy('id', 'DESC');
     }
+    public function oldEmails() {
+        return $this->hasMany('App\Models\OldEmail', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
     public function newBanAppeal() {
         return $this->hasOne('App\Models\BanAppeal', 'user_id', 'id')->where('status', 'new')->oldest();
     }

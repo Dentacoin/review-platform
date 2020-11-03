@@ -321,7 +321,13 @@ class UsersController extends AdminController {
             $users = $users->where('phone', 'LIKE', '%'.trim(request('search-phone')).'%');
         }
         if(!empty(request('search-email'))) {
-            $users = $users->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
+            $s_email = request('search-email');
+            $users = $users->where( function($query) use ($s_email) {
+                $query->where('email', 'LIKE', '%'.trim($s_email).'%')
+                ->orWhereHas('oldEmails', function ($queryy) use ($s_email) {
+                    $queryy->where('email', 'LIKE', $s_email);
+                });
+            });
         }
         if(!empty(request('search-address'))) {
             $dcn_address = request('search-address');
