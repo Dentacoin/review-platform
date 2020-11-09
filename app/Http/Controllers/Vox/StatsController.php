@@ -280,6 +280,7 @@ class StatsController extends FrontController {
                     $second_chart_array[ $answer_number ] = $res->cnt;
                 }
 
+                $reorder = $this->reorderStats($second_chart_array, $question);
                 foreach ($second_chart_array as $key => $value) {
                     if(mb_strpos($key, '!')===0 || mb_strpos($key, '#')===0) {
                         $second_chart[ $question->removeAnswerTooltip(mb_substr($key, 1)) ] = $value;
@@ -332,8 +333,7 @@ class StatsController extends FrontController {
                         $sum+=$value;
                     }
                 }
-
-                $reorder = $this->reorderStats($main_chart, $question);
+                
                 //reorder answers by respondents desc if they're not from scale!!
                 if($reorder) {
 
