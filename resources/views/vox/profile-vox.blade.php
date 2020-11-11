@@ -27,10 +27,6 @@
 	            				{{ trans('vox.page.profile.vox.list-questionnaire') }}
 	            			</th>
 	            			<th>
-	            				
-	            				{{ trans('vox.page.profile.vox.list-stats') }}
-	            			</th>
-	            			<th>
 	            				DCN
 	            			</th>
             			</tr>
@@ -48,13 +44,6 @@
 											{{ $completed->vox->title }}
 		            					</td>
 		            					<td>
-		            						@if($completed->vox->has_stats)
-											<a href="{{ $completed->vox->getStatsList() }}" target="_blank">
-												{{ trans('vox.page.profile.vox.list-check') }}
-											</a>
-											@endif
-		            					</td>
-		            					<td>
 		            						{{ $completed->reward ? $completed->reward : '-' }}
 		            					</td>
 		            				</tr>
@@ -63,6 +52,10 @@
 		  				@endif
             		</tbody>
             	</table>
+
+            	<div class="tac"> 
+					{{ $histories->render() }}
+				</div>
 		  	</div>
 
 		  	@if($more_surveys)
@@ -118,67 +111,6 @@
 				@endif
 
 			@endif
-
-        	@if($payouts->isNotEmpty())
-		        <div class="payputs-section">
-
-					<div class="black-line-title">
-		                <h4 class="bold">
-		                	Payouts
-		                </h4>
-		            </div>
-	            	<table class="table">
-	            		<thead>
-	            			<tr>
-		            			<th>
-		            				{{ trans('front.page.profile.history.list-date') }}
-		            			</th>
-		            			<th>
-		            				{{ trans('front.page.profile.history.list-amount') }}
-		            			</th>
-		            			<th>
-		            				{{ trans('front.page.profile.history.list-address') }}
-		            			</th>
-		            			<th>
-		            				{{ trans('front.page.profile.history.list-status') }}
-		            			</th>
-	            			</tr>
-	            		</thead>
-	            		<tbody>
-	            			@foreach( $payouts as $trans )
-	            				<tr>
-	            					<td>
-	            						{{ $trans->created_at->toDateString() }}
-	            					</td>
-	            					<td>
-	            						{{ $trans->amount }} DCN
-	            					</td>
-	            					<td>
-	            						<div class="vox-address">{{ $trans->address }}</div>
-	            					</td>
-	            					<td>
-	            						@if($trans->status=='new')
-	            							{{ trans('front.page.profile.history.status-new') }}
-	            						@elseif($trans->status=='failed')
-	            							{{ trans('front.page.profile.history.status-failed') }}
-	            						@elseif($trans->status=='unconfirmed')
-	            							<a href="https://etherscan.io/tx/{{ $trans->tx_hash }}" target="_blank">
-	            								{{ trans('front.page.profile.history.status-unconfirmed') }}
-	            								<i class="fa fa-share-square-o"></i>
-	            							</a>
-	            						@elseif($trans->status=='completed')
-	            							<a href="https://etherscan.io/tx/{{ $trans->tx_hash }}" target="_blank">
-	            								{{ trans('front.page.profile.history.status-completed') }}		            								
-	            								<i class="fa fa-share-square-o"></i>
-	            							</a>
-	            						@endif
-	            					</td>
-	            				</tr>
-	            			@endforeach
-	            		</tbody>
-	            	</table>
-	            </div>
-        	@endif
 
         	@if($user->vox_bans->isNotEmpty())
 	        	<div class="bans-section">

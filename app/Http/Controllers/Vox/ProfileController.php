@@ -1,26 +1,34 @@
 <?php
 
 namespace App\Http\Controllers\Vox;
+
 use App\Http\Controllers\FrontController;
+
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+
+use Illuminate\Support\Facades\Input;
+
+use App\Models\DcnCashout;
+use App\Models\UserInvite;
+use App\Models\DcnReward;
+use App\Models\Country;
+use App\Models\Civic;
+use App\Models\User;
+use App\Models\Vox;
+use App\Models\Dcn;
+
+use Carbon\Carbon;
 
 use Validator;
 use Response;
 use Request;
+use Image;
 use Route;
 use Hash;
 use Mail;
 use Auth;
-use Image;
-use Illuminate\Support\Facades\Input;
-use App\Models\User;
-use App\Models\UserInvite;
-use App\Models\Vox;
-use App\Models\DcnReward;
-use App\Models\DcnCashout;
-use App\Models\Dcn;
-use App\Models\Country;
-use App\Models\Civic;
-use Carbon\Carbon;
+use App;
 
 class ProfileController extends FrontController {
 
@@ -95,6 +103,8 @@ class ProfileController extends FrontController {
                 $more_surveys = true;
             }
 
+            $histories = $this->paginate($this->user->surveys_rewards->where('reference_id', '!=', 34))->withPath(App::getLocale().'/profile/vox-iframe/');
+
             $params = [
                 'xframe' => true,
                 'latest_voxes' => Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('created_at', 'desc')->take(3)->get(),
@@ -105,8 +115,7 @@ class ProfileController extends FrontController {
                 'ban_alternatives' => $ban_alternatives,
                 'ban_alternatives_buttons' => $ban_alternatives_buttons,
                 'time_left' => $time_left,
-                'histories' => $this->user->surveys_rewards->where('reference_id', '!=', 34),
-                'payouts' => $this->user->history->where('type', '=', 'vox-cashout'),
+                'histories' => $histories,
                 'js' => [
                     'profile.js',
                     'swiper.min.js'
@@ -129,5 +138,10 @@ class ProfileController extends FrontController {
         }
         
         return null;
+    }
+
+    private function paginate($items, $perPage = 10, $page = null, $options = []) {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }
