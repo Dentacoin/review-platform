@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Vox;
 
 use App\Http\Controllers\FrontController;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-
 use Illuminate\Support\Facades\Input;
 
 use App\Models\DcnCashout;
@@ -114,7 +111,7 @@ class ProfileController extends FrontController {
                 'ban_alternatives' => $ban_alternatives,
                 'ban_alternatives_buttons' => $ban_alternatives_buttons,
                 'time_left' => $time_left,
-                'histories' => DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('reference_id', '!=', 34)->get(),
+                'histories' => $rewards,
                 'js' => [
                     'profile.js',
                     'swiper.min.js'
@@ -137,10 +134,5 @@ class ProfileController extends FrontController {
         }
         
         return null;
-    }
-
-    private function paginate($items, $perPage = 10, $page = null, $options = []) {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }

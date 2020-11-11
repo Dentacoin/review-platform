@@ -447,3 +447,36 @@ body.sp-vox-iframe {
 		}
 	}
 }
+
+.pager {
+    text-align: center;
+    margin: 1em 0;
+
+    @media #{$phone} {
+    	margin-bottom: 40px;
+    }
+
+    span {
+    	color: #00bbdc;
+	    width: 30px;
+	    height: 30px;
+	    line-height: 30px;
+	    display: inline-block;
+	    border: 1px solid #00bbdc;
+	    margin: 0 3px;
+	    border-radius: 50%;
+	    font-size: 14px;
+	    cursor: pointer;
+	    transition: all 0.3s ease;
+	    float: none;
+	    padding: 0px;
+
+	    &.active {
+	    	background: #00bbdc;
+		    color: #fff;
+		    transition: all 0.3s ease;
+		    box-shadow: 0 0 20px -2px rgba(158, 158, 158, 0.59);
+		    border-color: #00bbdc;
+	    }
+	}
+}
