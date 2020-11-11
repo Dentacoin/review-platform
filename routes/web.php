@@ -54,6 +54,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('users', 							'UsersController@list');
 	Route::post('users/mass-delete', 				'UsersController@massdelete');
+	Route::post('users/mass-reject', 				'UsersController@massReject');
 	Route::get('users/byweek', 						'UsersController@byweek');
 	Route::any('users/loginas/{id}/{platform?}', 	'UsersController@loginas');
 	Route::any('users/user-data/{id}', 				'UsersController@personal_data');

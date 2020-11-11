@@ -77,16 +77,24 @@ $(document).ready(function(){
 		$('#deleteModal form').attr('action' , action);
 	});
 
+	$('#massDeleteModalButton').click( function(e) {
+		e.preventDefault();
+
+		$('#mass-delete-form').find('input[name="mass-delete-reasons"]').val($(this).parent().find('textarea').val());
+		$('#mass-delete-form').attr('action', $('#mass-delete-form').attr('mass-delete-action'));
+		$('#mass-delete-form').submit();
+	});
+
 	$('#mass-delete-button').click( function(e) {
 		e.preventDefault();
 
 		$('#massDeleteModal').modal('show');
 	});
 
-	$('#massDeleteModalButton').click( function(e) {
+	$('#mass-reject-button').click( function(e) {
 		e.preventDefault();
 
-		$('#mass-delete-form').find('input[name="mass-delete-reasons"]').val($(this).parent().find('textarea').val());
+		$('#mass-delete-form').attr('action', $('#mass-delete-form').attr('mass-reject-action'));
 		$('#mass-delete-form').submit();
 	});
     

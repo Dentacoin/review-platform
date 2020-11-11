@@ -903,7 +903,24 @@ class UsersController extends AdminController {
             }
         }
 
-        $this->request->session()->flash('success-message', 'All selected users and now deleted' );
+        $this->request->session()->flash('success-message', 'All selected users are deleted' );
+        return redirect(url()->previous());
+    }
+
+    public function massReject(  ) {
+        if( Request::input('ids') ) {
+            $rejectusers = User::whereIn('id', Request::input('ids'))->get();
+            foreach ($rejectusers as $ru) {
+                if($ru->is_dentist) {
+
+                    $ru->status = 'rejected';
+                    $ru->save();
+                    $ru->sendTemplate(14);
+                }
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'All selected dentists are rejected' );
         return redirect(url()->previous());
     }
 
