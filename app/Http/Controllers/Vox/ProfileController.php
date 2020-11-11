@@ -102,8 +102,7 @@ class ProfileController extends FrontController {
             if ($rewards->count() == 1 && $rewards->first()->vox_id == 11) {
                 $more_surveys = true;
             }
-
-            $histories = $this->paginate($this->user->surveys_rewards->where('reference_id', '!=', 34))->withPath(App::getLocale().'/profile/vox-iframe/');
+            
 
             $params = [
                 'xframe' => true,
@@ -115,7 +114,7 @@ class ProfileController extends FrontController {
                 'ban_alternatives' => $ban_alternatives,
                 'ban_alternatives_buttons' => $ban_alternatives_buttons,
                 'time_left' => $time_left,
-                'histories' => $histories,
+                'histories' => DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('reference_id', '!=', 34)->paginate(10),
                 'js' => [
                     'profile.js',
                     'swiper.min.js'
