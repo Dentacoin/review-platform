@@ -52,10 +52,6 @@
 		  				@endif
             		</tbody>
             	</table>
-
-            	<div class="tac"> 
-					{{ $histories->render() }}
-				</div>
 		  	</div>
 
 		  	@if($more_surveys)
