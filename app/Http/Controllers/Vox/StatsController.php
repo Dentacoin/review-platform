@@ -234,9 +234,9 @@ class StatsController extends FrontController {
 
 
             foreach ($answers as $key => $value) {
-                if(mb_strpos($value, '!')===0 || ($question->type != 'single_choice' && mb_strpos($value, '#')===0)) {
-                    $answers[$key] = mb_substr($value, 1);
-                }
+                // if(mb_strpos($value, '!')===0 || ($question->type != 'single_choice' && mb_strpos($value, '#')===0)) {
+                //     $answers[$key] = mb_substr($value, 1);
+                // }
                 $main_chart[$answers[$key]] = 0;
             }
 
@@ -282,11 +282,7 @@ class StatsController extends FrontController {
 
                 $reorder = $this->reorderStats($second_chart_array, $question);
                 foreach ($second_chart_array as $key => $value) {
-                    if(mb_strpos($key, '!')===0 || mb_strpos($key, '#')===0) {
-                        $second_chart[ $question->removeAnswerTooltip(mb_substr($key, 1)) ] = $value;
-                    } else {
-                        $second_chart[ $question->removeAnswerTooltip($key) ] = $value;
-                    }   
+                    $second_chart[ $question->removeAnswerTooltip($key) ] = $value;
                 }
 
                 $relation_info['answer'] = !empty($answer_id) ? $answer_id-1 : -1;
@@ -383,9 +379,35 @@ class StatsController extends FrontController {
                         $resp = $value ? $value/$sum : 0;
 
                         $converted_rows[] = [
-                            $key,
+                            mb_strpos($key, '#')===0 ? mb_substr($key, 1) : $key,
                             $resp,
                         ];
+                    }
+                }
+
+
+                //answers with ! at the bottom of array
+                $has_disabler = false;
+                foreach ($converted_rows as $key => $value) {
+
+                    if(mb_strpos($value[0], '!')===0) {
+                        $has_disabler = true;
+                        unset($converted_rows[$key]);
+                        $converted_rows[] = $value;
+                    }
+                }
+
+                if($has_disabler) {
+
+                    $converted_rows = array_values($converted_rows);
+
+                    foreach ($converted_rows as $key => $value) {
+                        if(mb_strpos($value[0], '!')===0) {
+                            $converted_rows[$key] = [
+                                mb_substr($value[0], 1),
+                                $value[1]
+                            ];
+                        }
                     }
                 }
 
@@ -629,6 +651,31 @@ class StatsController extends FrontController {
                     }
                 }
 
+                //answers with ! at the bottom of array
+                foreach ($main_chart as $key => $value) {
+
+                    if(mb_strpos($key, '!')===0) {
+                        unset($main_chart[$key]);
+                        $main_chart[mb_substr($key, 1)] = $value;
+                    }
+                }
+
+                foreach ($second_chart as $key => $value) {
+
+                    if(mb_strpos($key, '!')===0) {
+                        unset($second_chart[$key]);
+                        $second_chart[mb_substr($key, 1)] = $value;
+                    }
+                }
+
+                foreach ($third_chart as $key => $value) {
+
+                    if(mb_strpos($key, '!')===0) {
+                        unset($third_chart[$key]);
+                        $third_chart[mb_substr($key, 1)] = $value;
+                    }
+                }                
+
         	} else if($scale=='country_id') {
         		$countries = Country::with('translations')->get()->keyBy('id');
                 $total = VoxAnswer::prepareQuery($question_id, $dates, [
@@ -825,6 +872,31 @@ class StatsController extends FrontController {
                         $last_order_arr=array("name"=>$old_value['name']) + $last_order_arr;
                         $second_chart[$key] = $last_order_arr;
                     }
+
+                    foreach ($converted_rows as $key => $value) {
+                        if(mb_strpos($value[0], '#')===0) {
+                            $converted_rows[$key] = [
+                                mb_substr($value[0], 1),
+                                $value[1]
+                            ];
+                        }
+                    }
+
+                    foreach ($second_chart as $key => $value) {
+                        if(is_array($value)) {
+
+                            foreach($value as $k => $v) {
+
+                                if(mb_strpos($k, '#')===0) {
+                                    unset($value[$k]);
+                                    $value[mb_substr($k, 1)] = $v;
+
+                                }
+                            }
+                            $second_chart[$key] = $value;
+                        }
+                    }
+
                 }
 
                 if($question->type == 'rank') {
@@ -844,6 +916,14 @@ class StatsController extends FrontController {
                             if($max_resp <= $v) {
                                 $max_resp = $v;
                             }
+                        }
+
+                        if(mb_strpos($k, '!')===0) {
+                            unset($value[$k]);
+                            $value[mb_substr($k, 1)] = $v;
+
+                            $second_chart[$key] = $value;
+
                         }
                     }
 
@@ -906,6 +986,32 @@ class StatsController extends FrontController {
                                 }
                             }
                             $second_chart[$key] = $value;
+                        }
+                    }
+                }
+
+
+                //answers with ! at the bottom of array
+                $has_disabler = false;
+                foreach ($converted_rows as $key => $value) {
+
+                    if(mb_strpos($value[0], '!')===0) {
+                        $has_disabler = true;
+                        unset($converted_rows[$key]);
+                        $converted_rows[] = $value;
+                    }
+                }
+
+                if($has_disabler) {
+
+                    $converted_rows = array_values($converted_rows);
+
+                    foreach ($converted_rows as $key => $value) {
+                        if(mb_strpos($value[0], '!')===0) {
+                            $converted_rows[$key] = [
+                                mb_substr($value[0], 1),
+                                $value[1]
+                            ];
                         }
                     }
                 }
@@ -1176,6 +1282,30 @@ class StatsController extends FrontController {
                         $second_chart[$key] = $value;
                     }
                 }
+
+
+                //answers with ! at the bottom of array
+                $disabler_position = -1;
+                foreach ($main_chart as $key => $value) {
+
+                    if(mb_strpos($key, '!')===0) {
+                        $disabler_position = array_search($key, array_keys($main_chart));
+                        unset($main_chart[$key]);
+                        $main_chart[mb_substr($key, 1)] = $value;
+                    }
+                }
+
+                // dd($second_chart);
+                if($disabler_position > -1) {
+
+                    foreach ($second_chart as $key => $value) {
+                        $value[] = is_string($value[$disabler_position + 1]) ? mb_substr($value[$disabler_position + 1], 1) : $value[$disabler_position + 1];
+                        unset($value[$disabler_position + 1]);
+                        $value = array_values($value);
+                        $second_chart[$key] = $value;
+                    }
+                }
+
             } else {
                 $second_chart = $this->processArray($second_chart);
             }
