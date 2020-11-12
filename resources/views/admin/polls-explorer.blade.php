@@ -52,6 +52,7 @@
                         'table_fields' => [
                             'created_at'                => array('format' => 'datetime', 'label' => 'Date Taken','order' => true, 'orderKey' => 'taken'),
                             'user.name'              => array('template' => 'admin.parts.table-respondents-user-name', 'label' => 'Name','order' => true, 'orderKey' => 'name'),
+                            'country_id'              => array('format' => 'country', 'label' => 'Country','order' => true, 'orderKey' => 'name'),
                         ],
                         'table_data' => $respondents,
                         'table_pagination' => false,
@@ -64,7 +65,19 @@
     </div>
 
     @if($poll->status != 'scheduled')
-        <a class="btn btn-primary" href="{{ url('en/daily-polls/'.$poll_date.'/stats') }}" target="_blank">See Stats</a>
+        <a class="btn btn-primary" href="{{ url('en/daily-polls/'.$poll_date.'/stats') }}" target="_blank">See Stats</a><br/><br/>
+    @endif
+
+    @if(!empty($poll->users_percentage))
+        <div class="flex">
+            <div class="col-md-3" style="border: 1px solid black;padding-top: 10px;padding-bottom: 10px;background-color: white;">
+                <b> Current users percentage :</b> <br/><br/>
+
+                @foreach($poll->users_percentage as $c => $up)
+                    <p {!! 20 <= intval($up) ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
+                @endforeach
+            </div>
+        </p>
     @endif
 @endif
 
