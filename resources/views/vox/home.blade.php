@@ -41,7 +41,7 @@
 
 	<div class="container">
 
-		@if($is_warning_message_shown)
+		@if($user && $is_warning_message_shown)
 			<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
 		@endif
 
@@ -115,7 +115,7 @@
 				<div class="filters-section">
 					<div class="search-survey tal">
 						<i class="fas fa-search"></i>
-						<input type="text" id="survey-search" name="survey-search" value="{{ request('survey-search') ?? '' }}">
+						<input type="text" id="survey-search" name="survey_search" value="{{ request('survey_search') ?? '' }}">
 					</div>
 					<div class="questions-menu clearfix">
 						<div class="sort-menu tal"> 
@@ -134,7 +134,7 @@
 								@endif
 							@endforeach
 						</div>
-						<input type="hidden" name="sortable-items" value="">
+						<input type="hidden" name="sortable_items" value="">
 						<div class="sort-category tar"> 
 							<span>
 								{{ trans('vox.page.home.filter') }}:
