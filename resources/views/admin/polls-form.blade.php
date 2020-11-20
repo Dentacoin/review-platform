@@ -202,7 +202,7 @@
 		            </div>
 		            <div class="modal-body">
 	                    @foreach($item->users_percentage as $c => $up)
-	                        <p {!! intval($up) > 20 ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
+	                        <p {!! intval($up) >= 20 ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
 	                    @endforeach
 		            </div>
 		            <div class="modal-footer">
