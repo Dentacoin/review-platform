@@ -157,7 +157,7 @@ class Review extends Model {
             ->whereNull('rewarded')
             ->first();
 
-            if(!empty($inv)) {
+            if(!empty($inv) && !$inv->dont_rewarded) {
 
                 $reward = new DcnReward();
                 $reward->user_id = $this->user->invited_by;
