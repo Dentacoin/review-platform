@@ -570,7 +570,16 @@ class FrontController extends BaseController {
         $params['canonical'] = !empty($params['canonical']) ? $params['canonical'] : getLangUrl($this->current_page);
         $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='trp' ? '/img-trp/socials-cover.jpg' : '/img-vox/logo-text.png'  );
         //dd($params['pages_header']);
-
+        
+        if(Request::getHost() == 'urgent.reviews.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com') {
+            $params['without_banner'] = session('withoutBanner');
+        } else {
+            if(date('m') != 12) {
+                $params['without_banner'] = true;
+            } else {
+                $params['without_banner'] = session('withoutBanner');
+            }
+        }
         //
         //Global
         //

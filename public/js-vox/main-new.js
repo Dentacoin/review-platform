@@ -101,6 +101,8 @@ $(document).ready(function(){
 
 			var welcomeBonus = 0;
 			if( welcome_vox ) {
+
+				console.log('1');
 				var doingAsl = vox.current > ( (vox.count_real+1) + welcome_vox_q_count );
 				var doingWelcome = vox.current <= welcome_vox_q_count;
 				if(!doingWelcome && !doingAsl) {
@@ -108,21 +110,23 @@ $(document).ready(function(){
 				}
 
 			} else {
+				console.log('2');
+
 				var doingAsl = vox.current > (vox.count_real+1);
 				var doingWelcome = false;
 			}
 
 			if( doingAsl ) {
-				//console.log('doingAsl');
+				console.log('doingAsl');
 
 			} else if( welcome_vox_now || welcome_vox) {
 
-				//console.log('doingWelcome');
+				console.log('doingWelcome');
 				$('#current-question-reward').html( (vox.current / welcome_vox_q_count) * 100 );
 				$('#dcn-test-reward-before').html('DCN: 100');
 			} else { //Нормални
 				
-				//console.log('normal');
+				console.log('normal');
 				if(!skip) {
 					var reward = 0;
 				}
@@ -1183,6 +1187,24 @@ $(document).ready(function(){
     if(typeof FB !== 'undefined') {
 	    FB.CustomerChat.hideDialog();
     }
+
+    $('.poll-bubble').css('bottom', $('.christmas-banner:visible').height());
+    if($('.christmas-banner').length) {
+    	$('body').addClass('with-banner');
+    	$('.christmas-banner:visible .banner-video')[0].play();
+    	$('.christmas-banner:visible .banner-video')[0].removeAttribute("controls");
+    }
+
+    $('.close-banner').click( function(e) {
+    	e.preventDefault();
+    	$('.poll-bubble').css('bottom', 0);
+    	$('.christmas-banner').hide();
+
+    	$.ajax( {
+			url:  window.location.origin+'/en/remove-banner/',
+			type: 'GET',
+		});
+    });
 
 });
 

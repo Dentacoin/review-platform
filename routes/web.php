@@ -226,7 +226,25 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 
 Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
-	Route::get('users-stats', 						'IndexController@stats');
+	Route::get('index-voxes', 						'IndexController@indexVoxes');
+	Route::get('users-stats', 						'IndexController@headerStats');
+	Route::get('user-logout', 						'IndexController@getLogout');
+
+	Route::get('all-voxes', 						'PaidDentalSurveysController@allVoxes');
+	Route::get('get-voxes', 						'PaidDentalSurveysController@getVoxes');
+
+	Route::get('get-faq', 							'FaqController@getFaq');
+	
+	Route::get('all-stats', 						'StatsController@allStats');
+
+	Route::get('welcome-survey',					'IndexController@welcomeSurvey');
+	Route::get('do-vox/{slug}',						'IndexController@doVox');
+
+	Route::get('get-daily-polls',					'DailyPollsController@getPolls');
+	Route::get('get-poll-content',					'DailyPollsController@getPollContent');
+	Route::get('get-poll-stats',					'DailyPollsController@getPollStats');
+	Route::post('poll/{id}', 						'DailyPollsController@doPoll');
+
 });
 
 
@@ -260,6 +278,7 @@ $reviewRoutes = function () {
 			Route::post('index-dentist-down', 					'IndexController@index_dentist_down');
 			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
+			Route::get('remove-banner',							'IndexController@removeBanner');
 			
 			Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
 			Route::post('lead-magnet-step2', 					'IndexController@lead_magnet_step2');
@@ -415,6 +434,7 @@ $voxRoutes = function () {
 			Route::any('get-started/{id}', 						'VoxController@home_slug');
 			Route::post('start-over', 							'VoxController@start_over');
 			Route::post('vox-public-down', 						'VoxController@vox_public_down');
+			Route::get('remove-banner',							'VoxController@removeBanner');
 
 			Route::any('daily-polls', 							'PollsController@list');
 			Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');

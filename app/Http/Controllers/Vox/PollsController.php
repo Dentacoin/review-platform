@@ -282,10 +282,10 @@ class PollsController extends FrontController
 		    	$more_polls_to_take = null;
 		    }
 
-		    $next_stat = Poll::where('status', '!=', 'scheduled')->where('launched_at', '>', $poll->launched_at)->first();
+		    $next_stat = Poll::where('status', 'closed')->where('launched_at', '>', $poll->launched_at)->first();
 
 		    if (empty($next_stat)) {
-		    	$next_stat = Poll::where('status', '!=', 'scheduled')->orderBy('id', 'asc')->first();
+		    	$next_stat = Poll::where('status', 'closed')->orderBy('id', 'asc')->first();
 		    }
 
 		    $time = !empty($poll->launched_at) ? $poll->launched_at->timestamp : '';
@@ -382,7 +382,7 @@ class PollsController extends FrontController
 				}
 
 
-				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
+				$taken_daily_poll = !empty($this->user) ? PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first() : null;
 
 				if( empty($taken_daily_poll) && $poll->status == 'open' ) {
 

@@ -5,6 +5,12 @@ $phone_up: "screen and (min-width: 769px)";
 
 $main-color: #38ace5;
 
+body.logged-in {
+	.christmas-banner {
+		display: none !important;
+	}
+}
+
 .page-stats {
 	.fb_chb {
 		display: none !important;

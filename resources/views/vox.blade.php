@@ -307,8 +307,18 @@
 			</footer>
 		</div>
 
-		@if(false)
-			<div class="bottom-drawer"></div>
+		@if(!$without_banner)
+			<div class="bottom-drawer">
+				<a href="https://dentacoin.com/holiday-calendar/2020" target="_blank" class="christmas-banner">
+					<video class="banner-video" playsinline autoplay muted loop src="{{ url('img/dentacoin-christmas-calendar-banner.mp4') }}" type="video/mp4" style="width: 100%;margin-bottom: -6px;" controls=""></video>
+					<img class="close-banner" id="banner-pc" src="{{ url('new-vox-img/close-popup.png') }}">
+					<!-- <img src="{{ url('img/christmas-banner.gif') }}"> -->
+				</a>
+				<a href="https://dentacoin.com/holiday-calendar/2020" target="_blank" class="christmas-banner mobile-christmas-banner">
+					<img class="close-banner" id="banner-mobile" src="{{ url('new-vox-img/close-popup.png') }}">
+					<video class="banner-video" playsinline autoplay muted loop src="{{ url('img/dentacoin-christmas-calendar-banner.mp4') }}" type="video/mp4" style="width: 100%;margin-bottom: -6px;" controls=""></video>
+				</a>
+			</div>
 		@endif
 
 		<script type='application/ld+json'> 

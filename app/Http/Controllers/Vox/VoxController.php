@@ -40,6 +40,13 @@ use DB;
 class VoxController extends FrontController
 {
 
+
+	public function removeBanner() {
+		session([
+			'withoutBanner' => true
+		]);
+	}
+	
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
 
         parent::__construct($request, $route, $locale);

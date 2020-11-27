@@ -113,4 +113,10 @@
 			</div>
 		</div>
 	@endif
+
+	<style type="text/css">
+		.christmas-banner {
+			display: none !important;
+		}
+	</style>
 @endsection
