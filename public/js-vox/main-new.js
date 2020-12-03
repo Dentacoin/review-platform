@@ -1188,23 +1188,26 @@ $(document).ready(function(){
 	    FB.CustomerChat.hideDialog();
     }
 
-    $('.poll-bubble').css('bottom', $('.christmas-banner:visible').height());
-    if($('.christmas-banner').length) {
-    	$('body').addClass('with-banner');
-    	$('.christmas-banner:visible .banner-video')[0].play();
-    	$('.christmas-banner:visible .banner-video')[0].removeAttribute("controls");
-    }
+    setTimeout( function() {
 
-    $('.close-banner').click( function(e) {
-    	e.preventDefault();
-    	$('.poll-bubble').css('bottom', 0);
-    	$('.christmas-banner').hide();
+	    $('.poll-bubble').css('bottom', $('.christmas-banner:visible').outerHeight());
+	    if($('.christmas-banner').length) {
+	    	$('body').addClass('with-banner');
+	    	$('.christmas-banner:visible .banner-video')[0].play();
+	    	$('.christmas-banner:visible .banner-video')[0].removeAttribute("controls");
+	    }
 
-    	$.ajax( {
-			url:  window.location.origin+'/en/remove-banner/',
-			type: 'GET',
-		});
-    });
+	    $('.close-banner').click( function(e) {
+	    	e.preventDefault();
+	    	$('.poll-bubble').css('bottom', 0);
+	    	$('.christmas-banner').hide();
+
+	    	$.ajax( {
+				url:  window.location.origin+'/en/remove-banner/',
+				type: 'GET',
+			});
+	    });
+    }, 100);
 
 });
 
