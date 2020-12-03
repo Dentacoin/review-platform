@@ -1624,6 +1624,7 @@ jQuery(document).ready(function($){
 
     $('.close-banner').click( function(e) {
     	e.preventDefault();
+	    e.stopPropagation();
 
     	$('.christmas-banner').hide();
 

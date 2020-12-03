@@ -3191,4 +3191,7 @@ body.page-questionnaire.logged-in .christmas-banner {
   .christmas-banner .close-banner {
     position: absolute;
     right: 10px;
-    top: 10px; }
+    top: 10px;
+    width: 40px;
+    height: 40px;
+    padding: 5px; }

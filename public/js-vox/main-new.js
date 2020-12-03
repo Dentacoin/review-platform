@@ -1199,6 +1199,7 @@ $(document).ready(function(){
 
 	    $('.close-banner').click( function(e) {
 	    	e.preventDefault();
+	    	e.stopPropagation();
 	    	$('.poll-bubble').css('bottom', 0);
 	    	$('.christmas-banner').hide();
 

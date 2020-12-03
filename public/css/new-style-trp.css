@@ -3865,7 +3865,10 @@ body.strength-pb {
   .christmas-banner .close-banner {
     position: absolute;
     right: 10px;
-    top: 10px; }
+    top: 10px;
+    width: 40px;
+    height: 40px;
+    padding: 5px; }
 
 body.with-banner [data-testid="bubble_iframe"] {
   bottom: 108px !important; }
