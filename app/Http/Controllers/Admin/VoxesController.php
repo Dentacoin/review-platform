@@ -148,6 +148,23 @@ class VoxesController extends AdminController
             if($field=='type') {
                 $item->$field = $value=='0' ? 'hidden' : 'normal';
                 $item->last_count_at = null;
+
+                if ($value=='1' && $item->type == 'hidden') {
+                    $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                        CURLOPT_RETURNTRANSFER => 1,
+                        CURLOPT_POST => 1,
+                        CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
+                        CURLOPT_SSL_VERIFYPEER => 0,
+                        CURLOPT_POSTFIELDS => array(
+                            'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
+                        )
+                    ));
+                     
+                    $resp = json_decode(curl_exec($curl));
+                    curl_close($curl);
+                }
+
             }
             if($field=='has_stats') {
                 if($item->stats_questions->isEmpty()) {
