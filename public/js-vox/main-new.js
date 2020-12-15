@@ -5,10 +5,10 @@ var scrollToActive;
 var FB_status;
 var fbLogin;
 var fb_city_id;
-var checkFilledDots;
 var simpleCountDown, hoursCountdown;
 var simpleCountDownTO, hoursCountdownTO;
 var flickityScales;
+var checkFilledDots;
 
 var mapsLoaded = false;
 var mapsWaiting = [];
@@ -715,12 +715,6 @@ $(document).ready(function(){
 
 	        e.stopPropagation();
 
-	        if ($(this).closest('.tooltip-text').hasClass('info-cookie')) {
-	        	$('.tooltip-window').addClass('dark-tooltip');
-	        } else {
-	        	$('.tooltip-window').removeClass('dark-tooltip');
-	        }
-
 	    }
 
 	    if (window.innerWidth < 768) {
@@ -1190,8 +1184,10 @@ $(document).ready(function(){
 
     setTimeout( function() {
 
-	    $('.poll-bubble').css('bottom', $('.christmas-banner:visible').outerHeight());
 	    if($('.christmas-banner').length) {
+	    	setTimeout( function() {
+	    		$('.poll-bubble').css('bottom', $('.christmas-banner:visible').outerHeight());
+	    	}, 200);
 	    	$('body').addClass('with-banner');
 	    	$('.christmas-banner:visible .banner-video')[0].play();
 	    	$('.christmas-banner:visible .banner-video')[0].removeAttribute("controls");
