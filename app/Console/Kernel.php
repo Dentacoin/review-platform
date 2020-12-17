@@ -569,14 +569,11 @@ NOT SEND TRANSACTIONS
                                     $sender_name = 'Low '.$currency.' Alert';
 
                                     $message->from($sender, $sender_name);
-                                    $message->to( 'official@youpluswe.com' );
+                                    $message->to( 'admin@dentacoin.com' );
                                     $message->cc( [
-                                        'jeremias.grenzebach@dentacoin.com', 
-                                        'philipp@dentacoin.com', 
                                         'donika.kraeva@dentacoin.com', 
-                                        'ludwig.mair@dentacoin.com', 
                                         'stoyan.georgiev@dentaprime.com',
-                                        'admin@dentacoin.com'
+                                        'petya.ivanova@dentacoin.com'
                                     ] );
                                     //$message->to( 'dokinator@gmail.com' );
                                     $message->replyTo($sender, $sender_name);
