@@ -134,7 +134,7 @@
 								@endif
 							@endforeach
 						</div>
-						<input type="hidden" name="sortable_items" value="">
+						<input type="hidden" name="sortable-items" value="">
 						<div class="sort-category tar"> 
 							<span>
 								{{ trans('vox.page.home.filter') }}:
