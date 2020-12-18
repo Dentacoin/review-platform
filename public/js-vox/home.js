@@ -83,7 +83,7 @@ $(document).ready(function(){
 		var that = $(this);
 		var formData = new FormData(this);
 		formData.append("slice", 1);
-
+		console.log(formData);
         $.ajax({
             type: "POST",
             url: '/en/voxes-get/',
