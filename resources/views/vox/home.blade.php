@@ -2,7 +2,7 @@
 
 @section('content')
 	
-	@if(!empty($user) && $user->platform != 'external')
+	@if(!empty($user) && $user->platform != 'external' && !request()->exists('daily-answer'))
 		<div class="level-wrapper">
 			<div class="container">
 				<div class="flex flex-center">
@@ -41,7 +41,7 @@
 
 	<div class="container">
 
-		@if($user && $is_warning_message_shown)
+		@if($user && $is_warning_message_shown && !request()->exists('daily-answer'))
 			<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
 		@endif
 
@@ -115,7 +115,7 @@
 				<div class="filters-section">
 					<div class="search-survey tal">
 						<i class="fas fa-search"></i>
-						<input type="text" id="survey-search" name="survey_search" value="{{ request('survey_search') ?? '' }}">
+						<input type="text" id="survey-search" name="survey-search" value="{{ request('survey-search') ?? '' }}">
 					</div>
 					<div class="questions-menu clearfix">
 						<div class="sort-menu tal"> 
