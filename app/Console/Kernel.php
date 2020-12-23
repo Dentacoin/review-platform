@@ -432,7 +432,7 @@ UNCONFIRMED TRANSACTIONS
                     if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*72 && !User::isGasExpensive()) {
                         $trans->unconfirmed_retry = true;
                         $trans->save();
-                        Dcn::retry($trans);
+                        // Dcn::retry($trans);
                         echo 'RETRYING -> '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
                     }
                 }
@@ -453,7 +453,7 @@ NEW & FAILED TRANSACTIONS
 
                     if($trans->status=='new' ||  $trans->shouldRetry()) {
                         $executed++;
-                        Dcn::retry($trans);
+                        // Dcn::retry($trans);
                         echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
                     } else {
                         echo 'TOO EARLY TO RETRY'.PHP_EOL;
@@ -493,7 +493,7 @@ NOT SEND TRANSACTIONS
 
                     if(!User::isGasExpensive()) {
 
-                        Dcn::retry($trans);
+                        // Dcn::retry($trans);
                         echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
                     }
                 }
