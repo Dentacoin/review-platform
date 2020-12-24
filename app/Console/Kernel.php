@@ -451,9 +451,17 @@ NEW & FAILED TRANSACTIONS
                     $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                     echo $log.PHP_EOL;
 
-                    if($trans->status=='new' ||  $trans->shouldRetry()) {
+                    // if($trans->status=='new' ||  $trans->shouldRetry()) {
+                    //     $executed++;
+                    //     Dcn::retry($trans);
+                    //     echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
+                    // } else {
+                    //     echo 'TOO EARLY TO RETRY'.PHP_EOL;
+                    // }
+
+                    if($trans->status=='new') {
                         $executed++;
-                        // Dcn::retry($trans);
+                        Dcn::retry($trans);
                         echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
                     } else {
                         echo 'TOO EARLY TO RETRY'.PHP_EOL;
