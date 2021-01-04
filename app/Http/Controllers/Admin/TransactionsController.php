@@ -296,7 +296,7 @@ class TransactionsController extends AdminController
         $allow->show_warning_text = true;
         $allow->save();
 
-        $this->request->session()->flash('success-message', 'Messag is added!' );
+        $this->request->session()->flash('success-message', 'Messagе is added!' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
@@ -337,8 +337,6 @@ class TransactionsController extends AdminController
             $scam->save();
         }
 
-        return $this->showView('transactions-scammers', array(
-            'scammers' => TransactionScammersByDay::get(),
-        ));
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 }
