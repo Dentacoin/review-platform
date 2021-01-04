@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use App\Models\TransactionScammersByDay;
 use App\Models\WithdrawalsCondition;
 use App\Models\StopTransaction;
 use App\Models\DcnTransaction;
@@ -322,28 +323,22 @@ class TransactionsController extends AdminController
 
     public function scammers() {
 
-        ini_set('max_execution_time', 0);
-        set_time_limit(0);
-        ini_set('memory_limit','1024M');
+        return $this->showView('transactions-scammers', array(
+            'scammers' => TransactionScammersByDay::get(),
+        ));
+    }
 
-        $min_withdraw_time = WithdrawalsCondition::find(1)->timerange;
-        $transactions = DcnTransaction::where('created_at', '>', '2020-08-18 00:00:00')->groupBy('user_id')->get();
+    public function scammersChecked($id) {
 
-        $users = [];
-        foreach ($transactions as $trans) {
-            $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', '2020-08-18 00:00:00')->get();
+        $scam = TransactionScammersByDay::find($id);
 
-            foreach ($user_transactions as $user_trans) {
-                foreach ($user_transactions as $user_t) {
-                    if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && !in_array($user_t->user_id, $users)) {
-                        $users[] = $user_t->user_id;
-                    }
-                }   
-            }
+        if(!empty($scam)) {
+            $scam->checked = true;
+            $scam->save();
         }
 
         return $this->showView('transactions-scammers', array(
-            'users' => $users,
+            'scammers' => TransactionScammersByDay::get(),
         ));
     }
 }

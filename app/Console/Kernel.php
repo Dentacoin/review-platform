@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use App\Models\TransactionScammersByDay;
 use App\Models\IncompleteRegistration;
 use App\Models\WithdrawalsCondition;
 use App\Models\ScrapeDentistResult;
@@ -1940,6 +1941,33 @@ NOT SEND TRANSACTIONS
             echo 'Video reviews cron - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron('*/5 * * * *');
+
+
+
+        $schedule->call(function () {
+            echo 'Transaction scammers by day cron'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $min_withdraw_time = WithdrawalsCondition::find(1)->timerange;
+            $transactions = DcnTransaction::where('created_at', '>', '2020-08-18 00:00:00')->groupBy('user_id')->get();
+
+            foreach ($transactions as $trans) {
+                $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', '2020-08-18 00:00:00')->get();
+
+                foreach ($user_transactions as $user_trans) {
+                    foreach ($user_transactions as $user_t) {
+                        if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && empty(TransactionScammersByDay::where('user_id', $user_t->user_id)->first())) {
+
+                            $scammer = new TransactionScammersByDay;
+                            $scammer->user_id = $user_t->user_id;
+                            $scammer->save();
+                        }
+                    }   
+                }
+            }
+
+            echo 'Transaction scammers by day - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->dailyAt('04:00');
 
 
         $schedule->call(function () {

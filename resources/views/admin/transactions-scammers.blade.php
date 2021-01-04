@@ -30,20 +30,26 @@
 						                           	<th>
 						                                User Status
 						                            </th>
+						                            <th><span class="pull-right">Checked</span></th>
 							                    </tr>
 							                </thead>
 							                <tbody>
-							                	@foreach($users as $user)
-								                	<tr>
-								                		<td><a href="{{ url('cms/users/edit/'.$user) }}" target="_blank">{{ App\Models\User::withTrashed()->find($user)->name }}</a></td>
-								                		<td>
-								                			@if(App\Models\User::withTrashed()->find($user)->is_dentist)
-																<span class="label label-{{ config('user-statuses-classes')[App\Models\User::withTrashed()->find($user)->status] }}">{{ config('user-statuses')[App\Models\User::withTrashed()->find($user)->status] }}</span>
+							                	@foreach($scammers as $scam)
+								                	<tr style="{{ $scam->checked ? 'opacity: 0.5;' : '' }}">
+								                		<td style="width: 40%;"><a href="{{ url('cms/users/edit/'.$scam->user_id) }}" target="_blank">{{ $scam->user->name }}</a></td>
+								                		<td style="width: 40%;">
+								                			@if($scam->user->is_dentist)
+																<span class="label label-{{ config('user-statuses-classes')[$scam->user->status] }}">{{ config('user-statuses')[$scam->user->status] }}</span>
 															@else
-																@if(!empty(App\Models\User::withTrashed()->find($user)->patient_status))
-																	<span class="label label-{{ config('user-statuses-classes')[App\Models\User::withTrashed()->find($user)->patient_status] }}">{{ config('patient-statuses')[App\Models\User::withTrashed()->find($user)->patient_status] }}</span>
+																@if(!empty($scam->user->patient_status))
+																	<span class="label label-{{ config('user-statuses-classes')[$scam->user->patient_status] }}">{{ config('patient-statuses')[$scam->user->patient_status] }}</span>
 																@endif
 															@endif
+								                		</td>
+								                		<td style="width: 100%;">
+								                			@if(!$scam->checked)
+								                				<a href="{{ url('cms/transactions/scammers/'.$scam->id) }}" class="btn btn-info pull-right">Checked</a>
+								                			@endif
 								                		</td>
 								                	</tr>
 								                @endforeach

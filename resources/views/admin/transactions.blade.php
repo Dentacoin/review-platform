@@ -101,9 +101,14 @@
                     <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
                 </div>
                 <div class="panel-body">
-                    <div>
-                        Transactions count: {{ $total_count }} <br/>
-                        Sum: {{ $total_dcn_price }} DCN
+                    <div style="display: flex;justify-content: space-between;">
+                        <div>
+                            Transactions count: {{ $total_count }} <br/>
+                            Sum: {{ $total_dcn_price }} DCN
+                        </div>
+                        <div>
+                            <a href="{{ url('cms/transactions/scammers') }}" class="btn btn-danger pull-right" style="margin-left: 10px;">Scammers by days</a>
+                        </div>
                     </div>
             		<div class="panel-body">
                         <form method="post" action="{{ url('cms/transactions') }}" original-action="{{ url('cms/transactions') }}">
