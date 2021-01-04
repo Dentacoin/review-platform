@@ -327,11 +327,11 @@ class TransactionsController extends AdminController
         ini_set('memory_limit','1024M');
 
         $min_withdraw_time = WithdrawalsCondition::find(1)->timerange;
-        $transactions = DcnTransaction::where('created_at', '>', '2020-08-18 00:00:00')->whereNotIn('status', ['stopped'])->groupBy('user_id')->get();
+        $transactions = DcnTransaction::where('created_at', '>', '2020-08-18 00:00:00')->groupBy('user_id')->get();
 
         $users = [];
         foreach ($transactions as $trans) {
-            $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->whereNotIn('status', ['stopped'])->where('created_at', '>', '2020-08-18 00:00:00')->get();
+            $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', '2020-08-18 00:00:00')->get();
 
             foreach ($user_transactions as $user_trans) {
                 foreach ($user_transactions as $user_t) {
