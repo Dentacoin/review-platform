@@ -35,10 +35,10 @@
 							                <tbody>
 							                	@foreach($users as $user)
 								                	<tr>
-								                		<td><a href="{{ url('cms/users/edit/'.$user) }}" target="_blank">{{ App\Models\User::find($user)->getName() }}</a></td>
+								                		<td><a href="{{ url('cms/users/edit/'.$user) }}" target="_blank">{{ App\Models\User::find($user)->name }}</a></td>
 								                		<td>
 								                			@if(App\Models\User::find($user)->is_dentist)
-																<span class="label label-{{ config('user-statuses-classes')[$item->user->status] }}">{{ config('user-statuses')[App\Models\User::find($user)->status] }}</span>
+																<span class="label label-{{ config('user-statuses-classes')[App\Models\User::find($user)->status] }}">{{ config('user-statuses')[App\Models\User::find($user)->status] }}</span>
 															@else
 																@if(!empty(App\Models\User::find($user)->patient_status))
 																	<span class="label label-{{ config('user-statuses-classes')[App\Models\User::find($user)->patient_status] }}">{{ config('patient-statuses')[App\Models\User::find($user)->patient_status] }}</span>
