@@ -131,6 +131,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('transactions/scammers', 			'TransactionsController@scammers');
 	Route::get('transactions/scammers/{id}', 		'TransactionsController@scammersChecked');
 	Route::get('transactions/scammers-balance', 	'TransactionsController@scammersBalance');
+	Route::get('transactions/scammers-balance/{id}', 'TransactionsController@scammersBalanceChecked');
 
 	Route::get('spending', 							'SpendingController@list');
 

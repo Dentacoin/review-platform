@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use App\Models\TransactionScammersByBalance;
 use App\Models\TransactionScammersByDay;
 use App\Models\IncompleteRegistration;
 use App\Models\WithdrawalsCondition;
@@ -1962,6 +1963,19 @@ NOT SEND TRANSACTIONS
                             $scammer->save();
                         }
                     }   
+                }
+            }
+
+
+            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
+
+            foreach ($transactions as $trans) {
+                $user = User::withTrashed()->find($trans->user_id);
+
+                if(!empty($user) && empty(TransactionScammersByBalance::where('user_id', $user->id)->first()) && intval(DcnReward::where('user_id', $user->id)->sum('reward')) < intval(DcnTransaction::where('user_id', $user->id)->where('created_at', '>', Carbon::now()->addDays(-30))->where('type', '!=', 'register-reward')->sum('amount'))) {
+                    $scammer = new TransactionScammersByBalance;
+                    $scammer->user_id = $user->id;
+                    $scammer->save();
                 }
             }
 
