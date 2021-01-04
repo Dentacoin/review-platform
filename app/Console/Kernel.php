@@ -1949,10 +1949,10 @@ NOT SEND TRANSACTIONS
             echo 'Transaction scammers by day cron'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $min_withdraw_time = WithdrawalsCondition::find(1)->timerange;
-            $transactions = DcnTransaction::where('created_at', '>', '2020-08-18 00:00:00')->groupBy('user_id')->get();
+            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
 
             foreach ($transactions as $trans) {
-                $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', '2020-08-18 00:00:00')->get();
+                $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', Carbon::now()->addDays(-30))->get();
 
                 foreach ($user_transactions as $user_trans) {
                     foreach ($user_transactions as $user_t) {
