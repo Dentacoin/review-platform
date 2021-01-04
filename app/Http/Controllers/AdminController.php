@@ -13,6 +13,8 @@ use App\Models\Admin;
 use App\Models\Review;
 use App\Models\BanAppeal;
 use App\Models\DcnTransaction;
+use App\Models\TransactionScammersByDay;
+
 
 use Auth;
 use DB;
@@ -114,6 +116,8 @@ class AdminController extends BaseController
         $params['counters']['trp'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         $params['counters']['ban_appeals'] = BanAppeal::where('status', 'new')->count();
+
+        $params['counters']['transactions'] = TransactionScammersByDay::where('checked', '!=', 1)->count();
         
         $params['cache_version'] = '20201111';
 

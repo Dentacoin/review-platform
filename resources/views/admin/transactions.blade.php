@@ -107,7 +107,7 @@
                             Sum: {{ $total_dcn_price }} DCN
                         </div>
                         <div>
-                            <a href="{{ url('cms/transactions/scammers') }}" class="btn btn-danger pull-right" style="margin-left: 10px;">Scammers by days</a>
+                            <a href="{{ url('cms/transactions/scammers') }}" class="btn btn-danger pull-right" style="margin-left: 10px;">Scammers by days ({{ App\Models\TransactionScammersByDay::where('checked', '!=', 1)->count() }})</a>
                         </div>
                     </div>
             		<div class="panel-body">
