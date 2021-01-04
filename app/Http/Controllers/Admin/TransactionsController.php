@@ -340,7 +340,8 @@ class TransactionsController extends AdminController
                     //     dd($user_t->created_at->diffInDays($user_trans->created_at));
                     //     dd($user_t->created_at->timestamp + $min_withdraw_time, $user_trans->created_at->timestamp);
                     // }
-                    if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time)) {
+                    if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && !in_array($user_t->user_id, $users)) {
+                        echo $user_t->created_at->diffInDays($user_trans->created_at).' - '.$min_withdraw_time.'<br/>';
                         $users[] = $user_t->user_id;
                     }
                 }   
