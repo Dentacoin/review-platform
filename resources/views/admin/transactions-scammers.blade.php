@@ -18,16 +18,40 @@
                 <div class="panel-body">
             		<div class="panel-body">
                         <div class="table-responsive">
-        					@include('admin.parts.table', [
-        						'table_id' => 'transactions',
-        						'table_fields' => [
-                                    'user'              => array('template' => 'admin.parts.table-transactions-user'),
-                                    'user_status'       => array('template' => 'admin.parts.table-users-status'),
-        						],
-                                'table_data' => $users,
-        						'table_pagination' => false,
-                                'pagination_link' => array()
-        					])
+        					<div class="dataTables_wrapper">
+							    <div class="row">
+							    	<div class="col-sm-12 table-responsive-md">
+							    		<table class="table table-striped">
+							                <thead>
+							                    <tr>
+						                           	<th>
+						                                User
+						                            </th>
+						                           	<th>
+						                                User Status
+						                            </th>
+							                    </tr>
+							                </thead>
+							                <tbody>
+							                	@foreach($users as $user)
+								                	<tr>
+								                		<td><a href="{{ url('cms/users/edit/'.$user) }}" target="_blank">{{ App\Models\User::find($user)->getName() }}</a></td>
+								                		<td>
+								                			@if(App\Models\User::find($user)->is_dentist)
+																<span class="label label-{{ config('user-statuses-classes')[$item->user->status] }}">{{ config('user-statuses')[App\Models\User::find($user)->status] }}</span>
+															@else
+																@if(!empty(App\Models\User::find($user)->patient_status))
+																	<span class="label label-{{ config('user-statuses-classes')[App\Models\User::find($user)->patient_status] }}">{{ config('patient-statuses')[App\Models\User::find($user)->patient_status] }}</span>
+																@endif
+															@endif
+								                		</td>
+								                	</tr>
+								                @endif
+							                </tbody>
+							            </table>
+							        </div>
+							    </div>
+							</div>
                         </div>
                     </div>
                 </div>
