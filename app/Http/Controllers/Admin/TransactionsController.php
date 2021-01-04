@@ -335,19 +335,15 @@ class TransactionsController extends AdminController
 
             foreach ($user_transactions as $user_trans) {
                 foreach ($user_transactions as $user_t) {
-                    // if($user_t->id != $user_trans->id) {
-
-                    //     dd($user_t->created_at->diffInDays($user_trans->created_at));
-                    //     dd($user_t->created_at->timestamp + $min_withdraw_time, $user_trans->created_at->timestamp);
-                    // }
                     if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && !in_array($user_t->user_id, $users)) {
-                        echo $user_t->created_at->diffInDays($user_trans->created_at).' - '.$min_withdraw_time.'<br/>';
                         $users[] = $user_t->user_id;
                     }
                 }   
             }
         }
 
-        return $users;
+        return $this->showView('transactions-scammers', array(
+            'users' => $users,
+        ));
     }
 }
