@@ -9,6 +9,7 @@ use App\Models\WithdrawalsCondition;
 use App\Models\StopTransaction;
 use App\Models\DcnTransaction;
 use App\Models\UserAction;
+use App\Models\DcnReward;
 use App\Models\User;
 
 use Carbon\Carbon;
@@ -338,5 +339,30 @@ class TransactionsController extends AdminController
         }
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function scammersBalance() {
+
+        ini_set('max_execution_time', 0);
+        set_time_limit(0);
+        ini_set('memory_limit','1024M');
+
+        $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
+
+        $users = [];
+
+        foreach ($transactions as $trans) {
+            $user = User::withTrashed()->find($trans->user_id);
+
+            if(!empty($user) && intval(DcnReward::where('user_id', $user->id)->sum('reward')) < intval(DcnTransaction::where('user_id', $user->id)->where('created_at', '>', Carbon::now()->addDays(-30))->where('type', '!=', 'register-reward')->sum('amount'))) {
+                $users[] = $user->id;
+            }
+            // if(!empty($user->getTotalBalance()) && $user->getTotalBalance() < intval(DcnTransaction::where('user_id', $user->id)->sum('amount'))) {
+            //     dd($user->id);
+            //     dd($user->id, $user->getTotalBalance(), intval(DcnTransaction::where('user_id', $user->id)->sum('amount')));
+            // }
+        }
+
+        return $users;
     }
 }
