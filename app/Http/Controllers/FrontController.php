@@ -571,7 +571,6 @@ class FrontController extends BaseController {
         $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='trp' ? '/img-trp/socials-cover.jpg' : '/img-vox/logo-text.png'  );
         //dd($params['pages_header']);
         
-        $params['without_banner'] = session('withoutBanner');
         //
         //Global
         //
@@ -595,6 +594,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '20201215';
+        $params['cache_version'] = '20210104';
     }
 }

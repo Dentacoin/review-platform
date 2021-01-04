@@ -1615,25 +1615,6 @@ jQuery(document).ready(function($){
     	}
     });
 
-
-    if($('.christmas-banner').length) {
-    	$('body').addClass('with-banner');
-    	$('.christmas-banner:visible .banner-video')[0].play();
-    	$('.christmas-banner:visible .banner-video')[0].removeAttribute("controls");
-    }
-
-    $('.close-banner').click( function(e) {
-    	e.preventDefault();
-	    e.stopPropagation();
-
-    	$('.christmas-banner').hide();
-
-    	$.ajax( {
-			url:  window.location.origin+'/en/remove-banner/',
-			type: 'GET',
-		});
-    });
-
 });
 
 //

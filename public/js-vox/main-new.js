@@ -1182,30 +1182,6 @@ $(document).ready(function(){
 	    FB.CustomerChat.hideDialog();
     }
 
-    setTimeout( function() {
-
-	    if($('.christmas-banner').length) {
-	    	setTimeout( function() {
-	    		$('.poll-bubble').css('bottom', $('.christmas-banner:visible').outerHeight());
-	    	}, 200);
-	    	$('body').addClass('with-banner');
-	    	$('.christmas-banner:visible .banner-video')[0].play();
-	    	$('.christmas-banner:visible .banner-video')[0].removeAttribute("controls");
-	    }
-
-	    $('.close-banner').click( function(e) {
-	    	e.preventDefault();
-	    	e.stopPropagation();
-	    	$('.poll-bubble').css('bottom', 0);
-	    	$('.christmas-banner').hide();
-
-	    	$.ajax( {
-				url:  window.location.origin+'/en/remove-banner/',
-				type: 'GET',
-			});
-	    });
-    }, 100);
-
 });
 
 var getUrlParameter = function(sParam) {
