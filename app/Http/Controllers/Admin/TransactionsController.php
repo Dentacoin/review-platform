@@ -329,17 +329,22 @@ class TransactionsController extends AdminController
         $min_withdraw_time = WithdrawalsCondition::find(1)->timerange;
         $transactions = DcnTransaction::where('created_at', '>', '2020-08-18 00:00:00')->groupBy('user_id')->get();
 
-        $users = [];
+        $users_ids = [];
         foreach ($transactions as $trans) {
             $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', '2020-08-18 00:00:00')->get();
 
             foreach ($user_transactions as $user_trans) {
                 foreach ($user_transactions as $user_t) {
-                    if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && !in_array($user_t->user_id, $users)) {
-                        $users[] = $user_t->user_id;
+                    if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && !in_array($user_t->user_id, $users_ids)) {
+                        $users_ids[] = $user_t->user_id;
                     }
                 }   
             }
+        }
+
+        $users = [];
+        foreach ($users_ids as $val) {
+            $users[] = User::find($val);
         }
 
         return $this->showView('transactions-scammers', array(
