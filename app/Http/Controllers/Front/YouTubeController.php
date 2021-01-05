@@ -50,6 +50,19 @@ class YouTubeController extends FrontController {
 
         if(!empty($this->admin)) {
 
+            $users = User::withTrashed()->get();
+
+            $ids = [];
+            foreach($users as $user) {
+                if(preg_match('/[^A-Za-z0-9._-]/', explode('@', $user->email)[0])) {
+
+                    $ids[] = $user->id;
+                }
+            }
+
+            dd($ids);
+
+
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
