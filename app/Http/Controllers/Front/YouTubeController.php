@@ -54,7 +54,7 @@ class YouTubeController extends FrontController {
         set_time_limit(0);
         ini_set('memory_limit','1024M');
 
-            $users = User::withTrashed()->get();
+            $users = User::where('id', '>', 106035)->withTrashed()->get();
 
             $ids = [];
             foreach($users as $user) {
