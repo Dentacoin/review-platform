@@ -21,10 +21,23 @@
                     <div class="row" style="margin-bottom: 10px;">  
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="Email">
-                        </div>                      
+                        </div>
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-user-id" value="{{ $search_user_id }}" placeholder="User ID">
+                        </div>                     
+                        <div class="col-md-2">
+                            <select class="form-control" id="search-type" name="search-type">
+                                <option value="all" {!! 'all'==$search_type ? 'selected="selected"' : '' !!}>All</option>
+                                <option value="not_deleted" {!! 'not_deleted'==$search_type ? 'selected="selected"' : '' !!}>Not Deleted</option>
+                                <option value="deleted" {!! 'deleted'==$search_type ? 'selected="selected"' : '' !!}>Deleted</option>
+                            </select>
                         </div>
+                        <div class="col-md-2">
+                            <label for="christmas-email" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                <input id="christmas-email" type="checkbox" name="christmas-email" value="1" {!! !empty($christmas_email) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                Christmas invites
+                            </label>
+                        </div>     
                         <div class="col-md-2">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
                         </div>

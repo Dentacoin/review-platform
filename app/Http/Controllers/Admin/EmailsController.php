@@ -423,6 +423,26 @@ class EmailsController extends AdminController {
         if(request('search-user-id')) {
             $invalids = $invalids->where('user_id', request('search-user-id') );
         }
+        if(request('search-type')) {
+            if(request('search-type') == 'not_deleted') {
+
+                $invalids = $invalids->whereHas('user', function($user) {
+                    $user->whereNull('deleted_at');
+                });
+            } else if(request('search-type') == 'deleted') {
+                $invalids = $invalids->whereHas('user', function($user) {
+                    $user->whereNotNull('deleted_at');
+                });
+            }
+        }
+
+        if(!empty(request('christmas-email'))) {
+            $invalids = $invalids->whereHas('user', function($user) {
+                $user->whereHas('emails', function($email) {
+                    $email->where('template_id', 115);
+                });
+            });
+        }
 
         $total_count = $invalids->count();
 
@@ -465,6 +485,8 @@ class EmailsController extends AdminController {
             'invalids' => $invalids,
             'search_email' => request('search-email'),
             'search_user_id' => request('search-user-id'),
+            'search_type' => request('search-type'),
+            'christmas_email' => request('christmas-email'),
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
