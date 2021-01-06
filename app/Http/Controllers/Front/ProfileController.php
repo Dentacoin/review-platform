@@ -260,7 +260,7 @@ class ProfileController extends FrontController {
                             $substitutions = [
                                 'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                                 'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
-                                'invited_user_name' => $this->user->name,
+                                'invited_user_name' => Request::Input('name'),
                                 "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
                             ];
 
@@ -617,13 +617,7 @@ class ProfileController extends FrontController {
                                     $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
 
                                 } else {
-
-                                    //Mega hack
                                     $dentist_name = $this->user->name;
-                                    $dentist_email = $this->user->email;
-                                    $this->user->name = $names[$key];
-                                    $this->user->email = $email;
-                                    $this->user->save();
 
                                     if ( $this->user->is_dentist) {
                                         $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', $email);
@@ -651,11 +645,11 @@ class ProfileController extends FrontController {
                                         $substitutions = [
                                             'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                                             'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
-                                            'invited_user_name' => $this->user->name,
+                                            'invited_user_name' => $names[$key],
                                             "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
                                         ];
 
-                                        $this->user->sendGridTemplate(106, $substitutions, 'trp', $unsubscribed, $email);
+                                        User::unregisteredSendGridTemplate($this->user, $email, $names[$key], 106, $substitutions, 'trp', $unsubscribed, $email);
                                     } else {
 
                                         $unsubscribed = User::isUnsubscribedAnonymous(17, 'trp', $email);
@@ -680,16 +674,20 @@ class ProfileController extends FrontController {
                                             $new_anonymous_user->save();
                                         }
 
-                                        $this->user->sendTemplate( 17 , [
+                                        $user = User::find(113928);
+                                        $temp_email = $user->email;
+                                        $user->email = $email;
+                                        $user->save();
+
+                                        $user->sendTemplate( 17 , [
                                             'friend_name' => $dentist_name,
                                             'invitation_id' => $invitation->id
                                         ], 'trp', $unsubscribed, $email);
-                                    }
 
-                                    //Back to original
-                                    $this->user->name = $dentist_name;
-                                    $this->user->email = $dentist_email;
-                                    $this->user->save();
+                                        //Back to original
+                                        $user->email = $temp_email;
+                                        $user->save();
+                                    }
                                 }
                             }
                         }
