@@ -230,14 +230,10 @@ class ProfileController extends FrontController {
 
                     if(Request::Input('email') != $this->user->email) {
 
-                        //Mega hack
-                        $dentist_name = $this->user->name;
-                        $dentist_email = $this->user->email;
-                        $this->user->name = Request::Input('name');
-                        $this->user->email = Request::Input('email');
-                        $this->user->save();
-
                         if ( $this->user->is_dentist) {
+
+                            $dentist_name = $this->user->name;
+                            $dentist_email = $this->user->email;
 
                             $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', Request::Input('email'));
 
@@ -268,7 +264,7 @@ class ProfileController extends FrontController {
                                 "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
                             ];
 
-                            $mail = $this->user->sendGridTemplate(106, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
+                            $mail = User::unregisteredSendGridTemplate($this->user, Request::Input('email'), Request::Input('name'),  106, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
                         } else {
 
                             $unsubscribed = User::isUnsubscribedAnonymous(17, 'trp', Request::Input('email'));
@@ -293,16 +289,22 @@ class ProfileController extends FrontController {
                                 $new_anonymous_user->save();
                             }
 
-                            $mail = $this->user->sendTemplate( 17 , [
+                            $user = User::find(113928);
+                            $dentist_name = $user->name;
+                            $dentist_email = $user->email;
+                            $user->name = Request::Input('name');
+                            $user->email = Request::Input('email');
+                            $user->save();
+
+                            $mail = $user->sendTemplate( 17 , [
                                 'friend_name' => $dentist_name,
                                 'invitation_id' => $invitation->id
                             ], 'trp', $unsubscribed, Request::Input('email'));
-                        }
 
-                        //Back to original
-                        $this->user->name = $dentist_name;
-                        $this->user->email = $dentist_email;
-                        $this->user->save();
+                            $user->name = $dentist_name;
+                            $user->email = $dentist_email;
+                            $user->save();
+                        }
 
                         $mail->delete();
 

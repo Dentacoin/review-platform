@@ -619,16 +619,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function sendGridTemplate($template_id, $substitutions=null, $platform=null, $is_skipped=null, $anonymous_email=null) {
+        return self::unregisteredSendGridTemplate($this, $this->email, $this->getNameSendGrid(), $template_id, $substitutions, $platform, $is_skipped, $anonymous_email);
+    }
+
+    public static function unregisteredSendGridTemplate($user, $to_email, $to_name, $template_id, $substitutions=null, $platform=null, $is_skipped=null, $anonymous_email=null) {
 
         $item = new Email;
-        $item->user_id = $this->id;
+        $item->user_id = $user->id;
         $item->template_id = $template_id;
         $item->meta = $substitutions;
         if($platform) {
             $item->platform = $platform;            
         } else {
             if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
-                $item->platform = $this->platform;
+                $item->platform = $user->platform;
             } else {
                 $item->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
             }
@@ -637,16 +641,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if(empty($anonymous_email)) {
             
-            if($this->id != 3 && !empty($item->template->subscribe_category)) {
+            if($user->id != 3 && !empty($item->template->subscribe_category)) {
                 $cat = $item->template->subscribe_category;
-                if($item->platform != 'dentacare' && $item->platform != 'dentists' && !in_array($item->platform, $this->$cat)) {
+                if($item->platform != 'dentacare' && $item->platform != 'dentists' && !in_array($item->platform, $user->$cat)) {
                     $item->unsubscribed = true;
                     $item->save();
                 }
             }
         }
 
-        $to_be_send = $this->sendgridEmailValidation($template_id, $this->email);
+        $to_be_send = $user->sendgridEmailValidation($template_id, $to_email);
 
         if(!$to_be_send) {
             $item->invalid_email = true;
@@ -661,42 +665,42 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
             $from = new From($sender, $sender_name);
 
-            $tos = [new To( $this->email)];
+            $tos = [new To( $to_email)];
 
             $email = new SendGridMail(
                 $from,
                 $tos
             );
             $email->setTemplateId($item->template->sendgrid_template_id);
-            if($this->is_dentist && $template_id != 58 && $template_id != 59 && $template_id != 60 && $template_id != 61 && $template_id != 62 && $template_id != 106) {
+            if($user->is_dentist && $template_id != 58 && $template_id != 59 && $template_id != 60 && $template_id != 61 && $template_id != 62 && $template_id != 106) {
                 $email->addBcc("4097841@bcc.hubspot.com");
             }
 
-            if($this->id == 3 && ($item->template->id == 84 || $item->template->id == 26 || $item->template->id == 83 || $item->template->id == 85 ) ) {
+            if($user->id == 3 && ($item->template->id == 84 || $item->template->id == 26 || $item->template->id == 83 || $item->template->id == 85 ) ) {
 
             } else {
                 if ($item->template->category) {
                     $email->addCategory($item->template->category);
                 } else {
-                    $email->addCategory(strtoupper($item->platform).' Service '.($this->is_dentist ? 'Dentist' : 'Patient'));
+                    $email->addCategory(strtoupper($item->platform).' Service '.($user->is_dentist ? 'Dentist' : 'Patient'));
                 }
             }
 
-            $domain = 'https://'.config('platforms.'.$this->platform.'.url').'/';
+            $domain = 'https://'.config('platforms.'.$user->platform.'.url').'/';
 
-            $pageviews = DentistPageview::where('dentist_id', $this->id)->count();
+            $pageviews = DentistPageview::where('dentist_id', $user->id)->count();
 
             $defaulth_substitutions  = [
-                "name" => $this->getNameSendGrid(),
+                "name" => $to_name,
                 "platform" => $item->platform,
-                "invite-patient" => getLangUrl( 'dentist/'.$this->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
-                "lead-magnet-link" => $this->getLink().'?'. http_build_query(['popup'=>'popup-lead-magnet']),
+                "invite-patient" => getLangUrl( 'dentist/'.$user->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
+                "lead-magnet-link" => $user->getLink().'?'. http_build_query(['popup'=>'popup-lead-magnet']),
                 "homepage" => getLangUrl('/', null, $domain),
-                "trp_profile" => $this->getLink(),
-                "town" => $this->city_name ? $this->city_name : 'your town',
-                "country" => $this->country_id ? Country::find($this->country_id)->name : 'your country',
-                //"unsubscribe" => getLangUrl( 'unsubscription/'.$this->id.'/'.$this->get_token(), null, $domain),
-                "unsubscribe" => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(self::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $this->email),'email_category' => $item->template->subscribe_category, 'platform' => $item->platform ))))]),
+                "trp_profile" => $user->getLink(),
+                "town" => $user->city_name ? $user->city_name : 'your town',
+                "country" => $user->country_id ? Country::find($user->country_id)->name : 'your country',
+                //"unsubscribe" => getLangUrl( 'unsubscription/'.$user->id.'/'.$user->get_token(), null, $domain),
+                "unsubscribe" => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(self::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $to_email),'email_category' => $item->template->subscribe_category, 'platform' => $item->platform ))))]),
                 "pageviews" => $pageviews,
                 "trp" => url('https://reviews.dentacoin.com/'),
                 "trp-dentist" => url('https://reviews.dentacoin.com/en/welcome-dentist/'),

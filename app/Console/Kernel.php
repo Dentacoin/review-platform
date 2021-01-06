@@ -158,10 +158,6 @@ class Kernel extends ConsoleKernel
 
                                     $active_voxes_count = Vox::where('type', '!=', 'hidden')->count();
 
-                                    $u->email = $notify->email;
-                                    $u->name = $notify->name;
-                                    $u->save();
-
                                     $arr = [];
 
                                     if($key == 'trp') {
@@ -183,12 +179,7 @@ class Kernel extends ConsoleKernel
 
                                     //$arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
 
-                                    $mail = $u->sendGridTemplate($v['tempalte_id'], $arr, $key, $unsubscribed, $notify->email);
-
-                                    //Mega hack
-                                    $u->email = $tmpEmail;
-                                    $u->name = $tmpName;
-                                    $u->save();
+                                    $mail = User::unregisteredSendGridTemplate($u, $notify->email, $notify->name, $v['tempalte_id'], $arr, $key, $unsubscribed, $notify->email);
 
                                     $notify->$field = true;
                                     $notify->save();
@@ -234,21 +225,10 @@ class Kernel extends ConsoleKernel
                         $unsubscribed = User::isUnsubscribedAnonymous($time['tempalte_id'], 'trp', $notify->email);
 
                         echo 'USER: '.$notify;
-                        $u = User::find(3);
-                        $tmpEmail = $u->email;
-                        $tmpName = $u->name;
-
                         echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
 
-                        $u->email = $notify->email;
-                        $u->name = $notify->name;
-                        $u->save();
-                        $mail = $u->sendGridTemplate($time['tempalte_id'], null, 'trp', $unsubscribed, $notify->email);
-
-                        //Mega hack
-                        $u->email = $tmpEmail;
-                        $u->name = $tmpName;
-                        $u->save();
+                        $user = User::find(113928);
+                        $mail = User::unregisteredSendGridTemplate($user, $notify->email, $notify->name, $time['tempalte_id'], null, 'trp', $unsubscribed, $notify->email);
 
                         $notify->$field = true;
                         $notify->save();

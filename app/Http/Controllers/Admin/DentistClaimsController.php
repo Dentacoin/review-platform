@@ -67,21 +67,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
                     $dk->save();
 
                     $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $dk->email);
-
-                    $u = User::find(3);
-                    $tmpEmail = $u->email;
-                    $tmpName = $u->name;
-
-                    //Mega hack
-                    $u->email = $dk->email;
-                    $u->name = $dk->name;
-                    $u->save();
-                    $mail = $u->sendGridTemplate(66, null, 'trp', $unsubscribed, $dk->email);
-
-                    $u->email = $tmpEmail;
-                    $u->name = $tmpName;
-                    $u->save();
-
+                    $mail = User::unregisteredSendGridTemplate($u, $dk->email, $dk->name, 66, null, 'trp', $unsubscribed, $dk->email);
                     $mail->delete();
                 }
             }
@@ -121,20 +107,8 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
         $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $item->email);
 
-        $u = User::find(3);
-        $tmpEmail = $u->email;
-        $tmpName = $u->name;
-
-        //Mega hack
-        $u->email = $item->email;
-        $u->name = $item->name;
-        $u->save();
-        $mail = $u->sendGridTemplate(66, null, 'trp', $unsubscribed, $item->email);
-
-        $u->email = $tmpEmail;
-        $u->name = $tmpName;
-        $u->save();
-
+        $u = User::find(113928);
+        $mail = User::unregisteredSendGridTemplate($u, $item->email, $item->name, 66, null, 'trp', $unsubscribed, $item->email);
         $mail->delete();
 
 
@@ -172,20 +146,8 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
         $unsubscribed = User::isUnsubscribedAnonymous(67, 'trp', $item->email);
 
-        $u = User::find(3);
-        $tmpEmail = $u->email;
-        $tmpName = $u->name;
-
-        //Mega hack
-        $u->email = $item->email;
-        $u->name = $item->name;
-        $u->save();
-        $mail = $u->sendGridTemplate(67, null, 'trp', $unsubscribed, $item->email);
-
-        $u->email = $tmpEmail;
-        $u->name = $tmpName;
-        $u->save();
-
+        $u = User::find(113928);
+        $mail = User::unregisteredSendGridTemplate($u, $item->email, $item->name, 67, null, 'trp', $unsubscribed, $item->email);
         $mail->delete();
 
 

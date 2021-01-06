@@ -209,7 +209,8 @@
     						$table_fields,
                             'table_data' => $users,
     						'table_pagination' => false,
-                            'pagination_link' => array()
+                            'pagination_link' => array(),
+                            'users' => true
     					])
 
                         <input type="hidden" name="mass-delete-reasons">

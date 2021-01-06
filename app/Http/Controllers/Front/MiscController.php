@@ -24,17 +24,19 @@ class MiscController extends FrontController {
             $validator = Validator::make(Request::all(), $validator_arr);
             if (!$validator->fails()) {
 	            //Mega hack
-		        $temp_email = $this->user->email;
-		        $this->user->email = request('email');
-		        $this->user->save();
 
-		        $this->user->sendTemplate( 10, [
+	            $user = User::find(113928);
+		        $temp_email = $user->email;
+		        $user->email = request('email');
+		        $user->save();
+
+		        $user->sendTemplate( 10, [
 		            'link' => request('address')
 		        ]);
 
 		        //Back to original
-		        $this->user->email = $temp_email;
-		        $this->user->save();
+		        $user->email = $temp_email;
+		        $user->save();
 
 				return Response::json( [
 		            'success' => true,

@@ -1547,20 +1547,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     }
                 }
 
-                //Mega hack
-                $user_name = $this->user->name;
-                $user_email = $this->user->email;
-                $this->user->name = Request::Input('name');
-                $this->user->email = Request::Input('email');
-                $this->user->save();
-
-                $mail = $this->user->sendGridTemplate(89, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
-
-                //Back to original
-                $this->user->name = $user_name;
-                $this->user->email = $user_email;
-                $this->user->save();
-
+                $mail = User::unregisteredSendGridTemplate($this->user, Request::Input('email'), Request::Input('name'), 89, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
                 $mail->delete();
 
                 return Response::json(['success' => true, 'message' => trans('trp.popup.popup-recommend-dentist.success') ] );
