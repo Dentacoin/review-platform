@@ -194,11 +194,13 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('emails/trp/send-engagement-email',  'EmailsController@engagement_email');
 	Route::get('emails/trp/send-monthly-email',  	'EmailsController@monthly_email');
 
-	Route::get('email_validations/email_validations',					'EmailsController@list_validations');
-	Route::any('email_validations/email_validations/valid/{id}',		'EmailsController@mark_valid');
+	Route::get('email_validations/email_validations',				'EmailsController@list_validations');
+	Route::any('email_validations/email_validations/valid/{id}',	'EmailsController@mark_valid');
 	Route::get('email_validations/email_validations/stop',			'EmailsController@stop_validations');
 	Route::get('email_validations/email_validations/start',			'EmailsController@start_validations');
 	Route::get('email_validations/invalid_emails',					'EmailsController@invalid_emails');
+	Route::get('email_validations/invalid_emails/delete/{id}',		'EmailsController@invalid_delete');
+	Route::post('email_validations/invalid_emails/new',				'EmailsController@invalid_new');
 
 	Route::any('rewards', 							'RewardsController@list');
 

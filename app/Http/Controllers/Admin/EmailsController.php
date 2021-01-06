@@ -384,7 +384,7 @@ class EmailsController extends AdminController {
         $item->save();
 
         $this->request->session()->flash('success-message', 'Validations are inactive!' );
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations/email_validations');
     }
 
     public function start_validations() {
@@ -394,7 +394,7 @@ class EmailsController extends AdminController {
         $item->save();
 
         $this->request->session()->flash('success-message', 'Validations are active!' );
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations/email_validations');
     }
 
     public function mark_valid($id) {
@@ -409,7 +409,7 @@ class EmailsController extends AdminController {
             $this->request->session()->flash('success-message', 'Marked as valid!' );
         }
 
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations/email_validations');
     }
 
 
@@ -474,6 +474,41 @@ class EmailsController extends AdminController {
             'pagination_link' => $pagination_link,
         ));
     }
+
+    public function invalid_delete($id) {
+
+        $item = InvalidEmail::find($id);
+
+        if($item) {
+            $item->delete();
+            $this->request->session()->flash('success-message', 'Deleted!' );
+        }
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations/invalid_emails');
+    }
+
+    public function invalid_new() {
+
+        if(!empty(request('id')) && !empty(request('new-email'))) {
+
+            $item = InvalidEmail::find(request('id'));
+
+            if($item) {
+                $item->new_email = request('new-email');
+                $item->save();
+
+                $user = User::withTrashed()->find($item->user_id);
+                $user->email = $item->new_email;
+                $user->save();
+
+                $this->request->session()->flash('success-message', 'Email changed!' );
+            }
+
+        }
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations/invalid_emails');
+    }
+
+
     
 
 }

@@ -13,6 +13,7 @@ class InvalidEmail extends Model {
     
     protected $fillable = [
         'user_id', //The clinic
+        'new_email',
         'email',
     ];
 

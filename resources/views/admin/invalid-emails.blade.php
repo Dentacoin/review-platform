@@ -52,6 +52,9 @@
                             <tr>
                                 <th>User</th>
                                 <th>Invalid Email</th>
+                                <th>New email</th>
+                                <th>Change email</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,6 +66,19 @@
                                     <td>
                                         {{ $invalid->email }}
                                     </td>
+                                    <td>
+                                        {{ $invalid->new_email }}
+                                    </td>
+                                    <td>
+                                    	<form action="{{ url('cms/email_validations/invalid_emails/new/') }}" method="POST">
+                                    		<input type="hidden" name="id" value="{{ $invalid->id }}">
+                                        	<input type="email" name="new-email" value="">
+                                        	<input type="submit" name="submit" class="btn btn-info">
+                                    	</form>
+                                    </td>
+                                    <th>
+                                    	<a href="{{ url('cms/email_validations/invalid_emails/delete/'.$invalid->id) }}" class="btn btn-danger">delete</a>
+                                    </th>
                                 </tr>
                             @endforeach
                         </tbody>
