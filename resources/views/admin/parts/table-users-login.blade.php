@@ -8,6 +8,9 @@
 	{{ trans('admin.common.login-as') }}
 </a> -->
 
-<a target="_blank" href="{{ url('cms/users/loginas/'.$item->id.(!empty(request()->input('search-platform')) ? '/'.request()->input( 'search-platform' ) : '')) }}">
-	{{ trans('admin.common.login-as') }}
-</a>
+@if($item->id == 113928)
+@else
+	<a target="_blank" href="{{ url('cms/users/loginas/'.$item->id.(!empty(request()->input('search-platform')) ? '/'.request()->input( 'search-platform' ) : '')) }}">
+		{{ trans('admin.common.login-as') }}
+	</a>
+@endif
