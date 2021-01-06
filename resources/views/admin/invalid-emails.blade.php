@@ -53,6 +53,7 @@
                                 <th>User ID</th>
                                 <th>User</th>
                                 <th>Invalid Email</th>
+                                <th>Christmas invite</th>
                                 <th>New email</th>
                                 <th>Change email</th>
                                 <th>Delete</th>
@@ -69,6 +70,9 @@
                                     </td>
                                     <td>
                                         {{ $invalid->email }}
+                                    </td>
+                                    <td>
+                                        {{ App\Models\Email::where('template_id', 115)->where('user_id', $invalid->user_id)->first() ? 'true' : '' }}
                                     </td>
                                     <td>
                                         {{ $invalid->new_email }}
