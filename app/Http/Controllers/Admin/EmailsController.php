@@ -415,7 +415,7 @@ class EmailsController extends AdminController {
 
     public function invalid_emails( ) {
 
-        $invalids = InvalidEmail::orderBy('id', 'desc');
+        $invalids = InvalidEmail::orderBy('id', 'asc');
 
         if(!empty(request('search-email'))) {
             $invalids = $invalids->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
