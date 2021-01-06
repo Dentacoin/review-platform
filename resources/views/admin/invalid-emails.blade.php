@@ -51,6 +51,7 @@
                         <thead>
                             <tr>
                                 <th>User</th>
+                                <th>User ID</th>
                                 <th>Invalid Email</th>
                                 <th>New email</th>
                                 <th>Change email</th>
@@ -60,6 +61,9 @@
                         <tbody>
                             @foreach($invalids as $invalid)
                                 <tr style="{{ $invalid->user->deleted_at ? 'opacity: 0.5;' : '' }}">
+                                    <td>
+                                        {{ $invalid->user_id }}
+                                    </td>
                                     <td>
                                         <a href="{{ url('cms/users/edit/'.$invalid->user_id) }}" target="_blank">{{ $invalid->user->name }}</a>
                                     </td>
