@@ -50,8 +50,8 @@
 					<table class="table table-striped table-question-list">
                         <thead>
                             <tr>
-                                <th>User</th>
                                 <th>User ID</th>
+                                <th>User</th>
                                 <th>Invalid Email</th>
                                 <th>New email</th>
                                 <th>Change email</th>
