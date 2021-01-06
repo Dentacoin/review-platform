@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Models\StopEmailValidation;
 use App\Models\EmailValidation;
 use App\Models\EmailTemplate;
+use App\Models\InvalidEmail;
 use App\Models\Country;
 use App\Models\Review;
 use App\Models\Email;
@@ -410,5 +411,69 @@ class EmailsController extends AdminController {
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations');
     }
+
+
+    public function invalid_emails( ) {
+
+        $invalids = InvalidEmail::orderBy('id', 'desc');
+
+        if(!empty(request('search-email'))) {
+            $invalids = $invalids->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
+        }
+        if(request('search-user-id')) {
+            $invalids = $invalids->where('user_id', request('search-user-id') );
+        }
+
+        $total_count = $invalids->count();
+
+        $page = max(1,intval(request('page')));
+        
+        $ppp = 50;
+        $adjacents = 2;
+        $total_pages = ceil($total_count/$ppp);
+
+        //Here we generates the range of the page numbers which will display.
+        if($total_pages <= (1+($adjacents * 2))) {
+          $start = 1;
+          $end   = $total_pages;
+        } else {
+          if(($page - $adjacents) > 1) { 
+            if(($page + $adjacents) < $total_pages) { 
+              $start = ($page - $adjacents);            
+              $end   = ($page + $adjacents);         
+            } else {             
+              $start = ($total_pages - (1+($adjacents*2)));  
+              $end   = $total_pages;               
+            }
+          } else {               
+            $start = 1;                                
+            $end   = (1+($adjacents * 2));             
+          }
+        }
+
+        $invalids = $invalids->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        $pagination_link = '';
+
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search' && $key != 'page') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
+        }
+
+        return $this->showView('invalid-emails', array(
+            'invalids' => $invalids,
+            'search_email' => request('search-email'),
+            'search_user_id' => request('search-user-id'),
+            'total_count' => $total_count,
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
+            'pagination_link' => $pagination_link,
+        ));
+    }
+    
 
 }

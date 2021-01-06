@@ -60,6 +60,10 @@ return [
         ),
         'email_validations' => array(
             'icon' => 'lock',
+            'subpages' => array(
+                'email_validations' => 'email_validations',
+                'invalid_emails' => 'invalid_emails',
+            ),
         ),
         'trp' => array(
             'icon' => 'list-alt',
@@ -147,7 +151,9 @@ return [
                 'trp' => 'trp',
                 'trp-urgent' => 'trp-urgent',
                 'api' => 'api',
+                'api-dev' => 'api-dev',
                 'api_civic' => 'api_civic',
+                'api_withdraw' => 'api_withdraw',
             ),
         ),
     )

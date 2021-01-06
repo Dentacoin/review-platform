@@ -7,7 +7,7 @@ use App\Http\Controllers\FrontController;
 class BannedController extends FrontController {
 
 	public function home($locale=null) {
-			
+		
 		return $this->ShowVoxView('banned', array(
 			'ban_expires' => session('ban-expires'),
 			'noIndex' => true,

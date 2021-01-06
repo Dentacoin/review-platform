@@ -70,6 +70,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('users/edit/{id}/delete-reward/{rewardid}', 	'UsersController@delete_vox');
 	Route::get('users/edit/{id}/delete-unfinished/{vox_id}', 	'UsersController@delete_unfinished');
 	Route::any('users/delete/{id}', 				'UsersController@delete');
+	Route::any('users/delete-database/{id}', 		'UsersController@deleteDatabase');
 	Route::any('users/restore/{id}', 				'UsersController@restore');
 	Route::any('users/restore-self-deleted/{id}', 	'UsersController@restore_self_deleted');
 	Route::any('users/reviews/delete/{id}',		 	'UsersController@delete_review');
@@ -193,10 +194,11 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('emails/trp/send-engagement-email',  'EmailsController@engagement_email');
 	Route::get('emails/trp/send-monthly-email',  	'EmailsController@monthly_email');
 
-	Route::get('email_validations',					'EmailsController@list_validations');
-	Route::any('email_validations/valid/{id}',		'EmailsController@mark_valid');
-	Route::get('email_validations/stop',			'EmailsController@stop_validations');
-	Route::get('email_validations/start',			'EmailsController@start_validations');
+	Route::get('email_validations/email_validations',					'EmailsController@list_validations');
+	Route::any('email_validations/email_validations/valid/{id}',		'EmailsController@mark_valid');
+	Route::get('email_validations/email_validations/stop',			'EmailsController@stop_validations');
+	Route::get('email_validations/email_validations/start',			'EmailsController@start_validations');
+	Route::get('email_validations/invalid_emails',					'EmailsController@invalid_emails');
 
 	Route::any('rewards', 							'RewardsController@list');
 
@@ -232,7 +234,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::get('index-voxes', 						'IndexController@indexVoxes');
 	Route::get('users-stats', 						'IndexController@headerStats');
-	Route::get('user-logout', 						'IndexController@getLogout');
+	Route::post('get-next-question', 				'IndexController@getNextQuestion');
+	Route::any('survey-answer', 					'IndexController@surveyAnswer');
+	Route::post('start-over', 						'IndexController@startOver');
 
 	Route::get('all-voxes', 						'PaidDentalSurveysController@allVoxes');
 	Route::get('get-voxes', 						'PaidDentalSurveysController@getVoxes');
@@ -242,12 +246,23 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::get('all-stats', 						'StatsController@allStats');
 
 	Route::get('welcome-survey',					'IndexController@welcomeSurvey');
+	Route::post('welcome-survey-reward',			'IndexController@welcomeSurveyReward');
 	Route::get('do-vox/{slug}',						'IndexController@doVox');
+	Route::get('voxes-daily-limit',					'IndexController@dailyLimitReached');
+	Route::get('get-ban-time-left',					'IndexController@getBanTimeLeft');
+	Route::get('get-ban-info',						'IndexController@getBanInfo');
+	Route::post('dentist-request-survey',			'IndexController@dentistRequestSurvey');
+	Route::any('check-token',						'IndexController@checkToken');
+	Route::any('recommend-dentavox',				'IndexController@recommendDentavox');
+
 
 	Route::get('get-daily-polls',					'DailyPollsController@getPolls');
 	Route::get('get-poll-content',					'DailyPollsController@getPollContent');
 	Route::get('get-poll-stats',					'DailyPollsController@getPollStats');
 	Route::post('poll/{id}', 						'DailyPollsController@doPoll');
+	Route::post('poll-reward', 						'DailyPollsController@dailyPollReward');
+	Route::get('poll-reward-price',					'DailyPollsController@pollRewardPrice');
+	Route::post('todays-poll-answer',				'DailyPollsController@todaysPollAnswer');
 
 });
 
@@ -282,7 +297,6 @@ $reviewRoutes = function () {
 			Route::post('index-dentist-down', 					'IndexController@index_dentist_down');
 			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
-			Route::get('remove-banner',							'IndexController@removeBanner');
 			
 			Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
 			Route::post('lead-magnet-step2', 					'IndexController@lead_magnet_step2');
@@ -438,7 +452,6 @@ $voxRoutes = function () {
 			Route::any('get-started/{id}', 						'VoxController@home_slug');
 			Route::post('start-over', 							'VoxController@start_over');
 			Route::post('vox-public-down', 						'VoxController@vox_public_down');
-			Route::get('remove-banner',							'VoxController@removeBanner');
 
 			Route::any('daily-polls', 							'PollsController@list');
 			Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');

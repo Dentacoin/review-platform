@@ -31,6 +31,8 @@
 					<pre>
                         @if($type == 'api_civic')
                             {!! @file_get_contents( base_path().'\/../api-dev/storage/logs/civic.log' ) !!}
+                        @elseif($type == 'api_withdraw')
+                            {!! @file_get_contents( base_path().'\/../api-dev/storage/logs/withdraw.log' ) !!}
                         @else
                             {!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel.log' ) !!}
                         @endif

@@ -6,9 +6,9 @@
     {{ trans('admin.page.'.$current_page.'.title') }}
 
     @if($stopped_validations)
-    	<a href="{{ url('cms/email_validations/start') }}" class="btn btn-success pull-right" style="margin-right: 10px;">Start email validation</a>
+    	<a href="{{ url('cms/email_validations/email_validations/start') }}" class="btn btn-success pull-right" style="margin-right: 10px;">Start email validation</a>
     @else
-    	<a href="{{ url('cms/email_validations/stop') }}" class="btn btn-danger pull-right" style="margin-right: 10px;">Stop email validation</a>
+    	<a href="{{ url('cms/email_validations/email_validations/stop') }}" class="btn btn-danger pull-right" style="margin-right: 10px;">Stop email validation</a>
     @endif
 </h1>
 
@@ -22,7 +22,7 @@
                 <h4 class="panel-title"> Search Email Validations </h4>
             </div>
             <div class="panel-body users-filters">
-                <form method="get" action="{{ url('cms/email_validations') }}">
+                <form method="get" action="{{ url('cms/email_validations/email_validations') }}">
                     <div class="row custom-row" style="margin-bottom: 10px;">
                     <div class="row" style="margin-bottom: 10px;">  
                         <div class="col-md-2">
@@ -84,7 +84,7 @@
                                     </td>
                                     <td>
                                     	@if(!$validation->valid)
-	                                        <a class="btn btn-sm btn-primary" href="{{ url('cms/email_validations/valid/'.$validation->id) }}">
+	                                        <a class="btn btn-sm btn-primary" href="{{ url('cms/email_validations/email_validations/valid/'.$validation->id) }}">
 											    Мark as valid
 											</a>
 										@endif
@@ -105,25 +105,25 @@
     <nav aria-label="Page navigation" style="text-align: center;">
         <ul class="pagination">
             <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                <a class="page-link" href="{{ url('cms/email_validations/?page=1'.$pagination_link) }}" aria-label="Previous">
+                <a class="page-link" href="{{ url('cms/email_validations/email_validations/?page=1'.$pagination_link) }}" aria-label="Previous">
                     <span aria-hidden="true"> << </span>
                 </a>
             </li>
             <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                <a class="page-link prev" href="{{ url('cms/email_validations/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
+                <a class="page-link prev" href="{{ url('cms/email_validations/email_validations/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
                     <span aria-hidden="true"> < </span>
                 </a>
             </li>
             @for($i=$start; $i<=$end; $i++)
                 <li class="{{ ($i == $page ?  'active' : '') }}">
-                    <a class="page-link" href="{{ url('cms/email_validations/?page='.$i.$pagination_link) }}">{{ $i }}</a>
+                    <a class="page-link" href="{{ url('cms/email_validations/email_validations/?page='.$i.$pagination_link) }}">{{ $i }}</a>
                 </li>
             @endfor
             <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                <a class="page-link next" href="{{ url('cms/email_validations/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+                <a class="page-link next" href="{{ url('cms/email_validations/email_validations/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
             </li>
             <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                <a class="page-link" href="{{ url('cms/email_validations/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                <a class="page-link" href="{{ url('cms/email_validations/email_validations/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
             </li>
         </ul>
     </nav>

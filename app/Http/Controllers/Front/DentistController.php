@@ -163,286 +163,291 @@ class DentistController extends FrontController {
         $questions = Question::with('translations')->get();
 
         if(Request::isMethod('post')) {
+            
             $ret = array(
                 'success' => false
             );
-            $validator_arr = [
-                'answer' => ['required_without:youtube_id'],
-                'youtube_id' => ['required_without:answer'],
-                'treatments' => ['required']
-            ];
-            foreach ($questions as $question) {
 
-                if(!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') == 'own') {
-                    $validator_arr['option.4.0'] = ['required', 'numeric', 'min:1', 'max:5'];
-                    $validator_arr['option.4.1'] = ['required', 'numeric', 'min:1', 'max:5'];
-                    $validator_arr['option.4.2'] = ['required', 'numeric', 'min:1', 'max:5'];
-                    $validator_arr['option.4.3'] = ['required', 'numeric', 'min:1', 'max:5'];
+            if(!empty($this->user)) {
 
-                    $validator_arr['option.6.0'] = ['required', 'numeric', 'min:1', 'max:5'];
-                    $validator_arr['option.6.1'] = ['required', 'numeric', 'min:1', 'max:5'];
-                    $validator_arr['option.6.2'] = ['required', 'numeric', 'min:1', 'max:5'];
-                    $validator_arr['option.6.3'] = ['required', 'numeric', 'min:1', 'max:5'];
+                $validator_arr = [
+                    'answer' => ['required_without:youtube_id'],
+                    'youtube_id' => ['required_without:answer'],
+                    'treatments' => ['required']
+                ];
+                foreach ($questions as $question) {
 
-                    $validator_arr['option.7.0'] = ['required', 'numeric', 'min:1', 'max:5'];
-                    $validator_arr['option.7.1'] = ['required', 'numeric', 'min:1', 'max:5'];
-                } else {
-                    $opts = json_decode($question['options'], true);
+                    if(!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') == 'own') {
+                        $validator_arr['option.4.0'] = ['required', 'numeric', 'min:1', 'max:5'];
+                        $validator_arr['option.4.1'] = ['required', 'numeric', 'min:1', 'max:5'];
+                        $validator_arr['option.4.2'] = ['required', 'numeric', 'min:1', 'max:5'];
+                        $validator_arr['option.4.3'] = ['required', 'numeric', 'min:1', 'max:5'];
 
-                    foreach ($opts as $i => $nosense) {
-                        $validator_arr['option.'.$question->id.'.'.$i] = ['required', 'numeric', 'min:1', 'max:5'];
-                    }                    
-                }
-            }
+                        $validator_arr['option.6.0'] = ['required', 'numeric', 'min:1', 'max:5'];
+                        $validator_arr['option.6.1'] = ['required', 'numeric', 'min:1', 'max:5'];
+                        $validator_arr['option.6.2'] = ['required', 'numeric', 'min:1', 'max:5'];
+                        $validator_arr['option.6.3'] = ['required', 'numeric', 'min:1', 'max:5'];
 
-            $validator = Validator::make(Request::all(), $validator_arr);
-
-            if ($validator->fails()) {
-
-                $msg = $validator->getMessageBag()->toArray();
-                $ret['messages'] = [];
-                foreach ($msg as $field => $errors) {
-                    $ret['messages'][$field] = implode(', ', $errors);
-                }           
-
-                return Response::json( $ret );
-            } else {
-
-                $real_text = strip_tags(Request::input( 'answer' ));
-                $real_text_words = explode(' ', $real_text);
-                if( empty(Request::input( 'youtube_id' )) && (mb_strlen($real_text)<50 || count($real_text_words)<10) ) {
-                    $ret['short_text'] = true;
-                    return Response::json( $ret );
-
-                }
-
-                $ret['valid_input'] = true;
-
-                if( !$this->user->is_dentist) {
-
-                    $old_review = $this->user->hasReviewTo($item->id);
-                    if( $this->user->loggedFromBadIp() ) {
-                        $ul = new UserLogin;
-                        $ul->user_id = $this->user->id;
-                        $ul->ip = User::getRealIp();
-                        $ul->platform = 'trp';
-                        $ul->country = \GeoIP::getLocation()->country;
-
-                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                        $dd = new DeviceDetector($userAgent);
-                        $dd->parse();
-
-                        if ($dd->isBot()) {
-                            $ul->device = $dd->getBot();
-                        } else {
-                            $ul->device = $dd->getDeviceName();
-                            $ul->brand = $dd->getBrandName();
-                            $ul->model = $dd->getModel();
-                            $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                        }
-                        
-                        $ul->save();
-                        
-                        $u_id = $this->user->id;
-
-                        $action = new UserAction;
-                        $action->user_id = $u_id;
-                        $action->action = 'bad_ip';
-                        $action->reason = 'Automatically - Bad IP (Writing review)';
-                        $action->actioned_at = Carbon::now();
-                        $action->save();
-                        
-                        Auth::guard('web')->user()->logoutActions();
-                        Auth::guard('web')->user()->removeTokens();
-                        Auth::guard('web')->logout();
-
-                        $ret['success'] = false;
-                        $ret['valid_input'] = false;
-                        $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id));
-
-                        $token = User::encrypt(session('login-logged-out'));
-                        $imgs_urls = [];
-                        foreach( config('platforms') as $k => $platform ) {
-                            if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
-                                $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?logout-token='.urlencode($token);
-                            }
-                        }
-                        $imgs_urls[] = '//vox.dentacoin.com/custom-cookie?logout-token='.urlencode($token);
-
-                        $ret['imgs_urls'] = $imgs_urls;
-
-                        return Response::json( $ret );
-                    } else if( $this->user->cantSubmitReviewToSameDentist($item->id) ) {
-                        ; //dgd
+                        $validator_arr['option.7.0'] = ['required', 'numeric', 'min:1', 'max:5'];
+                        $validator_arr['option.7.1'] = ['required', 'numeric', 'min:1', 'max:5'];
                     } else {
+                        $opts = json_decode($question['options'], true);
 
-                        if($old_review && $old_review->status=='pending') {
-                            $review = $old_review;
-                        } else {
-                            $review = new Review;
-                            $review->user_id = $this->user->id;
-                            $review->review_to_id = $item->id;
+                        foreach ($opts as $i => $nosense) {
+                            $validator_arr['option.'.$question->id.'.'.$i] = ['required', 'numeric', 'min:1', 'max:5'];
+                        }                    
+                    }
+                }
 
-                            if($item->is_clinic) {
-                                $review->clinic_id = $item->id;
-                                if(!empty(Request::input( 'clinic_dentists' ))) {
-                                    $review->dentist_id = Request::input( 'clinic_dentists' );
-                                }
-                            } else {
-                                $review->dentist_id = $item->id;
-                                if(!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') != 'own') {
-                                    $review->clinic_id = Request::input( 'dentist_clinics' );
-                                } else if (!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') == 'own') {
-                                    $review->team_own_practice = true;
-                                }
-                            }
-                        }
+                $validator = Validator::make(Request::all(), $validator_arr);
 
-                        $review->rating = 0;
-                        $review->title = strip_tags(Request::input( 'title' ));
-                        $review->answer = strip_tags(Request::input( 'answer' ));
-                        $review->youtube_id = strip_tags(Request::input( 'youtube_id' ));
-                        $review->verified = !empty($isTrusted);
-                        $review->status = 'pending';
-                        $review->secret_id = null;
-                        $review->treatments = Request::input( 'treatments' );
-                        $review->save();
+                if ($validator->fails()) {
 
-                        $total = 0;
-                        $answer_rates = [];
-                        $answer_three_qs_rates = [];
-                        $crypto_data = [];
-                        $crypto_data['answer'] = strip_tags(Request::input( 'answer' ));
-                        foreach ($questions as $question) {
+                    $msg = $validator->getMessageBag()->toArray();
+                    $ret['messages'] = [];
+                    foreach ($msg as $field => $errors) {
+                        $ret['messages'][$field] = implode(', ', $errors);
+                    }           
 
-                            if ($question->id == 4 || $question->id == 6 || $question->id == 7) {
-                                $answer_three_qs_rates[$question->id] = 0;
-                                $options_three = json_decode($question['options'], true);
+                    return Response::json( $ret );
+                } else {
 
-                                foreach ($options_three as $i => $n) {
-                                    $re = Request::input( 'option.'.$question->id.'.'.$i );
-                                    $answer_three_qs_rates[$question->id] += $re;
-                                }
+                    $real_text = strip_tags(Request::input( 'answer' ));
+                    $real_text_words = explode(' ', $real_text);
+                    if( empty(Request::input( 'youtube_id' )) && (mb_strlen($real_text)<50 || count($real_text_words)<10) ) {
+                        $ret['short_text'] = true;
+                        return Response::json( $ret );
 
-                                $answer_three_qs_rates[$question->id] /= count($options_three);
-                            }
+                    }
 
-                            $crypto_data['question-'.$question->id] = [];
-                            $answer_rates[$question->id] = 0;
-                            $option_answers = [];
-                            $options = json_decode($question['options'], true);
+                    $ret['valid_input'] = true;
 
-                            foreach ($options as $i => $nosense) {
-                                $r = Request::input( 'option.'.$question->id.'.'.$i );
-                                $option_answers[] = $r;
-                                $answer_rates[$question->id] += $r;
-                            }
+                    if( !$this->user->is_dentist) {
 
-                            $answer_rates[$question->id] /= count($options);
-                            
-                            if($old_review && $old_review->status=='pending') {
-                                $answer = ReviewAnswer::where([
-                                    ['review_id', $review->id],
-                                    ['question_id', $question->id],
-                                ])->first();
-                            } else {
-                                $answer = new ReviewAnswer;
-                            }
-                            $answer->review_id = $review->id;
-                            $answer->question_id = $question->id;
-                            $answer->options = json_encode($option_answers);
-                            $crypto_data['question-'.$question->id] = $option_answers;
-                            $answer->save();
-                        }
-
-                        $review->rating = array_sum($answer_rates) / (!empty(Request::input( 'dentist_clinics' )) && Request::input( 'dentist_clinics' ) == 'own' ? 3 : count($answer_rates));
-                        $review->team_doctor_rating = !empty(Request::input( 'dentist_clinics' )) || !empty(Request::input( 'clinic_dentists' )) ? array_sum($answer_three_qs_rates) / 3 : null;
-                        $review->save();
-
-                        if (!empty($review->dentist_id)) {
-                            $the_dentist = User::find($review->dentist_id);
-                            $the_dentist->recalculateRating();
-                            $the_dentist->hasimage_social = false;
-                            $the_dentist->save();
-                        }
-
-                        if (!empty($review->clinic_id)) {
-                            $the_clinic = User::find($review->clinic_id);
-                            $the_clinic->recalculateRating();
-                            $the_clinic->hasimage_social = false;
-                            $the_clinic->save();
-                        }
-                        
-                        //Send & confirm
-                        $is_video = $review->youtube_id ? '_video' : '';
-                        $amount = $review->verified ? Reward::getReward('review'.$is_video.'_trusted') : Reward::getReward('review'.$is_video);
-                        
-                        if(!$is_video && $review->verified) {
-                            $reward = new DcnReward();
-                            $reward->user_id = $this->user->id;
-                            $reward->platform = 'trp';
-                            $reward->reward = $amount;
-                            $reward->type = 'review';
-                            $reward->reference_id = $review->id;
+                        $old_review = $this->user->hasReviewTo($item->id);
+                        if( $this->user->loggedFromBadIp() ) {
+                            $ul = new UserLogin;
+                            $ul->user_id = $this->user->id;
+                            $ul->ip = User::getRealIp();
+                            $ul->platform = 'trp';
+                            $ul->country = \GeoIP::getLocation()->country;
 
                             $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
                             $dd = new DeviceDetector($userAgent);
                             $dd->parse();
 
                             if ($dd->isBot()) {
-                                // handle bots,spiders,crawlers,...
-                                $reward->device = $dd->getBot();
+                                $ul->device = $dd->getBot();
                             } else {
-                                $reward->device = $dd->getDeviceName();
-                                $reward->brand = $dd->getBrandName();
-                                $reward->model = $dd->getModel();
-                                $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                                $ul->device = $dd->getDeviceName();
+                                $ul->brand = $dd->getBrandName();
+                                $ul->model = $dd->getModel();
+                                $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
                             }
-                            $reward->save();                            
-                        }
-
-                        $review->status = 'accepted';
-                        $review->save();
-
-                        if(!$review->youtube_id) {
-                            $review->afterSubmitActions();
-                        }
-
-                        $invites = UserInvite::where('user_id', $item->id )->where('invited_id', $this->user->id)->where('review', 1)->whereNull('completed')->get();
-                        if (!empty($invites)) {
-                            foreach ($invites as $invite) {
-                                $invite->completed = true;
-                                $invite->save();
-                            }
-                        }
-
-                        if($this->patientSuspicious($this->user->id)) {
-
-                            $notifications = $this->user->website_notifications;
-
-                            if(!empty($notifications)) {
-                                
-                                if (($key = array_search('trp', $notifications)) !== false) {
-                                    unset($notifications[$key]);
-                                }
-
-                                $this->user->website_notifications = $notifications;
-                                $this->user->save();
-                            }
-
-                            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-                            $request_body = new \stdClass();
-                            $request_body->recipient_emails = [$this->user->email];
                             
-                            $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
-                            $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
+                            $ul->save();
+                            
+                            $u_id = $this->user->id;
+
+                            $action = new UserAction;
+                            $action->user_id = $u_id;
+                            $action->action = 'bad_ip';
+                            $action->reason = 'Automatically - Bad IP (Writing review)';
+                            $action->actioned_at = Carbon::now();
+                            $action->save();
+                            
+                            Auth::guard('web')->user()->logoutActions();
+                            Auth::guard('web')->user()->removeTokens();
+                            Auth::guard('web')->logout();
 
                             $ret['success'] = false;
-                            $ret['ban'] = true;
-                        }
+                            $ret['valid_input'] = false;
+                            $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id));
 
-                        $ret['success'] = true;
+                            $token = User::encrypt(session('login-logged-out'));
+                            $imgs_urls = [];
+                            foreach( config('platforms') as $k => $platform ) {
+                                if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
+                                    $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?logout-token='.urlencode($token);
+                                }
+                            }
+                            $imgs_urls[] = '//vox.dentacoin.com/custom-cookie?logout-token='.urlencode($token);
+
+                            $ret['imgs_urls'] = $imgs_urls;
+
+                            return Response::json( $ret );
+                        } else if( $this->user->cantSubmitReviewToSameDentist($item->id) ) {
+                            ; //dgd
+                        } else {
+
+                            if($old_review && $old_review->status=='pending') {
+                                $review = $old_review;
+                            } else {
+                                $review = new Review;
+                                $review->user_id = $this->user->id;
+                                $review->review_to_id = $item->id;
+
+                                if($item->is_clinic) {
+                                    $review->clinic_id = $item->id;
+                                    if(!empty(Request::input( 'clinic_dentists' ))) {
+                                        $review->dentist_id = Request::input( 'clinic_dentists' );
+                                    }
+                                } else {
+                                    $review->dentist_id = $item->id;
+                                    if(!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') != 'own') {
+                                        $review->clinic_id = Request::input( 'dentist_clinics' );
+                                    } else if (!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') == 'own') {
+                                        $review->team_own_practice = true;
+                                    }
+                                }
+                            }
+
+                            $review->rating = 0;
+                            $review->title = strip_tags(Request::input( 'title' ));
+                            $review->answer = strip_tags(Request::input( 'answer' ));
+                            $review->youtube_id = strip_tags(Request::input( 'youtube_id' ));
+                            $review->verified = !empty($isTrusted);
+                            $review->status = 'pending';
+                            $review->secret_id = null;
+                            $review->treatments = Request::input( 'treatments' );
+                            $review->save();
+
+                            $total = 0;
+                            $answer_rates = [];
+                            $answer_three_qs_rates = [];
+                            $crypto_data = [];
+                            $crypto_data['answer'] = strip_tags(Request::input( 'answer' ));
+                            foreach ($questions as $question) {
+
+                                if ($question->id == 4 || $question->id == 6 || $question->id == 7) {
+                                    $answer_three_qs_rates[$question->id] = 0;
+                                    $options_three = json_decode($question['options'], true);
+
+                                    foreach ($options_three as $i => $n) {
+                                        $re = Request::input( 'option.'.$question->id.'.'.$i );
+                                        $answer_three_qs_rates[$question->id] += $re;
+                                    }
+
+                                    $answer_three_qs_rates[$question->id] /= count($options_three);
+                                }
+
+                                $crypto_data['question-'.$question->id] = [];
+                                $answer_rates[$question->id] = 0;
+                                $option_answers = [];
+                                $options = json_decode($question['options'], true);
+
+                                foreach ($options as $i => $nosense) {
+                                    $r = Request::input( 'option.'.$question->id.'.'.$i );
+                                    $option_answers[] = $r;
+                                    $answer_rates[$question->id] += $r;
+                                }
+
+                                $answer_rates[$question->id] /= count($options);
+                                
+                                if($old_review && $old_review->status=='pending') {
+                                    $answer = ReviewAnswer::where([
+                                        ['review_id', $review->id],
+                                        ['question_id', $question->id],
+                                    ])->first();
+                                } else {
+                                    $answer = new ReviewAnswer;
+                                }
+                                $answer->review_id = $review->id;
+                                $answer->question_id = $question->id;
+                                $answer->options = json_encode($option_answers);
+                                $crypto_data['question-'.$question->id] = $option_answers;
+                                $answer->save();
+                            }
+
+                            $review->rating = array_sum($answer_rates) / (!empty(Request::input( 'dentist_clinics' )) && Request::input( 'dentist_clinics' ) == 'own' ? 3 : count($answer_rates));
+                            $review->team_doctor_rating = !empty(Request::input( 'dentist_clinics' )) || !empty(Request::input( 'clinic_dentists' )) ? array_sum($answer_three_qs_rates) / 3 : null;
+                            $review->save();
+
+                            if (!empty($review->dentist_id)) {
+                                $the_dentist = User::find($review->dentist_id);
+                                $the_dentist->recalculateRating();
+                                $the_dentist->hasimage_social = false;
+                                $the_dentist->save();
+                            }
+
+                            if (!empty($review->clinic_id)) {
+                                $the_clinic = User::find($review->clinic_id);
+                                $the_clinic->recalculateRating();
+                                $the_clinic->hasimage_social = false;
+                                $the_clinic->save();
+                            }
+                            
+                            //Send & confirm
+                            $is_video = $review->youtube_id ? '_video' : '';
+                            $amount = $review->verified ? Reward::getReward('review'.$is_video.'_trusted') : Reward::getReward('review'.$is_video);
+                            
+                            if(!$is_video && $review->verified) {
+                                $reward = new DcnReward();
+                                $reward->user_id = $this->user->id;
+                                $reward->platform = 'trp';
+                                $reward->reward = $amount;
+                                $reward->type = 'review';
+                                $reward->reference_id = $review->id;
+
+                                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                                $dd = new DeviceDetector($userAgent);
+                                $dd->parse();
+
+                                if ($dd->isBot()) {
+                                    // handle bots,spiders,crawlers,...
+                                    $reward->device = $dd->getBot();
+                                } else {
+                                    $reward->device = $dd->getDeviceName();
+                                    $reward->brand = $dd->getBrandName();
+                                    $reward->model = $dd->getModel();
+                                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                                }
+                                $reward->save();                            
+                            }
+
+                            $review->status = 'accepted';
+                            $review->save();
+
+                            if(!$review->youtube_id) {
+                                $review->afterSubmitActions();
+                            }
+
+                            $invites = UserInvite::where('user_id', $item->id )->where('invited_id', $this->user->id)->where('review', 1)->whereNull('completed')->get();
+                            if (!empty($invites)) {
+                                foreach ($invites as $invite) {
+                                    $invite->completed = true;
+                                    $invite->save();
+                                }
+                            }
+
+                            if($this->patientSuspicious($this->user->id)) {
+
+                                $notifications = $this->user->website_notifications;
+
+                                if(!empty($notifications)) {
+                                    
+                                    if (($key = array_search('trp', $notifications)) !== false) {
+                                        unset($notifications[$key]);
+                                    }
+
+                                    $this->user->website_notifications = $notifications;
+                                    $this->user->save();
+                                }
+
+                                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+                                $request_body = new \stdClass();
+                                $request_body->recipient_emails = [$this->user->email];
+                                
+                                $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+                                $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
+
+                                $ret['success'] = false;
+                                $ret['ban'] = true;
+                            }
+
+                            $ret['success'] = true;
+                        }
                     }
                 }
             }
