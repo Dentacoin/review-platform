@@ -154,6 +154,7 @@ return [
                 'api-dev' => 'api-dev',
                 'api_civic' => 'api_civic',
                 'api_withdraw' => 'api_withdraw',
+                'api-ban-appeals' => 'api-ban-appeals',
             ),
         ),
     )
