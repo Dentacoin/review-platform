@@ -21,6 +21,7 @@ use App\Models\UserAction;
 use App\Models\CronjobRun;
 use App\Models\VoxAnswer;
 use App\Models\UserLogin;
+use App\Models\DcnReward;
 use App\Models\GasPrice;
 use App\Models\Article;
 use App\Models\Country;
