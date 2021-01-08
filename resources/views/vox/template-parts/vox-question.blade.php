@@ -328,27 +328,29 @@
 		</div>
 		<div class="answers {{ $question->allAnswersHaveImages() ? 'question-pictures' : '' }}">
 			@foreach($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $key => $answer)
-				<label class="answer answer no-mobile-tooltips {!! mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}" data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}"  {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!} 
-				{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $key ).'"' : '' !!}>
-					<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
+				@if(empty($answers_shown) || (!empty($answers_shown) && in_array($loop->iteration, $answers_shown)))
+					<label class="answer answer no-mobile-tooltips {!! mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}" data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}"  {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!} 
+					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $key ).'"' : '' !!}>
+						<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
 
-					@if($question->allAnswersHaveImages() && !empty($question->getAnswerImageUrl(false, $key)))
-						<div class="answer-image" style="background-image: url({{ $question->getAnswerImageUrl(true, $key) }})">
+						@if($question->allAnswersHaveImages() && !empty($question->getAnswerImageUrl(false, $key)))
+							<div class="answer-image" style="background-image: url({{ $question->getAnswerImageUrl(true, $key) }})">
 
-							<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $key }}" href="{{ $question->getAnswerImageUrl(false, $key) }}">
-								<img src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
-							</a>
-						</div>
-					@endif
+								<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $key }}" href="{{ $question->getAnswerImageUrl(false, $key) }}">
+									<img src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
+								</a>
+							</div>
+						@endif
 
-					{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
+						{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
 
-					@if(!empty($question->hasAnswerTooltip($answer, $question)))
-						<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
-						</div>
-					@endif
-					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? '<img src="'.$question->getAnswerImageUrl(false, $key).'" style="display: none !important;" />' : '' !!}
-				</label>
+						@if(!empty($question->hasAnswerTooltip($answer, $question)))
+							<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
+							</div>
+						@endif
+						{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? '<img src="'.$question->getAnswerImageUrl(false, $key).'" style="display: none !important;" />' : '' !!}
+					</label>
+				@endif
 			@endforeach
 		</div>
 	</div>
