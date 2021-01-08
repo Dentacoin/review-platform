@@ -50,9 +50,6 @@
 					<p class="questionnaire-description tac" {!! !empty($answered) && count($answered)>1 ? 'style="display: none;"' : '' !!} >
 						{{ $vox->description }}
 					</p>
-					<p class="demographic-questionnaire-description tac" style="display: none;" >
-						{{ trans('vox.common.demographics') }}
-					</p>
 
 					<div class="questions-dots">
 						<div class="dot" id="current-question-bar" style="width: 0%;"></div>

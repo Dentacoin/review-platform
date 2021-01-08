@@ -579,6 +579,17 @@
                                     ])
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label class="col-md-9 control-label"></label>
+                                <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Double rewards access</label>
+                                <div class="col-md-1" style="padding-left: 0px;">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'vip_access',
+                                        'info' => $fields['vip_access']
+                                    ])
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group avatar-group">
@@ -728,6 +739,12 @@
                                                 Delete
                                             </a>
                                         @endif
+
+                                        <!-- @if($item->id != 3)
+                                            <a class="btn btn-sm btn-danger form-control user-b" href="{{ url('cms/users/delete-database/'.$item->id) }}" style="margin-top: 10px;background: black;">
+                                                Delete from database
+                                            </a>
+                                        @endif -->
                                     @endif
                                 </div>
                             </div>

@@ -258,8 +258,7 @@ class VoxController extends FrontController {
 
 		if (!$testmode) {
 
-			$has_started_the_survey = VoxAnswer::where('vox_id', $vox->id)->where('user_id', $this->user->id)->first();
-			if ($this->user->isVoxRestricted($vox) || (!empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($this->user->country_id, $vox->users_percentage) && $vox->users_percentage[$this->user->country_id] >= $vox->country_percentage && empty($has_started_the_survey) && (!empty($vox->exclude_countries_ids) && !in_array($this->user->country_id, $vox->exclude_countries_ids) || empty($vox->exclude_countries_ids)))) {
+			if ($this->user->isVoxRestricted($vox) || $vox->voxCountryRestricted($this->user)) {
 				$related_voxes = [];
 				$related_voxes_ids = [];
 				if ($vox->related->isNotEmpty()) {
@@ -1559,18 +1558,24 @@ class VoxController extends FrontController {
 							}
 
 							if(!empty($question_id) && is_numeric($question_id)) {
+
 								$next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
 								if(!empty($next_question->prev_q_id_answers)) {
 									$prev_q = VoxQuestion::find($next_question->prev_q_id_answers);
 
 									$prev_answers = VoxAnswer::where('vox_id', $vox_id)->where('question_id', $prev_q->id)->where('user_id', $this->user->id)->get();
 									if($prev_answers->count() == 1) {
-										$prev_q_answers_text = $prev_q->vox_scale_id && !empty($scales[$prev_q->vox_scale_id]) ? explode(',', $scales[$prev_q->vox_scale_id]->answers) :  json_decode($prev_q->answers, true);
 
-										if(mb_strpos($prev_q_answers_text[$prev_answers->pluck('answer')->toArray()[0] - 1], '!') !== false) {
-											return 'skip-dvq:'.$next_question->id;
+										if($prev_answers->first()->answer != 0) {											
+											$prev_q_answers_text = $prev_q->vox_scale_id && !empty($scales[$prev_q->vox_scale_id]) ? explode(',', $scales[$prev_q->vox_scale_id]->answers) :  json_decode($prev_q->answers, true);
+
+											if(mb_strpos($prev_q_answers_text[$prev_answers->pluck('answer')->toArray()[0] - 1], '!') !== false) {
+												return 'skip-dvq:'.$next_question->id;
+											} else {
+												return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+											}
 										} else {
-											return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+											return 'skip-dvq:'.$next_question->id;
 										}
 
 									} else {
@@ -1617,16 +1622,37 @@ class VoxController extends FrontController {
 				                            }
 
 				                            if(mb_strpos($triggerAnswers, '-')!==false) {
-				                                list($from, $to) = explode('-', $triggerAnswers);
+				                            	if(mb_strpos($triggerAnswers, ',')!==false) {
 
-				                                $allowedAnswers = [];
-				                                for ($i=$from; $i <= $to ; $i++) { 
-				                                    $allowedAnswers[] = $i;
-				                                }
+					                                $allowedAnswers = [];
+
+					                                $answersArr = explode(',', $triggerAnswers);
+
+					                                foreach ($answersArr as $ar) {
+					                                	if(mb_strpos($ar, '-')!==false) {
+						                            		list($from, $to) = explode('-', $ar);
+
+							                                for ($i=$from; $i <= $to ; $i++) { 
+							                                    $allowedAnswers[] = $i;
+							                                }
+					                                	} else {
+					                                		$allowedAnswers[] = intval($ar);
+					                                	}
+					                                }
+				                            	} else {				                            		
+					                                list($from, $to) = explode('-', $triggerAnswers);
+
+					                                $allowedAnswers = [];
+					                                for ($i=$from; $i <= $to ; $i++) { 
+					                                    $allowedAnswers[] = $i;
+					                                }
+				                            	}
 
 				                            } else {
 				                                $allowedAnswers = explode(',', $triggerAnswers);
 				                            }
+
+				                            
 
 				                            if(!empty($allowedAnswers)) {
 				                            	$givenAnswers = [];
@@ -1640,7 +1666,10 @@ class VoxController extends FrontController {
 				                            		$givenAnswers[] = $this->user->$trigger_question;
 				                            	}
 
+				                            	// echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($allowedAnswers, true).' / Answer: '.var_export($givenAnswers, true).' / Inverted logic: '.($invert_trigger_logic ? 'da' : 'ne').'<br/>';
+
 				                            	foreach ($givenAnswers as $ga) {
+				                            		// echo '<br/>1';
 				                            		if(str_contains($ga,',') !== false) {
 					                                    $given_answers_array = explode(',', $ga);
 
@@ -1653,21 +1682,25 @@ class VoxController extends FrontController {
 					                                    }
 
 					                                    if($invert_trigger_logic) {
+				                            		// echo '<br/>2';
 					                                        if(!$found) {
-					                                            $triggerSuccess[] = true;
+					                                            $triggerSuccess[$ga] = true;
 					                                        } else {
-					                                            $triggerSuccess[] = false;
+					                                            $triggerSuccess[$ga] = false;
 					                                        }
 					                                    } else {
+				                            		// echo '<br/>3';
 
 					                                        if($found) {
-					                                            $triggerSuccess[] = true;
+					                                            $triggerSuccess[$ga] = true;
 					                                        } else {
-					                                            $triggerSuccess[] = false;
+					                                            $triggerSuccess[$ga] = false;
 					                                        }
 					                                    }
 					                                } else {
+				                            		// echo '<br/>4';
 					                                    if(strpos($allowedAnswers[0], '>') !== false) {
+				                            		// echo '<br/>5';
 					                                        $trg_ans = substr($allowedAnswers[0], 1);
 
 					                                        if($ga > intval($trg_ans)) {
@@ -1676,6 +1709,7 @@ class VoxController extends FrontController {
 					                                            $triggerSuccess[] = false;
 					                                        }
 					                                    } else if(strpos($allowedAnswers[0], '<') !== false) {
+				                            		// echo '<br/>6';
 					                                        $trg_ans = substr($allowedAnswers[0], 1);
 
 					                                        if(intval($ga) < intval($trg_ans)) {
@@ -1684,24 +1718,54 @@ class VoxController extends FrontController {
 					                                            $triggerSuccess[] = false;
 					                                        }
 					                                    } else {
+				                            		// echo '<br/>7';
 					                                        if($invert_trigger_logic) {
+				                            		// echo '<br/>8';
 					                                            if( !empty($ga) && !in_array($ga, $allowedAnswers) ) {
-					                                                $triggerSuccess[] = true;
+					                                                $triggerSuccess[$ga] = true;
 					                                            } else {
-					                                                $triggerSuccess[] = false;
+					                                                $triggerSuccess[$ga] = false;
 					                                            }
 					                                        } else {
+				                            		// echo '<br/>9';
+					                                        	// echo in_array($ga, $allowedAnswers) ? '<br/>in _array' : '<br/>not_in array';
 					                                            if( !empty($ga) && in_array($ga, $allowedAnswers) ) {
-					                                                $triggerSuccess[] = true;
+					                                                $triggerSuccess[$ga] = true;
 					                                            } else {
-					                                                $triggerSuccess[] = false;
+					                                                $triggerSuccess[$ga] = false;
 					                                            }
 					                                        }
 					                                    }
 				                            		}
+
+				                            		// if($next_question->id == 15919) {
+						                            // 	dd($ga, $triggerSuccess, json_encode($allowedAnswers) );
+						                            // }
 				                            	}
 				                            }
+
+
+				                            // if($question_id == 15919) {
+				                            // 	dd($allowedAnswers);
+				                            // }
+
+				                            // if($question_id == 15919) {
+				                            // 	dd($triggerSuccess);
+				                            // }
 					                    }
+
+				                            // dd('fff');
+
+
+				                            // if($question_id == 15920) {
+				                            	// dd($triggerSuccess);
+				                            // }
+
+
+
+				                            // if($question_id == 15919) {
+				                            	// dd($triggerSuccess);
+				                            // }
 
 					                    if( $next_question->trigger_type == 'or' ) { // ANY of the conditions should be met (A or B or C)
 					                        if( !in_array(true, $triggerSuccess) ) {
@@ -1712,6 +1776,8 @@ class VoxController extends FrontController {
 					                            return 'skip-dvq:'.$next_question->id;
 					                        }
 					                    }
+
+
 					                }
 								}
 

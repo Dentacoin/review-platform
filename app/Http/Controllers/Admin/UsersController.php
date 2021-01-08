@@ -229,7 +229,9 @@ class UsersController extends AdminController {
             'ip_protected' => [
                 'type' => 'bool',
             ],
-            
+            'vip_access' => [
+                'type' => 'bool',
+            ],            
     	];
     }
 
@@ -883,6 +885,16 @@ class UsersController extends AdminController {
             return redirect('cms/'.$this->current_page);
         }
     }
+
+
+    // public function deleteDatabase( $id ) {
+    //     $item = User::find($id);
+
+    //     $item->forceDelete();
+
+    //     $this->request->session()->flash('success-message', 'Deleted' );
+    //     return redirect('cms/users');
+    // }
 
     public function massdelete(  ) {
         if( Request::input('ids') ) {
@@ -1637,6 +1649,16 @@ class UsersController extends AdminController {
                                     
                                     $item->sendGridTemplate(67, null, 'trp');
                                 }
+                            }
+                            $item->$key = $this->request->input($key);
+
+                        } else if($key=='vip_access') {
+                            if($this->request->input($key) == 1) {
+
+                                $item->sendGridTemplate(118, null, 'vox');
+                            } else {
+
+                                $item->sendGridTemplate(119, null, 'vox');
                             }
                             $item->$key = $this->request->input($key);
 

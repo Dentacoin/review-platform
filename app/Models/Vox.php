@@ -5,19 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use Image;
+use WebPConvert\WebPConvert;
 
-use DB;
-use App;
-use Carbon\Carbon;
 use App\Models\VoxToCategory;
-use App\Models\Reward;
-use App\Models\DcnReward;
-use App\Models\VoxBadge;
 use App\Models\VoxRelated;
 use App\Models\VoxAnswer;
+use App\Models\DcnReward;
+use App\Models\VoxBadge;
+use App\Models\Reward;
+use App\Models\User;
 
-use WebPConvert\WebPConvert;
+use Carbon\Carbon;
+
+use Image;
+use App;
+use DB;
 
 class Vox extends Model {
     
@@ -235,7 +237,14 @@ class Vox extends Model {
             $how_many_questions = VoxAnswer::where('vox_id', $this->id)->where('user_id', $user_id)->where('answer', '!=' , 0)->groupBy('question_id')->get()->count();
             $reward_per_question = $this->getRewardPerQuestion()->dcn;
 
-            return $how_many_questions * $reward_per_question;
+            $double_reward = 1;
+
+            $user = User::find($user_id);
+            if(!empty($user) && !empty($user->vip_access)) {
+                $double_reward = 2;
+            }
+
+            return $how_many_questions * $reward_per_question * $double_reward;
         }        
     }
 
@@ -735,6 +744,18 @@ class Vox extends Model {
         $this->save();
     }
 
+    public function voxCountryRestricted($user) {
+
+        if(!empty($user->country_id) && empty($user->vip_access)) {
+
+            $has_started_the_survey = VoxAnswer::where('vox_id', $this->id)->where('user_id', $user->id)->first();
+
+            return !empty($this->country_percentage) && !empty($this->users_percentage) && array_key_exists($user->country_id, $this->users_percentage) && $this->users_percentage[$user->country_id] >= $this->country_percentage && empty($has_started_the_survey) && ( (!empty($this->exclude_countries_ids) && !in_array($user->country_id, $this->exclude_countries_ids)) || empty($this->exclude_countries_ids));
+        } else {
+            return false;
+        }
+    }
+
     public static function getBirthyearOptions() {
         $ret = '';        
 
@@ -761,6 +782,25 @@ class Vox extends Model {
         }
 
         return $ret;
+    }
+
+    public function convertForResponse() {
+        $arr = $this->toArray();
+        $arr['categories'] = [];
+        if($this->categories->isNotEmpty()) {
+            foreach ($this->categories as $cat) {
+                $arr['categories'][$cat->category->id] = $cat->category->name;
+            }
+        }
+        $arr['avatar'] = $this->getImageUrl();
+        $arr['thumb'] = $this->getImageUrl(true);
+        $arr['rewardTotal'] = $this->getRewardTotal();
+        $arr['rewardSingle'] = $this->getRewardPerQuestion()->dcn;
+        $arr['duration'] = $this->formatDuration();
+
+        
+
+        return $arr;
     }
 
 }

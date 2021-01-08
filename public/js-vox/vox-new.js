@@ -2,13 +2,41 @@ var sendReCaptcha;
 var recaptchaCode = null;
 var sendValidation;
 var preloadImages;
-var checkFilledDots;
 var skip = 0;
 var vox_id;
 var question_id;
 var handleSwiper;
 
 $(document).ready(function(){
+
+    var checkFilledDots = function( event, index) {
+        var goods = new Array;
+        var flickity = $('.flickity:visible');
+        var missing = false;
+        if( flickity.length ) {
+            flickity.find('.answer-radios-group').each( function() {
+                if( $(this).find('.answer-radio.active-label').length ) {
+                    goods.push(true);
+                } else {
+                    goods.push(false);
+                    missing = true;
+                }
+            } );
+            var i=0;
+            flickity.find('.flickity-page-dots .dot').each( function() {
+                if(goods[i]) {
+                    $(this).addClass('filled');
+                } else {
+                    $(this).removeClass('filled');
+                }
+                i++;
+            } );
+
+            if(!missing) {
+                $('.question-group:visible .next-answer').show().trigger('click');
+            }
+        }
+    }
     
     sendValidation = function() {
         if(recaptchaCode) { // && $('#iagree').is(':checked')
@@ -228,14 +256,6 @@ $(document).ready(function(){
                 while (divs.length) {
                     parent.prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
                 }
-            }
-        }
-
-        if($('.demographic-questionnaire-description').length) {
-            if( $('.question-group').hasClass('question-group-details') || $('.question-group').hasClass('location-question') || ($('.question-group').hasClass('birthyear-question') && !$('.question-group').next().attr('cross-check-correct')) ) {
-                $('.demographic-questionnaire-description').show();
-            } else {
-                $('.demographic-questionnaire-description').hide();
             }
         }
     }
@@ -582,6 +602,7 @@ $(document).ready(function(){
         $('#header-balance').html(data.balance);
 
         VoxTest.handleNextQuestion();
+        $('.coins-test').html( (parseInt($('.coins-test').html()) + vox.reward_single) * parseInt(user_vip_access ));
         $("#question-meta").hide();
 
         if ($(window).outerWidth() <= 768) {
@@ -595,6 +616,7 @@ $(document).ready(function(){
         if (($('.swiper-container').length || $('.swipe-cont').length) && typeof Swiper !== 'undefined' ) {
             handleSwiper();
         }
+
 
         $('html, body').animate({
             scrollTop: $('body').offset().top

@@ -145,6 +145,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'haswebp',
         'ip_protected',
         'is_logout',
+        'vip_access',
     ];
     protected $dates = [
         'verified_on',
@@ -658,7 +659,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         if (empty($is_skipped) && empty($item->unsubscribed) && $to_be_send) {
-
             $sender = $item->platform=='vox' ? config('mail.from.address-vox') : ($item->platform == 'trp' ? config('mail.from.address') : config('mail.from.address-dentacoin'));
             $sender_name = $item->platform=='vox' ? config('mail.from.name-vox') : ($item->platform == 'trp' ? config('mail.from.name') : config('mail.from.name-dentacoin'));
             //$sender_name = config('platforms.'.$item->platform.'.name') ?? config('mail.from.name');
@@ -746,7 +746,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
             $sendgrid->send($email);
 
-
             $item->sent = 1;
             $item->save();
 
@@ -775,6 +774,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         if(!self::domain_exists($email)) {
+            return false;
+        }
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
@@ -2340,7 +2343,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $is_restricted = true;
         }
 
-        if (!empty($this->country_id)) {
+        if (!empty($this->country_id) && empty($this->vip_access)) {
             if(!empty($vox->exclude_countries_ids) && in_array($this->country_id, $vox->exclude_countries_ids) ) {
             } else {
 
@@ -2475,7 +2478,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function notRestrictedVoxesList($voxList) {
 
-        if(!empty($this->country_id)) {
+        if(!empty($this->country_id) && empty($this->vip_access)) {
             $user = $this;
             $restricted_voxes = $voxList->filter(function($vox) use ($user) {
                 return ((!empty($vox->exclude_countries_ids) && !in_array($user->country_id, $vox->exclude_countries_ids)) || empty($vox->exclude_countries_ids)) && !empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($user->country_id, $vox->users_percentage) && $vox->users_percentage[$user->country_id] >= $vox->country_percentage;

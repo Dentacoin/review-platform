@@ -68,7 +68,7 @@ class Email extends Model
 	        }
 	    }
 
-        if (empty($this->unsubscribed)) {
+        if (empty($this->unsubscribed) && filter_var($this->user->email, FILTER_VALIDATE_EMAIL)) {
 			list($content, $title, $subtitle, $subject) = $this->prepareContent();
 
 			$platform = $this->template_id==20 ? 'dentacoin' : $this->platform;

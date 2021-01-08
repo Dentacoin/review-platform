@@ -483,6 +483,7 @@
         	var lang = '{{ App::getLocale() }}';
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         	var user_type = '{{ !empty($user) ? ($user->is_dentist ? 'dentist' : 'patient') : 'null' }}';
+        	var user_vip_access = '{{ !empty($user) ? ($user->vip_access ? '2' : '1') : '1' }}';
         	var featured_coin_text = '{!! nl2br( trans('vox.common.featured-tooltip') ) !!}';
         </script>
         <!-- endjs -->
