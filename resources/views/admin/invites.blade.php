@@ -65,6 +65,7 @@
                                 <th>Invited email</th>
                                 <th>Invited name</th>
                                 <th>Registered from invite</th>
+                                <th>Ask for verification</th>
                                 <th>Platform</th>
                                 <th>Rewarded</th>
                                 <th>Suspicious email</th>
@@ -88,6 +89,9 @@
                                     </td>
                                     <td>
                                         {!! $invite->invited_id ? '<a href="'.url('cms/users/edit/'.$invite->invited_id).'">'.(!empty($invite->invited) ? $invite->invited->name : 'unknown').'</a>' : '-' !!}
+                                    </td>
+                                    <td>
+                                        {!! $invite->invited_id ? (App\Models\UserAsk::where('user_id', $invite->invited_id)->where('dentist_id', $invite->user_id)->where('status', 'yes')->first() ? '🗸' : '') : '' !!}
                                     </td>
                                     <td>
                                         {!! $invite->platform ? config('platforms')[$invite->platform]['name'] : '' !!}
