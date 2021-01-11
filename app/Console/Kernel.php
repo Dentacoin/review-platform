@@ -15,6 +15,7 @@ use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
 use App\Models\ScrapeDentist;
 use App\Models\AnonymousUser;
+use App\Models\SenderBalance;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -1961,6 +1962,32 @@ NOT SEND TRANSACTIONS
             echo 'Transaction scammers by day - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->dailyAt('04:00');
+
+
+
+        $schedule->call(function () {
+            echo 'Sender balance - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            try {
+                $curl = file_get_contents('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0x10714e939fa7b0232de065003cd827fd4e28e5de&apikey='.env('ETHERSCAN_API'));
+            } catch (\Exception $e) {
+                $curl = false;
+            }
+            if(!empty($curl)) {
+                $curl = json_decode($curl, true);
+                if($curl['status']) {
+                    if(!empty($curl['result'])) {
+                        $sender_balance = SenderBalance::find(1);
+                        $sender_balance->balance = $curl['result'];
+                        $sender_balance->save();
+                    }
+                }
+            }
+
+            echo 'Sender balance - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+        })->cron('*/1 * * * *');
+
 
 
         $schedule->call(function () {
