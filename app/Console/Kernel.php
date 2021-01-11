@@ -470,7 +470,7 @@ NOT SEND TRANSACTIONS
             $unconfirmed_trans = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->count();
             if($unconfirmed_trans < 30) {
 
-                $take_count = (30 - $unconfirmed_trans) > 10 ? 10 : $take_count;
+                $take_count = (30 - $unconfirmed_trans) > 10 ? 10 : (30 - $unconfirmed_trans);
 
                 $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'desc')->take($take_count)->get(); //
 
