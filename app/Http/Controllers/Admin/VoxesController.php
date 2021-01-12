@@ -828,6 +828,10 @@ class VoxesController extends AdminController
 
     private function saveOrUpdate($item) {
 
+        ini_set('max_execution_time', 0);
+        set_time_limit(0);
+        ini_set('memory_limit', '4095M');
+
         if ($this->request->input('type') == 'normal' && $item->type == 'hidden') {
             $curl = curl_init();
             curl_setopt_array($curl, array(
