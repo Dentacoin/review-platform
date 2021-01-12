@@ -1653,14 +1653,18 @@ class UsersController extends AdminController {
                             $item->$key = $this->request->input($key);
 
                         } else if($key=='vip_access') {
-                            if($this->request->input($key) == 1) {
+                            
+                            if($item->$key!=$this->request->input($key)) {
 
-                                $item->sendGridTemplate(118, null, 'vox');
-                            } else {
+                                if($this->request->input($key) == 1) {
 
-                                $item->sendGridTemplate(119, null, 'vox');
+                                    $item->sendGridTemplate(118, null, 'vox');
+                                } else {
+
+                                    $item->sendGridTemplate(119, null, 'vox');
+                                }
+                                $item->$key = $this->request->input($key);
                             }
-                            $item->$key = $this->request->input($key);
 
                         } else if($value['type']=='password') {
                             if( $this->request->input($key) ) {
