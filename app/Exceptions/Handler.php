@@ -9,9 +9,6 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-// use DeviceDetector\DeviceDetector;
-// use DeviceDetector\Parser\Device\DeviceParserAbstract;
-
 class Handler extends ExceptionHandler
 {
     /**
@@ -45,16 +42,6 @@ class Handler extends ExceptionHandler
             Log::error("GET: " . json_encode($_GET));
             Log::error("POST: " . json_encode($_POST));
             Log::error("EXCEPTION TYPE: " . get_class($exception));
-
-            // $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-            // $dd = new DeviceDetector($userAgent);
-            // $dd->parse();
-
-            // if ($dd->isBot()) {
-            //     Log::error("BOT: " . $dd->getBot());
-            // } else {
-            //     Log::error("NOT BOT: " . $dd->getDeviceName());
-            // }
         }
 
         parent::report($exception);
