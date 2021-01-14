@@ -460,33 +460,49 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            $cron_running = CronjobRun::first();
+
+            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
+
+                if(!empty($cron_running)) {
+                    CronjobRun::destroy($cron_running->id);
+                }
+
+                $cronjob_stars = new CronjobRun;
+                $cronjob_stars->started_at = Carbon::now();
+                $cronjob_stars->save();
 
                 echo '
-NOT SEND TRANSACTIONS
+NOT SENT TRANSACTIONS
 
 ========================
 
 ';
-            $unconfirmed_trans = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->count();
-            if($unconfirmed_trans < 30) {
+                $unconfirmed_trans = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->count();
+                if($unconfirmed_trans < 30) {
 
-                $take_count = (30 - $unconfirmed_trans) > 10 ? 10 : (30 - $unconfirmed_trans);
+                    $take_count = (30 - $unconfirmed_trans) > 10 ? 10 : (30 - $unconfirmed_trans);
 
-                $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'desc')->take($take_count)->get(); //
+                    $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'desc')->take($take_count)->get(); //
 
-                if($transactions->isNotEmpty()) {
+                    if($transactions->isNotEmpty()) {
 
-                    foreach ($transactions as $trans) {
-                        $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || ';
-                        echo $log.PHP_EOL;
+                        foreach ($transactions as $trans) {
+                            $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || ';
+                            echo $log.PHP_EOL;
 
-                        if(!User::isGasExpensive()) {
+                            if(!User::isGasExpensive()) {
 
-                            Dcn::retry($trans);
-                            echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
+                                Dcn::retry($trans);
+                                echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
+                            }
                         }
                     }
                 }
+
+                CronjobRun::destroy($cronjob_stars->id);
+            } else {
+                echo 'Not sent transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
 
         })->cron("0 * * * *");
