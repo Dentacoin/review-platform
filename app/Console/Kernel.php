@@ -1992,7 +1992,7 @@ NOT SENT TRANSACTIONS
             if(!empty($curl)) {
                 $curl = json_decode($curl, true);
                 if($curl['status']) {
-                    if(!empty($curl['result'])) {
+                    if(!empty($curl['result']) || $curl['result'] == 0) {
                         $sender_balance = SenderBalance::find(1);
                         $sender_balance->balance = $curl['result'];
                         $sender_balance->save();
