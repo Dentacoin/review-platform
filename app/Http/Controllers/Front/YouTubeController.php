@@ -33,6 +33,7 @@ use App\Models\Poll;
 use App\Models\Vox;
 use App\Models\Dcn;
 use App\Models\InvalidEmail;
+use App\Models\SenderBalance;
 
 
 
@@ -50,29 +51,11 @@ class YouTubeController extends FrontController {
      * recover token from admin for youtube video reviews
      */
     public function test() {
-
+        
         if(!empty($this->admin)) {
 
-            // ini_set('max_execution_time', 0);
-            // set_time_limit(0);
-            // ini_set('memory_limit','1024M');
-
-            // $users = User::withTrashed()->where('id', '>=', 100000)->get();
-
-            // $ids = [];
-            // foreach($users as $user) {
-            //     if(preg_match('/[^A-Za-z0-9._-]/', explode('@', $user->email)[0])) {
-            //         $inv_email = new InvalidEmail;
-            //         $inv_email->user_id = $user->id;
-            //         $inv_email->email = $user->email;
-            //         $inv_email->save();
-
-            //         $ids[] = $user->id;
-            //     }
-            // }
-
-            // dd($ids);
-
+            $trans = DcnTransaction::find(99235);
+            Dcn::retry($trans);
 
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
