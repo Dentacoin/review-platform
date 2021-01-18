@@ -2002,7 +2002,7 @@ NOT SENT TRANSACTIONS
 
             echo 'Sender balance - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron('*/1 * * * *');
+        })->everyMinute();
 
 
 
