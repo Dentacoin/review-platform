@@ -54,9 +54,6 @@ class YouTubeController extends FrontController {
         
         if(!empty($this->admin)) {
 
-            $trans = DcnTransaction::find(99235);
-            Dcn::retry($trans);
-
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
