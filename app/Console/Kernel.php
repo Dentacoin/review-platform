@@ -515,38 +515,38 @@ NOT SENT TRANSACTIONS
             $alerts = [
                 [
                     'currency' => 'DCN',
-                    'address' => '0xfb7442ac247ae842238b3e060cd8a5798c1969e3',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0xfb7442ac247ae842238b3e060cd8a5798c1969e3&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'address' => '0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => 200000
                 ],
                 [
                     'currency' => 'ETH',
-                    'address' => '0xfb7442ac247ae842238b3e060cd8a5798c1969e3',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0xfb7442ac247ae842238b3e060cd8a5798c1969e3&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'address' => '0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => 250000000000000000
                 ],
                 [
                     'currency' => 'DCN',
-                    'address' => '0xb20c179bb3675d0c1035db98ed6591f6a645df2a',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0xb20c179bb3675d0c1035db98ed6591f6a645df2a&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'address' => '0x6052a6292873947eb547456716afcc539b172fde',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0x6052a6292873947eb547456716afcc539b172fde&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => 200000
                 ],
                 [
                     'currency' => 'ETH',
-                    'address' => '0xb20c179bb3675d0c1035db98ed6591f6a645df2a',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0xb20c179bb3675d0c1035db98ed6591f6a645df2a&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'address' => '0x6052a6292873947eb547456716afcc539b172fde',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0x6052a6292873947eb547456716afcc539b172fde&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => 250000000000000000
                 ],
                 [
                     'currency' => 'DCN',
-                    'address' => '0x10714e939fa7b0232de065003cd827fd4e28e5de',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0x10714e939fa7b0232de065003cd827fd4e28e5de&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'address' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0xe00b37962604344cacd1efbf0d45553cc400f53c&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => 200000
                 ],
                 [
                     'currency' => 'ETH',
-                    'address' => '0x10714e939fa7b0232de065003cd827fd4e28e5de',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0x10714e939fa7b0232de065003cd827fd4e28e5de&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'address' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0xe00b37962604344cacd1efbf0d45553cc400f53c&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => 250000000000000000
                 ],
             ];
