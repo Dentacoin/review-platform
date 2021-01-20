@@ -459,7 +459,7 @@ NEW & FAILED TRANSACTIONS
                 echo 'New,failed & unconfirmed transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
 
-        })->cron("*/15 * * * *");
+        })->cron("*/5 * * * *");
 
 
         $schedule->call(function () {
