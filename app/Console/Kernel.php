@@ -430,7 +430,7 @@ NEW & FAILED TRANSACTIONS
 ';
 
                 $executed = 0;
-                $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('processing', 0)->where('created_at','<', Carbon::now()->subMinutes(10)->toDateTimeString())->orderBy('id', 'asc')->take(10)->get(); //
+                $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
 
                 echo 'Start New & Failed';
 
@@ -459,7 +459,7 @@ NEW & FAILED TRANSACTIONS
                 echo 'New,failed & unconfirmed transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
 
-        })->cron("*/5 * * * *");
+        })->cron("*/15 * * * *");
 
 
         $schedule->call(function () {
