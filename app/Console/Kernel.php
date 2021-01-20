@@ -2004,7 +2004,7 @@ NOT SENT TRANSACTIONS
                     if($curl['status']) {
                         if(!empty($curl['result']) || $curl['result'] == 0) {
                             $sender_balance = SenderBalance::find(1);
-                            $sender_balance->$address = $curl['result'];
+                            $sender_balance->$platform = $curl['result'];
                             $sender_balance->save();
                         }
                     }
