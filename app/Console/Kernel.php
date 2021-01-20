@@ -1981,28 +1981,52 @@ NOT SENT TRANSACTIONS
 
 
 
-        $schedule->call(function () {
-            echo 'Sender balance - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+        // $schedule->call(function () {
+        //     echo 'Sender balance - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            try {
-                $curl = file_get_contents('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0x10714e939fa7b0232de065003cd827fd4e28e5de&apikey='.env('ETHERSCAN_API'));
-            } catch (\Exception $e) {
-                $curl = false;
-            }
-            if(!empty($curl)) {
-                $curl = json_decode($curl, true);
-                if($curl['status']) {
-                    if(!empty($curl['result']) || $curl['result'] == 0) {
-                        $sender_balance = SenderBalance::find(1);
-                        $sender_balance->balance = $curl['result'];
-                        $sender_balance->save();
-                    }
-                }
-            }
+        //     // $sendersAddresses = [
+        //     //     'vox' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
+        //     //     'vox-cashout' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
+        //     //     'invite-reward' => '0x6052a6292873947eb547456716afcc539b172fde',
+        //     //     'trp' => '0x6052a6292873947eb547456716afcc539b172fde',
+        //     //     'trp-cashout' => '0x6052a6292873947eb547456716afcc539b172fde',
+        //     //     'dentacare' => '0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e',
+        //     //     'assurance' => '0xd00f810ade0b763dfd9ae2ea39a7a203db853537',
+        //     //     'dentacoin' => '0x8d63d2316a17dceb9dd4d0b9be2f7b4cb06632a8',
+        //     //     'dentists' => '0xf394ef1d5eb2aa69a32ccb24140b46a80c9141dd'
+        //     // ];
 
-            echo 'Sender balance - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     $sendersAddresses = [
+        //         'vox' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
+        //         'vox-cashout' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
+        //         'invite-reward' => '0x6052a6292873947eb547456716afcc539b172fde',
+        //         'trp' => '0x6052a6292873947eb547456716afcc539b172fde',
+        //         'trp-cashout' => '0x6052a6292873947eb547456716afcc539b172fde',
+        //         'dentacare' => '0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e',
+        //         'assurance' => '0xd00f810ade0b763dfd9ae2ea39a7a203db853537',
+        //         'dentacoin' => '0x8d63d2316a17dceb9dd4d0b9be2f7b4cb06632a8',
+        //         'dentists' => '0xf394ef1d5eb2aa69a32ccb24140b46a80c9141dd'
+        //     ];
 
-        })->everyMinute();
+        //     try {
+        //         $curl = file_get_contents('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0x10714e939fa7b0232de065003cd827fd4e28e5de&apikey='.env('ETHERSCAN_API'));
+        //     } catch (\Exception $e) {
+        //         $curl = false;
+        //     }
+        //     if(!empty($curl)) {
+        //         $curl = json_decode($curl, true);
+        //         if($curl['status']) {
+        //             if(!empty($curl['result']) || $curl['result'] == 0) {
+        //                 $sender_balance = SenderBalance::find(1);
+        //                 $sender_balance->balance = $curl['result'];
+        //                 $sender_balance->save();
+        //             }
+        //         }
+        //     }
+
+        //     echo 'Sender balance - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+        // })->everyMinute();
 
 
 
