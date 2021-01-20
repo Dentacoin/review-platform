@@ -431,6 +431,9 @@ NEW & FAILED TRANSACTIONS
 
                 $executed = 0;
                 $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('processing', 0)->where('created_at','<', Carbon::now()->subMinutes(10)->toDateTimeString())->orderBy('id', 'asc')->take(10)->get(); //
+
+                echo 'Start New & Failed';
+
                 foreach ($transactions as $trans) {
                     $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                     echo $log.PHP_EOL;
