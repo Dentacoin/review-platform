@@ -14,6 +14,8 @@
         </div>
 
     </div>
+    <div style="margin-bottom: 10px;"><a href="https://docs.google.com/spreadsheets/d/1O3hId4TS3m_ZA-1-c77Rl6_grqyb2TIrpKkqTtmmgx8/edit#gid=0" target="_blank">Statuses info</a></div>
+
     @if($are_transactions_stopped)
         <div>
             <label class="alert alert-danger">Users can't withdraw. Allow them by click on 'Allow users to withdraw' button.</label>
@@ -107,8 +109,8 @@
                             Sum: {{ $total_dcn_price }} DCN
                         </div>
                         <div>
-                            <a href="{{ url('cms/transactions/scammers') }}" class="btn btn-danger pull-right" style="margin-left: 10px;">Scammers by days ({{ App\Models\TransactionScammersByDay::where('checked', '!=', 1)->count() }})</a>
-                            <a href="{{ url('cms/transactions/scammers-balance') }}" class="btn btn-danger pull-right" style="margin-left: 10px;">Scammers by balance ({{ App\Models\TransactionScammersByBalance::where('checked', '!=', 1)->count() }})</a>
+                            <a href="{{ url('cms/transactions/scammers') }}" class="btn btn-{{ App\Models\TransactionScammersByDay::where('checked', '!=', 1)->count() ? 'danger' : 'info' }} pull-right" style="margin-left: 10px;">Scammers by days ({{ App\Models\TransactionScammersByDay::where('checked', '!=', 1)->count() }})</a>
+                            <a href="{{ url('cms/transactions/scammers-balance') }}" class="btn btn-{{ App\Models\TransactionScammersByBalance::where('checked', '!=', 1)->count() ? 'danger' : 'info' }} pull-right" style="margin-left: 10px;">Scammers by balance ({{ App\Models\TransactionScammersByBalance::where('checked', '!=', 1)->count() }})</a>
                         </div>
                     </div>
             		<div class="panel-body">
