@@ -480,24 +480,18 @@ NOT SENT TRANSACTIONS
 ========================
 
 ';
-                $unconfirmed_trans = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->count();
-                if($unconfirmed_trans < 30) {
+                $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'desc')->take(10)->get(); //
 
-                    $take_count = (30 - $unconfirmed_trans) > 10 ? 10 : (30 - $unconfirmed_trans);
+                if($transactions->isNotEmpty()) {
 
-                    $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'desc')->take($take_count)->get(); //
+                    foreach ($transactions as $trans) {
+                        $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || ';
+                        echo $log.PHP_EOL;
 
-                    if($transactions->isNotEmpty()) {
+                        if(!User::isGasExpensive()) {
 
-                        foreach ($transactions as $trans) {
-                            $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || ';
-                            echo $log.PHP_EOL;
-
-                            if(!User::isGasExpensive()) {
-
-                                Dcn::retry($trans);
-                                echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
-                            }
+                            Dcn::retry($trans);
+                            echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
                         }
                     }
                 }
