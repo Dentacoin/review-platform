@@ -192,7 +192,7 @@ return [
         Propaganistas\LaravelPhone\PhoneServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         GoogleMaps\ServiceProvider\GoogleMapsServiceProvider::class,
-        // Collective\Remote\RemoteServiceProvider::class,
+        Collective\Remote\RemoteServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
         //Barryvdh\Debugbar\ServiceProvider::class
 
@@ -253,7 +253,7 @@ return [
         'GeoIP' => \Torann\GeoIP\Facades\GeoIP::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'GoogleMaps' => GoogleMaps\Facade\GoogleMapsFacade::class,
-        // 'SSH' => Collective\Remote\RemoteFacade::class,
+        'SSH' => Collective\Remote\RemoteFacade::class,
 
     ],
 
