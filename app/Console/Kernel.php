@@ -15,7 +15,6 @@ use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
 use App\Models\ScrapeDentist;
 use App\Models\AnonymousUser;
-use App\Models\SenderBalance;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -446,10 +445,10 @@ NEW & FAILED TRANSACTIONS
                         echo 'TOO EARLY TO RETRY'.PHP_EOL;
                     }
 
-                    if($executed>10) {
-                        echo '5 executed - enough for now'.PHP_EOL;
-                        break;
-                    }
+                    // if($executed>10) {
+                    //     echo '5 executed - enough for now'.PHP_EOL;
+                    //     break;
+                    // }
                 }
 
                 echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -1981,44 +1980,6 @@ NOT SENT TRANSACTIONS
             echo 'Transaction scammers by day - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->dailyAt('04:00');
-
-
-
-        $schedule->call(function () {
-            echo 'Sender balance - START'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-            $sendersAddresses = [
-                'vox' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
-                'trp' => '0x6052a6292873947eb547456716afcc539b172fde',
-                'assurance' => '0xd00f810ade0b763dfd9ae2ea39a7a203db853537',
-                'dentacoin' => '0x8d63d2316a17dceb9dd4d0b9be2f7b4cb06632a8',
-                'dentists' => '0xf394ef1d5eb2aa69a32ccb24140b46a80c9141dd'
-            ];
-
-            foreach ($sendersAddresses as $platform => $address) {
-                
-                try {
-                    $curl = file_get_contents('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$address.'&apikey='.env('ETHERSCAN_API'));
-                } catch (\Exception $e) {
-                    $curl = false;
-                }
-                if(!empty($curl)) {
-                    $curl = json_decode($curl, true);
-                    if($curl['status']) {
-                        if(!empty($curl['result']) || $curl['result'] == 0) {
-                            $sender_balance = SenderBalance::find(1);
-                            $sender_balance->$platform = $curl['result'];
-                            $sender_balance->save();
-                        }
-                    }
-                }
-            }
-
-
-            echo 'Sender balance - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-        })->everyMinute();
-
 
 
         $schedule->call(function () {
