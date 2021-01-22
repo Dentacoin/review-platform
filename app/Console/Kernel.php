@@ -10,6 +10,7 @@ use App\Models\TransactionScammersByDay;
 use App\Models\IncompleteRegistration;
 use App\Models\WithdrawalsCondition;
 use App\Models\ScrapeDentistResult;
+use App\Models\CronjobSecondRun;
 use App\Models\StopVideoReview;
 use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
@@ -462,15 +463,15 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            $cron_running = CronjobRun::first();
+            $cron_running = CronjobSecondRun::first();
 
             if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
 
                 if(!empty($cron_running)) {
-                    CronjobRun::destroy($cron_running->id);
+                    CronjobSecondRun::destroy($cron_running->id);
                 }
 
-                $cronjob_stars = new CronjobRun;
+                $cronjob_stars = new CronjobSecondRun;
                 $cronjob_stars->started_at = Carbon::now();
                 $cronjob_stars->save();
 
@@ -480,7 +481,7 @@ NOT SENT TRANSACTIONS
 ========================
 
 ';
-                $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'desc')->take(10)->get(); //
+                $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'asc')->take(10)->get(); //
 
                 if($transactions->isNotEmpty()) {
 
@@ -496,12 +497,12 @@ NOT SENT TRANSACTIONS
                     }
                 }
 
-                CronjobRun::destroy($cronjob_stars->id);
+                CronjobSecondRun::destroy($cronjob_stars->id);
             } else {
                 echo 'Not sent transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
 
-        })->cron("0 * * * *");
+        })->cron("*/30 * * * *");
 
 
         $schedule->call(function () {
