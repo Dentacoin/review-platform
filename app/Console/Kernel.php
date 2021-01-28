@@ -278,7 +278,12 @@ class Kernel extends ConsoleKernel
             //     $price = 1 / (int)((int)$resp / 100);
             // }
 
+
             if(!empty($price)) {
+                if($price < 0.00001) {
+                    $price = 0.00001;
+                }
+
                 file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
 
                 DB::table('voxes')
