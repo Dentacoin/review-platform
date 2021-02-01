@@ -1522,7 +1522,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
 
                 $existing_anonymous = AnonymousUser::where('email', 'LIKE', Request::Input('email'))->first();
                 
-                $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $item->email);
+                $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', Request::Input('email'));
 
                 if(empty($existing_patient)) {
 
