@@ -146,6 +146,9 @@ class ReviewsController extends AdminController
             $request_body->recipient_emails = [$patient->email];
             
             $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
             $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
 
             $patient->sendGridTemplate(86, null, 'trp');
@@ -228,6 +231,9 @@ class ReviewsController extends AdminController
                     $request_body->recipient_emails = [$patient->email];
                     
                     $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+
+                    $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
                     $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
 
                     $patient->sendGridTemplate(86, null,'trp');
