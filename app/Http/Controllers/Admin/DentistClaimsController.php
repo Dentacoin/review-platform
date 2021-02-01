@@ -67,6 +67,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
                     $dk->save();
 
                     $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $dk->email);
+                    $u = User::find(113928);
                     $mail = User::unregisteredSendGridTemplate($u, $dk->email, $dk->name, 66, null, 'trp', $unsubscribed, $dk->email);
                     $mail->delete();
                 }
