@@ -149,9 +149,7 @@ return [
             'icon' => 'bug',
             'subpages' => array(
                 'trp' => 'trp',
-                'trp-urgent' => 'trp-urgent',
                 'api' => 'api',
-                'api-dev' => 'api-dev',
                 'api_civic' => 'api_civic',
                 'api_withdraw' => 'api_withdraw',
                 'api-ban-appeals' => 'api-ban-appeals',
