@@ -177,6 +177,7 @@
 										<r style="display: block; color: #38ace5;">Hello, {{ $user->getNames() }}</r>
 										<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
 									@else
+
 										<a class="my-name" href="https://account.dentacoin.com/?platform=dentavox">
 											Hello, {{ $user->getNames() }}
 										</a>
@@ -213,7 +214,8 @@
 								@endif
 							@elseif( $current_page!='register' || (!empty($session_polls) && $current_page=='register') )
 								<span class="dcn-rate">
-									1000 DCN = $<span id="header-rate">{{ sprintf('%.3F', 1000 * $dcn_price) }}</span> 
+
+									10000 DCN = $<span id="header-rate">{{ sprintf('%.3F', 10000 * $dcn_original_price) }}</span>
 									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
 								<a href="javascript:;" class="start-button open-dentacoin-gateway patient-login">
