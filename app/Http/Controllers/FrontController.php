@@ -69,7 +69,6 @@ class FrontController extends BaseController {
 
         date_default_timezone_set("Europe/Sofia");
 
-
         $this->request = $request;
         $path = explode('/', Request::path());
         $this->current_page = isset($path[1]) ? $path[1] : null;
@@ -549,6 +548,7 @@ class FrontController extends BaseController {
     public function PrepareViewData($page, &$params, $text_domain) {
 
         $params['dcn_price'] = @file_get_contents('/tmp/dcn_price');
+        $params['dcn_original_price'] = @file_get_contents('/tmp/dcn_original_price');
         $params['dcn_change'] = @file_get_contents('/tmp/dcn_change');
         $params['welcome_test'] = !empty($this->welcome_test) ? $this->welcome_test : null;
         $params['country_id'] = $this->country_id;
