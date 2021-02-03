@@ -119,7 +119,7 @@ class Kernel extends ConsoleKernel
                     'tempalte_id' => 101,
                 ]
             ];
-            
+
             foreach ($notifications as $key => $value) {
                 $i = 0;
                 foreach ($value as $k => $v) {
@@ -196,7 +196,7 @@ class Kernel extends ConsoleKernel
 
             echo 'Incomplete Dentist Registrations cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron("*/5 * * * *"); //every 5 min
+        })->cron("*/15 * * * *"); //every 5 min
 
         $schedule->call(function () {
 
@@ -280,11 +280,14 @@ class Kernel extends ConsoleKernel
 
 
             if(!empty($price)) {
+                file_put_contents('/tmp/dcn_original_price', sprintf('%.10F',$price));
+
                 if($price < 0.00001) {
                     $price = 0.00001;
                 }
 
                 file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
+
 
                 DB::table('voxes')
                 ->where('reward_usd', '>', 0)
