@@ -437,7 +437,7 @@ class PollsController extends AdminController {
 
     public function pollsMonthlyDescriptions() {
 
-        $descriptions = PollsMonthlyDescription::orderBy('month', 'desc')->orderBy('year', 'desc');
+        $descriptions = PollsMonthlyDescription::orderBy('year', 'desc')->orderBy('month', 'desc');
 
         if(!empty($this->request->input('month'))) {
             $descriptions = $descriptions->where('month', $this->request->input('month'));
