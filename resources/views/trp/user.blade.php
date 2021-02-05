@@ -779,7 +779,7 @@
 							<div class="col">
 								@if(!empty($user) && $user->id==$item->id && !$review->verified && !empty($user->trusted))
 									<a class="button verify-review" href="javascript:;">
-										Trusted review
+										Verify
 									</a>
 								@endif
 
