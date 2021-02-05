@@ -42,7 +42,6 @@
                                 <option value="new" {!! 'new'==$search_status ? 'selected="selected"' : '' !!}>New</option>
                                 <option value="approved" {!! 'approved'==$search_type ? 'selected="selected"' : '' !!}>Approved</option>
                                 <option value="rejected" {!! 'rejected'==$search_type ? 'selected="selected"' : '' !!}>Rejected</option>
-                                <option value="manual_verification" {!! 'manual_verification'==$search_type ? 'selected="selected"' : '' !!}>Manual verification before withdrawing</option>
                             </select>
                         </div>
                         <div class="col-md-2">
