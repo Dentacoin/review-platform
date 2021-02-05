@@ -24,6 +24,7 @@ class UserInvite extends Model {
         'notified3',
         'unsubscribed',
         'platform',
+        'hidden',
     ];
 
     protected $dates = [

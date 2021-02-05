@@ -1753,6 +1753,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     $inv->invited_id = $review->user_id;
                     $inv->platform = 'trp';
                     $inv->rewarded = true;
+                    $inv->hidden = true;
                     $inv->save();
                 }
 

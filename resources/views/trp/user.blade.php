@@ -1345,33 +1345,36 @@
 		            			@foreach( $user->asks->sortBy(function ($elm, $key) {
 								    return $elm['status']=='waiting' ? -1 : 1;
 								}) as $ask )
-		            				<tr>
-		            					<td>
-		            						{{ $ask->created_at->toDateString() }}
-		            					</td>
-		            					<td>
-		            						{{ $ask->user ? $ask->user->name : "deleted user" }}
-		            					</td>
-		            					<td>
-		            						{{ $ask->user? $ask->user->email : 'deleted user' }}
-		            					</td>
-		            					<td>
-		            						@if($ask->status=='waiting')
-		            							<a class="btn btn-primary compact" href="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
-		            								<i class="fas fa-thumbs-up"></i>
-			            							{{ trans('trp.page.profile.asks.accept') }}
-		            							</a>
-		            							<a class="btn btn-inactive compact" href="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
-		            								<i class="fas fa-thumbs-down"></i>
-			            							{{ trans('trp.page.profile.asks.deny') }}
-		            							</a>
-		            						@else
-	            								<span class="label label-{{ $ask->status=='yes' ? 'success' : 'warning' }}">
-			            							{{ trans('trp.page.profile.asks.status-'.$ask->status) }}
-		            							</span>
-		            						@endif
-		            					</td>
-		            				</tr>
+
+									@if(!$ask->hidden)
+										<tr>
+											<td>
+												{{ $ask->created_at->toDateString() }}
+											</td>
+											<td>
+												{{ $ask->user ? $ask->user->name : "deleted user" }}
+											</td>
+											<td>
+												{{ $ask->user? $ask->user->email : 'deleted user' }}
+											</td>
+											<td>
+												@if($ask->status=='waiting')
+													<a class="btn btn-primary compact" href="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
+														<i class="fas fa-thumbs-up"></i>
+														{{ trans('trp.page.profile.asks.accept') }}
+													</a>
+													<a class="btn btn-inactive compact" href="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
+														<i class="fas fa-thumbs-down"></i>
+														{{ trans('trp.page.profile.asks.deny') }}
+													</a>
+												@else
+													<span class="label label-{{ $ask->status=='yes' ? 'success' : 'warning' }}">
+														{{ trans('trp.page.profile.asks.status-'.$ask->status) }}
+													</span>
+												@endif
+											</td>
+										</tr>
+									@endif
 		            			@endforeach
 		            		</tbody>
 		            	</table>
@@ -1404,38 +1407,40 @@
 			        		</thead>
 			        		<tbody>
 			        			@foreach( $user->patients_invites as $inv )
-			        				<tr>
-			        					<td>
-			        						{{ $inv->created_at->toDateString() }}
-			        					</td>
-			        					<td>
-			        						{{ $inv->invited_name }}
-			        					</td>
-			        					<td>
-			        						{{ $inv->invited_email }}
-			        					</td>
-			        					<td>
-			        						@if($inv->invited_id)
+									@if(!$inv->hidden)
+										<tr>
+											<td>
+												{{ $inv->created_at->toDateString() }}
+											</td>
+											<td>
+												{{ $inv->invited_name }}
+											</td>
+											<td>
+												{{ $inv->invited_email }}
+											</td>
+											<td>
+												@if($inv->invited_id)
 
-												@if(!empty($inv->hasReview($user->id)))
-													@if(!empty($inv->dentistInviteAgain($user->id)))
-														<a href="javascript:;" class="button invite-again" data-href="{{ getLangUrl('invite-patient-again') }}" inv-id="{{ $inv->id }}">{{ trans('trp.page.profile.invite.invite-again') }}</a><br>
+													@if(!empty($inv->hasReview($user->id)))
+														@if(!empty($inv->dentistInviteAgain($user->id)))
+															<a href="javascript:;" class="button invite-again" data-href="{{ getLangUrl('invite-patient-again') }}" inv-id="{{ $inv->id }}">{{ trans('trp.page.profile.invite.invite-again') }}</a><br>
+														@endif
+														<a review-id="{{ $inv->hasReview($user->id)->id }}" href="javascript:;" class="ask-review button">
+															{{ trans('trp.page.profile.invite.status-review') }}
+														</a>
+													@else
+														<span class="label label-warning">
+															{{ trans('trp.page.profile.invite.status-no-review') }}
+														</span>
 													@endif
-													<a review-id="{{ $inv->hasReview($user->id)->id }}" href="javascript:;" class="ask-review button">
-														{{ trans('trp.page.profile.invite.status-review') }}
-													</a>
 												@else
 													<span class="label label-warning">
 														{{ trans('trp.page.profile.invite.status-no-review') }}
 													</span>
 												@endif
-			        						@else
-			        							<span class="label label-warning">
-			            							{{ trans('trp.page.profile.invite.status-no-review') }}
-			        							</span>
-			        						@endif
-			        					</td>
-			        				</tr>
+											</td>
+										</tr>
+									@endif
 			        			@endforeach
 			        		</tbody>
 			        	</table>
