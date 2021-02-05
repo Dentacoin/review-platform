@@ -590,6 +590,18 @@
                                     ])
                                 </div>
                             </div>
+                            @if($item->is_dentist)
+                                <div class="form-group">
+                                    <label class="col-md-9 control-label"></label>
+                                    <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Trusted Dentist</label>
+                                    <div class="col-md-1" style="padding-left: 0px;">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'trusted',
+                                            'info' => $fields['trusted']
+                                        ])
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         <div class="col-md-6">
                             <div class="form-group avatar-group">
@@ -740,11 +752,11 @@
                                             </a>
                                         @endif
 
-                                        <!-- @if($item->id != 3)
+                                        @if($item->id != 3 && !empty($dev_domain))
                                             <a class="btn btn-sm btn-danger form-control user-b" href="{{ url('cms/users/delete-database/'.$item->id) }}" style="margin-top: 10px;background: black;">
                                                 Delete from database
                                             </a>
-                                        @endif -->
+                                        @endif
                                     @endif
                                 </div>
                             </div>

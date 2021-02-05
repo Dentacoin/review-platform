@@ -231,8 +231,11 @@ class UsersController extends AdminController {
             ],
             'vip_access' => [
                 'type' => 'bool',
-            ],            
-    	];
+            ],
+            'trusted' => [
+                'type' => 'bool',
+            ],
+        ];
     }
 
     public function list() {
@@ -887,14 +890,18 @@ class UsersController extends AdminController {
     }
 
 
-    // public function deleteDatabase( $id ) {
-    //     $item = User::find($id);
+     public function deleteDatabase( $id ) {
 
-    //     $item->forceDelete();
+        if(Request::getHost() == 'urgent.dentavox.dentacoin.com' || Request::getHost() == 'urgent.reviews.dentacoin.com') {
 
-    //     $this->request->session()->flash('success-message', 'Deleted' );
-    //     return redirect('cms/users');
-    // }
+            $item = User::find($id);
+
+            $item->forceDelete();
+
+            $this->request->session()->flash('success-message', 'Deleted' );
+            return redirect('cms/users');
+        }
+     }
 
     public function massdelete(  ) {
         if( Request::input('ids') ) {
@@ -1895,6 +1902,7 @@ class UsersController extends AdminController {
                 'emails' => $emails,
                 'habits_tests' => $habits_tests,
                 'countries' => Country::with('translations')->get(),
+                'dev_domain' => Request::getHost() == 'urgent.dentavox.dentacoin.com' || Request::getHost() == 'urgent.reviews.dentacoin.com' ? true : false,
             ));
         } else {
             return redirect('cms/'.$this->current_page);

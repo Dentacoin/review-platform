@@ -505,6 +505,12 @@ body.popup-visible {
     font-size: 24px; }
     .button.button-yellow:hover {
       background-color: #f7d16a; }
+  .button.verify-review {
+    font-size: 14px;
+    padding: 0px 10px; }
+    @media screen and (max-width: 768px) {
+      .button.verify-review {
+        font-size: 10px; } }
 
 .button-inner-white {
   background-color: #f7f7f7;

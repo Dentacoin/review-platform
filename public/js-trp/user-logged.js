@@ -2711,6 +2711,50 @@ $(document).ready(function(){
         });
     }
 
+
+    $('.verify-review').click( function() {
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+        var review_id_param = $(this).closest('.review.review-wrapper').attr('review-id');
+
+        $.ajax({
+            type: "POST",
+            url: window.location.origin+'/en/verify-review/',
+            data: {
+                review_id: review_id_param,
+                _token: $('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: function(ret) {
+                console.log(ret);
+                if(ret.success) {
+
+                    if ($(window).outerWidth() <= 768) {
+                        that.closest('.review.review-wrapper').find('.trusted-sticker.mobile-sticker').show();
+
+                    } else {
+                        that.closest('.review.review-wrapper').find('.trusted-sticker:not(.mobile-sticker)').show();
+                    }
+
+                    that.hide();
+
+                } else {
+                    console.log('error');
+                }
+                ajax_is_running = false;
+            },
+            error: function(ret) {
+                console.log('error');
+                ajax_is_running = false;
+            }
+
+        });
+    });
+
    
 
 });

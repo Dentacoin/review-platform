@@ -385,7 +385,7 @@
 					</div>
 					<div class="list-review">
 						<div class="list-review-left">
-							<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
+							<div class="review-avatar" style="background-image: url('{{ $review->user ? $review->user->getImageUrl(true) : '' }}');"></div>
 							<span class="review-date">
 								{{ $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-' }}
 							</span>
@@ -405,7 +405,7 @@
 							<div class="review-content">
 								{!! nl2br($review->answer) !!}
 							</div>
-							<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}</span>
+							<span class="review-name">{{ !empty($review->user) && !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : ($review->user ? $review->user->name : 'Deleted') }}</span>
 							<span class="mobile-review-date">
 								{{ $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-' }}
 							</span>

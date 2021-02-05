@@ -256,6 +256,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::post('dentist-request-survey',			'IndexController@dentistRequestSurvey');
 	Route::any('check-token',						'IndexController@checkToken');
 	Route::any('recommend-dentavox',				'IndexController@recommendDentavox');
+	Route::post('encrypt-user-token',				'IndexController@encryptUserToken');
 
 
 	Route::get('get-daily-polls',					'DailyPollsController@getPolls');
@@ -265,6 +266,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::post('poll-reward', 						'DailyPollsController@dailyPollReward');
 	Route::get('poll-reward-price',					'DailyPollsController@pollRewardPrice');
 	Route::post('todays-poll-answer',				'DailyPollsController@todaysPollAnswer');
+	Route::post('get-daily-poll-by-date',			'DailyPollsController@getDailyPollByDate');
 
 });
 
@@ -358,7 +360,7 @@ $reviewRoutes = function () {
 			Route::group(['middleware' => 'auth:web'], function () {
 
 				Route::post('profile/info/upload', 						'ProfileController@upload');
-				Route::post('profile/gallery', 							'ProfileController@gallery');				
+				Route::post('profile/gallery', 							'ProfileController@gallery');
 				Route::any('profile/gallery/delete/{id}', 				'ProfileController@gallery_delete');
 				Route::post('profile/info', 							'ProfileController@info');
 				Route::get('profile/trp-iframe', 						'ProfileController@trp');
@@ -392,6 +394,8 @@ $reviewRoutes = function () {
 				Route::get('profile/reviews-guided-tour/{layout?}', 	'ProfileController@reviewsGuidedTour');
 
 				Route::post('share', 									'MiscController@share');
+
+                Route::post('verify-review', 						    'DentistController@verifyReview');
 				
 			});
 
@@ -403,7 +407,6 @@ $reviewRoutes = function () {
 	//Route::any('page-not-found', 								'Front\NotFoundController@home');
 };
 Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
-Route::domain('dev.reviews.dentacoin.com')->group($reviewRoutes);
 Route::domain('urgent.reviews.dentacoin.com')->group($reviewRoutes);
 
 
@@ -492,5 +495,4 @@ Route::domain('vox.dentacoin.com')->group($voxRoutes);
 Route::domain('vox.dentavox.dentacoin.com')->group($voxRoutes);
 
 Route::domain('dentavox.dentacoin.com')->group($voxRoutes);
-Route::domain('dev.dentavox.dentacoin.com')->group($voxRoutes);
 Route::domain('urgent.dentavox.dentacoin.com')->group($voxRoutes);

@@ -625,6 +625,16 @@ body.popup-visible {
     		background-color: #f7d16a;
     	}
     }
+
+	&.verify-review {
+		font-size: 14px;
+		padding: 0px 10px;
+		//background-color: #14cab8;
+
+		@media #{$phone} {
+			font-size: 10px;
+		}
+	}
 }
 
 .button-inner-white {

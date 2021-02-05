@@ -724,26 +724,24 @@
 
 			    	<div class="review review-wrapper" review-id="{{ $review->id }}">
 						<div class="review-header">
-			    			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
-			    			<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: </span>
-							@if($review->verified)
-				    			<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
-				    				{!! nl2br(trans('trp.common.trusted')) !!}
-				    				<i class="fas fa-info-circle"></i>
-				    			</div>
-			    			@endif
+			    			<div class="review-avatar" style="background-image: url('{{ $review->user ? $review->user->getImageUrl(true) : '' }}');"></div>
+			    			<span class="review-name">{{ !empty($review->user) && !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : ($review->user ? $review->user->name : 'Deleted') }}: </span>
+
+							<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}" style="{{ !$review->verified ? 'display:none;' : '' }}">
+								{!! nl2br(trans('trp.common.trusted')) !!}
+								<i class="fas fa-info-circle"></i>
+							</div>
+
 			    			@if($review->title)
 				    			<span class="review-title">
 				    				“{{ $review->title }}”
 				    			</span>
 			    			@endif
-							@if($review->verified)
 
-				    			<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
-				    				{!! nl2br(trans('trp.common.trusted')) !!}
-				    				<i class="fas fa-info-circle"></i>
-				    			</div>
-			    			@endif
+							<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}"  style="{{ !$review->verified ? 'display:none;' : '' }}">
+								{!! nl2br(trans('trp.common.trusted')) !!}
+								<i class="fas fa-info-circle"></i>
+							</div>
 		    			</div>
 		    			<div class="review-rating">
 		    				<div class="ratings">
@@ -774,11 +772,17 @@
 						<div class="review-footer flex flex-mobile break-mobile">
 
 							@if($review->reply)
-								<a class="reply-button show-hide" href="javascript:;" alternative="▾ Show replies" >
+								<a class="reply-button show-hide" href="javascript:;" alternative="▾ {{ trans('trp.page.user.show-replies') }}" >
 									▴ {!! nl2br(trans('trp.page.user.hire-replies')) !!}
 								</a>
 							@endif
 							<div class="col">
+								@if(!empty($user) && $user->id==$item->id && !$review->verified)
+									<a class="button verify-review" href="javascript:;">
+										Trusted review
+									</a>
+								@endif
+
 								@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
 									<a class="reply-review" href="javascript:;">
 										<span>
@@ -788,20 +792,20 @@
 								@endif
 								
 								<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-									<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}">
+									<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}" style=height: 30px;">
 									<span>
 										{{ intval($review->upvotes) }}
 									</span>
 								</a>
 								<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes)) ? 'voted' : '' !!}" href="javascript:;">
-									<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}">
+									<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}" style=height: 30px;">
 									<span>
 										{{ intval($review->downvotes) }}
 									</span>
 								</a>
 
 								<a class="share-review" href="javascript:;" data-popup="popup-share" share-href="{{ $item->getLink() }}?review_id={{ $review->id }}">
-									<img src="{{ url('img-trp/share-review.png') }}">
+									<img src="{{ url('img-trp/share-review.png') }}" style=height: 30px;">
 									<span>
 										{!! nl2br(trans('trp.common.share')) !!}
 									</span>

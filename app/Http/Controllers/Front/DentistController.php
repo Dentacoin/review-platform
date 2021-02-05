@@ -821,7 +821,7 @@ class DentistController extends FrontController {
                     "@type" => "Review",
                     "author" => [
                         "@type" => "Person",
-                        "name" => $review->user->name,
+                        "name" => $review->user ? $review->user->name : '',
                     ],
                     "datePublished" => $review->created_at->format('Y-m-d'),
                     "reviewBody" => $review->answer,
@@ -1715,5 +1715,105 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         }
 
         return Response::json( ['success' => true] );
+    }
+
+
+    public function verifyReview() {
+        if(!empty($this->user) && $this->user->is_dentist && !empty(request('review_id'))) {
+            $review = Review::find(request('review_id'));
+
+            if(!empty($review) && ($review->dentist_id == $this->user->id || $review->clinic->id == $this->user->id)) {
+                $review->verified = true;
+                $review->save();
+
+                $main_dentist_id = $review->review_to_id ? $review->review_to_id : ($review->dentist_id ? $review->dentist_id : $review->clinic_id);
+
+                $last_ask = UserAsk::where('dentist_id', $main_dentist_id)->where('user_id', $review->user_id)->first();
+
+                if(empty($last_ask)) {
+                    $user_ask = new UserAsk;
+                    $user_ask->user_id = $review->user_id;
+                    $user_ask->dentist_id = $main_dentist_id;
+                    $user_ask->status = 'yes';
+                    $user_ask->on_review = true;
+                    $user_ask->hidden = true;
+                    $user_ask->save();
+                }
+
+                $last_invite = UserInvite::where('user_id', $main_dentist_id)->where('invited_id', $review->user_id)->first();
+                if (!empty($last_invite)) {
+                    $last_invite->created_at = Carbon::now();
+                    $last_invite->rewarded = true;
+                    $last_invite->save();
+                } else {
+                    $inv = new UserInvite;
+                    $inv->user_id = $main_dentist_id;
+                    $inv->invited_email = $review->user->email;
+                    $inv->invited_name = $review->user->name;
+                    $inv->invited_id = $review->user_id;
+                    $inv->platform = 'trp';
+                    $inv->rewarded = true;
+                    $inv->save();
+                }
+
+                //dentist reward
+                $reward_dentist = new DcnReward();
+                $reward_dentist->user_id = $main_dentist_id;
+                $reward_dentist->platform = 'trp';
+                $reward_dentist->reward = Reward::getReward('reward_dentist');
+                $reward_dentist->type = 'dentist-review';
+                $reward_dentist->reference_id = $review->id;
+
+                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                $dd = new DeviceDetector($userAgent);
+                $dd->parse();
+
+                if ($dd->isBot()) {
+                    // handle bots,spiders,crawlers,...
+                    $reward_dentist->device = $dd->getBot();
+                } else {
+                    $reward_dentist->device = $dd->getDeviceName();
+                    $reward_dentist->brand = $dd->getBrandName();
+                    $reward_dentist->model = $dd->getModel();
+                    $reward_dentist->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                }
+
+                $reward_dentist->save();
+
+                //patient reward
+                $reward = new DcnReward();
+                $reward->user_id = $review->user_id;
+                $reward->platform = 'trp';
+                $reward->reward = Reward::getReward('review_trusted');
+                $reward->type = 'review_trusted';
+                $reward->reference_id = $review->id;
+
+                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                $dd = new DeviceDetector($userAgent);
+                $dd->parse();
+
+                if ($dd->isBot()) {
+                    // handle bots,spiders,crawlers,...
+                    $reward->device = $dd->getBot();
+                } else {
+                    $reward->device = $dd->getDeviceName();
+                    $reward->brand = $dd->getBrandName();
+                    $reward->model = $dd->getModel();
+                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                }
+
+                $reward->save();
+
+                return Response::json([
+                    'success' => true,
+                ] );
+            }
+
+        }
+
+        return Response::json([
+            'success' => false,
+            'review_id' => request('review-id'),
+        ] );
     }
 } ?>

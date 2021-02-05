@@ -505,6 +505,12 @@ body.popup-visible {
     font-size: 24px; }
     .button.button-yellow:hover {
       background-color: #f7d16a; }
+  .button.verify-review {
+    font-size: 14px;
+    padding: 0px 10px; }
+    @media screen and (max-width: 768px) {
+      .button.verify-review {
+        font-size: 10px; } }
 
 .button-inner-white {
   background-color: #f7f7f7;
@@ -3846,29 +3852,3 @@ body.strength-pb {
   border: none; }
   .dcn-privacy-policy-cookie .button a {
     font-size: 18px !important; }
-
-.christmas-banner {
-  position: relative;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
-  display: block; }
-  @media screen and (max-width: 768px) {
-    .christmas-banner {
-      display: none; } }
-  .christmas-banner.mobile-christmas-banner {
-    display: none; }
-    @media screen and (max-width: 768px) {
-      .christmas-banner.mobile-christmas-banner {
-        display: block; } }
-  .christmas-banner img:not(.close-banner) {
-    width: 100%;
-    display: block; }
-  .christmas-banner .close-banner {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    width: 40px;
-    height: 40px;
-    padding: 5px; }
-
-body.with-banner [data-testid="bubble_iframe"] {
-  bottom: 108px !important; }
