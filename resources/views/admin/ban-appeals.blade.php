@@ -32,7 +32,7 @@
                         	<select class="form-control" name="search-type">
                                 <option value="">Ban Type</option>
                                 @foreach($types as $k => $type)
-                                	<option value="trp" {!! $k==$search_type ? 'selected="selected"' : '' !!}>{{ $type }}</option>
+                                	<option value="{{ $k }}" {!! $k==$search_type ? 'selected="selected"' : '' !!}>{{ $type }}</option>
                                 @endforeach
                             </select>
                         </div>
