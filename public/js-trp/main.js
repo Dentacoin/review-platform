@@ -39,6 +39,23 @@ jQuery(document).ready(function($){
 		timeout: 5000
 	});
 
+    $.ajax( {
+		url: 'https://dev-api.dentacoin.com/api/enums/',
+		type: 'GET',
+		success: function( data ) {
+			if(data) {
+				dentacoin_down = false;
+			} else {
+				dentacoin_down = true;
+			}
+		},
+		error: function(data) {
+			console.log(data);
+		    dentacoin_down = true;
+		},
+		timeout: 5000
+	});
+
 	//To be deleted
 	$('.country-select').change( function() {
 

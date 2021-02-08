@@ -60,6 +60,23 @@ $(document).ready(function(){
 		timeout: 5000
 	});
 
+	$.ajax( {
+		url: 'https://dev-api.dentacoin.com/api/enums/',
+		type: 'GET',
+		success: function( data ) {
+			if(data) {
+				dentacoin_down = false;
+			} else {
+				dentacoin_down = true;
+			}
+		},
+		error: function(data) {
+			console.log(data);
+			dentacoin_down = true;
+		},
+		timeout: 5000
+	});
+
     $('.country-select').change( function() {
     	$(this).closest('form').find('input[name="address"]').val('');
     	$(this).closest('form').find('.suggester-map-div').hide();
@@ -145,6 +162,7 @@ $(document).ready(function(){
 					$('#dcn-test-reward-before').hide();
 					$('#dcn-test-reward-after').show();
 
+					// console.log(user_vip_access);
 					$('.coins-test').html( Math.round(reward) );
 				}
 			}
@@ -260,6 +278,7 @@ $(document).ready(function(){
 	showPopup = function(id, ret, e) {
 
 		if(id=='download-stats-popup') {
+
 			$('.popup:not(.download-stats-popup)').remove();
 			$('#download-stats-popup').addClass('active');
         	$('body').addClass('popup-visible');
