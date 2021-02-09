@@ -178,16 +178,16 @@
 										<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
 									@else
 
-										<a class="my-name" href="https://account.dentacoin.com/?platform=dentavox">
+										<a class="my-name" href="javascript:;">
 											Hello, {{ $user->getNames() }}
 										</a>
-										<a href="https://account.dentacoin.com/?platform=dentavox">
+										<a href="javascript:;">
 											<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
 										</a>
 									@endif
 								</div>
 								@if( $user->platform!='external' )
-									<a class="header-a" href="https://account.dentacoin.com/?platform=dentavox" >
+									<a class="header-a" href="javascript:;" >
 										<img class="header-avatar" id="header-avatar" src="{{ $user->getImageUrl(true) }}" width="46" height="46">
 									</a>
 								@endif
