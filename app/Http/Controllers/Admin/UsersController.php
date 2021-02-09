@@ -71,6 +71,7 @@ class UsersController extends AdminController {
             'deleted' => 'Deleted',
             'bad_ip' => 'Bad IP',
             'suspicious_admin' => 'Suspicious (Admin)',
+            'manual_verification' => 'Manual verification before withdrawing',
         ];
 
     	$this->fields = [
