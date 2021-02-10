@@ -12,4 +12,10 @@ $(document).ready(function(){
 		$('#approvedModal form').attr('action' , action);
 	});
 
+	$('.pending-appeal').click( function() {
+		console.log('dsfdsf');
+		var action = $('#pendingModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
+		$('#pendingModal form').attr('action' , action);
+	});
+
 });

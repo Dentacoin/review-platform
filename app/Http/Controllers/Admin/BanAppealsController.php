@@ -45,6 +45,10 @@ class BanAppealsController extends AdminController {
             });
         }
 
+        if(!empty(request('pending'))) {
+            $items = $items->whereNotNull('pending_fields');
+        }
+
         if(!empty(request('search-name'))) {
             $items = $items->whereHas('user', function($query) {
                 $query->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
@@ -110,6 +114,7 @@ class BanAppealsController extends AdminController {
             'search_name' => request('search-name'),
             'search_type' => request('search-type'),
             'search_status' => request('search-status'),
+            'pending' => request('pending'),
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
@@ -137,6 +142,7 @@ class BanAppealsController extends AdminController {
             $action->save();
 
             $item->status = 'approved';
+            $item->pending_fields = null;
             $item->save();
 
             $this->request->session()->flash('success-message', "Appeal approved" );
@@ -170,11 +176,45 @@ class BanAppealsController extends AdminController {
             User::destroy( $user->id );
 
             $item->status = 'rejected';
+            $item->pending_fields = null;
             $item->save();
 
             $this->request->session()->flash('success-message', "Appeal rejected" );
         } else {
             $this->request->session()->flash('error-message', "You have to write a reason why this appeal has to be rejected" );
+        }
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
+
+    }
+
+    public function pending($id) {
+
+	    if(!empty(Request::input('pending_info'))) {
+	        $missing_info = Request::input('pending_info');
+
+            $item = BanAppeal::find($id);
+            $user = $item->user;
+
+            if(in_array('link', $missing_info) && in_array('image', $missing_info)) {
+                //both missing
+                $item->pending_fields = ['link', 'image'];
+                $user->sendGridTemplate(122, null, 'dentacoin');
+            } else if(in_array('link', $missing_info) && !in_array('image', $missing_info)) {
+                //no link
+                $item->pending_fields = ['link'];
+                $user->sendGridTemplate(121, null, 'dentacoin');
+            } else if(!in_array('link', $missing_info) && in_array('image', $missing_info)) {
+                //no selfie
+                $item->pending_fields = ['image'];
+                $user->sendGridTemplate(120, null, 'dentacoin');
+            }
+
+            $item->save();
+
+            $this->request->session()->flash('success-message', "Email send" );
+        } else {
+            $this->request->session()->flash('error-message', "Select missing info" );
         }
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');

@@ -23,6 +23,7 @@ use App\Models\CronjobRun;
 use App\Models\VoxAnswer;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
+use App\Models\BanAppeal;
 use App\Models\GasPrice;
 use App\Models\Article;
 use App\Models\Country;
@@ -647,6 +648,44 @@ NOT SENT TRANSACTIONS
 
             echo 'Suspicious Dentist Delete Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
+        })->cron("30 7 * * *"); //10:30h BG Time
+
+        $schedule->call(function () {
+            echo 'Delete pending ban appeals Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $pendingBanAppeals = BanAppeal::whereNotNull('pending_fields')->where('updated_at', '<', Carbon::now()->subDays(14) )->get();
+
+            if($pendingBanAppeals->isNotEmpty()) {
+                foreach ($pendingBanAppeals as $item) {
+
+                    $user = $item->user;
+
+                    if($user->patient_status != 'deleted') {
+
+                        $user->patient_status = 'deleted';
+                        $user->save();
+
+                        $action = new UserAction;
+                        $action->user_id = $user->id;
+                        $action->action = 'deleted';
+                        $action->reason = 'Pending ban appeal - automatically rejected after 14 days';
+                        $action->actioned_at = Carbon::now();
+                        $action->save();
+
+                        $user->sendTemplate(9, null, 'dentacoin');
+
+                        $user->deleteActions();
+                        User::destroy( $user->id );
+                    }
+
+                    $item->status = 'rejected';
+                    $item->pending_fields = null;
+                    $item->save();
+                }
+            }
+
+            echo 'Delete pending ban appeals Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
         })->cron("30 7 * * *"); //10:30h BG Time
 
 

@@ -14,6 +14,7 @@ class BanAppeal extends Model {
         'description',
         'type',
         'status',
+        'pending_fields',
     ];
 
     protected $dates = [
@@ -52,6 +53,20 @@ class BanAppeal extends Model {
         $img->save($to_thumb);
         $this->image = true;
         $this->save();
+    }
+
+    public function setPendingFieldsAttribute($value) {
+        $this->attributes['pending_fields'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['pending_fields'] = implode(',', $value);
+        }
+    }
+
+    public function getPendingFieldsAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);
+        }
+        return [];
     }
     
 }

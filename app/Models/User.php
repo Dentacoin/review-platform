@@ -126,6 +126,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'tw_id',
         'gp_id',
         'fb_id',
+        'apple_id',
         'civic_id',
         'civic_kyc',
         'civic_kyc_hash',

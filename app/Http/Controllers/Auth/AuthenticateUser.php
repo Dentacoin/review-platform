@@ -114,11 +114,17 @@ class AuthenticateUser extends FrontController
         $header[] = 'Authorization: Bearer ' . $token;
         $header[] = 'Cache-Control: no-cache';
 
+        if(request()->getHttpHost() == 'urgent.dentavox.dentacoin.com' || request()->getHttpHost() == 'urgent.reviews.dentacoin.com') {
+            $url = 'https://dev-api.dentacoin.com/api/check-user-info/';
+        } else {
+            $url = 'https://api.dentacoin.com/api/check-user-info/';
+        }
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_POST => 1,
-            CURLOPT_URL => 'https://api.dentacoin.com/api/check-user-info/',
+            CURLOPT_URL => $url,
             CURLOPT_SSL_VERIFYPEER => 0,
             CURLOPT_HTTPHEADER => $header,
             CURLOPT_POSTFIELDS => array(

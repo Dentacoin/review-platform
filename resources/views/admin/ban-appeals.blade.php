@@ -44,6 +44,12 @@
                                 <option value="rejected" {!! 'rejected'==$search_type ? 'selected="selected"' : '' !!}>Rejected</option>
                             </select>
                         </div>
+                        <div class="col-md-1">
+                            <label for="pending" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                <input id="pending" type="checkbox" name="pending" value="1" {!! !empty($pending) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                Is pending
+                            </label>
+                        </div>
                         <div class="col-md-2">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
                         </div>
@@ -90,6 +96,9 @@
                                                 @if($item->user->allBanAppeals->count() > 1)
                                                     <br/> <span style="color: red;"> + {{ $item->user->allBanAppeals->count() - 1 }} ban{{ $item->user->allBanAppeals->count() - 1 > 1 ? 's' : ''}}</span>
                                                 @endif
+                                                @if($item->pending_fields)
+                                                    <br/> <b>Pending</b>
+                                                @endif
 				                    		</td>
 				                    		<td style="word-break: break-all;">
 				                    			{{ $item->link }}
@@ -116,6 +125,16 @@
 					                    			<a class="btn btn-sm btn-danger reject-appeal" href="javascript:;" data-toggle="modal" data-target="#rejectedModal" appeal-id="{{ $item->id }}">
 		                                                Reject
 		                                            </a>
+
+                                                    @if($item->pending_fields)
+                                                        <a class="btn btn-sm btn-warning pending-appeal" disabled="disabled" href="javascript:;">
+                                                            Pending
+                                                        </a>
+                                                    @else
+                                                        <a class="btn btn-sm btn-warning pending-appeal" href="javascript:;" data-toggle="modal" data-target="#pendingModal" appeal-id="{{ $item->id }}">
+                                                            Pending
+                                                        </a>
+                                                    @endif
 		                                        @elseif($item->status == 'approved')
 		                                        	Approved
 		                                        @elseif($item->status == 'rejected')
@@ -174,6 +193,37 @@
                 <form action="{{ url('cms/ban_appeals/reject/') }}" original-action="{{ url('cms/ban_appeals/reject/') }}" method="post">
                     <textarea class="form-control" name="rejected_reason" placeholder="Write the reason why you want to reject this appeal"></textarea>
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Reject</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="pendingModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Pending Appeal</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('cms/ban_appeals/pending/') }}" original-action="{{ url('cms/ban_appeals/pending/') }}" method="post">
+
+                    <label for="image" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                        <input id="image" type="checkbox" name="pending_info[]" value="image" style="margin-top: 0px;margin-right: 4px;" />
+                        Image
+                    </label>
+                    <label for="link" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                        <input id="link" type="checkbox" name="pending_info[]" value="link"  style="margin-top: 0px;margin-right: 4px;" />
+                        Link
+                    </label>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Send email</button>
                 </form>
             </div>
             <div class="modal-footer">
