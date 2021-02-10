@@ -51,6 +51,8 @@ class VerifyCsrfToken extends BaseVerifier
         '*/vox-public-down',
         '*/voxes-get',
         '*/voxes-sort',
+        '*/api/*',
+        '*/authenticate-user',
     ];
 
 
