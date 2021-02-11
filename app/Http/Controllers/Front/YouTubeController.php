@@ -62,7 +62,10 @@ class YouTubeController extends FrontController {
 
                 foreach ($cashouts as $cashout) {
                     $cash = DcnCashout::find($cashout);
-                    $cash->forceDelete();
+                    if($cash) {
+
+                        $cash->forceDelete();
+                    }
                 }
 
                 $trans->forceDelete();
