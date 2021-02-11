@@ -54,27 +54,27 @@ class YouTubeController extends FrontController {
         if(!empty($this->admin)) {
 
 
-            $transactions = DcnTransaction::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->get();
+//            $transactions = DcnTransaction::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->get();
+//
+//            foreach ($transactions as $trans) {
+//
+//                $cashouts = $trans->reference_id;
+//
+//                foreach ($cashouts as $cashout) {
+//                    $cash = DcnCashout::find($cashout);
+//                    if($cash) {
+//
+//                        $cash->forceDelete();
+//                    }
+//                }
+//
+//                $trans->forceDelete();
+//
+//                $trans->user->sendGridTemplate(123, null, 'vox');
+//
+//            }
 
-            foreach ($transactions as $trans) {
-
-                $cashouts = $trans->reference_id;
-
-                foreach ($cashouts as $cashout) {
-                    $cash = DcnCashout::find($cashout);
-                    if($cash) {
-
-                        $cash->forceDelete();
-                    }
-                }
-
-                $trans->forceDelete();
-
-                $trans->user->sendGridTemplate(123, null, 'vox');
-
-            }
-
-            exit;
+//            exit;
 
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
