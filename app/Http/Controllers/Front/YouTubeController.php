@@ -53,25 +53,6 @@ class YouTubeController extends FrontController {
 
         if(!empty($this->admin)) {
 
-            $transactions = DcnTransaction::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->where('id', 100769)->get();
-
-            foreach ($transactions as $trans) {
-
-                $cashouts = $trans->reference_id;
-
-                foreach ($cashouts as $cashout) {
-                    $cash = DcnCashout::find($cashout);
-                    $cash->forceDelete();
-                }
-
-                $trans->forceDelete();
-
-                $trans->user->sendGridTemplate(123, null, 'dentacoin');
-
-            }
-
-
-
             exit;
             $transactions = DcnTransaction::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->get();
 
