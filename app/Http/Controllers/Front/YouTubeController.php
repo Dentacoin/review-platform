@@ -50,8 +50,18 @@ class YouTubeController extends FrontController {
      * recover token from admin for youtube video reviews
      */
     public function test() {
-        
+
         if(!empty($this->admin)) {
+
+
+           $transactions = DcnTransactions::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->count();
+
+           dd($transactions);
+
+           //593
+
+
+            exit;
 
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
