@@ -54,7 +54,7 @@ class YouTubeController extends FrontController {
         if(!empty($this->admin)) {
 
 
-           $transactions = DcnTransactions::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->count();
+           $transactions = DcnTransaction::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->count();
 
            dd($transactions);
 
