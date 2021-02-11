@@ -71,9 +71,7 @@ class YouTubeController extends FrontController {
 
             $trans = DcnTransaction::find(100767);
 
-            foreach ( as $item) {
-
-            }
+           
             dd($trans->reference_id);
 
 
