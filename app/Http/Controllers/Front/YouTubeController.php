@@ -53,7 +53,7 @@ class YouTubeController extends FrontController {
 
         if(!empty($this->admin)) {
 
-            exit;
+
             $transactions = DcnTransaction::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->get();
 
             foreach ($transactions as $trans) {
@@ -67,7 +67,7 @@ class YouTubeController extends FrontController {
 
                 $trans->forceDelete();
 
-                $trans->user->sendGridTemplate(123, null, 'dentacoin');
+                $trans->user->sendGridTemplate(123, null, 'vox');
 
             }
 
