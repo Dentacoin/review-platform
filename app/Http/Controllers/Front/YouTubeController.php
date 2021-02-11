@@ -54,17 +54,26 @@ class YouTubeController extends FrontController {
         if(!empty($this->admin)) {
 
 
-//           $transactions = DcnTransaction::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->get();
+//            $transactions = DcnTransaction::whereIn('status', ['pending', 'not_sent', 'dont_retry'])->get();
 //
-//           foreach ($transactions as $transaction) {
-//               $cashout =
-//           }
-//           dd($transactions);
+//            foreach ($transactions as $trans) {
+//                $cashouts = $trans->reference_id;
+//
+//                foreach ( as $item) {
+//
+//                }
+//
+//            }
+//            dd($transactions);
 //
 //           //593
 
 
-            $trans = DcnTransaction::find(100766);
+            $trans = DcnTransaction::find(100767);
+
+            foreach ( as $item) {
+
+            }
             dd($trans->reference_id);
 
 
