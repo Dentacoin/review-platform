@@ -53,24 +53,6 @@ class YouTubeController extends FrontController {
 
         if(!empty($this->admin)) {
 
-
-            $transactions = DcnTransaction::where('status', 'failed')->get();
-
-            foreach ($transactions as $trans) {
-
-                $user = $trans->user;
-
-                if($user->transactions_count() > 1 && !empty(DcnTransaction::where('user_id', $user->id)->where('status', 'completed')->first())) {
-                    $user->withdraw_at = DcnTransaction::where('user_id', $user->id)->where('status', 'completed')->orderBy('id', 'desc')->first()->created_at;
-                } else {
-                    $user->withdraw_at = $user->created_at;
-                }
-
-                $user->save();
-            }
-
-            exit;
-
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
