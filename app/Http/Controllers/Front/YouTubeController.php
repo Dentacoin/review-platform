@@ -54,7 +54,7 @@ class YouTubeController extends FrontController {
         if(!empty($this->admin)) {
 
 
-            $transactions = DcnTransaction::where('status', 'failed')->where('id', 100390)->get();
+            $transactions = DcnTransaction::where('status', 'failed')->get();
 
             foreach ($transactions as $trans) {
 
