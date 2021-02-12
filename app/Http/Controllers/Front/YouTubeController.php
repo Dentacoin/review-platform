@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
 use App\Models\IncompleteRegistration;
+use App\Models\WithdrawalsCondition;
 use App\Models\ScrapeDentistResult;
 use App\Models\UnclaimedDentist;
 use App\Models\DcnTransaction;
@@ -52,6 +53,17 @@ class YouTubeController extends FrontController {
     public function test() {
 
         if(!empty($this->admin)) {
+
+            $withdrawal_condition_for_days = WithdrawalsCondition::find(1)->timerange;
+
+            $users = User::where('is_dentist', 0)->where('platform', '!=', 'external')->where('created_at', '>', Carbon::now()->subDays($withdrawal_condition_for_days))->whereNull('withdraw_at')->get();
+
+            foreach ($users as $user) {
+                $user->withdraw_at = $user->created_at;
+                $user->save();
+            }
+
+            exit;
 
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
