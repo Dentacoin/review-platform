@@ -1988,23 +1988,23 @@ NOT SENT TRANSACTIONS
         $schedule->call(function () {
             echo 'Transaction scammers by day cron'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $min_withdraw_time = WithdrawalsCondition::find(1)->timerange;
-            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
-
-            foreach ($transactions as $trans) {
-                $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', Carbon::now()->addDays(-30))->get();
-
-                foreach ($user_transactions as $user_trans) {
-                    foreach ($user_transactions as $user_t) {
-                        if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && empty(TransactionScammersByDay::where('user_id', $user_t->user_id)->first())) {
-
-                            $scammer = new TransactionScammersByDay;
-                            $scammer->user_id = $user_t->user_id;
-                            $scammer->save();
-                        }
-                    }   
-                }
-            }
+//            $min_withdraw_time = WithdrawalsCondition::find(1)->timerange;
+//            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
+//
+//            foreach ($transactions as $trans) {
+//                $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', Carbon::now()->addDays(-30))->get();
+//
+//                foreach ($user_transactions as $user_trans) {
+//                    foreach ($user_transactions as $user_t) {
+//                        if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && empty(TransactionScammersByDay::where('user_id', $user_t->user_id)->first())) {
+//
+//                            $scammer = new TransactionScammersByDay;
+//                            $scammer->user_id = $user_t->user_id;
+//                            $scammer->save();
+//                        }
+//                    }
+//                }
+//            }
 
 
             $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
