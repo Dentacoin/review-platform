@@ -328,6 +328,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function my_workplace_approved() {
         return $this->hasMany('App\Models\UserTeam', 'dentist_id', 'id')->where('approved', true);
     }
+    public function transactions_count() {
+        return $this->hasMany('App\Models\DcnTransaction', 'user_id', 'id')->count();
+    }
 
     public function getWebsiteUrl() {
         return mb_strpos( $this->website, 'http' )!==false ? $this->website : 'http://'.$this->website;
