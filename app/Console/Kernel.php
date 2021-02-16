@@ -2077,12 +2077,12 @@ UNCONFIRMED TRANSACTIONS
 //            }
 
 
-            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
+            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->where('status', '!=', 'failed')->groupBy('user_id')->get();
 
             foreach ($transactions as $trans) {
                 $user = User::withTrashed()->find($trans->user_id);
 
-                if(!empty($user) && empty(TransactionScammersByBalance::where('user_id', $user->id)->first()) && intval(DcnReward::where('user_id', $user->id)->sum('reward')) < intval(DcnTransaction::where('user_id', $user->id)->where('created_at', '>', Carbon::now()->addDays(-30))->where('type', '!=', 'register-reward')->sum('amount'))) {
+                if(!empty($user) && empty(TransactionScammersByBalance::where('user_id', $user->id)->first()) && intval(DcnReward::where('user_id', $user->id)->sum('reward')) < intval(DcnTransaction::where('user_id', $user->id)->where('created_at', '>', Carbon::now()->addDays(-30))->where('type', '!=', 'register-reward')->where('status', '!=', 'failed')->sum('amount'))) {
                     $scammer = new TransactionScammersByBalance;
                     $scammer->user_id = $user->id;
                     $scammer->save();
