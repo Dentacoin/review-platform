@@ -200,19 +200,25 @@
                         <div class="form-group">
                             <label class="col-md-2">Min amount</label>
                             <div class="col-md-4">
-                                <input class="form-control" type="number" name="min-amount" value="{{ \App\Models\WithdrawalsCondition::find(1)->min_amount }}" />
+                                <input class="form-control" type="number" name="min-amount" value="{{ $withdrawal_conditions->min_amount }}" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2">Min VOX amount</label>
                             <div class="col-md-4">
-                                <input class="form-control" type="number" name="min-vox-amount" value="{{ \App\Models\WithdrawalsCondition::find(1)->min_vox_amount }}" />
+                                <input class="form-control" type="number" name="min-vox-amount" value="{{ $withdrawal_conditions->min_vox_amount }}" />
                             </div>
-                        </div>                        
+                        </div>
                         <div class="form-group">
                             <label class="col-md-2">Timerange (in days)</label>
                             <div class="col-md-4">
-                                <input class="form-control" type="number" name="timerange" value="{{ \App\Models\WithdrawalsCondition::find(1)->timerange }}" />
+                                <input class="form-control" type="number" name="timerange" value="{{ $withdrawal_conditions->timerange }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2">Server Pending Transactions Count</label>
+                            <div class="col-md-4">
+                                <input class="form-control" type="number" name="count_pending_transactions" value="{{ $withdrawal_conditions->count_pending_transactions }}" />
                             </div>
                         </div>
                         <div class="form-group">

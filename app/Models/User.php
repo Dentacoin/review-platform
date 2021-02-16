@@ -331,6 +331,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function transactions_count() {
         return $this->hasMany('App\Models\DcnTransaction', 'user_id', 'id')->count();
     }
+    public function transactions() {
+        return $this->hasMany('App\Models\DcnTransaction', 'user_id', 'id');
+    }
 
     public function getWebsiteUrl() {
         return mb_strpos( $this->website, 'http' )!==false ? $this->website : 'http://'.$this->website;
@@ -1670,7 +1673,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         $gas = GasPrice::find(1);
 
-        if($gas->gas_price > config('gas-limit.max_gas_price')) {
+        if($gas->gas_price > $gas->max_gas_price) {
             return true;
         }
 

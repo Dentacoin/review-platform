@@ -137,6 +137,7 @@ class TransactionsController extends AdminController
             'page' => $page,
             'pagination_link' => $pagination_link,
             'current_url' => $current_url,
+            'withdrawal_conditions' => WithdrawalsCondition::find(1),
         ));
     }
 
@@ -316,6 +317,10 @@ class TransactionsController extends AdminController
 
         if(!empty(request('timerange'))) {
             $withdrawal_conditions->timerange = request('timerange');
+        }
+
+        if(!empty(request('count_pending_transactions'))) {
+            $withdrawal_conditions->count_pending_transactions = request('count_pending_transactions');
         }
 
         $withdrawal_conditions->save();

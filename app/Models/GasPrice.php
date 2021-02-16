@@ -8,6 +8,7 @@ class GasPrice extends Model {
     
     protected $fillable = [
         "gas_price",
+        "max_gas_price",
     ];
     
     protected $dates = [

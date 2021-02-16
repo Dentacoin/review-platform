@@ -1941,24 +1941,48 @@ NOT SENT TRANSACTIONS
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => 'https://ethgasstation.info/json/ethgasAPI.json',
-                CURLOPT_SSL_VERIFYPEER => 0
+                CURLOPT_URL => 'https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey='.env('ETHERSCAN_API'),
+                CURLOPT_SSL_VERIFYPEER => 0,
             ));
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             $resp = json_decode(curl_exec($curl));
             curl_close($curl);
-            if (!empty($resp))   {
-                $gas_price = $resp->average;
-                $gwei = $gas_price / 10;
+            if (!empty($resp) && isset($resp->result->SafeGasPrice)) {
 
                 $gas = GasPrice::find(1);
-                $gas->gas_price = intval(number_format($gwei));
+                $gas->gas_price = intval(number_format($resp->result->SafeGasPrice));
                 $gas->save();
             }
 
             echo 'Gas Price Cron - DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("*/1 * * * *");
+
+
+        $schedule->call(function () {
+
+            echo 'Max Gas Price Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-max-gas-price',
+                CURLOPT_SSL_VERIFYPEER => 0,
+                CURLOPT_POST => 1,
+            ));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            $resp = json_decode(curl_exec($curl));
+            curl_close($curl);
+
+            if (!empty($resp) && isset($resp->success)) {
+                $gas = GasPrice::find(1);
+                $gas->max_gas_price = intval(number_format($resp->success / 1000000000));
+                $gas->save();
+            }
+
+            echo 'Max Gas Price Cron - DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+        })->cron("*/15 * * * *");
 
 
 
