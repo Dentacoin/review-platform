@@ -11,6 +11,7 @@ use App\Models\IncompleteRegistration;
 use App\Models\WithdrawalsCondition;
 use App\Models\ScrapeDentistResult;
 use App\Models\CronjobSecondRun;
+use App\Models\CronjobThirdRun;
 use App\Models\StopVideoReview;
 use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
@@ -367,7 +368,7 @@ PENDING TRANSACTIONS
         })->cron("*/5 * * * *");
 
 
-        
+
         $schedule->call(function () {
 
             $cron_running = CronjobRun::first();
@@ -379,6 +380,126 @@ PENDING TRANSACTIONS
                 }
 
                 $cronjob_stars = new CronjobRun;
+                $cronjob_stars->started_at = Carbon::now();
+                $cronjob_stars->save();
+
+                echo '
+NEW TRANSACTIONS
+
+=========================
+
+';
+
+                $transactions = DcnTransaction::where('status', 'new')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
+
+                if($transactions->isNotEmpty()) {
+
+                    $cron_new_trans_time = GasPrice::find(1)->cron_new_trans; // 2021-02-16 13:43:00
+
+                    if ($cron_new_trans_time < Carbon::now()->subMinutes(10)) {
+
+                        if (!User::isGasExpensive()) {
+
+                            foreach ($transactions as $trans) {
+                                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
+                                echo $log . PHP_EOL;
+
+                                Dcn::retry($trans);
+                                echo 'NEW STATUS: ' . $trans->status . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
+                            }
+
+                            $cron_new_trans_time->cron_new_trans = Carbon::now();
+                            $cron_new_trans_time->save();
+                        } else {
+
+                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(10);
+                            $cron_new_trans_time->save();
+
+                            echo 'New Transactions High Gas Price';
+                        }
+                    }
+                }
+
+
+                echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+                CronjobRun::destroy($cronjob_stars->id);
+            } else {
+                echo 'New transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            }
+
+        })->cron("* * * * *");
+
+
+        $schedule->call(function () {
+            $cron_running = CronjobSecondRun::first();
+
+            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
+
+                if(!empty($cron_running)) {
+                    CronjobSecondRun::destroy($cron_running->id);
+                }
+
+                $cronjob_stars = new CronjobSecondRun;
+                $cronjob_stars->started_at = Carbon::now();
+                $cronjob_stars->save();
+
+                echo '
+NOT SENT TRANSACTIONS
+
+========================
+
+';
+                $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'asc')->take(5)->get(); //
+
+                if($transactions->isNotEmpty()) {
+
+                    $cron_not_sent_trans_time = GasPrice::find(1)->cron_not_sent_trans;
+
+                    if ($cron_not_sent_trans_time < Carbon::now()->subMinutes(10)) {
+
+                        if(!User::isGasExpensive()) {
+
+                            foreach ($transactions as $trans) {
+                                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ';
+                                echo $log . PHP_EOL;
+
+                                Dcn::retry($trans);
+                                echo 'NEW STATUS: ' . $trans->status . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
+                            }
+
+                            $cron_not_sent_trans_time->cron_not_sent_trans = Carbon::now();
+                            $cron_not_sent_trans_time->save();
+                        } else {
+
+                            $cron_not_sent_trans_time->cron_not_sent_trans = Carbon::now()->subMinutes(10);
+                            $cron_not_sent_trans_time->save();
+
+                            echo 'Not sent Transactions High Gas Price';
+                        }
+                    }
+                }
+
+                CronjobSecondRun::destroy($cronjob_stars->id);
+            } else {
+                echo 'Not sent transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            }
+
+        })->cron("* * * * *");
+
+
+
+        $schedule->call(function () {
+
+            $cron_running = CronjobThirdRun::first();
+
+            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
+
+                if(!empty($cron_running)) {
+                    CronjobThirdRun::destroy($cron_running->id);
+                }
+
+                $cronjob_stars = new CronjobThirdRun;
                 $cronjob_stars->started_at = Carbon::now();
                 $cronjob_stars->save();
 
@@ -431,77 +552,12 @@ UNCONFIRMED TRANSACTIONS
                     }
                 }
 
-
-                echo '
-NEW TRANSACTIONS
-
-=========================
-
-';
-
-                $transactions = DcnTransaction::where('status', 'new')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
-
-                echo 'Start New Transactions';
-
-                foreach ($transactions as $trans) {
-                    $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
-                    echo $log.PHP_EOL;
-
-                    Dcn::retry($trans);
-                    echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
-                }
-
-                echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-                CronjobRun::destroy($cronjob_stars->id);
+                CronjobThirdRun::destroy($cronjob_stars->id);
             } else {
-                echo 'New & unconfirmed transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
+                echo 'Unconfirmed transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
 
         })->cron("*/15 * * * *");
-
-
-        $schedule->call(function () {
-            $cron_running = CronjobSecondRun::first();
-
-            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
-
-                if(!empty($cron_running)) {
-                    CronjobSecondRun::destroy($cron_running->id);
-                }
-
-                $cronjob_stars = new CronjobSecondRun;
-                $cronjob_stars->started_at = Carbon::now();
-                $cronjob_stars->save();
-
-                echo '
-NOT SENT TRANSACTIONS
-
-========================
-
-';
-                $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'asc')->take(10)->get(); //
-
-                if($transactions->isNotEmpty()) {
-
-                    foreach ($transactions as $trans) {
-                        $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || ';
-                        echo $log.PHP_EOL;
-
-                        if(!User::isGasExpensive()) {
-
-                            Dcn::retry($trans);
-                            echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
-                        }
-                    }
-                }
-
-                CronjobSecondRun::destroy($cronjob_stars->id);
-            } else {
-                echo 'Not sent transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
-            }
-
-        })->cron("*/30 * * * *");
 
 
         $schedule->call(function () {
@@ -1946,7 +2002,7 @@ NOT SENT TRANSACTIONS
 
             echo 'Gas Price Cron - DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron("*/1 * * * *");
+        })->cron("* * * * *");
 
 
         $schedule->call(function () {
