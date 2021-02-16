@@ -432,14 +432,14 @@ UNCONFIRMED TRANSACTIONS
 
 
                 echo '
-NEW & FAILED TRANSACTIONS
+NEW TRANSACTIONS
 
 =========================
 
 ';
 
                 $executed = 0;
-                $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
+                $transactions = DcnTransaction::whereIn('status', ['new'])->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
 
                 echo 'Start New & Failed';
 
