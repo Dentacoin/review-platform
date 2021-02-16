@@ -422,7 +422,8 @@ UNCONFIRMED TRANSACTIONS
                         }
                     }
 
-                    if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*72 && !User::isGasExpensive()) {
+                    //after 5 days
+                    if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*120 && !User::isGasExpensive()) {
                         $trans->unconfirmed_retry = true;
                         $trans->save();
                         Dcn::retry($trans);
@@ -438,34 +439,23 @@ NEW TRANSACTIONS
 
 ';
 
-                $executed = 0;
-                $transactions = DcnTransaction::whereIn('status', ['new'])->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
+                $transactions = DcnTransaction::where('status', 'new')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
 
-                echo 'Start New & Failed';
+                echo 'Start New Transactions';
 
                 foreach ($transactions as $trans) {
                     $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                     echo $log.PHP_EOL;
 
-                    if($trans->status=='new' ||  $trans->shouldRetry()) {
-                        $executed++;
-                        Dcn::retry($trans);
-                        echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
-                    } else {
-                        echo 'TOO EARLY TO RETRY'.PHP_EOL;
-                    }
-
-                    // if($executed>10) {
-                    //     echo '5 executed - enough for now'.PHP_EOL;
-                    //     break;
-                    // }
+                    Dcn::retry($trans);
+                    echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
                 }
 
                 echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
                 CronjobRun::destroy($cronjob_stars->id);
             } else {
-                echo 'New,failed & unconfirmed transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
+                echo 'New & unconfirmed transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
 
         })->cron("*/15 * * * *");
