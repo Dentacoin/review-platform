@@ -394,9 +394,9 @@ NEW TRANSACTIONS
 
                 if($transactions->isNotEmpty()) {
 
-                    $cron_new_trans_time = GasPrice::find(1)->cron_new_trans; // 2021-02-16 13:43:00
+                    $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
-                    if ($cron_new_trans_time < Carbon::now()->subMinutes(10)) {
+                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(10)) {
 
                         if (!User::isGasExpensive()) {
 
@@ -454,9 +454,9 @@ NOT SENT TRANSACTIONS
 
                 if($transactions->isNotEmpty()) {
 
-                    $cron_not_sent_trans_time = GasPrice::find(1)->cron_not_sent_trans;
+                    $cron_not_sent_trans_time = GasPrice::find(1);
 
-                    if ($cron_not_sent_trans_time < Carbon::now()->subMinutes(10)) {
+                    if ($cron_not_sent_trans_time->cron_not_sent_trans < Carbon::now()->subMinutes(10)) {
 
                         if(!User::isGasExpensive()) {
 
