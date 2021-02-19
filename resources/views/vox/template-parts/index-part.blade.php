@@ -109,7 +109,7 @@
 			<div class="col reason-desc">
 				<p>
 					{!! nl2br(trans('vox.page.index.reasons.2.content',[
-						"link" => '<a href="https://dentacoin.com/partner-network" target="_blank">',
+						"link" => '<a href="https://dentacoin.com/users#section-google-map" target="_blank">',
 						"endlink" => '</a>'
 					])) !!}						
 				</p>
