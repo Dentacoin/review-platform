@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\VoxAnswersDependency;
 use App\Models\VoxAnswer;
+use App\Models\VoxScale;
 
 use WebPConvert\WebPConvert;
 
+use Log;
 use DB;
 
 class VoxQuestion extends Model {
@@ -80,6 +82,14 @@ class VoxQuestion extends Model {
         return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_title);
     }
 
+    public function questionWithTooltipsApp() {
+
+        $new_title = str_replace("{/}","</a>", str_replace("[/]","</span>", str_replace('"', '&quot;', $this->question)));
+        $new_title = preg_replace('/\{([^\]]*)\}/', '<a href="${1}" target="_blank">', $new_title);
+
+        return preg_replace('/\[([^\]]*)\]/', '<span style="font-weight: bold; color: #41afff;" class="tooltip-text" text="${1}">', $new_title);
+    }
+
     public function questionWithoutTooltips() {
 
         $new_title = str_replace("{/}","</a>", str_replace("[/]","",$this->question));
@@ -135,7 +145,7 @@ class VoxQuestion extends Model {
             }
         }
 
-        if(!$this->vox_scale_id && count(json_decode($this->answers, true)) == $arr) {
+        if(!$this->vox_scale_id && $this->answers && count(json_decode($this->answers, true)) == $arr) {
             return true;
         } else {
             return false;
@@ -297,6 +307,112 @@ class VoxQuestion extends Model {
         $this->dependency_caching = true;
         $this->save();
     }
+
+    public function convertForResponse() {
+
+        $slist = VoxScale::get();
+        $scales = [];
+        foreach ($slist as $sitem) {
+            $scales[$sitem->id] = $sitem;
+        }
+
+        $arr = $this->toArray();
+        $arr['thumb'] = $this->getImageUrl(true);
+        $arr['avatar'] = $this->getImageUrl();
+        $arr['title'] = $this->questionWithTooltipsApp();
+        $arr['image_only_in_question'] = $this->imageOnlyInQuestion();
+        $arr['image_only_in_tooltip'] = $this->imageOnlyInTooltip();
+        $arr['image_in_tooltip_and_question'] = $this->imageInTooltipAndQuestion();
+        $arr['has_image_question'] = !empty($this->imageOnlyInQuestion()) || !empty($this->imageInTooltipAndQuestion());
+        $arr['has_image_tooltip'] = !empty($this->imageOnlyInTooltip()) || !empty($this->imageInTooltipAndQuestion());
+        $arr['all_answers_have_images'] = $this->allAnswersHaveImages();
+
+        $arr['answers_cov'] = $this->vox_scale_id && $this->type != 'scale' && !empty($scales[$this->vox_scale_id]) ? explode(',', $scales[$this->vox_scale_id]->answers) :  json_decode($this->answers, true);
+
+        if($arr['answers_cov']) {
+
+            foreach ($arr['answers_cov'] as $num => $ans) {
+                $arr['all_answers'][] = [
+                    'id' => $num+1,
+                    'answer' => $ans
+                ];
+            }
+
+            if($this->type == 'multiple_choice') {
+                if(empty($this->dont_randomize_answers)) {
+
+                    $arr['all_answers'] = $this->shuffleAnswers($arr['all_answers']);
+
+                }
+
+            } else if($this->type == 'single_choice') {
+
+                if($this->is_control != 1 && empty($this->dont_randomize_answers) && empty($this->vox_scale_id) && $this->vox_id != 11 && !$this->cross_check ) {
+                    $arr['all_answers'] = $this->shuffleAnswers($arr['all_answers']);
+                }
+
+            } else if($this->type == 'rank') {
+
+                $rank_arr = [];
+                foreach ($arr['all_answers'] as $key => $value) {
+                    $rank_arr[] = [
+                        $key+1,
+                        $value['answer'],
+                    ];
+                }
+
+                $arr['all_answers'] = $rank_arr;
+            }
+
+            if($this->type != 'multiple_choice' && $this->type != 'rank') {
+                foreach ($arr['all_answers'] as $key => $value) {
+                    if(mb_strpos($value['answer'],'!') === 0 || mb_strpos($value['answer'], '#') === 0) {
+                        $arr['all_answers'][$key] = [
+                            'id' => $value['id'],
+                            'answer' => mb_substr($value['answer'], 1)
+                        ];
+                    }
+                }
+            }
+        } else {
+            $arr['all_answers'] = [];
+        }
+
+        $arr['answer_images'] = [];
+        $arr['answer_images_thumb'] = [];
+
+        if (!empty($arr['all_answers'])) {
+            foreach ($arr['all_answers'] as $key => $value) {
+                $arr['answer_images'][] = $this->getAnswerImageUrl(false, $key);
+                $arr['answer_images_thumb'][] = $this->getAnswerImageUrl(true, $key);
+            }
+        }
+
+        return $arr;
+    }
+
+
+    public function shuffleAnswers($answers) {
+        $append_at_the_end = [];
+        $shuffled = [];
+
+        foreach ($answers as $value) {
+            if(mb_strpos($value['answer'],'!') === 0 || mb_strpos($value['answer'], '#') === 0) {
+                $append_at_the_end[] = $value;
+            } else {
+                $shuffled[] = $value;
+            }
+        }
+
+        shuffle($shuffled);
+
+        foreach ($append_at_the_end as $v) {
+            $shuffled[] = $v;
+        }
+
+        return $shuffled;
+    }
+
 }
 
 class VoxQuestionTranslation extends Model {

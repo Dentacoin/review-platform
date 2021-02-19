@@ -12,6 +12,8 @@ class GasPrice extends Model {
     ];
     
     protected $dates = [
+        "cron_new_trans",
+        "cron_not_sent_trans",
         'created_at', 
         'updated_at',
     ];

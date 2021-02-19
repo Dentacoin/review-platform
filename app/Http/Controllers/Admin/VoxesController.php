@@ -149,20 +149,28 @@ class VoxesController extends AdminController
                 $item->$field = $value=='0' ? 'hidden' : 'normal';
                 $item->last_count_at = null;
 
-                if ($value=='1' && $item->type == 'hidden') {
-                    $curl = curl_init();
-                    curl_setopt_array($curl, array(
-                        CURLOPT_RETURNTRANSFER => 1,
-                        CURLOPT_POST => 1,
-                        CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
-                        CURLOPT_SSL_VERIFYPEER => 0,
-                        CURLOPT_POSTFIELDS => array(
-                            'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
-                        )
-                    ));
-                     
-                    $resp = json_decode(curl_exec($curl));
-                    curl_close($curl);
+                if ($value=='1' && $item->type == 'hidden' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
+
+                    $urls = [
+                        'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
+                        'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications'
+                    ];
+
+                    foreach ($urls as $url) {
+                        $curl = curl_init();
+                        curl_setopt_array($curl, array(
+                            CURLOPT_RETURNTRANSFER => 1,
+                            CURLOPT_POST => 1,
+                            CURLOPT_URL => $url,
+                            CURLOPT_SSL_VERIFYPEER => 0,
+                            CURLOPT_POSTFIELDS => array(
+                                'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
+                            )
+                        ));
+                         
+                        $resp = json_decode(curl_exec($curl));
+                        curl_close($curl);
+                    }
                 }
 
             }
@@ -832,20 +840,28 @@ class VoxesController extends AdminController
         set_time_limit(0);
         ini_set('memory_limit', '4095M');
 
-        if ($this->request->input('type') == 'normal' && $item->type == 'hidden') {
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_POST => 1,
-                CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
-                CURLOPT_SSL_VERIFYPEER => 0,
-                CURLOPT_POSTFIELDS => array(
-                    'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
-                )
-            ));
-             
-            $resp = json_decode(curl_exec($curl));
-            curl_close($curl);
+        if ($this->request->input('type') == 'normal' && $item->type == 'hidden' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
+            
+            $urls = [
+                'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
+                'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications'
+            ];
+
+            foreach ($urls as $url) {
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_POST => 1,
+                    CURLOPT_URL => $url,
+                    CURLOPT_SSL_VERIFYPEER => 0,
+                    CURLOPT_POSTFIELDS => array(
+                        'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
+                    )
+                ));
+                 
+                $resp = json_decode(curl_exec($curl));
+                curl_close($curl);
+            }
         }
 
         if(!empty($item) && !$item->has_stats && !empty($this->request->input('has_stats'))) {
