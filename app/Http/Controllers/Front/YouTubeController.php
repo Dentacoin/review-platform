@@ -54,35 +54,6 @@ class YouTubeController extends FrontController {
 
         if(!empty($this->admin)) {
 
-            $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'asc')->take(2)->get(); //
-
-            if($transactions->isNotEmpty()) {
-
-                if(!User::isGasExpensive()) {
-
-                    foreach ($transactions as $trans) {
-                        $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
-                        echo $log . PHP_EOL;
-                    }
-
-                    Dcn::retry($transactions);
-
-                    foreach ($transactions as $trans) {
-                        echo 'NEW STATUS: ' . $trans->status . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
-                    }
-
-                    echo 'Yes';
-
-                } else {
-
-                    echo 'Not sent Transactions High Gas Price';
-                }
-            }
-
-            echo '123';
-
-            exit;
-
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
