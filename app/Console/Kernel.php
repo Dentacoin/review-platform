@@ -2110,7 +2110,7 @@ UNCONFIRMED TRANSACTIONS
             foreach ($transactions as $trans) {
                 $user = User::withTrashed()->find($trans->user_id);
 
-                if(!empty($user) && empty(TransactionScammersByBalance::where('user_id', $user->id)->first()) && intval(DcnReward::where('user_id', $user->id)->sum('reward')) < intval(DcnTransaction::where('user_id', $user->id)->where('created_at', '>', Carbon::now()->addDays(-30))->where('type', '!=', 'register-reward')->where('status', '!=', 'failed')->sum('amount'))) {
+                if(!empty($user) && empty(TransactionScammersByBalance::withTrashed()->where('user_id', $user->id)->first()) && intval(DcnReward::where('user_id', $user->id)->sum('reward')) < intval(DcnTransaction::where('user_id', $user->id)->where('created_at', '>', Carbon::now()->addDays(-30))->where('type', '!=', 'register-reward')->where('status', '!=', 'failed')->sum('amount'))) {
                     $scammer = new TransactionScammersByBalance;
                     $scammer->user_id = $user->id;
                     $scammer->save();
