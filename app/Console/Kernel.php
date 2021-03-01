@@ -434,64 +434,64 @@ NEW TRANSACTIONS
         })->cron("* * * * *");
 
 
-        $schedule->call(function () {
-            $cron_running = CronjobSecondRun::first();
+//         $schedule->call(function () {
+//             $cron_running = CronjobSecondRun::first();
 
-            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
+//             if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
 
-                if(!empty($cron_running)) {
-                    CronjobSecondRun::destroy($cron_running->id);
-                }
+//                 if(!empty($cron_running)) {
+//                     CronjobSecondRun::destroy($cron_running->id);
+//                 }
 
-                $cronjob_stars = new CronjobSecondRun;
-                $cronjob_stars->started_at = Carbon::now();
-                $cronjob_stars->save();
+//                 $cronjob_stars = new CronjobSecondRun;
+//                 $cronjob_stars->started_at = Carbon::now();
+//                 $cronjob_stars->save();
 
-                echo '
-NOT SENT TRANSACTIONS
+//                 echo '
+// NOT SENT TRANSACTIONS
 
-========================
+// ========================
 
-';
-                $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'asc')->take(5)->get(); //
+// ';
+//                 $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'asc')->take(5)->get(); //
 
-                if($transactions->isNotEmpty()) {
+//                 if($transactions->isNotEmpty()) {
 
-                    $cron_not_sent_trans_time = GasPrice::find(1);
+//                     $cron_not_sent_trans_time = GasPrice::find(1);
 
-                    if ($cron_not_sent_trans_time->cron_not_sent_trans < Carbon::now()->subMinutes(10)) {
+//                     if ($cron_not_sent_trans_time->cron_not_sent_trans < Carbon::now()->subMinutes(10)) {
 
-                        if(!User::isGasExpensive()) {
+//                         if(!User::isGasExpensive()) {
 
-                            foreach ($transactions as $trans) {
-                                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
-                                echo $log . PHP_EOL;
-                            }
+//                             foreach ($transactions as $trans) {
+//                                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
+//                                 echo $log . PHP_EOL;
+//                             }
 
-                            Dcn::retry($transactions);
+//                             Dcn::retry($transactions);
 
-                            foreach ($transactions as $trans) {
-                                echo 'NEW STATUS: ' . $trans->status . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
-                            }
+//                             foreach ($transactions as $trans) {
+//                                 echo 'NEW STATUS: ' . $trans->status . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
+//                             }
 
-                            $cron_not_sent_trans_time->cron_not_sent_trans = Carbon::now();
-                            $cron_not_sent_trans_time->save();
-                        } else {
+//                             $cron_not_sent_trans_time->cron_not_sent_trans = Carbon::now();
+//                             $cron_not_sent_trans_time->save();
+//                         } else {
 
-                            $cron_not_sent_trans_time->cron_not_sent_trans = Carbon::now()->subMinutes(10);
-                            $cron_not_sent_trans_time->save();
+//                             $cron_not_sent_trans_time->cron_not_sent_trans = Carbon::now()->subMinutes(10);
+//                             $cron_not_sent_trans_time->save();
 
-                            echo 'Not sent Transactions High Gas Price';
-                        }
-                    }
-                }
+//                             echo 'Not sent Transactions High Gas Price';
+//                         }
+//                     }
+//                 }
 
-                CronjobSecondRun::destroy($cronjob_stars->id);
-            } else {
-                echo 'Not sent transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
-            }
+//                 CronjobSecondRun::destroy($cronjob_stars->id);
+//             } else {
+//                 echo 'Not sent transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
+//             }
 
-        })->cron("* * * * *");
+//         })->cron("* * * * *");
 
 
 
