@@ -236,6 +236,9 @@ class UsersController extends AdminController {
             'trusted' => [
                 'type' => 'bool',
             ],
+            'is_admin' => [
+                'type' => 'bool',
+            ],
         ];
     }
 

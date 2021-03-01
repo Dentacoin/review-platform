@@ -403,8 +403,11 @@ NEW TRANSACTIONS
                             foreach ($transactions as $trans) {
                                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
                                 echo $log . PHP_EOL;
+                            }
 
-                                Dcn::retry($trans);
+                            Dcn::retry($transactions);
+
+                            foreach ($transactions as $trans) {
                                 echo 'NEW STATUS: ' . $trans->status . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
                             }
 
@@ -461,10 +464,13 @@ NOT SENT TRANSACTIONS
                         if(!User::isGasExpensive()) {
 
                             foreach ($transactions as $trans) {
-                                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ';
+                                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
                                 echo $log . PHP_EOL;
+                            }
 
-                                Dcn::retry($trans);
+                            Dcn::retry($transactions);
+
+                            foreach ($transactions as $trans) {
                                 echo 'NEW STATUS: ' . $trans->status . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
                             }
 
@@ -514,6 +520,8 @@ UNCONFIRMED TRANSACTIONS
                 $last_transactions = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(10)->get();
                 $transactions = $transactions->concat($last_transactions);
 
+                $toBeRetried = [];
+
                 foreach ($transactions as $trans) {
                     $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                     echo $log.PHP_EOL;
@@ -545,10 +553,30 @@ UNCONFIRMED TRANSACTIONS
 
                     //after 5 days
                     if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*120 && !User::isGasExpensive()) {
-                        $trans->unconfirmed_retry = true;
-                        $trans->save();
-                        Dcn::retry($trans);
-                        echo 'RETRYING -> '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
+                        $toBeRetried[] = $trans->id;
+
+                        // $trans->unconfirmed_retry = true;
+                        // $trans->save();
+                        // Dcn::retry($trans);
+                        // echo 'RETRYING -> '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
+                    }
+                }
+
+                if(!empty($toBeRetried)) {
+                    $transToRetry = DcnTransaction::whereIn('id', $toBeRetried)->get();
+
+                    if($transToRetry->isNotEmpty()) {
+
+                        foreach ($transToRetry as $retryTrans) {
+                            $retryTrans->unconfirmed_retry = true;
+                            $retryTrans->save();
+                        }
+
+                        Dcn::retry($transToRetry);
+
+                        foreach ($transToRetry as $retryTrans) {
+                            echo 'RETRYING -> '.$retryTrans->message.' '.$retryTrans->tx_hash.PHP_EOL;
+                        }
                     }
                 }
 

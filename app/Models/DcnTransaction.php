@@ -25,6 +25,7 @@ class DcnTransaction extends Model {
         'ip',
         'processing',
         'unconfirmed_retry',
+        'is_paid_by_the_user'
     ];
 
     protected $dates = [
