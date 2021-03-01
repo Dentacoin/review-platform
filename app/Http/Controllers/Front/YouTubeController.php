@@ -54,12 +54,11 @@ class YouTubeController extends FrontController {
 
         if(!empty($this->admin)) {
 
-            $transactions = DcnTransaction::where('status', 'new')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
+            $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'asc')->take(2)->get(); //
 
             if($transactions->isNotEmpty()) {
 
-
-                if (!User::isGasExpensive()) {
+                if(!User::isGasExpensive()) {
 
                     foreach ($transactions as $trans) {
                         $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
@@ -72,18 +71,15 @@ class YouTubeController extends FrontController {
                         echo 'NEW STATUS: ' . $trans->status . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
                     }
 
-                    $cron_new_trans_time->cron_new_trans = Carbon::now();
-                    $cron_new_trans_time->save();
-
                     echo 'Yes';
+
                 } else {
 
-                    $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(10);
-                    $cron_new_trans_time->save();
-
-                    echo 'New Transactions High Gas Price';
+                    echo 'Not sent Transactions High Gas Price';
                 }
             }
+
+            echo '123';
 
             exit;
 
