@@ -54,6 +54,15 @@ class InvitesController extends AdminController {
             });
         }
 
+        if(!empty(request('search-for-verification'))) {
+            if(request('search-for-verification') == 'yes') {
+
+                $items = $items->has('ask');
+            } else {
+                $items = $items->doesnthave('ask');
+            }
+        }
+
         if(!empty(request('search-invited-email'))) {
             $items = $items->where('invited_email', 'LIKE', '%'.trim(request('search-invited-email')).'%');
         }
@@ -123,6 +132,7 @@ class InvitesController extends AdminController {
             'search_invited_name' => request('search-invited-name'),
             'search_platform' => request('search-platform'),
             'search_inviter_type' => request('search-inviter-type'),
+            'search_for_verification' => request('search-for-verification'),
             'search_from' => request('search-from'),
             'search_to' => request('search-to'),
             'total_count' => $total_count,

@@ -62,6 +62,13 @@
                         <div class="col-md-2">
                             <input type="text" class="form-control datepicker" name="search-to" value="{{ $search_to }}" placeholder="Search to" autocomplete="off">
                         </div>
+                        <div class="col-md-2">
+                            <select class="form-control" name="search-for-verification">
+                                <option value="">Ask for verification</option>
+                                <option value="yes" {!! 'yes'==$search_for_verification ? 'selected="selected"' : '' !!}>Yes</option>
+                                <option value="no" {!! 'no'==$search_for_verification ? 'selected="selected"' : '' !!}>No</option>
+                            </select>
+                        </div>
                         
                         <div class="col-md-2">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">

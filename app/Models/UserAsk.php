@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 //ReverseInvite
 class UserAsk extends Model {
 
+    use \Awobaz\Compoships\Compoships;
     use SoftDeletes;
 
     protected $fillable = [

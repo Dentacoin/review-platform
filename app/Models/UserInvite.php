@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 class UserInvite extends Model {
 
+    use \Awobaz\Compoships\Compoships;
+
     protected $fillable = [
         'user_id',
         'invited_email',
@@ -38,6 +40,10 @@ class UserInvite extends Model {
 
     public function invited() {
         return $this->hasOne('App\Models\User', 'id', 'invited_id')->withTrashed();
+    }
+
+    public function ask() {
+        return $this->hasMany('App\Models\UserAsk', ['user_id', 'dentist_id'], ['invited_id', 'user_id'])->where('status', 'yes');
     }
 
     public function getImageUrl($thumb = false) {
