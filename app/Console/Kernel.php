@@ -392,7 +392,9 @@ NEW & NOT SENT TRANSACTIONS
 ';
 
                 $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(5)->get(); //
-                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->orderBy('id', 'asc')->take(5)->get();
+
+                $count_trans = $new_transactions->count();
+                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->orderBy('id', 'asc')->take(10 - $count_trans)->get();
                 $transactions = $new_transactions->concat($not_sent_transactions);
 
 
