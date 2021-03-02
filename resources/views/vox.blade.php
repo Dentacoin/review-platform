@@ -148,84 +148,85 @@
 		<div id="site-url" url="{{ empty($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/en/welcome-survey/' ? getLangUrl('/') : 'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] }}"></div>
 		
 		<div class="above-fold">
-			<header>
-				<div class="container">
-					<div class="navbar clearfix {{ !empty($user) && $user->platform == 'external' ? 'external-navbar' : '' }}">
-						<a href="{{ getLangUrl('/') }}" class="logo">
-							<img src="{{ url('new-vox-img/logo-vox.png') }}" alt="Dentavox logo" class="desktop" width="138" height="34">
-							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" alt="Dentavox logo mobile" class="mobile" width="46" height="29">
-						</a>
-						<div class="header-title">
-							@if($current_page=='index')
-								<table>
-									<tr>
-										<td class="tar"><b>{{ number_format($users_count, 0, '', ' ') }}</b></td>
-										<td>{{ trans('vox.header.users-count') }}</td>
-									</tr>
-									<tr>
-										<td class="tar"><b id="header_questions">{{ number_format($header_questions, 0, '', ' ') }}</b></td>
-										<td>{!! trans('vox.header.question-count', ['count' => '' ]) !!}</td>
-									</tr>
-								</table>
-							@endif
-						</div>
-						<div class="header-right tar flex">
-							@if( !empty($user) && $user->status!='approved' && $user->status!='test' && $user->status!='added_by_clinic_claimed' && $user->status!='added_by_dentist_claimed' )
-							@elseif($user)
-								<div class="user-and-price header-a">
-									@if( $user->platform=='external' )
-										<r style="display: block; color: #38ace5;">Hello, {{ $user->getNames() }}</r>
-										<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
-									@else
-
-										<a class="my-name" href="javascript:;">
-											Hello, {{ $user->getNames() }}
-										</a>
-										<a href="javascript:;">
+			@if(empty(request('app')))
+				<header>
+					<div class="container">
+						<div class="navbar clearfix {{ !empty($user) && $user->platform == 'external' ? 'external-navbar' : '' }}">
+							<a href="{{ getLangUrl('/') }}" class="logo">
+								<img src="{{ url('new-vox-img/logo-vox.png') }}" alt="Dentavox logo" class="desktop" width="138" height="34">
+								<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" alt="Dentavox logo mobile" class="mobile" width="46" height="29">
+							</a>
+							<div class="header-title">
+								@if($current_page=='index')
+									<table>
+										<tr>
+											<td class="tar"><b>{{ number_format($users_count, 0, '', ' ') }}</b></td>
+											<td>{{ trans('vox.header.users-count') }}</td>
+										</tr>
+										<tr>
+											<td class="tar"><b id="header_questions">{{ number_format($header_questions, 0, '', ' ') }}</b></td>
+											<td>{!! trans('vox.header.question-count', ['count' => '' ]) !!}</td>
+										</tr>
+									</table>
+								@endif
+							</div>
+							<div class="header-right tar flex">
+								@if( !empty($user) && $user->status!='approved' && $user->status!='test' && $user->status!='added_by_clinic_claimed' && $user->status!='added_by_dentist_claimed') )
+								@elseif($user)
+									<div class="user-and-price header-a">
+										@if( $user->platform=='external' )
+											<r style="display: block; color: #38ace5;">Hello, {{ $user->getNames() }}</r>
 											<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
+										@else
+
+											<a class="my-name" href="javascript:;">
+												Hello, {{ $user->getNames() }}
+											</a>
+											<a href="javascript:;">
+												<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
+											</a>
+										@endif
+									</div>
+									@if( $user->platform!='external' )
+										<a class="header-a" href="javascript:;" >
+											<img class="header-avatar" id="header-avatar" src="{{ $user->getImageUrl(true) }}" width="46" height="46">
 										</a>
 									@endif
-								</div>
-								@if( $user->platform!='external' )
-									<a class="header-a" href="javascript:;" >
-										<img class="header-avatar" id="header-avatar" src="{{ $user->getImageUrl(true) }}" width="46" height="46">
-									</a>
-								@endif
+									<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->
 
-								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
-								
-							@elseif($current_page=='welcome-survey')
-								@if(!empty($prev_user))
-									<div class="twerk-it">
-										<div class="user-and-price header-a">
-											<span class="tar">
-												Already been here?
-											</span>
-											<br/>
-											<a class="my-name open-dentacoin-gateway patient-login" style="font-weight: bold;" href="javascript:;">
-												Log into your Profile!
+								@elseif($current_page=='welcome-survey')
+									@if(!empty($prev_user))
+										<div class="twerk-it">
+											<div class="user-and-price header-a">
+												<span class="tar">
+													Already been here?
+												</span>
+												<br/>
+												<a class="my-name open-dentacoin-gateway patient-login" style="font-weight: bold;" href="javascript:;">
+													Log into your Profile!
+												</a>
+											</div>
+											<a class="header-a open-dentacoin-gateway patient-login" href="javascript:;">
+												<img class="header-avatar" id="header-avatar" src="{{ $prev_user->getImageUrl(true) }}" width="46" height="46">
 											</a>
 										</div>
-										<a class="header-a open-dentacoin-gateway patient-login" href="javascript:;">
-											<img class="header-avatar" id="header-avatar" src="{{ $prev_user->getImageUrl(true) }}" width="46" height="46">
-										</a>
-									</div>
 
+									@endif
+								@elseif( $current_page!='register' || (!empty($session_polls) && $current_page=='register') )
+									<span class="dcn-rate">
+
+										10000 DCN = $<span id="header-rate">{{ sprintf('%.2F', 10000 * $dcn_original_price) }}</span>
+										<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
+									</span>
+									<a href="javascript:;" class="start-button open-dentacoin-gateway patient-login">
+										{{ trans('vox.common.sign-in') }}
+									</a>
 								@endif
-							@elseif( $current_page!='register' || (!empty($session_polls) && $current_page=='register') )
-								<span class="dcn-rate">
-
-									10000 DCN = $<span id="header-rate">{{ sprintf('%.3F', 10000 * $dcn_original_price) }}</span>
-									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
-								</span>
-								<a href="javascript:;" class="start-button open-dentacoin-gateway patient-login">
-									{{ trans('vox.common.sign-in') }}
-								</a>
-							@endif
+							</div>
 						</div>
 					</div>
-				</div>
-			</header>
+				</header>
+			@endif
 
 			<div class="site-content">
 		   
@@ -274,7 +275,7 @@
 				</div>
 			</div>
 		@endif
-		
+
 		<div class="footer-expander">
 			<footer>
 				<div class="container flex flex-end">
@@ -284,27 +285,31 @@
 							{{ trans('vox.footer.company-name') }}
 						</p>
 					</a>
-					<div class="footer-text flex-6 tac">
-						<div class="footer-menu">
-							<a href="{{ getLangUrl('daily-polls') }}">{{ trans('vox.footer.daily-polls') }}</a>
-							<a href="{{ getLangUrl('dental-survey-stats') }}">{{ trans('vox.footer.stats') }}</a>
-							<a href="https://dentavox.dentacoin.com/blog/" target="_blank">{{ trans('vox.footer.blog') }}</a>
-							<a href="{{ getLangUrl('faq') }}">{{ trans('vox.footer.faq') }}</a>
-							<a class="privacy-item" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
+
+
+					@if(empty(request('app')))
+						<div class="footer-text flex-6 tac">
+							<div class="footer-menu">
+								<a href="{{ getLangUrl('daily-polls') }}">{{ trans('vox.footer.daily-polls') }}</a>
+								<a href="{{ getLangUrl('dental-survey-stats') }}">{{ trans('vox.footer.stats') }}</a>
+								<a href="https://dentavox.dentacoin.com/blog/" target="_blank">{{ trans('vox.footer.blog') }}</a>
+								<a href="{{ getLangUrl('faq') }}">{{ trans('vox.footer.faq') }}</a>
+								<a class="privacy-item" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
+							</div>
+							<small>
+								{{ trans('vox.footer.copyrights', [
+									'year' => date('Y')
+								]) }}
+							</small>
 						</div>
-						<small>
-							{{ trans('vox.footer.copyrights', [
-								'year' => date('Y')
-							]) }}
-						</small>
-					</div>
-					<div class="socials flex-3">
-						{{ trans('vox.footer.socials') }}
-						 &nbsp;
-						<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-						<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-					</div>
-					<a class="privacy-item-mobile" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
+						<div class="socials flex-3">
+							{{ trans('vox.footer.socials') }}
+							 &nbsp;
+							<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+							<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+						</div>
+						<a class="privacy-item-mobile" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
+						@endif
 				</div>
 			</footer>
 		</div>
@@ -392,12 +397,22 @@
 
 		@if(empty($user))
 			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js"></script>
-			<script type="text/javascript">
-				dcnGateway.init({
-					'platform' : '{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}',
-					'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=dentavox'
-				});	
-			</script>
+			@if(strpos($_SERVER['HTTP_HOST'], 'urgent') !== false) 
+				<script type="text/javascript">
+					dcnGateway.init({
+						'platform' : 'urgent.dentavox',
+						'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=dentavox',
+						'environment' : 'staging',
+					});	
+				</script>
+			@else
+				<script type="text/javascript">
+					dcnGateway.init({
+						'platform' : 'dentavox',
+						'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=dentavox',
+					});	
+				</script>
+			@endif
 		@else
 			@if($user->platform != 'external')
 				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style.css">
