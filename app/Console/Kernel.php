@@ -400,7 +400,7 @@ NEW & NOT SENT TRANSACTIONS
 
                     $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
-                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(10)) {
+                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(5)) {
 
                         if (!User::isGasExpensive()) {
 
@@ -419,7 +419,7 @@ NEW & NOT SENT TRANSACTIONS
                             $cron_new_trans_time->save();
                         } else {
 
-                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(10);
+                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(5);
                             $cron_new_trans_time->save();
 
                             echo 'New Transactions High Gas Price';
