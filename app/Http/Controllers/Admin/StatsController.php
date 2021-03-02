@@ -15,7 +15,11 @@ class StatsController extends AdminController
                 CONCAT(YEAR(`created_at`), 'W', REPLACE(LPAD( WEEK( DATE_SUB(  `created_at` , INTERVAL 16 HOUR ) , 5 ) , 2 , '0' ) , '00', '52') ) AS  `week`,
                 SUM( IF(  `is_dentist` AND `platform` = 'trp', 1, 0 ) ) AS `dentist`, 
                 SUM( IF(  !`is_dentist` AND `platform` = 'trp' , 1, 0 ) ) AS `patient`, 
-                SUM( IF(  `platform` = 'vox' , 1, 0 ) ) AS `vox`
+                SUM( IF(  `platform` = 'vox' , 1, 0 ) ) AS `vox`,
+                SUM( IF(  `platform` = 'dentacare' , 1, 0 ) ) AS `dentacare`,
+                SUM( IF(  `platform` = 'assurance' , 1, 0 ) ) AS `assurance`,
+                SUM( IF(  `platform` = 'dentacoin' , 1, 0 ) ) AS `dentacoin`,
+                SUM( IF(  `platform` = 'dentists' , 1, 0 ) ) AS `dentists`
             FROM  `users` 
             GROUP BY `week` 
             ORDER BY `id` DESC
@@ -31,6 +35,10 @@ class StatsController extends AdminController
                 'dentists' => $w->dentist,
                 'patients' => $w->patient,
                 'voxes' => $w->vox,
+                'dentacare' => $w->dentacare,
+                'assurance' => $w->assurance,
+                'dentacoin' => $w->dentacoin,
+                'dentists' => $w->dentists,
             ];
         }
 

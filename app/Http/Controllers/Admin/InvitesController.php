@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 use App\Models\UserInvite;
 
+use Carbon\Carbon;
+
 use Validator;
 use Request;
 
@@ -31,6 +33,21 @@ class InvitesController extends AdminController {
             });
         }
 
+        if(!empty(request('search-inviter-type'))) {
+            $s_inv_type = request('search-inviter-type');
+
+            if($s_inv_type == 'dentists') {
+
+                $items = $items->whereHas('user', function($query) {
+                    $query->where('is_dentist', '=', 1);
+                });
+            } else if($s_inv_type == 'patients') {
+                $items = $items->whereHas('user', function($query) {
+                    $query->where('is_dentist', '=', 0);
+                });
+            }
+        }
+
         if(!empty(request('search-invited-id'))) {
             $items = $items->whereHas('invited', function($query) {
                 $query->where('id', request('search-invited-id'));
@@ -43,6 +60,20 @@ class InvitesController extends AdminController {
 
         if(!empty(request('search-invited-name'))) {
             $items = $items->where('invited_name', 'LIKE', '%'.trim(request('search-invited-name')).'%');
+        }
+
+        if(!empty(request('search-platform'))) {
+            $items = $items->where('platform', request('search-platform'));
+        }
+
+        if(!empty(request('search-from'))) {
+            $firstday = new Carbon(request('search-from'));
+            $items = $items->where('created_at', '>=', $firstday);
+        }
+
+        if(!empty(request('search-to'))) {
+            $firstday = new Carbon(request('search-to'));
+            $items = $items->where('created_at', '<=', $firstday->addDays(1));
         }
 
         $total_count = $items->count();
@@ -90,6 +121,10 @@ class InvitesController extends AdminController {
             'search_invited_id' => request('search-invited-id'),
             'search_invited_email' => request('search-invited-email'),
             'search_invited_name' => request('search-invited-name'),
+            'search_platform' => request('search-platform'),
+            'search_inviter_type' => request('search-inviter-type'),
+            'search_from' => request('search-from'),
+            'search_to' => request('search-to'),
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,

@@ -238,8 +238,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::get('index-voxes', 						'IndexController@indexVoxes');
 	Route::get('users-stats', 						'IndexController@headerStats');
 	Route::post('get-next-question', 				'IndexController@getNextQuestion');
-	Route::any('survey-answer', 					'IndexController@surveyAnswer');
+	Route::post('survey-answer', 					'IndexController@surveyAnswer');
 	Route::post('start-over', 						'IndexController@startOver');
+	Route::get('is-dentacoin-down', 			    'IndexController@isDentacoinDown');
+    Route::get('is-online', 			            'IndexController@isOnline');
 
 	Route::get('all-voxes', 						'PaidDentalSurveysController@allVoxes');
 	Route::get('get-voxes', 						'PaidDentalSurveysController@getVoxes');

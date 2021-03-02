@@ -19,7 +19,7 @@
             </div>
             <div class="panel-body users-filters">
                 <form method="get" action="{{ url('cms/'.$current_page) }}" id="users-filter-form">
-                    <div class="row" style="margin-bottom: 10px;">
+                    <div class="row custom-row" style="margin-bottom: 10px;">
                         <div class="col-md-1">
                             <input type="text" class="form-control" name="search-user-id" value="{{ $search_user_id }}" placeholder="Inviter ID">
                         </div>
@@ -28,6 +28,13 @@
                         </div>
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-name" value="{{ $search_name }}" placeholder="Inviter Name">
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" name="search-inviter-type">
+                                <option value="">Inviter type</option>
+                                <option value="dentists" {!! 'dentists'==$search_inviter_type ? 'selected="selected"' : '' !!}>Dentists and Clinics</option>
+                                <option value="patients" {!! 'patients'==$search_inviter_type ? 'selected="selected"' : '' !!}>Patients</option>
+                            </select>
                         </div>
                         <div class="col-md-1">
                             <input type="text" class="form-control" name="search-invited-id" value="{{ $search_invited_id }}" placeholder="Invited ID">
@@ -38,6 +45,24 @@
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-invited-name" value="{{ $search_invited_name }}" placeholder="Invited Name">
                         </div>
+                    </div>
+                    <div class="row custom-row">
+                        <div class="col-md-2">
+                            <select class="form-control" name="search-platform">
+                                <option value="">Platform</option>
+                                @foreach(config('platforms') as $key => $platform)
+                                    <option value="{{ $key }}" {!! $key==$search_platform ? 'selected="selected"' : '' !!}>{{ $platform['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <input type="text" class="form-control datepicker" name="search-from" value="{{ $search_from }}" placeholder="Search from" autocomplete="off">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control datepicker" name="search-to" value="{{ $search_to }}" placeholder="Search to" autocomplete="off">
+                        </div>
+                        
                         <div class="col-md-2">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
                         </div>

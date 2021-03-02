@@ -54,6 +54,10 @@ class TransactionsController extends AdminController
             });
         } 
 
+        if(!empty(request()->input( 'paid-by-user'))) {
+            $transactions = $transactions->whereNotNull('is_paid_by_the_user');
+        }
+
         if(!empty($this->request->input('created'))) {
             $order = request()->input( 'created' );
             $transactions->getQuery()->orders = null;
@@ -129,6 +133,7 @@ class TransactionsController extends AdminController
             'search_to' => $this->request->input('search-to'),
             'search_from' => $this->request->input('search-from'),
             'search_email' =>  $this->request->input('search-email'),
+            'paid_by_user' => $this->request->input('paid-by-user'),
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
             'end' => $end,

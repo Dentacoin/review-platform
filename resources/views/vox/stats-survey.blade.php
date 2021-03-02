@@ -11,10 +11,13 @@
 			</div>
 		@endif
 
+
 		<div class="container">
-			<a class="back-home" href="{{ getLangUrl('dental-survey-stats') }}">
-				{!! trans('vox.page.stats.go-back-stats') !!}
-			</a> 
+			@if(empty(request('app')))
+				<a class="back-home" href="{{ getLangUrl('dental-survey-stats') }}">
+					{!! trans('vox.page.stats.go-back-stats') !!}
+				</a>
+			@endif
 
 			<h1>
 				{{ trans('vox.page.stats.title-single', [
@@ -313,14 +316,16 @@
 				{{ $vox->translateorNew(App::getLocale())->stats_description }}
 			</p>
 
-			<div class="flex flex-text-center">
-				<a href="{{ getLangUrl('dental-survey-stats') }}" class="white-button">Back to all stats</a>
-				@if(!in_array($vox->id, $taken))
-					<a class="blue-button" href="{!! !empty($user) ? $vox->getLink() : "javascript:showPopup('login-register-popup')" !!}">
-						{{ trans('vox.common.take-the-test') }}
-					</a>
-				@endif
-			</div>
+			@if(empty(request('app')))
+				<div class="flex flex-text-center">
+					<a href="{{ getLangUrl('dental-survey-stats') }}" class="white-button">Back to all stats</a>
+					@if(!in_array($vox->id, $taken))
+						<a class="blue-button" href="{!! !empty($user) ? $vox->getLink() : "javascript:showPopup('login-register-popup')" !!}">
+							{{ trans('vox.common.take-the-test') }}
+						</a>
+					@endif
+				</div>
+			@endif
 		</div>
 	</div>
 	<a style="display: none;" id="download-link" class="{{ session('download_stat') ? 'for-download' : '' }}" href="{{ session('download_stat') ? getLangUrl('download-pdf/'.session('download_stat')) : 'javascript:;' }}">Download link</a>

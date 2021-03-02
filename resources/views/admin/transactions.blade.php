@@ -60,21 +60,15 @@
                             <div class="col-md-1">
                                 <select class="form-control" name="search-status">
                                     <option value="">Status</option>
-                                    <option value="new" {!! 'new'==$search_status ? 'selected="selected"' : '' !!}>New</option>
-                                    <option value="unconfirmed" {!! 'unconfirmed'==$search_status ? 'selected="selected"' : '' !!}>Unconfirmed</option>
-                                    <option value="failed" {!! 'failed'==$search_status ? 'selected="selected"' : '' !!}>Failed</option>
-                                    <option value="completed" {!! 'completed'==$search_status ? 'selected="selected"' : '' !!}>Completed</option>
-                                    <option value="stopped" {!! 'stopped'==$search_status ? 'selected="selected"' : '' !!}>Stopped</option>
-                                    <option value="first" {!! 'first'==$search_status ? 'selected="selected"' : '' !!}>First</option>
-                                    <option value="dont_retry" {!! 'dont_retry'==$search_status ? 'selected="selected"' : '' !!}>Don't Retry</option>
-                                    <option value="not_sent" {!! 'not_sent'==$search_status ? 'selected="selected"' : '' !!}>Not Sent</option>
-                                    <option value="pending" {!! 'pending'==$search_status ? 'selected="selected"' : '' !!}>Pending</option>
+                                    @foreach(config('transaction-statuses') as $key => $status)
+                                        <option value="{{ $key }}" {!! $key==$search_status ? 'selected="selected"' : '' !!}>{{ $status }}</option>
+                                    @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <input type="text" class="form-control" name="search-address" value="{{ $search_address }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-address') }}">
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <input type="text" class="form-control" name="search-tx" value="{{ $search_tx }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-tx') }}">
                             </div>                                                                          
                             <div class="col-md-1">
@@ -82,6 +76,12 @@
                             </div>
                             <div class="col-md-1">
                                 <input type="text" class="form-control datepicker" name="search-to" value="{{ $search_to }}" placeholder="Search to" autocomplete="off">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="paid-by-user" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                    <input id="paid-by-user" type="checkbox" name="paid-by-user" value="1" {!! !empty($paid_by_user) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                    Paid by user
+                                </label>
                             </div>
                         </div>
                         <div class="row custom-row" style="margin-bottom: 10px;">
@@ -129,7 +129,7 @@
                                         'amount'            => array(),
                                         'address'           => array(),
                                         'tx_hash'           => array('template' => 'admin.parts.table-transactions-hash'),
-                                        'status'            => array(),
+                                        'status'            => array('template' => 'admin.parts.table-transactions-status'),
                                         'type'              => array(),
                                         'message'           => array(),
                                         'retries'           => array(),
