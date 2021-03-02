@@ -54,6 +54,43 @@ class YouTubeController extends FrontController {
 
         if(!empty($this->admin)) {
 
+            $transactions = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->where('test3', 0)->orderBy('id', 'asc')->take(10)->get();
+
+            foreach ($transactions as $trans) {
+                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
+                echo $log.PHP_EOL;
+
+                if( $trans->tx_hash ) {
+                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                    if(!empty($curl)) {
+                        echo 'result: '.$curl.PHP_EOL;
+
+                        $curl = json_decode($curl, true);
+                        if($curl['status']) {
+                            if(!empty($curl['result']['status'])) {
+                                $trans->test3 = true;
+                                $trans->status = 'completed';
+                                $trans->save();
+                                if( $trans->user && !empty($trans->user->email) ) {
+                                    $trans->user->sendTemplate( 20, [
+                                        'transaction_amount' => $trans->amount,
+                                        'transaction_address' => $trans->address,
+                                        'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                    ], $trans->type=='vox' ? 'vox' : 'trp' );
+                                }
+                                echo 'COMPLETED!'.PHP_EOL;
+                                sleep(1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            dd('DONE');
+
+
+
+
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
