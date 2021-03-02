@@ -68,7 +68,6 @@ class YouTubeController extends FrontController {
                         $curl = json_decode($curl, true);
                         if($curl['status']) {
                             if(!empty($curl['result']['status'])) {
-                                $trans->test3 = true;
                                 $trans->status = 'completed';
                                 $trans->save();
                                 if( $trans->user && !empty($trans->user->email) ) {
@@ -84,6 +83,10 @@ class YouTubeController extends FrontController {
                         }
                     }
                 }
+
+
+                $trans->test3 = true;
+                $trans->save();
             }
 
             dd('DONE');
