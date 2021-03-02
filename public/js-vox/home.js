@@ -19,7 +19,7 @@ $(document).ready(function(){
 			console.log('ee');
 		}
 		var sort_order = $(this).attr('sort')+'-'+($(this).hasClass('order-asc') ? 'asc' : 'desc' );
-		$('[name="sortable-items"]').val(sort_order);
+		$('[name="sortable_items"]').val(sort_order);
 		$('[type="submit"]').trigger('click');
 
 		$.ajax( {
@@ -64,7 +64,7 @@ $(document).ready(function(){
 		$('[type="submit"]').trigger('click');
 	});
 
-	$('.filter-item').change( function(e) {
+	$('.filter_item').change( function(e) {
 		e.preventDefault();
 		$('.filter-menu label').removeClass('active');
 		$(this).closest('label').addClass('active');
@@ -83,7 +83,7 @@ $(document).ready(function(){
 		var that = $(this);
 		var formData = new FormData(this);
 		formData.append("slice", 1);
-		console.log(formData);
+		
         $.ajax({
             type: "POST",
             url: '/en/voxes-get/',

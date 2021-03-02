@@ -122,6 +122,7 @@ class IndexController extends ApiController {
 		            
 	            if(!empty($user) && !empty($user->country_id)) {
 	                $restrictions = $todays_daily_poll->isPollRestricted($user->country_id);
+
 	            } else {
 
 	                $country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
@@ -233,7 +234,7 @@ class IndexController extends ApiController {
 		) );
     }
 
-	private function getCountryIdByIp() {
+	public function getCountryIdByIp() {
 		$country = null;
 
 		$location = \GeoIP::getLocation();
@@ -621,6 +622,8 @@ class IndexController extends ApiController {
         $user = Auth::guard('api')->user();
         // $user = User::find(37530);
 
+        $is_admin = $user->is_admin;
+
         if(!empty($user) && !empty(request('vox_id')) && !empty(Vox::find(request('vox_id'))) && !empty(request('type'))) {
 
 	    	$ret = [
@@ -649,6 +652,39 @@ class IndexController extends ApiController {
 					$answered[$l->question_id][] = $l->answer; // [3,5,7]
 				}
 			}
+
+            $cross_checks = [];
+            $cross_checks_references = [];
+
+            foreach ($vox->questions as $vq) {
+                if (!empty($vq->cross_check)) {
+
+                    if (is_numeric($vq->cross_check)) {
+                        $va = VoxAnswer::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+                        $cross_checks[$vq->id] = $va ? $va->answer : null;
+                        $cross_checks_references[$vq->id] = $vq->cross_check;
+                    } else if($vq->cross_check == 'gender') {
+                        $cc = $vq->cross_check;
+                        $cross_checks[$vq->id] = $user->$cc == 'm' ? 1 : 2;
+                        $cross_checks_references[$vq->id] = 'gender';
+                    } else if($vq->cross_check == 'birthyear') {
+                        $cc = $vq->cross_check;
+                        $cross_checks[$vq->id] = $user->$cc;
+                        $cross_checks_references[$vq->id] = 'birthyear';
+                    } else {
+                        $cc = $vq->cross_check;
+                        $i=0;
+                        foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
+                            if($key==$user->$cc) {
+                                $cross_checks[$vq->id] = $i;
+                                $cross_checks_references[$vq->id] = $cc;
+                                break;
+                            }
+                            $i++;
+                        }
+                    }
+                }
+            }
 
 	    	if( !isset( $answered[$q] ) ) {
 	    		$doing_asl = false;
@@ -851,7 +887,7 @@ class IndexController extends ApiController {
 				        	}
 				        }
 
-			        	if($is_scam && !$user->is_partner) {
+			        	if($is_scam && !$user->is_partner && !$is_admin) {
 			        	// if(false) {
 			        		
 			        		$wrongs = UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
@@ -1109,14 +1145,12 @@ class IndexController extends ApiController {
 
 		        		}
 
-
-
 	    				$reallist = $list->filter(function ($value, $key) {
 						    return !$value->is_skipped;
 						});
 
 	    				$ppp = 10;
-	        			if( $reallist->count() && $reallist->count()%$ppp==0 && !$user->is_partner ) {
+	        			if( $reallist->count() && $reallist->count()%$ppp==0 && !$user->is_partner && !$is_admin) {
 	        			// if(false) {
 
 	        				$pagenum = $reallist->count()/$ppp;

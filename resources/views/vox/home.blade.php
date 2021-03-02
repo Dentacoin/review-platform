@@ -115,7 +115,7 @@
 				<div class="filters-section">
 					<div class="search-survey tal">
 						<i class="fas fa-search"></i>
-						<input type="text" id="survey-search" name="survey-search" value="{{ request('survey-search') ?? '' }}">
+						<input type="text" id="survey-search" name="survey_search" value="{{ request('survey_search') ?? '' }}">
 					</div>
 					<div class="questions-menu clearfix">
 						<div class="sort-menu tal"> 
@@ -134,7 +134,7 @@
 								@endif
 							@endforeach
 						</div>
-						<input type="hidden" name="sortable-items" value="">
+						<input type="hidden" name="sortable_items" value="">
 						<div class="sort-category tar"> 
 							<span>
 								{{ trans('vox.page.home.filter') }}:
@@ -150,9 +150,9 @@
 									@if($k == 'taken' && empty($taken))
 
 									@else
-										<label for="filter-{{ $k }}" class="{!! request('filter-item') ? (request('filter-item') == $k ? 'active' : '') : ($k == 'untaken' ? 'active' : '') !!}">
+										<label for="filter-{{ $k }}" class="{!! request('filter_item') ? (request('filter_item') == $k ? 'active' : '') : ($k == 'untaken' ? 'active' : '') !!}">
 											{{ $v }}
-											<input type="radio" value="{{ $k }}" name="filter-item" id="filter-{{ $k }}" class="filter-item" {!! request('filter-item') && request('filter-item') == $k ? 'checked="checked"' : ($k=='untaken' ? 'checked="checked"' : '') !!} style="display: none;">
+											<input type="radio" value="{{ $k }}" name="filter_item" id="filter-{{ $k }}" class="filter_item" {!! request('filter_item') && request('filter_item') == $k ? 'checked="checked"' : ($k=='untaken' ? 'checked="checked"' : '') !!} style="display: none;">
 										</label>
 									@endif
 								@endforeach

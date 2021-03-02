@@ -4,7 +4,6 @@ var sendReCaptcha;
 var recaptchaCode = null;
 var sendValidation;
 var preloadImages;
-var checkFilledDots;
 var skip = 0;
 var vox_id;
 var question_id;
@@ -71,35 +70,6 @@ $(document).ready(function(){
     if(typeof(vox)!='undefined') {
         VoxTest.handleNextQuestion();
     }
-    
-    checkFilledDots = function( event, index) {
-		var goods = new Array;
-		var flickity = $('.flickity:visible');
-		var missing = false;
-		if( flickity.length ) {
-			flickity.find('.answer-radios-group').each( function() {
-	            if( $(this).find('.answer-radio.active-label').length ) {
-	                goods.push(true);
-	            } else {
-	                goods.push(false);
-	                missing = true;
-	            }
-	        } );
-	        var i=0;
-	        flickity.find('.flickity-page-dots .dot').each( function() {
-	            if(goods[i]) {
-	                $(this).addClass('filled');
-	            } else {
-	                $(this).removeClass('filled');
-	            }
-	            i++;
-	        } );
-
-	        if(!missing) {
-				$('.question-group:visible .next-answer').show().trigger('click');
-	        }
-		}
-	}
 
     if($('#to-append-public').length) {
         $(window).scroll( function() {

@@ -25,27 +25,31 @@ use Response;
 use Request;
 use Cookie;
 use Mail;
+use Auth;
 use App;
 
 class IndexController extends FrontController {
 
-	private function getVoxList() {
+	public function getVoxList() {
 
-		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
 
-		if( $this->user ) {
-			$voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
-			if(request('filter-item')) {
-				if(request('filter-item') == 'taken') {
-					$voxes = $voxes->whereIn('id', $this->user->filledVoxes());
-				} else if(request('filter-item') == 'untaken') {
-					$voxes = $voxes->whereNotIn('id', $this->user->filledVoxes());
-				} else if(request('filter-item') == 'all') {
+		$user = Auth::guard('api')->user() ? Auth::guard('api')->user() : $this->user;
+
+		$taken = !empty($user) ? $user->filledVoxes() : null;
+
+		if( $user ) {
+			$voxes = !empty($this->admin) ? User::getAllVoxes() : $user->voxesTargeting();
+			if(request('filter_item')) {
+				if(request('filter_item') == 'taken') {
+					$voxes = $voxes->whereIn('id', $user->filledVoxes());
+				} else if(request('filter_item') == 'untaken') {
+					$voxes = $voxes->whereNotIn('id', $user->filledVoxes());
+				} else if(request('filter_item') == 'all') {
 
 				}
 			} else {
 				if($taken) {
-					$voxes = $voxes->whereNotIn('id', $this->user->filledVoxes());
+					$voxes = $voxes->whereNotIn('id', $user->filledVoxes());
 				}
 			}
 		} else {
@@ -63,16 +67,21 @@ class IndexController extends FrontController {
 			});
 		}
 
-		if(request('survey-search')) {
-			$title = request('survey-search');
-			$voxes->whereHas('translations', function ($query) use ($title) {
-				$query->where('title', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
+		if(request('survey_search')) {
+
+			$searchTitle = trim(Request::input('survey_search'));
+			$titles = preg_split('/\s+/', $searchTitle, -1, PREG_SPLIT_NO_EMPTY);
+
+			$voxes->whereHas('translations', function ($query) use ($titles) {
+				foreach ($titles as $title) {
+					$query->where('title', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
+		        }
 			});
 		}
 
 		$voxList = $voxes->get();
 
-		$sort = request('sortable-items') ?? 'newest-desc';
+		$sort = request('sortable_items') ?? 'newest-desc';
 		$voxList = $voxList->sortByDesc(function ($voxlist) use ($sort) {
 			$sort_name = explode('-', $sort)[0];
 			$sort_type = explode('-', $sort)[1];
@@ -150,8 +159,8 @@ class IndexController extends FrontController {
         unset($get['page']);
         unset($get['submit']);
 
-		if ($this->user) {
-			$voxList = $this->user->notRestrictedVoxesList($voxList);
+		if ($user) {
+			$voxList = $user->notRestrictedVoxesList($voxList);
 			$voxList = $this->paginate($voxList, 6, request('slice') ?? 1 )->appends($get);
 		} else {
 			$voxList = $this->paginate($voxList, 6, request('slice') ?? 1)->withPath(App::getLocale().'/paid-dental-surveys/')->appends($get);
@@ -163,7 +172,8 @@ class IndexController extends FrontController {
     private function paginate($items, $perPage, $page, $options = []) {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $pageItems = $perPage;
-        if(!empty($this->user) && $this->user->is_dentist && $page == 1) {
+        $user = Auth::guard('api')->user() ? Auth::guard('api')->user() : $this->user;
+        if(!empty($user) && $user->is_dentist && $page == 1) {
         	$pageItems = $pageItems - 1;
         }
         return new LengthAwarePaginator($items->forPage($page, $pageItems), $items->count(), $pageItems, $page, $options);
@@ -354,9 +364,7 @@ class IndexController extends FrontController {
 				'vox' => $first,
 				'total_questions' => $total_questions,
 				'js' => [
-					'all-surveys.js',
-					'index-new.js',
-					'all-surveys.js',
+					'welcome-vox.js',
 				],
 				'css' => [
 					'vox-questionnaries.css',
