@@ -392,29 +392,33 @@ NEW & NOT SENT TRANSACTIONS
 
 ';
 
-                $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
+                // $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
-                if($count_new_trans > 10) {
-                    $count_new_trans = 10;
-                }
+                // if($count_new_trans > 10) {
+                //     $count_new_trans = 10;
+                // }
 
-                $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
+                // $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
-                if(!empty($count_not_sent_trans )) {
-                    if(empty($count_new_trans)) {
-                        $count_not_sent_trans = 10;
-                    } else {
-                        if($count_new_trans < 10) {
-                            $count_not_sent_trans = 10 - $count_new_trans;
-                        } else {
-                            $count_not_sent_trans = 0;
-                        }
-                    }
-                }
+                // if(!empty($count_not_sent_trans )) {
+                //     if(empty($count_new_trans)) {
+                //         $count_not_sent_trans = 10;
+                //     } else {
+                //         if($count_new_trans < 10) {
+                //             $count_not_sent_trans = 10 - $count_new_trans;
+                //         } else {
+                //             $count_not_sent_trans = 0;
+                //         }
+                //     }
+                // }
 
 
-                $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
-                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
+                // $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
+                // $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
+                // $transactions = $new_transactions->concat($not_sent_transactions);
+
+                $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(5)->get(); //
+                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(1)->get();
                 $transactions = $new_transactions->concat($not_sent_transactions);
 
                 if($transactions->isNotEmpty()) {
