@@ -1699,7 +1699,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     
                     $s_user = self::find($su->user_id);
 
-                    if(!empty($s_user) && !$s_user->ip_protected && !$s_user->allow_withdraw && !$s_user->is_dentist && !$s_user->patient_status == 'suspicious_badip') {
+                    if(!empty($s_user) && !$s_user->ip_protected && !$s_user->allow_withdraw && !$s_user->is_dentist && $s_user->patient_status != 'suspicious_badip') {
                         $s_user->patient_status = 'suspicious_badip';
                         $s_user->save();
                         
