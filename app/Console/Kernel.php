@@ -533,7 +533,7 @@ UNCONFIRMED TRANSACTIONS
 ';
 
                 $transactions = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
-                $last_transactions = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(10)->get();
+                $last_transactions = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(20)->get();
                 $transactions = $transactions->concat($last_transactions);
 
                 foreach ($transactions as $trans) {
