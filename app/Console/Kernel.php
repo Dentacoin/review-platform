@@ -334,7 +334,7 @@ PENDING TRANSACTIONS
 
 ';
 
-            $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->orderBy('id', 'asc')->take(100)->get();
+            $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->orderBy('id', 'asc')->take(10)->get();
 
             if($transactions->isNotEmpty()) {
 
@@ -359,6 +359,7 @@ PENDING TRANSACTIONS
                                         'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
                                     ], $trans->type=='vox' ? 'vox' : 'trp' );
                                 }
+                                sleep(1);
                             }
                         }
                     }
