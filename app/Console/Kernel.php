@@ -391,30 +391,37 @@ NEW & NOT SENT TRANSACTIONS
 =========================
 
 ';
-                $number = 20;    
+                // $number = 20;    
 
-                $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
+                // $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
-                if($count_new_trans > $number) {
-                    $count_new_trans = $number;
-                }
+                // if($count_new_trans > $number) {
+                //     $count_new_trans = $number;
+                // }
 
-                $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
+                // $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
-                if(!empty($count_not_sent_trans )) {
-                    if(empty($count_new_trans)) {
-                        $count_not_sent_trans = $number;
-                    } else {
-                        if($count_new_trans < $number) {
-                            $count_not_sent_trans = $number - $count_new_trans;
-                        } else {
-                            $count_not_sent_trans = 0;
-                        }
-                    }
-                }
+                // if(!empty($count_not_sent_trans )) {
+                //     if(empty($count_new_trans)) {
+                //         $count_not_sent_trans = $number;
+                //     } else {
+                //         if($count_new_trans < $number) {
+                //             $count_not_sent_trans = $number - $count_new_trans;
+                //         } else {
+                //             $count_not_sent_trans = 0;
+                //         }
+                //     }
+                // }
 
-                $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
-                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
+                // $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
+                // $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
+                // $transactions = $new_transactions->concat($not_sent_transactions);$number = 20;    
+
+
+                $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
+                $count_transactions = $new_transactions->count();
+
+                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(20 - $count_transactions)->get();
                 $transactions = $new_transactions->concat($not_sent_transactions);
 
 
@@ -464,6 +471,8 @@ NEW & NOT SENT TRANSACTIONS
 //         $schedule->call(function () {
 
 //             $cron_running = CronjobSecondRun::first();
+                // do new CronJobRuns
+
 
 //             if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
 
