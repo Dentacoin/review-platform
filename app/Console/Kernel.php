@@ -395,7 +395,7 @@ NEW & NOT SENT TRANSACTIONS
                 $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(5)->get(); //
 
                 $count_trans = $new_transactions->count();
-                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->orderBy('id', 'asc')->take(10 - $count_trans)->get();
+                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(10 - $count_trans)->get();
                 $transactions = $new_transactions->concat($not_sent_transactions);
 
 
@@ -463,10 +463,10 @@ NEW & NOT SENT TRANSACTIONS
 
 // ';
 
-//                 $new_transactions = DcnTransaction::where('status', 'new')->whereNotNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(5)->get(); //
+//                 $new_transactions = DcnTransaction::where('status', 'new')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash)->where('processing', 0)->orderBy('id', 'asc')->take(5)->get(); //
 
 //                 $count_trans = $new_transactions->count();
-//                 $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->orderBy('id', 'asc')->take(10 - $count_trans)->get();
+//                 $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash)->where('processing', 0)->orderBy('id', 'asc')->take(10 - $count_trans)->get();
 //                 $transactions = $new_transactions->concat($not_sent_transactions);
 
 
@@ -533,16 +533,16 @@ UNCONFIRMED TRANSACTIONS
 
 ';
 
-                $transactions = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
-                $last_transactions = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(20)->get();
+                $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
+                $last_transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(20)->get();
                 $transactions = $transactions->concat($last_transactions);
 
-                foreach ($transactions as $trans) {
-                    $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
-                    echo $log.PHP_EOL;
+                if($transactions->isNotEmpty()) {
+                    foreach ($transactions as $trans) {
+                        $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
+                        echo $log.PHP_EOL;
 
-                    $found = false;
-                    if( $trans->tx_hash ) {
+                        $found = false;
 
                         $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
                         if(!empty($curl)) {
@@ -564,36 +564,15 @@ UNCONFIRMED TRANSACTIONS
                                 }
                             }
                         }
-                    } else if($trans->allowance_hash) {
-                        $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->allowance_hash.'&apikey='.env('ETHERSCAN_API'));
-                        if(!empty($curl)) {
-                            $curl = json_decode($curl, true);
-                            if($curl['status']) {
-                                if(!empty($curl['result']['status'])) {
-                                    $trans->allowance_hash_confirmed = true;
-                                    $trans->save();
-                                    // if( $trans->user && !empty($trans->user->email) ) {
-                                    //     $trans->user->sendTemplate( 20, [
-                                    //         'transaction_amount' => $trans->amount,
-                                    //         'transaction_address' => $trans->address,
-                                    //         'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
-                                    //     ], $trans->type=='vox' ? 'vox' : 'trp' );
-                                    // }
-                                    $found = true;
-                                    echo 'COMPLETED!'.PHP_EOL;
-                                    sleep(1);
-                                }
-                            }
+
+                        //after 5 days
+                        if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*336 && !User::isGasExpensive()) {  //14 days = 24 * 14 = 336
+                            $trans->status = 'not_sent';
+                            $trans->unconfirmed_retry = true;
+                            $trans->save();
+
+                            echo 'CHANGING STATUS -> '.$trans->id.PHP_EOL;
                         }
-                    }
-
-                    //after 5 days
-                    if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*336 && !User::isGasExpensive()) {  //14 days = 24 * 14 = 336
-                        $trans->status = 'not_sent';
-                        $trans->unconfirmed_retry = true;
-                        $trans->save();
-
-                        echo 'CHANGING STATUS -> '.$trans->id.PHP_EOL;
                     }
                 }
 
@@ -603,6 +582,49 @@ UNCONFIRMED TRANSACTIONS
             }
 
         })->cron("*/15 * * * *");
+
+
+        $schedule->call(function () {
+
+            echo '
+PAID BY USER ALLOWANCE HASH UNCONFIRMED TRANSACTIONS
+
+========================
+
+';
+
+            $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('is_paid_by_the_user')->whereNotNull('allowance_hash')->whereNull('allowance_hash_confirmed')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
+            $last_transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('is_paid_by_the_user')->whereNotNull('allowance_hash')->whereNull('allowance_hash_confirmed')->where('processing', 0)->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(20)->get();
+            $transactions = $transactions->concat($last_transactions);
+
+            if($transactions->isNotEmpty()) {
+
+                foreach ($transactions as $trans) {
+                    $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
+                    echo $log.PHP_EOL;
+
+                    $found = false;
+
+                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->allowance_hash.'&apikey='.env('ETHERSCAN_API'));
+                    if(!empty($curl)) {
+                        $curl = json_decode($curl, true);
+                        if($curl['status']) {
+                            if(!empty($curl['result']['status'])) {
+                                $trans->allowance_hash_confirmed = true;
+                                $trans->save();
+                                if( $trans->user && !empty($trans->user->email) ) {
+                                    $trans->user->sendGridTemplate( 124 );
+                                }
+                                $found = true;
+                                echo 'COMPLETED!'.PHP_EOL;
+                                sleep(1);
+                            }
+                        }
+                    }
+                }
+            }
+
+        })->cron("*/5 * * * *");
 
 
         $schedule->call(function () {
