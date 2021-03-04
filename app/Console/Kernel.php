@@ -391,41 +391,38 @@ NEW & NOT SENT TRANSACTIONS
 =========================
 
 ';
+                $number = 6;    
 
-                // $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
+                $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
-                // if($count_new_trans > 10) {
-                //     $count_new_trans = 10;
-                // }
+                if($count_new_trans > $number) {
+                    $count_new_trans = $number;
+                }
 
-                // $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
+                $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
-                // if(!empty($count_not_sent_trans )) {
-                //     if(empty($count_new_trans)) {
-                //         $count_not_sent_trans = 10;
-                //     } else {
-                //         if($count_new_trans < 10) {
-                //             $count_not_sent_trans = 10 - $count_new_trans;
-                //         } else {
-                //             $count_not_sent_trans = 0;
-                //         }
-                //     }
-                // }
+                if(!empty($count_not_sent_trans )) {
+                    if(empty($count_new_trans)) {
+                        $count_not_sent_trans = $number;
+                    } else {
+                        if($count_new_trans < $number) {
+                            $count_not_sent_trans = $number - $count_new_trans;
+                        } else {
+                            $count_not_sent_trans = 0;
+                        }
+                    }
+                }
 
-
-                // $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
-                // $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
-                // $transactions = $new_transactions->concat($not_sent_transactions);
-
-                $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
-                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get();
+                $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
+                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
                 $transactions = $new_transactions->concat($not_sent_transactions);
+
 
                 if($transactions->isNotEmpty()) {
 
                     $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
-                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(15)) {
+                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(60)) {
 
                         if (!User::isGasExpensive()) {
 
@@ -444,7 +441,7 @@ NEW & NOT SENT TRANSACTIONS
                             $cron_new_trans_time->save();
                         } else {
 
-                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(15);
+                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(60);
                             $cron_new_trans_time->save();
 
                             echo 'New Transactions High Gas Price';
