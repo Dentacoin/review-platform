@@ -303,12 +303,22 @@
 
 		@if(empty($user))
 			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js"></script>
-			<script type="text/javascript">
-				dcnGateway.init({
-					'platform' : '{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.reviews' : 'trusted-reviews' !!}',
-					'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=trusted-reviews'
-				});
-			</script>
+			@if(strpos($_SERVER['HTTP_HOST'], 'urgent') !== false) 
+				<script type="text/javascript">
+					dcnGateway.init({
+						'platform' : 'urgent.reviews',
+						'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=trusted-reviews',
+						'environment' : 'staging',
+					});	
+				</script>
+			@else
+				<script type="text/javascript">
+					dcnGateway.init({
+						'platform' : 'trusted-reviews',
+						'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=trusted-reviews',
+					});	
+				</script>
+			@endif
 		@else
 			@if($user->platform != 'external')
 				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style.css">

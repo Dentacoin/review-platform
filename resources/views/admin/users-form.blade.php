@@ -602,6 +602,20 @@
                                     </div>
                                 </div>
                             @endif
+
+                            @if(!empty($dev_domain))
+                                <div class="form-group">
+                                    <label class="col-md-9 control-label"></label>
+                                    <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Vox App Test Mode</label>
+                                    <div class="col-md-1" style="padding-left: 0px;">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'is_admin',
+                                            'info' => $fields['is_admin']
+                                        ])
+                                    </div>
+                                </div>
+                            @endif
+
                         </div>
                         <div class="col-md-6">
                             <div class="form-group avatar-group">
