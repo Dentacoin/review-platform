@@ -391,7 +391,7 @@ NEW & NOT SENT TRANSACTIONS
 =========================
 
 ';
-                $number = 6;    
+                $number = 20;    
 
                 $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
