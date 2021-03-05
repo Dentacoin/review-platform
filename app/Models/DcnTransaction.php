@@ -18,7 +18,6 @@ class DcnTransaction extends Model {
         'address',
         'tx_hash',
         'allowance_hash',
-        'allowance_hash_confirmed',
         'type',
         'reference_id',
         'status',

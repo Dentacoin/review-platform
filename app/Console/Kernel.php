@@ -666,49 +666,6 @@ UNCONFIRMED TRANSACTIONS
 
         $schedule->call(function () {
 
-            echo '
-PAID BY USER ALLOWANCE HASH UNCONFIRMED TRANSACTIONS
-
-========================
-
-';
-
-            $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('is_paid_by_the_user')->whereNotNull('allowance_hash')->whereNull('allowance_hash_confirmed')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
-            $last_transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('is_paid_by_the_user')->whereNotNull('allowance_hash')->whereNull('allowance_hash_confirmed')->where('processing', 0)->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(20)->get();
-            $transactions = $transactions->concat($last_transactions);
-
-            if($transactions->isNotEmpty()) {
-
-                foreach ($transactions as $trans) {
-                    $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
-                    echo $log.PHP_EOL;
-
-                    $found = false;
-
-                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->allowance_hash.'&apikey='.env('ETHERSCAN_API'));
-                    if(!empty($curl)) {
-                        $curl = json_decode($curl, true);
-                        if($curl['status']) {
-                            if(!empty($curl['result']['status'])) {
-                                $trans->allowance_hash_confirmed = true;
-                                $trans->save();
-                                if( $trans->user && !empty($trans->user->email) ) {
-                                    $trans->user->sendGridTemplate( 124 );
-                                }
-                                $found = true;
-                                echo 'COMPLETED!'.PHP_EOL;
-                                sleep(1);
-                            }
-                        }
-                    }
-                }
-            }
-
-        })->cron("*/5 * * * *");
-
-
-        $schedule->call(function () {
-
             echo 'DCN Low Balance Cron - START!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $alerts = [
