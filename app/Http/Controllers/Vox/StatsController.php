@@ -1982,7 +1982,7 @@ class StatsController extends FrontController {
                                 }
                             }
 
-                            $rows_breakdown[] = '';
+                            $rows_breakdown[] = [''];
 
                         }
 
@@ -2138,7 +2138,7 @@ class StatsController extends FrontController {
 
                             // dd($main_breakdown_chart);
                             $rows_breakdown[] = $main_breakdown_chart;
-                            $rows_breakdown[] = '';
+                            $rows_breakdown[] = [''];
                         }
 
                         $flist['Breakdown'] = $rows_breakdown;
