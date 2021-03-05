@@ -335,7 +335,7 @@ PENDING TRANSACTIONS
 ';
 
 
-            $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->whereNull('cronjob_unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+            $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->where('cronjob_unconfirmed', 0)->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
 
             if(empty($transactions)) {
                 $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
@@ -595,7 +595,7 @@ UNCONFIRMED TRANSACTIONS
 
 ';
 
-                $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->whereNull('cronjob_unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+                $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('cronjob_unconfirmed', 0)->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
 
                 if(empty($transactions)) {
                     $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
