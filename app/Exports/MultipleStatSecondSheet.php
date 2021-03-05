@@ -121,6 +121,8 @@ class MultipleStatSecondSheet implements FromArray, WithTitle, WithEvents, WithD
     public function columnFormats(): array {
         return [
             'C' => NumberFormat::FORMAT_PERCENTAGE_00,
+            'E' => NumberFormat::FORMAT_PERCENTAGE_00,
+            'G' => NumberFormat::FORMAT_PERCENTAGE_00,
         ];
     }
 

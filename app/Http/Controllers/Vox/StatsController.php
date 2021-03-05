@@ -1690,31 +1690,62 @@ class StatsController extends FrontController {
                         }
 
                         $flist['Raw Data'] = $rows;
-                        $m_chart = [];
+                        $main_breakdown_chart = [];
+                        $male_breakdown_chart = [];
+                        $female_breakdown_chart = [];
 
                         $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
 
                         $breakdown_rows_count = 0;
 
+                        // dd($all_results);
+                        // dd($answers_array);
+
                         foreach ($answers_array as $key => $value) {
-                            $m_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+                            $main_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+                            $male_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+                            $female_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
 
                             $count_people = 0;
+                            $count_people_male = 0;
+                            $count_people_female = 0;
+
                             foreach ($all_results as $k => $v) {
                                 if($q->type == 'scale' ) {
                                     if($v->scale == ($key + 1)) {
                                         $count_people++;
+
+                                        if($v->gender == 'm') {
+                                            $count_people_male++;
+                                        }
+
+                                        if($v->gender == 'f') {
+                                            $count_people_female++;
+                                        }
                                     }
                                 } else {
 
                                     if($v->answer == ($key + 1)) {
                                         $count_people++;
+
+                                        if($v->gender == 'm') {
+                                            $count_people_male++;
+                                        }
+
+                                        if($v->gender == 'f') {
+                                            $count_people_female++;
+                                        }
                                     }
                                 }
                             }
 
-                            $m_chart[$key][] = $count_people;                        
+                            $main_breakdown_chart[$key][] = $count_people;
+                            $male_breakdown_chart[$key][] = $count_people_male;
+                            $female_breakdown_chart[$key][] = $count_people_female;
+
                         }
+
+                        // dd($main_breakdown_chart, $male_breakdown_chart, $female_breakdown_chart);
 
                         if($q->type == 'scale') {
                             $results_total = $results->where('answer', Request::input('scale-for'))->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
@@ -1951,7 +1982,13 @@ class StatsController extends FrontController {
                                 }
                             }
 
-                        } else {
+                            $rows_breakdown[] = '';
+
+                        }
+
+                        // dd($demographics);
+
+                        if(in_array('gender', $demographics)) {
                             if(!empty(Request::input('scale-for'))) {
                                 $list = json_decode($q->answers, true);
                                 $title_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[(Request::input('scale-for') - 1)].']';
@@ -1960,12 +1997,26 @@ class StatsController extends FrontController {
                             }
 
                             $cols_q_title_second = [
-                                $title_stats
+                                $title_stats,
                             ];
 
                             $rows_breakdown[] = $cols_q_title_second;
 
-                            foreach ($m_chart as $key => $value) {
+                            $chart_titles = [
+                                '',
+                                'Total',
+                                'Total',
+                                'Men',
+                                'Men',
+                                'Women',
+                                'Women',
+                            ];
+
+                            $rows_breakdown[] = $chart_titles;
+
+                            // dd($main_breakdown_chart);
+
+                            foreach ($main_breakdown_chart as $key => $value) {
                                 foreach ($value as $k => $v) {
                                     if($k == 1 && $v == 0) {
                                         $value[$k] = '0';
@@ -1973,24 +2024,91 @@ class StatsController extends FrontController {
                                         $value[$k] =  $v;
                                     }
                                 }
-                                $m_chart[$key] = $value;
+                                $main_breakdown_chart[$key] = $value;
 
-                                $m_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+                                $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
 
                             }
 
-                            usort($m_chart, function($a, $b) {
+                            foreach ($female_breakdown_chart as $key => $value) {
+                                foreach ($value as $k => $v) {
+                                    if($k == 1 && $v == 0) {
+                                        $value[$k] = '0';
+                                    } else {
+                                        $value[$k] =  $v;
+                                    }
+                                }
+                                $female_breakdown_chart[$key] = $value;
+
+                                $female_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+
+                            }
+
+                            foreach ($male_breakdown_chart as $key => $value) {
+                                foreach ($value as $k => $v) {
+                                    if($k == 1 && $v == 0) {
+                                        $value[$k] = '0';
+                                    } else {
+                                        $value[$k] =  $v;
+                                    }
+                                }
+                                $male_breakdown_chart[$key] = $value;
+
+                                $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+
+                            }
+
+
+                            usort($main_breakdown_chart, function($a, $b) {
                                 return $a[2] <= $b[2];
                             });
 
 
+                            // dd($main_breakdown_chart);
+                            
+                            $male_breakdown_final = [];
+                            $female_breakdown_final = [];
+                            foreach($main_breakdown_chart as $key => $value) {
+                                foreach ($male_breakdown_chart as $k => $v) {
+                                    if($v[0] == $value[0]) {
+                                        $male_breakdown_final[$key] = [
+                                            // $v[0],
+                                            $v[1],
+                                            $v[2],
+                                        ];
+                                    }
+                                }
+
+                                foreach ($female_breakdown_chart as $k => $v) {
+                                    if($v[0] == $value[0]) {
+                                        $female_breakdown_final[$key] = [
+                                            // $v[0],
+                                            $v[1],
+                                            $v[2],
+                                        ];
+                                    }
+                                }
+                            }
+
+                            foreach($main_breakdown_chart as $key => $value) {
+                                $main_breakdown_chart[$key][] = $male_breakdown_final[$key][0];
+                                $main_breakdown_chart[$key][] = $male_breakdown_final[$key][1];
+                                $main_breakdown_chart[$key][] = $female_breakdown_final[$key][0];
+                                $main_breakdown_chart[$key][] = $female_breakdown_final[$key][1];
+                            }
+
+                            // dd($main_breakdown_chart);
+
+                            // dd($main_breakdown_chart, $female_breakdown_final, $male_breakdown_final);
+
+
                             $ordered_diez = [];
 
-                            foreach ($m_chart as $key => $value) {
+                            foreach ($main_breakdown_chart as $key => $value) {
 
                                 if(mb_strpos($value[0], '#')===0) {
                                     $ordered_diez[] = $value;
-                                    unset( $m_chart[$key] );
+                                    unset( $main_breakdown_chart[$key] );
                                 }
                             }
 
@@ -2005,20 +2123,22 @@ class StatsController extends FrontController {
 
                                         $value[0] = mb_substr($value[0], 1);
 
-                                        $m_chart[] = $value;
+                                        $main_breakdown_chart[] = $value;
                                     }
                                 } else {
                                     foreach ($ordered_diez as $key => $value) {
 
                                         $ordered_diez[$key][0] = mb_substr($value[0], 1);
                                     }
-                                    $m_chart[] = $ordered_diez[0];
+                                    $main_breakdown_chart[] = $ordered_diez[0];
                                 }
 
-                                $m_chart = array_values($m_chart);
+                                $main_breakdown_chart = array_values($main_breakdown_chart);
                             }
 
-                            $rows_breakdown[] = $m_chart;
+                            // dd($main_breakdown_chart);
+                            $rows_breakdown[] = $main_breakdown_chart;
+                            $rows_breakdown[] = '';
                         }
 
                         $flist['Breakdown'] = $rows_breakdown;
