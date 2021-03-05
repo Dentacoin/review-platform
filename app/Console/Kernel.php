@@ -334,11 +334,25 @@ PENDING TRANSACTIONS
 
 ';
 
-            $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->orderBy('id', 'asc')->take(10)->get();
+
+            $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->whereNull('cronjob_unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+
+            if(empty($transactions)) {
+                $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+
+                if($transactions->isNotEmpty()) {
+                    foreach ($transactions as $trans) {
+                        $trans->cronjob_unconfirmed = 0;
+                        $trans->save();
+                    }
+                }
+            }
 
             if($transactions->isNotEmpty()) {
 
+                $int = 0;
                 foreach ($transactions as $trans) {
+                    $int++;
 
                     try {
                         $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
@@ -346,118 +360,128 @@ PENDING TRANSACTIONS
                         $curl = false;
                     }
                     if(!empty($curl)) {
-                        $curl = json_decode($curl, true);
-                        if($curl['status']) {
-                            if(!empty($curl['result']['status'])) {
-                                $trans->status = 'completed';
-                                $trans->save();
-                                echo 'COMPLETED PENDING - '.$trans->id.PHP_EOL;
-                                if( $trans->user && !empty($trans->user->email) ) {
-                                    $trans->user->sendTemplate( 20, [
-                                        'transaction_amount' => $trans->amount,
-                                        'transaction_address' => $trans->address,
-                                        'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
-                                    ], $trans->type=='vox' ? 'vox' : 'trp' );
+                        $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                        if(!empty($curl)) {
+                            $trans->cronjob_unconfirmed = 1;
+                            $trans->save();
+
+                            $curl = json_decode($curl, true);
+                            if($curl['status']) {
+                                if(!empty($curl['result']['status'])) {
+                                    $trans->status = 'completed';
+                                    $trans->cronjob_unconfirmed = 0;
+                                    $trans->save();
+                                    if( $trans->user && !empty($trans->user->email) ) {
+                                        $trans->user->sendTemplate( 20, [
+                                            'transaction_amount' => $trans->amount,
+                                            'transaction_address' => $trans->address,
+                                            'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                        ], $trans->type=='vox' ? 'vox' : 'trp' );
+                                    }
+                                    $found = true;
+                                    echo 'COMPLETED!'.PHP_EOL;
+                                    if($int % 5 == 0) {
+                                        sleep(1);
+                                    }
                                 }
-                                sleep(1);
                             }
                         }
                     }
                 }
             }
 
-        })->cron("*/5 * * * *");
+        })->cron("*/30 * * * *");
 
 
 
-//         $schedule->call(function () {
+        $schedule->call(function () {
 
-//             $cron_running = CronjobRun::first();
-//             //!!!!!new and not_sent transactions must be in one schedule, because of the manual nonces!!!!!!
+            $cron_running = CronjobRun::first();
+            //!!!!!new and not_sent transactions must be in one schedule, because of the manual nonces!!!!!!
 
-//             if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
+            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
 
-//                 if(!empty($cron_running)) {
-//                     CronjobRun::destroy($cron_running->id);
-//                 }
+                if(!empty($cron_running)) {
+                    CronjobRun::destroy($cron_running->id);
+                }
 
-//                 $cronjob_stars = new CronjobRun;
-//                 $cronjob_stars->started_at = Carbon::now();
-//                 $cronjob_stars->save();
+                $cronjob_stars = new CronjobRun;
+                $cronjob_stars->started_at = Carbon::now();
+                $cronjob_stars->save();
 
-//                 echo '
-// NEW & NOT SENT TRANSACTIONS
+                echo '
+NEW & NOT SENT TRANSACTIONS
 
-// =========================
+=========================
 
-// ';
-//                 $number = 20;    
+';
+                $number = 20;    
 
-//                 $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
+                $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
-//                 if($count_new_trans > $number) {
-//                     $count_new_trans = $number;
-//                 }
+                if($count_new_trans > $number) {
+                    $count_new_trans = $number;
+                }
 
-//                 $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
+                $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
-//                 if(!empty($count_not_sent_trans )) {
-//                     if(empty($count_new_trans)) {
-//                         $count_not_sent_trans = $number;
-//                     } else {
-//                         if($count_new_trans < $number) {
-//                             $count_not_sent_trans = $number - $count_new_trans;
-//                         } else {
-//                             $count_not_sent_trans = 0;
-//                         }
-//                     }
-//                 }
+                if(!empty($count_not_sent_trans )) {
+                    if(empty($count_new_trans)) {
+                        $count_not_sent_trans = $number;
+                    } else {
+                        if($count_new_trans < $number) {
+                            $count_not_sent_trans = $number - $count_new_trans;
+                        } else {
+                            $count_not_sent_trans = 0;
+                        }
+                    }
+                }
 
-//                 $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
-//                 $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
-//                 $transactions = $new_transactions->concat($not_sent_transactions);
-
-
-//                 if($transactions->isNotEmpty()) {
-
-//                     $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
-
-//                     if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(60)) {
-
-//                         if (!User::isGasExpensive()) {
-
-//                             foreach ($transactions as $trans) {
-//                                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
-//                                 echo $log . PHP_EOL;
-//                             }
-
-//                             Dcn::retry($transactions);
-
-//                             foreach ($transactions as $trans) {
-//                                 echo 'NEW STATUS: ' . $trans->status . ' / ID ' . $trans->id . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
-//                             }
-
-//                             $cron_new_trans_time->cron_new_trans = Carbon::now();
-//                             $cron_new_trans_time->save();
-//                         } else {
-
-//                             $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(60);
-//                             $cron_new_trans_time->save();
-
-//                             echo 'New Transactions High Gas Price';
-//                         }
-//                     }
-//                 }
+                $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
+                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
+                $transactions = $new_transactions->concat($not_sent_transactions);
 
 
-//                 echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+                if($transactions->isNotEmpty()) {
 
-//                 CronjobRun::destroy($cronjob_stars->id);
-//             } else {
-//                 echo 'New transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
-//             }
+                    $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
-//         })->cron("* * * * *");
+                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(60)) {
+
+                        if (!User::isGasExpensive()) {
+
+                            foreach ($transactions as $trans) {
+                                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
+                                echo $log . PHP_EOL;
+                            }
+
+                            Dcn::retry($transactions);
+
+                            foreach ($transactions as $trans) {
+                                echo 'NEW STATUS: ' . $trans->status . ' / ID ' . $trans->id . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
+                            }
+
+                            $cron_new_trans_time->cron_new_trans = Carbon::now();
+                            $cron_new_trans_time->save();
+                        } else {
+
+                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(60);
+                            $cron_new_trans_time->save();
+
+                            echo 'New Transactions High Gas Price';
+                        }
+                    }
+                }
+
+
+                echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+                CronjobRun::destroy($cronjob_stars->id);
+            } else {
+                echo 'New transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            }
+
+        })->cron("* * * * *");
 
 
 
@@ -488,8 +512,8 @@ PENDING TRANSACTIONS
 //                 if($count_new_trans > 10) {
 //                     $count_new_trans = 10;
 //                 }
-
-//                 $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->where('processing', 0)->count();
+// 
+                // $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->count();
 
 //                 if(!empty($count_not_sent_trans )) {
 //                     if(empty($count_new_trans)) {
@@ -571,23 +595,39 @@ UNCONFIRMED TRANSACTIONS
 
 ';
 
-                $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
-                $last_transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(20)->get();
-                $transactions = $transactions->concat($last_transactions);
+                $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->whereNull('cronjob_unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+
+                if(empty($transactions)) {
+                    $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+
+                    if($transactions->isNotEmpty()) {
+                        foreach ($transactions as $trans) {
+                            $trans->cronjob_unconfirmed = 0;
+                            $trans->save();
+                        }
+                    }
+                }
 
                 if($transactions->isNotEmpty()) {
+
+                    $int = 0;
                     foreach ($transactions as $trans) {
                         $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                         echo $log.PHP_EOL;
 
                         $found = false;
+                        $int++;
 
                         $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
                         if(!empty($curl)) {
+                            $trans->cronjob_unconfirmed = 1;
+                            $trans->save();
+
                             $curl = json_decode($curl, true);
                             if($curl['status']) {
                                 if(!empty($curl['result']['status'])) {
                                     $trans->status = 'completed';
+                                    $trans->cronjob_unconfirmed = 0;
                                     $trans->save();
                                     if( $trans->user && !empty($trans->user->email) ) {
                                         $trans->user->sendTemplate( 20, [
@@ -598,12 +638,14 @@ UNCONFIRMED TRANSACTIONS
                                     }
                                     $found = true;
                                     echo 'COMPLETED!'.PHP_EOL;
-                                    sleep(1);
+                                    if($int % 5 == 0) {
+                                        sleep(1);
+                                    }
                                 }
                             }
                         }
 
-                        //after 5 days
+                        //after 14 days
                         if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*336 && !User::isGasExpensive()) {  //14 days = 24 * 14 = 336
                             $trans->status = 'not_sent';
                             $trans->unconfirmed_retry = true;
@@ -619,7 +661,7 @@ UNCONFIRMED TRANSACTIONS
                 echo 'Unconfirmed transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
 
-        })->cron("*/15 * * * *");
+        })->cron("*/10 * * * *");
 
 
         $schedule->call(function () {
