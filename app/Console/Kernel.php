@@ -415,25 +415,26 @@ NEW & NOT SENT TRANSACTIONS
 =========================
 
 ';
-                $number = 25;
+                $number = 50; //always has to be %2
+                $half_number = $number/2;
 
                 $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
-
-                if($count_new_trans > $number) {
-                    $count_new_trans = $number;
-                }
-
                 $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
 
-                if(!empty($count_not_sent_trans )) {
-                    if(empty($count_new_trans)) {
-                        $count_not_sent_trans = $number;
-                    } else {
-                        if($count_new_trans < $number) {
-                            $count_not_sent_trans = $number - $count_new_trans;
-                        } else {
-                            $count_not_sent_trans = 0;
-                        }
+                if(empty($count_not_sent_trans )) {
+                    $count_new_trans = $number;
+                } else if(empty($count_new_trans)) {
+                    $count_not_sent_trans = $number;
+                } else {
+                    if($count_not_sent_trans >= $half_number && $count_new_trans >= $half_number) {
+                        $count_not_sent_trans = $half_number;
+                        $count_new_trans = $half_number;
+
+                    } else if($count_not_sent_trans < $half_number && $count_new_trans >= $half_number) {
+                        $count_new_trans = $number - $count_not_sent_trans;
+
+                    } else if($count_not_sent_trans >= $half_number && $count_new_trans < $half_number) {
+                        $count_not_sent_trans = $number - $count_new_trans;
                     }
                 }
 
