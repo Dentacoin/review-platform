@@ -1956,7 +1956,6 @@ class StatsController extends FrontController {
                                     $count_people_male = 0;
                                     $count_people_female = 0;
 
-
                                     foreach ($all_results as $k => $v) {
                                         if(!empty($v->gender)) {
                                             if($q->type == 'scale' ) {
@@ -2137,8 +2136,6 @@ class StatsController extends FrontController {
                                 ];
                                 $rows_breakdown[] = [''];
 
-                            } else if($chosen_dem == 'country_id') {
-
                             } else {
 
                                 $main_breakdown_chart = [];
@@ -2147,9 +2144,12 @@ class StatsController extends FrontController {
 
                                 if($chosen_dem == 'age' ) {
                                     $config_dem_groups = config('vox.age_groups');
+                                } else if($chosen_dem == 'country_id') {
+                                    $config_dem_groups = Country::with('translations')->get()->pluck('name', 'id')->toArray();
                                 } else {
                                     $config_dem_groups = config('vox.details_fields')[$chosen_dem]['values'];
                                 }
+
                                
                                 foreach ($answers_array as $key => $value) {
                                     $main_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
