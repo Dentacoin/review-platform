@@ -123,6 +123,11 @@ class MultipleStatSecondSheet implements FromArray, WithTitle, WithEvents, WithD
             'C' => NumberFormat::FORMAT_PERCENTAGE_00,
             'E' => NumberFormat::FORMAT_PERCENTAGE_00,
             'G' => NumberFormat::FORMAT_PERCENTAGE_00,
+            'I' => NumberFormat::FORMAT_PERCENTAGE_00,
+            'K' => NumberFormat::FORMAT_PERCENTAGE_00,
+            'M' => NumberFormat::FORMAT_PERCENTAGE_00,
+            'O' => NumberFormat::FORMAT_PERCENTAGE_00,
+            'Q' => NumberFormat::FORMAT_PERCENTAGE_00,
         ];
     }
 

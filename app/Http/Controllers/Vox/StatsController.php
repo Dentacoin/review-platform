@@ -1576,7 +1576,7 @@ class StatsController extends FrontController {
                             $cols,
                             $cols2
                         ];
-
+                        // dd($dem_options);
                         if($q->type == 'scale') {
                             $all_results = $results->where('answer', Request::input('scale-for'))->get();
                         } else if ($q->type == 'rank') {
@@ -1690,62 +1690,14 @@ class StatsController extends FrontController {
                         }
 
                         $flist['Raw Data'] = $rows;
-                        $main_breakdown_chart = [];
-                        $male_breakdown_chart = [];
-                        $female_breakdown_chart = [];
+
+
+
+                        ///Breakdown Sheet
 
                         $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
 
                         $breakdown_rows_count = 0;
-
-                        // dd($all_results);
-                        // dd($answers_array);
-
-                        foreach ($answers_array as $key => $value) {
-                            $main_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
-                            $male_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
-                            $female_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
-
-                            $count_people = 0;
-                            $count_people_male = 0;
-                            $count_people_female = 0;
-
-                            foreach ($all_results as $k => $v) {
-                                if($q->type == 'scale' ) {
-                                    if($v->scale == ($key + 1)) {
-                                        $count_people++;
-
-                                        if($v->gender == 'm') {
-                                            $count_people_male++;
-                                        }
-
-                                        if($v->gender == 'f') {
-                                            $count_people_female++;
-                                        }
-                                    }
-                                } else {
-
-                                    if($v->answer == ($key + 1)) {
-                                        $count_people++;
-
-                                        if($v->gender == 'm') {
-                                            $count_people_male++;
-                                        }
-
-                                        if($v->gender == 'f') {
-                                            $count_people_female++;
-                                        }
-                                    }
-                                }
-                            }
-
-                            $main_breakdown_chart[$key][] = $count_people;
-                            $male_breakdown_chart[$key][] = $count_people_male;
-                            $female_breakdown_chart[$key][] = $count_people_female;
-
-                        }
-
-                        // dd($main_breakdown_chart, $male_breakdown_chart, $female_breakdown_chart);
 
                         if($q->type == 'scale') {
                             $results_total = $results->where('answer', Request::input('scale-for'))->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
@@ -1763,82 +1715,319 @@ class StatsController extends FrontController {
                             $cols_title_second,
                         ];
 
-                        if(in_array('relation', $demographics)) {
 
-                            $second_chart = [];
+                        foreach($demographics as $chosen_dem) {
 
-                            $answers_related_array = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
+                            if($chosen_dem == 'relation') {
 
-                            foreach ($answers_related_array as $key => $value) {
-                                $second_chart[$key][] = mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0 ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
-                            }
+                                $second_chart = [];
 
-                            if(!empty($q->stats_answer_id)) {
+                                $answers_related_array = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
 
-                                $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
+                                foreach ($answers_related_array as $key => $value) {
+                                    $second_chart[$key][] = mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0 ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+                                }
 
-                                $rows_breakdown[] = [$q->related->question.' ['.$q->removeAnswerTooltip($list[$q->stats_answer_id - 1]).']'];                                
+                                if(!empty($q->stats_answer_id)) {
 
-                                $rows_breakdown[] = ['in relation to:'];
+                                    $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
+
+                                    $rows_breakdown[] = [$q->related->question.' ['.$q->removeAnswerTooltip($list[$q->stats_answer_id - 1]).']'];                                
+
+                                    $rows_breakdown[] = ['in relation to:'];
+
+                                    $cols_q_title_second = [
+                                        ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithTooltips()
+                                    ];
+
+                                    $rows_breakdown[] = $cols_q_title_second;
+
+                                    $cur_chart = [];
+
+                                    // $all_results = VoxAnswer::whereNull('is_admin')
+                                    // ->where('question_id', $q->id)
+                                    // ->where('is_completed', 1)
+                                    // ->where('is_skipped', 0)
+                                    // ->has('user');
+
+                                    // if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
+                                    //     $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
+                                    //     $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
+
+                                    //     $all_results = $all_results->where('created_at', '>=', $from)
+                                    //     ->where('created_at', '<=', $to);
+                                    // }
+
+                                    $a = $q->stats_answer_id;
+
+                                    // $all_results = $all_results->whereIn('user_id', function($query) use ($q, $a) {
+                                    //     $query->select('user_id')
+                                    //     ->from('vox_answers')
+                                    //     ->where('question_id', $q->related->id)
+                                    //     ->where('answer', $a);
+                                    // } );
+
+                                    $all_results = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->where('answer', $a)->first();
+
+                                    $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
+
+                                    $breakdown_rows_count = count($answers_array);
+
+                                    foreach ($answers_array as $key => $value) {
+                                        $cur_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+
+                                        // $count_people = 0;
+                                        // foreach ($all_results->get() as $k => $v) {
+
+                                        //     if($v->answer == ($key + 1)) {
+                                        //         $count_people++;
+                                        //     }
+                                        // }
+
+                                        $cur_chart[$key][] = $count_people;
+                                    }
+                                    
+                                    // $results_total = $all_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+                                    $results_total = $all_results->cnt;
+
+
+                                    $total = $results_total; 
+
+                                    foreach ($cur_chart as $key => $value) {
+                                        foreach ($value as $k => $v) {
+                                            if($k == 1 && $v == 0) {
+                                                $value[$k] = '0';
+                                            } else {
+                                                $value[$k] =  $v;
+                                            }
+                                        }
+                                        $cur_chart[$key] = $value;
+
+                                        $cur_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+
+                                    }
+
+                                    usort($cur_chart, function($a, $b) {
+                                        return $a[2] <= $b[2];
+                                    });
+
+
+                                    $ordered_diez = [];
+
+                                    foreach ($cur_chart as $key => $value) {
+
+                                        if(mb_strpos($value[0], '#')===0) {
+                                            $ordered_diez[] = $value;
+                                            unset( $cur_chart[$key] );
+                                        }
+                                    }
+
+                                    if(count($ordered_diez)) {
+
+                                        if( count($ordered_diez) > 1) {
+                                            usort($ordered_diez, function($a, $b) {
+                                                return $a[2] <= $b[2];
+                                            });
+
+                                            foreach ($ordered_diez as $key => $value) {
+
+                                                $value[0] = mb_substr($value[0], 1);
+
+                                                $cur_chart[] = $value;
+                                            }
+                                        } else {
+                                            foreach ($ordered_diez as $key => $value) {
+
+                                                $ordered_diez[$key][0] = mb_substr($value[0], 1);
+                                            }
+                                            $cur_chart[] = $ordered_diez[0];
+                                        }
+
+                                        $cur_chart = array_values($cur_chart);
+                                    }
+
+                                    $rows_breakdown[] = $cur_chart;
+                                } else {
+
+                                    for($i = 1; $i < count($second_chart); $i++) {
+
+                                        $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
+
+                                        $rows_breakdown[] = [$q->related->question.' ['.$q->removeAnswerTooltip($list[$i - 1]).']'];
+
+                                        $rows_breakdown[] = ['in relation to:'];
+
+                                        $cols_q_title_second = [
+                                            ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithTooltips()
+                                        ];
+
+                                        $rows_breakdown[] = $cols_q_title_second;
+
+                                        $m_original_chart = [];
+                                        $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
+
+                                        $breakdown_rows_count = count($answers_array);
+
+                                        $all_related_original_results = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->get();
+                                        // $all_related_original_results = VoxAnswer::whereNull('is_admin')
+                                        // ->where('question_id', $q->id)
+                                        // ->where('is_skipped', 0)
+                                        // ->has('user')
+                                        // ->whereIn('user_id', function($query) use ($q, $i) {
+                                        //     $query->select('user_id')
+                                        //     ->from('vox_answers')
+                                        //     ->where('question_id', $q->related->id)
+                                        //     ->where('answer', $i);
+                                        // });
+
+                                        // if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
+                                        //     $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
+                                        //     $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
+
+                                        //     $all_related_original_results = $all_related_original_results->where('created_at', '>=', $from)
+                                        //     ->where('created_at', '<=', $to);
+                                        // }
+                                        
+                                        foreach ($answers_array as $key => $value) {
+                                            $m_original_chart[$key][] = mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0 ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+
+                                            // $count_people = 0;
+                                            // foreach ($all_related_original_results->get() as $k => $v) {
+                                            //     if($v->answer == ($key + 1)) {
+                                            //         $count_people++;
+                                            //     }
+                                            // }
+
+                                            $m_original_chart[$key][] = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->where('answer', $key+1)->first()->cnt; 
+                                            // $m_original_chart[$key][] = $count_people;                        
+                                        }
+
+                                        $tr = 0;
+                                        foreach ($all_related_original_results as $alor) {
+                                            $tr+= $alor->cnt;
+                                        }
+                                        $total_count = $tr; 
+
+                                        // if($q->type == 'multiple_choice') {
+                                        //     $results_total = $all_related_original_results->count();
+                                        // } else {
+                                        //     $results_total = $all_related_original_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+                                        // } 
+
+                                        foreach ($m_original_chart as $key => $value) {
+                                            foreach ($value as $k => $v) {
+                                                if($k == 1 && $v == 0) {
+                                                    $value[$k] = '0';
+                                                } else {
+                                                    $value[$k] =  $v;
+                                                }
+                                            }
+                                            $m_original_chart[$key] = $value;
+
+                                            $m_original_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total_count);
+
+                                        }                                    
+
+                                        usort($m_original_chart, function($a, $b) {
+                                            return $a[2] <= $b[2];
+                                        });
+
+                                        $rows_breakdown[] = $m_original_chart;
+                                        $rows_breakdown[] = [''];
+                                    }
+                                }
+
+                                $rows_breakdown[] = [''];
+
+                            } else if($chosen_dem == 'gender') {
+
+                                $main_breakdown_chart = [];
+                                $male_breakdown_chart = [];
+                                $female_breakdown_chart = [];
+
+                                $main_total_count = 0;
+                                $male_total_count = 0;
+                                $female_total_count = 0;
+
+                                foreach ($answers_array as $key => $value) {
+                                    $main_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+                                    $male_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+                                    $female_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+
+                                    $count_people = 0;
+                                    $count_people_male = 0;
+                                    $count_people_female = 0;
+
+
+                                    foreach ($all_results as $k => $v) {
+                                        if(!empty($v->gender)) {
+                                            if($q->type == 'scale' ) {
+                                                if($v->scale == ($key + 1)) {
+                                                    $count_people++;
+
+                                                    if($v->gender == 'm') {
+                                                        $count_people_male++;
+                                                    }
+
+                                                    if($v->gender == 'f') {
+                                                        $count_people_female++;
+                                                    }
+                                                }
+                                            } else {
+
+                                                if($v->answer == ($key + 1)) {
+                                                    $count_people++;
+
+                                                    if($v->gender == 'm') {
+                                                        $count_people_male++;
+                                                    }
+
+                                                    if($v->gender == 'f') {
+                                                        $count_people_female++;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    $main_total_count = $main_total_count + $count_people;
+                                    $male_total_count = $male_total_count + $count_people_male;
+                                    $female_total_count = $female_total_count + $count_people_female;
+
+                                    $main_breakdown_chart[$key][] = $count_people;
+                                    $male_breakdown_chart[$key][] = $count_people_male;
+                                    $female_breakdown_chart[$key][] = $count_people_female;
+                                }
+
+
+                                if(!empty(Request::input('scale-for'))) {
+                                    $list = json_decode($q->answers, true);
+                                    $title_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[(Request::input('scale-for') - 1)].']';
+                                } else {
+                                    $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                                }
 
                                 $cols_q_title_second = [
-                                    ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithTooltips()
+                                    $title_stats,
                                 ];
 
                                 $rows_breakdown[] = $cols_q_title_second;
 
-                                $cur_chart = [];
+                                $chart_titles = [
+                                    '',
+                                    'Total',
+                                    'Total',
+                                    'Men',
+                                    'Men',
+                                    'Women',
+                                    'Women',
+                                ];
 
-                                // $all_results = VoxAnswer::whereNull('is_admin')
-                                // ->where('question_id', $q->id)
-                                // ->where('is_completed', 1)
-                                // ->where('is_skipped', 0)
-                                // ->has('user');
+                                $rows_breakdown[] = $chart_titles;
 
-                                // if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
-                                //     $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
-                                //     $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
+                                // dd($main_breakdown_chart);
 
-                                //     $all_results = $all_results->where('created_at', '>=', $from)
-                                //     ->where('created_at', '<=', $to);
-                                // }
-
-                                $a = $q->stats_answer_id;
-
-                                // $all_results = $all_results->whereIn('user_id', function($query) use ($q, $a) {
-                                //     $query->select('user_id')
-                                //     ->from('vox_answers')
-                                //     ->where('question_id', $q->related->id)
-                                //     ->where('answer', $a);
-                                // } );
-
-                                $all_results = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->where('answer', $a)->first();
-
-                                $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
-
-                                $breakdown_rows_count = count($answers_array);
-
-                                foreach ($answers_array as $key => $value) {
-                                    $cur_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
-
-                                    // $count_people = 0;
-                                    // foreach ($all_results->get() as $k => $v) {
-
-                                    //     if($v->answer == ($key + 1)) {
-                                    //         $count_people++;
-                                    //     }
-                                    // }
-
-                                    $cur_chart[$key][] = $count_people;
-                                }
-                                
-                                // $results_total = $all_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
-                                $results_total = $all_results->cnt;
-
-
-                                $total = $results_total; 
-
-                                foreach ($cur_chart as $key => $value) {
+                                foreach ($main_breakdown_chart as $key => $value) {
                                     foreach ($value as $k => $v) {
                                         if($k == 1 && $v == 0) {
                                             $value[$k] = '0';
@@ -1846,24 +2035,91 @@ class StatsController extends FrontController {
                                             $value[$k] =  $v;
                                         }
                                     }
-                                    $cur_chart[$key] = $value;
+                                    $main_breakdown_chart[$key] = $value;
 
-                                    $cur_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+                                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
 
                                 }
 
-                                usort($cur_chart, function($a, $b) {
+                                foreach ($female_breakdown_chart as $key => $value) {
+                                    foreach ($value as $k => $v) {
+                                        if($k == 1 && $v == 0) {
+                                            $value[$k] = '0';
+                                        } else {
+                                            $value[$k] =  $v;
+                                        }
+                                    }
+                                    $female_breakdown_chart[$key] = $value;
+
+                                    $female_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+
+                                }
+
+                                foreach ($male_breakdown_chart as $key => $value) {
+                                    foreach ($value as $k => $v) {
+                                        if($k == 1 && $v == 0) {
+                                            $value[$k] = '0';
+                                        } else {
+                                            $value[$k] =  $v;
+                                        }
+                                    }
+                                    $male_breakdown_chart[$key] = $value;
+
+                                    $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+
+                                }
+
+
+                                usort($main_breakdown_chart, function($a, $b) {
                                     return $a[2] <= $b[2];
                                 });
 
 
+                                // dd($main_breakdown_chart);
+                                
+                                $male_breakdown_final = [];
+                                $female_breakdown_final = [];
+                                foreach($main_breakdown_chart as $key => $value) {
+                                    foreach ($male_breakdown_chart as $k => $v) {
+                                        if($v[0] == $value[0]) {
+                                            $male_breakdown_final[$key] = [
+                                                // $v[0],
+                                                $v[1],
+                                                $v[2],
+                                            ];
+                                        }
+                                    }
+
+                                    foreach ($female_breakdown_chart as $k => $v) {
+                                        if($v[0] == $value[0]) {
+                                            $female_breakdown_final[$key] = [
+                                                // $v[0],
+                                                $v[1],
+                                                $v[2],
+                                            ];
+                                        }
+                                    }
+                                }
+
+                                foreach($main_breakdown_chart as $key => $value) {
+                                    $main_breakdown_chart[$key][] = $male_breakdown_final[$key][0];
+                                    $main_breakdown_chart[$key][] = $male_breakdown_final[$key][1];
+                                    $main_breakdown_chart[$key][] = $female_breakdown_final[$key][0];
+                                    $main_breakdown_chart[$key][] = $female_breakdown_final[$key][1];
+                                }
+
+                                // dd($main_breakdown_chart);
+
+                                // dd($main_breakdown_chart, $female_breakdown_final, $male_breakdown_final);
+
+
                                 $ordered_diez = [];
 
-                                foreach ($cur_chart as $key => $value) {
+                                foreach ($main_breakdown_chart as $key => $value) {
 
                                     if(mb_strpos($value[0], '#')===0) {
                                         $ordered_diez[] = $value;
-                                        unset( $cur_chart[$key] );
+                                        unset( $main_breakdown_chart[$key] );
                                     }
                                 }
 
@@ -1878,267 +2134,217 @@ class StatsController extends FrontController {
 
                                             $value[0] = mb_substr($value[0], 1);
 
-                                            $cur_chart[] = $value;
+                                            $main_breakdown_chart[] = $value;
                                         }
                                     } else {
                                         foreach ($ordered_diez as $key => $value) {
 
                                             $ordered_diez[$key][0] = mb_substr($value[0], 1);
                                         }
-                                        $cur_chart[] = $ordered_diez[0];
+                                        $main_breakdown_chart[] = $ordered_diez[0];
                                     }
 
-                                    $cur_chart = array_values($cur_chart);
+                                    $main_breakdown_chart = array_values($main_breakdown_chart);
                                 }
 
-                                $rows_breakdown[] = $cur_chart;
+                                // dd($main_breakdown_chart);
+                                $rows_breakdown[] = $main_breakdown_chart;
+                                $rows_breakdown[] = [
+                                    '',
+                                    $main_total_count,
+                                    '',
+                                    $male_total_count,
+                                    '',
+                                    $female_total_count,
+                                ];
+                                $rows_breakdown[] = [''];
+
+                            } else if($chosen_dem == 'country_id') {
+
                             } else {
 
-                                for($i = 1; $i < count($second_chart); $i++) {
+                                $main_breakdown_chart = [];
+                                $dem_breakdown_chart = [];
+                                $main_total_count = 0;
 
-                                    $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
+                                if($chosen_dem == 'age' ) {
+                                    $config_dem_groups = config('vox.age_groups');
+                                } else {
+                                    $config_dem_groups = config('vox.details_fields')[$chosen_dem]['values'];
+                                }
+                               
+                                foreach ($answers_array as $key => $value) {
+                                    $main_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+                                    $dem_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
 
-                                    $rows_breakdown[] = [$q->related->question.' ['.$q->removeAnswerTooltip($list[$i - 1]).']'];
+                                    $count_people = 0;
 
-                                    $rows_breakdown[] = ['in relation to:'];
+                                    //da opravq, ako choveka e izbral opredeleni godini (dem_options)
 
-                                    $cols_q_title_second = [
-                                        ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithTooltips()
-                                    ];
-
-                                    $rows_breakdown[] = $cols_q_title_second;
-
-                                    $m_original_chart = [];
-                                    $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
-
-                                    $breakdown_rows_count = count($answers_array);
-
-                                    $all_related_original_results = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->get();
-                                    // $all_related_original_results = VoxAnswer::whereNull('is_admin')
-                                    // ->where('question_id', $q->id)
-                                    // ->where('is_skipped', 0)
-                                    // ->has('user')
-                                    // ->whereIn('user_id', function($query) use ($q, $i) {
-                                    //     $query->select('user_id')
-                                    //     ->from('vox_answers')
-                                    //     ->where('question_id', $q->related->id)
-                                    //     ->where('answer', $i);
-                                    // });
-
-                                    // if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
-                                    //     $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
-                                    //     $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
-
-                                    //     $all_related_original_results = $all_related_original_results->where('created_at', '>=', $from)
-                                    //     ->where('created_at', '<=', $to);
-                                    // }
-                                    
-                                    foreach ($answers_array as $key => $value) {
-                                        $m_original_chart[$key][] = mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0 ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
-
-                                        // $count_people = 0;
-                                        // foreach ($all_related_original_results->get() as $k => $v) {
-                                        //     if($v->answer == ($key + 1)) {
-                                        //         $count_people++;
-                                        //     }
-                                        // }
-
-                                        $m_original_chart[$key][] = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->where('answer', $key+1)->first()->cnt; 
-                                        // $m_original_chart[$key][] = $count_people;                        
+                                    $dem_count = [];
+                                    foreach($config_dem_groups as $k => $v) {
+                                        $dem_count[$k] = [
+                                            'count' => 0,
+                                        ];
                                     }
 
-                                    $tr = 0;
-                                    foreach ($all_related_original_results as $alor) {
-                                        $tr+= $alor->cnt;
-                                    }
-                                    $total_count = $tr; 
+                                    foreach ($all_results as $k => $v) {
 
-                                    // if($q->type == 'multiple_choice') {
-                                    //     $results_total = $all_related_original_results->count();
-                                    // } else {
-                                    //     $results_total = $all_related_original_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
-                                    // } 
+                                        if(!empty($v->$chosen_dem)) {
 
-                                    foreach ($m_original_chart as $key => $value) {
-                                        foreach ($value as $k => $v) {
-                                            if($k == 1 && $v == 0) {
-                                                $value[$k] = '0';
+                                            if($q->type == 'scale' ) {
+                                                if($v->scale == ($key + 1)) {
+                                                    $count_people++;
+                                                    $dem_count[$v->$chosen_dem]['count']++;
+                                                }
+
                                             } else {
-                                                $value[$k] =  $v;
+                                                if($v->answer == ($key + 1)) {
+                                                    $count_people++;                                                
+                                                    $dem_count[$v->$chosen_dem]['count']++;
+                                                }
                                             }
                                         }
-                                        $m_original_chart[$key] = $value;
-
-                                        $m_original_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total_count);
-
-                                    }                                    
-
-                                    usort($m_original_chart, function($a, $b) {
-                                        return $a[2] <= $b[2];
-                                    });
-
-                                    $rows_breakdown[] = $m_original_chart;
-                                    $rows_breakdown[] = [''];
-                                }
-                            }
-
-                            $rows_breakdown[] = [''];
-
-                        }
-
-                        // dd($demographics);
-
-                        if(in_array('gender', $demographics)) {
-                            if(!empty(Request::input('scale-for'))) {
-                                $list = json_decode($q->answers, true);
-                                $title_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[(Request::input('scale-for') - 1)].']';
-                            } else {
-                                $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
-                            }
-
-                            $cols_q_title_second = [
-                                $title_stats,
-                            ];
-
-                            $rows_breakdown[] = $cols_q_title_second;
-
-                            $chart_titles = [
-                                '',
-                                'Total',
-                                'Total',
-                                'Men',
-                                'Men',
-                                'Women',
-                                'Women',
-                            ];
-
-                            $rows_breakdown[] = $chart_titles;
-
-                            // dd($main_breakdown_chart);
-
-                            foreach ($main_breakdown_chart as $key => $value) {
-                                foreach ($value as $k => $v) {
-                                    if($k == 1 && $v == 0) {
-                                        $value[$k] = '0';
-                                    } else {
-                                        $value[$k] =  $v;
                                     }
-                                }
-                                $main_breakdown_chart[$key] = $value;
 
-                                $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
-
-                            }
-
-                            foreach ($female_breakdown_chart as $key => $value) {
-                                foreach ($value as $k => $v) {
-                                    if($k == 1 && $v == 0) {
-                                        $value[$k] = '0';
-                                    } else {
-                                        $value[$k] =  $v;
-                                    }
-                                }
-                                $female_breakdown_chart[$key] = $value;
-
-                                $female_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
-
-                            }
-
-                            foreach ($male_breakdown_chart as $key => $value) {
-                                foreach ($value as $k => $v) {
-                                    if($k == 1 && $v == 0) {
-                                        $value[$k] = '0';
-                                    } else {
-                                        $value[$k] =  $v;
-                                    }
-                                }
-                                $male_breakdown_chart[$key] = $value;
-
-                                $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
-
-                            }
-
-
-                            usort($main_breakdown_chart, function($a, $b) {
-                                return $a[2] <= $b[2];
-                            });
-
-
-                            // dd($main_breakdown_chart);
-                            
-                            $male_breakdown_final = [];
-                            $female_breakdown_final = [];
-                            foreach($main_breakdown_chart as $key => $value) {
-                                foreach ($male_breakdown_chart as $k => $v) {
-                                    if($v[0] == $value[0]) {
-                                        $male_breakdown_final[$key] = [
-                                            // $v[0],
-                                            $v[1],
-                                            $v[2],
-                                        ];
-                                    }
+                                    $main_total_count = $main_total_count + $count_people;
+                                    $main_breakdown_chart[$key][] = $count_people;
+                                    $dem_breakdown_chart[$key][] = $dem_count;
                                 }
 
-                                foreach ($female_breakdown_chart as $k => $v) {
-                                    if($v[0] == $value[0]) {
-                                        $female_breakdown_final[$key] = [
-                                            // $v[0],
-                                            $v[1],
-                                            $v[2],
-                                        ];
-                                    }
-                                }
-                            }
+                                // dd($main_breakdown_chart, $age_breakdown_chart);
 
-                            foreach($main_breakdown_chart as $key => $value) {
-                                $main_breakdown_chart[$key][] = $male_breakdown_final[$key][0];
-                                $main_breakdown_chart[$key][] = $male_breakdown_final[$key][1];
-                                $main_breakdown_chart[$key][] = $female_breakdown_final[$key][0];
-                                $main_breakdown_chart[$key][] = $female_breakdown_final[$key][1];
-                            }
-
-                            // dd($main_breakdown_chart);
-
-                            // dd($main_breakdown_chart, $female_breakdown_final, $male_breakdown_final);
-
-
-                            $ordered_diez = [];
-
-                            foreach ($main_breakdown_chart as $key => $value) {
-
-                                if(mb_strpos($value[0], '#')===0) {
-                                    $ordered_diez[] = $value;
-                                    unset( $main_breakdown_chart[$key] );
-                                }
-                            }
-
-                            if(count($ordered_diez)) {
-
-                                if( count($ordered_diez) > 1) {
-                                    usort($ordered_diez, function($a, $b) {
-                                        return $a[2] <= $b[2];
-                                    });
-
-                                    foreach ($ordered_diez as $key => $value) {
-
-                                        $value[0] = mb_substr($value[0], 1);
-
-                                        $main_breakdown_chart[] = $value;
-                                    }
+                                if(!empty(Request::input('scale-for'))) {
+                                    $list = json_decode($q->answers, true);
+                                    $title_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[(Request::input('scale-for') - 1)].']';
                                 } else {
-                                    foreach ($ordered_diez as $key => $value) {
-
-                                        $ordered_diez[$key][0] = mb_substr($value[0], 1);
-                                    }
-                                    $main_breakdown_chart[] = $ordered_diez[0];
+                                    $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                                 }
 
-                                $main_breakdown_chart = array_values($main_breakdown_chart);
-                            }
+                                $cols_q_title_second = [
+                                    $title_stats,
+                                ];
 
-                            // dd($main_breakdown_chart);
-                            $rows_breakdown[] = $main_breakdown_chart;
-                            $rows_breakdown[] = [''];
+                                $rows_breakdown[] = $cols_q_title_second;
+
+                                $chart_titles = [
+                                    '',
+                                    'Total',
+                                    'Total',
+                                ];
+
+                                foreach($config_dem_groups as $ak => $dem_name) {
+                                    $chart_titles[] = $dem_name;
+                                    $chart_titles[] = $dem_name;
+                                }
+
+                                $rows_breakdown[] = $chart_titles;
+
+                                foreach ($main_breakdown_chart as $key => $value) {
+                                    foreach ($value as $k => $v) {
+                                        if($k == 1 && $v == 0) {
+                                            $value[$k] = '0';
+                                        } else {
+                                            $value[$k] =  $v;
+                                        }
+                                    }
+                                    $main_breakdown_chart[$key] = $value;
+                                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+                                }
+
+                                $total_count_by_group = [];
+
+                                foreach($config_dem_groups as $k => $v) {
+                                    $total_count_by_group[$k] = 0;
+                                }
+
+                                foreach ($dem_breakdown_chart as $key => $value) {
+                                    foreach($value[1] as $k => $v) {
+                                        $total_count_by_group[$k]+=$v['count'];
+                                    }
+                                }
+
+                                foreach ($dem_breakdown_chart as $key => $value) {
+                                    foreach($value[1] as $k => $v) {
+                                        $dem_breakdown_chart[$key][1][$k] = [
+                                            $v['count'],
+                                            $v['count'] == 0 ? '0' : ($v['count'] / $total_count_by_group[$k])
+                                        ];
+                                    }
+                                }
+
+                                usort($main_breakdown_chart, function($a, $b) {
+                                    return $a[2] <= $b[2];
+                                });
+                                
+                                $dem_breakdown_final = [];
+                                foreach($main_breakdown_chart as $key => $value) {
+                                    foreach ($dem_breakdown_chart as $k => $v) {
+
+                                        if($v[0] == $value[0]) {
+                                            $dem_breakdown_final[$key] = $v;
+                                        }
+                                    }
+                                }
+
+                                foreach ($dem_breakdown_final as $key => $value) {
+                                    foreach($value[1] as $k => $v) {
+                                        // dd($k, $v);
+                                        $main_breakdown_chart[$key][] = $v[0];
+                                        $main_breakdown_chart[$key][] = $v[1];
+                                    }
+                                }
+
+                                $ordered_diez = [];
+
+                                foreach ($main_breakdown_chart as $key => $value) {
+
+                                    if(mb_strpos($value[0], '#')===0) {
+                                        $ordered_diez[] = $value;
+                                        unset( $main_breakdown_chart[$key] );
+                                    }
+                                }
+
+                                if(count($ordered_diez)) {
+
+                                    if( count($ordered_diez) > 1) {
+                                        usort($ordered_diez, function($a, $b) {
+                                            return $a[2] <= $b[2];
+                                        });
+
+                                        foreach ($ordered_diez as $key => $value) {
+
+                                            $value[0] = mb_substr($value[0], 1);
+
+                                            $main_breakdown_chart[] = $value;
+                                        }
+                                    } else {
+                                        foreach ($ordered_diez as $key => $value) {
+
+                                            $ordered_diez[$key][0] = mb_substr($value[0], 1);
+                                        }
+                                        $main_breakdown_chart[] = $ordered_diez[0];
+                                    }
+
+                                    $main_breakdown_chart = array_values($main_breakdown_chart);
+                                }
+
+                                $rows_breakdown[] = $main_breakdown_chart;
+
+                                $final_count_group = [
+                                    '',
+                                    $main_total_count,
+                                ];
+
+                                foreach($total_count_by_group as $k => $v) {
+                                    $final_count_group[] = '';
+                                    $final_count_group[] = $v;
+                                } 
+
+                                $rows_breakdown[] = $final_count_group;
+                                $rows_breakdown[] = [''];
+                            }                        
+
                         }
 
                         $flist['Breakdown'] = $rows_breakdown;
