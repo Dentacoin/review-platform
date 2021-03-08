@@ -1937,8 +1937,6 @@ class StatsController extends FrontController {
                                     }
                                 }
 
-                                $rows_breakdown[] = [''];
-
                             } else if($chosen_dem == 'gender') {
 
                                 $main_breakdown_chart = [];
@@ -2025,8 +2023,6 @@ class StatsController extends FrontController {
 
                                 $rows_breakdown[] = $chart_titles;
 
-                                // dd($main_breakdown_chart);
-
                                 foreach ($main_breakdown_chart as $key => $value) {
                                     foreach ($value as $k => $v) {
                                         if($k == 1 && $v == 0) {
@@ -2036,9 +2032,7 @@ class StatsController extends FrontController {
                                         }
                                     }
                                     $main_breakdown_chart[$key] = $value;
-
                                     $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
-
                                 }
 
                                 foreach ($female_breakdown_chart as $key => $value) {
@@ -2050,9 +2044,7 @@ class StatsController extends FrontController {
                                         }
                                     }
                                     $female_breakdown_chart[$key] = $value;
-
                                     $female_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
-
                                 }
 
                                 foreach ($male_breakdown_chart as $key => $value) {
@@ -2064,18 +2056,12 @@ class StatsController extends FrontController {
                                         }
                                     }
                                     $male_breakdown_chart[$key] = $value;
-
                                     $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
-
                                 }
-
 
                                 usort($main_breakdown_chart, function($a, $b) {
                                     return $a[2] <= $b[2];
                                 });
-
-
-                                // dd($main_breakdown_chart);
                                 
                                 $male_breakdown_final = [];
                                 $female_breakdown_final = [];
@@ -2083,7 +2069,6 @@ class StatsController extends FrontController {
                                     foreach ($male_breakdown_chart as $k => $v) {
                                         if($v[0] == $value[0]) {
                                             $male_breakdown_final[$key] = [
-                                                // $v[0],
                                                 $v[1],
                                                 $v[2],
                                             ];
@@ -2093,7 +2078,6 @@ class StatsController extends FrontController {
                                     foreach ($female_breakdown_chart as $k => $v) {
                                         if($v[0] == $value[0]) {
                                             $female_breakdown_final[$key] = [
-                                                // $v[0],
                                                 $v[1],
                                                 $v[2],
                                             ];
@@ -2107,11 +2091,6 @@ class StatsController extends FrontController {
                                     $main_breakdown_chart[$key][] = $female_breakdown_final[$key][0];
                                     $main_breakdown_chart[$key][] = $female_breakdown_final[$key][1];
                                 }
-
-                                // dd($main_breakdown_chart);
-
-                                // dd($main_breakdown_chart, $female_breakdown_final, $male_breakdown_final);
-
 
                                 $ordered_diez = [];
 
@@ -2147,7 +2126,6 @@ class StatsController extends FrontController {
                                     $main_breakdown_chart = array_values($main_breakdown_chart);
                                 }
 
-                                // dd($main_breakdown_chart);
                                 $rows_breakdown[] = $main_breakdown_chart;
                                 $rows_breakdown[] = [
                                     '',
