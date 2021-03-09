@@ -45,13 +45,16 @@
                         <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }}" id="nav-tab-{{ $code }}">
                             <div class="form-group">
                                 <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.lang-slug') }}</label>
-                                <div class="col-md-{{ !empty($item) ? '6' : '10' }}">
+                                <div class="col-md-{{ !empty($item) ? '4' : '10' }}">
                                     {{ Form::text('slug-'.$code, !empty($item) ? $item->translateOrNew($code)->slug : null, array('maxlength' => 256, 'class' => 'form-control')) }}
                                 </div>
                                 @if(!empty($item))
                                     <div class="col-md-2">
                                         <!-- <a href="{{ $item->getLink().'?testmode=0' }}" target="_blank" class="btn btn-primary btn-block">Preview Survey</a> -->
                                         <a href="{{ $item->getStatsList() }}" target="_blank" class="btn btn-primary btn-block">Preview Stats</a>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="javascript:;" data-toggle="modal" data-target="#exportStats" class="btn btn-primary btn-block">Export Stats</a>
                                     </div>
                                     <div class="col-md-2">
                                         <a href="{{ $item->getLink().'?testmode=1' }}" target="_blank" class="btn btn-primary btn-block">Test Survey</a>
@@ -658,6 +661,62 @@
 
     </div>
 </div>
+
+@if(!empty($item) && $item->questions->isNotEmpty())
+    <div id="exportStats" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Export stats</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{{ url('cms/vox/export-stats') }}" id="export-stats-form">
+                        {!! csrf_field() !!}
+                        <div class="form-group clearfix" id="stat_standard" style="margin-top: 10px;">
+                            <input type="hidden" name="vox-id" value="{{ $item->id }}">
+                            <select class="form-control select2type" multiple name="chosen-qs[]">
+                                @foreach($item->questions as $qq)
+                                    @if($qq->used_for_stats=='standard' || $qq->used_for_stats=='dependency')
+                                        <option value="{{ $qq->id }}">{{ $qq->question }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+
+                            <br/>
+                            <br/>
+
+                            <label class="col-md-2 control-label">Demographics</label>
+                            <div class="col-md-10">
+                                <label for="demographics-relation">
+                                    <input type="checkbox" name="demographics[]" value="relation" id="demographics-relation" style="vertical-align: sub;" />
+                                    Relation &nbsp;&nbsp;&nbsp;&nbsp;
+                                </label>
+                                @foreach( config('vox.stats_scales') as $k => $v)
+                                    <label for="demographics-{{ $k }}">
+                                        <input type="checkbox" name="demographics[]" value="{{ $k }}" id="demographics-{{ $k }}" style="vertical-align: sub;" />
+                                        {{ trans('vox.page.stats.group-by-'.$k) }} &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+@endif
 
 
 @if(!empty($error))

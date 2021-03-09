@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\Vox;
 
 use App\Exports\MultipleLangSheetExport;
+use App\Exports\MultipleStatSheetExport;
 use App\Exports\Export;
 use App\Imports\Import;
 use Carbon\Carbon;
@@ -1994,6 +1995,81 @@ class VoxesController extends AdminController
         } else {
             return '';
         }
+    }
+
+    public function exportStats() {
+
+        ini_set('max_execution_time', 0);
+        set_time_limit(0);
+        ini_set('memory_limit','1024M');
+
+        $vox = Vox::find(request('vox-id'));
+        $all_period = date('d/m/Y',strtotime($vox->launched_at)).'-'.date('d/m/Y');
+        $demographics = request('demographics');
+
+        //ako e scale ??
+        $export_array = [];
+        foreach(request('chosen-qs') as $q_id) {
+            $q = VoxQuestion::find($q_id);
+
+            $results =  VoxAnswer::whereNull('is_admin')
+            ->where('question_id', $q_id)
+            ->where('is_completed', 1)
+            ->where('is_skipped', 0)
+            ->has('user');
+
+            if($q->type == 'scale') {
+                $results_resp = $results->where('answer', 1)->count();
+            } else {
+                $results_resp = $results->count();
+            }
+
+            // foreach($demographics as $dem) {
+            //     $results = $results->whereIn($key, array_values($value)
+            // }
+
+            if($q->type == 'scale') {
+                foreach ($q->scale as $key => $scale) {
+                    $export_array[] = Vox::exportStatsXlsx($vox, $q, $demographics, $results, $key+1, $all_period, true);
+                }
+            } else {
+                $export_array[] = Vox::exportStatsXlsx($vox, $q, $demographics, $results, null, $all_period, true);
+            }
+        }
+
+        $document = [
+            'flist' => [
+                "Raw Data" => [],
+                "Breakdown" => [],
+            ],
+            "breakdown_rows_count" => 0
+        ];
+
+
+        foreach($export_array as $key => $exportArr) {
+            // dd($exportArr['flist']["Raw Data"]);
+            foreach($exportArr['flist']["Raw Data"] as $raw_data) {
+                $document['flist']["Raw Data"][] = $raw_data;
+            }
+            foreach($exportArr['flist']["Breakdown"] as $breakdown_data) {
+                $document['flist']["Breakdown"][] = $breakdown_data;
+            }
+
+            // $document['flist']["Breakdown"][] = $exportArr['flist']["Breakdown"];
+            $document['breakdown_rows_count'] = $exportArr["breakdown_rows_count"]++;
+        }
+
+        // dd($export_array, $document);
+
+
+        $fname = $vox->title;
+
+        $pdf_title = strtolower(str_replace(['?', ' ', ':'], [' ', '-', ' '] ,$fname)).'-dentavox'.mb_substr(microtime(true), 0, 10);
+
+        return (new MultipleStatSheetExport($document['flist'], $document['breakdown_rows_count']))->download($pdf_title.'.xlsx');
+
+
+
     }
 
 }

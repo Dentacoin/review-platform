@@ -101,6 +101,7 @@ return [
                 'faq.js',
                 'polls.js',
                 'jquery.multisortable.js',
+                '../jquery.multi-select.min.js',
             ),
         ),
         'pages' => array(

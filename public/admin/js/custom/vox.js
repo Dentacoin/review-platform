@@ -609,4 +609,14 @@ $(document).ready(function(){
 			$(this).closest('form').submit();
 		});
 	}
+
+
+	if ($('.select2type').length) {
+		$(".select2type").multiSelect();
+
+		if( $('.multi-select-button').text() == '-- Select --') {
+
+			$('.multi-select-button').html('Select Questions')
+		}
+    }
 });

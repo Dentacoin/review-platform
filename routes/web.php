@@ -172,6 +172,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/duplicate-question', 			'VoxesController@duplicate_question');
 	Route::post('search-questions', 				'VoxesController@getTitle');
 	Route::post('vox-questions/mass-delete', 		'VoxesController@massdelete');
+	Route::any('vox/export-stats', 					'VoxesController@exportStats');
 
 	Route::get('vox/polls', 						'PollsController@list');
 	Route::any('vox/polls/add', 					'PollsController@add');
