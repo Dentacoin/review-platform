@@ -124,10 +124,6 @@ class Vox extends Model {
         return $this->hasOne('App\Models\VoxQuestion', 'vox_id', 'id')->where('stats_featured', '1'); // we used to show the first question in the Stats list
     }
     
-    public function scale() {
-        return $this->hasOne('App\Models\VoxScale', 'id', 'vox_scale_id');
-    }
-    
     public function respondentsCount() {
         $date = $this->respondents_last_count_at;
         $now = Carbon::now();
