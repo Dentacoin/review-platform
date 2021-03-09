@@ -2029,7 +2029,7 @@ class VoxesController extends AdminController
             // }
 
             if($q->type == 'scale') {
-                foreach ($q->scale as $key => $scale) {
+                foreach (explode(',', $q->scale->answers) as $key => $scale) {
                     $export_array[] = Vox::exportStatsXlsx($vox, $q, $demographics, $results, $key+1, $all_period, true);
                 }
             } else {
