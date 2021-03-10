@@ -599,7 +599,7 @@ UNCONFIRMED TRANSACTIONS
                 $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('cronjob_unconfirmed', 0)->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
 
                 if($transactions->isEmpty()) {
-                    $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+                    $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->get(); //
 
                     if($transactions->isNotEmpty()) {
                         foreach ($transactions as $trans) {
