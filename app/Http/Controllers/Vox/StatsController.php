@@ -392,7 +392,7 @@ class StatsController extends FrontController {
                                 $new_value
                             ];
                         }
-                        
+
                         $converted_rows = array_merge($converted_rows, $rows_without_diez);
                     }
                 } else {

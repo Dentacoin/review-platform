@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
+
+use App\Models\VoxAnswersDependency;
 use App\Models\VoxToCategory;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
@@ -1999,6 +2001,8 @@ class VoxesController extends AdminController
 
     public function exportStats() {
 
+        // SELECT * FROM `vox_answers_dependencies` WHERE `question_dependency_id` = 2951 AND `question_id` = 15910
+
         ini_set('max_execution_time', 0);
         set_time_limit(0);
         ini_set('memory_limit','1024M');
@@ -2019,17 +2023,7 @@ class VoxesController extends AdminController
             ->has('user');
 
             if($q->type == 'scale') {
-                $results_resp = $results->where('answer', 1)->count();
-            } else {
-                $results_resp = $results->count();
-            }
-
-            // foreach($demographics as $dem) {
-            //     $results = $results->whereIn($key, array_values($value)
-            // }
-
-            if($q->type == 'scale') {
-                foreach (explode(',', $q->scale->answers) as $key => $scale) {
+                foreach (json_decode($q->answers, true) as $key => $scale) {
                     $export_array[] = Vox::exportStatsXlsx($vox, $q, $demographics, $results, $key+1, $all_period, true);
                 }
             } else {

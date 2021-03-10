@@ -822,7 +822,7 @@ class Vox extends Model {
             $scales[$sitem->id] = $sitem;
         }
 
-        if(in_array('relation', $demographics)) {
+        if(in_array('relation', $demographics) && $q->used_for_stats == 'dependency') {
             if(!empty($q->stats_answer_id)) {
 
                 $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
@@ -844,7 +844,7 @@ class Vox extends Model {
         }
 
         if( $q->type == 'single_choice' || $q->type == 'number') {
-            $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+            $cols[] = in_array('relation', $demographics) && $q->used_for_stats == 'dependency' ? $q->questionWithoutTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
             $cols2[] = '';
 
         } else if( $q->type == 'scale' ) {
@@ -855,7 +855,7 @@ class Vox extends Model {
         } else if( $q->type == 'rank' ) {
             $list = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
             foreach ($list as $l) {
-                $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                $cols[] = in_array('relation', $demographics) && $q->used_for_stats == 'dependency' ? $q->questionWithoutTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                 $cols2[] = $q->removeAnswerTooltip(mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l);
             }
 
@@ -872,16 +872,32 @@ class Vox extends Model {
             }
 
             foreach ($list_done as $l) {
-                $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                $cols[] = in_array('relation', $demographics) && $q->used_for_stats == 'dependency' ? $q->questionWithoutTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                 $cols2[] = $q->removeAnswerTooltip(mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l);
             }
         }
 
         if($q->type == 'scale') {
-            $results_resp = $results->where('answer', $scale_for)->count();
+            $all_results = $results->where('scale', $scale_for)->get();
+            $breakdown_results = $all_results;
+        } else if ($q->type == 'rank' || $q->type == 'multiple_choice') {
+            $breakdown_results = clone $results;
+            $breakdown_results = $breakdown_results->groupBy('user_id')->get();
+            $all_results = $results->get();
         } else {
-            $results_resp = $results->count();
+            $all_results = $results->get();
+            $breakdown_results = $all_results;
         }
+
+        if($q->type == 'scale') {
+            $results_resp = clone $results;
+            $results_resp = $results_resp->where('answer', $scale_for)->groupBy('user_id')->get()->count();
+        } else {
+            $results_resp = clone $results;
+            $results_resp = $results_resp->groupBy('user_id')->get()->count();
+        }
+
+        // dd($results_resp, $results);
 
         $cols_title = [
             strtoupper($vox->title).', Base: '.$results_resp.' respondents, '.$all_period
@@ -910,19 +926,12 @@ class Vox extends Model {
             ];
         }
 
-
-        if($q->type == 'scale') {
-            $all_results = $results->where('answer', $scale_for)->get();
-        } else if ($q->type == 'rank') {
-            $all_results = $results->groupBy('user_id')->get();
-        } else {
-            $all_results = $results->get();
-        }
+        // dd($breakdown_results);
 
         foreach ($all_results as $answ) {
             $row = [];
 
-            $row[] = $answ->created_at->format('d.m.Y');
+            $row[] = $answ->created_at ? $answ->created_at->format('d.m.Y') : '';
 
             foreach ($demographics as $dem) {
                 if($dem != 'relation') {
@@ -930,7 +939,7 @@ class Vox extends Model {
                     if($dem == 'gender') {
 
                         if(!empty($answ->gender)) {
-                            $row[] = $answ->gender=='m' ? 'Male' : 'Female';
+                            $row[] = $answ->gender=='m' ? 'Male '.$answ->user_id : 'Female '.$answ->user_id;
                         } else {
                             $row[] = '0';
                         }
@@ -957,7 +966,7 @@ class Vox extends Model {
                 }
             }
 
-            if(in_array('relation', $demographics)) {
+            if(in_array('relation', $demographics) && $q->used_for_stats == 'dependency') {
                 if(!empty($q->stats_answer_id)) {
 
                     $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
@@ -1054,7 +1063,7 @@ class Vox extends Model {
 
         foreach($demographics as $chosen_dem) {
 
-            if($chosen_dem == 'relation') {
+            if($chosen_dem == 'relation' && $q->used_for_stats == 'dependency') {
 
                 $second_chart = [];
 
@@ -1073,7 +1082,7 @@ class Vox extends Model {
                     $rows_breakdown[] = ['in relation to:'];
 
                     $cols_q_title_second = [
-                        ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithTooltips()
+                        ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithoutTooltips()
                     ];
 
                     $rows_breakdown[] = $cols_q_title_second;
@@ -1103,7 +1112,7 @@ class Vox extends Model {
                     //     ->where('answer', $a);
                     // } );
 
-                    $all_results = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->where('answer', $a)->first();
+                    $all_results = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->where('answer', $a)->first();
 
                     $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
 
@@ -1184,6 +1193,26 @@ class Vox extends Model {
 
                     $rows_breakdown[] = $cur_chart;
                 } else {
+                    // $second_chart
+                    // array:5 [▼
+                    //   0 => array:1 [▼
+                    //     0 => "Excellent"
+                    //   ]
+                    //   1 => array:1 [▼
+                    //     0 => "Very good"
+                    //   ]
+                    //   2 => array:1 [▼
+                    //     0 => "Good"
+                    //   ]
+                    //   3 => array:1 [▼
+                    //     0 => "Fair"
+                    //   ]
+                    //   4 => array:1 [▼
+                    //     0 => "Poor"
+                    //   ]
+                    // ]
+
+                    // dd($q->id, $q->related->id);
 
                     for($i = 1; $i < count($second_chart); $i++) {
 
@@ -1194,7 +1223,7 @@ class Vox extends Model {
                         $rows_breakdown[] = ['in relation to:'];
 
                         $cols_q_title_second = [
-                            ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithTooltips()
+                            ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithoutTooltips()
                         ];
 
                         $rows_breakdown[] = $cols_q_title_second;
@@ -1204,7 +1233,8 @@ class Vox extends Model {
 
                         $breakdown_rows_count = count($answers_array);
 
-                        $all_related_original_results = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->get();
+                        // $all_related_original_results = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->get();
+
                         // $all_related_original_results = VoxAnswer::whereNull('is_admin')
                         // ->where('question_id', $q->id)
                         // ->where('is_skipped', 0)
@@ -1223,7 +1253,7 @@ class Vox extends Model {
                         //     $all_related_original_results = $all_related_original_results->where('created_at', '>=', $from)
                         //     ->where('created_at', '<=', $to);
                         // }
-                        
+                        $total_count = 0;
                         foreach ($answers_array as $key => $value) {
                             $m_original_chart[$key][] = mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0 ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
 
@@ -1233,16 +1263,19 @@ class Vox extends Model {
                             //         $count_people++;
                             //     }
                             // }
-
-                            $m_original_chart[$key][] = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->where('answer', $key+1)->first()->cnt; 
+                            $answer_resp = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->where('answer_id', $i)->where('answer', $key+1)->first()->cnt;
+                            $m_original_chart[$key][] = $answer_resp; 
+                            $total_count+=$answer_resp;
                             // $m_original_chart[$key][] = $count_people;                        
                         }
 
-                        $tr = 0;
-                        foreach ($all_related_original_results as $alor) {
-                            $tr+= $alor->cnt;
-                        }
-                        $total_count = $tr; 
+                        // $tr = 0;
+                        // foreach ($all_related_original_results as $alor) {
+                        //     $tr+= $alor->cnt;
+                        // }
+                        // $total_count = $tr; 
+
+                        // dd($total_count);
 
                         // if($q->type == 'multiple_choice') {
                         //     $results_total = $all_related_original_results->count();
@@ -1262,7 +1295,8 @@ class Vox extends Model {
 
                             $m_original_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total_count);
 
-                        }                                    
+                        }
+
 
                         usort($m_original_chart, function($a, $b) {
                             return $a[2] <= $b[2];
@@ -1282,6 +1316,10 @@ class Vox extends Model {
                 $main_total_count = 0;
                 $male_total_count = 0;
                 $female_total_count = 0;
+
+                $unique_total_count = 0;
+                $unique_male_total_count = 0;
+                $unique_female_total_count = 0;
 
                 foreach ($answers_array as $key => $value) {
                     $main_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
@@ -1322,6 +1360,45 @@ class Vox extends Model {
                             }
                         }
                     }
+                    
+                    $unique_count_people = 0;
+                    $unique_count_people_male = 0;
+                    $unique_count_people_female = 0;
+
+                    foreach ($breakdown_results as $k => $v) {
+                        if(!empty($v->gender)) {
+                            if($q->type == 'scale' ) {
+                                if($v->scale == ($key + 1)) {
+                                    $unique_count_people++;
+
+                                    if($v->gender == 'm') {
+                                        $unique_count_people_male++;
+                                    }
+
+                                    if($v->gender == 'f') {
+                                        $unique_count_people_female++;
+                                    }
+                                }
+                            } else {
+
+                                if($v->answer == ($key + 1)) {
+                                    $unique_count_people++;
+
+                                    if($v->gender == 'm') {
+                                        $unique_count_people_male++;
+                                    }
+
+                                    if($v->gender == 'f') {
+                                        $unique_count_people_female++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $unique_total_count = $unique_total_count + $unique_count_people;
+                    $unique_male_total_count = $unique_male_total_count + $unique_count_people_male;
+                    $unique_female_total_count = $unique_female_total_count + $unique_count_people_female;
 
                     $main_total_count = $main_total_count + $count_people;
                     $male_total_count = $male_total_count + $count_people_male;
@@ -1367,7 +1444,7 @@ class Vox extends Model {
                         }
                     }
                     $main_breakdown_chart[$key] = $value;
-                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $unique_total_count);
                 }
 
                 foreach ($female_breakdown_chart as $key => $value) {
@@ -1379,7 +1456,7 @@ class Vox extends Model {
                         }
                     }
                     $female_breakdown_chart[$key] = $value;
-                    $female_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+                    $female_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $unique_female_total_count);
                 }
 
                 foreach ($male_breakdown_chart as $key => $value) {
@@ -1391,7 +1468,7 @@ class Vox extends Model {
                         }
                     }
                     $male_breakdown_chart[$key] = $value;
-                    $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+                    $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $unique_male_total_count);
                 }
 
                 usort($main_breakdown_chart, function($a, $b) {
@@ -1472,11 +1549,13 @@ class Vox extends Model {
                 ];
                 $rows_breakdown[] = [''];
 
-            } else {
+            } else if($chosen_dem != 'relation') {
 
                 $main_breakdown_chart = [];
                 $dem_breakdown_chart = [];
+                $unique_dem_breakdown_chart = [];
                 $main_total_count = 0;
+                $unique_main_total_count = 0;
 
                 if($chosen_dem == 'age' ) {
                     $config_dem_groups = config('vox.age_groups');
@@ -1485,17 +1564,25 @@ class Vox extends Model {
                 } else {
                     $config_dem_groups = config('vox.details_fields')[$chosen_dem]['values'];
                 }
-
                
                 foreach ($answers_array as $key => $value) {
                     $main_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
                     $dem_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+                    $unique_dem_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
 
                     $count_people = 0;
+                    $unique_count_people = 0;
 
                     $dem_count = [];
                     foreach($config_dem_groups as $k => $v) {
                         $dem_count[$k] = [
+                            'count' => 0,
+                        ];
+                    }
+
+                    $unique_dem_count = [];
+                    foreach($config_dem_groups as $k => $v) {
+                        $unique_dem_count[$k] = [
                             'count' => 0,
                         ];
                     }
@@ -1519,9 +1606,30 @@ class Vox extends Model {
                         }
                     }
 
+                    foreach ($breakdown_results as $k => $v) {
+
+                        if(!empty($v->$chosen_dem)) {
+
+                            if($q->type == 'scale' ) {
+                                if($v->scale == ($key + 1)) {
+                                    $unique_count_people++;
+                                    $unique_dem_count[$v->$chosen_dem]['count']++;
+                                }
+
+                            } else {
+                                if($v->answer == ($key + 1)) {
+                                    $unique_count_people++;                                                
+                                    $unique_dem_count[$v->$chosen_dem]['count']++;
+                                }
+                            }
+                        }
+                    }
+
+                    $unique_main_total_count = $unique_main_total_count + $unique_count_people;
                     $main_total_count = $main_total_count + $count_people;
                     $main_breakdown_chart[$key][] = $count_people;
                     $dem_breakdown_chart[$key][] = $dem_count;
+                    $unique_dem_breakdown_chart[$key][] = $unique_dem_count;
                 }
 
                 // dd($main_breakdown_chart, $age_breakdown_chart);
@@ -1561,7 +1669,7 @@ class Vox extends Model {
                         }
                     }
                     $main_breakdown_chart[$key] = $value;
-                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $unique_main_total_count);
                 }
 
                 $total_count_by_group = [];
@@ -1576,11 +1684,23 @@ class Vox extends Model {
                     }
                 }
 
+                $unique_total_count_by_group = [];
+
+                foreach($config_dem_groups as $k => $v) {
+                    $unique_total_count_by_group[$k] = 0;
+                }
+
+                foreach ($unique_dem_breakdown_chart as $key => $value) {
+                    foreach($value[1] as $k => $v) {
+                        $unique_total_count_by_group[$k]+=$v['count'];
+                    }
+                }
+
                 foreach ($dem_breakdown_chart as $key => $value) {
                     foreach($value[1] as $k => $v) {
                         $dem_breakdown_chart[$key][1][$k] = [
                             $v['count'],
-                            $v['count'] == 0 ? '0' : ($v['count'] / $total_count_by_group[$k])
+                            $v['count'] == 0 ? '0' : ($v['count'] / $total_count_by_group[$k]) //tuk trqbwa da e unique ?
                         ];
                     }
                 }

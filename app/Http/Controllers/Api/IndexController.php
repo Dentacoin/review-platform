@@ -1706,8 +1706,8 @@ class IndexController extends ApiController {
 
 		            $message->from($sender, $sender_name);
 		            $message->to( 'gergana@youpluswe.com' );
-		            // $message->to( 'dentavox@dentacoin.com' );
-		            // $message->to( 'donika.kraeva@dentacoin.com' );
+		            $message->to( 'dentavox@dentacoin.com' );
+		            $message->to( 'donika.kraeva@dentacoin.com' );
 		            $message->replyTo($user->email, $user->getNames());
 		            $message->subject('Survey Request');
 		        });
