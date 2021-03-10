@@ -133,19 +133,14 @@ class StatsController extends FrontController {
         }
 
         if(request('app')) {
-
             if(request('app-user-id')) {
-
                 $user_id = User::decrypt(request('app-user-id'));
 
                 if($user_id) {
-
                     $user = User::find($user_id);
 
                     if(!empty($user)) {
-
                         Auth::login($user);
-
                         return redirect(getLangUrl('dental-survey-stats/'.$slug).'?'. http_build_query(['app'=>1]));
                     }
                 }
@@ -352,6 +347,7 @@ class StatsController extends FrontController {
                     }
                 }
                 
+                // dd($second_chart);
                 //reorder answers by respondents desc if they're not from scale!!
                 if($reorder) {
 
@@ -381,6 +377,7 @@ class StatsController extends FrontController {
                         }
                     }
 
+
                     if(!empty($rows_diez)) {
 
                         $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
@@ -395,6 +392,8 @@ class StatsController extends FrontController {
                                 $new_value
                             ];
                         }
+                        
+                        $converted_rows = array_merge($converted_rows, $rows_without_diez);
                     }
                 } else {
                     foreach ($second_chart as $key => $value) {
@@ -406,7 +405,6 @@ class StatsController extends FrontController {
                         ];
                     }
                 }
-
 
                 //answers with ! at the bottom of array
                 $has_disabler = false;
@@ -499,6 +497,7 @@ class StatsController extends FrontController {
                     }
                 }
 
+                // dd($results);
                 foreach ($results as $res) {
 
                     if($question->type == 'number') {
