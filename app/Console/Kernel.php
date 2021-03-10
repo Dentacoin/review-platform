@@ -606,6 +606,8 @@ UNCONFIRMED TRANSACTIONS
                             $trans->cronjob_unconfirmed = 0;
                             $trans->save();
                         }
+
+                        $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('cronjob_unconfirmed', 0)->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
                     }
                 }
 
