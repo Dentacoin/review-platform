@@ -679,9 +679,7 @@
                             <input type="hidden" name="vox-id" value="{{ $item->id }}">
                             <select class="form-control select2type" multiple name="chosen-qs[]">
                                 @foreach($item->questions as $qq)
-                                    @if($qq->used_for_stats=='standard' || $qq->used_for_stats=='dependency')
-                                        <option value="{{ $qq->id }}">{{ $qq->question }}</option>
-                                    @endif
+                                    <option value="{{ $qq->id }}">{{ $qq->question }}</option>
                                 @endforeach
                             </select>
 
