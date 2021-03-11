@@ -1112,15 +1112,21 @@ class Vox extends Model {
                     //     ->where('answer', $a);
                     // } );
 
-                    $all_results = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->where('answer', $a)->first();
-
+                    
                     $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
-
                     $breakdown_rows_count = count($answers_array);
+
+                    $results_total = 0;
 
                     foreach ($answers_array as $key => $value) {
                         $cur_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
 
+                        $all_results = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->where('answer_id', $a)->where('answer', $key+1)->first();
+
+                        if($answer_resp) {
+                            $cur_chart[$key][] = $all_results->cnt; 
+                            $results_total+=$all_results->cnt;
+                        }
                         // $count_people = 0;
                         // foreach ($all_results->get() as $k => $v) {
 
@@ -1135,9 +1141,6 @@ class Vox extends Model {
                     // $results_total = $all_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
                     $results_total = $all_results->cnt;
 
-
-                    $total = $results_total; 
-
                     foreach ($cur_chart as $key => $value) {
                         foreach ($value as $k => $v) {
                             if($k == 1 && $v == 0) {
@@ -1148,7 +1151,7 @@ class Vox extends Model {
                         }
                         $cur_chart[$key] = $value;
 
-                        $cur_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total);
+                        $cur_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $results_total);
 
                     }
 
