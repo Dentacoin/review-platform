@@ -2269,7 +2269,7 @@ UNCONFIRMED TRANSACTIONS
                 }
             }
 
-        })->dailyAt('10:15');
+        })->dailyAt('09:55');
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
