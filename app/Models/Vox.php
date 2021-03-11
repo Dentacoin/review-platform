@@ -1193,28 +1193,17 @@ class Vox extends Model {
 
                     $rows_breakdown[] = $cur_chart;
                 } else {
-                    // $second_chart
-                    // array:5 [▼
-                    //   0 => array:1 [▼
-                    //     0 => "Excellent"
-                    //   ]
-                    //   1 => array:1 [▼
-                    //     0 => "Very good"
-                    //   ]
-                    //   2 => array:1 [▼
-                    //     0 => "Good"
-                    //   ]
-                    //   3 => array:1 [▼
-                    //     0 => "Fair"
-                    //   ]
-                    //   4 => array:1 [▼
-                    //     0 => "Poor"
-                    //   ]
-                    // ]
+                    // dd($second_chart);
+                     // 0 => array:1 [▼
+                     //    0 => "Yes"
+                     //  ]
+                     //  1 => array:1 [▼
+                     //    0 => "No"
+                     //  ]
 
                     // dd($q->id, $q->related->id);
 
-                    for($i = 1; $i < count($second_chart); $i++) {
+                    for($i = 1; $i <= count($second_chart); $i++) {
 
                         $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
 
@@ -1235,16 +1224,7 @@ class Vox extends Model {
 
                         // $all_related_original_results = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->get();
 
-                        // $all_related_original_results = VoxAnswer::whereNull('is_admin')
-                        // ->where('question_id', $q->id)
-                        // ->where('is_skipped', 0)
-                        // ->has('user')
-                        // ->whereIn('user_id', function($query) use ($q, $i) {
-                        //     $query->select('user_id')
-                        //     ->from('vox_answers')
-                        //     ->where('question_id', $q->related->id)
-                        //     ->where('answer', $i);
-                        // });
+                        // $all_related_original_results =
 
                         // if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
                         //     $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
@@ -1254,20 +1234,37 @@ class Vox extends Model {
                         //     ->where('created_at', '<=', $to);
                         // }
                         $total_count = 0;
+                        $not_caching_answers = [];
+
+
                         foreach ($answers_array as $key => $value) {
                             $m_original_chart[$key][] = mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0 ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
 
-                            // $count_people = 0;
-                            // foreach ($all_related_original_results->get() as $k => $v) {
-                            //     if($v->answer == ($key + 1)) {
-                            //         $count_people++;
-                            //     }
-                            // }
-                            $answer_resp = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->where('answer_id', $i)->where('answer', $key+1)->first()->cnt;
-                            $m_original_chart[$key][] = $answer_resp; 
-                            $total_count+=$answer_resp;
-                            // $m_original_chart[$key][] = $count_people;                        
+                            $answer_resp = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->where('answer_id', $i)->where('answer', $key+1)->first();
+
+                            if($answer_resp) {
+                                $m_original_chart[$key][] = $answer_resp->cnt; 
+                                $total_count+=$answer_resp->cnt;
+                            } else {
+
+                                $vanswer = VoxAnswer::whereNull('is_admin')
+                                ->where('question_id', $q->id)
+                                ->where('is_skipped', 0)
+                                ->has('user')
+                                ->where('answer', $i)
+                                ->whereIn('user_id', function($query) use ($q, $key) {
+                                    $query->select('user_id')
+                                    ->from('vox_answers')
+                                    ->where('question_id', $q->related->id)
+                                    ->where('answer', $key+1);
+                                })->selectRaw('answer, COUNT(*) as cnt')->first();
+
+                                $m_original_chart[$key][] = $vanswer->cnt; 
+                                $total_count+=$vanswer->cnt;
+
+                            }
                         }
+                                // dd($not_caching_answers, $m_original_chart);
 
                         // $tr = 0;
                         // foreach ($all_related_original_results as $alor) {
