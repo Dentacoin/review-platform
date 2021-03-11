@@ -18,6 +18,7 @@ class DcnTransaction extends Model {
         'address',
         'tx_hash',
         'allowance_hash',
+        'nonce',
         'type',
         'reference_id',
         'status',
@@ -31,6 +32,7 @@ class DcnTransaction extends Model {
     ];
 
     protected $dates = [
+        'sended_at',
         'created_at',
         'updated_at',
         'deleted_at'

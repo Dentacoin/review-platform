@@ -136,14 +136,16 @@
 		    </script>
 		@endif
 
-      	<!-- Your Chat Plugin code -->
-      	<div class="fb-customerchat"
-        attribution=setup_tool
-        page_id="1578351428897849"
-        greeting_dialog_display="hide"
-  		logged_in_greeting="👋  {!! !empty($user) ? trans('vox.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('vox.chatbox.greeting.not-login')  !!}"
-  		logged_out_greeting="👋  {!! !empty($user) ? trans('vox.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('vox.chatbox.greeting.not-login')  !!}">
-      	</div>
+		@if(empty(request('app')))
+	      	<!-- Your Chat Plugin code -->
+	      	<div class="fb-customerchat"
+	        attribution=setup_tool
+	        page_id="1578351428897849"
+	        greeting_dialog_display="hide"
+	  		logged_in_greeting="👋  {!! !empty($user) ? trans('vox.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('vox.chatbox.greeting.not-login')  !!}"
+	  		logged_out_greeting="👋  {!! !empty($user) ? trans('vox.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('vox.chatbox.greeting.not-login')  !!}">
+	      	</div>
+	    @endif
 
 		<div id="site-url" url="{{ empty($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/en/welcome-survey/' ? getLangUrl('/') : 'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] }}"></div>
 		
@@ -238,7 +240,9 @@
 		@if(empty($user) && empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
 		@else
 			@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && request()->getHost() != 'vox.dentacoin.com' && request()->getHost() != 'account.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
-				@include('vox.popups.daily-poll')
+				@if(empty(request('app')))
+					@include('vox.popups.daily-poll')
+				@endif
 			@endif
 		@endif
 
