@@ -2002,6 +2002,7 @@ class VoxesController extends AdminController
     public function exportStats() {
 
         // SELECT * FROM `vox_answers_dependencies` WHERE `question_dependency_id` = 2951 AND `question_id` = 15910
+        // 823 total
 
         ini_set('max_execution_time', 0);
         set_time_limit(0);
@@ -2024,7 +2025,15 @@ class VoxesController extends AdminController
 
             if($q->type == 'scale') {
                 foreach (json_decode($q->answers, true) as $key => $scale) {
-                    $export_array[] = Vox::exportStatsXlsx($vox, $q, $demographics, $results, $key+1, $all_period, true);
+                    if(in_array(($key + 1), json_decode($q->stats_scale_answers, true))) {
+                        $results =  VoxAnswer::whereNull('is_admin')
+                        ->where('question_id', $q_id)
+                        ->where('is_completed', 1)
+                        ->where('is_skipped', 0)
+                        ->has('user');
+                        $export_array[] = Vox::exportStatsXlsx($vox, $q, $demographics, $results, $key+1, $all_period, true);
+                    }
+
                 }
             } else {
                 $export_array[] = Vox::exportStatsXlsx($vox, $q, $demographics, $results, null, $all_period, true);

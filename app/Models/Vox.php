@@ -876,10 +876,12 @@ class Vox extends Model {
                 $cols2[] = $q->removeAnswerTooltip(mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l);
             }
         }
+        // echo $scale_for.'<br/>';
 
         if($q->type == 'scale') {
-            $all_results = $results->where('scale', $scale_for)->get();
-            $breakdown_results = $all_results;
+            $breakdown_results = clone $results;
+            $breakdown_results = $breakdown_results->where('scale', $scale_for)->groupBy('user_id')->get();
+            $all_results = $results->where('answer', $scale_for)->get();
         } else if ($q->type == 'rank' || $q->type == 'multiple_choice') {
             $breakdown_results = clone $results;
             $breakdown_results = $breakdown_results->groupBy('user_id')->get();
@@ -891,12 +893,11 @@ class Vox extends Model {
 
         if($q->type == 'scale') {
             $results_resp = clone $results;
-            $results_resp = $results_resp->where('answer', $scale_for)->groupBy('user_id')->get()->count();
+            $results_resp = $results_resp->where('scale', $scale_for)->groupBy('user_id')->get()->count();
         } else {
             $results_resp = clone $results;
             $results_resp = $results_resp->groupBy('user_id')->get()->count();
         }
-
         // dd($results_resp, $results);
 
         $cols_title = [
@@ -1321,6 +1322,8 @@ class Vox extends Model {
                 $unique_male_total_count = 0;
                 $unique_female_total_count = 0;
 
+                // dd($all_results, $breakdown_results);
+                // dd($answers_array);
                 foreach ($answers_array as $key => $value) {
                     $main_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
                     $male_breakdown_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
@@ -1331,6 +1334,7 @@ class Vox extends Model {
                     $count_people_female = 0;
 
                     foreach ($all_results as $k => $v) {
+
                         if(!empty($v->gender)) {
                             if($q->type == 'scale' ) {
                                 if($v->scale == ($key + 1)) {
@@ -1409,6 +1413,8 @@ class Vox extends Model {
                     $female_breakdown_chart[$key][] = $count_people_female;
                 }
 
+                // dd($main_breakdown_chart);
+
 
                 if(!empty($scale_for)) {
                     $list = json_decode($q->answers, true);
@@ -1444,7 +1450,7 @@ class Vox extends Model {
                         }
                     }
                     $main_breakdown_chart[$key] = $value;
-                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $unique_total_count);
+                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / ($q->type == 'scale' ? $main_total_count : $unique_total_count));
                 }
 
                 foreach ($female_breakdown_chart as $key => $value) {
@@ -1456,7 +1462,7 @@ class Vox extends Model {
                         }
                     }
                     $female_breakdown_chart[$key] = $value;
-                    $female_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $unique_female_total_count);
+                    $female_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / ($q->type == 'scale' ? $female_total_count : $unique_female_total_count));
                 }
 
                 foreach ($male_breakdown_chart as $key => $value) {
@@ -1468,7 +1474,7 @@ class Vox extends Model {
                         }
                     }
                     $male_breakdown_chart[$key] = $value;
-                    $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $unique_male_total_count);
+                    $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / ($q->type == 'scale' ? $male_total_count : $male_female_total_count));
                 }
 
                 usort($main_breakdown_chart, function($a, $b) {
@@ -1669,7 +1675,7 @@ class Vox extends Model {
                         }
                     }
                     $main_breakdown_chart[$key] = $value;
-                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $unique_main_total_count);
+                    $main_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / ($q->type == 'scale' ? $main_total_count : $unique_main_total_count));
                 }
 
                 $total_count_by_group = [];
