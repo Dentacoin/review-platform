@@ -295,10 +295,8 @@ class VoxQuestion extends Model {
 
                 $existing = VoxAnswersDependency::where('question_id', $this->id)->first();
 
-                if($existing->isNotEmpty()) {
-                    foreach ($existing as $exist) {
-                        $exist->delete();
-                    }
+                if(!empty($existing)) {
+                    $existing->delete();
                 }
 
                 foreach ($results as $result) {
