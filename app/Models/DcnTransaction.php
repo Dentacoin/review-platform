@@ -32,6 +32,7 @@ class DcnTransaction extends Model {
     ];
 
     protected $dates = [
+        'notified_at',
         'sended_at',
         'created_at',
         'updated_at',

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Models\TransactionScammersByBalance;
 use App\Models\TransactionScammersByDay;
 use App\Models\IncompleteRegistration;
+use App\Models\DcnTransactionHistory;
 use App\Models\WithdrawalsCondition;
 use App\Models\VoxAnswersDependency;
 use App\Models\ScrapeDentistResult;
@@ -373,6 +374,12 @@ PENDING TRANSACTIONS
                                     $trans->status = 'completed';
                                     $trans->cronjob_unconfirmed = 0;
                                     $trans->save();
+
+                                    $dcn_history = new DcnTransactionHistory;
+                                    $dcn_history->transaction_id = $trans->id;
+                                    $dcn_history->status = 'completed';
+                                    $dcn_history->save();
+
                                     if( $trans->user && !empty($trans->user->email) ) {
                                         $trans->user->sendTemplate( 20, [
                                             'transaction_amount' => $trans->amount,
@@ -634,6 +641,12 @@ UNCONFIRMED TRANSACTIONS
                                     $trans->status = 'completed';
                                     $trans->cronjob_unconfirmed = 0;
                                     $trans->save();
+
+                                    $dcn_history = new DcnTransactionHistory;
+                                    $dcn_history->transaction_id = $trans->id;
+                                    $dcn_history->status = 'completed';
+                                    $dcn_history->save();
+
                                     if( $trans->user && !empty($trans->user->email) ) {
                                         $trans->user->sendTemplate( 20, [
                                             'transaction_amount' => $trans->amount,
@@ -2202,74 +2215,6 @@ UNCONFIRMED TRANSACTIONS
             echo 'Transaction scammers by day - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->dailyAt('04:00');
-
-
-        $schedule->call(function () {
-
-            $quest = VoxQuestion::find(15910);
-            $existing = VoxAnswersDependency::where('question_id', $quest->id)->get();
-
-            if($existing->isNotEmpty()) {
-                foreach ($existing as $exist) {
-                    $exist->delete();
-                }
-            }
-            
-            if(!empty($quest->stats_answer_id)) {
-
-                $results = VoxAnswer::prepareQuery($quest->id, null,[
-                    'dependency_answer' => $quest->stats_answer_id,
-                    'dependency_question' => $quest->stats_relation_id,
-                ]);
-
-                $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
-                $results = $results->get();
-
-                foreach ($results as $result) {
-
-                    $vda = new VoxAnswersDependency;
-                    $vda->question_dependency_id = $quest->stats_relation_id;
-                    $vda->question_id = $quest->id;
-                    $vda->answer_id = $quest->stats_answer_id;
-                    $vda->answer = $result->answer;
-                    $vda->cnt = $result->cnt;
-                    $vda->save();
-                }
-            } else {
-                //да минат през всички отговори
-                foreach (json_decode($quest->answers, true) as $key => $single_answ) {
-                    $answer_number = $key + 1;
-                    
-                    $results = VoxAnswer::prepareQuery($quest->id, null,[
-                        'dependency_answer' => $answer_number,
-                        'dependency_question' => $quest->stats_relation_id,
-                    ]);
-
-                    $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
-                    $results = $results->get();
-
-                    $existing = VoxAnswersDependency::where('question_id', $quest->id)->first();
-
-                    if($existing->isNotEmpty()) {
-                        foreach ($existing as $exist) {
-                            $exist->delete();
-                        }
-                    }
-
-                    foreach ($results as $result) {
-
-                        $vda = new VoxAnswersDependency;
-                        $vda->question_dependency_id = $quest->stats_relation_id;
-                        $vda->question_id = $quest->id;
-                        $vda->answer_id = $answer_number;
-                        $vda->answer = $result->answer;
-                        $vda->cnt = $result->cnt;
-                        $vda->save();
-                    }
-                }
-            }
-
-        })->dailyAt('09:55');
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;

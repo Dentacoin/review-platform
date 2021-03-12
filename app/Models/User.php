@@ -25,6 +25,7 @@ use Laravel\Passport\HasApiTokens;
 use WebPConvert\WebPConvert;
 use Carbon\Carbon;
 
+use App\Models\DcnTransactionHistory;
 use App\Models\StopEmailValidation;
 use App\Models\DentistPageview;
 use App\Models\EmailValidation;
@@ -1434,6 +1435,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             foreach ($transactions as $trans) {
                 $trans->status = 'stopped';
                 $trans->save();
+
+                $dcn_history = new DcnTransactionHistory;
+                $dcn_history->transaction_id = $trans->id;
+                $dcn_history->status = $trans->status;
+                $dcn_history->history_message = 'Stopped after the user is deleted';
+                $dcn_history->save();
             }
         }
         $this->removeFromSendgridSubscribes();
@@ -1495,6 +1502,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             foreach ($transactions as $trans) {
                 $trans->status = 'new';
                 $trans->save();
+
+                $dcn_history = new DcnTransactionHistory;
+                $dcn_history->transaction_id = $trans->id;
+                $dcn_history->status = $trans->status;
+                $dcn_history->history_message = 'Status new after the user is restored';
+                $dcn_history->save();
             }
         }
 

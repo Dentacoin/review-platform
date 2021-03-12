@@ -2009,7 +2009,7 @@ class VoxesController extends AdminController
         ini_set('memory_limit','1024M');
 
         $vox = Vox::find(request('vox-id'));
-        $all_period = date('d/m/Y',strtotime($vox->launched_at)).'-'.date('d/m/Y');
+        $all_period = $vox->launched_at ? date('d/m/Y',strtotime($vox->launched_at)).'-'.date('d/m/Y') : date('d/m/Y',strtotime($vox->created_at)).'-'.date('d/m/Y');
         $demographics = request('demographics');
 
         //ako e scale ??
