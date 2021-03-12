@@ -1381,7 +1381,8 @@ class IndexController extends ApiController {
 			}
 
 			if( $ret['success'] ) {
-				$open_recommend = false;
+				$open_recommend = true;
+				// $open_recommend = false;
 				$filled_voxes = $user->filledVoxes();
 				if ((count($filled_voxes) == 5 || count($filled_voxes) == 10 || count($filled_voxes) == 20 || count($filled_voxes) == 50) && empty($user->fb_recommendation)) {
 					$open_recommend = true;
