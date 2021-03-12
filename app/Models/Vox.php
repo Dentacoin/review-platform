@@ -1474,7 +1474,7 @@ class Vox extends Model {
                         }
                     }
                     $male_breakdown_chart[$key] = $value;
-                    $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / ($q->type == 'scale' ? $male_total_count : $male_female_total_count));
+                    $male_breakdown_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / ($q->type == 'scale' ? $male_total_count : $unique_male_total_count));
                 }
 
                 usort($main_breakdown_chart, function($a, $b) {
