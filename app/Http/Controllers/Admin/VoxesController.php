@@ -2025,7 +2025,7 @@ class VoxesController extends AdminController
 
             if($q->type == 'scale') {
                 foreach (json_decode($q->answers, true) as $key => $scale) {
-                    if(in_array(($key + 1), json_decode($q->stats_scale_answers, true))) {
+                    if(empty($q->stats_scale_answers) || (!empty($q->stats_scale_answers) && in_array(($key + 1), json_decode($q->stats_scale_answers, true)))) {
                         $results =  VoxAnswer::whereNull('is_admin')
                         ->where('question_id', $q_id)
                         ->where('is_completed', 1)
