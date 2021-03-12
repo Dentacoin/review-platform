@@ -213,7 +213,8 @@
 							@endif
 							@foreach( $question->stats_fields as $sk)
 								@if($sk == 'gender')
-									<label for="format-gender-{{ $question->id }}" class="{{ $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' }} dem-label">
+								<!-- // && $question->used_for_stats!='dependency' -->
+									<label for="format-gender-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
 										<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}" class="download-demographic-checkbox" checked="checked">
 										Sex
 								@elseif($sk == 'country_id')
