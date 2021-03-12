@@ -205,11 +205,11 @@
 					@if(empty($question->stats_scale_answers))
 						<div class="demogr-inner" style="display: none" inner="{{ $question->id }}">
 							@if($question->used_for_stats=='dependency')
-								<label for="format-relation-{{ $question->id }}" class="active dem-label">
+								<!-- <label for="format-relation-{{ $question->id }}" class="active dem-label">
 									<input type="checkbox" name="download-demographic[]" value="relation" id="format-relation-{{ $question->id }}" class="download-demographic-checkbox" checked="checked">
 									Relation
 									<div class="active-removal"><span>x</span></div>
-								</label>
+								</label> -->
 							@endif
 							@foreach( $question->stats_fields as $sk)
 								@if($sk == 'gender')
