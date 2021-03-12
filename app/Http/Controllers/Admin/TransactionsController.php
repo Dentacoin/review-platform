@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 
 use App\Models\TransactionScammersByBalance;
 use App\Models\TransactionScammersByDay;
+use App\Models\DcnTransactionHistory;
 use App\Models\WithdrawalsCondition;
 use App\Models\StopTransaction;
 use App\Models\DcnTransaction;
@@ -159,6 +160,13 @@ class TransactionsController extends AdminController
 
         $item->save();
 
+        $dcn_history = new DcnTransactionHistory;
+        $dcn_history->transaction_id = $item->id;
+        $dcn_history->admin_id = $this->admin->id;
+        $dcn_history->status = 'new';
+        $dcn_history->history_message = 'Bumped by admin';
+        $dcn_history->save();
+
         $this->request->session()->flash('success-message', 'Transaction bumped' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
@@ -168,6 +176,13 @@ class TransactionsController extends AdminController
 
         $item->status = 'pending';
         $item->save();
+
+        $dcn_history = new DcnTransactionHistory;
+        $dcn_history->transaction_id = $item->id;
+        $dcn_history->admin_id = $this->admin->id;
+        $dcn_history->status = 'pending';
+        $dcn_history->history_message = 'Pending by admin';
+        $dcn_history->save();
 
         $this->request->session()->flash('success-message', 'Transaction pending' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
@@ -191,6 +206,13 @@ class TransactionsController extends AdminController
         $item->status = 'stopped';
         $item->save();
 
+        $dcn_history = new DcnTransactionHistory;
+        $dcn_history->transaction_id = $item->id;
+        $dcn_history->admin_id = $this->admin->id;
+        $dcn_history->status = 'stopped';
+        $dcn_history->history_message = 'Stopped by admin';
+        $dcn_history->save();
+
         $this->request->session()->flash('success-message', 'Transaction stopped' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
@@ -208,6 +230,13 @@ class TransactionsController extends AdminController
                 $bt->status = 'new';
                 $bt->retries = 0;
                 $bt->save();
+
+                $dcn_history = new DcnTransactionHistory;
+                $dcn_history->transaction_id = $bt->id;
+                $dcn_history->admin_id = $this->admin->id;
+                $dcn_history->status = 'new';
+                $dcn_history->history_message = 'Bumped by admin';
+                $dcn_history->save();
             }
         }
 
@@ -234,6 +263,13 @@ class TransactionsController extends AdminController
 
                 $st->status = 'stopped';
                 $st->save();
+
+                $dcn_history = new DcnTransactionHistory;
+                $dcn_history->transaction_id = $st->id;
+                $dcn_history->admin_id = $this->admin->id;
+                $dcn_history->status = 'stopped';
+                $dcn_history->history_message = 'Stopped by admin';
+                $dcn_history->save();
             }
         }
 
@@ -248,6 +284,13 @@ class TransactionsController extends AdminController
 
                 $pt->status = 'pending';
                 $pt->save();
+
+                $dcn_history = new DcnTransactionHistory;
+                $dcn_history->transaction_id = $pt->id;
+                $dcn_history->admin_id = $this->admin->id;
+                $dcn_history->status = 'pending';
+                $dcn_history->history_message = 'Pending by admin';
+                $dcn_history->save();
             }
         }
 
@@ -262,6 +305,13 @@ class TransactionsController extends AdminController
 
             $transaction->status = 'new';
             $transaction->save();
+
+            $dcn_history = new DcnTransactionHistory;
+            $dcn_history->transaction_id = $item->id;
+            $dcn_history->admin_id = $this->admin->id;
+            $dcn_history->status = 'new';
+            $dcn_history->history_message = 'Bumped by admin from Dont Retry button';
+            $dcn_history->save();
         }
 
         $this->request->session()->flash('success-message', '"Dont retry" transactions are bumped' );
