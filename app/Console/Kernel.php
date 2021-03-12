@@ -685,6 +685,48 @@ UNCONFIRMED TRANSACTIONS
 
         $schedule->call(function () {
 
+            echo '
+PAID BY USER NOTIFICATION FOR TRANSACTIONS
+
+========================
+
+';
+
+            $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNull('tx_hash')->whereNotNull('allowance_hash')->whereNull('notified_at')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); 
+
+            if($transactions->isNotEmpty()) {
+
+                $int = 0;
+                foreach ($transactions as $trans) {
+                    $int++;
+
+                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->allowance_hash.'&apikey='.env('ETHERSCAN_API'));
+                    if(!empty($curl)) {
+
+                        $curl = json_decode($curl, true);
+                        if($curl['status']) {
+                            if(!empty($curl['result']['status'])) {
+                                $trans->notified_at = Carbon::now();
+                                $trans->save();
+
+                                if( $trans->user && !empty($trans->user->email) ) {
+                                    $trans->user->sendGridTemplate( 124, null, 'dcn' );
+                                }
+                                echo 'COMPLETED!'.PHP_EOL;
+                                if($int % 5 == 0) {
+                                    sleep(1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        })->cron("*/10 * * * *");
+
+
+        $schedule->call(function () {
+
             echo 'DCN Low Balance Cron - START!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $alerts = [
