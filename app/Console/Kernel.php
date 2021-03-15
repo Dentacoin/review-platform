@@ -2191,6 +2191,24 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 $gas->save();
             }
 
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-max-gas-price-for-approval',
+                CURLOPT_SSL_VERIFYPEER => 0,
+                CURLOPT_POST => 1,
+            ));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            $resp = json_decode(curl_exec($curl));
+            curl_close($curl);
+
+            if (!empty($resp) && isset($resp->success)) {
+                $gas = GasPrice::find(1);
+                $gas->max_gas_price_approval = intval(number_format($resp->success / 1000000000));
+                $gas->save();
+            }
+
             echo 'Max Gas Price Cron - DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("*/15 * * * *");
