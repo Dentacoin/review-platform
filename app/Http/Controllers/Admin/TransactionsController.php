@@ -162,7 +162,7 @@ class TransactionsController extends AdminController
 
         $dcn_history = new DcnTransactionHistory;
         $dcn_history->transaction_id = $item->id;
-        $dcn_history->admin_id = $this->admin->id;
+        // $dcn_history->admin_id = $this->admin->id;
         $dcn_history->status = 'new';
         $dcn_history->history_message = 'Bumped by admin';
         $dcn_history->save();
@@ -179,7 +179,7 @@ class TransactionsController extends AdminController
 
         $dcn_history = new DcnTransactionHistory;
         $dcn_history->transaction_id = $item->id;
-        $dcn_history->admin_id = $this->admin->id;
+        // $dcn_history->admin_id = $this->admin->id;
         $dcn_history->status = 'pending';
         $dcn_history->history_message = 'Pending by admin';
         $dcn_history->save();
@@ -208,7 +208,7 @@ class TransactionsController extends AdminController
 
         $dcn_history = new DcnTransactionHistory;
         $dcn_history->transaction_id = $item->id;
-        $dcn_history->admin_id = $this->admin->id;
+        // $dcn_history->admin_id = $this->admin->id;
         $dcn_history->status = 'stopped';
         $dcn_history->history_message = 'Stopped by admin';
         $dcn_history->save();
@@ -233,7 +233,7 @@ class TransactionsController extends AdminController
 
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $bt->id;
-                $dcn_history->admin_id = $this->admin->id;
+                // $dcn_history->admin_id = $this->admin->id;
                 $dcn_history->status = 'new';
                 $dcn_history->history_message = 'Bumped by admin';
                 $dcn_history->save();
@@ -266,7 +266,7 @@ class TransactionsController extends AdminController
 
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $st->id;
-                $dcn_history->admin_id = $this->admin->id;
+                // $dcn_history->admin_id = $this->admin->id;
                 $dcn_history->status = 'stopped';
                 $dcn_history->history_message = 'Stopped by admin';
                 $dcn_history->save();
@@ -287,7 +287,7 @@ class TransactionsController extends AdminController
 
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $pt->id;
-                $dcn_history->admin_id = $this->admin->id;
+                // $dcn_history->admin_id = $this->admin->id;
                 $dcn_history->status = 'pending';
                 $dcn_history->history_message = 'Pending by admin';
                 $dcn_history->save();
@@ -308,7 +308,7 @@ class TransactionsController extends AdminController
 
             $dcn_history = new DcnTransactionHistory;
             $dcn_history->transaction_id = $item->id;
-            $dcn_history->admin_id = $this->admin->id;
+            // $dcn_history->admin_id = $this->admin->id;
             $dcn_history->status = 'new';
             $dcn_history->history_message = 'Bumped by admin from Dont Retry button';
             $dcn_history->save();
