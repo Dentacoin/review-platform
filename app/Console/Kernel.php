@@ -497,19 +497,19 @@ NEW & NOT SENT TRANSACTIONS
 
         $schedule->call(function () {
 
-            $cron_running = CronjobSecondRun::first();
-                do new CronJobRuns
+            // $cron_running = CronjobSecondRun::first();
+            //     do new CronJobRuns
 
 
-            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
+            // if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
 
-                if(!empty($cron_running)) {
-                    CronjobSecondRun::destroy($cron_running->id);
-                }
+            //     if(!empty($cron_running)) {
+            //         CronjobSecondRun::destroy($cron_running->id);
+            //     }
 
-                $cronjob_stars = new CronjobSecondRun;
-                $cronjob_stars->started_at = Carbon::now();
-                $cronjob_stars->save();
+            //     $cronjob_stars = new CronjobSecondRun;
+            //     $cronjob_stars->started_at = Carbon::now();
+            //     $cronjob_stars->save();
 
                 echo '
 PAID BY USER TRANSACTIONS
@@ -576,10 +576,10 @@ PAID BY USER TRANSACTIONS
 
                 echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-                CronjobSecondRun::destroy($cronjob_stars->id);
-            } else {
-                echo 'New transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
-            }
+            //     CronjobSecondRun::destroy($cronjob_stars->id);
+            // } else {
+            //     echo 'New transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            // }
 
         })->cron("* * * * *");
 
