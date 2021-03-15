@@ -544,9 +544,9 @@ PAID BY USER TRANSACTIONS
 
                 if($transactions->isNotEmpty()) {
 
-                    // $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
+                    $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
-                    // if ($cron_new_trans_time->cron_not_sent_trans < Carbon::now()->subMinutes(10)) {
+                    if ($cron_new_trans_time->cron_paid_by_user_trans < Carbon::now()->subMinutes(10)) {
 
                         if (!User::isApprovalGasExpensive()) {
 
@@ -561,12 +561,12 @@ PAID BY USER TRANSACTIONS
                                 echo 'NEW STATUS: ' . $trans->status . ' / ID ' . $trans->id . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
                             }
 
-                            // $cron_new_trans_time->cron_not_sent_trans = Carbon::now();
-                            // $cron_new_trans_time->save();
+                            $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now();
+                            $cron_new_trans_time->save();
                         } else {
 
-                            // $cron_new_trans_time->cron_not_sent_trans = Carbon::now()->subMinutes(10);
-                            // $cron_new_trans_time->save();
+                            $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now()->subMinutes(10);
+                            $cron_new_trans_time->save();
 
                             echo 'New Transactions High Gas Price';
                         }
@@ -581,7 +581,7 @@ PAID BY USER TRANSACTIONS
             //     echo 'New transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             // }
 
-        })->cron("/5 * * * *");
+        })->cron("* * * * *");
 
 
         $schedule->call(function () {
