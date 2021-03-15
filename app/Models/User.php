@@ -1693,6 +1693,27 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         return false;
     }
 
+    public static function isApprovalGasExpensive() {
+
+        // $url = file_get_contents('https://dentacoin.net/gas-price');
+
+        // $gas = json_decode($url, true);
+
+        // if(intVal($gas['gasPrice']) > intVal($gas['treshold']) ) {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
+
+        $gas = GasPrice::find(1);
+
+        if($gas->gas_price > $gas->max_gas_price_approval) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function loggedFromBadIp() {
 
         $ip = self::getRealIp();
