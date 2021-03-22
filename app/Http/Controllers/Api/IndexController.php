@@ -1880,6 +1880,10 @@ class IndexController extends ApiController {
 	        ] );
     	}
 
+    	return Response::json( [
+            'success' => false,
+        ] );
+
     }
 
     public function sendPush($title, $message, $meta = null) {
