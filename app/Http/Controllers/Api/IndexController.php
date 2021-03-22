@@ -1861,9 +1861,19 @@ class IndexController extends ApiController {
 
     	$user = Auth::guard('api')->user();
 
-    	if($user) {
+    	if($user && request('token')) {
 
-    		dd(Request::all());
+    		$token = request('token');
+    		$existing_device = UserDevice::where('device_token', $token)->first();
+
+    		if(!empty($existing_device)) {
+    			$existing_device->delete();
+    		}
+
+			$new_device = new UserDevice;
+			$new_device->user_id = $user->id;
+			$new_device->device_token = $token;
+			$new_device->save();
 
 	    	return Response::json( [
 	            'success' => true,
