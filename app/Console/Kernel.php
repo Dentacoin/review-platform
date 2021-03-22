@@ -522,55 +522,58 @@ PAID BY USER TRANSACTIONS
                 $count_new_trans = DcnTransaction::where('status', 'new')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->count();
                 $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->count();
 
-                if(empty($count_not_sent_trans )) {
-                    $count_new_trans = $number;
-                } else if(empty($count_new_trans)) {
-                    $count_not_sent_trans = $number;
-                } else {
-                    if($count_not_sent_trans >= $half_number && $count_new_trans >= $half_number) {
-                        $count_not_sent_trans = $half_number;
-                        $count_new_trans = $half_number;
+                if($count_new_trans || $count_not_sent_trans) {
+                    
+                    if(empty($count_not_sent_trans )) {
+                        $count_new_trans = $number;
+                    } else if(empty($count_new_trans)) {
+                        $count_not_sent_trans = $number;
+                    } else {
+                        if($count_not_sent_trans >= $half_number && $count_new_trans >= $half_number) {
+                            $count_not_sent_trans = $half_number;
+                            $count_new_trans = $half_number;
 
-                    } else if($count_not_sent_trans < $half_number && $count_new_trans >= $half_number) {
-                        $count_new_trans = $number - $count_not_sent_trans;
+                        } else if($count_not_sent_trans < $half_number && $count_new_trans >= $half_number) {
+                            $count_new_trans = $number - $count_not_sent_trans;
 
-                    } else if($count_not_sent_trans >= $half_number && $count_new_trans < $half_number) {
-                        $count_not_sent_trans = $number - $count_new_trans;
+                        } else if($count_not_sent_trans >= $half_number && $count_new_trans < $half_number) {
+                            $count_not_sent_trans = $number - $count_new_trans;
+                        }
                     }
-                }
 
-                $new_transactions = DcnTransaction::where('status', 'new')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
-                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
-                $transactions = $new_transactions->concat($not_sent_transactions);
+                    $new_transactions = DcnTransaction::where('status', 'new')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
+                    $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
+                    $transactions = $new_transactions->concat($not_sent_transactions);
 
 
-                if($transactions->isNotEmpty()) {
+                    if($transactions->isNotEmpty()) {
 
-                    $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
+                        $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
-                    if ($cron_new_trans_time->cron_paid_by_user_trans < Carbon::now()->subMinutes(10)) {
+                        if ($cron_new_trans_time->cron_paid_by_user_trans < Carbon::now()->subMinutes(10)) {
 
-                        if (!User::isApprovalGasExpensive()) {
+                            if (!User::isApprovalGasExpensive()) {
 
-                            foreach ($transactions as $trans) {
-                                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
-                                echo $log . PHP_EOL;
+                                foreach ($transactions as $trans) {
+                                    $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
+                                    echo $log . PHP_EOL;
+                                }
+
+                                Dcn::retry($transactions, true);
+
+                                foreach ($transactions as $trans) {
+                                    echo 'NEW STATUS: ' . $trans->status . ' / ID ' . $trans->id . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
+                                }
+
+                                $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now();
+                                $cron_new_trans_time->save();
+                            } else {
+
+                                $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now()->subMinutes(10);
+                                $cron_new_trans_time->save();
+
+                                echo 'New Transactions High Gas Price';
                             }
-
-                            Dcn::retry($transactions, true);
-
-                            foreach ($transactions as $trans) {
-                                echo 'NEW STATUS: ' . $trans->status . ' / ID ' . $trans->id . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
-                            }
-
-                            $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now();
-                            $cron_new_trans_time->save();
-                        } else {
-
-                            $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now()->subMinutes(10);
-                            $cron_new_trans_time->save();
-
-                            echo 'New Transactions High Gas Price';
                         }
                     }
                 }
