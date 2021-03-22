@@ -243,6 +243,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::post('start-over', 						'IndexController@startOver');
 	Route::get('is-dentacoin-down', 			    'IndexController@isDentacoinDown');
     Route::get('is-online', 			            'IndexController@isOnline');
+	Route::post('save-user-device',					'IndexController@saveUserDevice');
 
 	Route::get('all-voxes', 						'PaidDentalSurveysController@allVoxes');
 	Route::get('get-voxes', 						'PaidDentalSurveysController@getVoxes');

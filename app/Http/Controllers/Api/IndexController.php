@@ -19,6 +19,7 @@ use App\Models\Recommendation;
 use App\Models\VoxCrossCheck;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
+use App\Models\UserDevice;
 use App\Models\UserInvite;
 use App\Models\UserAction;
 use App\Models\VoxRelated;
@@ -1855,4 +1856,56 @@ class IndexController extends ApiController {
             'success' => true,
         ] );
     }
+
+    public function saveUserDevice() {
+
+    	$user = Auth::guard('api')->user();
+
+    	if($user) {
+
+    		dd(Request::all());
+
+	    	return Response::json( [
+	            'success' => true,
+	        ] );
+    	}
+
+    }
+
+    public function sendPush($title, $message, $meta = null) {
+
+    	$devices = UserDevice::get();
+
+    	foreach($devices as $device) {
+
+            $data = [
+                "to" => $device->device_token,
+                "content_available" => true,
+                "notification" => [
+                    "title" => $title,
+                    "body" => $message,
+                ],
+            ];
+            if(!empty($meta)) {
+                $data['data'] = $meta;
+            }
+            $dataString = json_encode($data);
+      
+            $headers = [
+                'Authorization: key='.env('FIREBASE_KEY'),
+                'Content-Type: application/json',
+            ];
+      
+            $ch = curl_init();
+      
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+      
+            curl_exec($ch);
+    	}
+    }
+
 }

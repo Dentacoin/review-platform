@@ -67,7 +67,23 @@ class ApiController extends BaseController {
         date_default_timezone_set("Europe/Sofia");
 
         
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::guard('api')->user();
 
+            $request->attributes->add([
+                'user' => $this->user,
+                // 'country_id' => $this->country_id,
+                // 'city_id' => $this->city_id,
+            ]);
+
+            $response = $next($request);
+            $response->headers->set('Referrer-Policy', 'no-referrer');
+            $response->headers->set('X-XSS-Protection', '1; mode=block');
+            //$response->headers->set('X-Frame-Options', 'DENY');
+     
+            return $response;
+
+        });
 
         $this->request = $request;
 
