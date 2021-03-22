@@ -1033,7 +1033,7 @@ $(document).ready(function(){
 		                	$('#poll-popup').find('.poll-question').html(ret.title);
 		                	$('#poll-popup').find('form').attr('action', ret.url);
 		                	for (var i in ret.answers ) {
-		                		$('#poll-popup .poll-answers').append('<label class="poll-answer" for="ans-'+(parseInt(i) + 1)+'"><input type="radio" name="answer" class="answer" value="'+(parseInt(i) + 1)+'" id="ans-'+(parseInt(i) + 1)+'">'+ret.answers[i]+'</label>');
+		                		$('#poll-popup .poll-answers').append('<label class="poll-answer" for="ans-'+(parseInt(i) + 1)+'"><input type="radio" name="answer" class="answer" value="'+(parseInt(i) + 1)+'" id="ans-'+(parseInt(i) + 1)+'">'+(ret.answers[i].indexOf('#') > -1 ? ret.answers[i].substr(1) : ret.answers[i])+'</label>');
 		                	}
 
 		                	$('#poll-popup').find('.content').hide();
