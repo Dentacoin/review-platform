@@ -141,7 +141,7 @@ class PollsController extends FrontController
 			$all_daily_polls = $all_daily_polls->where('status', '!=', 'scheduled');
 		}
 
-		$all_daily_polls = $all_daily_polls->get();
+		$all_daily_polls = $all_daily_polls->orderBy('launched_at','asc')->get();
 
 		if ($all_daily_polls->isNotEmpty()) {
 			foreach ($all_daily_polls as $poll) {

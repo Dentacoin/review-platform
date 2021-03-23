@@ -342,15 +342,12 @@ class IndexController extends ApiController {
 	            $user->logoutActions();
 	            $user->removeTokens();
 	            Auth::guard('api')->logout();
-	            
-				// return redirect( 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id)) );
+
+	            return Response::json( array(
+					'logout' => true,
+				) );
 			}
 
-
-			//daily limit reached
-			// if($user->status!='approved' && $user->status!='added_by_clinic_claimed' && $user->status!='added_by_dentist_claimed' && $user->status!='test') {
-	  //           Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
-			// } else
 			if( $user->madeTest($vox->id) ) {
 
 				return Response::json( array(
@@ -1884,42 +1881,6 @@ class IndexController extends ApiController {
             'success' => false,
         ] );
 
-    }
-
-    public function sendPush($title, $message, $meta = null) {
-
-    	$devices = UserDevice::get();
-
-    	foreach($devices as $device) {
-
-            $data = [
-                "to" => $device->device_token,
-                "content_available" => true,
-                "notification" => [
-                    "title" => $title,
-                    "body" => $message,
-                ],
-            ];
-            if(!empty($meta)) {
-                $data['data'] = $meta;
-            }
-            $dataString = json_encode($data);
-      
-            $headers = [
-                'Authorization: key='.env('FIREBASE_KEY'),
-                'Content-Type: application/json',
-            ];
-      
-            $ch = curl_init();
-      
-            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-      
-            curl_exec($ch);
-    	}
     }
 
 }
