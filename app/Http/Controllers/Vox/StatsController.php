@@ -1612,7 +1612,7 @@ class StatsController extends FrontController {
 
     public function download() {
         
-        if(!empty($this->user) && Request::isMethod('post')) {
+        if((!empty($this->user) || !empty(Auth::guard('api')->user())) && Request::isMethod('post')) {
             //dd(Request::all());
             $validator = Validator::make(Request::all(), [
                 'download-format' => array('required'),
@@ -1686,7 +1686,7 @@ class StatsController extends FrontController {
     }
 
     public function createPdf() {
-        if(!empty($this->user) && !empty(Request::input("hidden_html"))) {
+        if((!empty($this->user) || !empty(Auth::guard('api')->user())) && !empty(Request::input("hidden_html"))) {
 
             set_time_limit(300);
             ini_set('memory_limit', '1024М');
