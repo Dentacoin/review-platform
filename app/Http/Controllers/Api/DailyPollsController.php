@@ -45,7 +45,7 @@ class DailyPollsController extends ApiController {
 		$month = request('month') ?? date('m');
 
 		$all_daily_polls = Poll::where('launched_at', '>=', $year."-".$month."-01 00:00:00")
-		->where('launched_at', '<', $year."-".$month."-31 23:59:59")->where('status', '!=', 'scheduled')->get();
+		->where('launched_at', '<', $year."-".$month."-31 23:59:59")->where('status', '!=', 'scheduled')->orderBy('launched_at','asc')->get();
 
 		if ($all_daily_polls->isNotEmpty()) {
 			foreach ($all_daily_polls as $poll) {
