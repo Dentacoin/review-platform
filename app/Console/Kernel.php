@@ -715,7 +715,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                                 $trans->save();
 
                                 if( $trans->user && !empty($trans->user->email) ) {
-                                    $trans->user->sendGridTemplate( 124, null, 'dcn' );
+                                    $trans->user->sendGridTemplate( 124, null, 'dentacoin' );
                                 }
                                 echo 'COMPLETED!'.PHP_EOL;
                                 if($int % 5 == 0) {
