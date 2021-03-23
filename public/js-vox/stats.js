@@ -1932,7 +1932,7 @@ $(document).ready(function(){
             function( data ) {
                 if(data.success) {
                     window.location.href = data.url;
-                    window.shouldCloseAndRedirect = data.url;
+                    window.shouldCloseAndRedirect = data.url_file;
                 } else {
                     console.log('download error');
                 }
@@ -1973,7 +1973,7 @@ $(document).ready(function(){
             success: function (data) {
                 if(data.success) {
                     window.location.href = data.url;
-                    window.shouldCloseAndRedirect = data.url;
+                    window.shouldCloseAndRedirect = data.url_file;
                 } else {
                     console.log('not ok');
                 }
