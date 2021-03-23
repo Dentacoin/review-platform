@@ -144,8 +144,6 @@ class StatsController extends FrontController {
                         return redirect(getLangUrl('dental-survey-stats/'.$slug).'?'. http_build_query(['app'=>1]));
                     }
                 }
-            } else {
-                Auth::guard('web')->logout();
             }
         }
 
