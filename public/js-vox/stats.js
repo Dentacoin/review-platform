@@ -1764,8 +1764,6 @@ $(document).ready(function(){
     });
 
     $('#download-form').submit( function(e) {
-
-        console.log('TUK');
         e.preventDefault();
 
         if(ajax_is_running) {
@@ -1778,18 +1776,14 @@ $(document).ready(function(){
         $(this).find('.has-error').removeClass('has-error');
         var that = $(this);
 
-        console.log('TUK E');
         $.post( 
             $(this).attr('action'), 
             $(this).serialize(), 
             function( data ) {
-        console.log('DATA');
                 if(data.success) {
-        console.log('SUCCESS');
                     window.location.href = window.location.origin+window.location.pathname+data.tail;
                 } else {
 
-        console.log('FALSE');
                     console.log(that);
                     for(var i in data.messages) {
                         if(i == 'download-date' || i == 'date-from-download' || i == 'date-to-download' ) {
@@ -1938,7 +1932,7 @@ $(document).ready(function(){
             function( data ) {
                 if(data.success) {
                     window.location.href = data.url;
-                    window.shouldCloseAndRedirect = 10;
+                    window.shouldCloseAndRedirect = data.url;
                 } else {
                     console.log('download error');
                 }
@@ -1979,7 +1973,7 @@ $(document).ready(function(){
             success: function (data) {
                 if(data.success) {
                     window.location.href = data.url;
-                    window.shouldCloseAndRedirect = 10;
+                    window.shouldCloseAndRedirect = data.url;
                 } else {
                     console.log('not ok');
                 }
