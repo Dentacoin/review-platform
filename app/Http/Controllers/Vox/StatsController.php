@@ -1724,7 +1724,7 @@ class StatsController extends FrontController {
             $ret = array(
                 'success' => true,
                 'url' => Request::input("stat_url").'?download=1',
-                'url_file' => $dir.'/'.$pdf_title.'.pdf',
+                'url_file' => url('/storage/pdf/'.$pdf_title.'.pdf'),
             );
 
             return Response::json( $ret );
@@ -1772,7 +1772,7 @@ class StatsController extends FrontController {
         $ret = array(
             'success' => true,
             'url' => Request::input("stat_url").'?download-png=1',
-            'url_file' => $count_img > 1 ? $folder.'.zip' : $folder.'/'.$picture_title.'1.png',
+            'url_file' => $count_img > 1 ? url('/storage/png/'.$png_title.'.zip') : url('/storage/png/'.$png_title.'/'.$picture_title.'1.png'),
         );
 
         return Response::json( $ret );
