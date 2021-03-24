@@ -108,7 +108,7 @@
 				                    				<img src="{{ $item->getImageUrl(true) }}" style="max-width: 30px;">
 				                    			</a>
 				                    		</td>
-				                    		<td>
+				                    		<td style="word-break: break-all;">
 				                    			{{ $item->description }}
 				                    		</td>
 				                    		<td>
