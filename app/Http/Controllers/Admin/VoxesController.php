@@ -11,6 +11,7 @@ use App\Models\VoxAnswersDependency;
 use App\Models\VoxToCategory;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
+use App\Models\UserDevice;
 use App\Models\VoxRelated;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
@@ -147,6 +148,10 @@ class VoxesController extends AdminController
         if(!empty($item)) {
             if($field=='featured') {
                 $item->$field = $value=='0' ? 0 : 1;
+
+                if ($value=='1' && $item->featured != 1 && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
+                    UserDevice::sendPush('Now:', 'Double rewards for "'.$item->title.'" survey!');
+                }
             }
             if($field=='type') {
                 $item->$field = $value=='0' ? 'hidden' : 'normal';
@@ -174,6 +179,8 @@ class VoxesController extends AdminController
                         $resp = json_decode(curl_exec($curl));
                         curl_close($curl);
                     }
+
+                    UserDevice::sendPush('New paid survey published!', 'Take it now');
                 }
 
             }
@@ -865,6 +872,12 @@ class VoxesController extends AdminController
                 $resp = json_decode(curl_exec($curl));
                 curl_close($curl);
             }
+
+            UserDevice::sendPush('New paid survey published!', 'Take it now');
+        }
+
+        if ($this->request->input('featured') == 1 && $item->featured != 1 && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
+            UserDevice::sendPush('Now:', 'Double rewards for "'.$item->title.'" survey!');
         }
 
         if(!empty($item) && !$item->has_stats && !empty($this->request->input('has_stats'))) {
