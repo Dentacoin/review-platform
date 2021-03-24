@@ -11,6 +11,9 @@
 					@if($item->history->count() == 1 )
 					@endif
 					<div>
+						@if(!empty($history->sended_at))
+							- Sended at: {{ date('d.m.Y', $history->sended_at->timestamp) }} <br/>
+						@endif
 						@if(!empty($history->address))
 							- Address: {{ $history->address }} <br/>
 						@endif
