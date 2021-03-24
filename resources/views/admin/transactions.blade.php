@@ -121,7 +121,7 @@
             						'table_id' => 'transactions',
             						'table_fields' => [
                                         'checkboxes' => array('format' => 'checkboxes'),
-                                        'id'           => array(),
+                                        'id'                => array('template' => 'admin.parts.table-transactions-id'),
                                         'created_at'        => array('format' => 'datetime','order' => true, 'orderKey' => 'created','label' => 'Date'),
                                         'user'              => array('template' => 'admin.parts.table-transactions-user'),
                                         'email'             => array('template' => 'admin.parts.table-transactions-email'),
@@ -232,5 +232,28 @@
             </div>
         </div>
     </div>
+
+
+    <style type="text/css">
+        .trans-history-wrapper .trans-history {
+            display: none;
+            position: absolute;
+            border: 1px solid black;
+            padding: 10px;
+            border-radius: 5px;
+            background: white;
+        }
+
+        .trans-history-wrapper:hover .trans-history {
+            display: block;
+        }
+
+        .trans-history-wrapper .trans-history div {
+            border-bottom: 1px solid black;
+            margin-bottom: 3px;
+            padding-bottom: 4px;
+        }
+
+    </style>
 
 @endsection
