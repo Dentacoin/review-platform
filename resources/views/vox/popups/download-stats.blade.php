@@ -26,11 +26,13 @@
 							<input type="radio" name="download-format" value="pdf" id="format-pdf" class="download-format-radio">
 							.PDF
 						</label>
-						<label for="format-xlsx">
-							<i class="far fa-circle"></i>
-							<input type="radio" name="download-format" value="xlsx" id="format-xlsx" class="download-format-radio">
-							.XLSX
-						</label>
+						@if(empty(request('app')))
+							<label for="format-xlsx">
+								<i class="far fa-circle"></i>
+								<input type="radio" name="download-format" value="xlsx" id="format-xlsx" class="download-format-radio">
+								.XLSX
+							</label>
+						@endif
 					</div>
 
 					<div class="filters-wrapper alert-after">

@@ -35,21 +35,21 @@ class IndexController extends FrontController {
 
 		$user = Auth::guard('api')->user() ? Auth::guard('api')->user() : $this->user;
 
-		$taken = !empty($user) ? $user->filledVoxes() : null;
-
 		if( $user ) {
+			$taken = $user->filledVoxes();
+
 			$voxes = !empty($this->admin) ? User::getAllVoxes() : $user->voxesTargeting();
 			if(request('filter_item')) {
 				if(request('filter_item') == 'taken') {
-					$voxes = $voxes->whereIn('id', $user->filledVoxes());
+					$voxes = $voxes->whereIn('id', $taken);
 				} else if(request('filter_item') == 'untaken') {
-					$voxes = $voxes->whereNotIn('id', $user->filledVoxes());
+					$voxes = $voxes->whereNotIn('id', $taken);
 				} else if(request('filter_item') == 'all') {
 
 				}
 			} else {
 				if($taken) {
-					$voxes = $voxes->whereNotIn('id', $user->filledVoxes());
+					$voxes = $voxes->whereNotIn('id', $taken);
 				}
 			}
 		} else {
