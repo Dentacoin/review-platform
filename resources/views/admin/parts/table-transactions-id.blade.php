@@ -6,7 +6,9 @@
 	@else
 		<div class="trans-history-wrapper">
 			<img src="{{ url('img/info.png') }}" style="max-width: 15px;">
+
 			<div class="trans-history">
+				History: <br/>
 				@foreach($item->history as $history)
 					@if($item->history->count() == 1 )
 					@endif
