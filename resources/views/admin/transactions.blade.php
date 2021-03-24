@@ -254,6 +254,12 @@
             padding-bottom: 4px;
         }
 
+        .trans-history-wrapper .trans-history div:last-child {
+            border-bottom: none;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+        }
+
     </style>
 
 @endsection

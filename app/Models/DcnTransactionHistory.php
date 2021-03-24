@@ -20,6 +20,8 @@ class DcnTransactionHistory extends Model
         'nonce',
         'status',
         'message',
+        'history_message',
+        'from_creating'
 	];
     protected $dates = [
         'send_date',
