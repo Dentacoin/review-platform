@@ -298,7 +298,7 @@
 						<div class="download-functions-wrap">
 							<div class="download-functions">
 								<p>✓ Access to all public statistics</p>
-								<p>✓ Downloads in .pdf, .png{{empty(request('app') ? ', .xlsx' : ''}}</p>
+								<p>✓ Downloads in .pdf, .png{{empty(request('app')) ? ', .xlsx' : ''}}</p>
 								<p>✓ Custom survey orders available</p>
 							</div>
 						</div>
