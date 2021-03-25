@@ -25,7 +25,7 @@
 			    	<div class="review review-wrapper" review-id="{{ $review->id }}">
 						<div class="review-header">
 			    			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
-			    			@if($user->is_dentist)
+			    			@if($is_dentist)
 			    				<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: </span>
 			    			@else
 			    				<span class="review-name">to {{ !empty($review->review_to_id) ? $review->original_dentist->name : ($review->dentist ? $review->dentist->name : $review->clinic->name) }}: </span>
@@ -69,7 +69,7 @@
 								
 							</a>
 						</div>
-						@if(!$user->is_dentist)
+						@if(!$is_dentist)
 							@if(!empty($review->review_to_id) && !empty($review->original_dentist))
 								<a href="{{ $review->original_dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">
 									<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">

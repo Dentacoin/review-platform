@@ -1544,6 +1544,7 @@ class ProfileController extends FrontController {
         if(!empty($this->user)) {
             
             $params = [
+                'is_dentist' => $this->user->is_dentist,
                 'xframe' => true,
                 'reviews' => $this->user->is_dentist ? $this->user->reviews_in() : $this->user->reviews_out,
                 'css' => [
