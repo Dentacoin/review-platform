@@ -33,7 +33,7 @@
 							- PS Message: {{ $history->message }} <br/>
 						@endif
 						@if(!empty($history->history_message))
-							{{ $history->history_message }} {{ !empty($history->admin_id) ? '( by '.$history->admin->username.' )' : '' }}<br/>
+							{{ $history->history_message }} <br/>
 						@endif
 					</div>
 				@endforeach
