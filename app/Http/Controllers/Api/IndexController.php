@@ -1856,9 +1856,7 @@ class IndexController extends ApiController {
 
     public function saveUserDevice() {
 
-    	$user = Auth::guard('api')->user();
-
-    	if($user && request('token')) {
+    	if(request('token')) {
 
     		$token = request('token');
     		$existing_device = UserDevice::where('device_token', $token)->first();
@@ -1868,7 +1866,7 @@ class IndexController extends ApiController {
     		}
 
 			$new_device = new UserDevice;
-			$new_device->user_id = $user->id;
+			$new_device->user_id = Auth::guard('api')->user() ? Auth::guard('api')->user()->id : null;
 			$new_device->device_token = $token;
 			$new_device->save();
 
