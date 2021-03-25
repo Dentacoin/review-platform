@@ -43,13 +43,15 @@ class ProfileController extends FrontController {
             }
         }
 
-        if(!empty($this->user)) {
+        if(!empty(Auth::guard('web')->user())) {
 
-            if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') {
+            $user = Auth::guard('web')->user();
+
+            if($user->is_dentist && $user->status!='approved' && $user->status!='added_by_clinic_claimed' && $user->status!='added_by_dentist_claimed' && $user->status!='test') {
                 return redirect(getLangUrl('/'));
             }
 
-            $current_ban = $this->user->isBanned('vox');
+            $current_ban = $user->isBanned('vox');
             $prev_bans = null; 
             $time_left = '';
 
@@ -59,7 +61,7 @@ class ProfileController extends FrontController {
 
             if( $current_ban ) {
 
-                $prev_bans = $this->user->getPrevBansCount('vox', $current_ban->type);
+                $prev_bans = $user->getPrevBansCount('vox', $current_ban->type);
                 if($current_ban->type=='mistakes') {
                     $ban_reason = trans('vox.page.bans.banned-mistakes-title-'.$prev_bans);
                 } else {
@@ -106,7 +108,7 @@ class ProfileController extends FrontController {
             }
 
             $more_surveys = false;
-            $rewards = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('reference_id', '!=', 34)->get();
+            $rewards = DcnReward::where('user_id', $user->id)->where('platform', 'vox')->where('type', 'survey')->where('reference_id', '!=', 34)->get();
             
             if ($rewards->count() == 1 && $rewards->first()->vox_id == 11) {
                 $more_surveys = true;
