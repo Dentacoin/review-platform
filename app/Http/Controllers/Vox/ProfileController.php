@@ -126,6 +126,7 @@ class ProfileController extends FrontController {
                 'ban_alternatives_buttons' => $ban_alternatives_buttons,
                 'time_left' => $time_left,
                 'histories' => $rewards,
+                'voxBans' => $user->vox_bans,
                 'js' => [
                     'profile.js',
                     'swiper.min.js'

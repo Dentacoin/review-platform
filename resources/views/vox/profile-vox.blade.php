@@ -108,7 +108,7 @@
 
 			@endif
 
-        	@if($user->vox_bans->isNotEmpty())
+        	@if($voxBans->isNotEmpty())
 	        	<div class="bans-section">
 
 					<div class="black-line-title">
@@ -135,7 +135,7 @@
 	            			</tr>
 	            		</thead>
 	            		<tbody>
-	            			@foreach( $user->vox_bans as $ban )
+	            			@foreach( $voxBans as $ban )
 	            				<tr>
 	            					<td>
 	            						{{ $ban->created_at ? ($ban->created_at->toDateString().', '.$ban->created_at->toTimeString()) : '' }}

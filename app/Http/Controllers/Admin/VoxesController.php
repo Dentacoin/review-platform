@@ -149,8 +149,10 @@ class VoxesController extends AdminController
             if($field=='featured') {
                 $item->$field = $value=='0' ? 0 : 1;
 
-                if ($value=='1' && $item->featured != 1 && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
-                    UserDevice::sendPush('Now:', 'Double rewards for "'.$item->title.'" survey!');
+                if ($value=='1' && $item->featured != 1 && $item->type == 'normal' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
+                    UserDevice::sendPush('Now:', 'Double rewards for "'.$item->title.'" survey!', [
+                        'page' => 'paid-dental-surveys/'.$item->slug,
+                    ]);
                 }
             }
             if($field=='type') {
@@ -180,7 +182,9 @@ class VoxesController extends AdminController
                         curl_close($curl);
                     }
 
-                    UserDevice::sendPush('New paid survey published!', 'Take it now');
+                    UserDevice::sendPush('New paid survey published!', 'Take it now', [
+                        'page' => 'paid-dental-surveys/'.$item->slug,
+                    ]);
                 }
 
             }
@@ -873,11 +877,15 @@ class VoxesController extends AdminController
                 curl_close($curl);
             }
 
-            UserDevice::sendPush('New paid survey published!', 'Take it now');
+            UserDevice::sendPush('New paid survey published!', 'Take it now', [
+                'page' => 'paid-dental-surveys/'.$item->slug,
+            ]);
         }
 
-        if ($this->request->input('featured') == 1 && $item->featured != 1 && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
-            UserDevice::sendPush('Now:', 'Double rewards for "'.$item->title.'" survey!');
+        if ($this->request->input('featured') == 1 && $item->featured != 1 && $item->type == 'normal' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
+            UserDevice::sendPush('Now:', 'Double rewards for "'.$item->title.'" survey!', [
+                'page' => 'paid-dental-surveys/'.$item->slug,
+            ]);
         }
 
         if(!empty($item) && !$item->has_stats && !empty($this->request->input('has_stats'))) {
