@@ -10,8 +10,6 @@
 			<div class="trans-history">
 				History: <br/>
 				@foreach($item->history as $history)
-					@if($item->history->count() == 1 )
-					@endif
 					<div>
 						@if(!empty($history->sended_at))
 							- Sended at: {{ $history->sended_at }} <br/>
@@ -35,7 +33,7 @@
 							- PS Message: {{ $history->message }} <br/>
 						@endif
 						@if(!empty($history->history_message))
-							{{ $history->history_message }} <br/>
+							{{ $history->history_message }} {{ !empty($history->admin_id) ? '( by '.$history->admin->username.' )' : '' }}<br/>
 						@endif
 					</div>
 				@endforeach

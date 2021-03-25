@@ -31,6 +31,18 @@ class ProfileController extends FrontController {
 
     public function vox($locale=null) {
 
+        if(empty($this->user) && !empty(request('slug'))) {
+            $user_id = User::decrypt(request('slug'));
+
+            if($user_id) {
+                $user = User::find($user_id);
+
+                if(!empty($user)) {
+                    Auth::login($user);
+                }
+            }
+        }
+
         if(!empty($this->user)) {
 
             if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') {
