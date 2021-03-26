@@ -239,9 +239,10 @@ class TransactionsController extends AdminController
                     }
                 }
 
-                $item->delete();
+                $item->status = 'failed';
+                $item->save();
 
-                $last_transaction = DcnTransaction::where('user_id', $item->user->id)->orderBy('id', 'desc')->first();
+                $last_transaction = DcnTransaction::where('user_id', $item->user->id)->where('id', '!=', $item->id)->orderBy('id', 'desc')->first();
                 if(!empty($last_transaction)) {
                     $item->user->withdraw_at = $last_transaction->created_at;
                 } else {
