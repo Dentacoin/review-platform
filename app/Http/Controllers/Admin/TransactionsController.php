@@ -228,6 +228,7 @@ class TransactionsController extends AdminController
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $item->id;
                 $dcn_history->admin_id = $this->user->id;
+                $dcn_history->status = 'failed';
                 $dcn_history->history_message = 'Deleted by admin';
                 $dcn_history->save();
 
