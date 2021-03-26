@@ -22,3 +22,8 @@
 		</a>	
 	@endif
 @endif
+@if(($admin->id == 14 || $admin->id == 15 || $admin->id == 1) && ($item->status != 'completed' && $item->status != 'unconfirmed' && $item->status != 'pending'))
+	<a class="btn btn-info" onclick="return confirm('Are you sure you want to DELETE this?');" href="{{ url('cms/transactions/delete/'.$item->id) }}" style="background: black;border-color: black;">
+		Delete
+	</a>
+@endif

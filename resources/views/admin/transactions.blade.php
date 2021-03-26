@@ -135,7 +135,7 @@
                                         'message'           => array(),
                                         'retries'           => array(),
                                         'sended_at'        => array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sended at'),
-                                        'bump'              =>array('template' => 'admin.parts.table-transactions-bump'),
+                                        'bump'              =>array('template' => 'admin.parts.table-transactions-bump', 'label' => "Actions"),
             						],
                                     'table_data' => $transactions,
             						'table_pagination' => false,

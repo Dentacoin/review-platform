@@ -11,6 +11,7 @@ use App\Models\WithdrawalsCondition;
 use App\Models\StopTransaction;
 use App\Models\DcnTransaction;
 use App\Models\UserAction;
+use App\Models\DcnCashout;
 use App\Models\DcnReward;
 use App\Models\User;
 
@@ -214,6 +215,50 @@ class TransactionsController extends AdminController
         $dcn_history->save();
 
         $this->request->session()->flash('success-message', 'Transaction stopped' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function delete( $id ) {
+        $item = DcnTransaction::find($id);
+
+        if(!empty($item)) {
+
+            if(($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) && ($item->status != 'completed' && $item->status != 'unconfirmed' && $item->status != 'pending')) {
+
+                $dcn_history = new DcnTransactionHistory;
+                $dcn_history->transaction_id = $item->id;
+                $dcn_history->admin_id = $this->user->id;
+                $dcn_history->history_message = 'Deleted by admin';
+                $dcn_history->save();
+
+                foreach($item->reference_id as $cashout_id) {
+                    $cashout = DcnCashout::find($cashout_id);
+
+                    if(!empty($cashout)) {
+                        $cashout->delete();
+                    }
+                }
+
+                $item->delete();
+
+                $last_transaction = DcnTransaction::where('user_id', $item->user->id)->orderBy('id', 'desc')->first();
+                if(!empty($last_transaction)) {
+                    $item->user->withdraw_at = $last_transaction->created_at;
+                } else {
+                    $item->user->withdraw_at = $item->user->created_at;
+                }
+                $item->user->save();
+
+                $item->user->sendGridTemplate(125);
+
+                $this->request->session()->flash('success-message', 'Transaction deleted' );
+            } else {
+                $this->request->session()->flash('error-message', 'You can\'t delete this transaction' );
+            }
+        } else {
+            $this->request->session()->flash('error-message', 'This transaction is already deleted' );
+        }
+
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 

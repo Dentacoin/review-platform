@@ -119,6 +119,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('transactions', 						'TransactionsController@list');
 	Route::any('transactions/bump/{id}', 			'TransactionsController@bump');
 	Route::any('transactions/stop/{id}', 			'TransactionsController@stop');
+	Route::any('transactions/delete/{id}', 			'TransactionsController@delete');
 	Route::any('transactions/pending/{id}', 		'TransactionsController@pending');
 	Route::post('transactions/mass-bump', 			'TransactionsController@massbump');
 	Route::post('transactions/mass-stop', 			'TransactionsController@massstop');
