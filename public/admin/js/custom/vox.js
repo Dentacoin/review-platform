@@ -619,4 +619,39 @@ $(document).ready(function(){
 			$('.multi-select-button').html('Select Questions')
 		}
     }
+
+    $('.show-questions').click( function() {
+    	var that = $(this);
+
+    	$.ajax( {
+			url: window.location.origin+'/cms/vox/get-questions-count/'+$(this).attr('vox-id'),
+			type: 'POST',
+			dataType: 'json',
+			success: function( data ) {
+				that.closest('div').html(data.q_count);
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+    });
+
+    $('.show-respondents').click( function() {
+    	var that = $(this);
+
+    	$.ajax( {
+			url: window.location.origin+'/cms/vox/get-respondents-count/'+$(this).attr('vox-id'),
+			type: 'POST',
+			dataType: 'json',
+			success: function( data ) {
+				that.hide();
+				that.closest('div').find('.respondents-shown').html(data.resp_count);
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+    });
+
+    
 });

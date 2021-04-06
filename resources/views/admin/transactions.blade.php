@@ -9,7 +9,7 @@
             <a href="{{ $are_transactions_stopped ? url('cms/transactions/start') : url('cms/transactions/stop') }}" class="btn btn-{{ $are_transactions_stopped ? 'success' : 'danger' }} pull-right" style="margin-left: 10px;">{{ $are_transactions_stopped ? 'Allow users to withdraw' : 'Disallow users to withdraw' }}</a>
 
             @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
-                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right">Bump all transactions with status 'DONT RETRY'</a>
+                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right">Bump trans with status 'DONT RETRY'</a>
             @endif
         </div>
 

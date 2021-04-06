@@ -174,6 +174,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('search-questions', 				'VoxesController@getTitle');
 	Route::post('vox-questions/mass-delete', 		'VoxesController@massdelete');
 	Route::any('vox/export-stats', 					'VoxesController@exportStats');
+	Route::post('vox/get-questions-count/{id}', 	'VoxesController@getQuestionsCount');
+	Route::post('vox/get-respondents-count/{id}', 	'VoxesController@getRespondentsCount');
 
 	Route::get('vox/polls', 						'PollsController@list');
 	Route::any('vox/polls/add', 					'PollsController@add');

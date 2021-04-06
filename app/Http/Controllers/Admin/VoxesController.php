@@ -2091,9 +2091,28 @@ class VoxesController extends AdminController
         $pdf_title = strtolower(str_replace(['?', ' ', ':'], [' ', '-', ' '] ,$fname)).'-dentavox'.mb_substr(microtime(true), 0, 10);
 
         return (new MultipleStatSheetExport($document['flist'], $document['breakdown_rows_count']))->download($pdf_title.'.xlsx');
+    }
 
+    public function getQuestionsCount($vox_id) {
 
+        $vox = Vox::find($vox_id);
 
+        if( !empty($vox)) {
+            return Response::json( [
+                'q_count' => $vox->questions->count(),
+            ] );
+        }
+    }
+
+    public function getRespondentsCount($vox_id) {
+
+        $vox = Vox::find($vox_id);
+
+        if( !empty($vox)) {
+            return Response::json( [
+                'resp_count' => $vox->realRespondentsCountForAdminPurposes(),
+            ] );
+        }
     }
 
 }
