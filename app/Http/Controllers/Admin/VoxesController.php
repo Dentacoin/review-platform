@@ -75,6 +75,7 @@ class VoxesController extends AdminController
             'voxes' => Vox::with('translations')->with('questions')->with('questions.translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
             'active_voxes_count' => Vox::where('type', '!=', 'hidden')->count(),
             'hidden_voxes_count' => Vox::where('type', 'hidden')->count(),
+            'are_all_results_shown' => session('vox-show-all-results') ? true : false,
             'error_arr' => $error_arr,
             'error' => $error,
         ));
@@ -2114,5 +2115,25 @@ class VoxesController extends AdminController
             ] );
         }
     }
+
+    public function showAllResults() {
+
+        session([
+            'vox-show-all-results' => true
+        ]);
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
+    }
+
+    public function showIndividualResults() {
+
+        session([
+            'vox-show-all-results' => false
+        ]);
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
+    }
+
+
 
 }

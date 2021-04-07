@@ -145,14 +145,16 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('vox', 								'VoxesController@list');
 	Route::get('vox/list', 							'VoxesController@list');
-	Route::post('vox/list/reorder', 					'VoxesController@reorderVoxes');
+	Route::get('vox/list/show-all-results', 		'VoxesController@showAllResults');
+	Route::get('vox/list/show-individual-results', 	'VoxesController@showIndividualResults');
+	Route::post('vox/list/reorder', 				'VoxesController@reorderVoxes');
 	Route::any('vox/add', 							'VoxesController@add');
-	Route::any('vox/edit-field/{id}/{field}/{value}', 	'VoxesController@edit_field');
+	Route::any('vox/edit-field/{id}/{field}/{value}','VoxesController@edit_field');
 	Route::any('vox/edit/{id}', 					'VoxesController@edit');
 	Route::any('vox/edit/{id}/delpic', 				'VoxesController@delpic');
 	Route::any('vox/edit/{id}/export', 				'VoxesController@export');
 	Route::any('vox/edit/{id}/import', 				'VoxesController@import');
-	Route::any('vox/edit/{id}/import-quick', 				'VoxesController@import_quick');
+	Route::any('vox/edit/{id}/import-quick', 		'VoxesController@import_quick');
 	Route::get('vox/delete/{id}', 					'VoxesController@delete');
 	Route::post('vox/edit/{id}/question/add', 		'VoxesController@add_question');
 	Route::any('vox/edit/{id}/question/{question_id}', 		'VoxesController@edit_question');

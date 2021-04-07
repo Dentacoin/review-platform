@@ -6,6 +6,7 @@
     {{ trans('admin.page.'.$current_page.'.title') }}
     
     <a class="btn btn-primary pull-right" id="table-sort" href="javascript:;" alternate="Done">Sort Surveys</a>
+    <a class="btn btn-info pull-right" href="{{ $are_all_results_shown ? url('cms/vox/list/show-individual-results') : url('cms/vox/list/show-all-results') }}" style="margin-right: 10px;">Show {{ $are_all_results_shown ? 'Individual' : 'All' }} Results</a>
 </h1>
 <!-- end page-header -->
 
