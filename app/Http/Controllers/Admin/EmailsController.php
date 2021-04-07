@@ -8,6 +8,7 @@ use App\Models\StopEmailValidation;
 use App\Models\EmailValidation;
 use App\Models\EmailTemplate;
 use App\Models\InvalidEmail;
+use App\Models\OldEmail;
 use App\Models\Country;
 use App\Models\Review;
 use App\Models\Email;
@@ -531,6 +532,78 @@ class EmailsController extends AdminController {
     }
 
 
-    
+    public function old_emails( ) {
+
+        $olds = OldEmail::orderBy('id', 'asc');
+
+        if(!empty(request('search-email'))) {
+            $olds = $olds->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
+        }
+        if(request('search-user-id')) {
+            $olds = $olds->where('user_id', request('search-user-id') );
+        }
+
+        $total_count = $olds->count();
+
+        $page = max(1,intval(request('page')));
+        
+        $ppp = 50;
+        $adjacents = 2;
+        $total_pages = ceil($total_count/$ppp);
+
+        //Here we generates the range of the page numbers which will display.
+        if($total_pages <= (1+($adjacents * 2))) {
+          $start = 1;
+          $end   = $total_pages;
+        } else {
+          if(($page - $adjacents) > 1) { 
+            if(($page + $adjacents) < $total_pages) { 
+              $start = ($page - $adjacents);            
+              $end   = ($page + $adjacents);         
+            } else {             
+              $start = ($total_pages - (1+($adjacents*2)));  
+              $end   = $total_pages;               
+            }
+          } else {               
+            $start = 1;                                
+            $end   = (1+($adjacents * 2));             
+          }
+        }
+
+        $olds = $olds->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        $pagination_link = '';
+
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search' && $key != 'page') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
+        }
+
+        return $this->showView('old-emails', array(
+            'olds' => $olds,
+            'search_email' => request('search-email'),
+            'search_user_id' => request('search-user-id'),
+            'total_count' => $total_count,
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
+            'pagination_link' => $pagination_link,
+        ));
+    }
+
+    public function old_emails_delete($id) {
+
+        $item = OldEmail::find($id);
+
+        if($item) {
+            $item->forceDelete();
+            $this->request->session()->flash('success-message', 'Deleted!' );
+        }
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations/old_emails');
+    }
 
 }

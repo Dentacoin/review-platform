@@ -12,7 +12,7 @@ class OldEmail extends Model {
 	use SoftDeletes;
     
     protected $fillable = [
-        'user_id', //The clinic
+        'user_id',
         'email',
     ];
 

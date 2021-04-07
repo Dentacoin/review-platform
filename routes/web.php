@@ -211,6 +211,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('email_validations/invalid_emails',					'EmailsController@invalid_emails');
 	Route::get('email_validations/invalid_emails/delete/{id}',		'EmailsController@invalid_delete');
 	Route::post('email_validations/invalid_emails/new',				'EmailsController@invalid_new');
+	Route::get('email_validations/old_emails',						'EmailsController@old_emails');
+	Route::get('email_validations/old_emails/delete/{id}',			'EmailsController@old_emails_delete');
 
 	Route::any('rewards', 							'RewardsController@list');
 
