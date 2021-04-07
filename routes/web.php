@@ -139,8 +139,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('transactions/enable-retry', 		'TransactionsController@enableRetry');
 	// Route::get('transactions/disable-paid-by-user-retry', 		'TransactionsController@disablePaidByUserRetry');
 	// Route::get('transactions/enable-paid-by-user-retry', 		'TransactionsController@enablePaidByUserRetry');
-	Route::get('transactions/edit-mode', 			'TransactionsController@editMode');
-	Route::get('transactions/normal-mode', 			'TransactionsController@normalMode');
 
 
 	Route::get('spending', 							'SpendingController@list');

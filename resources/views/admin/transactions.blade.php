@@ -17,11 +17,6 @@
 
                 <!-- <a href="{{ $is_retry_paid_by_the_user_stopped ? url('cms/transactions/enable-paid-by-user-retry') : url('cms/transactions/disable-paid-by-user-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_paid_by_the_user_stopped ? 'Enable' : 'Disable' }} Paid By User Retry</a> -->
             @endif
-            @if(session('edit-mode'))
-                <!-- <a href="{{ url('cms/transactions/normal-mode') }}" class="btn btn-success pull-right" style="margin-left: 10px;">Normal mode</a> -->
-            @else
-                <!-- <a href="{{ url('cms/transactions/edit-mode') }}" class="btn btn-success pull-right" style="margin-left: 10px;">Edit mode</a> -->
-            @endif
         </div>
 
     </div>
@@ -281,22 +276,5 @@
         }
 
     </style>
-
-    @if(session('edit-mode'))
-        <style type="text/css">         
-            .normal-mode {
-                display: none;
-            }
-
-        </style>
-    @endif
-
-    @if(!session('edit-mode'))
-        <style type="text/css">         
-            .edit-mode {
-                display: none;
-            }
-        </style>
-    @endif
 
 @endsection
