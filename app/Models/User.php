@@ -2604,10 +2604,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $info .= '<p>Duplicated IPs:</p>';
                 $i=0;
                 foreach($dublicated_ips as $di) {
-                    $i++;
+                    if($di->getUsersCount() > 1) {
+                        $i++;
 
-                    if(!empty(User::withTrashed()->find($di->user_id))) {
-                        $info .= '<p>'.$i.'. <a href="'.url('cms/users/edit/'.$di->user_id).'">'.User::withTrashed()->find($di->user_id)->name.'</a></p>';
+                        if(!empty(User::withTrashed()->find($di->user_id))) {
+                            $info .= '<p>'.$i.'. <a href="'.url('cms/users/edit/'.$di->user_id).'">'.User::withTrashed()->find($di->user_id)->name.'</a></p>';
+                        }
                     }
                 }
             }
