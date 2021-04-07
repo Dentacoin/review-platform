@@ -90,6 +90,16 @@
 				                	@foreach($items as $item)
 				                    	<tr>
 				                    		<td>
+                                                @if($item->user->banAppealInfo())
+                                                    <div class="ban-appeal-wrapper">
+                                                        <i class="fa fa-exclamation-triangle" style="color: red;"></i>
+
+                                                        <div class="ban-appeal-tooltip">
+                                                            {!! $item->user->banAppealInfo() !!}
+                                                        </div>
+                                                    </div>
+                                                @endif
+
 				                    			<a href="{{ url('cms/users/edit/'.$item->user->id) }}">
 													{{ $item->user->name }}
 												</a>
@@ -255,5 +265,21 @@
 
     </div>
 </div>
+
+<style type="text/css">
+    .ban-appeal-wrapper .ban-appeal-tooltip {
+        display: none;
+        position: absolute;
+        border: 1px solid black;
+        padding: 10px;
+        border-radius: 5px;
+        background: white;
+    }
+
+    .ban-appeal-wrapper:hover .ban-appeal-tooltip {
+        display: block;
+    }
+
+</style>
 
 @endsection

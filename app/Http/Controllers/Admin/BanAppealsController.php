@@ -67,7 +67,7 @@ class BanAppealsController extends AdminController {
 
         $page = max(1,intval(request('page')));
         
-        $ppp = 50;
+        $ppp = 20;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
 

@@ -588,18 +588,6 @@ class TransactionsController extends AdminController
                 return redirect('cms/transactions');
             }
 
-            // if(!empty(request('trans-id'))) {
-            //     $trans = DcnTransaction::find(request('trans-id'));
-
-            //     if(!empty($trans)) {
-            //         dd(request()->all());
-            //     }
-            // }
-
-            // return Response::json( [
-            //     'success' => true
-            // ] );
-
             return $this->showView('transactions-edit', array(
                 'item' => $item,
             ));

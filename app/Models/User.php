@@ -32,6 +32,7 @@ use App\Models\EmailValidation;
 use App\Models\BlacklistBlock;
 use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
+use App\Models\WalletAddress;
 use App\Models\AnonymousUser;
 use App\Models\DentistClaim;
 use App\Models\UserStrength;
@@ -2547,5 +2548,88 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
 
         return $voxList;
+    }
+
+    public function banAppealInfo() {
+
+        $info = '';
+
+        if( !empty($this->name)) {
+            $duplicated_name = self::where('id', '!=', $this->id)->where('name', 'LIKE', $this->name)->withTrashed()->first();
+
+            if(!empty($duplicated_name)) {
+                $info .= 'Duplicated name<br/>';
+            }
+        }
+
+        if( !empty($this->email)) {
+            $duplicated_mails = User::where('id', '!=', $this->id)->where('email', 'LIKE', $this->email)->withTrashed()->first();
+
+            if(!empty($duplicated_mails)) {
+                $info .= 'Duplicated email<br/>';
+            }
+        }
+
+        if( !empty($this->civic_kyc_hash)) {
+            $duplicated_kyc = self::where('id', '!=', $this->id)->where('civic_kyc_hash', $this->civic_kyc_hash)->withTrashed()->first();
+
+            if(!empty($duplicated_kyc)) {
+                $info .= 'Duplicated kyc<br/>';
+            }
+        }
+
+        if( $this->wallet_addresses->isNotEmpty()) {
+            foreach($this->wallet_addresses as $wa) {
+                $duplicated_wallet = WalletAddress::where('user_id', '!=', $this->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->first();
+
+                if(!empty($duplicated_wallet)) {
+                    $info .= 'Duplicated wallet<br/>';
+                }
+            }
+        }
+
+        if($this->getSameIPUsers()) {
+            $info .= '2 or more from IP<br/>';
+        }
+
+        $permanent_vox_ban = UserBan::where('user_id', $this->id)->where('domain', 'vox')->whereNull('expires')->first();
+        if(!empty($duplicated_kyc)) {
+            $info .= 'Permenant Vox ban<br/>';
+        }        
+
+
+        // $duplicated_names = collect();
+        // if( !empty($this->name)) {
+        //     $duplicated_names = self::where('id', '!=', $this->id)->where('name', 'LIKE', $this->name)->withTrashed()->get();
+        // }
+
+        // if($duplicated_names->isNotEmpty()) {
+        //     $info .= '<p class="col-md-10 col-md-offset-2">Duplicated names:</p>';
+        //     $i=0;
+        //     foreach($duplicated_names as $dn) {
+        //         $i++;
+        //         $info .= '<p class="col-md-10 col-md-offset-2">'.$i.'. <a href="'.url('cms/users/edit/'.$dn->id).'">'.$dn->name.' '.($dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' ).'</a></p><div class="bottom-border"> </div>';
+        //     }
+        // }
+
+        // $duplicated_kyc = collect();
+        // if( !empty($this->civic_kyc_hash)) {
+        //     $duplicated_kyc = self::where('id', '!=', $this->id)->where('civic_kyc_hash', $this->civic_kyc_hash)->withTrashed()->get();
+        // }
+
+        // if($duplicated_kyc->isNotEmpty()) {
+        //     $info .= '<p class="col-md-10 col-md-offset-2">Duplicated KYC:</p>';
+        //     $i=0;
+        //     foreach($duplicated_kyc as $dn) {
+        //         $i++;
+        //         $info .= '<p class="col-md-10 col-md-offset-2">'.$i.'. <a href="'.url('cms/users/edit/'.$dn->id).'">'.$dn->name.' '.($dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' ).'</a></p><div class="bottom-border"> </div>';
+        //     }
+        // }
+
+        // if($this->getSameIPUsers()) {
+        //     $info .= '2 or more from IP ';
+        // }
+
+        return $info;
     }
 }
