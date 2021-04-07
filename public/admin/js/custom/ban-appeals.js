@@ -18,4 +18,20 @@ $(document).ready(function(){
 		$('#pendingModal form').attr('action' , action);
 	});
 
+	$('.ban-appeal-info').click( function() {
+		var that = $(this);
+		
+    	$.ajax( {
+			url: window.location.origin+'/cms/ban_appeals/info/'+that.attr('user-id'),
+			type: 'POST',
+			dataType: 'json',
+			success: function( data ) {
+				that.closest('.ban-appeal-wrapper').find('.ban-appeal-tooltip').html(data.data);
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+	});
+
 });

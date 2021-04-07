@@ -15,6 +15,7 @@ use App\Models\User;
 use Carbon\Carbon;
 
 use Validator;
+use Response;
 use Request;
 use Image;
 use Route;
@@ -219,6 +220,14 @@ class BanAppealsController extends AdminController {
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
 
+    }
+
+    public function userInfo($user_id) {
+        $user = User::withTrashed()->find($user_id);
+
+        if(!empty($user)) {
+            return Response::json( ['data' => $user->banAppealInfo()] );
+        }
     }
 
 }

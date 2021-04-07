@@ -243,6 +243,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('ban_appeals/approve/{id}', 			'BanAppealsController@approve');
 	Route::any('ban_appeals/reject/{id}', 			'BanAppealsController@reject');
 	Route::any('ban_appeals/pending/{id}', 			'BanAppealsController@pending');
+	Route::any('ban_appeals/info/{id}', 			'BanAppealsController@userInfo');
 });
 
 
