@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-1">
                             <select class="form-control" name="pending">
-                                <option value="">Pending and no pending</option>
+                                <option value="">All</option>
                                 <option value="pending" {!! 'pending'==$pending ? 'selected="selected"' : '' !!}>Pending</option>
                                 <option value="no-pending" {!! 'no-pending'==$pending ? 'selected="selected"' : '' !!}>No Pending</option>
                             </select>
