@@ -930,12 +930,22 @@
                                                 </td>
                                                 <td>
                                                     @if($ba->status == 'new')
-                                                        <a class="btn btn-sm btn-primary" href="javascript:;" data-toggle="modal" data-target="#approvedModal">
+                                                        <a class="btn btn-sm btn-primary approve-appeal" href="javascript:;" data-toggle="modal" data-target="#approvedModal" appeal-id="{{ $ba->id }}">
                                                             Approve
                                                         </a>
-                                                        <a class="btn btn-sm btn-danger" href="javascript:;" data-toggle="modal" data-target="#rejectedModal">
+                                                        <a class="btn btn-sm btn-danger reject-appeal" href="javascript:;" data-toggle="modal" data-target="#rejectedModal" appeal-id="{{ $ba->id }}">
                                                             Reject
                                                         </a>
+
+                                                        @if($ba->pending_fields)
+                                                            <a class="btn btn-sm btn-warning pending-appeal" disabled="disabled" href="javascript:;">
+                                                                Pending
+                                                            </a>
+                                                        @else
+                                                            <a class="btn btn-sm btn-warning pending-appeal" href="javascript:;" data-toggle="modal" data-target="#pendingModal" appeal-id="{{ $ba->id }}">
+                                                                Pending
+                                                            </a>
+                                                        @endif
                                                     @elseif($ba->status == 'approved')
                                                         Approved
                                                     @elseif($ba->status == 'rejected')
@@ -1735,8 +1745,56 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ url('cms/ban_appeals/reject/'.$item->banAppeal->id) }}" method="post">
-                        <textarea class="form-control" name="rejected_reason" placeholder="Write the reason why you want to reject this appeal"></textarea>
+                        <label for="multiple-accounts" style="display: block;">
+                            <input type="radio" name="reject_radio" id="multiple-accounts" value="Multiple accounts">
+                            Multiple accounts
+                        </label>
+                        <label for="fake-fb-profile" style="display: block;">
+                            <input type="radio" name="reject_radio" id="fake-fb-profile" value="Fake FB profile">
+                            Fake FB profile
+                        </label>
+                        <label for="no-image-on-fb" style="display: block;">
+                            <input type="radio" name="reject_radio" id="no-image-on-fb" value="No image on FB profile">
+                            No image on FB profile
+                        </label>
+                        <label for="reject-other" style="display: block;">
+                            <input type="radio" name="reject_radio" id="reject-other" value="Other">
+                            Other
+                        </label>
+
+                        <textarea style="display: none;" class="form-control" name="rejected_reason" placeholder="Write the reason why you want to reject this appeal"></textarea>
                         <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Reject</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="pendingModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Pending Appeal</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url('cms/ban_appeals/pending/') }}" original-action="{{ url('cms/ban_appeals/pending/') }}" method="post">
+
+                        <label for="image" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                            <input id="image" type="checkbox" name="pending_info[]" value="image" style="margin-top: 0px;margin-right: 4px;" />
+                            Image
+                        </label>
+                        <label for="link" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                            <input id="link" type="checkbox" name="pending_info[]" value="link"  style="margin-top: 0px;margin-right: 4px;" />
+                            Link
+                        </label>
+
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Send email</button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -1756,8 +1814,24 @@
                     <h4 class="modal-title">Approve appeal</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('cms/ban_appeals/approve/'.$item->banAppeal->id) }}" method="post">
-                        <textarea class="form-control" name="approved_reason" placeholder="Write the reason why you want to approve this appeal"></textarea>
+                    <form action="{{ url('cms/ban_appeals/approve/') }}" original-action="{{ url('cms/ban_appeals/approve/') }}" method="post">
+                        <label for="legit-proof" style="display: block;">
+                            <input type="radio" name="approve_radio" id="legit-proof" value="Legit proof">
+                            Legit proof
+                        </label>
+                        <label for="leaving-one-account" style="display: block;">
+                            <input type="radio" name="approve_radio" id="leaving-one-account" value="Dupl accounts, leaving only one">
+                            Dupl accounts, leaving only one
+                        </label>
+                        <label for="monitor-dupl-accounts" style="display: block;">
+                            <input type="radio" name="approve_radio" id="monitor-dupl-accounts" value="Monitor for multiple accounts">
+                            Monitor for multiple accounts
+                        </label>
+                        <label for="approve-other" style="display: block;">
+                            <input type="radio" name="approve_radio" id="approve-other" value="Other">
+                            Other
+                        </label>
+                        <textarea style="display: none;" class="form-control" name="approved_reason" placeholder="Write a reason why you want to approve this appeal"></textarea>
                         <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Approve</button>
                     </form>
                 </div>

@@ -200,7 +200,24 @@
             </div>
             <div class="modal-body">
                 <form action="{{ url('cms/ban_appeals/reject/') }}" original-action="{{ url('cms/ban_appeals/reject/') }}" method="post">
-                    <textarea class="form-control" name="rejected_reason" placeholder="Write the reason why you want to reject this appeal"></textarea>
+                    <label for="multiple-accounts" style="display: block;">
+                        <input type="radio" name="reject_radio" id="multiple-accounts" value="Multiple accounts">
+                        Multiple accounts
+                    </label>
+                    <label for="fake-fb-profile" style="display: block;">
+                        <input type="radio" name="reject_radio" id="fake-fb-profile" value="Fake FB profile">
+                        Fake FB profile
+                    </label>
+                    <label for="no-image-on-fb" style="display: block;">
+                        <input type="radio" name="reject_radio" id="no-image-on-fb" value="No image on FB profile">
+                        No image on FB profile
+                    </label>
+                    <label for="reject-other" style="display: block;">
+                        <input type="radio" name="reject_radio" id="reject-other" value="Other">
+                        Other
+                    </label>
+
+                    <textarea style="display: none;" class="form-control" name="rejected_reason" placeholder="Write the reason why you want to reject this appeal"></textarea>
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Reject</button>
                 </form>
             </div>
@@ -253,7 +270,23 @@
             </div>
             <div class="modal-body">
                 <form action="{{ url('cms/ban_appeals/approve/') }}" original-action="{{ url('cms/ban_appeals/approve/') }}" method="post">
-                    <textarea class="form-control" name="approved_reason" placeholder="Write the reason why you want to approve this appeal"></textarea>
+                    <label for="legit-proof" style="display: block;">
+                        <input type="radio" name="approve_radio" id="legit-proof" value="Legit proof">
+                        Legit proof
+                    </label>
+                    <label for="leaving-one-account" style="display: block;">
+                        <input type="radio" name="approve_radio" id="leaving-one-account" value="Dupl accounts, leaving only one">
+                        Dupl accounts, leaving only one
+                    </label>
+                    <label for="monitor-dupl-accounts" style="display: block;">
+                        <input type="radio" name="approve_radio" id="monitor-dupl-accounts" value="Monitor for multiple accounts">
+                        Monitor for multiple accounts
+                    </label>
+                    <label for="approve-other" style="display: block;">
+                        <input type="radio" name="approve_radio" id="approve-other" value="Other">
+                        Other
+                    </label>
+                    <textarea style="display: none;" class="form-control" name="approved_reason" placeholder="Write a reason why you want to approve this appeal"></textarea>
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Approve</button>
                 </form>
             </div>

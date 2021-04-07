@@ -356,5 +356,59 @@ $(document).ready(function(){
         console.log(percent);
     };
 
+    $('.reject-appeal').click( function() {
+		var action = $('#rejectedModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
+		$('#rejectedModal form').attr('action' , action);
+	});
+
+	$('.approve-appeal').click( function() {
+		var action = $('#approvedModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
+		$('#approvedModal form').attr('action' , action);
+	});
+
+	$('.pending-appeal').click( function() {
+		console.log('dsfdsf');
+		var action = $('#pendingModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
+		$('#pendingModal form').attr('action' , action);
+	});
+
+	$('.ban-appeal-info').click( function() {
+		var that = $(this);
+		
+    	$.ajax( {
+			url: window.location.origin+'/cms/ban_appeals/info/'+that.attr('user-id'),
+			type: 'POST',
+			dataType: 'json',
+			success: function( data ) {
+				that.closest('.ban-appeal-wrapper').find('.ban-appeal-tooltip').html(data.data);
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+	});
+
+	$('[name="approve_radio"]').click(function() {
+		if($(this).attr('id') == 'approve-other') {
+			$('[name="approved_reason"]').show();
+		} else {
+			$('[name="approved_reason"]').hide();
+		}
+	});
+
+	$('[name="reject_radio"]').click(function() {
+		if($(this).attr('id') == 'reject-other' || $(this).attr('id') == 'multiple-accounts') {
+			if($(this).attr('id') == 'multiple-accounts') {
+				$('[name="rejected_reason"]').attr("placeholder", "Write which are the multiple accounts");
+			} else {
+				$('[name="rejected_reason"]').attr("placeholder", "Write the reason why you want to reject this appeal");
+			}
+			$('[name="rejected_reason"]').show();
+		} else {
+			$('[name="rejected_reason"]').hide();
+		}
+	});
+
+
 });
 
