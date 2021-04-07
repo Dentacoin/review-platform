@@ -47,7 +47,13 @@ class BanAppealsController extends AdminController {
         }
 
         if(!empty(request('pending'))) {
-            $items = $items->whereNotNull('pending_fields');
+            if(request('pending') == 'pending') {
+                $items = $items->whereNotNull('pending_fields');
+            }
+
+            if(request('pending') == 'no-pending') {
+                $items = $items->whereNull('pending_fields');
+            }
         }
 
         if(!empty(request('search-name'))) {

@@ -45,10 +45,11 @@
                             </select>
                         </div>
                         <div class="col-md-1">
-                            <label for="pending" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
-                                <input id="pending" type="checkbox" name="pending" value="1" {!! !empty($pending) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
-                                Is pending
-                            </label>
+                            <select class="form-control" name="pending">
+                                <option value="">Pending and no pending</option>
+                                <option value="pending" {!! 'pending'==$pending ? 'selected="selected"' : '' !!}>Pending</option>
+                                <option value="no-pending" {!! 'no-pending'==$pending ? 'selected="selected"' : '' !!}>No Pending</option>
+                            </select>
                         </div>
                         <div class="col-md-2">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
@@ -90,15 +91,6 @@
 				                	@foreach($items as $item)
 				                    	<tr>
 				                    		<td>
-                                                <div class="ban-appeal-wrapper">
-                                                    <div class="img-wrap ban-appeal-info" user-id="{{ $item->user->id }}">
-                                                        <img src="{{ url('img/info.png') }}" style="max-width: 15px;">
-                                                    </div>
-
-                                                    <div class="ban-appeal-tooltip">
-                                                    </div>
-                                                </div>
-
 				                    			<a href="{{ url('cms/users/edit/'.$item->user->id) }}">
 													{{ $item->user->name }}
 												</a>
@@ -108,6 +100,14 @@
                                                 @if($item->pending_fields)
                                                     <br/> <b>Pending</b>
                                                 @endif
+                                                <div class="ban-appeal-wrapper">
+                                                    <div class="img-wrap ban-appeal-info" user-id="{{ $item->user->id }}">
+                                                        <img src="{{ url('img/info.png') }}" style="max-width: 15px;">
+                                                    </div>
+
+                                                    <div class="ban-appeal-tooltip">
+                                                    </div>
+                                                </div>
 				                    		</td>
 				                    		<td style="word-break: break-all;">
 				                    			{{ $item->link }}
