@@ -73,7 +73,9 @@
                                         {{ $old->email }}
                                     </td>
                                     <th>
-                                    	<a href="{{ url('cms/email_validations/old_emails/delete/'.$old->id) }}" class="btn btn-danger">delete</a>
+                                    	@if($admin->id == 14 || $admin->id == 15 || $admin->id == 1)
+                                    		<a href="{{ url('cms/email_validations/old_emails/delete/'.$old->id) }}" class="btn btn-danger">delete</a>
+                                    	@endif
                                     </th>
                                 </tr>
                             @endforeach

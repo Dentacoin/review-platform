@@ -596,11 +596,13 @@ class EmailsController extends AdminController {
 
     public function old_emails_delete($id) {
 
-        $item = OldEmail::find($id);
+        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
+            $item = OldEmail::find($id);
 
-        if($item) {
-            $item->forceDelete();
-            $this->request->session()->flash('success-message', 'Deleted!' );
+            if($item) {
+                $item->forceDelete();
+                $this->request->session()->flash('success-message', 'Deleted!' );
+            }
         }
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations/old_emails');
