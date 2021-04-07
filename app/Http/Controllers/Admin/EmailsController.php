@@ -534,7 +534,7 @@ class EmailsController extends AdminController {
 
     public function old_emails( ) {
 
-        $olds = OldEmail::orderBy('id', 'asc');
+        $olds = OldEmail::orderBy('id', 'desc');
 
         if(!empty(request('search-email'))) {
             $olds = $olds->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
