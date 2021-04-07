@@ -2554,48 +2554,48 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         $info = '';
 
-        if( !empty($this->name)) {
-            $duplicated_name = self::where('id', '!=', $this->id)->where('name', 'LIKE', $this->name)->withTrashed()->first();
+        // if( !empty($this->name)) {
+        //     $duplicated_name = self::where('id', '!=', $this->id)->where('name', 'LIKE', $this->name)->withTrashed()->first();
 
-            if(!empty($duplicated_name)) {
-                $info .= 'Duplicated name<br/>';
-            }
-        }
+        //     if(!empty($duplicated_name)) {
+        //         $info .= 'Duplicated name<br/>';
+        //     }
+        // }
 
-        if( !empty($this->email)) {
-            $duplicated_mails = User::where('id', '!=', $this->id)->where('email', 'LIKE', $this->email)->withTrashed()->first();
+        // if( !empty($this->email)) {
+        //     $duplicated_mails = User::where('id', '!=', $this->id)->where('email', 'LIKE', $this->email)->withTrashed()->first();
 
-            if(!empty($duplicated_mails)) {
-                $info .= 'Duplicated email<br/>';
-            }
-        }
+        //     if(!empty($duplicated_mails)) {
+        //         $info .= 'Duplicated email<br/>';
+        //     }
+        // }
 
-        if( !empty($this->civic_kyc_hash)) {
-            $duplicated_kyc = self::where('id', '!=', $this->id)->where('civic_kyc_hash', $this->civic_kyc_hash)->withTrashed()->first();
+        // if( !empty($this->civic_kyc_hash)) {
+        //     $duplicated_kyc = self::where('id', '!=', $this->id)->where('civic_kyc_hash', $this->civic_kyc_hash)->withTrashed()->first();
 
-            if(!empty($duplicated_kyc)) {
-                $info .= 'Duplicated kyc<br/>';
-            }
-        }
+        //     if(!empty($duplicated_kyc)) {
+        //         $info .= 'Duplicated kyc<br/>';
+        //     }
+        // }
 
-        if( $this->wallet_addresses->isNotEmpty()) {
-            foreach($this->wallet_addresses as $wa) {
-                $duplicated_wallet = WalletAddress::where('user_id', '!=', $this->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->first();
+        // if( $this->wallet_addresses->isNotEmpty()) {
+        //     foreach($this->wallet_addresses as $wa) {
+        //         $duplicated_wallet = WalletAddress::where('user_id', '!=', $this->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->first();
 
-                if(!empty($duplicated_wallet)) {
-                    $info .= 'Duplicated wallet<br/>';
-                }
-            }
-        }
+        //         if(!empty($duplicated_wallet)) {
+        //             $info .= 'Duplicated wallet<br/>';
+        //         }
+        //     }
+        // }
 
-        if($this->getSameIPUsers()) {
-            $info .= '2 or more from IP<br/>';
-        }
+        // if($this->getSameIPUsers()) {
+        //     $info .= '2 or more from IP<br/>';
+        // }
 
-        $permanent_vox_ban = UserBan::where('user_id', $this->id)->where('domain', 'vox')->whereNull('expires')->first();
-        if(!empty($duplicated_kyc)) {
-            $info .= 'Permenant Vox ban<br/>';
-        }        
+        // $permanent_vox_ban = UserBan::where('user_id', $this->id)->where('domain', 'vox')->whereNull('expires')->first();
+        // if(!empty($duplicated_kyc)) {
+        //     $info .= 'Permenant Vox ban<br/>';
+        // }        
 
 
         // $duplicated_names = collect();
