@@ -553,12 +553,36 @@ class TransactionsController extends AdminController
             $item = DcnTransaction::find($id);
 
             if(Request::isMethod('post')) {
+
+                if((!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) || (!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) || (!empty(request('status')) && request('status') != $item->status)) {
+
+                    $dcn_history = new DcnTransactionHistory;
+                    $dcn_history->transaction_id = $item->id;
+                    $dcn_history->admin_id = $this->user->id;
+
+                    if(!empty(request('status')) && request('status') != $item->status) {
+                        $dcn_history->status = request('status');
+                    }
+
+                    if(!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) {
+                        $dcn_history->tx_hash = request('tx_hash');
+                    }
+
+                    if(!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) {
+                        $dcn_history->allowance_hash = request('allowance_hash');
+                    }
+
+                    $dcn_history->history_message = 'Edited by admin';
+                    $dcn_history->save();
+                }
+
                 $item->tx_hash = request('tx_hash');
                 if($item->is_paid_by_the_user) {
                     $item->allowance_hash = request('allowance_hash');
                 }
                 $item->status = request('status');
                 $item->save();
+
 
                 $this->request->session()->flash('success-message', 'Saved!' );
                 return redirect('cms/transactions');
