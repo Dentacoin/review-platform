@@ -9,7 +9,18 @@
             <a href="{{ $are_transactions_stopped ? url('cms/transactions/start') : url('cms/transactions/stop') }}" class="btn btn-{{ $are_transactions_stopped ? 'success' : 'danger' }} pull-right" style="margin-left: 10px;">{{ $are_transactions_stopped ? 'Allow users to withdraw' : 'Disallow users to withdraw' }}</a>
 
             @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
-                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right">Bump trans with status 'DONT RETRY'</a>
+                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right" style="margin-left: 10px;">Bump trans with status 'DONT RETRY'</a>
+            @endif
+
+            @if($admin->id == 14 || $admin->id == 15 || $admin->id == 1)
+                <a href="{{ $is_retry_stopped ? url('cms/transactions/enable-retry') : url('cms/transactions/disable-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_stopped ? 'Enable' : 'Disable' }} Retry</a>
+
+                <!-- <a href="{{ $is_retry_paid_by_the_user_stopped ? url('cms/transactions/enable-paid-by-user-retry') : url('cms/transactions/disable-paid-by-user-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_paid_by_the_user_stopped ? 'Enable' : 'Disable' }} Paid By User Retry</a> -->
+            @endif
+            @if(session('edit-mode'))
+                <!-- <a href="{{ url('cms/transactions/normal-mode') }}" class="btn btn-success pull-right" style="margin-left: 10px;">Normal mode</a> -->
+            @else
+                <!-- <a href="{{ url('cms/transactions/edit-mode') }}" class="btn btn-success pull-right" style="margin-left: 10px;">Edit mode</a> -->
             @endif
         </div>
 
@@ -26,6 +37,16 @@
             <label class="alert alert-warning">Warning message on DV homepage is shown. Hide it from the button "Hide warning message on DV homepage".</label>
         </div>
     @endif
+    @if($is_retry_stopped)
+        <div>
+            <label class="alert alert-warning">Sending transactions to Payment Server is disabled for normal transactions and paid by the user transactions.</label>
+        </div>
+    @endif
+    @if($is_retry_paid_by_the_user_stopped)
+        <!-- <div>
+            <label class="alert alert-warning">Sending paid by user transactions to Payment Server is disabled.</label>
+        </div> -->
+    @endif
 
     @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
         <!-- <div>
@@ -34,7 +55,6 @@
     @endif
 
     <!-- end page-header -->
-
 
     <div class="row">
         <div class="col-md-12">
@@ -261,5 +281,22 @@
         }
 
     </style>
+
+    @if(session('edit-mode'))
+        <style type="text/css">         
+            .normal-mode {
+                display: none;
+            }
+
+        </style>
+    @endif
+
+    @if(!session('edit-mode'))
+        <style type="text/css">         
+            .edit-mode {
+                display: none;
+            }
+        </style>
+    @endif
 
 @endsection

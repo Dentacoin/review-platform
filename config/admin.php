@@ -36,6 +36,9 @@ return [
         ),
         'transactions' => array(
             'icon' => 'bitcoin',
+            'js' => array(
+                'transactions.js',
+            ),
         ),
         'ban_appeals' => array(
             'icon' => 'ban',
@@ -63,6 +66,7 @@ return [
             'subpages' => array(
                 'email_validations' => 'email_validations',
                 'invalid_emails' => 'invalid_emails',
+                'old_emails' => 'old_emails',
             ),
         ),
         'trp' => array(

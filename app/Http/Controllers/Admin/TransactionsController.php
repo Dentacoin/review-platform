@@ -13,10 +13,12 @@ use App\Models\DcnTransaction;
 use App\Models\UserAction;
 use App\Models\DcnCashout;
 use App\Models\DcnReward;
+use App\Models\GasPrice;
 use App\Models\User;
 
 use Carbon\Carbon;
 
+use Response;
 use Request;
 use Route;
 use Auth;
@@ -122,9 +124,14 @@ class TransactionsController extends AdminController
         $are_transactions_stopped = StopTransaction::find(1)->stopped;
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
+        $is_retry_stopped = GasPrice::find(1)->cron_new_trans > Carbon::now();
+        $is_retry_paid_by_the_user_stopped = GasPrice::find(1)->cron_paid_by_user_trans > Carbon::now();
+
         return $this->showView('transactions', array(
             'are_transactions_stopped' => $are_transactions_stopped,
             'is_warning_message_shown' => $is_warning_message_shown,
+            'is_retry_stopped' => $is_retry_stopped,
+            'is_retry_paid_by_the_user_stopped' => $is_retry_paid_by_the_user_stopped,
             'transactions' => $transactions,
             'total_count' => $total_count,
             'search_address' => $this->request->input('search-address'),
@@ -467,4 +474,112 @@ class TransactionsController extends AdminController
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
+
+    public function disableRetry() {
+
+        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
+
+            $allow = GasPrice::find(1);
+            $allow->cron_new_trans = Carbon::now()->addYears(5);
+            $allow->cron_paid_by_user_trans = Carbon::now()->addYears(5);
+            $allow->save();
+
+            $this->request->session()->flash('success-message', 'Disabled!' );
+        }
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function enableRetry() {
+
+        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
+            $allow = GasPrice::find(1);
+            $allow->cron_new_trans = Carbon::now()->addDays(-1);
+            $allow->cron_paid_by_user_trans = Carbon::now()->addDays(-1);
+            $allow->save();
+
+            $this->request->session()->flash('success-message', 'Enabled!' );
+        }
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    // public function disablePaidByUserRetry() {
+
+    //     if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
+    //         $allow = GasPrice::find(1);
+    //         $allow->cron_paid_by_user_trans = Carbon::now()->addYears(5);
+    //         $allow->save();
+
+    //         $this->request->session()->flash('success-message', 'Disabled!' );
+    //     }
+
+    //     return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    // }
+
+    // public function enablePaidByUserRetry() {
+
+    //     if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
+    //         $allow = GasPrice::find(1);
+    //         $allow->cron_paid_by_user_trans = Carbon::now()->addDays(-1);
+    //         $allow->save();
+
+    //         $this->request->session()->flash('success-message', 'Enabled!' );
+    //     }
+
+    //     return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    // }
+
+    public function editMode() {
+        session([
+            'edit-mode' => true
+        ]); 
+
+        $this->request->session()->flash('success-message', 'Edit mode enabled!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function normalMode() {
+        session([
+            'edit-mode' => false
+        ]); 
+
+        $this->request->session()->flash('success-message', 'Normal mode enabled!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function edit($id) {
+        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
+            $item = DcnTransaction::find($id);
+
+            if(Request::isMethod('post')) {
+                $item->tx_hash = request('tx_hash');
+                if($item->is_paid_by_the_user) {
+                    $item->allowance_hash = request('allowance_hash');
+                }
+                $item->status = request('status');
+                $item->save();
+
+                $this->request->session()->flash('success-message', 'Saved!' );
+                return redirect('cms/transactions');
+            }
+
+            // if(!empty(request('trans-id'))) {
+            //     $trans = DcnTransaction::find(request('trans-id'));
+
+            //     if(!empty($trans)) {
+            //         dd(request()->all());
+            //     }
+            // }
+
+            // return Response::json( [
+            //     'success' => true
+            // ] );
+
+            return $this->showView('transactions-edit', array(
+                'item' => $item,
+            ));
+        }
+    }
+
 }

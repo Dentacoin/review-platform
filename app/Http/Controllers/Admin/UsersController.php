@@ -896,13 +896,19 @@ class UsersController extends AdminController {
 
      public function deleteDatabase( $id ) {
 
-        if(Request::getHost() == 'urgent.dentavox.dentacoin.com' || Request::getHost() == 'urgent.reviews.dentacoin.com') {
+        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
 
             $item = User::find($id);
 
+            if($item->logins->isNotEmpty()) {
+                foreach ($item->logins as $login) {
+                    $login->forceDelete();
+                }
+            }
+
             $item->forceDelete();
 
-            $this->request->session()->flash('success-message', 'Deleted' );
+            $this->request->session()->flash('success-message', 'Deleted forever' );
             return redirect('cms/users');
         }
      }

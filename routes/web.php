@@ -117,6 +117,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('trp/scrape-google-dentists/{id}', 	'ScrapeGoogleDentistsController@download');
 
 	Route::any('transactions', 						'TransactionsController@list');
+	Route::any('transactions/edit/{id}', 			'TransactionsController@edit');
 	Route::any('transactions/bump/{id}', 			'TransactionsController@bump');
 	Route::any('transactions/stop/{id}', 			'TransactionsController@stop');
 	Route::any('transactions/delete/{id}', 			'TransactionsController@delete');
@@ -133,7 +134,14 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('transactions/scammers', 			'TransactionsController@scammers');
 	Route::get('transactions/scammers/{id}', 		'TransactionsController@scammersChecked');
 	Route::get('transactions/scammers-balance', 	'TransactionsController@scammersBalance');
-	Route::get('transactions/scammers-balance/{id}', 'TransactionsController@scammersBalanceChecked');
+	Route::get('transactions/scammers-balance/{id}','TransactionsController@scammersBalanceChecked');
+	Route::get('transactions/disable-retry', 		'TransactionsController@disableRetry');
+	Route::get('transactions/enable-retry', 		'TransactionsController@enableRetry');
+	// Route::get('transactions/disable-paid-by-user-retry', 		'TransactionsController@disablePaidByUserRetry');
+	// Route::get('transactions/enable-paid-by-user-retry', 		'TransactionsController@enablePaidByUserRetry');
+	Route::get('transactions/edit-mode', 			'TransactionsController@editMode');
+	Route::get('transactions/normal-mode', 			'TransactionsController@normalMode');
+
 
 	Route::get('spending', 							'SpendingController@list');
 

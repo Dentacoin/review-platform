@@ -27,3 +27,8 @@
 		Delete
 	</a>
 @endif
+@if($admin->id == 14 || $admin->id == 15 || $admin->id == 1)
+	<a class="btn btn-info" href="{{ url('cms/transactions/edit/'.$item->id) }}">
+		Edit
+	</a>
+@endif

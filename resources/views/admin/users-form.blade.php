@@ -766,8 +766,8 @@
                                             </a>
                                         @endif
 
-                                        @if($item->id != 3 && !empty($dev_domain))
-                                            <a class="btn btn-sm btn-danger form-control user-b" href="{{ url('cms/users/delete-database/'.$item->id) }}" style="margin-top: 10px;background: black;">
+                                        @if($item->id != 3 && ($admin->id == 14 || $admin->id == 15 || $admin->id == 1))
+                                            <a class="btn btn-sm btn-danger form-control user-b" href="{{ url('cms/users/delete-database/'.$item->id) }}" onclick="return confirm('Are you sure you want to DELETE this user? Тhis cannot be reversed!!!');" style="margin-top: 10px;background: black;">
                                                 Delete from database
                                             </a>
                                         @endif
