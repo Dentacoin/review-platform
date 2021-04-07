@@ -91,7 +91,9 @@
 				                    	<tr>
 				                    		<td>
                                                 <div class="ban-appeal-wrapper">
-                                                    <img src="{{ url('img/info.png') }}" class="ban-appeal-info" user-id="{{ $item->user->id }}" style="max-width: 15px;">
+                                                    <div class="img-wrap ban-appeal-info" user-id="{{ $item->user->id }}">
+                                                        <img src="{{ url('img/info.png') }}" style="max-width: 15px;">
+                                                    </div>
 
                                                     <div class="ban-appeal-tooltip">
                                                     </div>
@@ -272,6 +274,11 @@
         border-radius: 5px;
         background: white;
         z-index: 1000;
+    }
+
+    .ban-appeal-wrapper .img-wrap {
+        padding: 5px;
+        padding-left: 0px;
     }
 
     .ban-appeal-wrapper:hover .ban-appeal-tooltip {
