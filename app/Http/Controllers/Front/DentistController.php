@@ -447,6 +447,7 @@ class DentistController extends FrontController {
                             }
 
                             $ret['success'] = true;
+                            $ret['review_id'] = $review->id;
                         }
                     }
                 }
@@ -1138,7 +1139,10 @@ class DentistController extends FrontController {
                     if(!empty($last_ask)) {
                         $last_ask->created_at = Carbon::now();
                         $last_ask->status = 'waiting';
-                        $last_ask->on_review = true;
+                        if (!empty($verification)) {
+                            $last_ask->on_review = true;
+                            $last_ask->review_id = $verification;
+                        }
                         $last_ask->save();
                     } else {
                         $ask = new UserAsk;
@@ -1147,6 +1151,7 @@ class DentistController extends FrontController {
                         $ask->status = 'waiting';
                         if (!empty($verification)) {
                             $ask->on_review = true;
+                            $ask->review_id = $verification;
                         }
                         $ask->save();
                     }
@@ -1736,6 +1741,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     $user_ask->dentist_id = $main_dentist_id;
                     $user_ask->status = 'yes';
                     $user_ask->on_review = true;
+                    $user_ask->review_id = $review->id;
                     $user_ask->hidden = true;
                     $user_ask->save();
                 }

@@ -259,6 +259,11 @@ $(document).ready(function(){
         }
     } );
 
+    $('.show-review').click( function(e) {
+        var id = $(this).attr('review-id');
+        showFullReview(id, $('#cur_dent_id').val());
+    } );
+
     $('.scroll-to-map').click( function() {
         $('.profile-tabs .tab[data-tab="about"]').trigger('click');
         $('html, body').animate({

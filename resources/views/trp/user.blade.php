@@ -1330,11 +1330,14 @@
 			            			<th style="width: 20%;">
 			            				{{ trans('trp.page.profile.asks.list-date') }}
 			            			</th>
-			            			<th style="width: 30%;">
+			            			<th style="width: 20%;">
 			            				{{ trans('trp.page.profile.asks.list-name') }}
 			            			</th>
-			            			<th style="width: 40%;">
+			            			<th style="width: 30%;">
 			            				{{ trans('trp.page.profile.asks.list-email') }}
+			            			</th>
+			            			<th style="width: 20%;">
+			            				{{ trans('trp.page.profile.asks.list-note') }}
 			            			</th>
 			            			<th style="width: 10%;">
 			            				{{ trans('trp.page.profile.asks.list-status') }}
@@ -1356,6 +1359,15 @@
 											</td>
 											<td>
 												{{ $ask->user? $ask->user->email : 'deleted user' }}
+											</td>
+											<td>
+												@if($ask->on_review && !empty(\App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first()))
+													<a review-id="{{ \App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first()->id }}" href="javascript:;" class="show-review">
+														See review
+													</a>
+												@else
+													Invite Request
+												@endif
 											</td>
 											<td>
 												@if($ask->status=='waiting')
@@ -1394,10 +1406,10 @@
 			            			<th style="width: 20%;">
 			            				{{ trans('trp.page.profile.invite.list-date') }}
 			            			</th>
-			            			<th style="width: 30%;">
+			            			<th style="width: 20%;">
 			            				{{ trans('trp.page.profile.invite.list-name') }}
 			            			</th>
-			            			<th style="width: 40%;">
+			            			<th style="width: 50%;">
 			            				{{ trans('trp.page.profile.invite.list-email') }}
 			            			</th>
 			            			<th style="width: 10%;">

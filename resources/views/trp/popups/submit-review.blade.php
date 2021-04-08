@@ -347,7 +347,7 @@
 					            		Request Verification
 					            	</a> -->
 					            @endif
-				            	<a href="{{ getLangUrl('dentist/'.$item->slug.'/ask/1') }}" class="button ask-dentist-submit-review">
+				            	<a href="{{ getLangUrl('dentist/'.$item->slug.'/ask/') }}" original-href="{{ getLangUrl('dentist/'.$item->slug.'/ask/') }}" class="button ask-dentist-submit-review">
 									{!! nl2br(trans('trp.popup.submit-review-popup.done-non-trusted-invite')) !!}
 								</a>
 				            @endif

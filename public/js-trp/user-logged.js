@@ -1497,6 +1497,7 @@ $(document).ready(function(){
                 console.log(data, data.imgs_urls);
                 if(data.success) {
                     $('#review-confirmed').show();
+                    $('#review-confirmed').find('.ask-dentist-submit-review').attr('href', $('#review-confirmed').find('.ask-dentist-submit-review').attr('original-href') + data.review_id);
                     $('#review-submit-button').hide();
 
                     that.find('.question:not(.review-desc)').hide();

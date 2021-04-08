@@ -16,6 +16,7 @@ class UserAsk extends Model {
         'dentist_id',
         'status',
         'on_review',
+        'review_id',
         'hidden',
     ];
 
