@@ -1361,7 +1361,7 @@
 												{{ $ask->user? $ask->user->email : 'deleted user' }}
 											</td>
 											<td>
-												@if($ask->on_review && !empty(\App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first()))
+												@if($ask->on_review && !empty($ask->user) && !empty(\App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first()))
 													<a review-id="{{ \App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first()->id }}" href="javascript:;" class="show-review">
 														See review
 													</a>
