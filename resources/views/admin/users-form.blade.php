@@ -1744,7 +1744,7 @@
                     <h4 class="modal-title">Reject Appeal</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('cms/ban_appeals/reject/'.$item->banAppeal->id) }}" method="post">
+                    <form action="{{ url('cms/ban_appeals/reject/') }}" original-action="{{ url('cms/ban_appeals/reject/') }}" method="post">
                         <label for="multiple-accounts" style="display: block;">
                             <input type="radio" name="reject_radio" id="multiple-accounts" value="Multiple accounts">
                             Multiple accounts
