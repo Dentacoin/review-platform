@@ -1279,60 +1279,60 @@ class IndexController extends ApiController {
 					        $reward->save();
 	        				$ret['balance'] = $user->getTotalBalance('vox');
 
-	        				VoxAnswer::where('user_id', $user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
+	        				// VoxAnswer::where('user_id', $user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
-	        				$vox->recalculateUsersPercentage($user);
+	        				// $vox->recalculateUsersPercentage($user);
 
-	                        if($user->invited_by && !empty($user->invitor)) {
+	            //             if($user->invited_by && !empty($user->invitor)) {
 
-	                        	$inv = UserInvite::where('user_id', $user->invited_by)
-					            ->where(function ($query) {
-					                $query->where('platform', '!=', 'trp')
-					                ->orWhere('platform', null);
-					            })
-					            ->where('invited_id', $user->id)
-					            ->whereNull('rewarded')
-					            ->first();
+	            //             	$inv = UserInvite::where('user_id', $user->invited_by)
+					        //     ->where(function ($query) {
+					        //         $query->where('platform', '!=', 'trp')
+					        //         ->orWhere('platform', null);
+					        //     })
+					        //     ->where('invited_id', $user->id)
+					        //     ->whereNull('rewarded')
+					        //     ->first();
 
-	                            if(!empty($inv) && !$inv->dont_rewarded) {
+	            //                 if(!empty($inv) && !$inv->dont_rewarded) {
 
-	                            	$reward = new DcnReward;
-							        $reward->user_id = $user->invited_by;
-							        $reward->reference_id = $user->id;
-							        $reward->type = 'invitation';
-							        $reward->platform = 'vox';
-							        $reward->reward = Reward::getReward('reward_invite');
+	            //                 	$reward = new DcnReward;
+							      //   $reward->user_id = $user->invited_by;
+							      //   $reward->reference_id = $user->id;
+							      //   $reward->type = 'invitation';
+							      //   $reward->platform = 'vox';
+							      //   $reward->reward = Reward::getReward('reward_invite');
 
-							        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-					                $dd = new DeviceDetector($userAgent);
-					                $dd->parse();
+							      //   $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+					        //         $dd = new DeviceDetector($userAgent);
+					        //         $dd->parse();
 
-					                if ($dd->isBot()) {
-					                    // handle bots,spiders,crawlers,...
-					                    $reward->device = $dd->getBot();
-					                } else {
-					                    $reward->device = $dd->getDeviceName();
-					                    $reward->brand = $dd->getBrandName();
-					                    $reward->model = $dd->getModel();
-	        							$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-					                }
+					        //         if ($dd->isBot()) {
+					        //             // handle bots,spiders,crawlers,...
+					        //             $reward->device = $dd->getBot();
+					        //         } else {
+					        //             $reward->device = $dd->getDeviceName();
+					        //             $reward->brand = $dd->getBrandName();
+					        //             $reward->model = $dd->getModel();
+	        				// 			$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+					        //         }
 
-							        $reward->save();
+							      //   $reward->save();
 
-	                                $inv->rewarded = true;
-	                                $inv->save();
+	            //                     $inv->rewarded = true;
+	            //                     $inv->save();
 	                                
-	                                if($user->invitor->is_dentist) {
-	                                    $user->invitor->sendGridTemplate( 82, [
-	                                        'who_joined_name' => $user->getNames()
-	                                    ], 'vox' );
-	                                } else {
-	                                	$user->invitor->sendGridTemplate( 113, [
-	                                        'who_joined_name' => $user->getNames()
-	                                    ], 'vox' );
-	                                }
-	                            }
-	                        }
+	            //                     if($user->invitor->is_dentist) {
+	            //                         $user->invitor->sendGridTemplate( 82, [
+	            //                             'who_joined_name' => $user->getNames()
+	            //                         ], 'vox' );
+	            //                     } else {
+	            //                     	$user->invitor->sendGridTemplate( 113, [
+	            //                             'who_joined_name' => $user->getNames()
+	            //                         ], 'vox' );
+	            //                     }
+	            //                 }
+	            //             }
 
 	                        if ($user->platform == 'external') {
 	                            $curl = curl_init();
