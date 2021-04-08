@@ -1281,7 +1281,7 @@ class IndexController extends ApiController {
 
 	        				//---
 
-	        				// VoxAnswer::where('user_id', $user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
+	        				VoxAnswer::where('user_id', $user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
 	        				// $vox->recalculateUsersPercentage($user);
 
