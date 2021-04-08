@@ -75,7 +75,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Message</label>
                         <div class="col-md-10">
-                            {{ Form::textarea('message', null, array('class' => 'form-control', 'style' => 'max-height: 60px !important;'), 'placeholder' => 'Write here any comment about the changes if you want..') }}
+                            {{ Form::textarea('message', null, array('class' => 'form-control', 'style' => 'max-height: 60px !important;', 'placeholder' => 'Write here any comment about the changes if you want..')) }}
                         </div>
                     </div>
 
