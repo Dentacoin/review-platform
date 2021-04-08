@@ -567,11 +567,9 @@ class Vox extends Model {
         if(!empty($this->country_percentage) ) {
             $country = $user->country_id;
 
-            $respondents_count = $this->realRespondentsCountForAdminPurposes();
+            $respondents_users = DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->get();
 
-            if ($respondents_count > 9) {
-                
-                $respondents_users = DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->get();
+            if ($respondents_users->count() > 9) {
 
                 $arr = [];
                 foreach ($respondents_users as $ru) {
