@@ -910,7 +910,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach($item->allBanAppeals as $ba)
-                                            <tr>
+                                            <tr appeal-id="{{ $ba->id }}">
                                                 <td>
                                                     {{ $ba->link }}
                                                 </td>
@@ -928,7 +928,7 @@
                                                 <td>
                                                     {{ date('d.m.Y, H:i:s', $ba->created_at->timestamp) }}
                                                 </td>
-                                                <td>
+                                                <td class="actions">
                                                     @if($ba->status == 'new')
                                                         <a class="btn btn-sm btn-primary approve-appeal" href="javascript:;" data-toggle="modal" data-target="#approvedModal" appeal-id="{{ $ba->id }}">
                                                             Approve
@@ -1744,7 +1744,7 @@
                     <h4 class="modal-title">Reject Appeal</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('cms/ban_appeals/reject/') }}" original-action="{{ url('cms/ban_appeals/reject/') }}" method="post">
+                    <form class="ban-appeal-form" action="{{ url('cms/ban_appeals/reject/') }}" original-action="{{ url('cms/ban_appeals/reject/') }}" method="post" appeal-id="">
                         <label for="multiple-accounts" style="display: block;">
                             <input type="radio" name="reject_radio" id="multiple-accounts" value="Multiple accounts">
                             Multiple accounts
@@ -1764,6 +1764,8 @@
 
                         <textarea style="display: none;" class="form-control" name="rejected_reason" placeholder="Write the reason why you want to reject this appeal"></textarea>
                         <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Reject</button>
+
+                        <label class="alert alert-danger appeal-error" style="display: none;margin-top: 10px;"></label>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -1783,7 +1785,7 @@
                     <h4 class="modal-title">Pending Appeal</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('cms/ban_appeals/pending/') }}" original-action="{{ url('cms/ban_appeals/pending/') }}" method="post">
+                    <form class="ban-appeal-form" action="{{ url('cms/ban_appeals/pending/') }}" original-action="{{ url('cms/ban_appeals/pending/') }}" method="post" appeal-id="">
 
                         <label for="image" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
                             <input id="image" type="checkbox" name="pending_info[]" value="image" style="margin-top: 0px;margin-right: 4px;" />
@@ -1795,6 +1797,7 @@
                         </label>
 
                         <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Send email</button>
+                        <label class="alert alert-danger appeal-error" style="display: none;margin-top: 10px;"></label>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -1814,7 +1817,7 @@
                     <h4 class="modal-title">Approve appeal</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('cms/ban_appeals/approve/') }}" original-action="{{ url('cms/ban_appeals/approve/') }}" method="post">
+                    <form class="ban-appeal-form" action="{{ url('cms/ban_appeals/approve/') }}" original-action="{{ url('cms/ban_appeals/approve/') }}" method="post" appeal-id="">
                         <label for="legit-proof" style="display: block;">
                             <input type="radio" name="approve_radio" id="legit-proof" value="Legit proof">
                             Legit proof
@@ -1833,6 +1836,7 @@
                         </label>
                         <textarea style="display: none;" class="form-control" name="approved_reason" placeholder="Write a reason why you want to approve this appeal"></textarea>
                         <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Approve</button>
+                        <label class="alert alert-danger appeal-error" style="display: none;margin-top: 10px;"></label>
                     </form>
                 </div>
                 <div class="modal-footer">

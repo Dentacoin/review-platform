@@ -359,17 +359,21 @@ $(document).ready(function(){
     $('.reject-appeal').click( function() {
 		var action = $('#rejectedModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
 		$('#rejectedModal form').attr('action' , action);
+		$('#rejectedModal form').attr('appeal-id' , $(this).attr('appeal-id'));
 	});
 
 	$('.approve-appeal').click( function() {
+
 		var action = $('#approvedModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
 		$('#approvedModal form').attr('action' , action);
+		$('#approvedModal form').attr('appeal-id' , $(this).attr('appeal-id'));
 	});
 
 	$('.pending-appeal').click( function() {
 		console.log('dsfdsf');
 		var action = $('#pendingModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
 		$('#pendingModal form').attr('action' , action);
+		$('#pendingModal form').attr('appeal-id' , $(this).attr('appeal-id'));
 	});
 
 	$('.ban-appeal-info').click( function() {
@@ -408,6 +412,44 @@ $(document).ready(function(){
 			$('[name="rejected_reason"]').hide();
 		}
 	});
+
+	$('.ban-appeal-form').submit( function(e) {
+        e.preventDefault();
+
+        $(this).find('.appeal-error').hide();
+        var formData = new FormData(this);
+
+        $.ajax({
+	        url: $(this).attr('action'),
+	        type: 'POST',
+	        data: formData,
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    }).done( (function (data) {
+			console.log(data);
+
+			if(data.success) {
+				$('.modal').modal('hide');
+				if(data.type == 'approved') {
+					$('tr[appeal-id="'+$(this).attr('appeal-id')+'"]').find('.actions').html('Approved');
+				} else if(data.type == 'rejected') {
+					$('tr[appeal-id="'+$(this).attr('appeal-id')+'"]').find('.actions').html('Rejected');
+				} else if(data.type == 'pending') {
+					$('tr[appeal-id="'+$(this).attr('appeal-id')+'"]').find('.actions').html('Pending');
+				}
+				// $(this).attr('appeal-id')
+			} else {
+				console.log($(this));
+				$(this).find('.appeal-error').html(data.message);
+				$(this).find('.appeal-error').show();
+			}
+
+	    }).bind(this) ).fail(function (data) {
+			console.log(data);
+	    });
+
+    } );
 
 
 });
