@@ -1247,124 +1247,124 @@ class IndexController extends ApiController {
 	    				}
 
 				        if(count($answered) == count($vox->questions)) {
-				    //     	$reward = DcnReward::where('user_id', $user->id)->where('reference_id', $vox->id)->where('platform', 'vox')->where('type', 'survey')->first();
+				        	$reward = DcnReward::where('user_id', $user->id)->where('reference_id', $vox->id)->where('platform', 'vox')->where('type', 'survey')->first();
 
-				    //     	if (empty($reward)) {
-								// $reward = new DcnReward;
-						  //       $reward->user_id = $user->id;
-						  //       $reward->reference_id = $vox->id;
-						  //       $reward->platform = 'vox';
-						  //       $reward->type = 'survey';
-						  //   }
-					   //      $reward->reward = $vox->getRewardForUser($user->id);
-					   //      $start = $list->first()->created_at;
-					   //      $diff = Carbon::now()->diffInSeconds( $start );
-					   //      $normal = count($vox->questions)*2;
-					   //      $reward->seconds = $diff;
+				        	if (empty($reward)) {
+								$reward = new DcnReward;
+						        $reward->user_id = $user->id;
+						        $reward->reference_id = $vox->id;
+						        $reward->platform = 'vox';
+						        $reward->type = 'survey';
+						    }
+					        $reward->reward = $vox->getRewardForUser($user->id);
+					        $start = $list->first()->created_at;
+					        $diff = Carbon::now()->diffInSeconds( $start );
+					        $normal = count($vox->questions)*2;
+					        $reward->seconds = $diff;
 
-					   //      $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-			     //            $dd = new DeviceDetector($userAgent);
-			     //            $dd->parse();
+					        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+			                $dd = new DeviceDetector($userAgent);
+			                $dd->parse();
 
-			     //            if ($dd->isBot()) {
-			     //                // handle bots,spiders,crawlers,...
-			     //                $reward->device = $dd->getBot();
-			     //            } else {
-			     //                $reward->device = $dd->getDeviceName();
-			     //                $reward->brand = $dd->getBrandName();
-			     //                $reward->model = $dd->getModel();
-	       //  					$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-			     //            }
+			                if ($dd->isBot()) {
+			                    // handle bots,spiders,crawlers,...
+			                    $reward->device = $dd->getBot();
+			                } else {
+			                    $reward->device = $dd->getDeviceName();
+			                    $reward->brand = $dd->getBrandName();
+			                    $reward->model = $dd->getModel();
+	        					$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+			                }
 
-					   //      $reward->save();
-	       //  				$ret['balance'] = $user->getTotalBalance('vox');
+					        $reward->save();
+	        				$ret['balance'] = $user->getTotalBalance('vox');
 
-	       //  				VoxAnswer::where('user_id', $user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
+	        				VoxAnswer::where('user_id', $user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
-	       //  				$vox->recalculateUsersPercentage($user);
+	        				$vox->recalculateUsersPercentage($user);
 
-	       //                  if($user->invited_by && !empty($user->invitor)) {
+	                        if($user->invited_by && !empty($user->invitor)) {
 
-	       //                  	$inv = UserInvite::where('user_id', $user->invited_by)
-					   //          ->where(function ($query) {
-					   //              $query->where('platform', '!=', 'trp')
-					   //              ->orWhere('platform', null);
-					   //          })
-					   //          ->where('invited_id', $user->id)
-					   //          ->whereNull('rewarded')
-					   //          ->first();
+	                        	$inv = UserInvite::where('user_id', $user->invited_by)
+					            ->where(function ($query) {
+					                $query->where('platform', '!=', 'trp')
+					                ->orWhere('platform', null);
+					            })
+					            ->where('invited_id', $user->id)
+					            ->whereNull('rewarded')
+					            ->first();
 
-	       //                      if(!empty($inv) && !$inv->dont_rewarded) {
+	                            if(!empty($inv) && !$inv->dont_rewarded) {
 
-	       //                      	$reward = new DcnReward;
-							 //        $reward->user_id = $user->invited_by;
-							 //        $reward->reference_id = $user->id;
-							 //        $reward->type = 'invitation';
-							 //        $reward->platform = 'vox';
-							 //        $reward->reward = Reward::getReward('reward_invite');
+	                            	$reward = new DcnReward;
+							        $reward->user_id = $user->invited_by;
+							        $reward->reference_id = $user->id;
+							        $reward->type = 'invitation';
+							        $reward->platform = 'vox';
+							        $reward->reward = Reward::getReward('reward_invite');
 
-							 //        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-					   //              $dd = new DeviceDetector($userAgent);
-					   //              $dd->parse();
+							        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+					                $dd = new DeviceDetector($userAgent);
+					                $dd->parse();
 
-					   //              if ($dd->isBot()) {
-					   //                  // handle bots,spiders,crawlers,...
-					   //                  $reward->device = $dd->getBot();
-					   //              } else {
-					   //                  $reward->device = $dd->getDeviceName();
-					   //                  $reward->brand = $dd->getBrandName();
-					   //                  $reward->model = $dd->getModel();
-	       //  							$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-					   //              }
+					                if ($dd->isBot()) {
+					                    // handle bots,spiders,crawlers,...
+					                    $reward->device = $dd->getBot();
+					                } else {
+					                    $reward->device = $dd->getDeviceName();
+					                    $reward->brand = $dd->getBrandName();
+					                    $reward->model = $dd->getModel();
+	        							$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+					                }
 
-							 //        $reward->save();
+							        $reward->save();
 
-	       //                          $inv->rewarded = true;
-	       //                          $inv->save();
+	                                $inv->rewarded = true;
+	                                $inv->save();
 	                                
-	       //                          if($user->invitor->is_dentist) {
-	       //                              $user->invitor->sendGridTemplate( 82, [
-	       //                                  'who_joined_name' => $user->getNames()
-	       //                              ], 'vox' );
-	       //                          } else {
-	       //                          	$user->invitor->sendGridTemplate( 113, [
-	       //                                  'who_joined_name' => $user->getNames()
-	       //                              ], 'vox' );
-	       //                          }
-	       //                      }
-	       //                  }
+	                                if($user->invitor->is_dentist) {
+	                                    $user->invitor->sendGridTemplate( 82, [
+	                                        'who_joined_name' => $user->getNames()
+	                                    ], 'vox' );
+	                                } else {
+	                                	$user->invitor->sendGridTemplate( 113, [
+	                                        'who_joined_name' => $user->getNames()
+	                                    ], 'vox' );
+	                                }
+	                            }
+	                        }
 
-	       //                  if ($user->platform == 'external') {
-	       //                      $curl = curl_init();
-								// curl_setopt_array($curl, array(
-								// 	CURLOPT_RETURNTRANSFER => 1,
-								// 	CURLOPT_POST => 1,
-								// 	CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
-								// 	CURLOPT_SSL_VERIFYPEER => 0,
-								//     CURLOPT_POSTFIELDS => array(
-								//         'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
-								//     )
-								// ));
+	                        if ($user->platform == 'external') {
+	                            $curl = curl_init();
+								curl_setopt_array($curl, array(
+									CURLOPT_RETURNTRANSFER => 1,
+									CURLOPT_POST => 1,
+									CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
+									CURLOPT_SSL_VERIFYPEER => 0,
+								    CURLOPT_POSTFIELDS => array(
+								        'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
+								    )
+								));
 								 
-								// $resp = json_decode(curl_exec($curl));
-								// curl_close($curl);
+								$resp = json_decode(curl_exec($curl));
+								curl_close($curl);
 
-	       //                  } else if(!empty($user->patient_of)) {
+	                        } else if(!empty($user->patient_of)) {
 
-	       //                  	$curl = curl_init();
-								// curl_setopt_array($curl, array(
-								// 	CURLOPT_RETURNTRANSFER => 1,
-								// 	CURLOPT_POST => 1,
-								// 	CURLOPT_URL => 'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications',
-								// 	CURLOPT_SSL_VERIFYPEER => 0,
-								//     CURLOPT_POSTFIELDS => array(
-								//         'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
-								//     )
-								// ));
+	                        	$curl = curl_init();
+								curl_setopt_array($curl, array(
+									CURLOPT_RETURNTRANSFER => 1,
+									CURLOPT_POST => 1,
+									CURLOPT_URL => 'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications',
+									CURLOPT_SSL_VERIFYPEER => 0,
+								    CURLOPT_POSTFIELDS => array(
+								        'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
+								    )
+								));
 								 
-								// $resp = json_decode(curl_exec($curl));
-								// curl_close($curl);
-	       //                  }
+								$resp = json_decode(curl_exec($curl));
+								curl_close($curl);
+	                        }
 
 				        }
 	        		} else {
