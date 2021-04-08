@@ -554,7 +554,7 @@ class TransactionsController extends AdminController
 
             if(Request::isMethod('post')) {
 
-                if((!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) || (!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) || (!empty(request('status')) && request('status') != $item->status)) {
+                if((!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) || (!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) || (!empty(request('status')) && request('status') != $item->status) || (!empty(request('message')) && request('message') != $item->message)) {
 
                     $dcn_history = new DcnTransactionHistory;
                     $dcn_history->transaction_id = $item->id;
@@ -572,11 +572,16 @@ class TransactionsController extends AdminController
                         $dcn_history->allowance_hash = request('allowance_hash');
                     }
 
+                    if(!empty(request('message')) && request('message') != $item->message) {
+                        $dcn_history->message = request('message');
+                    }
+
                     $dcn_history->history_message = 'Edited by admin';
                     $dcn_history->save();
                 }
 
                 $item->tx_hash = request('tx_hash');
+                $item->message = request('message');
                 if($item->is_paid_by_the_user) {
                     $item->allowance_hash = request('allowance_hash');
                 }
