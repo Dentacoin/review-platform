@@ -32,6 +32,9 @@ class UserAsk extends Model {
     public function dentist() {
         return $this->hasOne('App\Models\User', 'id', 'dentist_id')->withTrashed();
     }
+    public function review() {
+        return $this->hasOne('App\Models\Review', 'id', 'review_id')->withTrashed();
+    }
 }
 
 
