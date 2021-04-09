@@ -319,7 +319,7 @@
 			@if(empty(request('app')))
 				<div class="flex flex-text-center">
 					<a href="{{ getLangUrl('dental-survey-stats') }}" class="white-button">Back to all stats</a>
-					@if(!in_array($vox->id, $taken))
+					@if(!in_array($vox->id, $taken) && $vox->type != 'hidden')
 						<a class="blue-button" href="{!! !empty($user) ? $vox->getLink() : "javascript:showPopup('login-register-popup')" !!}">
 							{{ trans('vox.common.take-the-test') }}
 						</a>
