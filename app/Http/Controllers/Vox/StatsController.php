@@ -59,8 +59,8 @@ class StatsController extends FrontController {
 
             $searchValues = preg_split('/\s+/', $name, -1, PREG_SPLIT_NO_EMPTY); 
 
-            $voxes = Vox::where('type', '!=', 'hidden')
-            ->with('stats_main_question')
+            // where('type', '!=', 'hidden')
+            $voxes = Vox::with('stats_main_question')
             ->where('has_stats', 1)
             ->with('translations')
             ->whereHas('translations', function ($query) use ($searchValues) {
@@ -76,9 +76,9 @@ class StatsController extends FrontController {
 
             $voxes = Vox::with('stats_main_question')->where('has_stats', 1)->with('translations');
 
-            if (!Auth::guard('admin')->user()) {
-                $voxes = $voxes->where('type', '!=', 'hidden');
-            }
+            // if (!Auth::guard('admin')->user()) {
+            //     $voxes = $voxes->where('type', '!=', 'hidden');
+            // }
 
             $voxes = $voxes->get();
 
