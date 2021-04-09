@@ -842,7 +842,7 @@ class Vox extends Model {
         }
 
         if( $q->type == 'single_choice' || $q->type == 'number') {
-            $cols[] = in_array('relation', $demographics) && $q->used_for_stats == 'dependency' ? $q->questionWithoutTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+            $cols[] = in_array('relation', $demographics) && $q->used_for_stats == 'dependency' ? $q->questionWithoutTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : (!empty($q->stats_title) ? $q->stats_title : $q->questionWithoutTooltips() ));
             $cols2[] = '';
 
         } else if( $q->type == 'scale' ) {
@@ -853,7 +853,7 @@ class Vox extends Model {
         } else if( $q->type == 'rank' ) {
             $list = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
             foreach ($list as $l) {
-                $cols[] = in_array('relation', $demographics) && $q->used_for_stats == 'dependency' ? $q->questionWithoutTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                $cols[] = in_array('relation', $demographics) && $q->used_for_stats == 'dependency' ? $q->questionWithoutTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : (!empty($q->stats_title) ? $q->stats_title : $q->questionWithoutTooltips() ));
                 $cols2[] = $q->removeAnswerTooltip(mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l);
             }
 
@@ -870,7 +870,7 @@ class Vox extends Model {
             }
 
             foreach ($list_done as $l) {
-                $cols[] = in_array('relation', $demographics) && $q->used_for_stats == 'dependency' ? $q->questionWithoutTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                $cols[] = in_array('relation', $demographics) && $q->used_for_stats == 'dependency' ? $q->questionWithoutTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : (!empty($q->stats_title) ? $q->stats_title : $q->questionWithoutTooltips() ));
                 $cols2[] = $q->removeAnswerTooltip(mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l);
             }
         }
@@ -889,13 +889,13 @@ class Vox extends Model {
             $breakdown_results = $all_results;
         }
 
-        if($q->type == 'scale') {
-            $results_resp = clone $results;
-            $results_resp = $results_resp->where('scale', $scale_for)->groupBy('user_id')->get()->count();
-        } else {
+        // if($q->type == 'scale') {
+        //     $results_resp = clone $results;
+        //     $results_resp = $results_resp->where('scale', $scale_for)->groupBy('user_id')->get()->count();
+        // } else {
             $results_resp = clone $results;
             $results_resp = $results_resp->groupBy('user_id')->get()->count();
-        }
+        // }
         // dd($results_resp, $results);
 
         $cols_title = [
@@ -906,9 +906,9 @@ class Vox extends Model {
         if(!empty($is_admin)) {
             if(!empty($scale_for)) {
                 $list = json_decode($q->answers, true);
-                $t_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[($scale_for - 1)].']';
+                $t_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : (!empty($q->stats_title) ? $q->stats_title : $q->questionWithoutTooltips() )).' ['.$list[($scale_for - 1)].']';
             } else {
-                $t_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                $t_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : (!empty($q->stats_title) ? $q->stats_title : $q->questionWithoutTooltips() ));
             }
 
             $rows = [
@@ -1197,9 +1197,9 @@ class Vox extends Model {
 
                 if(!empty($scale_for)) {
                     $list = json_decode($q->answers, true);
-                    $title_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[($scale_for - 1)].']';
+                    $title_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : (!empty($q->stats_title) ? $q->stats_title : $q->questionWithoutTooltips() )).' ['.$list[($scale_for - 1)].']';
                 } else {
-                    $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                    $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : (!empty($q->stats_title) ? $q->stats_title : $q->questionWithoutTooltips() ));
                 }
 
                 $cols_q_title_second = [
@@ -1421,9 +1421,9 @@ class Vox extends Model {
 
                 if(!empty($scale_for)) {
                     $list = json_decode($q->answers, true);
-                    $title_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[($scale_for - 1)].']';
+                    $title_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : (!empty($q->stats_title) ? $q->stats_title : $q->questionWithoutTooltips() )).' ['.$list[($scale_for - 1)].']';
                 } else {
-                    $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                    $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : (!empty($q->stats_title) ? $q->stats_title : $q->questionWithoutTooltips() ));
                 }
 
                 $cols_q_title_second = [
