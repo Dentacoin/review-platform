@@ -83,7 +83,7 @@
 						<a href="{{ $vox->getStatsList() }}">
 							{!! trans('vox.common.check-statictics') !!}
 						</a>
-						@if(!in_array($vox->id, $taken))
+						@if(!in_array($vox->id, $taken) && $vox->type != 'hidden' )
 							<a class="blue-button secondary" href="{{ $vox->getLink() }}">
 								{{ trans('vox.common.take-the-test') }}
 							</a>
