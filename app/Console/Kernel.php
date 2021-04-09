@@ -2282,6 +2282,27 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         })->dailyAt('04:00');
 
         $schedule->call(function () {
+            echo 'Scheduled surveys '.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now()->addHours(2) )->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
+
+            if($hidden_voxes->isNotEmpty()) {
+
+                foreach ($hidden_voxes as $hv) {
+                    echo 'Scheduled survey - '.$hv->id.PHP_EOL.PHP_EOL.PHP_EOL;
+
+                    $hv->type = 'normal';
+                    $hv->save();
+
+                    $hv->activeVox();
+                }
+            }
+
+            echo 'Scheduled surveys - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+        })->cron("* * * * *");
+
+        $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *");

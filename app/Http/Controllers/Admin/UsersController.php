@@ -906,6 +906,67 @@ class UsersController extends AdminController {
                 }
             }
 
+            if($item->allBanAppeals->isNotEmpty()) {
+                foreach ($item->allBanAppeals as $ba) {
+                    $ba->forceDelete();
+                }
+            }
+
+            $id = $item->id;
+            $teams = UserTeam::where(function($query) use ($id) {
+                $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
+            })->get();
+
+            if (!empty($teams)) {
+                foreach ($teams as $team) {
+                    $dent_id = $team->dentist_id;
+                    $team->delete();
+
+                    $dent = User::find($dent_id);
+                    if(!empty($dent) && $dent->is_clinic) {
+
+                        if ($dent->status == 'added_by_clinic_new') {
+                            $dent->status = 'added_by_clinic_rejected';
+                            $dent->save();
+                        } else if($dent->status == 'dentist_no_email') {
+                            $action = new UserAction;
+                            $action->user_id = $dent->id;
+                            $action->action = 'deleted';
+                            $action->reason = 'his dentist was deleted/rejected';
+                            $action->actioned_at = Carbon::now();
+                            $action->save();
+
+                            $dent->deleteActions();
+                            self::destroy( $dent->id );
+                        }
+                    }
+                }
+            }
+
+            $user_invites = UserInvite::where(function($query) use ($id) {
+                $query->where( 'user_id', $id)->orWhere('invited_id', $id);
+            })->get();
+
+            if (!empty($user_invites)) {
+               foreach ($user_invites as $user_invite) {
+                   $user_invite->forceDelete();
+               }
+            }
+
+            if($item->claims->isNotEmpty()) {
+                foreach ($item->claims as $c) {
+                    $c->forceDelete();
+                }
+            }
+
+            $transactions = DcnTransaction::where('user_id', $item->id)->whereIn('status', ['new', 'failed', 'first', 'not_sent'])->get();
+
+            if ($transactions->isNotEmpty()) {
+                foreach ($transactions as $trans) {
+                    $trans->forceDelete();
+                }
+            }
+
             $item->forceDelete();
 
             $this->request->session()->flash('success-message', 'Deleted forever' );

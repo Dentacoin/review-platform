@@ -123,14 +123,21 @@
                     @endif
 
                     <div class="form-group">
+                        <label class="col-md-2 control-label" style="max-width: 200px;">Scheduled at</label>
+                        <div class="col-md-2">
+                            {{ Form::text('scheduled_at', !empty($item) ? $item->scheduled_at : null, array('class' => 'form-control datetimepicker', 'autocomplete' => 'off')) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="col-md-2 control-label" style="max-width: 200px;">Sort order</label>
-                        <div class="col-md-10">
+                        <div class="col-md-2">
                             {{ Form::number('sort_order', !empty($item) ? $item->sort_order : null, array('class' => 'form-control')) }}
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.type') }}</label>
-                        <div class="col-md-10">
+                        <div class="col-md-2">
                             {{ Form::select('type', $types, !empty($item) ? $item->type : null, array('class' => 'form-control')) }}
                         </div>
                     </div>

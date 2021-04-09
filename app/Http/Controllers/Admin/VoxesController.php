@@ -857,30 +857,7 @@ class VoxesController extends AdminController
 
         if ($this->request->input('type') == 'normal' && $item->type == 'hidden' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
             
-            $urls = [
-                'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
-                'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications'
-            ];
-
-            foreach ($urls as $url) {
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                    CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_POST => 1,
-                    CURLOPT_URL => $url,
-                    CURLOPT_SSL_VERIFYPEER => 0,
-                    CURLOPT_POSTFIELDS => array(
-                        'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
-                    )
-                ));
-                 
-                $resp = json_decode(curl_exec($curl));
-                curl_close($curl);
-            }
-
-            UserDevice::sendPush('New paid survey published!', 'Take it now', [
-                'page' => 'paid-dental-surveys/'.$item->slug,
-            ]);
+            $item->activeVox();
         }
 
         if ($this->request->input('featured') == 1 && $item->featured != 1 && $item->type == 'normal' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
@@ -900,6 +877,7 @@ class VoxesController extends AdminController
         }
 
         $item->type = $this->request->input('type');
+        $item->scheduled_at = $this->request->input('scheduled_at');
         $item->featured = $this->request->input('featured');
         $item->stats_featured = $this->request->input('stats_featured');
         $item->has_stats = $this->request->input('has_stats');

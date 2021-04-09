@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use WebPConvert\WebPConvert;
 
 use App\Models\VoxToCategory;
+use App\Models\UserDevice;
 use App\Models\VoxRelated;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
@@ -1683,6 +1684,34 @@ class Vox extends Model {
             'rows_breakdown' => $rows_breakdown,
             'breakdown_rows_count' => $breakdown_rows_count,
         ];
+    }
+
+    public function activeVox() {
+
+        $urls = [
+            'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
+            'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications'
+        ];
+
+        foreach ($urls as $url) {
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_POST => 1,
+                CURLOPT_URL => $url,
+                CURLOPT_SSL_VERIFYPEER => 0,
+                CURLOPT_POSTFIELDS => array(
+                    'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
+                )
+            ));
+             
+            $resp = json_decode(curl_exec($curl));
+            curl_close($curl);
+        }
+
+        UserDevice::sendPush('New paid survey published!', 'Take it now', [
+            'page' => 'paid-dental-surveys/'.$this->slug,
+        ]);
     }
 
 }
