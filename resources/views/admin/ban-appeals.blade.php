@@ -91,23 +91,27 @@
 				                	@foreach($items as $item)
 				                    	<tr appeal-id="{{ $item->id }}">
 				                    		<td>
-				                    			<a href="{{ url('cms/users/edit/'.$item->user->id) }}">
-													{{ $item->user->name }}
-												</a>
-                                                @if($item->user->allBanAppeals->count() > 1)
-                                                    <br/> <span style="color: red;"> + {{ $item->user->allBanAppeals->count() - 1 }} ban{{ $item->user->allBanAppeals->count() - 1 > 1 ? 's' : ''}}</span>
-                                                @endif
-                                                @if($item->pending_fields)
-                                                    <br/> <b>Pending</b>
-                                                @endif
-                                                <div class="ban-appeal-wrapper">
-                                                    <div class="img-wrap ban-appeal-info" user-id="{{ $item->user->id }}">
-                                                        <img src="{{ url('img/info.png') }}" style="max-width: 15px;">
-                                                    </div>
+                                                @if(!empty($item->user))
+    				                    			<a href="{{ url('cms/users/edit/'.$item->user->id) }}">
+    													{{ $item->user->name }}
+    												</a>
+                                                    @if($item->user->allBanAppeals->count() > 1)
+                                                        <br/> <span style="color: red;"> + {{ $item->user->allBanAppeals->count() - 1 }} ban{{ $item->user->allBanAppeals->count() - 1 > 1 ? 's' : ''}}</span>
+                                                    @endif
+                                                    @if($item->pending_fields)
+                                                        <br/> <b>Pending</b>
+                                                    @endif
+                                                    <div class="ban-appeal-wrapper">
+                                                        <div class="img-wrap ban-appeal-info" user-id="{{ $item->user->id }}">
+                                                            <img src="{{ url('img/info.png') }}" style="max-width: 15px;">
+                                                        </div>
 
-                                                    <div class="ban-appeal-tooltip">
+                                                        <div class="ban-appeal-tooltip">
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @else
+                                                    deleted user from the database
+                                                @endif
 				                    		</td>
 				                    		<td style="word-break: break-all;">
                                                 @if(filter_var($item->link, FILTER_VALIDATE_URL) === FALSE)
@@ -125,7 +129,7 @@
 				                    			{{ $item->description }}
 				                    		</td>
 				                    		<td>
-				                    			{{ $item->user->patient_status == 'deleted' && $item->id < 23 ? 'Deleted' : $types[$item->type] }}
+				                    			{{ !empty($item->user) ? $item->user->patient_status == 'deleted' && $item->id < 23 ? 'Deleted' : $types[$item->type] : '-' }}
 				                    		</td>
 				                    		<td>
 				                    			{{ date('d.m.Y, H:i:s', $item->created_at->timestamp) }}
