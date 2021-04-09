@@ -76,6 +76,7 @@ class Vox extends Model {
         'respondents_last_count_at',
         'created_at',
         'launched_at',
+        'scheduled_at',
         'updated_at',
         'deleted_at'
     ];
@@ -583,7 +584,7 @@ class Vox extends Model {
                 }
 
                 foreach ($arr as $key => $value) {
-                    $arr[$key] = round((($value / $respondents_count) * 100), 2);
+                    $arr[$key] = round((($value / $respondents_users->count()) * 100), 2);
                 }
 
                 $this->users_percentage = $arr;
