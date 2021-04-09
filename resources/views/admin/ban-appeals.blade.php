@@ -110,7 +110,11 @@
                                                 </div>
 				                    		</td>
 				                    		<td style="word-break: break-all;">
-				                    			<a href="{{ $item->link }}" target="_blank">{{ $item->link }}</a>
+                                                @if(filter_var($item->link, FILTER_VALIDATE_URL) === FALSE)
+                                                    {{ $item->link }}
+                                                @else
+                                                    <a href="{{ $item->link }}" target="_blank">{{ $item->link }}</a>
+                                                @endif
 				                    		</td>
 				                    		<td>
 				                    			<a href="{{ $item->getImageUrl() }}" data-lightbox="banappeal{{ $item->id }}">
