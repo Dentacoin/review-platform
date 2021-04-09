@@ -110,7 +110,7 @@
                                                 </div>
 				                    		</td>
 				                    		<td style="word-break: break-all;">
-				                    			{{ $item->link }}
+				                    			<a href="{{ $item->link }}" target="_blank">{{ $item->link }}</a>
 				                    		</td>
 				                    		<td>
 				                    			<a href="{{ $item->getImageUrl() }}" data-lightbox="banappeal{{ $item->id }}">
