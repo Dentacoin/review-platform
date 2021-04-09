@@ -205,17 +205,16 @@
 					@if(empty($question->stats_scale_answers))
 						<div class="demogr-inner" style="display: none" inner="{{ $question->id }}">
 							@if($question->used_for_stats=='dependency')
-								<!-- <label for="format-relation-{{ $question->id }}" class="active dem-label">
+								<label for="format-relation-{{ $question->id }}" class="active dem-label">
 									<input type="checkbox" name="download-demographic[]" value="relation" id="format-relation-{{ $question->id }}" class="download-demographic-checkbox" checked="checked">
 									Relation
 									<div class="active-removal"><span>x</span></div>
-								</label> -->
+								</label>
 							@endif
 							@foreach( $question->stats_fields as $sk)
 								@if($sk == 'gender')
-								<!-- // && $question->used_for_stats!='dependency' -->
-									<label for="format-gender-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
-										<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}" class="download-demographic-checkbox" checked="checked">
+									<label for="format-gender-{{ $question->id }}" class="{{ $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' }} dem-label">
+										<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}" class="download-demographic-checkbox" {!! $question->used_for_stats!='dependency' ? 'checked="checked"' : '' !!} >
 										Sex
 								@elseif($sk == 'country_id')
 									<label for="format-country_id-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-label" style="display: none;">

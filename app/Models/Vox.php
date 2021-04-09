@@ -825,17 +825,17 @@ class Vox extends Model {
 
                 $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
 
-                $cols[] = $q->related->question.' ['.$q->removeAnswerTooltip($list[$q->stats_answer_id - 1]).']';
+                $cols[] = $q->related->questionWithoutTooltips().' ['.$q->removeAnswerTooltip($list[$q->stats_answer_id - 1]).']';
                 $cols2[] = '';
             } else {
                 if($q->related->type == 'multiple_choice') {
                     $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
                     foreach ($list as $l) {
-                        $cols[] = $q->related->question;
+                        $cols[] = $q->related->questionWithoutTooltips();
                         $cols2[] = mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l;
                     }
                 } else {
-                    $cols[] = $q->related->question;
+                    $cols[] = $q->related->questionWithoutTooltips();
                     $cols2[] = '';
                 }
             }
@@ -985,7 +985,7 @@ class Vox extends Model {
                         $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
 
                         $given_related_answer = VoxAnswer::whereNull('is_admin')->where('user_id', $answ->user_id)->where('question_id', $q->related->id)->first();
-                        $row[] = $given_related_answer ? $q->removeAnswerTooltip($list[$given_related_answer->answer - 1]) : '0';
+                        $row[] = $given_related_answer ? $q->removeAnswerTooltip(mb_strpos($list[$given_related_answer->answer - 1], '!')===0 || mb_strpos($list[$given_related_answer->answer - 1], '#')===0 ?  mb_substr($list[$given_related_answer->answer - 1], 1) : $list[$given_related_answer->answer - 1]) : '0';
                     }
                 }
             }
@@ -1059,7 +1059,6 @@ class Vox extends Model {
             $cols_title_second,
         ];
 
-
         foreach($demographics as $chosen_dem) {
 
             if($chosen_dem == 'relation' && $q->used_for_stats == 'dependency') {
@@ -1073,236 +1072,18 @@ class Vox extends Model {
                 }
 
                 if(!empty($q->stats_answer_id)) {
+                    $convertedRelation = self::downlaodRelationXlsx($q, $q->stats_answer_id, $scales, $rows_breakdown);
+                    $rows_breakdown = $convertedRelation['rows_breakdown'];
+                    $rows_breakdown[] = [''];
 
-                    $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
-
-                    $rows_breakdown[] = [$q->related->question.' ['.$q->removeAnswerTooltip($list[$q->stats_answer_id - 1]).']'];                                
-
-                    $rows_breakdown[] = ['in relation to:'];
-
-                    $cols_q_title_second = [
-                        ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithoutTooltips()
-                    ];
-
-                    $rows_breakdown[] = $cols_q_title_second;
-
-                    $cur_chart = [];
-
-                    // $all_results = VoxAnswer::whereNull('is_admin')
-                    // ->where('question_id', $q->id)
-                    // ->where('is_completed', 1)
-                    // ->where('is_skipped', 0)
-                    // ->has('user');
-
-                    // if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
-                    //     $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
-                    //     $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
-
-                    //     $all_results = $all_results->where('created_at', '>=', $from)
-                    //     ->where('created_at', '<=', $to);
-                    // }
-
-                    $a = $q->stats_answer_id;
-
-                    // $all_results = $all_results->whereIn('user_id', function($query) use ($q, $a) {
-                    //     $query->select('user_id')
-                    //     ->from('vox_answers')
-                    //     ->where('question_id', $q->related->id)
-                    //     ->where('answer', $a);
-                    // } );
-
-                    
-                    $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
-                    $breakdown_rows_count = count($answers_array);
-
-                    $results_total = 0;
-
-                    foreach ($answers_array as $key => $value) {
-                        $cur_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
-
-                        $all_results = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->where('answer_id', $a)->where('answer', $key+1)->first();
-
-                        if($answer_resp) {
-                            $cur_chart[$key][] = $all_results->cnt; 
-                            $results_total+=$all_results->cnt;
-                        }
-                        // $count_people = 0;
-                        // foreach ($all_results->get() as $k => $v) {
-
-                        //     if($v->answer == ($key + 1)) {
-                        //         $count_people++;
-                        //     }
-                        // }
-
-                        $cur_chart[$key][] = $count_people;
-                    }
-                    
-                    // $results_total = $all_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
-                    $results_total = $all_results->cnt;
-
-                    foreach ($cur_chart as $key => $value) {
-                        foreach ($value as $k => $v) {
-                            if($k == 1 && $v == 0) {
-                                $value[$k] = '0';
-                            } else {
-                                $value[$k] =  $v;
-                            }
-                        }
-                        $cur_chart[$key] = $value;
-
-                        $cur_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $results_total);
-
-                    }
-
-                    usort($cur_chart, function($a, $b) {
-                        return $a[2] <= $b[2];
-                    });
-
-
-                    $ordered_diez = [];
-
-                    foreach ($cur_chart as $key => $value) {
-
-                        if(mb_strpos($value[0], '#')===0) {
-                            $ordered_diez[] = $value;
-                            unset( $cur_chart[$key] );
-                        }
-                    }
-
-                    if(count($ordered_diez)) {
-
-                        if( count($ordered_diez) > 1) {
-                            usort($ordered_diez, function($a, $b) {
-                                return $a[2] <= $b[2];
-                            });
-
-                            foreach ($ordered_diez as $key => $value) {
-
-                                $value[0] = mb_substr($value[0], 1);
-
-                                $cur_chart[] = $value;
-                            }
-                        } else {
-                            foreach ($ordered_diez as $key => $value) {
-
-                                $ordered_diez[$key][0] = mb_substr($value[0], 1);
-                            }
-                            $cur_chart[] = $ordered_diez[0];
-                        }
-
-                        $cur_chart = array_values($cur_chart);
-                    }
-
-                    $rows_breakdown[] = $cur_chart;
+                    $breakdown_rows_count = $convertedRelation['breakdown_rows_count'];
                 } else {
-                    // dd($second_chart);
-                     // 0 => array:1 [▼
-                     //    0 => "Yes"
-                     //  ]
-                     //  1 => array:1 [▼
-                     //    0 => "No"
-                     //  ]
-
-                    // dd($q->id, $q->related->id);
-
                     for($i = 1; $i <= count($second_chart); $i++) {
-
-                        $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
-
-                        $rows_breakdown[] = [$q->related->question.' ['.$q->removeAnswerTooltip($list[$i - 1]).']'];
-
-                        $rows_breakdown[] = ['in relation to:'];
-
-                        $cols_q_title_second = [
-                            ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithoutTooltips()
-                        ];
-
-                        $rows_breakdown[] = $cols_q_title_second;
-
-                        $m_original_chart = [];
-                        $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
-
-                        $breakdown_rows_count = count($answers_array);
-
-                        // $all_related_original_results = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->get();
-
-                        // $all_related_original_results =
-
-                        // if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
-                        //     $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
-                        //     $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
-
-                        //     $all_related_original_results = $all_related_original_results->where('created_at', '>=', $from)
-                        //     ->where('created_at', '<=', $to);
-                        // }
-                        $total_count = 0;
-                        $not_caching_answers = [];
-
-
-                        foreach ($answers_array as $key => $value) {
-                            $m_original_chart[$key][] = mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0 ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
-
-                            $answer_resp = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->where('answer_id', $i)->where('answer', $key+1)->first();
-
-                            if($answer_resp) {
-                                $m_original_chart[$key][] = $answer_resp->cnt; 
-                                $total_count+=$answer_resp->cnt;
-                            } else {
-
-                                $vanswer = VoxAnswer::whereNull('is_admin')
-                                ->where('question_id', $q->id)
-                                ->where('is_skipped', 0)
-                                ->has('user')
-                                ->where('answer', $i)
-                                ->whereIn('user_id', function($query) use ($q, $key) {
-                                    $query->select('user_id')
-                                    ->from('vox_answers')
-                                    ->where('question_id', $q->related->id)
-                                    ->where('answer', $key+1);
-                                })->selectRaw('answer, COUNT(*) as cnt')->first();
-
-                                $m_original_chart[$key][] = $vanswer->cnt; 
-                                $total_count+=$vanswer->cnt;
-
-                            }
-                        }
-                                // dd($not_caching_answers, $m_original_chart);
-
-                        // $tr = 0;
-                        // foreach ($all_related_original_results as $alor) {
-                        //     $tr+= $alor->cnt;
-                        // }
-                        // $total_count = $tr; 
-
-                        // dd($total_count);
-
-                        // if($q->type == 'multiple_choice') {
-                        //     $results_total = $all_related_original_results->count();
-                        // } else {
-                        //     $results_total = $all_related_original_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
-                        // } 
-
-                        foreach ($m_original_chart as $key => $value) {
-                            foreach ($value as $k => $v) {
-                                if($k == 1 && $v == 0) {
-                                    $value[$k] = '0';
-                                } else {
-                                    $value[$k] =  $v;
-                                }
-                            }
-                            $m_original_chart[$key] = $value;
-
-                            $m_original_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total_count);
-
-                        }
-
-
-                        usort($m_original_chart, function($a, $b) {
-                            return $a[2] <= $b[2];
-                        });
-
-                        $rows_breakdown[] = $m_original_chart;
+                        $convertedRelation = self::downlaodRelationXlsx($q, $i, $scales, $rows_breakdown);
+                        $rows_breakdown = $convertedRelation['rows_breakdown'];
                         $rows_breakdown[] = [''];
+
+                        $breakdown_rows_count = $convertedRelation['breakdown_rows_count'];
                     }
                 }
 
@@ -1788,6 +1569,118 @@ class Vox extends Model {
         return [
             'flist' => $flist,
             'breakdown_rows_count' => $breakdown_rows_count, 
+        ];
+    }
+
+    public static function downlaodRelationXlsx($q, $answer, $scales, $rows_breakdown) {
+
+        $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
+
+        $rows_breakdown[] = [$q->related->questionWithoutTooltips().' ['.$q->removeAnswerTooltip($list[$answer - 1]).']'];
+
+        $rows_breakdown[] = ['in relation to:'];
+
+        $cols_q_title_second = [
+            ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->questionWithoutTooltips()
+        ];
+
+        $rows_breakdown[] = $cols_q_title_second;
+
+        $m_original_chart = [];
+        $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
+
+        $breakdown_rows_count = count($answers_array);
+        $total_count = 0;
+
+        foreach ($answers_array as $key => $value) {
+            $m_original_chart[$key][] = mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0 ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
+
+            $answer_resp = VoxAnswersDependency::where('question_id', $q->id)->where('question_dependency_id', $q->related->id)->where('answer_id', $answer)->where('answer', $key+1)->first();
+
+            if($answer_resp) {
+                $m_original_chart[$key][] = $answer_resp->cnt; 
+                $total_count+=$answer_resp->cnt;
+            } else {
+
+                $cur_answer = VoxAnswer::whereNull('is_admin')
+                ->where('question_id', $q->id)
+                ->where('is_completed', 1)
+                ->where('is_skipped', 0)
+                ->where('answer', $key+1)
+                ->has('user');        
+
+                $quest = $q->related->id;
+                $aaa = $answer;
+                $cur_answer = $cur_answer->whereIn('user_id', function($query) use ($quest, $aaa) {
+                    $query->select('user_id')
+                    ->from('vox_answers')
+                    ->where('question_id', $quest)
+                    ->where('answer', $aaa);
+                } )->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->first();
+
+                // dd($cur_answers);
+                $m_original_chart[$key][] = $cur_answer ? $cur_answer->cnt : 0; 
+                $total_count+=$cur_answer ? $cur_answer->cnt : 0; 
+            }
+        }
+        // dd($m_original_chart, $total_count);
+
+        foreach ($m_original_chart as $key => $value) {
+            foreach ($value as $k => $v) {
+                if($k == 1 && $v == 0) {
+                    $value[$k] = '0';
+                } else {
+                    $value[$k] =  $v;
+                }
+            }
+            $m_original_chart[$key] = $value;
+
+            $m_original_chart[$key][] = $value[1] == 0 ? '0' : ($value[1] / $total_count);
+        }
+
+        usort($m_original_chart, function($a, $b) {
+            return $a[2] <= $b[2];
+        });
+
+        $ordered_diez = [];
+
+        foreach ($m_original_chart as $key => $value) {
+
+            if(mb_strpos($value[0], '#')===0) {
+                $ordered_diez[] = $value;
+                unset( $m_original_chart[$key] );
+            }
+        }
+
+        if(count($ordered_diez)) {
+
+            if( count($ordered_diez) > 1) {
+                usort($ordered_diez, function($a, $b) {
+                    return $a[2] <= $b[2];
+                });
+
+                foreach ($ordered_diez as $key => $value) {
+
+                    $value[0] = mb_substr($value[0], 1);
+
+                    $m_original_chart[] = $value;
+                }
+            } else {
+                foreach ($ordered_diez as $key => $value) {
+
+                    $ordered_diez[$key][0] = mb_substr($value[0], 1);
+                }
+                $m_original_chart[] = $ordered_diez[0];
+            }
+
+            $m_original_chart = array_values($m_original_chart);
+        }
+
+        $rows_breakdown[] = $m_original_chart;
+
+        return [
+            'rows_breakdown' => $rows_breakdown,
+            'breakdown_rows_count' => $breakdown_rows_count,
         ];
     }
 
