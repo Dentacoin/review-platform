@@ -308,7 +308,7 @@ class Vox extends Model {
     }
 
     public function getSocialImageUrl($type = 'social') {
-        return $this->hasimage_social ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.'-'.$type.'.png').'?rev='.$this->updated_at->timestamp : url('new-vox-img/stats-dummy.png');
+        return $this->hasimage_social ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.'-'.$type.'.png').'?rev=1'.$this->updated_at->timestamp : url('new-vox-img/stats-dummy.png');
     }
 
     public function getSocialImagePath($type = 'social') {
