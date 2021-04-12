@@ -544,7 +544,8 @@ class FrontController extends BaseController {
         } else {
             return response()->view('trp.'.$page, $params, $statusCode ? $statusCode : 200);
         }
-    }    
+    }
+
     public function PrepareViewData($page, &$params, $text_domain) {
 
         $params['dcn_price'] = @file_get_contents('/tmp/dcn_price');
@@ -594,6 +595,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '20210408';
+        $params['cache_version'] = '20210409';
     }
 }

@@ -183,6 +183,91 @@ $main-color: #38ace5;
 	}
 }
 
+.all-taken-wrapper {
+	max-width: 980px;
+    margin: 0 auto;
+    align-items: center;
+
+    @media screen and (max-width: 992px) and (min-width: 769px ) {
+		width: 100%;
+		max-width: none;
+	    width: auto;
+	    margin: 0px;
+	}
+
+	.col {
+		text-align: left;
+
+		@media #{$phone} {
+			text-align: center;
+		}
+	}
+
+	img {
+	    max-width: 100%;
+
+	    @media #{$phone} {
+	    	max-width: 70%;
+	    }
+	}
+
+	h3 {
+		font-size: 28px;
+    	font-weight: bold;
+    	margin-bottom: 0px;
+
+    	@media screen and (max-width: 992px) {
+    		font-size: 26px;
+    	}
+
+    	@media #{$phone} {
+    		font-size: 22px;
+    	}
+	}
+
+	b,p {
+		font-size: 20px;
+
+		@media #{$phone} {
+    		font-size: 16px;
+    	}
+	}
+
+	b {
+		margin-top: 20px;
+		display: block;
+	}
+
+	.btns {
+		margin-top: 20px;
+
+		a {
+			padding: 18px 23px;
+			font-size: 21px;
+    		font-weight: bold;
+    		border-width: 1px;
+
+    		@media screen and (max-width: 992px) {
+	    		padding: 16px 13px;
+    			font-size: 17px;
+	    	}
+
+	    	@media #{$phone} {
+		    	padding: 13px 10px;
+	    		font-size: 15px;
+	    	}
+
+    		&:first-child {
+    			margin-right: 5px;
+
+    			@media #{$phone} {
+    				margin-right: 0px;
+    			}
+    		}
+		}
+	}
+}
+
 .daily-poll-welcome {
 	text-align: center;
 

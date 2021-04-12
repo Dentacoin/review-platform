@@ -87,12 +87,36 @@
 		<form  method="get" class="another-questions">
   			@include('front.errors')
   			
-			<h1 class="bold">
-				{{ trans('vox.page.home.title') }}
-			</h1>
+  			@if(!$all_taken)
+				<h1 class="bold">
+					{{ trans('vox.page.home.title') }}
+				</h1>
+			@endif
 
 			@if($all_taken)
-				<div class="alert alert-info alert-done-all-surveys">
+				<div class="all-taken-wrapper flex break-mobile">
+					<div class="col">
+						<img src="{{ url('/new-vox-img/all-surveys-taken.png') }}">
+					</div>
+					<div class="col">
+						<h3>Oops! No surveys available.</h3>
+						<p>It seems you have taken all surveys available to users with your demographics. No worries: We upload two new surveys every week. Limits are dynamic, so just make it a daily habit to check for newly available surveys!</p>
+						<b>Meanwhile, why don't you:</b>
+
+						<div class="btns">
+							@if($user->platform != 'external')
+								<a class="opinion blue-button" href="https://account.dentacoin.com/invite?platform=dentavox">
+									Invite {{ $user->is_dentist ? 'patients' : 'friends' }}
+								</a>
+							@endif
+							<a class="statistics blue-button {{ $user->platform != 'external' ? 'secondary' : '' }}" href="{{ getLangUrl('dental-survey-stats') }}">
+								Browse Stats
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- <div class="alert alert-info alert-done-all-surveys">
 					@if($user->is_dentist)
 						{!! nl2br(trans('vox.page.home.dentist.alert-done-all-surveys', [
 							'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
@@ -110,7 +134,7 @@
 							])) !!}
 						@endif
 					@endif
-				</div>
+				</div> -->
 			@else
 				<div class="filters-section">
 					<div class="search-survey tal">
