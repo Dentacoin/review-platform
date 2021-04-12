@@ -898,7 +898,7 @@ class UsersController extends AdminController {
 
         if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
 
-            $item = User::find($id);
+            $item = User::withTrashed()->find($id);
 
             if($item->logins->isNotEmpty()) {
                 foreach ($item->logins as $login) {
