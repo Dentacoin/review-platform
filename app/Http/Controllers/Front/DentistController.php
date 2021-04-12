@@ -955,6 +955,15 @@ class DentistController extends FrontController {
 
                     if (!empty(Request::input('job'))) {
 
+                        $claimsFromSameIp = DentistClaim::where('ip', 'LIKE', User::getRealIp() )->count();
+
+                        if($claimsFromSameIp > 3) {
+                            return Response::json( [
+                                'success' => false,
+                                'message' => trans('trp.popup.popup-claim-profile.error-ip', ['link' => '<a href="mailto:reviews@dentacoin.com">', 'endlink' => '</a>'])
+                            ] );
+                        }
+
                         $fromm = !empty(Request::input('email')) ? 'from site' : 'from mail';
 
                         $claim = new DentistClaim;
@@ -967,6 +976,7 @@ class DentistController extends FrontController {
                         $claim->explain_related = empty(Request::input('explain-related')) ? Request::input('explain-related') : '';
                         $claim->status = 'waiting';
                         $claim->from_mail = !empty(Request::input('email')) ? false : true;
+                        $claim->ip = User::getRealIp();
                         $claim->save();
 
                         if(!empty(Request::input('email'))) {
@@ -1024,6 +1034,7 @@ class DentistController extends FrontController {
                             $claim->password = bcrypt(Request::input('password'));
                             $claim->status = 'approved';
                             $claim->from_mail = true;
+                            $claim->ip = User::getRealIp();
                             $claim->save();
 
                             $mtext = 'Dentist claimed his profile from short link. The profile was automatically approved.<br/>

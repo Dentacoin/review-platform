@@ -16,7 +16,8 @@ class DentistClaim extends Model {
         'job',
         'explain_related',
         'status',
-        'from_mail'
+        'from_mail',
+        'ip'
     ];
 
     protected $dates = [

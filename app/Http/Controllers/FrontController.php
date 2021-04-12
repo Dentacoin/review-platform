@@ -608,7 +608,7 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '2021041201';
+        $params['cache_version'] = '2021041202';
     }
 
     public function initVoxWP() {

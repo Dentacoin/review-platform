@@ -101,7 +101,7 @@
 				</div>
 
 				<div class="alert alert-success" style="display: none;"></div>
-				<div class="alert alert-warning" style="display: none;">{!! nl2br(trans('trp.popup.popup-claim-profile.error')) !!}</div>
+				<div class="alert alert-warning" id="claim-err" style="display: none;">{!! nl2br(trans('trp.popup.popup-claim-profile.error')) !!}</div>
 			</form>
 		</div>
 		<div class="claim-success">

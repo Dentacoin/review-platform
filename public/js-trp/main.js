@@ -1437,28 +1437,33 @@ jQuery(document).ready(function($){
 				}
 				
 			} else {
-				for(var i in data.messages) {
-                    $(this).find('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
 
-                    $(this).find('[name="'+i+'"]').addClass('has-error');
+				if(data.messages) {
+					for(var i in data.messages) {
+	                    $(this).find('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
 
-                    if ($(this).find('[name="'+i+'"]').closest('.modern-file').length) {
-                        $(this).find('[name="'+i+'"]').closest('.modern-file').addClass('has-error');
-                    }
+	                    $(this).find('[name="'+i+'"]').addClass('has-error');
 
-                    if ($(this).find('[name="'+i+'"]').closest('.agree-label').length) {
-                        $(this).find('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
-                        $(this).find('[name="'+i+'"]').closest('.agree-label').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
-                    }
-                }
-                $('.popup').animate({
-	                scrollTop: $('.ajax-alert:visible').first().offset().top
-	            }, 500);
+	                    if ($(this).find('[name="'+i+'"]').closest('.modern-file').length) {
+	                        $(this).find('[name="'+i+'"]').closest('.modern-file').addClass('has-error');
+	                    }
+
+	                    if ($(this).find('[name="'+i+'"]').closest('.agree-label').length) {
+	                        $(this).find('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
+	                        $(this).find('[name="'+i+'"]').closest('.agree-label').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
+	                    }
+	                }
+	                $('.popup').animate({
+		                scrollTop: $('.ajax-alert:visible').first().offset().top
+		            }, 500);
+				} else {
+					$('#claim-err').html(data.message).show();
+				}
 			}
             ajax_is_running = false;
 
 	    }).bind(this) ).fail(function (data) {
-			$(this).find('.alert-warning').show();
+			$('#claim-err').show();
 	    });
 
 	    return;
