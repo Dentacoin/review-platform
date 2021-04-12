@@ -15,7 +15,7 @@
             @if($admin->id == 14 || $admin->id == 15 || $admin->id == 1)
                 <a href="{{ $is_retry_stopped ? url('cms/transactions/enable-retry') : url('cms/transactions/disable-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_stopped ? 'Enable' : 'Disable' }} Retry</a>
 
-                <!-- <a href="{{ $is_retry_paid_by_the_user_stopped ? url('cms/transactions/enable-paid-by-user-retry') : url('cms/transactions/disable-paid-by-user-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_paid_by_the_user_stopped ? 'Enable' : 'Disable' }} Paid By User Retry</a> -->
+                <a href="{{ $is_retry_paid_by_the_user_stopped ? url('cms/transactions/enable-paid-by-user-retry') : url('cms/transactions/disable-paid-by-user-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_paid_by_the_user_stopped ? 'Enable' : 'Disable' }} Paid By User Retry</a>
             @endif
         </div>
 
@@ -34,13 +34,13 @@
     @endif
     @if($is_retry_stopped)
         <div>
-            <label class="alert alert-warning">Sending transactions to Payment Server is disabled for normal transactions and paid by the user transactions.</label>
+            <label class="alert alert-warning">Sending normal transactions to the PS is disabled.</label>
         </div>
     @endif
     @if($is_retry_paid_by_the_user_stopped)
-        <!-- <div>
-            <label class="alert alert-warning">Sending paid by user transactions to Payment Server is disabled.</label>
-        </div> -->
+        <div>
+            <label class="alert alert-warning">Sending paid by user transactions to the PS is disabled.</label>
+        </div>
     @endif
 
     @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
