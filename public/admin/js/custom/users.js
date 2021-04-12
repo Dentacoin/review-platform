@@ -186,4 +186,13 @@ $(document).ready(function(){
         });
     });
 
+
+    $('[name="patient_status"]').change( function() {
+    	if($(this).val() == 'suspicious_admin') {
+    		$('#suspicious-reason').show();
+    	} else {
+    		$('#suspicious-reason').hide();
+    	}
+    });
+
 });

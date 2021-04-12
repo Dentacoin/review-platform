@@ -1758,11 +1758,21 @@ class UsersController extends AdminController {
                                 } else if($item->$key == 'deleted' && ($this->request->input($key) == 'new_verified' || $this->request->input($key) == 'new_not_verified')) {
                                     $item->sendTemplate(111, null, 'dentacoin');
                                 } else if($this->request->input($key) == 'suspicious_badip' || $this->request->input($key) == 'suspicious_admin') {
+                                    if($this->request->input($key) == 'suspicious_admin' && !empty($this->request->input('suspicious-reason'))) {
+                                        $action = new UserAction;
+                                        $action->user_id = $item->id;
+                                        $action->action = 'suspicious_admin';
+                                        $action->reason = $this->request->input('suspicious-reason');
+                                        $action->actioned_at = Carbon::now();
+                                        $action->save();
+                                    }
+
                                     $item->sendTemplate(110, null, 'dentacoin');
                                     $item->removeTokens();
                                     $item->logoutActions();
                                 }
                             }
+
                             $item->$key = $this->request->input($key);
 
                         } else if($value['type']=='datepicker') {

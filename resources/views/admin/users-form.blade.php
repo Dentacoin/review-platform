@@ -687,8 +687,8 @@
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
                                         @foreach($item->actions as $act)
-                                            <span style="color: {{ $act->action == 'deleted' || $act->action == 'bad_ip' ? 'red' : 'black' }};"><span style="text-transform: capitalize;">{{ $act->action == 'restored_self_deleted' ? 'Self Deleted Restored' : ($act->action == 'bad_ip' ? 'Bad IP' : $act->action) }}</span> at: {{ $act->actioned_at->toDateTimeString() }}</span><br/>
-                                            <span style="color: {{ $act->action == 'deleted' ? 'red' : 'black' }};">Reason: {{ $act->reason }}</span><br/><br/>
+                                            <span style="color: {{ $act->action == 'deleted' || $act->action == 'bad_ip' || $act->action == 'suspicious_admin' ? 'red' : 'black' }};"><span style="text-transform: capitalize;">{{ $act->action == 'restored_self_deleted' ? 'Self Deleted Restored' : ($act->action == 'bad_ip' ? 'Bad IP' : ($act->action == 'suspicious_admin' ? 'Suspicious' : $act->action)) }}</span> at: {{ $act->actioned_at->toDateTimeString() }}</span><br/>
+                                            <span style="color: {{ $act->action == 'deleted' || $act->action == 'bad_ip' || $act->action == 'suspicious_admin' ? 'red' : 'black' }};">Reason: {{ $act->reason }}</span><br/><br/>
                                         @endforeach
                                     </div>
                                 </div>
@@ -784,13 +784,19 @@
                                     </div>
                                 </div>
                             @endif
+                            <div class="form-group" id="suspicious-reason" style="display: none;">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" name="suspicious-reason" placeholder="Reason why this user is suspicious"></textarea>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
                                     <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control user-b"> {{ trans('admin.common.save') }} </button>
                                 </div>
                             </div>
-                            
+
                         </div>
                         
                     </div>
