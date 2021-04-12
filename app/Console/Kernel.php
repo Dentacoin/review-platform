@@ -867,6 +867,30 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         })->cron("30 7 * * *"); //10:30h BG Time
 
         $schedule->call(function () {
+            echo 'Suspicious Patients Delete Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $users = User::whereIn('patient_status', ['suspicious_admin', 'suspicious_badip'])->where('updated_at', '<', Carbon::now()->subDays(30) )->doesnthave('newBanAppeal')->get();
+
+            if ($users->isNotEmpty()) {
+
+                foreach ($users as $user) {
+                    $action = new UserAction;
+                    $action->user_id = $user->id;
+                    $action->action = 'deleted';
+                    $action->reason = 'Automatically - Patient with status suspicious over a month';
+                    $action->actioned_at = Carbon::now();
+                    $action->save();
+
+                    $user->deleteActions();
+                    User::destroy( $user->id );
+                }
+            }
+
+            echo 'Suspicious Patients Delete Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->hourly();
+
+        $schedule->call(function () {
             echo 'Delete pending ban appeals Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $pendingBanAppeals = BanAppeal::whereNotNull('pending_fields')->where('updated_at', '<', Carbon::now()->subDays(14) )->get();
