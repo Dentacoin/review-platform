@@ -61,12 +61,12 @@
 						<div class="flex">
 							<div>
 								{!! trans('vox.page.stats.period-from') !!}:<br/>
-								<input type="text" id="date-from" autocomplete="off">
+								<input type="text" id="date-from" autocomplete="off" placeholder="mm/dd/yyyy">
 							</div>
 							-
 							<div>
 								{!! trans('vox.page.stats.period-to') !!}:<br/>
-								<input type="text" id="date-to" autocomplete="off">
+								<input type="text" id="date-to" autocomplete="off" placeholder="mm/dd/yyyy">
 							</div>
 						</div>
 						<div class="button-holder">

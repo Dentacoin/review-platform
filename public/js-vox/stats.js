@@ -500,7 +500,15 @@ $(document).ready(function(){
         if(time_filter=='all') {
             timeframe = null;
         } else if(time_filter=='custom') {
+            if($('#date-from').val() && $('#date-to').val()) {
 
+                var day_from = new Date($('#date-from').val());
+                var day_to = new Date($('#date-to').val());
+
+                timeframe = [];
+                timeframe.push(day_from);
+                timeframe.push(day_to);
+            }
         } else {
             if(time_filter=='last7') {
                 var ms = new Date().getTime() - 86400000*7;
@@ -562,8 +570,8 @@ $(document).ready(function(){
                             startDate: start_date,
                             minDays: 1,
                             singleMonth: $(window).outerWidth() > 768 ? false : true,
-                            setValue: function(s,s1,s2)
-                            {
+                            format: 'MMM DD, YYYY',
+                            setValue: function(s,s1,s2) {
                                 var day_from = new Date(s1);
                                 var day_to = new Date(s2);
 
@@ -574,7 +582,7 @@ $(document).ready(function(){
                                 var options = { 
                                 //    weekday: 'long', 
                                     year: 'numeric', 
-                                    month: 'short', 
+                                    month: 'numeric', 
                                     day: 'numeric' 
                                 };
 
