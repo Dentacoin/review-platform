@@ -888,7 +888,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             echo 'Suspicious Patients Delete Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->hourly();
+        })->dailyAt('13:00');
 
         $schedule->call(function () {
             echo 'Delete pending ban appeals Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
