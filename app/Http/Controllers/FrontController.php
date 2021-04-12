@@ -407,6 +407,16 @@ class FrontController extends BaseController {
 
         if(!empty($this->user) && $this->user->id == 37530) {
             $this->initVoxWP();
+
+            // $query = new \WP_Query(array(
+            //     'post_type' => 'post',
+            //     'post_status' => 'publish',
+            //     'orderby' => 'date',
+            //     'order' => 'DESC',
+            // ));
+            // $items = $query->get_posts();
+
+            // dd($items);
         }
         $this->PrepareViewData($page, $params, 'vox');
 
@@ -604,14 +614,14 @@ class FrontController extends BaseController {
     public function initVoxWP() {
 
         
-        /*
-        wp-includes/l10n.php
+        
+        // wp-includes/l10n.php
         if(!function_exists('__')) {
             function __( $text, $domain = 'default' ) {
                     return translate( $text, $domain );
             }
         }
-        */
+        
 
         /*
             + Create new empty theme (so __ is not used)
