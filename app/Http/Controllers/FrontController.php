@@ -632,8 +632,7 @@ class FrontController extends BaseController {
 
 
         define('WP_USE_THEMES', false);
-
         require __DIR__.'/../../../../blog-dv/blog/wp-blog-header.php';
-        \WPGlobus::Config()->set_language( 'en_GB' );
+        // \WPGlobus::Config()->set_language( 'en_GB' );
     }
 }
