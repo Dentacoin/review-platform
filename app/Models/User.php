@@ -279,8 +279,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function permanentBans() {
         return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->whereNull('expires')->orderBy('id', 'DESC');
     }
-    public function permanentVoxBans() {
-        return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->where('platform', 'vox')->whereNull('expires')->orderBy('id', 'DESC');
+    public function permanentVoxBan() {
+        return $this->hasOne('App\Models\UserBan', 'id', 'user_id')->where('platform', 'vox')->whereNull('expires');
     }
     public function invites() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('created_at', 'DESC');
@@ -2613,8 +2613,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
         }
 
-        $permanent_vox_ban = UserBan::where('user_id', $this->id)->where('domain', 'vox')->whereNull('expires')->first();
-        if(!empty($permanent_vox_ban)) {
+        if(!empty($this->permanentVoxBan())) {
             $info .= '<p style="color:red">Permenant Vox ban</p>';
         }
 
