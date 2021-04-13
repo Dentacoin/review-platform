@@ -1569,9 +1569,7 @@ class IndexController extends ApiController {
 
 	public function getBanInfo() {
 
-
-        // $user = Auth::guard('api')->user();
-        $user = User::find(71650);
+        $user = Auth::guard('api')->user();
 
         $current_ban = $user->isBanned('vox');
 
@@ -1606,14 +1604,14 @@ class IndexController extends ApiController {
 						'name' => $user->getNames()
 					]),
 				];
-				$ret['title'] = $titles[$prev_bans];
+				$ret['title'] = $titles[$prev_bans - 1];
 				$contents = [
 					trans('vox.page.bans.ban-mistakes-content-1'),
 					trans('vox.page.bans.ban-mistakes-content-2'),
 					trans('vox.page.bans.ban-mistakes-content-3'),
 					trans('vox.page.bans.ban-mistakes-content-4'),
 				];
-				$ret['content'] = $contents[$prev_bans];
+				$ret['content'] = $contents[$prev_bans - 1];
 
         	} else if($current_ban->type == 'too-fast') {
 
@@ -1640,14 +1638,14 @@ class IndexController extends ApiController {
 						'name' => $user->getNames()
 					]),
 				];
-				$ret['title'] = $titles[$prev_bans];
+				$ret['title'] = $titles[$prev_bans - 1];
 				$contents = [
 					trans('vox.page.bans.ban-too-fast-content-1'),
 					trans('vox.page.bans.ban-too-fast-content-2'),
 					trans('vox.page.bans.ban-too-fast-content-3'),
 					trans('vox.page.bans.ban-too-fast-content-4'),
 				];
-				$ret['content'] = $contents[$prev_bans];
+				$ret['content'] = $contents[$prev_bans - 1];
 
         	}
         }
