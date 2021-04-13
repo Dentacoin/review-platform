@@ -1512,7 +1512,6 @@ class IndexController extends ApiController {
 		];
 
         if($user) {
-
 			$daily_voxes = DcnReward::where('user_id', $user->id)->where('platform', 'vox')->where('type', 'survey')->where('created_at', '>', Carbon::now()->subDays(1))->count();
 
 			if($daily_voxes >= 10) {
@@ -1541,14 +1540,12 @@ class IndexController extends ApiController {
 			}
         }
 
-
         return Response::json( $ret );
 	}
 
 	public function getBanTimeLeft() {
 
         $user = Auth::guard('api')->user();
-        // $user = User::find(37530);
 
 		$current_ban = $user->isBanned('vox');
 
@@ -1715,36 +1712,13 @@ class IndexController extends ApiController {
                 return Response::json( [
                     'success' => true,
                 ] );
-
             }
 		}
-
-    }
-
-
-    public function checkToken() {
-
-    	try {
-		   $bearerToken = request('token');
-		   $parsedToken = (new \Lcobucci\JWT\Parser())->parse($bearerToken);
-		   $tokenId = $parsedToken->getHeader('jti');
-		   $this->client = \Laravel\Passport\Token::find($tokenId)->client;
-		} catch (Exception $e) {
-		   $this->client = [];
-		}
-
-  //   	$bearerToken = request('token');
-		// $tokenId = (new \Lcobucci\JWT\Parser())->parse($bearerToken)->getHeader('jti');
-		// $client = \Laravel\Passport\Token::find($tokenId)->client;
-
-		// $client_id = $client->id;
-		// $client_secret = $client->secret;
     }
 
     public function recommendDentavox() {
 
     	$user = Auth::guard('api')->user();
-    	// $user = User::find(37530);
 
     	if(!empty($user)) {
     		
@@ -1830,7 +1804,6 @@ class IndexController extends ApiController {
         	'success' => false,
         ] );
     }
-
 
     public function isDentacoinDown() {
 

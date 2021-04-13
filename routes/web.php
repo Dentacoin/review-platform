@@ -273,7 +273,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::get('get-ban-time-left',					'IndexController@getBanTimeLeft');
 	Route::get('get-ban-info',						'IndexController@getBanInfo');
 	Route::post('dentist-request-survey',			'IndexController@dentistRequestSurvey');
-	Route::any('check-token',						'IndexController@checkToken');
 	Route::any('recommend-dentavox',				'IndexController@recommendDentavox');
 	Route::post('encrypt-user-token',				'IndexController@encryptUserToken');
 

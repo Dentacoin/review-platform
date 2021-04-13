@@ -2308,7 +2308,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Scheduled surveys '.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now()->addHours(2) )->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
+            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now()->addHours(3) )->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
 
             if($hidden_voxes->isNotEmpty()) {
 
