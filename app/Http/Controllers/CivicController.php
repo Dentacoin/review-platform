@@ -29,7 +29,7 @@ class CivicController extends BaseController {
 			$fields = [];
 			if(!empty( $data['data'] )) {
 				foreach ($data['data'] as $key => $value) {
-					$fields[$value['label']] = $value['value'];					
+					$fields[$value['label']] = $value['value'];
 					if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
 						$data['data'][$key]['value'] = 'Masked';
 					}
@@ -43,6 +43,10 @@ class CivicController extends BaseController {
 			];
 			foreach ($hashFields as $f) {
 				$cardInfo[] = !empty($fields[$f]) ? $fields[$f] : '';
+			}
+
+			if(isset($fields['documents.genericId.country'])) {
+				$c->country_code = $fields['documents.genericId.country'];
 			}
 			$c->response = json_encode($data);
 			$c->hash = md5(implode('|', $cardInfo));

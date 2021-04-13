@@ -10,9 +10,11 @@ class Civic extends Model {
     use SoftDeletes;
     
     protected $fillable = [
+        'user_id',
         'jwtToken',
         'response',
         'hash',
+        'country_code',
     ];
 
     protected $dates = [
