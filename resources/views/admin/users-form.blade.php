@@ -8,7 +8,7 @@
         <a class="label label-danger" href="{{ url('cms/users/edit/'.$item->id) }}#logins-list">Click for Suspicious Logins</a>
     @endif
     @if($item->permanentVoxBan()) 
-        <div class="label label-danger">Permanent Vox Ban</div>
+        <div class="label label-warning">Permanent Vox Ban</div>
     @endif
     @if($item->is_dentist)
         @if($item->status == 'admin_imported')
