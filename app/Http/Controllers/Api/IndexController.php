@@ -1584,18 +1584,18 @@ class IndexController extends ApiController {
 				$prev_bans = $user->getPrevBansCount('vox', 'mistakes');
 
 				$days = 0;
-		        if($prev_bans==0) {
+		        if($prev_bans==1) {
 		            $days = 1;
-		        } else if($prev_bans==1) {
-		            $days = 3;
 		        } else if($prev_bans==2) {
+		            $days = 3;
+		        } else if($prev_bans==3) {
 		            $days = 7;
 		        }
 
 				$ret['ban'] = true;
 				$ret['ban_duration'] = $days;
 				$ret['ban_times'] = $prev_bans;
-				$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
+				$ret['img'] = url('new-vox-img/ban'.($prev_bans).'.png');
 				$titles = [
 					trans('vox.page.bans.ban-mistakes-title-1'),
 					trans('vox.page.bans.ban-mistakes-title-2'),
@@ -1618,18 +1618,18 @@ class IndexController extends ApiController {
 				$prev_bans = $user->getPrevBansCount('vox', 'too-fast');
 
 				$days = 0;
-		        if($prev_bans==0) {
+		        if($prev_bans==1) {
 		            $days = 1;
-		        } else if($prev_bans==1) {
-		            $days = 3;
 		        } else if($prev_bans==2) {
+		            $days = 3;
+		        } else if($prev_bans==3) {
 		            $days = 7;
 		        }
 
 				$ret['ban'] = true;
 				$ret['ban_duration'] = $days;
 				$ret['ban_times'] = $prev_bans;
-				$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
+				$ret['img'] = url('new-vox-img/ban'.($prev_bans).'.png');
 				$titles = [
 					trans('vox.page.bans.ban-too-fast-title-1'),
 					trans('vox.page.bans.ban-too-fast-title-2'),
@@ -1646,7 +1646,6 @@ class IndexController extends ApiController {
 					trans('vox.page.bans.ban-too-fast-content-4'),
 				];
 				$ret['content'] = $contents[$prev_bans - 1];
-
         	}
         }
 
