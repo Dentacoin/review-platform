@@ -1,14 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Routing\Controller as BaseController;
+
 use App\Models\Civic;
+
+use Validator;
 use Response;
 use Request;
-use Validator;
+use Log;
 
-class CivicController extends BaseController
-{
+class CivicController extends BaseController {
 
 	public function add() {
         header('Access-Control-Allow-Origin: *');
@@ -19,6 +22,8 @@ class CivicController extends BaseController
 			}
 			$c->jwtToken = Request::input('jwtToken');
 			$data = Request::input('data');
+
+			Log::info($data);
 			$hash = '';
 			$cardInfo = [];
 			$fields = [];
