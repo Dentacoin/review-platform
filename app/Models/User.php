@@ -2616,9 +2616,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
         }
 
-        if(!empty($this->permanentVoxBan())) {
+        $permanent_vox_ban = UserBan::where('user_id', $this->id)->where('domain', 'vox')->whereNull('expires')->first();
+        if(!empty($permanent_vox_ban)) {
             $info .= '<p style="color:red">Permenant Vox ban</p>';
         }
+        // if(!empty($this->permanentVoxBan())) {
+        //     $info .= '<p style="color:red">Permenant Vox ban</p>';
+        // }
 
         return $info !== '' ? $info : 'Nothing wrong with this user';
     }
