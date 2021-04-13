@@ -1570,7 +1570,8 @@ class IndexController extends ApiController {
 	public function getBanInfo() {
 
 
-        $user = Auth::guard('api')->user();
+        // $user = Auth::guard('api')->user();
+        $user = User::find(71650);
 
         $current_ban = $user->isBanned('vox');
 
