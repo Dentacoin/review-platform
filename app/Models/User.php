@@ -282,6 +282,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function permanentVoxBan() {
         return $this->hasOne('App\Models\UserBan', 'id', 'user_id')->where('platform', 'vox')->whereNull('expires');
     }
+    public function permanentTrpBan() {
+        return $this->hasOne('App\Models\UserBan', 'id', 'user_id')->where('platform', 'trp')->whereNull('expires');
+    }
     public function invites() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('created_at', 'DESC');
     }

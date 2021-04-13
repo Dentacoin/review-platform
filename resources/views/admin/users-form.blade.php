@@ -10,6 +10,9 @@
     @if($item->permanentVoxBan()) 
         <div class="label label-warning">Permanent Vox Ban</div>
     @endif
+    @if($item->permanentTrpBan()) 
+        <div class="label label-warning">Permanent TRP Ban</div>
+    @endif
     @if($item->is_dentist)
         @if($item->status == 'admin_imported')
             <a onclick="$('#claim-link').show();" class="btn btn-primary" style="float: right;">Short Claim Form</a>
