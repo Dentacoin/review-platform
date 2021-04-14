@@ -243,7 +243,7 @@
                                 <input class="form-control" type="number" name="daily_max_amount" value="{{ $withdrawal_conditions->daily_max_amount }}" />
                             </div>
                         </div>
-                        <p>Todays transactions amount {{ round(App\Models\DcnTransaction::where('sended_at', '>=', date('Y-m-d').' 00:00:00')->where('status', 'unconfirmed')->get()->sum('amount') * @file_get_contents('/tmp/dcn_original_price')) }}$</p>
+                        <p>Todays transactions amount {{ round(App\Models\DcnTransaction::where('sended_at', '>=', date('Y-m-d').' 00:00:00')->whereIn('status', ['unconfirmed', 'completed'])->get()->sum('amount') * @file_get_contents('/tmp/dcn_original_price')) }}$</p>
                                                 
                         <div class="form-group">
                             <div class="col-md-6">
