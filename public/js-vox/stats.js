@@ -502,8 +502,23 @@ $(document).ready(function(){
         } else if(time_filter=='custom') {
             if($('#date-from').val() && $('#date-to').val()) {
 
-                var day_from = new Date($('#date-from').val());
-                var day_to = new Date($('#date-to').val());
+                var from = $('#date-from').val();
+                var to = $('#date-to').val();
+
+                var d_from = from.split('/')[0];
+                var m_from = from.split('/')[1];
+                var y_from = from.split('/')[2];
+
+                var converted_date_from = m_from+'/'+d_from+'/'+y_from;
+
+                var d_to = to.split('/')[0];
+                var m_to = to.split('/')[1];
+                var y_to = to.split('/')[2];
+
+                var converted_date_to = m_to+'/'+d_to+'/'+y_to;
+
+                var day_from = new Date(converted_date_from);
+                var day_to = new Date(converted_date_to);
 
                 timeframe = [];
                 timeframe.push(day_from);
@@ -588,8 +603,21 @@ $(document).ready(function(){
 
                                 var from = timeframe[0].toLocaleDateString('en', options);
                                 var to = timeframe[1].toLocaleDateString('en', options);
-                                $('#date-from').val(from);
-                                $('#date-to').val(to);
+
+                                var d_from = from.split('/')[1];
+                                var m_from = from.split('/')[0];
+                                var y_from = from.split('/')[2];
+
+                                var converted_date_from = d_from+'/'+m_from+'/'+y_from;
+
+                                var d_to = to.split('/')[1];
+                                var m_to = to.split('/')[0];
+                                var y_to = to.split('/')[2];
+
+                                var converted_date_to = d_to+'/'+m_to+'/'+y_to;
+
+                                $('#date-from').val(converted_date_from);
+                                $('#date-to').val(converted_date_to);
                             }
                         });
 
