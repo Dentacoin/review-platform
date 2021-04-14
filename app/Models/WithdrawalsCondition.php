@@ -10,7 +10,8 @@ class WithdrawalsCondition extends Model {
         "min_amount",
         "min_vox_amount",
         "timerange",
-        "count_pending_transactions"
+        "count_pending_transactions",
+        "daily_max_amount",
     ];
     
     protected $dates = [

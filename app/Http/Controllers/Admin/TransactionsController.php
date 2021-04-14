@@ -433,6 +433,10 @@ class TransactionsController extends AdminController
             $withdrawal_conditions->count_pending_transactions = request('count_pending_transactions');
         }
 
+        if(!empty(request('daily_max_amount'))) {
+            $withdrawal_conditions->daily_max_amount = request('daily_max_amount');
+        }
+
         $withdrawal_conditions->save();
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');

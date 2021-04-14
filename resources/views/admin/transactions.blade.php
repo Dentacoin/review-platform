@@ -238,6 +238,13 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-2">Transactions daily max amount ( in $ )</label>
+                            <div class="col-md-4">
+                                <input class="form-control" type="number" name="daily_max_amount" value="{{ $withdrawal_conditions->daily_max_amount }}" />
+                            </div>
+                        </div>
+                                                
+                        <div class="form-group">
                             <div class="col-md-6">
                                 <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
                             </div>
