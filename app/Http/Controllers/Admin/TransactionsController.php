@@ -433,8 +433,10 @@ class TransactionsController extends AdminController
             $withdrawal_conditions->count_pending_transactions = request('count_pending_transactions');
         }
 
-        if(!empty(request('daily_max_amount'))) {
+        if(!empty(request('daily_max_amount')) || request('daily_max_amount') === 0) {
             $withdrawal_conditions->daily_max_amount = request('daily_max_amount');
+        } else {
+            $withdrawal_conditions->daily_max_amount = null;
         }
 
         $withdrawal_conditions->save();
