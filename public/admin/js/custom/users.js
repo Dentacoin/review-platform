@@ -195,4 +195,35 @@ $(document).ready(function(){
     	}
     });
 
+    $('#check-kyc').click( function() {
+    	var token = $(this).attr('civic-token');
+
+    	$.ajax({
+            type: 'POST',
+            url: 'https://api.dentacoin.com/api/test-civic',
+            data: {
+                jwtToken: token
+            },
+            dataType: 'json',
+            success: function (response) {
+            	if(response.res.success) {
+            		$('#kyc-result').html('success');
+            		// for( var i in response.data) {
+            		// 	if(i == 'product_news' || i == 'blog') {
+
+            		// 		for(var u in response.data[i]) {
+            		// 			var value = response.data[i][u]['checked'] ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>';
+            		// 			$('#'+i).find('.'+u).html(value);
+            		// 		}
+            		// 	}
+            		// }
+            	} else {
+            		$('#kyc-result').html(response.res.errors.token);
+            		 //token
+            	}
+                console.log(response);
+            }
+        });
+    });
+
 });

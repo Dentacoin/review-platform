@@ -280,10 +280,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->whereNull('expires')->orderBy('id', 'DESC');
     }
     public function permanentVoxBan() {
-        return $this->hasOne('App\Models\UserBan', 'id', 'user_id')->where('platform', 'vox')->whereNull('expires');
+        return $this->hasOne('App\Models\UserBan', 'user_id', 'id')->where('domain', 'vox')->whereNull('expires');
     }
     public function permanentTrpBan() {
-        return $this->hasOne('App\Models\UserBan', 'id', 'user_id')->where('platform', 'trp')->whereNull('expires');
+        return $this->hasOne('App\Models\UserBan', 'user_id', 'id')->where('domain', 'trp')->whereNull('expires');
     }
     public function invites() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('created_at', 'DESC');
@@ -338,6 +338,35 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     public function transactions() {
         return $this->hasMany('App\Models\DcnTransaction', 'user_id', 'id');
+    }
+    public function kycValidation() {
+        return $this->hasOne('App\Models\Civic', 'user_id', 'id');
+    }
+
+    public function kycEmailPhone() {
+        $data = json_decode($this->kycValidation->response, true);
+        $email = null;
+        $phone = null;
+
+        if(!empty($data['userId'])) {
+
+
+            if(!empty($data['data'])) {
+                foreach ($data['data'] as $dd) {
+                    if($dd['label'] == 'contact.personal.email' && $dd['isOwner'] && $dd['isValid']) {
+                        $email = $dd['value'];
+                    }
+                    if($dd['label'] == 'contact.personal.phoneNumber' && $dd['isOwner'] && $dd['isValid']) {
+                        $phone = $dd['value'];
+                    }
+                }
+            }
+        }
+
+        return [
+            'email' => $email,
+            'phone' => $phone,
+        ];
     }
 
     public function getWebsiteUrl() {
@@ -2616,13 +2645,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
         }
 
-        $permanent_vox_ban = UserBan::where('user_id', $this->id)->where('domain', 'vox')->whereNull('expires')->first();
-        if(!empty($permanent_vox_ban)) {
+        if(!empty($this->permanentVoxBan)) {
             $info .= '<p style="color:red">Permenant Vox ban</p>';
         }
-        // if(!empty($this->permanentVoxBan())) {
-        //     $info .= '<p style="color:red">Permenant Vox ban</p>';
-        // }
 
         return $info !== '' ? $info : 'Nothing wrong with this user';
     }

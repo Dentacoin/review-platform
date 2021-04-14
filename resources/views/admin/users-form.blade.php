@@ -7,11 +7,11 @@
     @if( $item->getSameIPUsers() && !$item->is_dentist )
         <a class="label label-danger" href="{{ url('cms/users/edit/'.$item->id) }}#logins-list">Click for Suspicious Logins</a>
     @endif
-    @if($item->permanentVoxBan()) 
-        <!-- <div class="label label-warning">Permanent Vox Ban</div> -->
+    @if($item->permanentVoxBan)
+        <div class="label label-warning">Permanent Vox Ban</div>
     @endif
-    @if($item->permanentTrpBan()) 
-        <!-- <div class="label label-warning">Permanent TRP Ban</div> -->
+    @if($item->permanentTrpBan)
+        <div class="label label-warning">Permanent TRP Ban</div>
     @endif
     @if($item->is_dentist)
         @if($item->status == 'admin_imported')
@@ -1669,6 +1669,46 @@
         </div>
     </div>
 </div>
+
+@if(!empty($item->kycValidation))
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Civic KYC Validation</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="row table-responsive-md">
+
+                        <table class="table table-striped table-question-list">
+                            <thead>
+                                <tr>
+                                    <th>Civic info</th>
+                                    <th>Check result</th>
+                                    <th>Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Email: {{ $item->kycEmailPhone()['email'] }} <br/>
+                                        Phone: {{ $item->kycEmailPhone()['phone'] }} <br/>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-info" id="check-kyc" civic-token="{{ $item->kycValidation->jwtToken }}">Check</a>
+                                    </td>
+                                    <td>
+                                        <p id="kyc-result"></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 <div id="deleteModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
