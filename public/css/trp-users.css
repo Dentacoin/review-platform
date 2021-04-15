@@ -2149,6 +2149,14 @@ body.reviews-guided-tour .widget-code-wrap {
       @media screen and (max-width: 768px) {
         .fixed-popup .popup-inner .invite-content .step-title span {
           font-size: 18px; } }
+  .fixed-popup .popup-inner .invite-content .invite-hubapp {
+    display: inline-block;
+    position: relative;
+    top: 10px; }
+    .fixed-popup .popup-inner .invite-content .invite-hubapp.manual-hubapp {
+      top: -20px; }
+    .fixed-popup .popup-inner .invite-content .invite-hubapp i {
+      margin-top: 0px; }
   .fixed-popup .popup-inner .invite-content .checkboxes-wrapper {
     width: 100%;
     overflow: hidden;

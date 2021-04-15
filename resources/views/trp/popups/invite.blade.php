@@ -60,7 +60,9 @@
 				{!! Form::close() !!}
 			</div>
 
-			@include('trp.parts.patient-invites-steps')
+			@include('trp.parts.patient-invites-steps', [
+				'number' => 1,
+			])
 		</div>
 
 		<div id="invite-option-email" class="invite-content" style="display: none;">
@@ -95,6 +97,14 @@
 						</div>
 					</div>
 				</div>
+
+				@if($user->is_partner)
+					<label class="checkbox-label invite-hubapp manual-hubapp" for="invite-hubapp" >
+						<input type="checkbox" class="special-checkbox" id="invite-hubapp" name="invite-hubapp"/>
+						<i class="far fa-square"></i>
+						Invite to Dentacoin HubApp
+					</label>
+				@endif
 
 				<div class="alert invite-alert" style="display: none; margin-top: 20px;">
 				</div>
@@ -168,7 +178,9 @@
 				{!! Form::close() !!}
 			</div>
 
-			@include('trp.parts.patient-invites-steps')
+			@include('trp.parts.patient-invites-steps', [
+				'number' => 2,
+			])
 		</div>
 
 		@if(false)

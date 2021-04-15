@@ -3248,6 +3248,20 @@ body.reviews-guided-tour {
 				}
 			}
 
+			.invite-hubapp {
+				display: inline-block;
+			    position: relative;
+			    top: 10px;
+
+			    &.manual-hubapp {
+			    	top: -20px;
+			    }
+
+			    i {
+			    	margin-top: 0px;
+			    }
+			}
+
 			.checkboxes-wrapper {
 				width: 100%;
 				overflow: hidden;

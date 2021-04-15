@@ -83,6 +83,14 @@
 			<div class="patient-info-value for-name"></div>
 		</div>
 
+		@if($user->is_partner)
+			<label class="checkbox-label invite-hubapp" for="invite-hubapp-{{ $number }}" >
+				<input type="checkbox" class="special-checkbox" id="invite-hubapp-{{ $number }}" name="invite-hubapp"/>
+				<i class="far fa-square"></i>
+				Invite to Dentacoin HubApp
+			</label>
+		@endif
+
 		<div class="alert invite-alert" style="display: none; margin-top: 20px;"></div>
 
 		<div class="tac">
