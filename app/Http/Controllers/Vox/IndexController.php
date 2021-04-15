@@ -213,11 +213,30 @@ class IndexController extends FrontController {
 			}
 		}
 
+		$latest_blog_posts = null;
+		if($all_taken){
+			$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
+
+			foreach($latest_blog_posts as $lbp) {
+				$post_terms = DB::connection('vox_wordpress_db')->table('term_relationships')->where('object_id', $lbp->ID)->get()->pluck('term_taxonomy_id')->toArray();
+				$category = DB::connection('vox_wordpress_db')->table('terms')->whereIn('term_id', $post_terms)->first();
+
+				$lbp->cat_name = $category->name;
+
+				$post_image_id = DB::connection('vox_wordpress_db')->table('postmeta')->where('post_id', $lbp->ID)->where('meta_key', '_thumbnail_id')->first()->meta_value;
+				$post_image_link = DB::connection('vox_wordpress_db')->table('posts')->where('id', $post_image_id)->first();
+
+				$lbp->img = $post_image_link->guid;
+
+			}
+		}
+
 		$seos = PageSeo::find(2);
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
         $arr = array(
         	'all_taken' => $all_taken,
+        	'latest_blog_posts' => $latest_blog_posts,
             'is_warning_message_shown' => $is_warning_message_shown,
 			'countries' => Country::with('translations')->get(),
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
