@@ -84,7 +84,7 @@
 
 		@if($user->id == 37530)
 			<div class="section-slider-posts">
-				<h3>Latest blog posts</h3>
+				<h3 class="blog-posts-title">Latest blog posts</h3>
 				<div class="slider-posts-inner">
 		    		<div class="flickity slider-posts">
 						@foreach($latest_blog_posts as $lp)

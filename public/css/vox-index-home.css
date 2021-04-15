@@ -36,6 +36,10 @@
     .section-slider-posts {
       margin-top: 50px;
       margin-bottom: 50px; } }
+  .section-slider-posts .blog-posts-title {
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 30px; }
   .section-slider-posts .gray-wp-button {
     background-color: #dadada;
     border: none;
@@ -65,7 +69,7 @@
         padding: 0px 30px; } }
   .section-slider-posts .slider-posts .post {
     width: 33.3%;
-    padding: 60px 30px; }
+    padding: 20px 30px; }
     @media screen and (max-width: 1260px) {
       .section-slider-posts .slider-posts .post {
         padding: 60px 20px; } }

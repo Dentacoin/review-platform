@@ -65,6 +65,12 @@ $main-color: #38ace5;
 		margin-bottom: 50px;
 	}
 
+	.blog-posts-title {
+		text-align: center;
+	    text-transform: uppercase;
+	    margin-bottom: 30px;
+	}
+
 	.gray-wp-button {
 		background-color: #dadada;
 		border: none;
@@ -105,7 +111,7 @@ $main-color: #38ace5;
 	.slider-posts {
 		.post {
 			width: 33.3%;
-			padding: 60px 30px;
+			padding: 20px 30px;
 
 			@media #{$small_pc} {
 				padding: 60px 20px;
