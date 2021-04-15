@@ -45,45 +45,25 @@
 				<img src="{{ url('/new-vox-img/all-surveys-taken.png') }}">
 			</div>
 			<div class="col">
-				<h3>Oops! No surveys available.</h3>
-				<p>It seems you have taken all surveys available to users with your demographics. No worries: We upload two new surveys every week. Limits are dynamic, so just make it a daily habit to check for newly available surveys!</p>
-				<b>Meanwhile, why don't you:</b>
+				<h3>{{ trans('vox.page.home.all-surveys-done.title') }}</h3>
+				<p>{!! nl2br(trans('vox.page.home.all-surveys-done.description')) !!}</p>
+				<b>{{ trans('vox.page.home.all-surveys-done.info') }}</b>
 
 				<div class="btns">
 					@if($user->platform != 'external')
 						<a class="opinion blue-button" href="https://account.dentacoin.com/invite?platform=dentavox">
-							Invite {{ $user->is_dentist ? 'patients' : 'friends' }}
+							{{ $user->is_dentist ? trans('vox.page.home.all-surveys-done.invite-patients') : trans('vox.page.home.all-surveys-done.invite-friends') }}
 						</a>
 					@endif
 					<a class="statistics blue-button {{ $user->platform != 'external' ? 'secondary' : '' }}" href="{{ getLangUrl('dental-survey-stats') }}">
-						Browse Stats
+						{{ trans('vox.page.home.all-surveys-done.browse-stats') }}
 					</a>
 				</div>
 			</div>
 		</div>
 
-		<!-- <div class="alert alert-info alert-done-all-surveys">
-			@if($user->is_dentist)
-				{!! nl2br(trans('vox.page.home.dentist.alert-done-all-surveys', [
-					'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
-					'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
-					'endlink' => '</a>',
-				])) !!}
-			@else
-				@if($user->platform == 'external')
-					Looks like you have taken all surveys. Good job! While waiting for the next topic, you can browse our <a href=" {{ getLangUrl('dental-survey-stats') }}"> survey statistics</a>. Stay tuned for more updates!
-				@else
-					{!! nl2br(trans('vox.page.home.patients.alert-done-all-surveys', [
-						'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
-						'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
-						'endlink' => '</a>',
-					])) !!}
-				@endif
-			@endif
-		</div> -->
-
 		<div class="section-slider-posts">
-			<h3 class="blog-posts-title">Latest blog posts</h3>
+			<h3 class="blog-posts-title">{{ trans('vox.page.home.all-surveys-done.blog-posts-title') }}</h3>
 			<div class="slider-posts-inner">
 	    		<div class="flickity slider-posts">
 					@foreach($latest_blog_posts as $lp)
@@ -103,7 +83,7 @@
 					    			<p>
 					    				{{ $lp->post_excerpt }}
 					    			</p>
-			    					<div class="read-more">Read more<img src="https://dentavox.dentacoin.com/blog/wp-content/themes/blog/img/read-arrow.png"></div>
+			    					<div class="read-more">{{ trans('vox.page.home.all-surveys-done.blog-posts-more') }}<img src="https://dentavox.dentacoin.com/blog/wp-content/themes/blog/img/read-arrow.png"></div>
 					    		</div>
 				    		</div>
 		    			</a>
@@ -111,7 +91,7 @@
 	    		</div>
 	    	</div>
 	    	<div class="tac">
-	    		<a href="https://dentavox.dentacoin.com/blog/" target="_blank" class="gray-wp-button">See all</a>
+	    		<a href="https://dentavox.dentacoin.com/blog/" target="_blank" class="gray-wp-button">{{ trans('vox.page.home.all-surveys-done.blog-posts-all') }}</a>
 	    	</div>
 	    </div>
 		
