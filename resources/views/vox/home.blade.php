@@ -39,137 +39,134 @@
 		</div>
 	@endif
 
-	<div class="container">
+	@if($all_taken)
+		<div class="all-taken-wrapper flex break-mobile">
+			<div class="col">
+				<img src="{{ url('/new-vox-img/all-surveys-taken.png') }}">
+			</div>
+			<div class="col">
+				<h3>Oops! No surveys available.</h3>
+				<p>It seems you have taken all surveys available to users with your demographics. No worries: We upload two new surveys every week. Limits are dynamic, so just make it a daily habit to check for newly available surveys!</p>
+				<b>Meanwhile, why don't you:</b>
 
-		@if($user && $is_warning_message_shown && !request()->exists('daily-answer'))
-			<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
-		@endif
+				<div class="btns">
+					@if($user->platform != 'external')
+						<a class="opinion blue-button" href="https://account.dentacoin.com/invite?platform=dentavox">
+							Invite {{ $user->is_dentist ? 'patients' : 'friends' }}
+						</a>
+					@endif
+					<a class="statistics blue-button {{ $user->platform != 'external' ? 'secondary' : '' }}" href="{{ getLangUrl('dental-survey-stats') }}">
+						Browse Stats
+					</a>
+				</div>
+			</div>
+		</div>
 
-		@if(request()->exists('daily-answer'))
-			<div class="daily-poll-welcome">
-				<div class="flex-mobile">
-					<div class="col">
-				    	<h3>{{ trans('vox.page.home.daily-poll.title') }}</h3>
-				    	<h4>{!! nl2br(trans('vox.page.home.daily-poll.subtitle', ['reward' => '<b>'. $daily_poll_reward.' DCN</b>'])) !!}</h4>
-				    </div>
-				    <div class="col">
-		    			<img class="poll-man" src="{{ url('new-vox-img/welcome-daily-poll.png') }}" width="331" height="370">
-		    		</div>
-		    	</div>
-		    	<h4 class="title-next">{{ trans('vox.page.home.daily-poll.next-title') }}</h4>
+		<!-- <div class="alert alert-info alert-done-all-surveys">
+			@if($user->is_dentist)
+				{!! nl2br(trans('vox.page.home.dentist.alert-done-all-surveys', [
+					'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
+					'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
+					'endlink' => '</a>',
+				])) !!}
+			@else
+				@if($user->platform == 'external')
+					Looks like you have taken all surveys. Good job! While waiting for the next topic, you can browse our <a href=" {{ getLangUrl('dental-survey-stats') }}"> survey statistics</a>. Stay tuned for more updates!
+				@else
+					{!! nl2br(trans('vox.page.home.patients.alert-done-all-surveys', [
+						'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
+						'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
+						'endlink' => '</a>',
+					])) !!}
+				@endif
+			@endif
+		</div> -->
 
-		    	<div class="flex doing-next">
-		    		<div class="col">
-		    			<img src="{{ url('new-vox-img/browse-polls-icon-white.png') }}" width="126" height="126">
-		    			<a href="{{ getLangUrl('daily-polls') }}" class="blue-button">
-			    			<img src="{{ url('new-vox-img/browse-polls-icon-white.svg') }}" width="60" height="60">
-				    		{{ trans('vox.page.home.daily-poll.browse-polls') }}
-				    	</a>
-		    		</div>
-		    		<div class="col">
-		    			<img src="{{ url('new-vox-img/take-paid-surveys-white.png') }}" width="126" height="126">
-		    			<a href="javascript:;" class="blue-button scroll-to-surveys">
-		    				<img src="{{ url('new-vox-img/take-paid-surveys-white.svg') }}" width="60" height="60">
-		    				{{ trans('vox.page.home.daily-poll.take-surveys') }}
-		    			</a>
-		    		</div>
-		    		<div class="col">
-		    			<img src="{{ url('new-vox-img/check-stats-white.png') }}" width="126" height="126">
-		    			<a href="{{ getLangUrl('dental-survey-stats') }}" class="blue-button">
-		    				<img src="{{ url('new-vox-img/check-stats-white.svg') }}" width="60" height="60">
-		    				{{ trans('vox.page.home.daily-poll.check-stats') }}
-		    			</a>
+		@if($user->id == 37530)
+			<div class="section-slider-posts">
+				<div class="slider-posts-inner">
+
+		    		<div class="flickity slider-posts">
+						@foreach($latest_blog_posts as $lp)
+			    			<div class="post">
+			    				<div class="post-inner">
+				    				<a href="{{ $lp->guid }}" target="_blank" class="post-image cover" style="background-image: url({{ $lp->img }}); background-position: 50% 50%;"></a>
+			    					<div class="hover-top">
+					    				<div class="post-info">
+			    							<a href="javascript::" class="cat">
+												{{ $lp->cat_name }}
+											</a>
+						    				<span class="date">{{ date("M j, Y (D)", strtotime($lp->post_date)) }}</span> 
+						    			</div>
+						    			<a href="{{ $lp->guid }}" target="_blank"><h4>{{ $lp->post_title }}</h4></a>
+						    		</div>
+						    		<div class="bottom-container">
+						    			<p>
+						    				{{ $lp->post_excerpt }}
+						    			</p>
+				    					<a href="{{ $lp->guid }}" target="_blank" class="read-more">Read more<img src="https://dentavox.dentacoin.com/blog/wp-content/themes/blog/img/read-arrow.png"></a>
+						    		</div>
+					    		</div>
+			    			</div>
+			    		@endforeach
 		    		</div>
 		    	</div>
 		    </div>
-		@endif
+	    @endif
 		
-		<form  method="get" class="another-questions">
-  			@include('front.errors')
-  			
-  			@if(!$all_taken)
+	@else
+		<div class="container">
+
+			@if($user && $is_warning_message_shown && !request()->exists('daily-answer'))
+				<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
+			@endif
+
+			@if(request()->exists('daily-answer'))
+				<div class="daily-poll-welcome">
+					<div class="flex-mobile">
+						<div class="col">
+					    	<h3>{{ trans('vox.page.home.daily-poll.title') }}</h3>
+					    	<h4>{!! nl2br(trans('vox.page.home.daily-poll.subtitle', ['reward' => '<b>'. $daily_poll_reward.' DCN</b>'])) !!}</h4>
+					    </div>
+					    <div class="col">
+			    			<img class="poll-man" src="{{ url('new-vox-img/welcome-daily-poll.png') }}" width="331" height="370">
+			    		</div>
+			    	</div>
+			    	<h4 class="title-next">{{ trans('vox.page.home.daily-poll.next-title') }}</h4>
+
+			    	<div class="flex doing-next">
+			    		<div class="col">
+			    			<img src="{{ url('new-vox-img/browse-polls-icon-white.png') }}" width="126" height="126">
+			    			<a href="{{ getLangUrl('daily-polls') }}" class="blue-button">
+				    			<img src="{{ url('new-vox-img/browse-polls-icon-white.svg') }}" width="60" height="60">
+					    		{{ trans('vox.page.home.daily-poll.browse-polls') }}
+					    	</a>
+			    		</div>
+			    		<div class="col">
+			    			<img src="{{ url('new-vox-img/take-paid-surveys-white.png') }}" width="126" height="126">
+			    			<a href="javascript:;" class="blue-button scroll-to-surveys">
+			    				<img src="{{ url('new-vox-img/take-paid-surveys-white.svg') }}" width="60" height="60">
+			    				{{ trans('vox.page.home.daily-poll.take-surveys') }}
+			    			</a>
+			    		</div>
+			    		<div class="col">
+			    			<img src="{{ url('new-vox-img/check-stats-white.png') }}" width="126" height="126">
+			    			<a href="{{ getLangUrl('dental-survey-stats') }}" class="blue-button">
+			    				<img src="{{ url('new-vox-img/check-stats-white.svg') }}" width="60" height="60">
+			    				{{ trans('vox.page.home.daily-poll.check-stats') }}
+			    			</a>
+			    		</div>
+			    	</div>
+			    </div>
+			@endif
+			
+			<form  method="get" class="another-questions">
+	  			@include('front.errors')
+	  			
 				<h1 class="bold">
 					{{ trans('vox.page.home.title') }}
 				</h1>
-			@endif
 
-			@if($all_taken)
-				<div class="all-taken-wrapper flex break-mobile">
-					<div class="col">
-						<img src="{{ url('/new-vox-img/all-surveys-taken.png') }}">
-					</div>
-					<div class="col">
-						<h3>Oops! No surveys available.</h3>
-						<p>It seems you have taken all surveys available to users with your demographics. No worries: We upload two new surveys every week. Limits are dynamic, so just make it a daily habit to check for newly available surveys!</p>
-						<b>Meanwhile, why don't you:</b>
-
-						<div class="btns">
-							@if($user->platform != 'external')
-								<a class="opinion blue-button" href="https://account.dentacoin.com/invite?platform=dentavox">
-									Invite {{ $user->is_dentist ? 'patients' : 'friends' }}
-								</a>
-							@endif
-							<a class="statistics blue-button {{ $user->platform != 'external' ? 'secondary' : '' }}" href="{{ getLangUrl('dental-survey-stats') }}">
-								Browse Stats
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<!-- <div class="alert alert-info alert-done-all-surveys">
-					@if($user->is_dentist)
-						{!! nl2br(trans('vox.page.home.dentist.alert-done-all-surveys', [
-							'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
-							'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
-							'endlink' => '</a>',
-						])) !!}
-					@else
-						@if($user->platform == 'external')
-							Looks like you have taken all surveys. Good job! While waiting for the next topic, you can browse our <a href=" {{ getLangUrl('dental-survey-stats') }}"> survey statistics</a>. Stay tuned for more updates!
-						@else
-							{!! nl2br(trans('vox.page.home.patients.alert-done-all-surveys', [
-								'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
-								'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
-								'endlink' => '</a>',
-							])) !!}
-						@endif
-					@endif
-				</div> -->
-
-				@if($user->id == 37530)
-					<div class="section-slider-posts">
-						<div class="slider-posts-inner">
-
-				    		<div class="flickity slider-posts">
-								@foreach($latest_blog_posts as $lp)
-					    			<div class="post">
-					    				<div class="post-inner">
-						    				<a href="{{ $lp->guid }}" target="_blank" class="post-image cover" style="background-image: url({{ $lp->img }}); background-position: 50% 50%;"></a>
-					    					<div class="hover-top">
-							    				<div class="post-info">
-					    							<a href="javascript::" class="cat">
-														{{ $lp->cat_name }}
-													</a>
-								    				<span class="date">{{ date("M j, Y (D)", strtotime($lp->post_date)) }}</span> 
-								    			</div>
-								    			<a href="{{ $lp->guid }}" target="_blank"><h4>{{ $lp->post_title }}</h4></a>
-								    		</div>
-								    		<div class="bottom-container">
-								    			<p>
-								    				{{ $lp->post_excerpt }}
-								    			</p>
-						    					<a href="{{ $lp->guid }}" target="_blank" class="read-more">Read more<img src="https://dentavox.dentacoin.com/blog/wp-content/themes/blog/img/read-arrow.png"></a>
-								    		</div>
-							    		</div>
-					    			</div>
-					    		@endforeach
-				    		</div>
-				    	</div>
-				    </div>
-			    @endif
-
-				
-			@else
 				<div class="filters-section">
 					<div class="search-survey tal">
 						<i class="fas fa-search"></i>
@@ -263,9 +260,10 @@
 						{{ trans('vox.page.home.no-results') }}
 					</div>
 				</div>
-			@endif
-	        <input type="submit" name="submit" style="display: none;">
-		</form>
-	</div>
+		        <input type="submit" name="submit" style="display: none;">
+			</form>
+		</div>
+
+	@endif
     	
 @endsection
