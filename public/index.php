@@ -58,8 +58,3 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
-
-function __($key = null, $replace = [], $locale = null)
-{
-    return '';
-}
