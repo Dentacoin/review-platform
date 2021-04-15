@@ -88,26 +88,26 @@
 				<div class="slider-posts-inner">
 		    		<div class="flickity slider-posts">
 						@foreach($latest_blog_posts as $lp)
-			    			<div class="post">
+			    			<a href="{{ $lp->guid }}" target="_blank" class="post">
 			    				<div class="post-inner">
-				    				<a href="{{ $lp->guid }}" target="_blank" class="post-image cover" style="background-image: url({{ $lp->img }}); background-position: 50% 50%;"></a>
+				    				<div class="post-image cover" style="background-image: url({{ $lp->img }}); background-position: 50% 50%;"></div>
 			    					<div class="hover-top">
 					    				<div class="post-info">
-			    							<a href="javascript::" class="cat">
+			    							<div href="javascript::" class="cat">
 												{{ $lp->cat_name }}
-											</a>
+											</div>
 						    				<span class="date">{{ date("M j, Y (D)", strtotime($lp->post_date)) }}</span> 
 						    			</div>
-						    			<a href="{{ $lp->guid }}" target="_blank"><h4>{{ $lp->post_title }}</h4></a>
+						    			<div><h4>{{ $lp->post_title }}</h4></div>
 						    		</div>
 						    		<div class="bottom-container">
 						    			<p>
 						    				{{ $lp->post_excerpt }}
 						    			</p>
-				    					<a href="{{ $lp->guid }}" target="_blank" class="read-more">Read more<img src="https://dentavox.dentacoin.com/blog/wp-content/themes/blog/img/read-arrow.png"></a>
+				    					<div class="read-more">Read more<img src="https://dentavox.dentacoin.com/blog/wp-content/themes/blog/img/read-arrow.png"></div>
 						    		</div>
 					    		</div>
-			    			</div>
+			    			</a>
 			    		@endforeach
 		    		</div>
 		    	</div>
