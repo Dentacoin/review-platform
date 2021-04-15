@@ -3255,6 +3255,10 @@ body.reviews-guided-tour {
 
 			    &.manual-hubapp {
 			    	top: -20px;
+
+			    	@media #{$phone} {
+			    		top: -10px;
+			    	}
 			    }
 
 			    i {

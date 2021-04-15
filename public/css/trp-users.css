@@ -2155,6 +2155,9 @@ body.reviews-guided-tour .widget-code-wrap {
     top: 10px; }
     .fixed-popup .popup-inner .invite-content .invite-hubapp.manual-hubapp {
       top: -20px; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .invite-content .invite-hubapp.manual-hubapp {
+          top: -10px; } }
     .fixed-popup .popup-inner .invite-content .invite-hubapp i {
       margin-top: 0px; }
   .fixed-popup .popup-inner .invite-content .checkboxes-wrapper {
