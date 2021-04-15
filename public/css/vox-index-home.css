@@ -85,7 +85,8 @@
       display: block;
       background-position-y: 0px;
       border-top-left-radius: 16px;
-      border-top-right-radius: 16px; }
+      border-top-right-radius: 16px;
+      background-size: cover; }
       @media screen and (max-width: 768px) {
         .section-slider-posts .slider-posts .post .post-image {
           padding-top: 53%; } }

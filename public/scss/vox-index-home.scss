@@ -132,6 +132,7 @@ $main-color: #38ace5;
 				background-position-y: 0px;
 				border-top-left-radius: 16px;
 				border-top-right-radius: 16px;
+				background-size: cover;
 
 				@media #{$phone} {
 					padding-top: 53%;
