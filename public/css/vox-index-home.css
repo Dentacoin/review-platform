@@ -36,6 +36,28 @@
     .section-slider-posts {
       margin-top: 50px;
       margin-bottom: 50px; } }
+  .section-slider-posts .gray-wp-button {
+    background-color: #dadada;
+    border: none;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 20px 160px;
+    display: inline-block;
+    border-radius: 20px;
+    text-align: center;
+    transition: all 0.3s ease; }
+    @media screen and (max-width: 1080px) {
+      .section-slider-posts .gray-wp-button {
+        font-size: 19px; } }
+    @media screen and (max-width: 768px) {
+      .section-slider-posts .gray-wp-button {
+        padding: 15px 30px;
+        font-size: 17px; } }
+    .section-slider-posts .gray-wp-button:focus, .section-slider-posts .gray-wp-button:hover {
+      outline: none;
+      background-color: #d2cece;
+      transition: all 0.3s ease; }
   .section-slider-posts .slider-posts-inner {
     padding: 0px 60px; }
     @media screen and (max-width: 1260px) {

@@ -65,6 +65,35 @@ $main-color: #38ace5;
 		margin-bottom: 50px;
 	}
 
+	.gray-wp-button {
+		background-color: #dadada;
+		border: none;
+	    color: #333;
+	    font-size: 24px;
+	    font-weight: bold;
+	    padding: 20px 160px;
+	    display: inline-block;
+	    border-radius: 20px;
+	    text-align: center;
+	    transition: all 0.3s ease;
+
+	    @media #{$tablet} {
+	    	font-size: 19px;
+	    }
+
+	    @media #{$phone} {
+	    	padding: 15px 30px;
+	    	font-size: 17px;
+	    }
+
+	    &:focus,
+	    &:hover {
+	    	outline: none;
+	    	background-color: #d2cece;
+	    	transition: all 0.3s ease;
+	    }
+	}
+
 	.slider-posts-inner {
 		padding: 0px 60px;
 

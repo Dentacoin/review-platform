@@ -84,8 +84,8 @@
 
 		@if($user->id == 37530)
 			<div class="section-slider-posts">
+				<h3>Latest blog posts</h3>
 				<div class="slider-posts-inner">
-
 		    		<div class="flickity slider-posts">
 						@foreach($latest_blog_posts as $lp)
 			    			<div class="post">
@@ -110,6 +110,9 @@
 			    			</div>
 			    		@endforeach
 		    		</div>
+		    	</div>
+		    	<div class="tac">
+		    		<a href="https://dentavox.dentacoin.com/blog/" target="_blank" class="gray-wp-button">See all</a>
 		    	</div>
 		    </div>
 	    @endif
