@@ -265,6 +265,11 @@ class IndexController extends FrontController {
 			$arr['js'][] = 'select2.min.js';
 		}
 
+		if($all_taken) {
+			$arr['css'][] = 'flickity.min.css';
+            $arr['js'][] = 'flickity.min.js';
+		}
+
 		return $this->ShowVoxView('home', $arr);
 	}
 

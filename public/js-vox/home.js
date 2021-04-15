@@ -188,4 +188,50 @@ $(document).ready(function(){
         }, 500);
 	});
 
+	if($('.flickity').length) {
+		$('.flickity').flickity({
+			autoPlay: false,
+			wrapAround: true,
+			pageDots: false,
+			groupCells: 1,
+			cellAlign: $(window).outerWidth()<768 ? 'center' : 'left',
+			freeScroll: false,
+			contain: true,
+			on: {
+				ready: fixFlickty,
+			}
+		});
+
+		var fixFlickty = function() {
+			if ($('.slider-posts').length) {
+				$('.slider-posts').each( function() {
+					var mh = 0;
+					$(this).find('.post .post-inner').css('height', 'auto');
+					$(this).find('.post .post-inner').each( function() {
+						if( $(this).height() > mh ) {
+							mh = $(this).height();
+						}
+					} );
+					$(this).find('.post .post-inner').css('height', mh+'px');
+				} );
+			}
+
+			if ($('.flickity-slider').length) {
+				$('.flickity-slider').each( function() {
+
+					var mh = 0;
+					$(this).find('.slider-wrapper').css('height', 'auto');
+					$(this).find('.slider-wrapper').each( function() {
+						if( $(this).height() > mh ) {
+							mh = $(this).height();
+						}
+					} );
+					$(this).find('.slider-wrapper').css('height', mh+'px');
+				} );
+			}
+		}
+		$(window).resize( fixFlickty );
+		fixFlickty();
+	}
+
 });
