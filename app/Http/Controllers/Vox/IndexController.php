@@ -205,7 +205,7 @@ class IndexController extends FrontController {
 			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
 			$untaken_voxes = $untaken_voxes->where('type', 'normal')->count();
 			if($untaken_voxes == count($taken)) {
-				$all_taken = false;
+				$all_taken = true;
 			}
 		}
 
