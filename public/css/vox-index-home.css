@@ -40,6 +40,11 @@
     text-align: center;
     text-transform: uppercase;
     margin-bottom: 30px; }
+    @media screen and (max-width: 768px) {
+      .section-slider-posts .blog-posts-title {
+        font-size: 30px; } }
+  .section-slider-posts .read-more {
+    color: #aaaaaa; }
   .section-slider-posts .gray-wp-button {
     background-color: #dadada;
     border: none;

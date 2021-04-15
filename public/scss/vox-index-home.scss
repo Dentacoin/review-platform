@@ -69,6 +69,14 @@ $main-color: #38ace5;
 		text-align: center;
 	    text-transform: uppercase;
 	    margin-bottom: 30px;
+
+	    @media #{$phone} {
+	    	font-size: 30px;
+	    }
+	}
+
+	.read-more {
+	    color: #aaaaaa;
 	}
 
 	.gray-wp-button {
