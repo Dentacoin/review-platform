@@ -54,6 +54,20 @@ return [
             'engine' => null,
         ],
 
+        'vox_wordpress_db' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('VOX_WP_DB_DATABASE'),
+            'username' => env('VOX_WP_DB_USERNAME'),
+            'password' => env('VOX_WP_DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => 'wp_',
+            'strict' => true,
+            'engine' => null,
+        ],
 
         'pgsql' => [
             'driver' => 'pgsql',
