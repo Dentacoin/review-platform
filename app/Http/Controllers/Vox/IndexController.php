@@ -27,6 +27,7 @@ use Cookie;
 use Mail;
 use Auth;
 use App;
+use DB;
 
 class IndexController extends FrontController {
 
