@@ -189,7 +189,7 @@ class ProfileController extends FrontController {
                         $invitation->notified3 = null;
                     }
 
-                    if(!empty(Request::Input('invite-hubapp')) && $this->user->is_partner) {
+                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
                         $invitation->for_dentist_patients = true;
                     }
                     $invitation->save();
@@ -216,7 +216,7 @@ class ProfileController extends FrontController {
                     $invitation->invited_name = Request::Input('name');
                     $invitation->platform = 'trp';
                     $invitation->review = true;
-                    if(!empty(Request::Input('invite-hubapp')) && $this->user->is_partner) {
+                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
                         $invitation->for_dentist_patients = true;
                     }
                     $invitation->save();
@@ -224,7 +224,7 @@ class ProfileController extends FrontController {
 
                 if(!empty($existing_patient)) {
 
-                    if(!empty(Request::Input('invite-hubapp')) && $this->user->is_partner) {
+                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
                         $existing_patient->patient_of = $this->user->id;
                         $existing_patient->save();
                     }
@@ -576,7 +576,7 @@ class ProfileController extends FrontController {
                                         $invitation->notified2 = null;
                                         $invitation->notified3 = null;
                                     }
-                                    if(!empty(Request::Input('invite-hubapp')) && $this->user->is_partner) {
+                                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
                                         $invitation->for_dentist_patients = true;
                                     }
                                     $invitation->save();
@@ -608,7 +608,7 @@ class ProfileController extends FrontController {
                                 $invitation->invited_name = $names[$key];
                                 $invitation->platform = 'trp';
                                 $invitation->review = true;
-                                if(!empty(Request::Input('invite-hubapp')) && $this->user->is_partner) {
+                                if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
                                     $invitation->for_dentist_patients = true;
                                 }
 
@@ -625,7 +625,7 @@ class ProfileController extends FrontController {
                             if ($send_mail) {
                                 if(!empty($existing_patient)) {
 
-                                    if(!empty(Request::Input('invite-hubapp')) && $this->user->is_partner) {
+                                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
                                         $existing_patient->patient_of = $this->user->id;
                                         $existing_patient->save();
                                     }

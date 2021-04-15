@@ -100,7 +100,7 @@
 
 				@if($user->is_partner)
 					<label class="checkbox-label invite-hubapp manual-hubapp" for="invite-hubapp" >
-						<input type="checkbox" class="special-checkbox" id="invite-hubapp" name="invite-hubapp"/>
+						<input type="checkbox" class="special-checkbox" id="invite-hubapp" name="invite_hubapp"/>
 						<i class="far fa-square"></i>
 						Invite to Dentacoin HubApp
 					</label>

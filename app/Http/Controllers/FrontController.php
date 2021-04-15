@@ -608,41 +608,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '20210414';
-    }
-
-    public function initVoxWP() {
-
-        
-        /*
-        wp-includes/l10n.php
-        if(!function_exists('__')) {
-            function __( $text, $domain = 'default' ) {
-                    return translate( $text, $domain );
-            }
-        }
-        */
-
-        /*
-            + Create new empty theme (so __ is not used)
-            function my_setup() {
-                add_theme_support( 'title-tag' );
-                add_theme_support( 'post-thumbnails' );
-            }
-            add_action( 'after_setup_theme', 'my_setup' );
-        */
-
-        /*
-            public/index.php
-            function __($key = null, $replace = [], $locale = null)
-            {
-                return '';
-            }
-        */
-
-
-        define('WP_USE_THEMES', false);
-        require __DIR__.'/../../../../blog-dv/blog/wp-blog-header.php';
-        // \WPGlobus::Config()->set_language( 'en_GB' );
+        $params['cache_version'] = '20210415';
     }
 }

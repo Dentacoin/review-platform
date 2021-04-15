@@ -433,6 +433,7 @@ $(document).ready(function(){
                 token: $(this).find('input[name="_token"]').val(),
                 name: $(this).find('.invite-name').val(),
                 email: $(this).find('.invite-email').val(),
+                invite_hubapp: $(this).find('[name="invite_hubapp"]').val(),
             },
             dataType: 'json',
             success: function(data) {
