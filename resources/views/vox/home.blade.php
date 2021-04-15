@@ -82,40 +82,38 @@
 			@endif
 		</div> -->
 
-		@if($user->id == 37530)
-			<div class="section-slider-posts">
-				<h3 class="blog-posts-title">Latest blog posts</h3>
-				<div class="slider-posts-inner">
-		    		<div class="flickity slider-posts">
-						@foreach($latest_blog_posts as $lp)
-			    			<a href="{{ $lp->guid }}" target="_blank" class="post">
-			    				<div class="post-inner">
-				    				<div class="post-image cover" style="background-image: url({{ $lp->img }}); background-position: 50% 50%;"></div>
-			    					<div class="hover-top">
-					    				<div class="post-info">
-			    							<div href="javascript::" class="cat">
-												{{ $lp->cat_name }}
-											</div>
-						    				<span class="date">{{ date("M j, Y (D)", strtotime($lp->post_date)) }}</span> 
-						    			</div>
-						    			<div><h4>{{ $lp->post_title }}</h4></div>
-						    		</div>
-						    		<div class="bottom-container">
-						    			<p>
-						    				{{ $lp->post_excerpt }}
-						    			</p>
-				    					<div class="read-more">Read more<img src="https://dentavox.dentacoin.com/blog/wp-content/themes/blog/img/read-arrow.png"></div>
-						    		</div>
+		<div class="section-slider-posts">
+			<h3 class="blog-posts-title">Latest blog posts</h3>
+			<div class="slider-posts-inner">
+	    		<div class="flickity slider-posts">
+					@foreach($latest_blog_posts as $lp)
+		    			<a href="{{ $lp->guid }}" target="_blank" class="post">
+		    				<div class="post-inner">
+			    				<div class="post-image cover" style="background-image: url({{ $lp->img }}); background-position: 50% 50%;"></div>
+		    					<div class="hover-top">
+				    				<div class="post-info">
+		    							<div href="javascript::" class="cat">
+											{{ $lp->cat_name }}
+										</div>
+					    				<span class="date">{{ date("M j, Y (D)", strtotime($lp->post_date)) }}</span> 
+					    			</div>
+					    			<div><h4>{{ $lp->post_title }}</h4></div>
 					    		</div>
-			    			</a>
-			    		@endforeach
-		    		</div>
-		    	</div>
-		    	<div class="tac">
-		    		<a href="https://dentavox.dentacoin.com/blog/" target="_blank" class="gray-wp-button">See all</a>
-		    	</div>
-		    </div>
-	    @endif
+					    		<div class="bottom-container">
+					    			<p>
+					    				{{ $lp->post_excerpt }}
+					    			</p>
+			    					<div class="read-more">Read more<img src="https://dentavox.dentacoin.com/blog/wp-content/themes/blog/img/read-arrow.png"></div>
+					    		</div>
+				    		</div>
+		    			</a>
+		    		@endforeach
+	    		</div>
+	    	</div>
+	    	<div class="tac">
+	    		<a href="https://dentavox.dentacoin.com/blog/" target="_blank" class="gray-wp-button">See all</a>
+	    	</div>
+	    </div>
 		
 	@else
 		<div class="container">
