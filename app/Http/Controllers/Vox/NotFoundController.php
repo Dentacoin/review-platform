@@ -1,23 +1,27 @@
 <?php
 
 namespace App\Http\Controllers\Vox;
+
 use App\Http\Controllers\FrontController;
+
+use App\Models\PageSeo;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\User;
-use App\Models\PageSeo;
+
 use CArbon\Carbon;
 
-use App;
-use Mail;
+use Validator;
 use Response;
 use Request;
 use Cookie;
-use Validator;
+use Mail;
+use App;
 
-class NotFoundController extends FrontController
-{
-
+class NotFoundController extends FrontController {
+	/**
+     * 404 page view
+     */
 	public function home($locale=null) {
 		if(!empty($this->user) && $this->user->isBanned('vox')) {
 			return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');

@@ -31,9 +31,10 @@ use DB;
 
 class IndexController extends FrontController {
 
+	/**
+     * Home page get voxes by filters
+     */
 	public function getVoxList() {
-
-
 		$user = Auth::guard('api')->user() ? Auth::guard('api')->user() : $this->user;
 
 		if( $user ) {
@@ -180,6 +181,9 @@ class IndexController extends FrontController {
         return new LengthAwarePaginator($items->forPage($page, $pageItems), $items->count(), $pageItems, $page, $options);
     }
 
+    /**
+     * Home page view
+     */
 	public function survey_list($locale=null) {
 		$sorts = [
 			// 'featured' => trans('vox.page.home.sort-featured'),
@@ -268,6 +272,9 @@ class IndexController extends FrontController {
 		return $this->ShowVoxView('home', $arr);
 	}
 
+	/**
+     * Home page load more voxes
+     */
 	public function getVoxes() {
 		$voxList = $this->getVoxList((request('slice') * 6) );
 
@@ -282,6 +289,10 @@ class IndexController extends FrontController {
 		}
 	}
 	
+
+	/**
+     * Index page for not logged users
+     */
 	public function home($locale=null) {
 
 		$first = Vox::where('type', 'home')->first();
@@ -336,6 +347,9 @@ class IndexController extends FrontController {
 		}
 	}
 
+	/**
+     * bottom content of the index page
+     */
 	public function index_down($locale=null) {
 		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
 
@@ -356,6 +370,9 @@ class IndexController extends FrontController {
         ));	
 	}
 	
+	/**
+     * Home page for not logged users
+     */
 	public function surveys_public($locale=null) {
 
 		if(empty($this->user) || (!empty($this->user) && !$this->user->madeTest(11) ) ) {
@@ -365,6 +382,9 @@ class IndexController extends FrontController {
 		}
 	}
 
+	/**
+     * Welcome survey page
+     */
 	public function welcome($locale=null) {
 		$first = Vox::with('questions.translations')->where('type', 'home')->first();
 
@@ -404,6 +424,9 @@ class IndexController extends FrontController {
 	    }
 	}
 
+	/**
+     * Dentist request a survey
+     */
 	public function request_survey($locale=null) {
 
 		if(!empty($this->user) && $this->user->is_dentist) {
@@ -471,6 +494,9 @@ class IndexController extends FrontController {
 		}
 	}
 
+	/**
+     * Patient request a survey
+     */
 	public function request_survey_patients($locale=null) {
 
 		$validator = Validator::make(Request::all(), [
@@ -512,6 +538,9 @@ Survey topics and the questions: '.request('topics');
         }
 	}
 
+	/**
+     * DV recommendation form
+     */
 	public function recommend($locale=null) {
 
 		if(!empty($this->user)) {
@@ -586,6 +615,9 @@ Survey topics and the questions: '.request('topics');
 		}
 	}
 
+	/**
+     * Session to remember the last sort surveys on home page
+     */
 	public function voxesSort($locale=null) {
 		if(request('sort')) {
 			session([
@@ -597,6 +629,9 @@ Survey topics and the questions: '.request('topics');
         ] );
 	}
 
+	/**
+     * Popup contents
+     */
 	public function getPopup() {
 
 		//dd(request('id'));

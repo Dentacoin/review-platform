@@ -1733,7 +1733,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return Response::json( ['success' => true] );
     }
 
-
+    /**
+     * dentist verifies review
+     */
     public function verifyReview() {
         if(!empty($this->user) && $this->user->is_dentist && !empty(request('review_id'))) {
             $review = Review::find(request('review_id'));

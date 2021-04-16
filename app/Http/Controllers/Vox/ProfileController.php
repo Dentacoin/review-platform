@@ -29,6 +29,9 @@ use App;
 
 class ProfileController extends FrontController {
 
+    /**
+     * section DentaVox in accont.dentacoin.com
+     */
     public function vox($locale=null) {
 
         if(empty($this->user) && !empty(request('slug'))) {

@@ -6,6 +6,9 @@ use App\Http\Controllers\FrontController;
 
 class BannedController extends FrontController {
 
+	/**
+     * view for banned patients
+     */
 	public function home($locale=null) {
 		
 		return $this->ShowVoxView('banned', array(
@@ -16,7 +19,10 @@ class BannedController extends FrontController {
 			]
         ));
 	}
-
+	
+	/**
+     * redirect the banned patient to account
+     */
 	public function profile_redirect($locale=null) {
 
 		if (!empty($this->user) && !$this->user->isBanned('vox')) {

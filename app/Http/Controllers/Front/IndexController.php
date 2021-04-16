@@ -265,6 +265,9 @@ class IndexController extends FrontController {
 		return $this->ShowView('index', $params);	
 	}
 
+	/**
+     * bottom content of the index page
+     */
 	public function index_down($locale=null) {
 		if(!empty($this->user) && $this->user->isBanned('trp')) {
 			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
@@ -328,6 +331,9 @@ class IndexController extends FrontController {
         ));	
 	}
 
+	/**
+     * bottom content of the welcome dentist page
+     */
 	public function index_dentist_down($locale=null) {
 		if(!empty($this->user) && $this->user->isBanned('trp')) {
 			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
@@ -626,6 +632,9 @@ class IndexController extends FrontController {
     	}
     }
 
+    /**
+     * get lead magnet resutls
+     */
     public function lead_magnet_session($locale=null) {
 
     	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points'])) {
@@ -640,6 +649,9 @@ class IndexController extends FrontController {
     	}
     }
 
+    /**
+     * get popups content
+     */
 	public function getPopup() {
 
 		//dd(request('id'));

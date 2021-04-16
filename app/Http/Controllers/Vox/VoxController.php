@@ -36,7 +36,6 @@ use App;
 use Mail;
 use DB;
 
-
 class VoxController extends FrontController {
 	
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
@@ -46,6 +45,9 @@ class VoxController extends FrontController {
     	$this->details_fields = config('vox.details_fields');
 	}
 
+	/**
+     * Single vox page by id
+     */
 	public function home($locale=null, $id) {
 		$vox = Vox::find($id);
 
@@ -56,6 +58,9 @@ class VoxController extends FrontController {
 		return redirect( getLangUrl('page-not-found') );
 	}
 
+	/**
+     * Single vox page by slug
+     */
 	public function home_slug($locale=null, $slug) {
 		$vox = Vox::whereTranslationLike('slug', $slug)->with('questions.translations')->with('questions.vox')->first();
 
@@ -66,6 +71,9 @@ class VoxController extends FrontController {
 		return $this->dovox($locale, $vox);
 	}
 
+	/**
+     * bottom content of single vox page
+     */
 	public function vox_public_down($locale=null) {
 		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
 
@@ -85,6 +93,12 @@ class VoxController extends FrontController {
         ));	
 	}
 
+	/**
+     * Single vox page for not logged users
+     * Single vox page for taken vox
+     * Single vox page for restricted vox
+     * Answer vox
+     */
 	public function dovox($locale=null, $vox) {
         ini_set('max_execution_time', 0);
         set_time_limit(0);
@@ -1479,6 +1493,9 @@ class VoxController extends FrontController {
         }
 	}
 
+	/**
+     * Start the vox again from the first question
+     */
 	public function start_over() {
 
 		$vox = Vox::find(Request::input('vox_id'));
@@ -1501,13 +1518,17 @@ class VoxController extends FrontController {
 		return Response::json( $ret );
 	}
 
-
+	/**
+     * Get next question of the vox
+     */
     public function getNextQuestion() {
 
         return self::getNextQuestionFunction($this->admin, $this->user, false, $this->country_id);
     }
 
-
+    /**
+     * Get next question of the vox function for web and app
+     */
 	public static function getNextQuestionFunction($admin, $user, $for_app, $country_id) {
 
 //        if($for_app) {

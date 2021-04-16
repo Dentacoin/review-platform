@@ -35,7 +35,7 @@ class Handler extends ExceptionHandler
      */
      public function report(Exception $exception)
     {
-        if( \App::runningInConsole() || $exception instanceof \Illuminate\Session\TokenMismatchException || get_class($exception) == 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' ) {
+        if( app()->runningInConsole() || $exception instanceof \Illuminate\Session\TokenMismatchException || get_class($exception) == 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' ) {
             ;
         } else {
             Log::error("URL: " . Request::url().' - Method: '.Request::method());

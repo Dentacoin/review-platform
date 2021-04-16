@@ -33,9 +33,11 @@ use App;
 use Mail;
 use DB;
 
-class PollsController extends FrontController
-{
+class PollsController extends FrontController {
 
+	/**
+     * All daily polls page
+     */
 	public function list($locale=null) {
 
 		$seos = PageSeo::find(14);
@@ -58,6 +60,9 @@ class PollsController extends FrontController
         ));
 	}
 
+	/**
+     * Show daily poll by date
+     */
 	public function show_popup_poll($locale=null, $date) {
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
@@ -91,9 +96,11 @@ class PollsController extends FrontController
 			'canonical' => getLangUrl('daily-polls/'.$date),
 			'noindex' => true,
         ));
-		
 	}
 
+	/**
+     * Show daily poll stats by date
+     */
 	public function show_popup_stats_poll($locale=null, $date) {
 
 		$time = strtotime($date);
@@ -129,9 +136,11 @@ class PollsController extends FrontController
 			'canonical' => getLangUrl('daily-polls/'.$date.'/stats'),
 			'noindex' => true,
         ));
-		
 	}
 
+	/**
+     * Get daily polls by month
+     */
 	public function get_polls($locale=null) {
 
 		$all_daily_polls = Poll::where('launched_at', '>=', Request::input('year')."-".Request::input('month')."-01 00:00:00")
@@ -205,6 +214,9 @@ class PollsController extends FrontController
         return Response::json( $ret );
 	}
 
+	/**
+     * Get daily poll content by id
+     */
 	public function get_poll_content($locale=null, $poll_id) {
 
 		$ret = [
@@ -268,6 +280,9 @@ class PollsController extends FrontController
         return Response::json( $ret );
 	}
 
+	/**
+     * Get daily poll stats by id
+     */
 	public function get_poll_stats($locale=null, $poll_id) {
 
 		$poll = Poll::find($poll_id);
@@ -312,6 +327,9 @@ class PollsController extends FrontController
         return Response::json( $ret );
 	}
 
+	/**
+     * Answer daily poll
+     */
 	public function dopoll($locale=null, $id) {
 
 		if(Request::isMethod('post')) {
@@ -500,7 +518,9 @@ class PollsController extends FrontController
         return $chart;
 	}
 
-
+	/**
+     * Session to hide the daily poll from the pages
+     */
 	public function hidePoll( $locale=null ) {
 
 		$sess = [

@@ -8,9 +8,10 @@ use App\Models\PageSeo;
 use App;
 use Request;
 
-class FaqController extends FrontController
-{
-
+class FaqController extends FrontController {
+	/**
+     * FAQ page view
+     */
 	public function home($locale=null) {
 
         $pathToFile = base_path().'/resources/lang/en/faq.php';

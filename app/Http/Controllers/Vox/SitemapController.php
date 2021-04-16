@@ -3,26 +3,30 @@
 namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
+use App\Models\VoxQuestion;
+use App\Models\VoxCategory;
+use App\Models\VoxAnswer;
+use App\Models\Country;
+use App\Models\User;
+use App\Models\Dcn;
+use App\Models\Vox;
+
+use Carbon\Carbon;
+
 use Validator;
 use Response;
 use Request;
 use Route;
 use Hash;
 use Mail;
-use DB;
 use App;
-use Carbon\Carbon;
-use App\Models\Dcn;
-use App\Models\Country;
-use App\Models\User;
-use App\Models\Vox;
-use App\Models\VoxAnswer;
-use App\Models\VoxQuestion;
-use App\Models\VoxCategory;
+use DB;
 
+class SitemapController extends FrontController {
 
-class SitemapController extends FrontController
-{
+	/**
+     * sitemaps for DentaVox
+     */
 	public function links($locale=null) {
 
 		$links = [
@@ -53,6 +57,9 @@ class SitemapController extends FrontController
             ->header('Content-Type', 'application/xml');        
 	}
 
+	/**
+     * sitemaps list for DentaVox & DentaVox blog
+     */
 	public function sitemap($locale=null) {
 
         $content = '<?xml version="1.0" encoding="UTF-8"?>

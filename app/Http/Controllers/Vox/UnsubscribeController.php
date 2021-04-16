@@ -17,9 +17,11 @@ use Request;
 use Mail;
 use App;
 
-class UnsubscribeController extends FrontController
-{
+class UnsubscribeController extends FrontController {
 
+	/**
+     * oldest unsubscribe link
+     */
 	public function unsubscribe($locale=null, $user_id, $hash) {
 
 		$user = User::find($user_id);
@@ -60,6 +62,9 @@ Link in CMS: https://dentavox.dentacoin.com/cms/users/edit/'.$user->id;
 		return redirect( getLangUrl('/') );
 	}
 
+	/**
+     * old unsubscribe link
+     */
 	public function new_unsubscribe($locale=null, $user_id, $hash) {
 
 		$user = User::find($user_id);
@@ -117,6 +122,9 @@ Link in CMS: https://dentavox.dentacoin.com/cms/users/edit/'.$user->id;
 		return redirect( getLangUrl('/') );
 	}
 
+	/**
+     * old unsubscribe link for incomplete registration
+     */
 	public function unsubscribe_incomplete($locale=null, $id, $hash) {
 
 		$ir = IncompleteRegistration::find($id);

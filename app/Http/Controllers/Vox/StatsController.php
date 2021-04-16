@@ -42,6 +42,9 @@ use DB;
 
 class StatsController extends FrontController {
 
+    /**
+     * Page with all stats
+     */
     public function home($locale=null) {
 
         $this->current_page = 'stats';
@@ -118,6 +121,9 @@ class StatsController extends FrontController {
         ));
     }
 
+    /**
+     * Single stats page
+     */
     public function stats($locale=null, $slug=null, $question_id=null) {
         
         $this->current_page = 'stats';
@@ -1608,6 +1614,9 @@ class StatsController extends FrontController {
         return $newarr;
     }
 
+    /**
+     * Download stats
+     */
     public function download() {
         
         if(!empty($this->user) && Request::isMethod('post')) {
@@ -1683,6 +1692,9 @@ class StatsController extends FrontController {
         return redirect(getLangUrl('/'));
     }
 
+    /**
+     * Download stats pdf
+     */
     public function createPdf() {
         if(!empty($this->user) && !empty(Request::input("hidden_html"))) {
 
@@ -1737,6 +1749,9 @@ class StatsController extends FrontController {
         return redirect( getVoxUrl('/'));
     }
 
+    /**
+     * Download stats png
+     */
     public function createPng() {
 
         $cur_time = mb_substr(microtime(true), 0, 10);
@@ -1778,7 +1793,9 @@ class StatsController extends FrontController {
         return Response::json( $ret );
     }
 
-
+    /**
+     * Download the pdf stat file
+     */
     public function download_file($locale=null,$name) {
         session()->pull('download_stat');
 
@@ -1786,7 +1803,9 @@ class StatsController extends FrontController {
         return response()->download($file);
     }
 
-
+    /**
+     * Download the png stat file
+     */
     public function download_file_png($locale=null,$name) {
         session()->pull('download_stat_png');
 
