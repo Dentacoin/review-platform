@@ -630,7 +630,7 @@ Survey topics and the questions: '.request('topics');
 	}
 
 	/**
-     * Popup contents
+     * Popups content
      */
 	public function getPopup() {
 

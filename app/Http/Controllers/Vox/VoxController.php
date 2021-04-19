@@ -1526,9 +1526,6 @@ class VoxController extends FrontController {
         return self::getNextQuestionFunction($this->admin, $this->user, false, $this->country_id);
     }
 
-    /**
-     * Get next question of the vox function for web and app
-     */
 	public static function getNextQuestionFunction($admin, $user, $for_app, $country_id) {
 
 //        if($for_app) {

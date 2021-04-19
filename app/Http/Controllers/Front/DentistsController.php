@@ -63,7 +63,11 @@ class DentistsController extends FrontController {
         } else if($filter == 'all-results') {
             $items = $items->where(function($q) use ($query) {
                 $q->where('name', 'LIKE', $query.'%')
-                ->orWhere('name_alternative', 'LIKE', $query.'%');
+                ->orWhere(function ($queryy) use ($query) {
+                    $queryy->where('name_alternative', 'LIKE', $query.'%')
+                    ->orWhere('slug', 'LIKE', $query.'%');
+                });
+                
             });
             $mode = 'name';
         } else {
