@@ -23,7 +23,7 @@ class UserDevice extends Model {
     public static function sendPush($title, $message, $meta = null) {
         
         $data = [
-            "registration_ids" => self::get()->pluck('device_token')->toArray(),
+            "registration_ids" => self::whereNotNull('device_token')->get()->pluck('device_token')->toArray(),
             "content_available" => true,
             "notification" => [
                 "title" => $title,

@@ -23,6 +23,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
+        \League\OAuth2\Server\Exception\OAuthServerException::class,
     ];
 
     /**
@@ -35,7 +36,7 @@ class Handler extends ExceptionHandler
      */
      public function report(Exception $exception)
     {
-        if( app()->runningInConsole() || $exception instanceof \Illuminate\Session\TokenMismatchException || get_class($exception) == 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' ) {
+        if( app()->runningInConsole() || $exception instanceof \Illuminate\Session\TokenMismatchException || get_class($exception) == 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException') {
             ;
         } else {
             Log::error("URL: " . Request::url().' - Method: '.Request::method());
