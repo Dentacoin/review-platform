@@ -1589,6 +1589,8 @@ $phone: "screen and (max-width: 768px)";
 				flex-wrap: wrap;
 
 				.slider-wrapper {
+					display: block !important;
+					
 					.deleter {
 						display: none;
 					}

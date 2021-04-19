@@ -649,6 +649,10 @@ class DentistController extends FrontController {
             $view_params['css'][] = 'codemirror.css';
         }
 
+        if(!empty($this->user) && $this->user->id == $item->id) {
+            $view_params['js'][] = '../js/jquery-ui.min.js';
+        }
+
         if($item->photos->isNotEmpty() && empty($item->reviews_in())) {
             $load_lightbox = 'true';
             $view_params['css'][] = 'lightbox.css';

@@ -1023,8 +1023,10 @@
   .details-wrapper .team-container.rearranging-team .flickity {
     display: flex;
     flex-wrap: wrap; }
-    .details-wrapper .team-container.rearranging-team .flickity .slider-wrapper .deleter {
-      display: none; }
+    .details-wrapper .team-container.rearranging-team .flickity .slider-wrapper {
+      display: block !important; }
+      .details-wrapper .team-container.rearranging-team .flickity .slider-wrapper .deleter {
+        display: none; }
   @media screen and (max-width: 768px) {
     .details-wrapper .asks-container {
       overflow-x: auto; } }
