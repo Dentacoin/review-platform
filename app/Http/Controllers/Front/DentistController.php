@@ -662,7 +662,7 @@ class DentistController extends FrontController {
                 $load_lightbox = 'false';
             }
         } else {
-            $load_lightbox = 'false';
+            $load_lightbox = 'true';
         }
         $view_params['load_lightbox'] = $load_lightbox;
 
@@ -675,7 +675,7 @@ class DentistController extends FrontController {
                 $load_flickity = 'false';
             }
         } else {
-            $load_flickity = 'false';
+            $load_flickity = 'true';
         }
         $view_params['load_flickity'] = $load_flickity;
 

@@ -162,10 +162,7 @@ $(document).ready(function(){
                 } );
             } else {
                 flickityFunctions();
-            }
-
-
-            
+            }            
         }
     });
 
