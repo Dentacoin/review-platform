@@ -1010,6 +1010,32 @@ $phone: "screen and (max-width: 768px)";
 	}
 }
 
+.fake-map {
+	@media screen and (max-width: 570px) {
+		display: none;
+	}
+
+	&.mobile-map {
+		display: none;
+
+		@media screen and (max-width: 570px) {
+			display: block;
+			margin: 0 auto;
+		}
+	}
+}
+
+.info-address {
+	text-align: center;
+    margin-bottom: 20px;
+
+    img {
+		max-width: 15px;
+		margin-right: 4px;
+		vertical-align: bottom;
+    }
+}
+
 .details-wrapper {
 	margin-top: 35px;
 
@@ -1590,7 +1616,7 @@ $phone: "screen and (max-width: 768px)";
 
 				.slider-wrapper {
 					display: block !important;
-					
+
 					.deleter {
 						display: none;
 					}

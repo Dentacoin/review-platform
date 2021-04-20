@@ -1300,7 +1300,14 @@
 				</h2>
 
 				@if( ($item->lat && $item->lon) )
+					@if($click_on_map)
+						<div class="info-address">
+							<img src="{{ url('img-trp/map-pin-active.png') }}">{{ $item->address }}, {{ $item->country->name }}
+						</div>
+					@endif
 					<div class="map-container" id="profile-map" lat="{{ $item->lat }}" lon="{{ $item->lon }}">
+						<img class="fake-map" src="{{ url('img-trp/not-loaded-map.png') }}">
+						<img class="fake-map mobile-map" src="{{ url('img-trp/not-loaded-map-mobile.png') }}">
 					</div>
 				@else
 					<div class="alert alert-info">
@@ -1517,8 +1524,8 @@
 
 <script type="text/javascript">
 	var aggregated_reviews = {!! json_encode($aggregated, JSON_HEX_QUOT) !!};
-	var load_maps = {!! $load_maps !!};
-	var load_lightbox = {!! $load_lightbox !!};
+	var click_on_map = {!! $click_on_map !!};
+	var load_lightbox = {!! $load_lightbox !!};	
 	var load_flickity = {!! $load_flickity !!};
 </script>
 

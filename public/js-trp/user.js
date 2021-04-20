@@ -13,9 +13,10 @@ var suggestClinicClick;
 var aggregated_reviews;
 var editor;
 var fb_page_error;
-var load_maps;
 var load_lightbox;
 var load_flickity;
+var load_maps = false;
+var click_on_map;
 
 $(document).ready(function(){
 
@@ -82,13 +83,68 @@ $(document).ready(function(){
         teamFlickity.resize();
     }
 
+    var loadMap = function() {
+        if( $('#profile-map').length && !$('#profile-map').attr('inited') ) {
+            $('#profile-map').attr('inited', 'done');
+            $('.info-address').hide();
+
+            prepareMapFucntion( function() {
+                    
+                var profile_map = new google.maps.Map(document.getElementById('profile-map'), {
+                    center: {
+                        lat: parseFloat($('#profile-map').attr('lat')), 
+                        lng: parseFloat($('#profile-map').attr('lon'))
+                    },
+                    zoom: 15,
+                    backgroundColor: 'none'
+                });
+
+                var mapMarker = new google.maps.Marker({
+                    position: {
+                        lat: parseFloat($('#profile-map').attr('lat')), 
+                        lng: parseFloat($('#profile-map').attr('lon'))
+                    },
+                    map: profile_map,
+                    icon: images_path+'/map-pin-active.png',
+                });
+
+                var data = $('.scroll-to-map:visible').attr('map-tooltip');
+                var infowindow = new google.maps.InfoWindow({
+                  content: data
+                });
+                infowindow.open(profile_map,mapMarker);
+
+            } );
+        }
+    }
+
+    $('.fake-map').click( function() {
+        if (!load_maps && typeof google === 'undefined' ) {
+            $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
+                load_maps = true;
+
+                loadMap();
+                
+            } );
+        } else {
+            loadMap();
+        }
+    });
+
     $('.tab').click( function() {
         if( $(this).attr('data-tab')=='about' ) {
 
-            if (!load_maps && typeof google === 'undefined' ) {
-                $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
-                    load_maps = true;
-                } );
+            if(!click_on_map) {
+                if(typeof google === 'undefined' ) {
+                    $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
+                        click_on_map = true;
+
+                        loadMap();
+                        
+                    } );
+                } else {
+                    loadMap();
+                }
             }
 
             if (!load_lightbox ) {
@@ -109,37 +165,7 @@ $(document).ready(function(){
             }
 
 
-            if( $('#profile-map').length && !$('#profile-map').attr('inited') ) {
-                $('#profile-map').attr('inited', 'done');
-
-                prepareMapFucntion( function() {
-                        
-                    var profile_map = new google.maps.Map(document.getElementById('profile-map'), {
-                        center: {
-                            lat: parseFloat($('#profile-map').attr('lat')), 
-                            lng: parseFloat($('#profile-map').attr('lon'))
-                        },
-                        zoom: 15,
-                        backgroundColor: 'none'
-                    });
-
-                    var mapMarker = new google.maps.Marker({
-                        position: {
-                            lat: parseFloat($('#profile-map').attr('lat')), 
-                            lng: parseFloat($('#profile-map').attr('lon'))
-                        },
-                        map: profile_map,
-                        icon: images_path+'/map-pin-active.png',
-                    });
-
-                    var data = $('.scroll-to-map:visible').attr('map-tooltip');
-                    var infowindow = new google.maps.InfoWindow({
-                      content: data
-                    });
-                    infowindow.open(profile_map,mapMarker);
-
-                } );
-            }
+            
         }
     });
 

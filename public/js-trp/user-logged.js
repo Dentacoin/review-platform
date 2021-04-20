@@ -13,7 +13,7 @@ var suggestClinicClick;
 var aggregated_reviews;
 var editor;
 var fb_page_error;
-var load_maps;
+var load_maps = false;
 
 $(document).ready(function(){
 

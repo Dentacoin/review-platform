@@ -737,11 +737,12 @@ class DentistController extends FrontController {
             $addGM = true;
         }
 
-        if( $addGM && empty($item->reviews_in()) ) {
-            $view_params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
-            $view_params['load_maps'] = 'true';
+        //always not loaded now
+        if( $addGM && $item->reviews_in()->isEmpty() ) {
+            // $view_params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
+            $view_params['click_on_map'] = 'true';
         } else {
-            $view_params['load_maps'] = 'false';
+            $view_params['click_on_map'] = 'false';
         }
 
         $view_params['schema'] = [
