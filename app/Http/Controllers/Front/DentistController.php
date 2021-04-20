@@ -653,19 +653,27 @@ class DentistController extends FrontController {
             $view_params['js'][] = '../js/jquery-ui.min.js';
         }
 
-        if($item->photos->isNotEmpty() && $item->reviews_in()->isEmpty()) {
-            $load_lightbox = 'true';
-            $view_params['css'][] = 'lightbox.css';
-            $view_params['js'][] = '../js/lightbox.js';
+        if($item->photos->isNotEmpty()) {
+            if($item->reviews_in()->isEmpty()) {
+                $load_lightbox = 'true';
+                $view_params['css'][] = 'lightbox.css';
+                $view_params['js'][] = '../js/lightbox.js';
+            } else {
+                $load_lightbox = 'false';
+            }
         } else {
             $load_lightbox = 'false';
         }
         $view_params['load_lightbox'] = $load_lightbox;
 
-        if((!empty($this->user) && $this->user->id == $item->id) || ($item->photos->isNotEmpty() || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty()) && $item->reviews_in()->isEmpty()) {
-            $load_flickity = 'true';
-            $view_params['css'][] = 'flickity.min.css';
-            $view_params['js'][] = 'flickity.min.js';
+        if((!empty($this->user) && $this->user->id == $item->id) || ($item->photos->isNotEmpty() || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty())) {
+            if($item->reviews_in()->isEmpty()) {
+                $load_flickity = 'true';
+                $view_params['css'][] = 'flickity.min.css';
+                $view_params['js'][] = 'flickity.min.js';
+            } else {
+                $load_flickity = 'false';
+            }
         } else {
             $load_flickity = 'false';
         }
