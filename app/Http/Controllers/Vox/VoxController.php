@@ -415,7 +415,10 @@ class VoxController extends FrontController {
 		$answered_without_skip = [];
 		foreach ($list as $l) {
 			if(!isset( $answered_without_skip[$l->question_id] )) {
-				$answered_without_skip[$l->question_id] = ($l->question->type == 'number' && $l->answer == 0) || $l->question->cross_check == 'birthyear' ? 1 : $l->answer; //3
+				if($l->question) {
+
+					$answered_without_skip[$l->question_id] = ($l->question->type == 'number' && $l->answer == 0) || $l->question->cross_check == 'birthyear' ? 1 : $l->answer; //3
+				}
 			} else {
 				if(!is_array($answered_without_skip[$l->question_id])) {
 					$answered_without_skip[$l->question_id] = [ $answered_without_skip[$l->question_id] ]; // [3]
