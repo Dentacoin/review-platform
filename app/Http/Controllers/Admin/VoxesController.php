@@ -148,13 +148,14 @@ class VoxesController extends AdminController
 
         if(!empty($item)) {
             if($field=='featured') {
-                $item->$field = $value=='0' ? 0 : 1;
 
                 if ($value=='1' && $item->featured != 1 && $item->type == 'normal' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
                     UserDevice::sendPush('Now:', 'Double rewards for "'.$item->title.'" survey!', [
                         'page' => '/paid-dental-surveys/'.$item->slug,
                     ]);
                 }
+
+                $item->$field = $value=='0' ? 0 : 1;                
             }
             if($field=='type') {
                 $item->$field = $value=='0' ? 'hidden' : 'normal';
