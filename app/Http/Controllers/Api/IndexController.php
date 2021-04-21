@@ -696,6 +696,13 @@ class IndexController extends ApiController {
 					$doing_asl = true;
 				}
 
+
+
+		    	if($user->id == 37530) {
+
+		    		dd($answ, $doing_asl);
+		    	}
+
 	        	$found = $doing_asl ? true : false;
 	        	foreach ($vox->questions as $question) {
 	        		if($question->id == $q) {
