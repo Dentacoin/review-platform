@@ -749,6 +749,9 @@ class IndexController extends ApiController {
 	        			$user->$type = $answ;
 	        			$user->save();
 
+	        			Log::info('type '.$type);
+	        			Log::info('u type '.$user->$type);
+
 	        			if( isset( config('vox.stats_scales')[$type] ) ) {
 	        				VoxAnswer::where('user_id', $user->id)->update([
 		        				$type => $answ
