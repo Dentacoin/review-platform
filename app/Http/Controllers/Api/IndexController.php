@@ -740,7 +740,7 @@ class IndexController extends ApiController {
 	        			$valid = true;
 	        			$a = $answ;
 	        		} else if ( isset( $this->details_fields[$type] ) ) {
-
+	        			Log::info('aaa '.$answ);
 	        			$should_reward = false;
 	        			if($user->$type===null) {
 	        				$should_reward = true;
