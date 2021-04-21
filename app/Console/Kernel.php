@@ -642,29 +642,72 @@ UNCONFIRMED TRANSACTIONS
 
                             $curl = json_decode($curl, true);
                             if($curl['status']) {
-                                if(!empty($curl['result']['status'])) {
-                                    $trans->status = 'completed';
-                                    $trans->cronjob_unconfirmed = 0;
-                                    $trans->save();
 
-                                    $dcn_history = new DcnTransactionHistory;
-                                    $dcn_history->transaction_id = $trans->id;
-                                    $dcn_history->status = 'completed';
-                                    $dcn_history->save();
+                                if($trans->is_paid_by_the_user) {
+                                    if($curl['result']['status'] === '1') {
+                                        $trans->status = 'completed';
+                                        $trans->cronjob_unconfirmed = 0;
+                                        $trans->save();
 
-                                    if( $trans->user && !empty($trans->user->email) ) {
-                                        $trans->user->sendTemplate( 20, [
-                                            'transaction_amount' => $trans->amount,
-                                            'transaction_address' => $trans->address,
-                                            'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
-                                        ], $trans->type=='vox' ? 'vox' : 'trp' );
+                                        $dcn_history = new DcnTransactionHistory;
+                                        $dcn_history->transaction_id = $trans->id;
+                                        $dcn_history->status = 'completed';
+                                        $dcn_history->save();
+
+                                        if( $trans->user && !empty($trans->user->email) ) {
+                                            $trans->user->sendTemplate( 20, [
+                                                'transaction_amount' => $trans->amount,
+                                                'transaction_address' => $trans->address,
+                                                'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                            ], $trans->type=='vox' ? 'vox' : 'trp' );
+                                        }
+                                        $found = true;
+                                        echo 'COMPLETED!'.PHP_EOL;
+                                        if($int % 5 == 0) {
+                                            sleep(1);
+                                        }
+                                    } else if ($curl['result']['status'] === '0') {
+                                        $trans->status = 'failed';
+                                        $trans->cronjob_unconfirmed = 0;
+                                        $trans->save();
+
+                                        $dcn_history = new DcnTransactionHistory;
+                                        $dcn_history->transaction_id = $trans->id;
+                                        $dcn_history->status = 'failed';
+                                        $dcn_history->history_message = 'Failed in Etherscan';
+                                        $dcn_history->save();
+
+                                        if($int % 5 == 0) {
+                                            sleep(1);
+                                        }
                                     }
-                                    $found = true;
-                                    echo 'COMPLETED!'.PHP_EOL;
-                                    if($int % 5 == 0) {
-                                        sleep(1);
+                                } else {
+
+                                    if(!empty($curl['result']['status'])) {
+                                        $trans->status = 'completed';
+                                        $trans->cronjob_unconfirmed = 0;
+                                        $trans->save();
+
+                                        $dcn_history = new DcnTransactionHistory;
+                                        $dcn_history->transaction_id = $trans->id;
+                                        $dcn_history->status = 'completed';
+                                        $dcn_history->save();
+
+                                        if( $trans->user && !empty($trans->user->email) ) {
+                                            $trans->user->sendTemplate( 20, [
+                                                'transaction_amount' => $trans->amount,
+                                                'transaction_address' => $trans->address,
+                                                'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                            ], $trans->type=='vox' ? 'vox' : 'trp' );
+                                        }
+                                        $found = true;
+                                        echo 'COMPLETED!'.PHP_EOL;
+                                        if($int % 5 == 0) {
+                                            sleep(1);
+                                        }
                                     }
                                 }
+
                             }
                         }
 
