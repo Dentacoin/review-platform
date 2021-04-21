@@ -746,7 +746,11 @@ class IndexController extends ApiController {
 	        				$should_reward = true;
 	        			}
 
-	        			$user->$type = $answ;
+	        			if($answ === 0) {
+	        				$user->$type = $answ.'';
+	        			} else {
+	        				$user->$type = $answ;
+	        			}
 	        			$user->save();
 
 	        			Log::info('type '.$type);
