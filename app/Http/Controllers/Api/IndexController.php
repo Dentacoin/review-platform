@@ -49,7 +49,6 @@ use Route;
 use Hash;
 use Auth;
 use Mail;
-use Log;
 use App;
 use DB;
 
