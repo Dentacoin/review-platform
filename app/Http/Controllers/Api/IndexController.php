@@ -740,7 +740,7 @@ class IndexController extends ApiController {
 	        			$valid = true;
 	        			$a = $answ;
 	        		} else if ( isset( $this->details_fields[$type] ) ) {
-	        			Log::info('aaa '.$answ);
+
 	        			$should_reward = false;
 	        			if($user->$type===null) {
 	        				$should_reward = true;
@@ -752,9 +752,6 @@ class IndexController extends ApiController {
 	        				$user->$type = $answ;
 	        			}
 	        			$user->save();
-
-	        			Log::info('type '.$type);
-	        			Log::info('u type '.$user->$type);
 
 	        			if( isset( config('vox.stats_scales')[$type] ) ) {
 	        				VoxAnswer::where('user_id', $user->id)->update([
@@ -1408,16 +1405,6 @@ class IndexController extends ApiController {
 	    		'success' => false,
 	    	];
         }
-
-
-
-
-
-    	if($user->id == 37530) {
-    		Log::info('Answer: '.$answ);
-    		Log::info('doing_asl: '.$doing_asl);
-    		Log::info(Response::json( $ret ));
-    	}
 
     	return Response::json( $ret );
     }
