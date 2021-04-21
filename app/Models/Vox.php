@@ -1710,7 +1710,7 @@ class Vox extends Model {
         }
 
         UserDevice::sendPush('New paid survey published!', 'Take it now', [
-            'page' => 'paid-dental-surveys/'.$this->slug,
+            'page' => '/paid-dental-surveys/'.$this->slug,
         ]);
     }
 
