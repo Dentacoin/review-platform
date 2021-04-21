@@ -1572,82 +1572,85 @@ class IndexController extends ApiController {
 
         $user = Auth::guard('api')->user();
 
-        $current_ban = $user->isBanned('vox');
-
         $ret = [
     		'ban' => false,
     	];
 
-        if($current_ban) {
+        if(!empty($user)) {
+        	
+	        $current_ban = $user->isBanned('vox');
 
-        	if($current_ban->type == 'mistakes') {
+	        if($current_ban) {
 
-				$prev_bans = $user->getPrevBansCount('vox', 'mistakes');
+	        	if($current_ban->type == 'mistakes') {
 
-				$days = 0;
-		        if($prev_bans==1) {
-		            $days = 1;
-		        } else if($prev_bans==2) {
-		            $days = 3;
-		        } else if($prev_bans==3) {
-		            $days = 7;
-		        }
+					$prev_bans = $user->getPrevBansCount('vox', 'mistakes');
 
-				$ret['ban'] = true;
-				$ret['ban_duration'] = $days;
-				$ret['ban_times'] = $prev_bans;
-				$ret['img'] = url('new-vox-img/ban'.($prev_bans).'.png');
-				$titles = [
-					trans('vox.page.bans.ban-mistakes-title-1'),
-					trans('vox.page.bans.ban-mistakes-title-2'),
-					trans('vox.page.bans.ban-mistakes-title-3'),
-					trans('vox.page.bans.ban-mistakes-title-4', [
-						'name' => $user->getNames()
-					]),
-				];
-				$ret['title'] = $titles[$prev_bans - 1];
-				$contents = [
-					trans('vox.page.bans.ban-mistakes-content-1'),
-					trans('vox.page.bans.ban-mistakes-content-2'),
-					trans('vox.page.bans.ban-mistakes-content-3'),
-					trans('vox.page.bans.ban-mistakes-content-4'),
-				];
-				$ret['content'] = $contents[$prev_bans - 1];
+					$days = 0;
+			        if($prev_bans==1) {
+			            $days = 1;
+			        } else if($prev_bans==2) {
+			            $days = 3;
+			        } else if($prev_bans==3) {
+			            $days = 7;
+			        }
 
-        	} else if($current_ban->type == 'too-fast') {
+					$ret['ban'] = true;
+					$ret['ban_duration'] = $days;
+					$ret['ban_times'] = $prev_bans;
+					$ret['img'] = url('new-vox-img/ban'.($prev_bans).'.png');
+					$titles = [
+						trans('vox.page.bans.ban-mistakes-title-1'),
+						trans('vox.page.bans.ban-mistakes-title-2'),
+						trans('vox.page.bans.ban-mistakes-title-3'),
+						trans('vox.page.bans.ban-mistakes-title-4', [
+							'name' => $user->getNames()
+						]),
+					];
+					$ret['title'] = $titles[$prev_bans - 1];
+					$contents = [
+						trans('vox.page.bans.ban-mistakes-content-1'),
+						trans('vox.page.bans.ban-mistakes-content-2'),
+						trans('vox.page.bans.ban-mistakes-content-3'),
+						trans('vox.page.bans.ban-mistakes-content-4'),
+					];
+					$ret['content'] = $contents[$prev_bans - 1];
 
-				$prev_bans = $user->getPrevBansCount('vox', 'too-fast');
+	        	} else if($current_ban->type == 'too-fast') {
 
-				$days = 0;
-		        if($prev_bans==1) {
-		            $days = 1;
-		        } else if($prev_bans==2) {
-		            $days = 3;
-		        } else if($prev_bans==3) {
-		            $days = 7;
-		        }
+					$prev_bans = $user->getPrevBansCount('vox', 'too-fast');
 
-				$ret['ban'] = true;
-				$ret['ban_duration'] = $days;
-				$ret['ban_times'] = $prev_bans;
-				$ret['img'] = url('new-vox-img/ban'.($prev_bans).'.png');
-				$titles = [
-					trans('vox.page.bans.ban-too-fast-title-1'),
-					trans('vox.page.bans.ban-too-fast-title-2'),
-					trans('vox.page.bans.ban-too-fast-title-3'),
-					trans('vox.page.bans.ban-too-fast-title-4',[
-						'name' => $user->getNames()
-					]),
-				];
-				$ret['title'] = $titles[$prev_bans - 1];
-				$contents = [
-					trans('vox.page.bans.ban-too-fast-content-1'),
-					trans('vox.page.bans.ban-too-fast-content-2'),
-					trans('vox.page.bans.ban-too-fast-content-3'),
-					trans('vox.page.bans.ban-too-fast-content-4'),
-				];
-				$ret['content'] = $contents[$prev_bans - 1];
-        	}
+					$days = 0;
+			        if($prev_bans==1) {
+			            $days = 1;
+			        } else if($prev_bans==2) {
+			            $days = 3;
+			        } else if($prev_bans==3) {
+			            $days = 7;
+			        }
+
+					$ret['ban'] = true;
+					$ret['ban_duration'] = $days;
+					$ret['ban_times'] = $prev_bans;
+					$ret['img'] = url('new-vox-img/ban'.($prev_bans).'.png');
+					$titles = [
+						trans('vox.page.bans.ban-too-fast-title-1'),
+						trans('vox.page.bans.ban-too-fast-title-2'),
+						trans('vox.page.bans.ban-too-fast-title-3'),
+						trans('vox.page.bans.ban-too-fast-title-4',[
+							'name' => $user->getNames()
+						]),
+					];
+					$ret['title'] = $titles[$prev_bans - 1];
+					$contents = [
+						trans('vox.page.bans.ban-too-fast-content-1'),
+						trans('vox.page.bans.ban-too-fast-content-2'),
+						trans('vox.page.bans.ban-too-fast-content-3'),
+						trans('vox.page.bans.ban-too-fast-content-4'),
+					];
+					$ret['content'] = $contents[$prev_bans - 1];
+	        	}
+	        }
         }
 
         return Response::json( $ret );
