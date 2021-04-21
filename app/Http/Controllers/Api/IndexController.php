@@ -49,6 +49,7 @@ use Route;
 use Hash;
 use Auth;
 use Mail;
+use Log;
 use App;
 use DB;
 
@@ -699,7 +700,8 @@ class IndexController extends ApiController {
 
 
 		    	if($user->id == 37530) {
-
+		    		Log::info('Answer: '.$answ);
+		    		Log::info('doing_asl: '.$doing_asl);
 		    		dd($answ, $doing_asl);
 		    	}
 
