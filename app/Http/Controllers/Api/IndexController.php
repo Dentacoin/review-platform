@@ -1553,14 +1553,14 @@ class IndexController extends ApiController {
 
 		$current_ban = $user->isBanned('vox');
 
-		if( $current_ban->expires ) {
+		$time_left = null;
+
+		if($current_ban && $current_ban->expires ) {
             $now = Carbon::now();
             $time_left = $current_ban->expires->diffInHours($now).':'.
             str_pad($current_ban->expires->diffInMinutes($now)%60, 2, '0', STR_PAD_LEFT).':'.
             str_pad($current_ban->expires->diffInSeconds($now)%60, 2, '0', STR_PAD_LEFT);
-        } else {
-            $time_left = null;
-        }
+		}
 
         return Response::json( [
         	'time_left' => $time_left,
