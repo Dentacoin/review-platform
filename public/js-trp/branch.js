@@ -175,6 +175,9 @@ $(document).ready(function(){
                                             }
                                         });
 
+                                        console.log('1');
+                                        console.log(ssoLoaded);
+
                                         var ssoLoaded = 0;
                                         $('.sso-imgs').on('load error', function() {
                                             ssoLoaded++;        
@@ -182,6 +185,8 @@ $(document).ready(function(){
                                                 window.location.href = window.location.origin;
                                             }
                                         });
+                                        console.log('2');
+                                        console.log(ssoLoaded);
                                     }
                                 },
                                 error: function(ret) {
