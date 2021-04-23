@@ -41,12 +41,10 @@ return [
 	],
     'external' => [
         'name' => 'DentaVox',
-        'url' => 'dentavox.dentacoin.com',
         'balance' => false,
     ],
     'hubapp' => [
         'name' => 'HubApp',
-        'url' => 'dentavox.dentacoin.com',
         'balance' => false,
     ],
 ];
