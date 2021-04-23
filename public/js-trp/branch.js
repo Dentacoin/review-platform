@@ -109,7 +109,7 @@ $(document).ready(function(){
                             ssoLoaded++;        
                             if(ssoLoaded==ssoTotal) {
                                 $.ajax({
-                                    type: "POST",
+                                    type: "GET",
                                     url: that.attr('login-url'),
                                     success: function(ret) {
                                         $('.sso img').remove();
@@ -149,7 +149,7 @@ $(document).ready(function(){
                         ssoLoaded++;        
                         if(ssoLoaded==ssoTotal) {
                             $.ajax({
-                                type: "POST",
+                                type: "GET",
                                 url: that.attr('login-url'),
                                 success: function(ret) {
                                     if(ret.success) {

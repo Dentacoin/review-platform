@@ -2172,8 +2172,6 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
 
         $user = User::find(User::decrypt(urldecode($token)));
 
-        dd($user);
-
         $ret['success'] = false;
 
         if($user->branches->isNotEmpty() && in_array($id, $user->branches->pluck('branch_clinic_id')->toArray())) {
