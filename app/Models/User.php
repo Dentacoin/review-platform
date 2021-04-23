@@ -1214,7 +1214,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getLink() {
-        return getLangUrl('dentist/'.$this->slug, null, strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'https://urgent.reviews.dentacoin.com/' : 'https://reviews.dentacoin.com/');
+        return getLangUrl('dentist/'.$this->slug, null, isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'https://urgent.reviews.dentacoin.com/' : 'https://reviews.dentacoin.com/');
     }
 
     public function parseCategories($categories) {
