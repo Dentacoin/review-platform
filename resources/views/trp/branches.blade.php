@@ -148,7 +148,7 @@
 							({{ trans('trp.common.reviews-count', [ 'count' => intval($dentist->ratings)]) }})
 						</span>
 					</div>
-					<div href="javascript:;" login-url="{{ getLangUrl('loginas/'.$dentist->id.'/'.App\Models\User::encrypt($user->id)) }}" logout-url="{{ getLangUrl('logoutas') }}" class="button button-submit login-as" cur-user="{{ $user->id }}">
+					<div href="javascript:;" login-url="{{ getLangUrl('loginas/'.$dentist->id.'/'.urlencode(App\Models\User::encrypt($user->id))) }}" logout-url="{{ getLangUrl('logoutas') }}" class="button button-submit login-as" cur-user="{{ $user->id }}">
 						{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
 					</div>
 					<div class="share-button" data-popup="popup-share" share-href="{{ $dentist->getLink() }}">
