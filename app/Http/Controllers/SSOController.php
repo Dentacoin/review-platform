@@ -50,14 +50,16 @@ class SSOController extends BaseController
                     session(['logged_user' => $session_arr]);
                     Auth::login($user, true);
 
+                    if(!empty(request('dentist_slug'))) {
+                        return redirect(getLangUrl('dentist/'.request('dentist_slug')));
+                    }
+
+
+
 
 
                     if(!empty(Auth::guard('admin')->user())) {
-                        dd(Auth::guard('web')->user());
-                    }
-
-                    if(!empty(request('dentist_slug'))) {
-                        return redirect(getLangUrl('dentist/'.request('dentist_slug')));
+                        dd('success');
                     }
 
                     return redirect(getLangUrl('/'));
