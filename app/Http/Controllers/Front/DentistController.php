@@ -2144,11 +2144,15 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
     }
 
     public function loginas( $locale=null,$id ) {
-        
+
         if($this->user->branches->isNotEmpty() && in_array($id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
             $item = User::find($id);
 
             if(!empty($item)) {
+
+                Auth::guard('web')->user()->logoutActions();
+                Auth::guard('web')->logout();
+
                 Auth::login($item, true);
 
                 $tokenobj = $item->createToken('LoginToken');
