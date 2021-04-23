@@ -42,6 +42,7 @@ use Carbon\Carbon;
 use Response;
 use Request;
 use Mail;
+use Auth;
 use Log;
 use DB;
 
