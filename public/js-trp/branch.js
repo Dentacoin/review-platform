@@ -111,11 +111,11 @@ $(document).ready(function(){
                                 $.ajax({
                                     type: "POST",
                                     url: that.attr('login-url'),
-                                    success: function(data) {
+                                    success: function(ret) {
                                         $('.sso img').remove();
 
-                                        for( var i in data.imgs_urls) {
-                                            $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
+                                        for( var i in ret.imgs_urls) {
+                                            $('body').append('<img class="sso-imgs hide" src="'+ret.imgs_urls[i]+'"/>');
                                         }
 
                                         var ssoTotal = $('.sso-imgs').length;
@@ -137,7 +137,7 @@ $(document).ready(function(){
                                             }
                                         });
                                     },
-                                    error: function(data) {
+                                    error: function(ret) {
                                         console.log('error');
                                     }
                                 });
@@ -151,12 +151,12 @@ $(document).ready(function(){
                             $.ajax({
                                 type: "POST",
                                 url: that.attr('login-url'),
-                                success: function(data) {
-                                    if(data.success) {
+                                success: function(ret) {
+                                    if(ret.success) {
                                         $('.sso img').remove();
 
-                                        for( var i in data.imgs_urls) {
-                                            $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
+                                        for( var i in ret.imgs_urls) {
+                                            $('body').append('<img class="sso-imgs hide" src="'+ret.imgs_urls[i]+'"/>');
                                         }
 
                                         var ssoTotal = $('.sso-imgs').length;
@@ -179,7 +179,7 @@ $(document).ready(function(){
                                         });
                                     }
                                 },
-                                error: function(data) {
+                                error: function(ret) {
                                     console.log('error');
                                 }
                             });
