@@ -2157,7 +2157,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         $imgs_urls = [];
         foreach( config('platforms') as $k => $platform ) {
             if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
-                if($k !== 'vox' && $k !== 'trp') {
+                if($k !== 'trp') {
                     $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?logout-token='.urlencode($token);
                 }
             }
@@ -2192,7 +2192,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     $imgs_urls = [];
                     foreach( config('platforms') as $k => $platform ) {
                         if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
-                            if($k !== 'vox' && $k !== 'trp') {
+                            if($k !== 'trp') {
                                 $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?slug='.urlencode(User::encrypt($item->id)).'&type='.urlencode(User::encrypt('dentist')).'&token='.urlencode($token);
                             }
                         }
