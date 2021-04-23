@@ -119,7 +119,7 @@ class AdminController extends BaseController
 
         $params['counters']['transactions'] = TransactionScammersByDay::where('checked', '!=', 1)->count() ? TransactionScammersByDay::where('checked', '!=', 1)->count() : TransactionScammersByBalance::where('checked', '!=', 1)->count();
         
-        $params['cache_version'] = '20210423';
+        $params['cache_version'] = '2021042301';
 
         $params['dcn_warning_transaction'] = DcnTransaction::where('status', 'dont_retry')->count();
         //dd($params['counters']);
