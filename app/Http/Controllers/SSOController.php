@@ -15,6 +15,10 @@ class SSOController extends BaseController
             //logging
 	        $slug = $this->decrypt(request('slug'));
 
+            if(!empty(Auth::guard('admin')->user())) {
+                dd($slug);
+            }
+
             $user = User::find( $slug );
 
             if($user) {
