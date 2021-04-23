@@ -2149,10 +2149,6 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
             $item = User::find($id);
 
             if(!empty($item)) {
-
-                Auth::guard('web')->user()->logoutActions();
-                Auth::guard('web')->logout();
-
                 Auth::login($item, true);
 
                 $tokenobj = $item->createToken('LoginToken');
