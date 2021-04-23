@@ -2157,7 +2157,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         $imgs_urls = [];
         foreach( config('platforms') as $k => $platform ) {
             if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
-                $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?logout-token='.urlencode($token);
+                if($k !== 'vox') {
+                    $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?logout-token='.urlencode($token);
+                }
             }
         }
         $imgs_urls[] = '//vox.dentacoin.com/custom-cookie?logout-token='.urlencode($token);
