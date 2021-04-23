@@ -2147,9 +2147,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
 
         $encrypted_user_id = User::encrypt($this->user->id);
 
-        Auth::guard('web')->user()->logoutActions();
-        Auth::guard('web')->user()->removeTokens();
-        Auth::guard('web')->logout();
+        // Auth::guard('web')->user()->logoutActions();
+        // Auth::guard('web')->user()->removeTokens();
+        // Auth::guard('web')->logout();
 
         $ret['success'] = true;
 
