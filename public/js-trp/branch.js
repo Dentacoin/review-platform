@@ -91,9 +91,7 @@ $(document).ready(function(){
 
         var that = $(this);
 
-        that.html('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
-
-        return;
+        that.html('<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>');
 
         $.ajax({
             type: "GET",
