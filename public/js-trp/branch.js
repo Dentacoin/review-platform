@@ -164,7 +164,6 @@ $(document).ready(function(){
                                             $('body').append('<img class="sso-imgs hide" src="'+ret.imgs_urls[i]+'"/>');
                                         }  
 
-
                                         var ssoTotal = $('.sso-imgs').length;
                                         console.log(ssoTotal);
                                         var ssoLoaded = 0;
