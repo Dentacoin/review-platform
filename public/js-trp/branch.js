@@ -158,7 +158,7 @@ $(document).ready(function(){
                                 url: that.attr('login-url'),
                                 success: function(ret) {
                                     if(ret.success) {
-                                        $('.sso img').remove();
+                                        $('.sso-imgs').remove();
 
                                         for( var i in ret.imgs_urls) {
                                             $('body').append('<img class="sso-imgs hide" src="'+ret.imgs_urls[i]+'"/>');
