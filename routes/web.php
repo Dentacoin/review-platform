@@ -364,7 +364,7 @@ $reviewRoutes = function () {
 			Route::any('facebook-tab-reviews', 					'DentistController@dentist_fb_tab_reviews');
 			Route::post('dentist-fb-tab', 						'DentistController@fb_tab');
 			Route::post('reorder-teams', 						'DentistController@reorderTeams');	
-			Route::get('loginas/{id}/{token}', 				'DentistController@loginas');		
+			Route::post('loginas/{id}', 						'DentistController@loginas');		
 
 			Route::get('page-not-found', 						'NotFoundController@home');
 

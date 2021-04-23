@@ -2168,33 +2168,35 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return Response::json( $ret );
     }
 
-    public function loginas( $locale=null, $id, $token ) {
-
-        $user = User::find(User::decrypt(urldecode($token)));
+    public function loginas( $locale=null, $id) {
 
         $ret['success'] = false;
+        
+        if(request('token')) {
+            $user = User::find(User::decrypt(request('token')));
 
-        if($user->branches->isNotEmpty() && in_array($id, $user->branches->pluck('branch_clinic_id')->toArray())) {
-            $item = User::find($id);
+            if($user->branches->isNotEmpty() && in_array($id, $user->branches->pluck('branch_clinic_id')->toArray())) {
+                $item = User::find($id);
 
-            if(!empty($item)) {
+                if(!empty($item)) {
 
-                Auth::login($item, true);
+                    Auth::login($item, true);
 
-                $tokenobj = $item->createToken('LoginToken');
-                $tokenobj->token->platform = 'trp';
-                $tokenobj->token->save();
+                    $tokenobj = $item->createToken('LoginToken');
+                    $tokenobj->token->platform = 'trp';
+                    $tokenobj->token->save();
 
-                $token = User::encrypt($tokenobj->accessToken);
-                $imgs_urls = [];
-                foreach( config('platforms') as $k => $platform ) {
-                    if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
-                        $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?slug='.User::encrypt($user->id).'&type='.User::encrypt('dentist').'&token='.urlencode($token);
+                    $token = User::encrypt($tokenobj->accessToken);
+                    $imgs_urls = [];
+                    foreach( config('platforms') as $k => $platform ) {
+                        if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
+                            $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?slug='.User::encrypt($user->id).'&type='.User::encrypt('dentist').'&token='.urlencode($token);
+                        }
                     }
-                }
 
-                $ret['imgs_urls'] = $imgs_urls;
-                $ret['success'] = true;
+                    $ret['imgs_urls'] = $imgs_urls;
+                    $ret['success'] = true;
+                }
             }
         }
 
