@@ -2143,30 +2143,61 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         }
     }
 
-    public function loginas( $locale=null,$id ) {
+    public function logoutas($locale=null) {
 
-        if($this->user->branches->isNotEmpty() && in_array($id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+        $encrypted_user_id = User::encrypt($this->user->id);
+
+        Auth::guard('web')->user()->logoutActions();
+        Auth::guard('web')->user()->removeTokens();
+        Auth::guard('web')->logout();
+
+        $ret['success'] = true;
+
+        $token = User::encrypt(session('login-logged-out'));
+        $imgs_urls = [];
+        foreach( config('platforms') as $k => $platform ) {
+            if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
+                $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?logout-token='.urlencode($token);
+            }
+        }
+        $imgs_urls[] = '//vox.dentacoin.com/custom-cookie?logout-token='.urlencode($token);
+
+        $ret['imgs_urls'] = $imgs_urls;
+        $ret['encrypted_user_id'] = $encrypted_user_id;
+
+        return Response::json( $ret );
+    }
+
+    public function loginas( $locale=null, $id, $token ) {
+
+        $user = User::find(User::decrypt($token));
+
+        $ret['success'] = false;
+
+        if($user->branches->isNotEmpty() && in_array($id, $user->branches->pluck('branch_clinic_id')->toArray())) {
             $item = User::find($id);
 
             if(!empty($item)) {
+
                 Auth::login($item, true);
 
                 $tokenobj = $item->createToken('LoginToken');
                 $tokenobj->token->platform = 'trp';
                 $tokenobj->token->save();
 
-                session([
-                    'login-logged' => $item->id,
-                    'mark-login' => 'TRP',
-                    'logged_user' => [
-                        'token' => $tokenobj->accessToken,
-                        'id' => $item->id,
-                        'type' => 'dentist',
-                    ],
-                ]);
+                $token = User::encrypt($tokenobj->accessToken);
+                $imgs_urls = [];
+                foreach( config('platforms') as $k => $platform ) {
+                    if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
+                        $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?slug='.User::encrypt($user->id).'&type='.User::encrypt('dentist').'&token='.urlencode($token);
+                    }
+                }
+
+                $ret['imgs_urls'] = $imgs_urls;
+                $ret['success'] = true;
             }
         }
 
-        return redirect(getLangUrl('/'));
+        return Response::json( $ret );
     }
 } ?>

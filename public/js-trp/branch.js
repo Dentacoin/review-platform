@@ -81,4 +81,118 @@ $(document).ready(function(){
         }
     });
 
+
+    $('.login-as').click( function(e) {
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.ajax({
+            type: "GET",
+            url: $(this).attr('logout-url'),
+            success: function(data) {
+                if(data.success) {
+                    $('.sso img').remove();
+
+                    for( var i in data.imgs_urls) {
+                        $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
+                    }
+
+                    var ssoTotal = $('.sso-imgs').length;
+                    var ssoLoaded = 0;
+                    $('.sso-imgs').each( function() {
+                        if( $(this)[0].complete ) {
+                            ssoLoaded++;        
+                            if(ssoLoaded==ssoTotal) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: that.attr('login-url'),
+                                    success: function(data) {
+                                        $('.sso img').remove();
+
+                                        for( var i in data.imgs_urls) {
+                                            $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
+                                        }
+
+                                        var ssoTotal = $('.sso-imgs').length;
+                                        var ssoLoaded = 0;
+                                        $('.sso-imgs').each( function() {
+                                            if( $(this)[0].complete ) {
+                                                ssoLoaded++;        
+                                                if(ssoLoaded==ssoTotal) {
+                                                    window.location.href = window.location.origin;
+                                                }
+                                            }
+                                        });
+
+                                        var ssoLoaded = 0;
+                                        $('.sso-imgs').on('load error', function() {
+                                            ssoLoaded++;        
+                                            if(ssoLoaded==ssoTotal) {
+                                                window.location.href = window.location.origin;
+                                            }
+                                        });
+                                    },
+                                    error: function(data) {
+                                        console.log('error');
+                                    }
+                                });
+                            }
+                        }
+                    } );
+                    var ssoLoaded = 0;
+                    $('.sso-imgs').on('load error', function() {
+                        ssoLoaded++;        
+                        if(ssoLoaded==ssoTotal) {
+                            $.ajax({
+                                type: "POST",
+                                url: that.attr('login-url'),
+                                success: function(data) {
+                                    if(data.success) {
+                                        $('.sso img').remove();
+
+                                        for( var i in data.imgs_urls) {
+                                            $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
+                                        }
+
+                                        var ssoTotal = $('.sso-imgs').length;
+                                        var ssoLoaded = 0;
+                                        $('.sso-imgs').each( function() {
+                                            if( $(this)[0].complete ) {
+                                                ssoLoaded++;        
+                                                if(ssoLoaded==ssoTotal) {
+                                                    window.location.href = window.location.origin;
+                                                }
+                                            }
+                                        });
+
+                                        var ssoLoaded = 0;
+                                        $('.sso-imgs').on('load error', function() {
+                                            ssoLoaded++;        
+                                            if(ssoLoaded==ssoTotal) {
+                                                window.location.href = window.location.origin;
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(data) {
+                                    console.log('error');
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            error: function(data) {
+                console.log('error');
+            }
+        });
+
+        ajax_is_running = false;
+    });
+
 });
