@@ -17,10 +17,6 @@ class SSOController extends BaseController
 
             $user = User::find( $slug );
 
-            if(!empty(Auth::guard('admin')->user())) {
-                dd($user);
-            }
-
             if($user) {
             	$token = $this->decrypt(request('token'));
 	            $type = $this->decrypt(request('type'));
@@ -53,6 +49,12 @@ class SSOController extends BaseController
                     ];
                     session(['logged_user' => $session_arr]);
                     Auth::login($user, true);
+
+
+
+                    if(!empty(Auth::guard('admin')->user())) {
+                        dd(Auth::guard('web')->user());
+                    }
 
                     if(!empty(request('dentist_slug'))) {
                         return redirect(getLangUrl('dentist/'.request('dentist_slug')));
