@@ -162,9 +162,11 @@ $(document).ready(function(){
 
                                         for( var i in ret.imgs_urls) {
                                             $('body').append('<img class="sso-imgs hide" src="'+ret.imgs_urls[i]+'"/>');
-                                        }
+                                        }  
+
 
                                         var ssoTotal = $('.sso-imgs').length;
+                                        console.log(ssoTotal);
                                         var ssoLoaded = 0;
                                         $('.sso-imgs').each( function() {
                                             if( $(this)[0].complete ) {
