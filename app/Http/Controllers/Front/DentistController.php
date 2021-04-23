@@ -2149,6 +2149,20 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
 
             if(!empty($item)) {
                 Auth::login($item, true);
+
+                $tokenobj = $item->createToken('LoginToken');
+                $tokenobj->token->platform = 'trp';
+                $tokenobj->token->save();
+
+                session([
+                    'login-logged' => $item->id,
+                    'mark-login' => 'TRP',
+                    'logged_user' => [
+                        'token' => $tokenobj->accessToken,
+                        'id' => $user->id,
+                        'type' => 'dentist',
+                    ],
+                ]);
             }
         }
 
