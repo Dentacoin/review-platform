@@ -303,6 +303,9 @@
   .result-container.branch .button-submit:hover {
     background-color: #126585;
     color: white; }
+  .result-container.branch .button-submit i {
+    background: transparent;
+    font-size: 15px; }
   .result-container .avatar {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;

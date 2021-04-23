@@ -91,6 +91,10 @@ $(document).ready(function(){
 
         var that = $(this);
 
+        that.html('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
+
+        return;
+
         $.ajax({
             type: "GET",
             url: $(this).attr('logout-url'),
@@ -165,7 +169,6 @@ $(document).ready(function(){
                                         }  
 
                                         var ssoTotal = $('.sso-imgs').length;
-                                        console.log(ssoTotal);
                                         var ssoLoaded = 0;
                                         $('.sso-imgs').each( function() {
                                             if( $(this)[0].complete ) {
@@ -176,9 +179,6 @@ $(document).ready(function(){
                                             }
                                         });
 
-                                        console.log('1');
-                                        console.log(ssoLoaded);
-
                                         var ssoLoaded = 0;
                                         $('.sso-imgs').on('load error', function() {
                                             ssoLoaded++;        
@@ -186,8 +186,6 @@ $(document).ready(function(){
                                                 window.location.href = window.location.origin;
                                             }
                                         });
-                                        console.log('2');
-                                        console.log(ssoLoaded);
                                     }
                                 },
                                 error: function(ret) {
