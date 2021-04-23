@@ -1869,36 +1869,41 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
 
     public function branchesPage($locale=null) {
 
-        $seos = PageSeo::find(35);
+        if($this->user->branches->isNotEmpty()) {
 
-        $seo_title = $seos->seo_title;
-        $seo_description = $seos->seo_description;
-        $social_title = $seos->social_title;
-        $social_description = $seos->social_description;
+            $seos = PageSeo::find(35);
 
-        $items = [];
+            $seo_title = $seos->seo_title;
+            $seo_description = $seos->seo_description;
+            $social_title = $seos->social_title;
+            $social_description = $seos->social_description;
 
-        foreach($this->user->branches as $branch) {
-            $items[] = $branch->branchClinic;
+            $items = [];
+
+            foreach($this->user->branches as $branch) {
+                $items[] = $branch->branchClinic;
+            }
+
+            return $this->ShowView('branches', [
+                'items' => $items,
+                'countries' => Country::with('translations')->get(),
+                'seo_title' => $seo_title,
+                'seo_description' => $seo_description,
+                'social_title' => $social_title,
+                'social_description' => $social_description,
+                'css' => [
+                    'trp-search.css',
+                ],
+                'js' => [
+                    'search.js',
+                    'branch.js',
+                    'upload.js',
+                    'address.js',
+                ],
+            ]);
+        } else {
+            return redirect( getLangUrl('page-not-found') );
         }
-
-        return $this->ShowView('branches', [
-            'items' => $items,
-            'countries' => Country::with('translations')->get(),
-            'seo_title' => $seo_title,
-            'seo_description' => $seo_description,
-            'social_title' => $social_title,
-            'social_description' => $social_description,
-            'css' => [
-                'trp-search.css',
-            ],
-            'js' => [
-                'search.js',
-                'branch.js',
-                'upload.js',
-                'address.js',
-            ],
-        ]);
     }
 
     public function addNewBranch($locale=null, $step=null) {
