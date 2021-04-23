@@ -368,11 +368,11 @@
 			    });
 			</script>
 		@endif
-		@if(!empty( $markLogin )) 
-			@include('sso')
-		@endif
 		@if(!empty( $markLogout )) 
 			@include('sso-logout')
+		@endif
+		@if(!empty( $markLogin )) 
+			@include('sso')
 		@endif
 		
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
