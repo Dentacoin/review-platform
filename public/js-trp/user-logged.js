@@ -1970,6 +1970,14 @@ $(document).ready(function(){
         $('#invite-option-'+$(this).attr('data-invite')).show();
     });
 
+    // $('.branch-tabs a').click( function() {
+    //     $('.branch-tabs a').removeClass('active');
+    //     $(this).addClass('active');
+    //     $('.branch-content').hide();
+    //     console.log($(this).attr('data-branch'));
+    //     $('#branch-option-'+$(this).attr('data-branch')).show();
+    // });
+
     $('.widget-tabs a').click( function() {
         $('.widget-tabs a').removeClass('active');
         $(this).addClass('active');
@@ -2756,7 +2764,5 @@ $(document).ready(function(){
 
         });
     });
-
-   
 
 });

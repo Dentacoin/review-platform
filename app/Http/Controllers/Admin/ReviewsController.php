@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use App\Models\Review;
-use App\Models\DcnReward;
 use App\Models\ReviewAnswer;
-use App\Models\User;
+use App\Models\DcnReward;
 use App\Models\UserBan;
+use App\Models\Review;
+use App\Models\User;
+
 use Carbon\Carbon;
 
 use Request;
 use Route;
 
-class ReviewsController extends AdminController
-{
+class ReviewsController extends AdminController {
+
     public function list() {
 
         $reviews = Review::orderBy('id', 'DESC');

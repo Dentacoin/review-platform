@@ -116,6 +116,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('trp/scrape-google-dentists', 		'ScrapeGoogleDentistsController@list');
 	Route::any('trp/scrape-google-dentists/{id}', 	'ScrapeGoogleDentistsController@download');
 
+	Route::get('trp/clinic-branches', 				'BranchesController@clinicBranches');
+	Route::any('trp/add-clinic-branch', 			'BranchesController@addClinicBranch');
+
 	Route::any('transactions', 						'TransactionsController@list');
 	Route::any('transactions/edit/{id}', 			'TransactionsController@edit');
 	Route::any('transactions/bump/{id}', 			'TransactionsController@bump');
@@ -411,9 +414,13 @@ $reviewRoutes = function () {
 				Route::get('profile/reviews-guided-tour-remove', 		'ProfileController@removeReviewsGuidedTour');
 				Route::get('profile/reviews-guided-tour/{layout?}', 	'ProfileController@reviewsGuidedTour');
 
+
 				Route::post('share', 									'MiscController@share');
 
                 Route::post('verify-review', 						    'DentistController@verifyReview');
+                Route::get('branches', 						    		'DentistController@branchesPage');
+				Route::post('profile/add-new-branch/{step?}', 			'DentistController@addNewBranch');
+				Route::any('loginas/{id}', 								'DentistController@loginas');
 				
 			});
 

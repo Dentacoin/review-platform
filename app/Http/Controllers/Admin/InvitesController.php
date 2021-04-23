@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Validator;
 use Request;
 
-
 class InvitesController extends AdminController {
 
     public function list( ) {

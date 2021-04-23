@@ -78,6 +78,7 @@ return [
                 'faq' => 'faq',
                 'testimonials' => 'testimonials',
                 'scrape-google-dentists' => 'scrape-google-dentists',
+                'clinic-branches' => 'clinic-branches',
             ),
             'js' => array(
                 'questions.js',

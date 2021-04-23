@@ -128,7 +128,7 @@ class IndexController extends FrontController {
 		$city_cookie = json_decode(Cookie::get('dentists_city'), true);
 		//dd($city_cookie);
 
-		$featured = User::with('country')->where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNull('self_deleted')->orderBy('avg_rating', 'DESC');
+		$featured = User::with('country')->where('is_dentist', 1)->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNull('self_deleted')->orderBy('avg_rating', 'DESC');
 		$homeDentists = collect();
 
 		if (!empty($city_cookie)) {

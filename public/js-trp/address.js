@@ -128,31 +128,58 @@ jQuery(document).ready(function($){
         conatiner.find('.different-country-hint').hide();
         conatiner.find('.geoip-confirmation').hide();
         conatiner.find('.suggester-map-div').hide();
-            
+        
+        console.log(conatiner);
             //console.log('Geocoding result: ', place);
         
     	if( place && typeof place.geometry !== null) {
       //    && place.types && (place.types.indexOf('street_address') != -1 || place.types.indexOf('establishment') != -1 || place.types.indexOf('point_of_interest') != -1 || place.types.indexOf('premise') != -1) ) {
     		// //address_components
-    		
-            var gstring = conatiner.find('.address-suggester-input').val();
-            var country_name = conatiner.find('.country-select option:selected').text();
-            var country_code_name = conatiner.find('.country-select option:selected').attr('code').toUpperCase();
+    		if(conatiner.find('.country-select').length) {
 
-            var address_country;
-            for (var i in place.address_components) {
-                for( var t in place.address_components[i].types) {
-                    if (place.address_components[i].types[t] == 'country') {
-                        address_country = place.address_components[i].short_name;
-                        break;
+                var gstring = conatiner.find('.address-suggester-input').val();
+                var country_name = conatiner.find('.country-select option:selected').text();
+                var country_code_name = conatiner.find('.country-select option:selected').attr('code').toUpperCase();
+
+                var address_country;
+                for (var i in place.address_components) {
+                    for( var t in place.address_components[i].types) {
+                        if (place.address_components[i].types[t] == 'country') {
+                            address_country = place.address_components[i].short_name;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if ( (country_code_name == 'XK' && (address_country == 'XK' || typeof address_country === 'undefined') ) || (address_country == country_code_name) ) {
+                if ( (country_code_name == 'XK' && (address_country == 'XK' || typeof address_country === 'undefined') ) || (address_country == country_code_name) ) {
 
-                gstring = gstring.replace(', '+country_name, '');
-                conatiner.find('.address-suggester-input').val(gstring);
+                    gstring = gstring.replace(', '+country_name, '');
+                    conatiner.find('.address-suggester-input').val(gstring);
+
+                    var coords = {
+                        lat: place.geometry.location.lat(), 
+                        lng: place.geometry.location.lng()
+                    };
+                    setupMap(conatiner, coords);
+
+                    conatiner.find('.geoip-confirmation').show();
+
+                    $('.go-to-next[step-number="3"]').removeClass('disabled');
+                    if ($('.invite-new-dentist-form').length) {
+                        $('.invite-new-dentist-form').find('.button').removeClass('disabled');
+                    }
+
+                } else {
+
+                    conatiner.find('.different-country-hint').show();
+                    $('.go-to-next[step-number="3"]').addClass('disabled');
+                    
+                    if ($('.invite-new-dentist-form').length) {
+                        $('.invite-new-dentist-form').find('.button').addClass('disabled');
+                    }
+                }
+            } else {
+                var gstring = conatiner.find('.address-suggester-input').val();
 
                 var coords = {
                     lat: place.geometry.location.lat(), 
@@ -161,20 +188,6 @@ jQuery(document).ready(function($){
                 setupMap(conatiner, coords);
 
                 conatiner.find('.geoip-confirmation').show();
-
-                $('.go-to-next[step-number="3"]').removeClass('disabled');
-                if ($('.invite-new-dentist-form').length) {
-                    $('.invite-new-dentist-form').find('.button').removeClass('disabled');
-                }
-
-            } else {
-
-                conatiner.find('.different-country-hint').show();
-                $('.go-to-next[step-number="3"]').addClass('disabled');
-                
-                if ($('.invite-new-dentist-form').length) {
-                    $('.invite-new-dentist-form').find('.button').addClass('disabled');
-                }
             }
 
        

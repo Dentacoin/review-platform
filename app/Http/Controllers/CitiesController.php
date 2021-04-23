@@ -28,7 +28,7 @@ class CitiesController extends BaseController
                     ->orWhere('name_alternative', 'like', "%{$value}%");
                 });
             }
-		})->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed', 'dentist_no_email'])
+		})->whereIn('status', config('dentist-statuses.shown'))
 		->whereNull('self_deleted')->take(10)->get();
 
 		$user_list = [];
@@ -58,7 +58,7 @@ class CitiesController extends BaseController
 		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
 			$query->where('name', 'LIKE', '%'.$username.'%')
 			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
-		})->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed', 'dentist_no_email'])
+		})->whereIn('status', config('dentist-statuses.shown'))
 		->whereNull('self_deleted')->take(10)->get();
 		$user_list = [];
 		foreach ($users as $user) {
@@ -201,7 +201,7 @@ class CitiesController extends BaseController
 	            $query->where('dentist_id', $id);
 	        });
 		}
-		$clinics = $clinics->where('name', 'LIKE', $joinclinic.'%')->whereIn('status', ['approved','added_approved','admin_imported'])
+		$clinics = $clinics->where('name', 'LIKE', $joinclinic.'%')->whereIn('status', config('dentist-statuses.shown_with_link'))
 		->whereNull('self_deleted')->take(10)->get();
 
 		$clinic_list = [];
@@ -230,7 +230,7 @@ class CitiesController extends BaseController
 	        });
 		}
 
-        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])
+        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')->whereIn('status', config('dentist-statuses.shown_with_link'))
 		->whereNull('self_deleted')->take(10)->get();
 
 		$dentist_list = [];

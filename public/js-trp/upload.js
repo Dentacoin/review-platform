@@ -74,6 +74,40 @@ $(document).ready(function(){
     uploadTeamImage();
 
 
+    $('.add-avatar-clinic-branch').change( function() {
+        if (typeof($(this)[0].files[0]) != 'undefined' ) {
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            $(this).closest('.image-label').addClass('loading');
+
+            var file = $(this)[0].files[0];
+            var that = $(this);
+            var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
+                that.closest('.image-label').removeClass('loading');
+                that.closest('.image-label').css('background-image', "url('"+data.thumb+"')");
+                if(that.closest('.image-label').find('.centered-hack').length) {
+                    that.closest('.image-label').find('.centered-hack').hide();
+                }
+
+                console.log(that.parent().parent());
+                console.log(that.parent().parent().find('.photo-name-branch'));
+                that.parent().parent().find('.photo-name-branch').val( data.name );
+                if( that.parent().parent().find('.photo-thumb-branch').length ) {
+                    that.parent().parent().find('.photo-thumb-branch').val( data.thumb );
+                }
+
+                ajax_is_running = false;
+            });
+
+            upload.doUpload();
+        }
+
+    } );
+
+
 
     Upload = function (file, url, success) {
         this.file = file;

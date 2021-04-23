@@ -6,7 +6,6 @@ use App\Http\Controllers\AdminController;
 
 use Illuminate\Support\Facades\Input;
 
-
 use App\Models\DcnTransaction;
 use App\Models\UserAction;
 use App\Models\BanAppeal;

@@ -4,26 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use App\Models\UserCategory;
+use App\Models\ReviewAnswer;
+use App\Models\VoxAnswer;
+use App\Models\UserBan;
+use App\Models\Country;
+use App\Models\Review;
+use App\Models\City;
 use App\Models\User;
 use App\Models\Vox;
-use App\Models\UserBan;
-use App\Models\VoxAnswer;
-use App\Models\City;
-use App\Models\Country;
-use App\Models\UserCategory;
-use App\Models\Review;
-use App\Models\ReviewAnswer;
 
 use Carbon\Carbon;
 
 use Request;
 use Route;
+use Excel;
 use Auth;
 use DB;
-use Excel;
 
-class UsersStatsController extends AdminController
-{
+class UsersStatsController extends AdminController {
 
     public function list() {
 

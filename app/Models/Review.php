@@ -80,13 +80,13 @@ class Review extends Model {
 
     public function afterSubmitActions() {
 
-        if( $this->dentist && !empty($this->dentist->email)) {
+        if( $this->dentist) {
             $this->dentist->sendTemplate( $this->verified ? 21 : 6, [
                 'review_id' => $this->id,
                 'dentist_id' => $this->dentist->id,
             ], 'trp');            
         }
-        if( $this->clinic && !empty($this->clinic->email)) {
+        if( $this->clinic) {
             $this->clinic->sendTemplate( $this->verified ? 21 : 6, [
                 'review_id' => $this->id,
                 'dentist_id' => $this->clinic->id,

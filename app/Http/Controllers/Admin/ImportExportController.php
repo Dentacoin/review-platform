@@ -21,8 +21,7 @@ use Request;
 use Config;
 use Lang;
 
-class ImportExportController extends AdminController
-{
+class ImportExportController extends AdminController {
 
     public function list() {
 

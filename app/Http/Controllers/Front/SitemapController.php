@@ -23,7 +23,7 @@ class SitemapController extends FrontController {
 			getLangUrl('dentists/bucuresti-municipiul-bucuresti-romania/'),
 		];
 
-		$dentists = User::where('is_dentist', '1')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNull('self_deleted')->get();
+		$dentists = User::where('is_dentist', '1')->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNull('self_deleted')->get();
 
 		foreach ($dentists as $dentist) {
 			if($dentist->address) {
@@ -31,12 +31,12 @@ class SitemapController extends FrontController {
 			}
 		}
 
-		$dentists = User::where('is_dentist', 1)->whereNotNull('address')->whereNotNull('country_id')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
+		$dentists = User::where('is_dentist', 1)->whereNotNull('address')->whereNotNull('country_id')->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
         $dentist_countries = Country::whereIn('id', $dentists )->get();
 
-        $dentist_cities = User::where('is_dentist', 1)->whereNotNull('address')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNotNull('country_id')->whereNotNull('state_name')->whereNotNull('city_name')->groupBy('state_name')->groupBy('city_name')->get();
+        $dentist_cities = User::where('is_dentist', 1)->whereNotNull('address')->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNotNull('country_id')->whereNotNull('state_name')->whereNotNull('city_name')->groupBy('state_name')->groupBy('city_name')->get();
         
-        $dentist_states = User::where('is_dentist', 1)->whereNotNull('address')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNotNull('country_id')->whereNotNull('state_name')->whereNotNull('city_name')->groupBy('state_name')->get();
+        $dentist_states = User::where('is_dentist', 1)->whereNotNull('address')->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNotNull('country_id')->whereNotNull('state_name')->whereNotNull('city_name')->groupBy('state_name')->get();
 
         foreach ($dentist_countries as $country) {
         	$links[] = getLangUrl('dentists-in-'.$country->slug);

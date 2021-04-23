@@ -41,4 +41,19 @@ $(document).ready(function(){
 	// }
 
 	// $('.transaction-load-more').click( lm_handler );
+
+
+	var pendingTransactionsFunction = function() {
+
+		if($('#server_pending_trans_check').is(':checked')) {
+			$('#count_pending_transactions').removeAttr("disabled");
+		} else {
+			$('#count_pending_transactions').prop('disabled', 'disabled');
+		}
+	}
+
+	pendingTransactionsFunction();
+
+	$('#server_pending_trans_check').change(pendingTransactionsFunction);
+	
 });

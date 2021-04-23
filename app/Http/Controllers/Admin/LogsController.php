@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-class LogsController extends AdminController
-{
+class LogsController extends AdminController {
+    
     public function list($type=null) {
 
         if(!empty($type)) {

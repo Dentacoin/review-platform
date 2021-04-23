@@ -11,8 +11,8 @@ use Carbon\Carbon;
 use Request;
 use Route;
 
-class RecommendationsController extends AdminController
-{
+class RecommendationsController extends AdminController {
+    
     public function list() {
 
         $recommendations = Recommendation::orderBy('id', 'DESC');

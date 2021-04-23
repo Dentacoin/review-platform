@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use App\Models\User;
 use App\Models\WhitelistIp;
+use App\Models\User;
+
 use Carbon\Carbon;
 
-use DB;
-use Request;
 use Validator;
+use Request;
+use DB;
 
-class WhitelistIpsController extends AdminController
-{
+class WhitelistIpsController extends AdminController {
+
     public function list() {
 
         if(Request::isMethod('post')) {

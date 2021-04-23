@@ -1184,31 +1184,44 @@ jQuery(document).ready(function($){
 
         $('.tooltip-window').html($(this).attr('text'));
 
-        if (window.innerWidth < 768) {
-      //   if ($(this).hasClass('fixed-tooltip')) {
-
-	        var that = $(this).closest('.tooltip-text');
-	        var y = that.offset().top + that.outerHeight() + 10;
+        if($(this).closest('.tooltip-text').hasClass('input-tooltip')) {
+        	var that = $(this).closest('.tooltip-text');
+	        var y = that.offset().top - $('.tooltip-window').outerHeight() - 5;
 	    	var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
 
 	        $('.tooltip-window').css('left', x );
 	        $('.tooltip-window').css('top', y );
+
+	        $('.tooltip-window').addClass('top-tooltip');
         } else {
-
-        	 $('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
-
-	        if (window.innerWidth > 768) {
-		        if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
-		            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
-		        }
-		    }
-
+        	$('.tooltip-window').removeClass('top-tooltip');
 	        if (window.innerWidth < 768) {
-	        	$('.tooltip-window').css('top', e.pageY + 15 );
+	      //   if ($(this).hasClass('fixed-tooltip')) {
+
+		        var that = $(this).closest('.tooltip-text');
+		        var y = that.offset().top + that.outerHeight() + 10;
+		    	var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
+
+		        $('.tooltip-window').css('left', x );
+		        $('.tooltip-window').css('top', y );
 	        } else {
-	        	$('.tooltip-window').css('top', e.pageY + 30 );
+
+	        	 $('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
+
+		        if (window.innerWidth > 768) {
+			        if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
+			            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
+			        }
+			    }
+
+		        if (window.innerWidth < 768) {
+		        	$('.tooltip-window').css('top', e.pageY + 15 );
+		        } else {
+		        	$('.tooltip-window').css('top', e.pageY + 30 );
+		        }
 	        }
         }
+
 
         $('.tooltip-window').css('display', 'block');
 

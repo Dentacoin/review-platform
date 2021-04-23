@@ -54,9 +54,11 @@ class Email extends Model
 
 	public function send($anonymous_email=null) {
 
-		if(!$this->user || !$this->user->email) {
+		if(!$this->user || (!$this->user->email && !$this->user->mainBranchEmail())) {
 			return;
 		}
+
+		$user_email = $this->user->email ? $this->user->email : $this->user->mainBranchEmail();
 
         if(empty($anonymous_email)) {
 	        if($this->user->id != 3 && !empty($this->template->subscribe_category)) {
@@ -68,7 +70,7 @@ class Email extends Model
 	        }
 	    }
 
-        if (empty($this->unsubscribed) && filter_var($this->user->email, FILTER_VALIDATE_EMAIL)) {
+        if (empty($this->unsubscribed) && filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
 			list($content, $title, $subtitle, $subject) = $this->prepareContent();
 
 			$platform = $this->template_id==20 ? 'dentacoin' : $this->platform;
@@ -84,11 +86,11 @@ class Email extends Model
 				'title' => $title,
 				'subtitle' => $subtitle,
 				'platform' => $platform,
-				'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $this->user->email),'email_category' => $this->template->subscribe_category, 'platform' => $this->platform ))))]),
+				'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $user_email),'email_category' => $this->template->subscribe_category, 'platform' => $this->platform ))))]),
 			])->render();
 
 	        $from = new From($sender, $sender_name);
-	        $tos = [new To( $this->user->email)];
+	        $tos = [new To( $user_email)];
 
 	        $email = new SendGridMail(
 	            $from,

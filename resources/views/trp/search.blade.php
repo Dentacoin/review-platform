@@ -92,7 +92,7 @@
 									<img src="{{ url('img-trp/mini-logo.png') }}">
 								</div>
 								<span>{!! nl2br(trans('trp.page.search.partner')) !!}</span> 
-								{{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}
+								{{ $dentist->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
 							</span>
 						@endif
 						<div class="p">
@@ -285,7 +285,7 @@
 										<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getNames(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
 									@endif
 									@if($dentist->is_partner)
-										<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}">
+										<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}">
 									@endif
 								</div>
 								<div class="media-right">
@@ -293,7 +293,7 @@
 										{{ $dentist->getNames() }}
 									</h4>
 									<span class="type">
-										{{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}
+										{{ $dentist->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
 									</span>
 							    	@if( $time = $dentist->getWorkHoursText() )
 							    		

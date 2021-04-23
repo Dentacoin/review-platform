@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Validator;
 use App\Http\Controllers\AdminController;
+
 use App\Models\Reward;
+
+use Validator;
 use Request;
 
-
-class RewardsController extends AdminController
-{
+class RewardsController extends AdminController {
 
     public function list( ) {
-
 
         if(Request::isMethod('post')) {
         	$rewards = Reward::get();

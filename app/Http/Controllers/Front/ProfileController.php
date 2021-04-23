@@ -240,12 +240,14 @@ class ProfileController extends FrontController {
 
                 } else {
 
-                    if(Request::Input('email') != $this->user->email) {
+                    $inviter_email = $this->user->email ? $this->user->email : $this->user->mainBranchEmail();
+
+                    if(Request::Input('email') != $inviter_email) {
 
                         if ( $this->user->is_dentist) {
 
                             $dentist_name = $this->user->name;
-                            $dentist_email = $this->user->email;
+                            $dentist_email = $inviter_email;
 
                             $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', Request::Input('email'));
 
@@ -548,7 +550,8 @@ class ProfileController extends FrontController {
                 }
 
                 foreach ($emails as $key => $email) {
-                    if(!empty($names[$key]) && ($email != $this->user->email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $inviter_email = $this->user->email ? $this->user->email : $this->user->mainBranchEmail();
+                    if(!empty($names[$key]) && ($email != $inviter_email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
                         $send_mail = false;
 
@@ -955,7 +958,7 @@ class ProfileController extends FrontController {
                         $dentists_with_same_name = User::where('is_dentist', true)->where('is_clinic', '!=', 1)->where(function($query) use ($username) {
                             $query->where('name', 'LIKE', $username)
                             ->orWhere('name_alternative', 'LIKE', $username);
-                        })->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed'])
+                        })->whereIn('status', config('dentist-statuses.dentist_approved'))
                         ->whereNull('self_deleted');
 
                         if (!empty($team_ids)) {
@@ -2074,5 +2077,4 @@ class ProfileController extends FrontController {
             'success' => false,
         ]);
     }
-
 }

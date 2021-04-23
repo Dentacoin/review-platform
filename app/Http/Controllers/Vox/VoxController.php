@@ -213,10 +213,7 @@ class VoxController extends FrontController {
 			return redirect( 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id)) );
 		}
 
-		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') ) {
-			if($this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') {
-            	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
-			}
+		if(empty($vox) || !in_array($this->user->status, config('dentist-statuses.approved')) ) {
 			return redirect( getLangUrl('page-not-found') );
 		} else if( 
 	    	isset( $this->details_fields[$qtype] ) ||

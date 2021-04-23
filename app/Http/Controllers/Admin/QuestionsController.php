@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Validator;
 use App\Http\Controllers\AdminController;
+
 use App\Models\Question;
+
+use Validator;
 use Request;
 
+class QuestionsController extends AdminController {
 
-class QuestionsController extends AdminController
-{
     public function list( ) {
 
     	return $this->showView('questions', array(

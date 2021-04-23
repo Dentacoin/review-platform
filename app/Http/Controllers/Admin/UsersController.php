@@ -296,6 +296,7 @@ class UsersController extends AdminController {
             'clinic.added_by_dentist_unclaimed' => 'Clinics (Added by Dentist Approved)', 
             'clinic.added_by_dentist_claimed' => 'Clinics (Added by Dentist Claimed)', 
             'clinic.added_by_dentist_rejected' => 'Clinics (Added by Dentist Rejected)',
+            'clinic.clinic_branch' => 'Clinics (Branches)',
             'dentist_clinic.all' => 'Dentists & Clinics (All)',
             'dentist_clinic.new' => 'Dentists & Clinics (New)',
             'dentist_clinic.pending' => 'Dentists & Clinics (Suspicious)',
@@ -1682,6 +1683,8 @@ class UsersController extends AdminController {
                                             $inv->save();
                                         }
                                     }
+
+                                    $item->generateSocialCover();
 
                                 } else if( $this->request->input($key)=='added_by_dentist_unclaimed' ) {
                                     $item->status = 'added_by_dentist_unclaimed';

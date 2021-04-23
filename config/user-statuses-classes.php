@@ -19,6 +19,7 @@ return [
     'added_by_dentist_new' => 'info',
     'added_by_dentist_rejected' => 'danger',
     'duplicated_email' => 'danger',
+    'clinic_branch' => 'success',
     'old_verified_no_kyc' => 'info',
     'old_verified_no_sc' => 'info', 
     'new_verified' => 'success', 

@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use App\Models\User;
 use App\Models\UserLogin;
+use App\Models\User;
+
 use Carbon\Carbon;
 
-use DB;
 use Request;
+use DB;
 
-class ScammersController extends AdminController
-{
+class ScammersController extends AdminController {
+
     public function list() {
 
         $list = [];

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
+
 use Illuminate\Support\Facades\Input;
-use Request;
+
 use Response;
+use Request;
 use Route;
 
-
-class FaqController extends AdminController
-{
+class FaqController extends AdminController {
 
     public function faq($locale = null) {
 

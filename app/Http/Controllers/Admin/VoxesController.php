@@ -6,7 +6,6 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
-
 use App\Models\VoxAnswersDependency;
 use App\Models\VoxToCategory;
 use App\Models\VoxCategory;
@@ -33,8 +32,7 @@ use Image;
 use Route;
 use DB;
 
-class VoxesController extends AdminController
-{
+class VoxesController extends AdminController {
 
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
         parent::__construct($request, $route, $locale);

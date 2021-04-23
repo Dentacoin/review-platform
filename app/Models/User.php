@@ -64,6 +64,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     protected $fillable = [
     	'email',
+        'email_clinic_branch',
         'email_public',
         'email_clean',
     	'password', 
@@ -342,6 +343,28 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function kycValidation() {
         return $this->hasOne('App\Models\Civic', 'user_id', 'id');
     }
+    public function branches() {
+        return $this->hasMany('App\Models\UserBranch', 'clinic_id', 'id');
+    }
+    public function mainBranchClinicEmail() {
+        return $this->hasOne('App\Models\User', 'email', 'email_clinic_branch');
+    }
+    public function mainBranchEmail() {
+        $email = null;
+
+        if(!empty($this->email_clinic_branch)) {
+            $email = $this->email_clinic_branch;
+        } else if($this->branches->isNotEmpty()) {
+            foreach($this->branches as $branch) {
+                if(!empty($branch->branchClinic->email)) {
+                    $email = $branch->branchClinic->email;
+                    break;
+                }
+            }
+        }
+
+        return $email;
+    }
 
     public function kycEmailPhone() {
         $data = json_decode($this->kycValidation->response, true);
@@ -523,27 +546,30 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             ], 'vox');
         } else {
 
-            $notifications = $this->website_notifications;
+            if(!empty($this->email)) {
 
-            if(!empty($notifications)) {
-                
-                if (($key = array_search('vox', $notifications)) !== false) {
-                    unset($notifications[$key]);
+                $notifications = $this->website_notifications;
+
+                if(!empty($notifications)) {
+                    
+                    if (($key = array_search('vox', $notifications)) !== false) {
+                        unset($notifications[$key]);
+                    }
+
+                    $this->website_notifications = $notifications;
+                    $this->save();
                 }
 
-                $this->website_notifications = $notifications;
-                $this->save();
+                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+                $request_body = new \stdClass();
+                $request_body->recipient_emails = [$this->email];
+                
+                $vox_group_id = config('email-preferences')['product_news']['vox']['sendgrid_group_id'];
+                $response = $sg->client->asm()->groups()->_($vox_group_id)->suppressions()->post($request_body);
+
+                $this->sendTemplate(16, null, 'vox');              
             }
-
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-            $request_body = new \stdClass();
-            $request_body->recipient_emails = [$this->email];
-            
-            $vox_group_id = config('email-preferences')['product_news']['vox']['sendgrid_group_id'];
-            $response = $sg->client->asm()->groups()->_($vox_group_id)->suppressions()->post($request_body);
-
-            $this->sendTemplate(16, null, 'vox');              
         }
 
         return [
@@ -616,52 +642,67 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     public function get_token() {
         //dd($this->email.$this->id);
-        $token = md5($this->email.$this->id.env('SALT'));
+        $email = $this->email ? $this->email : $this->mainBranchEmail();
+        $token = md5($email.$this->id.env('SALT'));
         $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
         return $token;
     }
     public function get_widget_token() {
         //dd($this->email.$this->id);
-        $token = md5($this->email.$this->id.env('SALT_WIDGET'));
+        $email = $this->email ? $this->email : $this->mainBranchEmail();
+        $token = md5($email.$this->id.env('SALT_WIDGET'));
         $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
         return $token;
     }
 
     public function sendTemplate($template_id, $params=null, $platform=null, $unsubscribed=null, $anonymous_email=null) {
-        $item = new Email;
-        $item->user_id = $this->id;
-        $item->template_id = $template_id;
-        $item->meta = $params;
 
-        if($platform) {
-            $item->platform = $platform;
-        } else {
-            if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
-                $item->platform = $this->platform;
+        if(!empty($this->email) || !empty($this->mainBranchEmail())) {
+
+            $email = $this->email ? $this->email : $this->mainBranchEmail();
+
+            $item = new Email;
+            $item->user_id = $this->id;
+            $item->template_id = $template_id;
+            $item->meta = $params;
+
+            if($platform) {
+                $item->platform = $platform;
             } else {
-                $item->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
+                if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
+                    $item->platform = $this->platform;
+                } else {
+                    $item->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
+                }
             }
-        }
 
-        $item->save();
-
-        $to_be_send = $this->sendgridEmailValidation($template_id, $this->email);
-
-        if(!$to_be_send) {
-            $item->invalid_email = true;
             $item->save();
+
+            $to_be_send = $this->sendgridEmailValidation($template_id, $email);
+
+            if(!$to_be_send) {
+                $item->invalid_email = true;
+                $item->save();
+            }
+
+            if(!$unsubscribed && $to_be_send) {
+
+                $item->send($anonymous_email);
+            }
+
+            return $item;
         }
 
-        if(!$unsubscribed && $to_be_send) {
-
-            $item->send($anonymous_email);
-        }
-
-        return $item;
+        return null;
     }
 
     public function sendGridTemplate($template_id, $substitutions=null, $platform=null, $is_skipped=null, $anonymous_email=null) {
-        return self::unregisteredSendGridTemplate($this, $this->email, $this->getNameSendGrid(), $template_id, $substitutions, $platform, $is_skipped, $anonymous_email);
+        if(!empty($this->email) || !empty($this->mainBranchEmail())) {
+            $email = $this->email ? $this->email : $this->mainBranchEmail();
+            return self::unregisteredSendGridTemplate($this, $email, $this->getNameSendGrid(), $template_id, $substitutions, $platform, $is_skipped, $anonymous_email);
+        }
+
+        return null;
     }
 
     public static function unregisteredSendGridTemplate($user, $to_email, $to_name, $template_id, $substitutions=null, $platform=null, $is_skipped=null, $anonymous_email=null) {
@@ -936,7 +977,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function validateMyEmail() {
         $result = false;
 
-        $clean_email = str_replace('.', '', $this->email);
+        $email = $this->email ? $this->email : $this->mainBranchEmail();
+
+        $clean_email = str_replace('.', '', $email);
         $found_email = self::where('email_clean', 'LIKE', $clean_email)->where('id', '!=', $this->id)->first();
      
         if ($found_email) {
@@ -1171,7 +1214,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getLink() {
-        return getLangUrl('dentist/'.$this->slug, null, 'https://reviews.dentacoin.com/');
+        return getLangUrl('dentist/'.$this->slug, null, strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'https://urgent.reviews.dentacoin.com/' : 'https://reviews.dentacoin.com/');
     }
 
     public function parseCategories($categories) {
@@ -1484,23 +1527,26 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     public function removeFromSendgridSubscribes() {
 
         //get sendgrid user id
-        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+        if(!empty($this->email)) {
 
-        $query_params = new \stdClass();
-        $query_params->email = $this->email;
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
 
-        $response = $sg->client->contactdb()->recipients()->search()->get(null, $query_params);
+            $query_params = new \stdClass();
+            $query_params->email = $this->email;
 
-        if(isset(json_decode($response->body())->recipients[0])) {
-            $recipient_id = json_decode($response->body())->recipients[0]->id;
-        } else {
-            $recipient_id = null;
-        }
+            $response = $sg->client->contactdb()->recipients()->search()->get(null, $query_params);
 
-        if(!empty($recipient_id)) {
-            // delete from list
-            $request_body = [$recipient_id];
-            $response = $sg->client->contactdb()->recipients()->delete($request_body);
+            if(isset(json_decode($response->body())->recipients[0])) {
+                $recipient_id = json_decode($response->body())->recipients[0]->id;
+            } else {
+                $recipient_id = null;
+            }
+
+            if(!empty($recipient_id)) {
+                // delete from list
+                $request_body = [$recipient_id];
+                $response = $sg->client->contactdb()->recipients()->delete($request_body);
+            }
         }
     }
 
@@ -1571,70 +1617,77 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
             $this->save();
 
-
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-            $user_info = new \stdClass();
-            $user_info->email = $this->email;
-            $user_info->first_name = explode(' ', $this->name)[0];
-            $user_info->last_name = isset(explode(' ', $this->name)[1]) ? explode(' ', $this->name)[1] : '';
-            $user_info->type = 'patient';
-
-            $request_body = [
-                $user_info
-            ];
-
-            $response = $sg->client->contactdb()->recipients()->post($request_body);
-            $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
-
-            //add to list
-            if($recipient_id) {
+            if(!empty($this->email)) {
 
                 $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-                $list_id = config('email-preferences')['product_news']['vox']['sendgrid_list_id'];
-                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+
+                $user_info = new \stdClass();
+                $user_info->email = $this->email;
+                $user_info->first_name = explode(' ', $this->name)[0];
+                $user_info->last_name = isset(explode(' ', $this->name)[1]) ? explode(' ', $this->name)[1] : '';
+                $user_info->type = 'patient';
+
+                $request_body = [
+                    $user_info
+                ];
+
+                $response = $sg->client->contactdb()->recipients()->post($request_body);
+                $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+                //add to list
+                if($recipient_id) {
+
+                    $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                    $list_id = config('email-preferences')['product_news']['vox']['sendgrid_list_id'];
+                    $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+                }
             }
 
         } else {
 
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-            $user_info = new \stdClass();
-            $user_info->email = $this->email;
-            $user_info->title = $this->title ? config('titles')[$this->title] : '';
-            $user_info->first_name = explode(' ', $this->name)[0];
-            $user_info->last_name = isset(explode(' ', $this->name)[1]) ? explode(' ', $this->name)[1] : '';
-            $user_info->type = 'dentist';
-            $user_info->partner = $this->is_partner ? 'yes' : 'no';
-
-            $request_body = [
-                $user_info
-            ];
-
-            $response = $sg->client->contactdb()->recipients()->post($request_body);
-            $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
-
-            //add to list
-            if($recipient_id) {
+            if(!empty($this->email)) {
 
                 $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-                $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
-                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+
+                $user_info = new \stdClass();
+                $user_info->email = $this->email;
+                $user_info->title = $this->title ? config('titles')[$this->title] : '';
+                $user_info->first_name = explode(' ', $this->name)[0];
+                $user_info->last_name = isset(explode(' ', $this->name)[1]) ? explode(' ', $this->name)[1] : '';
+                $user_info->type = 'dentist';
+                $user_info->partner = $this->is_partner ? 'yes' : 'no';
+
+                $request_body = [
+                    $user_info
+                ];
+
+                $response = $sg->client->contactdb()->recipients()->post($request_body);
+                $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+                //add to list
+                if($recipient_id) {
+
+                    $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                    $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
+                    $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+                }
             }
         }
     }
 
     public function sendgridSubscribeToGroup($platform) {
 
-        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-        $group_id = config('email-preferences')['product_news'][$platform]['sendgrid_group_id'];
-        $email = $this->email;
+        if(!empty($this->email)) {
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+            $group_id = config('email-preferences')['product_news'][$platform]['sendgrid_group_id'];
+            $email = $this->email;
 
-        $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->_($email)->delete();
+            $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->_($email)->delete();
+        }
     }
 
     public function canInvite($platform) {
-        return ($this->status=='approved' || $this->status=='test' || $this->status=='added_by_clinic_claimed' || $this->status=='added_by_dentist_claimed') && !$this->loggedFromBadIp();
+        return in_array($this->status, config('dentist-statuses.approved_test')) && !$this->loggedFromBadIp();
     }
 
     public function getSameIPUsers() {
@@ -2201,7 +2254,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         $arr = $this->toArray();
         $arr['avatar_url'] = $this->getImageUrl();
         $arr['thumbnail_url'] = $this->getImageUrl(true);
-        $arr['trp_public_profile_link'] = $this->is_dentist && ($this->status=='approved' || $this->status=='test' || $this->status=='added_approved' || $this->status=='admin_imported' || $this->status=='added_by_clinic_claimed' || $this->status=='added_by_clinic_unclaimed' || $this->status=='added_by_dentist_unclaimed' || $this->status=='added_by_dentist_claimed') ? $this->getLink() : null;
+        $arr['trp_public_profile_link'] = $this->is_dentist && in_array($this->status, config('dentist-statuses.shown_test')) ? $this->getLink() : null;
 
         return $arr;
     }

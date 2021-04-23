@@ -17,8 +17,8 @@ use Request;
 use Route;
 use Auth;
 
-class YoutubeController extends AdminController
-{
+class YoutubeController extends AdminController {
+    
     public function list() {
 
         $pending = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->get();

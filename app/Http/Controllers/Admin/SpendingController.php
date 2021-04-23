@@ -8,12 +8,9 @@ use App\Models\DcnTransaction;
 use Carbon\Carbon;
 use DB;
 
-
-class SpendingController extends AdminController
-{
+class SpendingController extends AdminController {
 
     public function list( ) {
-
         
         $groups = [
             'day', 

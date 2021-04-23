@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Validator;
 use App\Http\Controllers\AdminController;
-use App\Models\Admin;
+
 use Illuminate\Http\Request;
+use App\Models\Admin;
 
+use Validator;
 
-class AdminsController extends AdminController
-{
+class AdminsController extends AdminController {
+
     public function __construct(Request $request) {
         parent::__construct($request);
         $this->langslist = ['' => '-'];

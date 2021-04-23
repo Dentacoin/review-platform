@@ -5,9 +5,7 @@ use App\Http\Controllers\AdminController;
 
 use DB;
 
-
-class StatsController extends AdminController
-{
+class StatsController extends AdminController {
 
     public function registrations( ) {
         $weeks = DB::select("

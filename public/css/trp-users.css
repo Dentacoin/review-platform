@@ -3121,3 +3121,8 @@ body.guided-tour {
   padding: 12px 73px;
   margin-top: 30px;
   margin-bottom: 20px; }
+
+.clinic-branches {
+  font-size: 16px;
+  color: #46afda;
+  font-weight: bold; }

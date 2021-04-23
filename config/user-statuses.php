@@ -19,4 +19,5 @@ return [
     'added_by_dentist_new' => 'Added by Dentist New',
     'added_by_dentist_rejected' => 'Added by Dentist Rejected',
     'duplicated_email' => 'Duplicated Email',
+    'clinic_branch' => 'Clinic Branch',
 ];

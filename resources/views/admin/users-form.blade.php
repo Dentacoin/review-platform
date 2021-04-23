@@ -36,6 +36,12 @@
     </div>
 @endif
 
+@if($item->status == 'clinic_branch')
+    <div class="alert alert-info">
+        This clinic is a branch of <a href="{{ url('cms/users/edit/'.$item->mainBranchClinicEmail->id) }}">{{ $item->mainBranchClinicEmail->name }}</a>
+    </div>
+@endif
+
 @if($item->status == 'new' && $item->is_dentist && !$item->is_clinic && $item->my_workplace->isNotEmpty())
     <div class="alert alert-info">
         @foreach($item->my_workplace as $wp)
@@ -110,7 +116,9 @@
                                                 <label class="control-label" style="padding-right: 10px;">Status</label>
                                                 <div style="display: inline-block;">
                                                     <select class="form-control" name="status">
-                                                        @if($item->status == 'added_new' || $item->status == 'added_rejected')
+                                                        @if($item->status == 'clinic_branch')
+                                                            <option value="clinic_branch" {{ $item->status == 'clinic_branch' ? 'selected="selected"' : ''}} >Clinic Branch</option>
+                                                        @elseif($item->status == 'added_new' || $item->status == 'added_rejected')
                                                             <option value="added_new" {{ $item->status == 'added_new' ? 'selected="selected"' : ''}} >Added New</option>
                                                             <option value="added_approved" {{ $item->status == 'added_approved' ? 'selected="selected"' : ''}} >Added Approved</option>
                                                             <option value="added_rejected" {{ $item->status == 'added_rejected' ? 'selected="selected"' : ''}} >Added Rejected</option>
@@ -305,15 +313,24 @@
                                     ])
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Email</label>
-                                <div class="col-md-10">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'email',
-                                        'info' => $fields['email']
-                                    ])
+                            @if($item->status == 'clinic_branch')
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Main Clinic Email</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" disabled="disabled" type="text" value="{{ $item->email_clinic_branch }}">
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Email</label>
+                                    <div class="col-md-10">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'email',
+                                            'info' => $fields['email']
+                                        ])
+                                    </div>
+                                </div>
+                            @endif
                             @if($duplicated_mails->isNotEmpty())
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this email already exists:</p>
                                 @foreach($duplicated_mails as $dm)
@@ -1012,6 +1029,40 @@
 @endif
 
 <h4 style="margin-bottom: 20px;">TRUSTED REVIEWS</h4>
+
+@if($item->is_clinic && $item->branches->isNotEmpty())
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Clinic's Branches</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="row table-responsive-md">
+
+                        <table class="table table-striped table-question-list">
+                            <thead>
+                                <tr>
+                                    <th>Clinic</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($item->branches as $branch)
+                                    <tr>
+                                        <td>
+                                            <a href="{{ url('cms/users/edit/'.$branch->branch_clinic_id) }}">{{ $branch->branchClinic->name }}</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 @if($item->is_dentist)
     <div class="row">
         <div class="col-md-12">

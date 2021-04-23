@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use App\Models\User;
 use App\Models\UserAction;
 use App\Models\Blacklist;
+use App\Models\User;
+
 use Carbon\Carbon;
 
-use DB;
-use Request;
 use Validator;
+use Request;
+use DB;
 
-class BlacklistController extends AdminController
-{
+class BlacklistController extends AdminController {
+    
     public function list() {
 
         if(Request::isMethod('post')) {

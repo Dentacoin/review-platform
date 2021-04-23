@@ -5,24 +5,30 @@
 @if(!empty($user) && $user->id==$item->id )
 	<div class="guided-overflow-wrapper">
 		<div class="guided-tour-part guided-overflow-top"></div>
-		<div class="guided-tour-part guided-overflow-right"><img class="top" src="{{ url('img-trp/border-tooltips.png') }}"><img class="bottom" src="{{ url('img-trp/border-tooltips.png') }}"></div>
-		<div class="guided-tour-part guided-overflow-left"><img class="top" src="{{ url('img-trp/border-tooltips.png') }}"><img class="bottom" src="{{ url('img-trp/border-tooltips.png') }}"></div>
+		<div class="guided-tour-part guided-overflow-right">
+			<img class="top" src="{{ url('img-trp/border-tooltips.png') }}">
+			<img class="bottom" src="{{ url('img-trp/border-tooltips.png') }}">
+		</div>
+		<div class="guided-tour-part guided-overflow-left">
+			<img class="top" src="{{ url('img-trp/border-tooltips.png') }}">
+			<img class="bottom" src="{{ url('img-trp/border-tooltips.png') }}">
+		</div>
 		<div class="guided-tour-part guided-overflow-bottom"></div>
 
 		<div class="bubble-guided-tour">
 			<div class="cap"></div>
-			<h4>Complete your profile</h4>
+			<h4>{{ trans('trp.guided-tour.complete-profile') }}</h4>
 			<div class="flex guided-info-wrap">
 				<div class="guided-icon">
 					<img src="{{ url('img-trp/edit-profile.svg') }}"/>
 				</div>
-				<p>Click "Edit profile" to add the basic info about your practice.</p>
+				<p>{{ trans('trp.guided-tour.complete-profile-info') }}</p>
 			</div>
 
 			<div class="flex guided-buttons">
-				<div class="steps">Steps: <span id="cur-step">1</span><span>/</span><span id="all-steps">7</span></div>
-				<a href="javascript:;" class="skip-step">Skip this step</a>
-				<a href="javascript:;" class="skip-reviews-step with-layout button" style="display: none;">Ok</a>
+				<div class="steps">{{ trans('trp.guided-tour.steps') }}: <span id="cur-step">1</span><span>/</span><span id="all-steps">7</span></div>
+				<a href="javascript:;" class="skip-step">{{ trans('trp.guided-tour.skip-steps') }}</a>
+				<a href="javascript:;" class="skip-reviews-step with-layout button" style="display: none;">{{ trans('trp.guided-tour.ok-button') }}</a>
 			</div>
 		</div>
 	</div>
@@ -205,7 +211,7 @@
 					{{ trans('trp.page.user.recommend') }}
 				</a>
 			@endif
-			@if($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed')
+			@if(in_array($item->status, config('dentist-statuses.unclaimed')))
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
@@ -232,7 +238,7 @@
 						{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 					</a>
 				@endif
-				@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed'))
+				@if(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
 					<a class="claim-button" href="javascript:;"  data-popup="claim-popup">
 						{{ trans('trp.common.claim-practice') }}
 					</a>
@@ -308,7 +314,33 @@
 				    	</span>
 			    	</a>
 		    	@endif
-
+		    	@if(!empty($user) && $user->is_clinic && $item->is_clinic && $user->branches->isNotEmpty() && in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
+		    		<a href="{{ getLangUrl('loginas/'.$item->id) }}" class="p clinic-branches">
+	    				<div class="img">
+	    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+	    				</div>
+	    				{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
+	    			</a>
+		    	@endif
+		    	@if(!empty($user) && $user->id == $item->id && $item->is_clinic)
+		    		@if($item->branches->isNotEmpty())
+		    			<a href="{{ getLangUrl('branches') }}" class="p clinic-branches">
+		    				<div class="img">
+		    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+		    				</div>
+		    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
+		    			</a>
+		    		@else
+		    			@if($user->id == 37530)
+			    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
+			    				<div class="img">
+			    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+			    				</div>
+			    				{!! nl2br(trans('trp.page.user.branch.add-branch')) !!}
+			    			</a>
+			    		@endif
+		    		@endif
+		    	@endif
 		    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
 		    		<div class="p workplace-p">
 			    		<div class="img" style="min-width: 25px;">
@@ -328,9 +360,17 @@
 	    			</div>
 				@endif
 			    <div class="p profile-socials">
-		    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
-		    			<i class="fas fa-envelope"></i>
-		    		</a>
+			    	@if(!empty($item->email))
+			    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
+			    			<i class="fas fa-envelope"></i>
+			    		</a>
+			    	@else
+			    		@if($item->branches->isNotEmpty())
+				    		<a class="social" href="mailto:{{ $item->mainBranchEmail() }}">
+				    			<i class="fas fa-envelope"></i>
+				    		</a>
+				    	@endif
+			    	@endif
 		    		@if( $item->socials )
 			    		@foreach($item->socials as $k => $v)
 				    		<a class="social" href="{{ $v }}" target="_blank">
@@ -519,7 +559,7 @@
 			@endif
 
 
-			@if($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed')
+			@if(in_array($item->status, config('dentist-statuses.unclaimed')))
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 
@@ -576,6 +616,33 @@
 				    		</span>
 			    		</a>
 			    	@endif
+			    	@if(!empty($user) && $user->is_clinic && $item->is_clinic && $user->branches->isNotEmpty() && in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
+			    		<a href="{{ getLangUrl('loginas/'.$item->id) }}" class="p clinic-branches">
+		    				<div class="img">
+		    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+		    				</div>
+		    				{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
+		    			</a>
+			    	@endif
+			    	@if(!empty($user) && $user->id == $item->id && $item->is_clinic)
+			    		@if($item->branches->isNotEmpty())
+			    			<a href="{{ getLangUrl('branches') }}" class="p clinic-branches">
+			    				<div class="img">
+			    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+			    				</div>
+			    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
+			    			</a>
+			    		@else
+			    			@if($user->id == 37530)
+				    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
+				    				<div class="img">
+				    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+				    				</div>
+				    				{!! nl2br(trans('trp.page.user.branch.add-branch')) !!}
+				    			</a>
+				    		@endif
+			    		@endif
+			    	@endif
 			    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
 			    		<div class="p workplace-p">
 				    		<div class="img" style="min-width: 25px;">
@@ -587,9 +654,17 @@
 			    		</div>
 			    	@endif
 				    <div class="p profile-socials">
-				    	<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
-			    			<i class="fas fa-envelope"></i>
-			    		</a>
+				    	@if(!empty($item->email))
+				    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
+				    			<i class="fas fa-envelope"></i>
+				    		</a>
+				    	@else
+				    		@if($item->branches->isNotEmpty())
+					    		<a class="social" href="mailto:{{ $item->mainBranchEmail() }}">
+					    			<i class="fas fa-envelope"></i>
+					    		</a>
+					    	@endif
+				    	@endif
 				    	@if( $item->socials )
 				    		@foreach($item->socials as $k => $v)
 					    		<a class="social" href="{{ $v }}" target="_blank">
@@ -606,7 +681,7 @@
 					{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 				</a>
 			@endif
-			@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed'))
+			@if(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
 				<a class="claim-button" href="javascript:;" data-popup="claim-popup">
 					{{ trans('trp.common.claim-practice') }}
 				</a>
@@ -1480,6 +1555,7 @@
 @if(!empty($user))
 
 	@if( $user->id==$item->id )
+		@include('trp.popups.add-branch')
 		@include('trp.popups.widget')
 		@include('trp.popups.invite')
 		@include('trp.popups.working-time')
@@ -1500,7 +1576,7 @@
 			@include('trp.popups.ask-dentist')
 		@endif
 	@endif
-@elseif(empty($user) && $item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed')
+@elseif(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
 	@include('trp/popups/claim-profile')
 @endif
 @include('trp.popups.detailed-review')
