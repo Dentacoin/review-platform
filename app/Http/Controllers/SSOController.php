@@ -54,14 +54,6 @@ class SSOController extends BaseController
                         return redirect(getLangUrl('dentist/'.request('dentist_slug')));
                     }
 
-
-
-
-
-                    if(!empty(Auth::guard('admin')->user())) {
-                        dd('success');
-                    }
-
                     return redirect(getLangUrl('/'));
                 }
             } else {

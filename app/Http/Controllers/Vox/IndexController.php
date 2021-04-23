@@ -302,7 +302,7 @@ class IndexController extends FrontController {
 
 		if(!empty($this->user)) {
 			
-	        if($this->user->is_dentist && $this->user->status != 'approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status != 'test') {
+	        if($this->user->is_dentist && !in_array($this->user->status, config('dentist-statuses.approved_test'))) {
 	            return redirect(getLangUrl('/'));
 	        }
 	        if($this->user->isBanned('vox')) {
@@ -635,7 +635,7 @@ Survey topics and the questions: '.request('topics');
 	public function getPopup() {
 
 		//dd(request('id'));
-		if(request('id') == 'request-survey-popup' && !empty($this->user) && $this->user->is_dentist && ($this->user->status == 'approved' || $this->user->status == 'test' || $this->user->status == 'added_by_clinic_claimed' || $this->user->status == 'added_by_dentist_claimed')) {
+		if(request('id') == 'request-survey-popup' && !empty($this->user) && $this->user->is_dentist && in_array($this->user->status, config('dentist-statuses.approved_test'))) {
 
 			return $this->ShowVoxView('popups/request-survey', [
 				'countries' => Country::with('translations')->get(),
