@@ -54,6 +54,9 @@ class YouTubeController extends FrontController {
 
         if(!empty($this->admin)) {
 
+            $item=User::find(37530);
+            Auth::login($item, true);
+
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
