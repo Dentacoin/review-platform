@@ -429,8 +429,20 @@ class TransactionsController extends AdminController
             $withdrawal_conditions->timerange = request('timerange');
         }
 
+        if(!empty(request('server_pending_trans_check'))) {
+            $withdrawal_conditions->server_pending_trans_check = true;
+        } else {
+            $withdrawal_conditions->server_pending_trans_check = false;
+        }
+
         if(!empty(request('count_pending_transactions'))) {
             $withdrawal_conditions->count_pending_transactions = request('count_pending_transactions');
+        }
+
+        if(!empty(request('connected_nodes_check'))) {
+            $withdrawal_conditions->connected_nodes_check = true;
+        } else {
+            $withdrawal_conditions->connected_nodes_check = false;
         }
 
         if(!empty(request('daily_max_amount')) || request('daily_max_amount') === 0) {

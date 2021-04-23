@@ -232,9 +232,21 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="server_pending_trans_check" class="col-md-2 control-label" style="text-align: left;">Allow check for server pending transactions</label>
+                            <div class="col-md-10">
+                                <input type="checkbox" name="server_pending_trans_check" value="1" id="server_pending_trans_check" {!! !empty($withdrawal_conditions->server_pending_trans_check) ? 'checked="checked"' : '' !!}>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-2">Server Pending Transactions Count</label>
                             <div class="col-md-4">
-                                <input class="form-control" type="number" name="count_pending_transactions" value="{{ $withdrawal_conditions->count_pending_transactions }}" />
+                                <input class="form-control" type="number" id="count_pending_transactions" name="count_pending_transactions" value="{{ $withdrawal_conditions->count_pending_transactions }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="connected_nodes_check" class="col-md-2 control-label" style="text-align: left;">Check for connected nodes</label>
+                            <div class="col-md-10">
+                                <input type="checkbox" name="connected_nodes_check" value="1" id="connected_nodes_check" {!! !empty($withdrawal_conditions->connected_nodes_check) ? 'checked="checked"' : '' !!}>
                             </div>
                         </div>
                         <div class="form-group">
