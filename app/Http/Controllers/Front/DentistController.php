@@ -2144,6 +2144,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
     }
 
     public function loginas( $locale=null,$id ) {
+        
         if($this->user->branches->isNotEmpty() && in_array($id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
             $item = User::find($id);
 
@@ -2159,7 +2160,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     'mark-login' => 'TRP',
                     'logged_user' => [
                         'token' => $tokenobj->accessToken,
-                        'id' => $user->id,
+                        'id' => $item->id,
                         'type' => 'dentist',
                     ],
                 ]);
