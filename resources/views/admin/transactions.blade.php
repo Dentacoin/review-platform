@@ -298,6 +298,25 @@
             padding-bottom: 0px;
         }
 
+        .user-info-wrapper .user-info-tooltip {
+            display: none;
+            position: absolute;
+            border: 1px solid black;
+            padding: 10px;
+            border-radius: 5px;
+            background: white;
+            z-index: 1000;
+        }
+
+        .user-info-wrapper .img-wrap {
+            padding: 5px;
+            padding-left: 0px;
+        }
+
+        .user-info-wrapper:hover .user-info-tooltip {
+            display: block;
+        }
+
     </style>
 
 @endsection

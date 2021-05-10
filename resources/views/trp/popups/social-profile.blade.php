@@ -9,11 +9,11 @@
 			<a href="javascript:;" class="close-cur-popup">< {{ trans('trp.common.back') }}</a>
 		</div>
 		<h2>
-			GET VERIFIED FASTER
+			{!! nl2br(trans('trp.popup.social-profile.title')) !!}
 		</h2>
 
 		<div class="content">
-			<p>Let's get to know each other better! If you complete your profile now, you will get verified much faster upon requesting your first rewards.</p>
+			<p>{!! nl2br(trans('trp.popup.social-profile.description')) !!}</p>
 
 			<form class="form" action="{{ getLangUrl('social-profile') }}" method="post" id="social-profile-form">
 				{!! csrf_field() !!}
@@ -23,7 +23,7 @@
 						<div class="centered-hack">
 			    			<img src="{{ url('img/camera.svg') }}">
 							<p>
-		    					+ Add profile photo
+		    					{!! nl2br(trans('trp.popup.social-profile.add-photo')) !!}
 				    		</p>
 						</div>
 			    		<div class="loader">
@@ -35,22 +35,22 @@
 					<input type="hidden" class="photo-thumb" name="photo-thumb" >
 
 					<div class="tac max-size">
-						<span>Max size: 2MB</span>
+						<span>{!! nl2br(trans('trp.popup.social-profile.max-photo-size')) !!}</span>
 					</div>
 				@endif
 
 				<div class="modern-field alert-after">
 					<input type="text" name="link" id="link" class="modern-input link" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 					<label for="link">
-						<span>Link to your social media profile:</span>
+						<span>{!! nl2br(trans('trp.popup.social-profile.social-link')) !!}</span>
 					</label>
 				</div>
 
 				<div class="flex flex-center flex-text-center break-mobile">
-					<a href="javascript:;" class="closer-pop cancel button button-white">Cancel</a>
-					<button type="submit" class="button">Update profile</button>
+					<a href="javascript:;" class="closer-pop cancel button button-white">{!! nl2br(trans('trp.popup.social-profile.cancel')) !!}</a>
+					<button type="submit" class="button">{!! nl2br(trans('trp.popup.social-profile.update-profile')) !!}</button>
 				</div>
-				<div class="alert alert-warning without-image mobile" style="display: none; margin-top: 20px;">The image is required.</div>
+				<div class="alert alert-warning without-image mobile" style="display: none; margin-top: 20px;">{!! nl2br(trans('trp.popup.social-profile.error-missing-image')) !!}</div>
 			</form>
 		</div>
 	</div>

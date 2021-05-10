@@ -55,5 +55,21 @@ $(document).ready(function(){
 	pendingTransactionsFunction();
 
 	$('#server_pending_trans_check').change(pendingTransactionsFunction);
+
+	$('.user-info').click( function() {
+		var that = $(this);
+		
+    	$.ajax( {
+			url: window.location.origin+'/cms/ban_appeals/info/'+that.attr('user-id'),
+			type: 'POST',
+			dataType: 'json',
+			success: function( data ) {
+				that.closest('.user-info-wrapper').find('.user-info-tooltip').html(data.data);
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+	});
 	
 });
