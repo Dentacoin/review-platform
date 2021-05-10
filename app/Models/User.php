@@ -909,7 +909,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $new_email_validation->valid = false;
                 } else {
                     $new_email_validation->meta = $response;
-                    if(json_decode($response)->result->verdict == 'Valid') {
+                    if(isset(json_decode($response)->result) && json_decode($response)->result->verdict == 'Valid') {
                         $new_email_validation->valid = true;
                         $to_be_send = true;
                     } else {

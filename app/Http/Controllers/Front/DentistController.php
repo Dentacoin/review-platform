@@ -449,6 +449,10 @@ class DentistController extends FrontController {
                                 $ret['ban'] = true;
                             }
 
+                            if(Review::where('user_id', $this->user->id)->count() == 1) {
+                                $ret['social_profile'] = true;
+                            }
+
                             $ret['success'] = true;
                             $ret['review_id'] = $review->id;
                         }

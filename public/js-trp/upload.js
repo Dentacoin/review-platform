@@ -74,6 +74,38 @@ $(document).ready(function(){
     uploadTeamImage();
 
 
+    $('#add-avatar-patient').change( function() {
+        if (typeof($(this)[0].files[0]) != 'undefined' ) {
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            $(this).closest('.image-label').addClass('loading');
+
+            var file = $(this)[0].files[0];
+            var that = $(this);
+            var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
+                that.closest('.image-label').removeClass('loading');
+                that.closest('.image-label').css('background-image', "url('"+data.thumb+"')");
+                if(that.closest('.image-label').find('.centered-hack').length) {
+                    that.closest('.image-label').find('.centered-hack').remove();
+                }
+
+                that.parent().parent().find('.photo-name').val( data.name );
+                if( that.parent().parent().find('.photo-thumb').length ) {
+                    that.parent().parent().find('.photo-thumb').val( data.thumb );
+                }
+
+                ajax_is_running = false;
+            });
+
+            upload.doUpload();
+        }
+
+    } );
+
+
     $('.add-avatar-clinic-branch').change( function() {
         if (typeof($(this)[0].files[0]) != 'undefined' ) {
             if(ajax_is_running) {

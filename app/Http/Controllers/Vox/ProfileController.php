@@ -153,4 +153,72 @@ class ProfileController extends FrontController {
         
         return null;
     }
+
+    /**
+     * Patient uploads a profile photo
+     */
+    public function upload($locale=null) {
+
+        if( Request::file('image') && Request::file('image')->isValid() ) {
+            $img = Image::make( Input::file('image') )->orientate();
+            $this->user->addImage($img);
+            $this->user->save();
+
+            return Response::json(['success' => true, 'thumb' => $this->user->getImageUrl(true), 'name' => '' ]);
+        }
+    }
+
+    /**
+     * Patient social profile form
+     */
+    public function socialProfile($locale=null) {
+
+        if(!empty($this->user)) {
+
+            if (request('link') && mb_strpos(mb_strtolower(request('link')), 'http') !== 0) {
+                request()->merge([
+                    'link' => 'http://'.request('link')
+                ]);
+            }
+
+            $validator = Validator::make(Request::all(), [
+                'link' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
+            ]);
+
+            if ($validator->fails()) {
+
+                $msg = $validator->getMessageBag()->toArray();
+                $ret = array(
+                    'success' => false,
+                    'messages' => array()
+                );
+
+                foreach ($msg as $field => $errors) {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
+
+                return Response::json( $ret );
+            } else {
+
+                if(Request::has('photo') && empty(Request::input('photo'))) {
+                    return Response::json( [
+                        'success' => false,
+                        'without_image' => true,
+                    ] );
+                }
+
+                $this->user->website = Request::input('link');
+                $this->user->save();
+
+                if( Request::input('photo') ) {
+                    $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
+                    $this->user->addImage($img);
+                }
+
+                return Response::json( [
+                    'success' => true,
+                ] );
+            }
+        }
+    }
 }

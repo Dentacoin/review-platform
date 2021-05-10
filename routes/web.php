@@ -386,6 +386,7 @@ $reviewRoutes = function () {
 				Route::any('profile/gallery/delete/{id}', 				'ProfileController@gallery_delete');
 				Route::post('profile/info', 							'ProfileController@info');
 				Route::get('profile/trp-iframe', 						'ProfileController@trp');
+				Route::post('social-profile', 							'ProfileController@socialProfile');
 
 				Route::post('invite-patient-again',						'ProfileController@invite_patient_again');
 				Route::post('profile/invite', 							'ProfileController@invite');
@@ -498,7 +499,8 @@ $voxRoutes = function () {
 			//Route::any('vpn', 									'VpnController@list');
 
 			Route::group(['middleware' => 'auth:web'], function () {
-				
+				Route::post('profile/info/upload', 				'ProfileController@upload');
+				Route::post('social-profile', 					'ProfileController@socialProfile');
 			});
 
 			Route::get('/', 									'IndexController@home');

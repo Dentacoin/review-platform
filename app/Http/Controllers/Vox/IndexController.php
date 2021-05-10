@@ -649,6 +649,10 @@ Survey topics and the questions: '.request('topics');
 
 			return $this->ShowVoxView('popups/recommend');
 
+		} else if(request('id') == 'social-profile-popup' && !empty($this->user)) {
+
+			return $this->ShowVoxView('popups/social-profile');
+
 		} else if(request('id') == 'failed-popup' && empty($this->user)) {
 			
 			return $this->ShowVoxView('popups/failed-reg-login');

@@ -484,6 +484,22 @@ jQuery(document).ready(function($){
 	            } else {
 	                $('.all-days-equal').hide();
 		        }
+		    } else if(id =='social-profile-popup') {
+		    	$.getScript(window.location.origin+'/js-trp/upload.js', function() {
+
+        			$('.popup .closer-pop').click( function() {
+
+				        if($(this).hasClass('inactive')) {
+				            return;
+				        }
+				        if($(this).closest('.popup').hasClass('ban')) {
+				            window.location.reload();
+				        }
+
+				        $(this).closest('.popup').removeClass('active');
+				        $('body').removeClass('popup-visible');
+				    } );
+        		});
 		    }
 
 			$('#'+id+'.popup').addClass('active');

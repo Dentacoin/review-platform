@@ -1574,6 +1574,185 @@ body.edit-user .information {
   margin-top: 25px;
   margin-bottom: 30px;
   padding: 12px 52px; }
+.popup.social-profile-popup {
+  overflow-y: auto;
+  z-index: 100011; }
+  @media screen and (max-width: 768px) {
+    .popup.social-profile-popup {
+      padding: 0px 10px; } }
+  .popup.social-profile-popup .popup-inner {
+    width: 930px;
+    position: relative;
+    background: white;
+    border-radius: 10px;
+    padding: 30px 150px 40px;
+    text-align: center;
+    background-image: none;
+    box-shadow: 0 0 23px 0px #a3a2a2;
+    top: auto;
+    transform: none;
+    height: auto;
+    display: block;
+    top: 100px;
+    margin: 0 auto;
+    left: auto; }
+    @media screen and (max-width: 998px) {
+      .popup.social-profile-popup .popup-inner {
+        width: 95%;
+        top: 80px; } }
+    @media screen and (max-width: 768px) {
+      .popup.social-profile-popup .popup-inner {
+        padding: 30px 10px 18px;
+        width: 100%; } }
+    .popup.social-profile-popup .popup-inner::after {
+      display: none; }
+    @media screen and (max-width: 998px) {
+      .popup.social-profile-popup .popup-inner .popup-pc-buttons {
+        display: none; } }
+    .popup.social-profile-popup .popup-inner .popup-mobile-buttons {
+      display: none; }
+      @media screen and (max-width: 998px) {
+        .popup.social-profile-popup .popup-inner .popup-mobile-buttons {
+          display: block; } }
+      .popup.social-profile-popup .popup-inner .popup-mobile-buttons .close-cur-popup {
+        top: 40px;
+        left: 20px;
+        right: unset !important;
+        color: #777777; }
+    .popup.social-profile-popup .popup-inner .close-cur-popup:not(.button) {
+      position: absolute;
+      right: 20px;
+      top: 20px; }
+      .popup.social-profile-popup .popup-inner .close-cur-popup:not(.button) i {
+        font-size: 30px; }
+    .popup.social-profile-popup .popup-inner h2 {
+      font-size: 30px;
+      font-weight: bold;
+      margin-top: 0px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      color: black; }
+      @media screen and (max-width: 768px) {
+        .popup.social-profile-popup .popup-inner h2 {
+          font-size: 22px;
+          max-width: 300px;
+          margin-right: auto;
+          margin-left: auto;
+          margin-bottom: 0px; } }
+    @media screen and (max-width: 768px) {
+      .popup.social-profile-popup .popup-inner .content {
+        width: 100%; } }
+    .popup.social-profile-popup .popup-inner .content > p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      max-width: 530px;
+      margin-left: auto;
+      margin-right: auto; }
+      @media screen and (max-width: 768px) {
+        .popup.social-profile-popup .popup-inner .content > p {
+          font-size: 15px; } }
+    .popup.social-profile-popup .popup-inner .content .max-size {
+      margin-top: 10px; }
+      .popup.social-profile-popup .popup-inner .content .max-size span {
+        font-style: italic;
+        font-size: 14px; }
+    .popup.social-profile-popup .popup-inner .content .modern-field {
+      margin-top: 20px; }
+    .popup.social-profile-popup .popup-inner .content button {
+      padding: 11px 46px;
+      font-size: 20px;
+      font-weight: bold;
+      border: 2px solid #41afff;
+      cursor: pointer;
+      border-radius: 7px;
+      background-color: #41afff; }
+      @media screen and (max-width: 998px) {
+        .popup.social-profile-popup .popup-inner .content button {
+          font-size: 17px; } }
+      .popup.social-profile-popup .popup-inner .content button:focus, .popup.social-profile-popup .popup-inner .content button:hover {
+        opacity: 0.9;
+        transition: all 0.3s ease; }
+    .popup.social-profile-popup .popup-inner .content .cancel {
+      border: 2px solid #41afff;
+      padding: 11px 46px;
+      border-radius: 7px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #41afff;
+      margin-right: 10px; }
+      @media screen and (max-width: 998px) {
+        .popup.social-profile-popup .popup-inner .content .cancel {
+          font-size: 17px; } }
+      @media screen and (max-width: 768px) {
+        .popup.social-profile-popup .popup-inner .content .cancel {
+          display: none; } }
+      .popup.social-profile-popup .popup-inner .content .cancel:focus, .popup.social-profile-popup .popup-inner .content .cancel:hover {
+        background-color: #41afff;
+        color: white; }
+    .popup.social-profile-popup .popup-inner .content .alert-warning.mobile {
+      padding: 10px 10px 10px 40px;
+      font-size: 14px; }
+      .popup.social-profile-popup .popup-inner .content .alert-warning.mobile:before {
+        left: 10px;
+        font-size: 20px; }
+    .popup.social-profile-popup .popup-inner .content .image-label {
+      cursor: pointer;
+      width: 180px;
+      height: 180px;
+      display: block;
+      border: 2px dashed #777777;
+      padding: 40px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      background-size: cover;
+      background-position: 50% 50%;
+      background-color: transparent;
+      border-radius: 0px; }
+      .popup.social-profile-popup .popup-inner .content .image-label p {
+        background-color: #38ace5;
+        position: absolute;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        padding: 5px 0px; }
+      .popup.social-profile-popup .popup-inner .content .image-label i {
+        font-size: 30px;
+        color: #777777; }
+      .popup.social-profile-popup .popup-inner .content .image-label input {
+        display: none; }
+      .popup.social-profile-popup .popup-inner .content .image-label .centered-hack {
+        position: static;
+        width: auto;
+        top: auto;
+        left: auto;
+        transform: none; }
+      .popup.social-profile-popup .popup-inner .content .image-label .loader {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        text-align: center;
+        padding: 20px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.3);
+        color: white;
+        width: 100px;
+        height: 100px;
+        line-height: 80px; }
+        .popup.social-profile-popup .popup-inner .content .image-label .loader i {
+          color: white;
+          background: none;
+          font-size: 40px; }
+      .popup.social-profile-popup .popup-inner .content .image-label.loading .loader {
+        display: block; }
+      .popup.social-profile-popup .popup-inner .content .image-label.loading .centered-hack {
+        display: none; }
 
 #add-team-popup form .input {
   height: 40px; }

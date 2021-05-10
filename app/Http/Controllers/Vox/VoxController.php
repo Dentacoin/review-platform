@@ -1216,12 +1216,17 @@ class VoxController extends FrontController {
 				$ret['token'] = request()->session()->token();
 
 				$open_recommend = false;
+				$social_profile = false;
 				$filled_voxes = $this->user->filledVoxes();
-				if ((count($filled_voxes) == 5 || count($filled_voxes) == 10 || count($filled_voxes) == 20 || count($filled_voxes) == 50) && empty($this->user->fb_recommendation)) {
+
+				if(!$this->user->is_dentist && count($filled_voxes) == 1) {
+					$social_profile = true;
+				} else if ((count($filled_voxes) == 5 || count($filled_voxes) == 10 || count($filled_voxes) == 20 || count($filled_voxes) == 50) && empty($this->user->fb_recommendation)) {
 					$open_recommend = true;
 				}
 
 				$ret['recommend'] = $open_recommend;
+				$ret['social_profile'] = $social_profile;
 				$ret['vox_id'] = $vox->id;
 				$ret['question_id'] = !empty($q) ? $q : null;
 			}

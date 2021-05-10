@@ -630,6 +630,8 @@ $(document).ready(function(){
 
         if(data.recommend) {
             showPopup('recommend-popup');
+        } else if(data.social_profile) {
+            showPopup('social-profile-popup');
         }
     }
 

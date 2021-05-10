@@ -1497,13 +1497,18 @@ $(document).ready(function(){
 
                 console.log(data, data.imgs_urls);
                 if(data.success) {
+
+                    if(data.social_profile) {
+                        showPopup('social-profile-popup');
+                    }
+
                     $('#review-confirmed').show();
                     $('#review-confirmed').find('.ask-dentist-submit-review').attr('href', $('#review-confirmed').find('.ask-dentist-submit-review').attr('original-href') + data.review_id);
                     $('#review-submit-button').hide();
 
                     that.find('.question:not(.review-desc)').hide();
                     that.find('.review-desc').find('.popup-title').hide();
-                    that.find('.review-desc').find('.reviews-wrapper').hide();  
+                    that.find('.review-desc').find('.reviews-wrapper').hide();
 
                     gtag('event', 'Submit', {
                         'event_category': 'Reviews',
