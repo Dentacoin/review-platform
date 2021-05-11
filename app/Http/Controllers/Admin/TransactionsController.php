@@ -662,4 +662,38 @@ class TransactionsController extends AdminController
         }
     }
 
+    public function checkPendingTransactions() {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POST => 1,
+            CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-pending-transactions',
+            CURLOPT_SSL_VERIFYPEER => 0,
+        ));
+         
+        $resp = json_decode(curl_exec($curl));
+        curl_close($curl);
+
+        $pending_transactions = !empty($resp) ? $resp->success : 'Error';
+
+        return Response::json( ['data' => $pending_transactions] );
+    }
+
+    public function checkConnectedNodes() {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POST => 1,
+            CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-connected-nodes',
+            CURLOPT_SSL_VERIFYPEER => 0,
+        ));
+         
+        $response = json_decode(curl_exec($curl));
+        curl_close($curl);
+
+        $connected_nodes = !empty($response) ? $response->success : 'Error';
+
+        return Response::json( ['data' => $connected_nodes] );
+    }
+
 }

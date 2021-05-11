@@ -238,11 +238,19 @@
                             <div class="col-md-4">
                                 <input class="form-control" type="number" id="count_pending_transactions" name="count_pending_transactions" value="{{ $withdrawal_conditions->count_pending_transactions }}" />
                             </div>
+                            <a href="javascript:;" class="col-md-2 btn btn-primary" id="check-cur-pending-tx">check current pending tx count</a>
+                            <div class="col-md-4" id="cur-pending-tx">
+                                
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="connected_nodes_check" class="col-md-2 control-label" style="text-align: left;">Check for connected nodes</label>
-                            <div class="col-md-10">
+                            <div class="col-md-4">
                                 <input type="checkbox" name="connected_nodes_check" value="1" id="connected_nodes_check" {!! !empty($withdrawal_conditions->connected_nodes_check) ? 'checked="checked"' : '' !!}>
+                            </div>
+                            <a href="javascript:;" class="col-md-2 btn btn-primary" id="check-cur-nodes">check connected nodes</a>
+                            <div class="col-md-4" id="cur-nodes">
+                                
                             </div>
                         </div>
                         <div class="form-group">

@@ -71,5 +71,39 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	$('#check-cur-pending-tx').click( function() {
+		var that = $(this);
+		
+    	$.ajax( {
+			url: window.location.origin+'/cms/check-pending-trans/',
+			type: 'POST',
+			dataType: 'json',
+			success: function( data ) {
+				$('#cur-pending-tx').html(data.data);
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+	});
+
+	$('#check-cur-nodes').click( function() {
+		var that = $(this);
+		
+    	$.ajax( {
+			url: window.location.origin+'/cms/check-nodes/',
+			type: 'POST',
+			dataType: 'json',
+			success: function( data ) {
+				$('#cur-nodes').html(data.data);
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+	});
+
+
 	
 });
