@@ -1606,6 +1606,7 @@
 	var click_on_map = {!! $click_on_map !!};
 	var load_lightbox = {!! $load_lightbox !!};	
 	var load_flickity = {!! $load_flickity !!};
+	var dont_initialize_flickity = {!! $dont_initialize_flickity !!};	
 </script>
 
 @endsection

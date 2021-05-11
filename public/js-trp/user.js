@@ -15,6 +15,7 @@ var editor;
 var fb_page_error;
 var load_lightbox;
 var load_flickity;
+var dont_initialize_flickity;
 var load_maps = false;
 var click_on_map;
 
@@ -46,41 +47,44 @@ $(document).ready(function(){
     } );
 
     var flickityFunctions = function() {
-        if (window.innerWidth > 768) {
-            var draggable_gallery = false;
-        } else {
-            var draggable_gallery = true;
+        if(!dont_initialize_flickity) {
+            
+            if (window.innerWidth > 768) {
+                var draggable_gallery = false;
+            } else {
+                var draggable_gallery = true;
+            }
+
+            if (window.innerWidth > 992) {
+                var draggable_team = false;
+            } else {
+                var draggable_team = true;
+            }
+
+            galleryFlickty = $('.gallery-flickity').flickity({
+                autoPlay: false,
+                wrapAround: true,
+                cellAlign: 'left',
+                pageDots: true,
+                freeScroll: true,
+                groupCells: 1,
+                draggable: draggable_gallery,
+            });
+
+            galleryFlickty.resize();
+
+            teamFlickity = $('.flickity').flickity({
+                autoPlay: false,
+                wrapAround: true,
+                cellAlign: 'left',
+                pageDots: false,
+                freeScroll: true,
+                groupCells: 1,
+                draggable: draggable_team,
+            });
+
+            teamFlickity.resize();
         }
-
-        if (window.innerWidth > 992) {
-            var draggable_team = false;
-        } else {
-            var draggable_team = true;
-        }
-
-        galleryFlickty = $('.gallery-flickity').flickity({
-            autoPlay: false,
-            wrapAround: true,
-            cellAlign: 'left',
-            pageDots: true,
-            freeScroll: true,
-            groupCells: 1,
-            draggable: draggable_gallery,
-        });
-
-        galleryFlickty.resize();
-
-        teamFlickity = $('.flickity').flickity({
-            autoPlay: false,
-            wrapAround: true,
-            cellAlign: 'left',
-            pageDots: false,
-            freeScroll: true,
-            groupCells: 1,
-            draggable: draggable_team,
-        });
-
-        teamFlickity.resize();
     }
 
     var loadMap = function() {
@@ -154,6 +158,7 @@ $(document).ready(function(){
                 } );
             }
 
+            console.lof(load_flickity);
             if (!load_flickity ) {
                 $.getScript(window.location.origin+'/js-trp/flickity.min.js', function() {
                     $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');

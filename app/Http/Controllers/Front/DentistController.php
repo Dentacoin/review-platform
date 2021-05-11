@@ -680,6 +680,7 @@ class DentistController extends FrontController {
         }
         $view_params['load_lightbox'] = $load_lightbox;
 
+        $dont_initialize_flickity = 'false';
         if((!empty($this->user) && $this->user->id == $item->id) || ($item->photos->isNotEmpty() || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty())) {
 
             if(!empty($this->user) && $this->user->id == $item->id) {
@@ -697,8 +698,10 @@ class DentistController extends FrontController {
             }
         } else {
             $load_flickity = 'true';
+            $dont_initialize_flickity = 'true';
         }
         $view_params['load_flickity'] = $load_flickity;
+        $view_params['dont_initialize_flickity'] = $dont_initialize_flickity;
 
         if( $is_review ) {
             $seos = PageSeo::find(33);
