@@ -174,6 +174,9 @@
 		@if(!empty($user) && $user->id == $clinic->id && !empty($clinic->email))
 			<a href="javascript:;" data-popup-logged="popup-branch" class="button add-branch"><img src="{{ url('img-trp/add-new-branch-white.svg') }}"/>{{ trans('trp.page.branches.add-branch') }}</a>
 		@endif
+		@if(!empty($user) && $user->id == $clinic->id)
+			{!! csrf_field() !!}
+		@endif
 	</div>
 
 	@if(!empty($user) && $user->id == $clinic->id && !empty($clinic->email))
