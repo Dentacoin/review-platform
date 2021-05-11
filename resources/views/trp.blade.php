@@ -158,7 +158,7 @@
 											<img src="{{ url('img-trp/swith-account-black.svg') }}"/>
 										</div>
 									@endif
-									@if($has_review_notification)
+									@if(!empty($has_review_notification))
 										<div class="notification"></div>
 									@endif
 								</a>
