@@ -77,6 +77,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/reset-first-guided-tour/{id}','UsersController@resetFirstGudedTour');
 	Route::get('users/convert-to-dentist/{id}',		'UsersController@convertToDentist');
 	Route::get('users/convert-to-patient/{id}',		'UsersController@convertToPatient');
+	Route::get('users/info/{id}',					'UsersController@userInfo');
 
 	Route::get('anonymous_users', 					'UsersController@anonymous_list');
 	Route::get('anonymous_users/delete/{id}',		'UsersController@anonymousDelete');

@@ -2436,4 +2436,18 @@ class UsersController extends AdminController {
 
         return redirect('cms/users/edit/'.$id);
     }
+
+    public function userInfo($id) {
+        $user = User::withTrashed()->find($id);
+
+        $duplicated_names = collect();
+        if( !empty($user->name)) {
+            $duplicated_names = User::where('id', '!=', $user->id)->where('name', 'LIKE', $user->name)->withTrashed()->get();
+        }
+
+        return $this->showView('user-info', [
+            'user' => $user,
+            'duplicated_names' => $duplicated_names
+        ]);
+    }
 }

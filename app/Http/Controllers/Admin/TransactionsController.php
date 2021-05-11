@@ -142,6 +142,31 @@ class TransactionsController extends AdminController
         $is_retry_stopped = GasPrice::find(1)->cron_new_trans > Carbon::now();
         $is_retry_paid_by_the_user_stopped = GasPrice::find(1)->cron_paid_by_user_trans > Carbon::now();
 
+        $table_fields = [
+            'checkboxes' => array('format' => 'checkboxes'),
+            'id'                => array('template' => 'admin.parts.table-transactions-id'),
+            'created_at'        => array('format' => 'datetime','order' => true, 'orderKey' => 'created','label' => 'Date'),
+            'user'              => array('template' => 'admin.parts.table-transactions-user'),
+            'email'             => array('template' => 'admin.parts.table-transactions-email'),
+        ];
+
+        if(request('search-status') == 'first') {
+            $table_fields['user_image'] = array('template' => 'admin.parts.table-users-image', 'label' => 'Image');
+            $table_fields['user_website'] = array('template' => 'admin.parts.table-users-website', 'label' => 'Website');
+        }
+
+        $table_fields['user_status'] = array('template' => 'admin.parts.table-users-status');
+        $table_fields['amount'] = array();
+        $table_fields['address'] = array();
+        $table_fields['tx_hash'] = array('template' => 'admin.parts.table-transactions-hash');
+        $table_fields['status'] = array('template' => 'admin.parts.table-transactions-status');
+        $table_fields['type'] = array();
+        $table_fields['nonce'] = array();
+        $table_fields['message'] = array();
+        $table_fields['retries'] = array();
+        $table_fields['sended_at'] = array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sended at');
+        $table_fields['bump'] = array('template' => 'admin.parts.table-transactions-bump', 'label' => "Actions");
+
         return $this->showView('transactions', array(
             'are_transactions_stopped' => $are_transactions_stopped,
             'is_warning_message_shown' => $is_warning_message_shown,
@@ -168,6 +193,7 @@ class TransactionsController extends AdminController
             'pagination_link' => $pagination_link,
             'current_url' => $current_url,
             'withdrawal_conditions' => WithdrawalsCondition::find(1),
+            'table_fields' => $table_fields
         ));
     }
 

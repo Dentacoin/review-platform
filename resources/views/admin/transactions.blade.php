@@ -147,24 +147,7 @@
                             <div class="table-responsive">
             					@include('admin.parts.table', [
             						'table_id' => 'transactions',
-            						'table_fields' => [
-                                        'checkboxes' => array('format' => 'checkboxes'),
-                                        'id'                => array('template' => 'admin.parts.table-transactions-id'),
-                                        'created_at'        => array('format' => 'datetime','order' => true, 'orderKey' => 'created','label' => 'Date'),
-                                        'user'              => array('template' => 'admin.parts.table-transactions-user'),
-                                        'email'             => array('template' => 'admin.parts.table-transactions-email'),
-                                        'user_status'       => array('template' => 'admin.parts.table-users-status'),
-                                        'amount'            => array(),
-                                        'address'           => array(),
-                                        'tx_hash'           => array('template' => 'admin.parts.table-transactions-hash'),
-                                        'status'            => array('template' => 'admin.parts.table-transactions-status'),
-                                        'type'              => array(),
-                                        'nonce'              => array(),
-                                        'message'           => array(),
-                                        'retries'           => array(),
-                                        'sended_at'        => array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sended at'),
-                                        'bump'              =>array('template' => 'admin.parts.table-transactions-bump', 'label' => "Actions"),
-            						],
+            						'table_fields' => $table_fields,
                                     'table_data' => $transactions,
             						'table_pagination' => false,
                                     'pagination_link' => array()
