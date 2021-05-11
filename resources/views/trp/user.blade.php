@@ -330,7 +330,7 @@
 		    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
 		    			</a>
 		    		@else
-		    			@if($user->id == 37530 || $user->id == 68690)
+		    			@if(!empty($user) && $user->id == 37530 || $user->id == 68690)
 			    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
 			    				<div class="img">
 			    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
@@ -631,7 +631,7 @@
 			    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
 			    			</a>
 			    		@else
-			    			@if($user->id == 37530 || $user->id == 68690)
+			    			@if(!empty($user) && $user->id == 37530 || $user->id == 68690)
 				    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
 				    				<div class="img">
 				    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
