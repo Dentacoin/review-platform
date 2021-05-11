@@ -235,6 +235,39 @@ header {
 				display: block;
 			}
 		}
+
+		.profile-btn {
+			position: relative;
+
+			.profile-branches {
+				position: absolute;
+			    width: 25px;
+			    height: 25px;
+			    background-color: white;
+			    border-radius: 50%;
+			    padding: 5px;
+			    right: -5px;
+			    bottom: -5px;
+			    box-shadow: 0px 0px 7px 0px #898989;
+
+			    img {
+			    	width: auto;
+				    margin-left: auto;
+				    vertical-align: initial;
+			    }
+			}
+
+			.notification {
+				width: 16px;
+				height: 16px;
+				border: 2px solid white;
+				border-radius: 50%;
+				background-color: #ff0000;
+				position: absolute;
+				right: -1px;
+				top: -1px;
+			}
+		}
 	}
 }
 

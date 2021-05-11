@@ -141,8 +141,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'gdpr_privacy',
         'self_deleted',
         'allow_withdraw',
-        'grace_end',
-        'grace_notified',
         'recover_token',
         'fb_recommendation',
         'first_login_recommendation',
@@ -150,6 +148,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'ip_protected',
         'is_logout',
         'vip_access',
+        'review_notification',
     ];
     protected $dates = [
         'verified_on',
@@ -159,7 +158,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'created_at',
         'updated_at',
         'deleted_at',
-        'grace_end',
     ];
 
     // protected $casts = [

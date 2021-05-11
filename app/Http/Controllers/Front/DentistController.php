@@ -315,6 +315,9 @@ class DentistController extends FrontController {
                             $review->treatments = Request::input( 'treatments' );
                             $review->save();
 
+                            $item->review_notification = true;
+                            $item->save();
+
                             $total = 0;
                             $answer_rates = [];
                             $answer_three_qs_rates = [];
@@ -658,6 +661,9 @@ class DentistController extends FrontController {
 
         if(!empty($this->user) && $this->user->id == $item->id) {
             $view_params['js'][] = '../js/jquery-ui.min.js';
+
+            $item->review_notification = false;
+            $item->save();
         }
 
         if(!empty($this->user) && $this->user->is_clinic) {

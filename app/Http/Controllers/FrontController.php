@@ -520,7 +520,17 @@ class FrontController extends BaseController {
 
     public function ShowView($page, $params=array(), $statusCode=null) {
         
-        $this->PrepareViewData($page, $params, 'trp');    
+        $this->PrepareViewData($page, $params, 'trp');
+
+        $params['has_review_notification'] = false;
+        if(!empty($this->user) && $this->user->is_clinic && $this->user->branches->isNotEmpty()) {
+            foreach($this->user->branches as $branch) {
+                if($branch->branchClinic->review_notification) {
+                    $params['has_review_notification'] = true;
+                    break;
+                }
+            }
+        }
 
         if (empty($this->user)) {
             $params['hours'] = [];
@@ -595,6 +605,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '2021051103';
+        $params['cache_version'] = '2021051104';
     }
 }

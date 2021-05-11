@@ -153,6 +153,14 @@
 										{{ $user->getNameShort() }}
 									</span>
 									<img src="{{ $user->getImageUrl(true) }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
+									@if($user->is_clinic && $user->branches->isNotEmpty())
+										<div class="profile-branches">
+											<img src="{{ url('img-trp/swith-account-black.svg') }}"/>
+										</div>
+									@endif
+									@if($has_review_notification)
+										<div class="notification"></div>
+									@endif
 								</a>
 	                        @else
 	                        	@if($current_page=='welcome-dentist')
