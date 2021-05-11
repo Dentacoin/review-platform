@@ -113,6 +113,10 @@ $(document).ready(function(){
                                 $.ajax({
                                     type: "POST",
                                     url: that.attr('login-url'),
+                                    data: {
+                                        token: that.attr('user-token'),
+                                        _token: $('input[name="_token"]').val(),
+                                    },
                                     success: function(ret) {
                                         $('.sso img').remove();
 
