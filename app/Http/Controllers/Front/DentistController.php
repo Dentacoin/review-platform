@@ -2186,7 +2186,6 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
     public function loginas( $locale=null, $id) {
 
         $ret['success'] = false;
-            dd('test');
         
         if(request('token')) {
             $user = User::find(User::decrypt(request('token')));
