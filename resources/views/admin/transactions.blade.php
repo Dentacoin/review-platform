@@ -66,15 +66,26 @@
                             <div class="col-md-1">
                                 <input type="text" class="form-control" name="search-user-id" value="{{ $search_user_id }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-user-id') }}">
                             </div>  
-                            <div class="col-md-1">
-                                <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="Transaction ID" autocomplete="off">
-                            </div>  
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="User email" autocomplete="off">
                             </div>
+                            <div class="col-md-2">
+                                <select class="form-control" name="search-user-status">
+                                    <option value="">User Status</option>
+                                    @foreach(config('patient-statuses') as $key => $user_status)
+                                        <option value="{{ $key }}" {!! $key==$search_user_status ? 'selected="selected"' : '' !!}>Patient: {{ $user_status }}</option>
+                                    @endforeach
+                                    @foreach(config('user-statuses') as $key => $user_status)
+                                        <option value="{{ $key }}" {!! $key==$search_user_status ? 'selected="selected"' : '' !!}>Dentist: {{ $user_status }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="col-md-1">
+                                <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="Trans ID" autocomplete="off">
+                            </div>
+                            <div class="col-md-2">
                                 <select class="form-control" name="search-status">
-                                    <option value="">Status</option>
+                                    <option value="">Trans Status</option>
                                     @foreach(config('transaction-statuses') as $key => $status)
                                         <option value="{{ $key }}" {!! $key==$search_status ? 'selected="selected"' : '' !!}>{{ $status }}</option>
                                     @endforeach
@@ -85,7 +96,9 @@
                             </div>
                             <div class="col-md-2">
                                 <input type="text" class="form-control" name="search-tx" value="{{ $search_tx }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-tx') }}">
-                            </div>                                                                          
+                            </div>
+                        </div>
+                        <div class="row custom-row" style="margin-bottom: 10px;">
                             <div class="col-md-1">
                                 <input type="text" class="form-control datepicker" name="search-from" value="{{ $search_from }}" placeholder="Search from" autocomplete="off">
                             </div>

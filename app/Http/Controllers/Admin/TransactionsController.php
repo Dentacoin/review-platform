@@ -42,7 +42,22 @@ class TransactionsController extends AdminController
         }
         if(!empty($this->request->input('search-status'))) {
             $transactions = $transactions->where('status', $this->request->input('search-status'));
-        }        
+        }
+        if(!empty($this->request->input('search-user-status'))) {
+            $status = $this->request->input('search-user-status');
+            $transactions = $transactions->whereHas('user', function ($query) use ($status) {
+
+                if( $status=='approved' ) {
+                    $query->where(function ($subquery) use ($status) {
+                        $subquery->where('is_dentist', 1)
+                        ->where('status', $status);
+                    });
+                } else {
+                    $query->where('status', $status)
+                    ->orWhere('patient_status', $status);
+                }
+            });
+        } 
         if(!empty($this->request->input('search-from'))) {
             $firstday = new Carbon($this->request->input('search-from'));
             $transactions = $transactions->where('created_at', '>=', $firstday);
@@ -143,6 +158,7 @@ class TransactionsController extends AdminController
             'search_from' => $this->request->input('search-from'),
             'search_email' =>  $this->request->input('search-email'),
             'paid_by_user' => $this->request->input('paid-by-user'),
+            'search_user_status' => $this->request->input('search-user-status'),
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
             'end' => $end,
