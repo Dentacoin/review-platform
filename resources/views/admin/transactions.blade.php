@@ -81,11 +81,11 @@
                                 </select>
                             </div>
                             <div class="col-md-1">
-                                <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="Trans ID" autocomplete="off">
+                                <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="Transaction ID" autocomplete="off">
                             </div>
                             <div class="col-md-2">
                                 <select class="form-control" name="search-status">
-                                    <option value="">Trans Status</option>
+                                    <option value="">Transaction Status</option>
                                     @foreach(config('transaction-statuses') as $key => $status)
                                         <option value="{{ $key }}" {!! $key==$search_status ? 'selected="selected"' : '' !!}>{{ $status }}</option>
                                     @endforeach
