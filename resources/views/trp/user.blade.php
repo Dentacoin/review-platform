@@ -322,25 +322,23 @@
 	    				{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
 	    			</a>
 		    	@endif
-		    	@if(!empty($user) && $user->id == $item->id && $item->is_clinic)
-		    		@if($item->branches->isNotEmpty())
-		    			<a href="{{ getLangUrl('branches') }}" class="p clinic-branches">
+	    		@if($item->branches->isNotEmpty())
+	    			<a href="{{ getLangUrl('branches/'.$item->slug) }}" class="p clinic-branches">
+	    				<div class="img">
+	    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+	    				</div>
+	    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
+	    			</a>
+	    		@else
+	    			@if($user->id == 37530 || $user->id == 68690)
+		    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
 		    				<div class="img">
 		    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
 		    				</div>
-		    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
+		    				{!! nl2br(trans('trp.page.user.branch.add-branch')) !!}
 		    			</a>
-		    		@else
-		    			@if($user->id == 37530 || $user->id == 68690)
-			    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
-			    				<div class="img">
-			    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-			    				</div>
-			    				{!! nl2br(trans('trp.page.user.branch.add-branch')) !!}
-			    			</a>
-			    		@endif
 		    		@endif
-		    	@endif
+	    		@endif
 		    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
 		    		<div class="p workplace-p">
 			    		<div class="img" style="min-width: 25px;">
@@ -366,7 +364,7 @@
 			    		</a>
 			    	@else
 			    		@if($item->branches->isNotEmpty())
-				    		<a class="social" href="mailto:{{ $item->mainBranchEmail() }}">
+				    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->mainBranchEmail() }}">
 				    			<i class="fas fa-envelope"></i>
 				    		</a>
 				    	@endif
@@ -624,25 +622,23 @@
 		    				{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
 		    			</a>
 			    	@endif
-			    	@if(!empty($user) && $user->id == $item->id && $item->is_clinic)
-			    		@if($item->branches->isNotEmpty())
-			    			<a href="{{ getLangUrl('branches') }}" class="p clinic-branches">
+		    		@if($item->branches->isNotEmpty())
+		    			<a href="{{ getLangUrl('branches/'.$item->slug) }}" class="p clinic-branches">
+		    				<div class="img">
+		    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+		    				</div>
+		    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
+		    			</a>
+		    		@else
+		    			@if($user->id == 37530 || $user->id == 68690)
+			    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
 			    				<div class="img">
 			    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
 			    				</div>
-			    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
+			    				{!! nl2br(trans('trp.page.user.branch.add-branch')) !!}
 			    			</a>
-			    		@else
-			    			@if($user->id == 37530)
-				    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
-				    				<div class="img">
-				    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-				    				</div>
-				    				{!! nl2br(trans('trp.page.user.branch.add-branch')) !!}
-				    			</a>
-				    		@endif
 			    		@endif
-			    	@endif
+		    		@endif
 			    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
 			    		<div class="p workplace-p">
 				    		<div class="img" style="min-width: 25px;">
@@ -660,7 +656,7 @@
 				    		</a>
 				    	@else
 				    		@if($item->branches->isNotEmpty())
-					    		<a class="social" href="mailto:{{ $item->mainBranchEmail() }}">
+					    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->mainBranchEmail() }}">
 					    			<i class="fas fa-envelope"></i>
 					    		</a>
 					    	@endif

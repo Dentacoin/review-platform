@@ -900,6 +900,12 @@ body {
 			margin-top: -60px;
 			font-size: 23px;
 		}
+
+		&.small-mt {
+			@media #{$phone} {
+				margin-top: -20px;
+			}
+		}
 	}
 }
 

@@ -6,42 +6,42 @@
 	<div class="search-gradient-wave green-gradient">
 		<div class="main-top branch-top"></div>
 	    <div class="container overflow-container">
-	    	<h1>{{ trans('trp.page.branches.title') }}</h1>
+	    	<h1 class="{{ !empty($user) ? '' : 'small-mt' }}">{{ !empty($user) && $user->id == $clinic->id ? trans('trp.page.branches.title') : $clinic->getNames()."'s Branches" }}</h1>
 	    </div>
 	</div>
 
     <div class="search-results-wrapper container">
 
-    	<a href="{{ $user->getLink() }}" class="result-container current-branch dentist clearfix" full-dentist-id="{{ $user->id }}">
+    	<a href="{{ $clinic->getLink() }}" class="result-container current-branch dentist clearfix" full-dentist-id="{{ $clinic->id }}">
     		<img class="angle-check" src="{{ url('img-trp/angle-check.png') }}">
-			<div class="avatar{!! $user->hasimage ? '' : ' default-avatar' !!}"  style="background-image: url('{{ $user->getImageUrl(true) }}')">
-				@if($user->hasimage)
-					<img src="{{ $user->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $user->getNames(), 'location' => ($user->city_name ? $user->city_name.', ' : '').($user->state_name ? $user->state_name.', ' : '').($user->country->name) ]) }}" style="display: none !important;"> 
+			<div class="avatar{!! $clinic->hasimage ? '' : ' default-avatar' !!}"  style="background-image: url('{{ $clinic->getImageUrl(true) }}')">
+				@if($clinic->hasimage)
+					<img src="{{ $clinic->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $clinic->getNames(), 'location' => ($clinic->city_name ? $clinic->city_name.', ' : '').($clinic->state_name ? $clinic->state_name.', ' : '').($clinic->country->name) ]) }}" style="display: none !important;"> 
 				@endif
 			</div>
 			<div class="media-right">
 				<h4>
-					{{ $user->getNames() }}
+					{{ $clinic->getNames() }}
 				</h4>
-				@if($user->is_partner)
+				@if($clinic->is_partner)
 					<span class="type">
 						<div class="img">
 							<img src="{{ url('img-trp/mini-logo.png') }}">
 						</div>
 						<span>{!! nl2br(trans('trp.page.search.partner')) !!}</span> 
-						{{ $user->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
+						{{ $clinic->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
 					</span>
 				@endif
 				<div class="p">
 					<div class="img">
 						<img src="{{ url('img-trp/map-pin.png') }}">
 					</div>
-					{{ $user->city_name ? $user->city_name.', ' : '' }}
-					{{ $user->state_name ? $user->state_name.', ' : '' }} 
-					{{ $user->country->name }} 
+					{{ $clinic->city_name ? $clinic->city_name.', ' : '' }}
+					{{ $clinic->state_name ? $clinic->state_name.', ' : '' }} 
+					{{ $clinic->country->name }} 
 				</div>
 
-		    	@if( $time = $user->getWorkHoursText() )
+		    	@if( $time = $clinic->getWorkHoursText() )
 		    		<div class="p">
 		    			<div class="img">
 		    				<img src="{{ url('img-trp/open.png') }}">
@@ -49,17 +49,17 @@
 		    			{!! $time !!}
 		    		</div>
 		    	@endif
-		    	@if( $user->website )
-		    		<div class="p dentist-website" href="{{ $user->getWebsiteUrl() }}" target="_blank">
+		    	@if( $clinic->website )
+		    		<div class="p dentist-website" href="{{ $clinic->getWebsiteUrl() }}" target="_blank">
 		    			<div class="img">
 			    			<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
 			    		</div>
 			    		<span>
-				    		{{ $user->website }}
+				    		{{ $clinic->website }}
 				    	</span>
 		    		</div>
 		    	@endif
-		    	@if($user->top_dentist_month)
+		    	@if($clinic->top_dentist_month)
 					<div class="top-dentist">
 						<img src="{{ url('img-trp/top-dentist.png') }}">
 		    			<span>
@@ -69,14 +69,20 @@
 				@endif
 			    <div class="ratings">
 					<div class="stars">
-						<div class="bar" style="width: {{ $user->avg_rating/5*100 }}%;">
+						<div class="bar" style="width: {{ $clinic->avg_rating/5*100 }}%;">
 						</div>
 					</div>
 					<span class="rating">
-						({{ trans('trp.common.reviews-count', [ 'count' => intval($user->ratings)]) }})
+						({{ trans('trp.common.reviews-count', [ 'count' => intval($clinic->ratings)]) }})
 					</span>
 				</div>
-				<div class="share-button" data-popup="popup-share" share-href="{{ $user->getLink() }}">
+				@if(!empty($user) && $user->id == $clinic->id)
+				@else
+					<div href="{{ $clinic->getLink() }}" class="button button-submit">
+						{!! nl2br(trans('trp.common.see-profile')) !!}
+					</div>
+				@endif
+				<div class="share-button" data-popup="popup-share" share-href="{{ $clinic->getLink() }}">
 					<img src="{{ url('img-trp/share.png') }}">
 				</div>
 			</div>
@@ -148,9 +154,15 @@
 							({{ trans('trp.common.reviews-count', [ 'count' => intval($dentist->ratings)]) }})
 						</span>
 					</div>
-					<div href="javascript:;" login-url="{{ getLangUrl('loginas/'.$dentist->id) }}" user-token="{{ App\Models\User::encrypt($user->id) }}" logout-url="{{ getLangUrl('logoutas') }}" class="button button-submit login-as" cur-user="{{ $user->id }}">
-						{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
-					</div>
+					@if(!empty($user) && $user->id == $clinic->id)
+						<div href="javascript:;" login-url="{{ getLangUrl('loginas/'.$dentist->id) }}" user-token="{{ App\Models\User::encrypt($clinic->id) }}" logout-url="{{ getLangUrl('logoutas') }}" class="button button-submit login-as" cur-user="{{ $clinic->id }}">
+							{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
+						</div>
+					@else
+						<div href="{{ $dentist->getLink() }}" class="button button-submit">
+							{!! nl2br(trans('trp.common.see-profile')) !!}
+						</div>
+					@endif
 					<div class="share-button" data-popup="popup-share" share-href="{{ $dentist->getLink() }}">
 						<img src="{{ url('img-trp/share.png') }}">
 					</div>
@@ -159,11 +171,13 @@
 
 		@endforeach
 
-		@if(!empty($user->email))
+		@if(!empty($user) && $user->id == $clinic->id && !empty($clinic->email))
 			<a href="javascript:;" data-popup-logged="popup-branch" class="button add-branch"><img src="{{ url('img-trp/add-new-branch-white.svg') }}"/>{{ trans('trp.page.branches.add-branch') }}</a>
 		@endif
 	</div>
 
-	@include('trp.popups.add-branch')
+	@if(!empty($user) && $user->id == $clinic->id && !empty($clinic->email))
+		@include('trp.popups.add-branch')
+	@endif
 
 @endsection

@@ -605,6 +605,9 @@ body .sort-wrapper {
       .overflow-container h1 {
         margin-top: -60px;
         font-size: 23px; } }
+    @media screen and (max-width: 768px) {
+      .overflow-container h1.small-mt {
+        margin-top: -20px; } }
 
 .pagination {
   text-align: center;

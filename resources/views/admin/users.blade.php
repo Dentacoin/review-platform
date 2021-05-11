@@ -157,6 +157,9 @@
                                 <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-email') }}">
                             </div>
                             <div class="col-md-2">
+                                <input type="text" class="form-control" name="search-phone" value="{{ $search_phone }}" placeholder="Phone ( without the country code )">
+                            </div>
+                            <div class="col-md-1">
                                 <select class="form-control" name="search-country">
                                     <option value="">All Countries</option>
                                     @foreach( $countries as $country )
@@ -167,10 +170,7 @@
                             <div class="col-md-2">
                                 <input type="text" class="form-control" name="search-ip-address" value="{{ $search_ip_address }}" placeholder="IP Address">
                             </div>
-                            <!-- <div class="col-md-2">
-                                <input type="text" class="form-control" name="search-phone" value="{{ $search_phone }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-phone') }}">
-                            </div> -->
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <input type="text" class="form-control" name="search-address" value="{{ $search_address }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-address') }}">
                             </div>
                         </div>

@@ -1871,9 +1871,11 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         ] );
     }
 
-    public function branchesPage($locale=null) {
+    public function branchesPage($locale=null, $slug) {
 
-        if($this->user->branches->isNotEmpty()) {
+        $clinic = User::where('slug', 'LIKE', $slug)->whereNull('self_deleted')->first();
+
+        if(!empty($clinic) && $clinic->branches->isNotEmpty()) {
 
             $seos = PageSeo::find(35);
 
@@ -1884,11 +1886,13 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
 
             $items = [];
 
-            foreach($this->user->branches as $branch) {
+            foreach($clinic->branches as $branch) {
                 $items[] = $branch->branchClinic;
             }
 
             return $this->ShowView('branches', [
+                'noIndex' => true,
+                'clinic' => $clinic,
                 'items' => $items,
                 'countries' => Country::with('translations')->get(),
                 'seo_title' => $seo_title,
@@ -2166,9 +2170,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         $imgs_urls = [];
         foreach( config('platforms') as $k => $platform ) {
             if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
-                // if($k !== 'vox' && $k !== 'trp') {
+                if($k !== 'vox' && $k !== 'account') {
                     $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?logout-token='.urlencode($token);
-                // }
+                }
             }
         }
         $imgs_urls[] = '//vox.dentacoin.com/custom-cookie?logout-token='.urlencode($token);
@@ -2201,9 +2205,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     $imgs_urls = [];
                     foreach( config('platforms') as $k => $platform ) {
                         if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
-                            // if($k !== 'vox' && $k !== 'trp') {
+                            if($k !== 'vox' && $k !== 'account') {
                                 $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?slug='.urlencode(User::encrypt($item->id)).'&type='.urlencode(User::encrypt('dentist')).'&token='.urlencode($token);
-                            // }
+                            }
                         }
                     }
 

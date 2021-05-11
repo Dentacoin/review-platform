@@ -789,6 +789,7 @@ class UsersController extends AdminController {
             'search_address' => request('search-address'),
             'search_tx' => request('search-tx'),
             'results_number' => request('results-number'),
+            'search_phone' => request('search-phone'),
             'search_ip_address' => request('search-ip-address'),
             'search_type' => request('search-type'),
             'search_status' => request('search-status'),
