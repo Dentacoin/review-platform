@@ -320,6 +320,7 @@
 	    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
 	    				</div>
 	    				{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
+						{!! csrf_field() !!}
 	    			</a>
 	    		@else
 		    		@if($item->branches->isNotEmpty())
@@ -621,6 +622,7 @@
 		    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
 		    				</div>
 		    				{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
+		    				{!! csrf_field() !!}
 		    			</a>
 		    		@else
 			    		@if($item->branches->isNotEmpty())
