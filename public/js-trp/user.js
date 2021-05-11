@@ -48,7 +48,7 @@ $(document).ready(function(){
 
     var flickityFunctions = function() {
         if(!dont_initialize_flickity) {
-            
+
             if (window.innerWidth > 768) {
                 var draggable_gallery = false;
             } else {
@@ -158,7 +158,6 @@ $(document).ready(function(){
                 } );
             }
 
-            console.lof(load_flickity);
             if (!load_flickity ) {
                 $.getScript(window.location.origin+'/js-trp/flickity.min.js', function() {
                     $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
