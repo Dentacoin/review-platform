@@ -658,6 +658,9 @@ class DentistController extends FrontController {
 
         if(!empty($this->user) && $this->user->id == $item->id) {
             $view_params['js'][] = '../js/jquery-ui.min.js';
+        }
+
+        if(!empty($this->user) && $this->user->is_clinic) {
             $view_params['js'][] = 'branch.js';
         }
 
