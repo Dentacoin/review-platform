@@ -1568,9 +1568,6 @@
 			@include('trp.popups.workplace')
 		@endif
 	@else
-		@if(!$user->is_dentist)
-			@include('trp.popups.social-profile')
-		@endif
 		@if(!empty($writes_review))
 			@include('trp.popups.recommend-dentist')
 		@endif

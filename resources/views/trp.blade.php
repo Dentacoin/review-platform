@@ -233,6 +233,11 @@
 			</div>
 		@endif
 
+
+		@if(!empty($user) && !$user->is_dentist)
+			@include('trp.popups.social-profile')
+		@endif
+
 		<div class="tooltip-window" style="display: none;"></div>
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />

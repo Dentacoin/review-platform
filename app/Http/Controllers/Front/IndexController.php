@@ -260,6 +260,8 @@ class IndexController extends FrontController {
 
 		if (!empty($this->user)) {
 			$params['extra_body_class'] = 'strength-pb';
+			$params['css'][] = 'flickity.min.css';
+			$params['js'][] = 'flickity.min.js';
 		}
 
 		return $this->ShowView('index', $params);	
