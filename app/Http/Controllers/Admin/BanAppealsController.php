@@ -69,6 +69,15 @@ class BanAppealsController extends AdminController {
             $items = $items->where('status', request('search-status'));
         }
 
+        if(!empty(request('search-from'))) {
+            $firstday = new Carbon(request('search-from'));
+            $items = $items->where('created_at', '>=', $firstday);
+        }
+        if(!empty(request('search-to'))) {
+            $firstday = new Carbon(request('search-to'));
+            $items = $items->where('created_at', '<=', $firstday->addDays(1));
+        }
+
         $total_count = $items->count();
 
         $page = max(1,intval(request('page')));
@@ -120,6 +129,8 @@ class BanAppealsController extends AdminController {
             'search_name' => request('search-name'),
             'search_type' => request('search-type'),
             'search_status' => request('search-status'),
+            'search_from' => request('search-from'),
+            'search_to' => request('search-to'),
             'pending' => request('pending'),
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,

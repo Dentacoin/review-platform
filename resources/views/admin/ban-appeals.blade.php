@@ -55,6 +55,14 @@
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
                         </div>
                     </div>
+                    <div class="row custom-row" style="margin-bottom: 10px;">
+                        <div class="col-md-1">
+                            <input type="text" class="form-control datepicker" name="search-from" value="{{ $search_from }}" placeholder="From" autocomplete="off">
+                        </div>
+                        <div class="col-md-1">
+                            <input type="text" class="form-control datepicker" name="search-to" value="{{ $search_to }}" placeholder="To" autocomplete="off">
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
