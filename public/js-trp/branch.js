@@ -81,7 +81,6 @@ $(document).ready(function(){
         }
     });
 
-
     $('.login-as').click( function(e) {
 
         if(ajax_is_running) {
@@ -93,23 +92,23 @@ $(document).ready(function(){
 
         that.html('<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>');
 
-        $.ajax({
-            type: "GET",
-            url: $(this).attr('logout-url'),
-            success: function(data) {
-                if(data.success) {
-                    $('.sso img').remove();
+        // $.ajax({
+        //     type: "GET",
+        //     url: $(this).attr('logout-url'),
+        //     success: function(data) {
+        //         if(data.success) {
+        //             $('.sso img').remove();
 
-                    for( var i in data.imgs_urls) {
-                        $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
-                    }
+        //             for( var i in data.imgs_urls) {
+        //                 $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
+        //             }
 
-                    var ssoTotal = $('.sso-imgs').length;
-                    var ssoLoaded = 0;
-                    $('.sso-imgs').each( function() {
-                        if( $(this)[0].complete ) {
-                            ssoLoaded++;        
-                            if(ssoLoaded==ssoTotal) {
+        //             var ssoTotal = $('.sso-imgs').length;
+        //             var ssoLoaded = 0;
+        //             $('.sso-imgs').each( function() {
+        //                 if( $(this)[0].complete ) {
+        //                     ssoLoaded++;        
+        //                     if(ssoLoaded==ssoTotal) {
                                 $.ajax({
                                     type: "POST",
                                     url: that.attr('login-url'),
@@ -118,90 +117,90 @@ $(document).ready(function(){
                                         _token: $('input[name="_token"]').val(),
                                     },
                                     success: function(ret) {
-                                        $('.sso img').remove();
+                                        // $('.sso img').remove();
 
-                                        for( var i in ret.imgs_urls) {
-                                            $('body').append('<img class="sso-imgs hide" src="'+ret.imgs_urls[i]+'"/>');
-                                        }
+                                        // for( var i in ret.imgs_urls) {
+                                        //     $('body').append('<img class="sso-imgs hide" src="'+ret.imgs_urls[i]+'"/>');
+                                        // }
 
-                                        var ssoTotal = $('.sso-imgs').length;
-                                        var ssoLoaded = 0;
-                                        $('.sso-imgs').each( function() {
-                                            if( $(this)[0].complete ) {
-                                                ssoLoaded++;        
-                                                if(ssoLoaded==ssoTotal) {
-                                                    window.location.href = window.location.origin;
-                                                }
-                                            }
-                                        });
+                                        // var ssoTotal = $('.sso-imgs').length;
+                                        // var ssoLoaded = 0;
+                                        // $('.sso-imgs').each( function() {
+                                        //     if( $(this)[0].complete ) {
+                                        //         ssoLoaded++;        
+                                        //         if(ssoLoaded==ssoTotal) {
+                                        //             window.location.href = window.location.origin;
+                                        //         }
+                                        //     }
+                                        // });
 
-                                        var ssoLoaded = 0;
-                                        $('.sso-imgs').on('load error', function() {
-                                            ssoLoaded++;        
-                                            if(ssoLoaded==ssoTotal) {
+                                        // var ssoLoaded = 0;
+                                        // $('.sso-imgs').on('load error', function() {
+                                        //     ssoLoaded++;        
+                                        //     if(ssoLoaded==ssoTotal) {
                                                 window.location.href = window.location.origin;
-                                            }
-                                        });
+                                            // }
+                                        // });
                                     },
                                     error: function(ret) {
                                         console.log('error');
                                     }
                                 });
-                            }
-                        }
-                    } );
-                    var ssoLoaded = 0;
-                    $('.sso-imgs').on('load error', function() {
-                        ssoLoaded++;        
-                        if(ssoLoaded==ssoTotal) {
-                            $.ajax({
-                                type: "POST",
-                                data: {
-                                    token: that.attr('user-token'),
-                                    _token: $('input[name="_token"]').val(),
-                                },
-                                dataType: 'json',
-                                url: that.attr('login-url'),
-                                success: function(ret) {
-                                    if(ret.success) {
-                                        $('.sso-imgs').remove();
+                    //         }
+                    //     }
+                    // } );
+                    // var ssoLoaded = 0;
+                    // $('.sso-imgs').on('load error', function() {
+                    //     ssoLoaded++;        
+                    //     if(ssoLoaded==ssoTotal) {
+                    //         $.ajax({
+                    //             type: "POST",
+                    //             data: {
+                    //                 token: that.attr('user-token'),
+                    //                 _token: $('input[name="_token"]').val(),
+                    //             },
+                    //             dataType: 'json',
+                    //             url: that.attr('login-url'),
+                    //             success: function(ret) {
+                    //                 if(ret.success) {
+                    //                     $('.sso-imgs').remove();
 
-                                        for( var i in ret.imgs_urls) {
-                                            $('body').append('<img class="sso-imgs hide" src="'+ret.imgs_urls[i]+'"/>');
-                                        }  
+                    //                     for( var i in ret.imgs_urls) {
+                    //                         $('body').append('<img class="sso-imgs hide" src="'+ret.imgs_urls[i]+'"/>');
+                    //                     }  
 
-                                        var ssoTotal = $('.sso-imgs').length;
-                                        var ssoLoaded = 0;
-                                        $('.sso-imgs').each( function() {
-                                            if( $(this)[0].complete ) {
-                                                ssoLoaded++;        
-                                                if(ssoLoaded==ssoTotal) {
-                                                    window.location.href = window.location.origin;
-                                                }
-                                            }
-                                        });
+                    //                     var ssoTotal = $('.sso-imgs').length;
+                    //                     var ssoLoaded = 0;
+                    //                     $('.sso-imgs').each( function() {
+                    //                         if( $(this)[0].complete ) {
+                    //                             ssoLoaded++;        
+                    //                             if(ssoLoaded==ssoTotal) {
+                    //                                 window.location.href = window.location.origin;
+                    //                             }
+                    //                         }
+                    //                     });
 
-                                        var ssoLoaded = 0;
-                                        $('.sso-imgs').on('load error', function() {
-                                            ssoLoaded++;        
-                                            if(ssoLoaded==ssoTotal) {
-                                                window.location.href = window.location.origin;
-                                            }
-                                        });
-                                    }
-                                },
-                                error: function(ret) {
-                                    console.log('error');
-                                }
-                            });
-                        }
-                    });
-                }
-            },
-            error: function(data) {
-                console.log('error');
-            }
-        });
+                    //                     var ssoLoaded = 0;
+                    //                     $('.sso-imgs').on('load error', function() {
+                    //                         ssoLoaded++;        
+                    //                         if(ssoLoaded==ssoTotal) {
+                    //                             window.location.href = window.location.origin;
+                    //                         }
+                    //                     });
+                    //                 }
+                    //             },
+                    //             error: function(ret) {
+                    //                 console.log('error');
+                    //             }
+                    //         });
+                    //     }
+                    // });
+        //         }
+        //     },
+        //     error: function(data) {
+        //         console.log('error');
+        //     }
+        // });
 
         ajax_is_running = false;
     });
