@@ -192,6 +192,9 @@
 				    </div>
 			    </div>
 		    </div>
+		    @if(!empty($user) && $user->is_clinic && $user->branches->isNotEmpty())
+		    	<input type="hidden" id="clinic-branches" value="{{ $clinicBranches }}">
+		    @endif
 	    </header>
 
 	    <div class="site-content">

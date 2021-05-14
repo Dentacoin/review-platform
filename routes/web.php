@@ -366,8 +366,7 @@ $reviewRoutes = function () {
 			Route::post('facebook-tab', 						'DentistController@dentist_fb_tab');
 			Route::any('facebook-tab-reviews', 					'DentistController@dentist_fb_tab_reviews');
 			Route::post('dentist-fb-tab', 						'DentistController@fb_tab');
-			Route::post('reorder-teams', 						'DentistController@reorderTeams');	
-			Route::post('loginas/{id}', 						'DentistController@loginas');	
+			Route::post('reorder-teams', 						'DentistController@reorderTeams');
             Route::get('branches/{slug}', 						'DentistController@branchesPage');	
 
 			Route::get('page-not-found', 						'NotFoundController@home');
@@ -425,7 +424,8 @@ $reviewRoutes = function () {
 
                 Route::post('verify-review', 						    'DentistController@verifyReview');
 				Route::post('profile/add-new-branch/{step?}', 			'DentistController@addNewBranch');
-				Route::any('logoutas', 									'DentistController@logoutas');
+				// Route::any('logoutas', 									'DentistController@logoutas');
+				Route::post('loginas', 									'DentistController@loginas');
 				
 			});
 

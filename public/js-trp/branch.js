@@ -113,7 +113,7 @@ $(document).ready(function(){
                                     type: "POST",
                                     url: that.attr('login-url'),
                                     data: {
-                                        token: that.attr('user-token'),
+                                        branch_id: that.attr('branch-id'),
                                         _token: $('input[name="_token"]').val(),
                                     },
                                     success: function(ret) {

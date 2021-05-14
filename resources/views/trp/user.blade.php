@@ -315,7 +315,7 @@
 			    	</a>
 		    	@endif
 		    	@if(!empty($user) && $user->is_clinic && $item->is_clinic && $user->branches->isNotEmpty() && in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
-		    		<a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas/'.$item->id) }}" user-token="{{ App\Models\User::encrypt($user->id) }}" logout-url="{{ getLangUrl('logoutas') }}" cur-user="{{ $user->id }}">
+		    		<a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $item->id }}">
 	    				<div class="img">
 	    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
 	    				</div>
@@ -617,7 +617,7 @@
 			    		</a>
 			    	@endif
 			    	@if(!empty($user) && $user->is_clinic && $item->is_clinic && $user->branches->isNotEmpty() && in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
-			    		<a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas/'.$item->id) }}" user-token="{{ App\Models\User::encrypt($user->id) }}" logout-url="{{ getLangUrl('logoutas') }}" cur-user="{{ $user->id }}">
+			    		<a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $item->id }}">
 		    				<div class="img">
 		    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
 		    				</div>

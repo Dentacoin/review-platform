@@ -155,7 +155,7 @@
 						</span>
 					</div>
 					@if(!empty($user) && $user->id == $clinic->id)
-						<div href="javascript:;" login-url="{{ getLangUrl('loginas/'.$dentist->id) }}" user-token="{{ App\Models\User::encrypt($clinic->id) }}" logout-url="{{ getLangUrl('logoutas') }}" class="button button-submit login-as" cur-user="{{ $clinic->id }}">
+						<div href="javascript:;" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $dentist->id }}" class="button button-submit login-as">
 							{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
 						</div>
 					@else

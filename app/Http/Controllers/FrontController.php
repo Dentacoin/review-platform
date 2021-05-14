@@ -522,14 +522,34 @@ class FrontController extends BaseController {
         
         $this->PrepareViewData($page, $params, 'trp');
 
+        $params['clinicBranches'] = false;
         $params['has_review_notification'] = false;
         if(!empty($this->user) && $this->user->is_clinic && $this->user->branches->isNotEmpty()) {
+            $params['clinicBranches'] = [];
             foreach($this->user->branches as $branch) {
-                if($branch->branchClinic->review_notification) {
+
+                $branchClinic = $branch->branchClinic;
+
+                $params['clinicBranches'][$branchClinic->id] = [
+                    'name' => $branchClinic->getNames(),
+                    'avatar' => $branchClinic->getImageUrl(true),
+                    'notification' => $branchClinic->review_notification ? true : false,
+                ];
+            }
+            foreach($this->user->branches as $branch) {
+
+                $branchClinic = $branch->branchClinic;
+
+                if($branchClinic->review_notification) {
+                    //user asks
                     $params['has_review_notification'] = true;
                     break;
                 }
             }
+        }
+
+        if($params['clinicBranches']) {
+            $params['clinicBranches'] = json_encode($params['clinicBranches']);
         }
 
         if (empty($this->user)) {
@@ -605,6 +625,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '20210513';
+        $params['cache_version'] = '20210514';
     }
 }
