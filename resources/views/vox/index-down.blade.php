@@ -66,8 +66,8 @@
 		<h2>Get DentaVox mobile app!</h2>
 		<div class="flex flex-text-center">
 			<a class="mobile-app-button google-play" href="https://play.google.com/store/apps/details?id=com.dentacoin.dentavox" target="_blank"></a>
-				<a class="mobile-app-button app-store" href="https://play.google.com/store/apps/details?id=com.dentacoin.dentavox" target="_blank"></a>
 			@if(false)
+				<a class="mobile-app-button app-store" href="https://play.google.com/store/apps/details?id=com.dentacoin.dentavox" target="_blank"></a>
 			@endif
 		</div>
 	</div>
