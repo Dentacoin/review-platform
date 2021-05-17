@@ -315,16 +315,13 @@ class IndexController extends FrontController {
 			if (Request::input('h1')) {
 				$title = ucwords(Request::input('h1'));
 			} else {
-				// $title = nl2br(trans('vox.page.index.title'));
-				$title = 'Take online surveys';
+				$title = nl2br(trans('vox.page.index.title'));
 			}
 
 			if (Request::input('h2')) {
 				$subtitle = ucfirst(Request::input('h2'));
 			} else {
-
-				$subtitle = 'and get rewarded';
-				// $subtitle = nl2br(trans('vox.page.index.subtitle'));
+				$subtitle = nl2br(trans('vox.page.index.subtitle'));
 			}
 
 			$seos = PageSeo::find(3);
