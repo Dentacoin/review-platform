@@ -159,18 +159,8 @@
 						</a>
 						<div class="header-title">
 							@if($current_page=='index')
-							<b>{{ number_format($users_count, 0, '', ' ') }}</b> {{ trans('vox.header.users-count') }} <br/>
-							<b id="header_questions">{{ number_format($header_questions, 0, '', ' ') }}</b> {!! trans('vox.header.question-count', ['count' => '' ]) !!}
-								<!-- <table>
-									<tr>
-										<td class="tar"><b>{{ number_format($users_count, 0, '', ' ') }}</b></td>
-										<td>{{ trans('vox.header.users-count') }}</td>
-									</tr>
-									<tr>
-										<td class="tar"><b id="header_questions">{{ number_format($header_questions, 0, '', ' ') }}</b></td>
-										<td>{!! trans('vox.header.question-count', ['count' => '' ]) !!}</td>
-									</tr>
-								</table> -->
+								<b>{{ number_format($users_count, 0, '', ' ') }}</b> {{ trans('vox.header.users-count') }} <br/>
+								<b id="header_questions">{{ number_format($header_questions, 0, '', ' ') }}</b> {!! trans('vox.header.question-count', ['count' => '' ]) !!}
 							@endif
 						</div>
 						<div class="header-right tar flex">
@@ -181,9 +171,8 @@
 										<r style="display: block; color: #38ace5;">Hello, {{ $user->getNames() }}</r>
 										<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
 									@else
-
 										<a class="my-name" href="javascript:;">
-											Hello, {{ $user->getNames() }}
+											{!! trans('vox.header.username', ['username' => $user->getNames() ]) !!}
 										</a>
 										<a href="javascript:;">
 											<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
@@ -196,17 +185,16 @@
 									</a>
 								@endif
 								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->
-
 							@elseif($current_page=='welcome-survey')
 								@if(!empty($prev_user))
 									<div class="twerk-it">
 										<div class="user-and-price header-a">
 											<span class="tar">
-												Already been here?
+												{!! trans('vox.header.been-here') !!}
 											</span>
 											<br/>
 											<a class="my-name open-dentacoin-gateway patient-login" style="font-weight: bold;" href="javascript:;">
-												Log into your Profile!
+												{!! trans('vox.header.log-to-profile') !!}
 											</a>
 										</div>
 										<a class="header-a open-dentacoin-gateway patient-login" href="javascript:;">
@@ -217,7 +205,6 @@
 								@endif
 							@elseif( $current_page!='register' || (!empty($session_polls) && $current_page=='register') )
 								<span class="dcn-rate">
-
 									10000 DCN = $<span id="header-rate">{{ sprintf('%.2F', 10000 * $dcn_original_price) }}</span>
 									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
@@ -231,9 +218,7 @@
 			@endif
 
 			<div class="site-content">
-		   
 				@yield('content')
-
 			</div>
 		</div>
 
@@ -309,7 +294,7 @@
 							<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank"><i class="fab fa-facebook-f"></i></a>
 						</div>
 						<a class="privacy-item-mobile" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
-						@endif
+					@endif
 				</div>
 			</footer>
 		</div>
