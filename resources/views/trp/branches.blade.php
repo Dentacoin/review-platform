@@ -171,7 +171,7 @@
 
 		@endforeach
 
-		@if(!empty($user) && $user->id == $clinic->id && !empty($clinic->email))
+		@if(!empty($user) && $user->id == $clinic->id)
 			<a href="javascript:;" data-popup-logged="popup-branch" class="button add-branch"><img src="{{ url('img-trp/add-new-branch-white.svg') }}"/>{{ trans('trp.page.branches.add-branch') }}</a>
 		@endif
 		@if(!empty($user) && $user->id == $clinic->id)
@@ -179,7 +179,7 @@
 		@endif
 	</div>
 
-	@if(!empty($user) && $user->id == $clinic->id && !empty($clinic->email))
+	@if(!empty($user) && $user->id == $clinic->id)
 		@include('trp.popups.add-branch')
 	@endif
 
