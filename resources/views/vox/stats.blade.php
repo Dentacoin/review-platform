@@ -2,7 +2,7 @@
 
 @section('content')
 
-	<div class="container">
+	<div class="container all-stats-wrapper">
 
 		@include('front.errors')
 		<a class="back-home" href="{{ getLangUrl('/') }}">

@@ -127,7 +127,6 @@ class VoxController extends FrontController {
 				'custom_body_class' => 'vox-public',
 				'js' => [
 					'all-surveys.js',
-					'vox-new.js',
 				],
 				'css' => [
 					'vox-public-vox.css',

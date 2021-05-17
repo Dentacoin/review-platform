@@ -1,17 +1,36 @@
-.page-index h2 {
-  font-size: 30px; }
+.page-index p.h2-bold {
+  font-size: 42px;
+  color: #333333; }
+  @media screen and (max-width: 1200px) {
+    .page-index p.h2-bold {
+      font-size: 34px; } }
   @media screen and (max-width: 768px) {
+    .page-index p.h2-bold {
+      font-size: 22px; } }
+.page-index h2 {
+  font-size: 34px;
+  color: #565656; }
+  @media screen and (max-width: 1200px) {
     .page-index h2 {
       font-size: 26px; } }
+  @media screen and (max-width: 768px) {
+    .page-index h2 {
+      font-size: 22px; } }
+@media screen and (max-width: 1200px) {
+  .page-index h3 {
+    font-size: 26px; } }
+@media screen and (max-width: 768px) {
+  .page-index h3 {
+    font-size: 20px; } }
+@media screen and (max-width: 768px) {
+  .page-index h3 {
+    margin-bottom: 6px; } }
 .page-index .blue-button {
   padding: 10px 40px;
   display: inline-block; }
   @media screen and (max-width: 768px) {
     .page-index .blue-button {
       font-size: 18px; } }
-@media screen and (max-width: 768px) {
-  .page-index .section-work {
-    padding-top: 40px; } }
 
 #questions-wrapper {
   margin-top: 30px; }

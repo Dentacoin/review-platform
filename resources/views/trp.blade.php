@@ -192,8 +192,10 @@
 				    </div>
 			    </div>
 		    </div>
-		    @if(!empty($user) && $user->is_clinic && $user->branches->isNotEmpty())
-		    	<input type="hidden" id="clinic-branches" value="{{ $clinicBranches }}">
+		    @if(!empty($user) && $user->is_clinic)
+		    	@if($user->branches->isNotEmpty())
+		    		<input type="hidden" id="clinic-branches" value="{{ $clinicBranches }}">
+		    	@endif
 		    	<input type="hidden" id="add-branches-popup-link" value="https://reviews.dentacoin.com/en/dentist/{{$user->slug}}/?popup-loged=popup-branch">
 		    @endif
 	    </header>

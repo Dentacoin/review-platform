@@ -2,7 +2,7 @@
 
 @section('content')
 
-	<div class="container">
+	<div class="container daily-polls-wrapper">
 		{!! csrf_field() !!}
 
 		<a class="back-home" href="{{ getLangUrl('/') }}">

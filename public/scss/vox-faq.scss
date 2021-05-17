@@ -10,6 +10,14 @@ $main-color: #38ace5;
 		overflow: hidden;		
 	}
 
+	.faq-wrapper {
+		padding-top: 40px;
+
+		@media #{$phone} {
+			padding-top: 0px;
+		}
+	}
+
 	.faq-block {
 		min-height: 750px;
 

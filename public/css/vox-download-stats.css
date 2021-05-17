@@ -29,7 +29,8 @@
   width: 1400px !important;
   max-width: 1400px;
   margin-right: auto;
-  margin-left: auto; }
+  margin-left: auto;
+  padding-top: 40px; }
 @font-face {
   .page-statistics.download-statistics {
     font-family: 'Nunito';
@@ -44,6 +45,9 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap; } }
+  @media screen and (max-width: 768px) {
+    .page-statistics.download-statistics {
+      padding-top: 0px; } }
   .page-statistics.download-statistics h1 {
     font-size: 25px;
     margin-bottom: 45px;

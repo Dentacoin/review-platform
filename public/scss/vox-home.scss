@@ -611,6 +611,11 @@ $main-color: #38ace5;
 }
 .another-questions {
 	text-align: center;
+	padding-top: 40px;
+
+	@media #{$phone} {
+		padding-top: 0px;
+	}
 
 	h1 {
 

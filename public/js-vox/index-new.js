@@ -37,6 +37,16 @@ $(document).ready(function(){
                 $(this).attr('src', $(this).attr('video-url') );
             });
         }
+
+        $(window).scroll( function(e) {
+            if(!$('.make-money-wrapper img').hasClass('animation-activated') && $(window).scrollTop() + $(window).height() / 2 > $('.make-money-wrapper').offset().top) {
+                $('.make-money-wrapper img').addClass('animation-activated');
+            }
+
+            if(!$('.get-app-wrapper').hasClass('animation-activated') && $(window).scrollTop() + $(window).height() / 2 > $('.get-app-wrapper').offset().top) {
+                $('.get-app-wrapper').addClass('animation-activated');
+            }
+        });
     }
 
     if($('#to-append').length) {
@@ -55,11 +65,29 @@ $(document).ready(function(){
                             $.getScript(window.location.origin+'/js-vox/swiper.min.js', function() {
                                 
                                 if ($('.swiper-container').length && typeof Swiper !== 'undefined' ) {
-                                    if (window.innerWidth > 768) {
+                                    if (window.innerWidth > 1150) {
 
                                         var swiper_done = new Swiper('.swiper-container', {
                                             slidesPerView: 3,
                                             slidesPerGroup: 3,
+                                            spaceBetween: 0,
+                                            pagination: {
+                                                el: '.swiper-pagination',
+                                                clickable: true,
+                                            },
+                                            breakpoints: {
+                                                900: {
+                                                  slidesPerView: 2,
+                                                },
+                                            },
+                                            autoplay: {
+                                                delay: 5000,
+                                            },
+                                        });
+                                    } else if(window.innerWidth > 768) {
+                                        var swiper_done = new Swiper('.swiper-container', {
+                                            slidesPerView: 2,
+                                            slidesPerGroup: 2,
                                             spaceBetween: 0,
                                             pagination: {
                                                 el: '.swiper-pagination',
@@ -107,5 +135,8 @@ $(document).ready(function(){
             }
         });
     }
+
+    
+    // $('.make-money-wrapper')
 
 });

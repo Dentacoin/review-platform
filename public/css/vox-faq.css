@@ -1,5 +1,10 @@
 .page-faq .site-content {
   overflow: hidden; }
+.page-faq .faq-wrapper {
+  padding-top: 40px; }
+  @media screen and (max-width: 768px) {
+    .page-faq .faq-wrapper {
+      padding-top: 0px; } }
 .page-faq .faq-block {
   min-height: 750px; }
   @media screen and (max-width: 768px) {

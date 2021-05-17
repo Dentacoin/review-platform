@@ -1,4 +1,7 @@
-$pc: "screen and (max-width: 1200px)";
+$big_pc: "screen and (max-width: 1590px)";
+$medium_pc: "screen and (max-width: 1450px)";
+$pc: "screen and (max-width: 1300px)";
+$pc_small: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 1080px)";
 $phone: "screen and (max-width: 768px)";
 $phone_up: "screen and (min-width: 769px)";
@@ -356,14 +359,6 @@ select:focus > option:checked {
     color: white !important;
 }
 
-.site-content {
-	padding-top: 40px;
-
-	@media #{$phone} {
-		padding-top: 20px;
-	}
-}
-
 .above-fold {
 	min-height: calc(100vh - 147px);
 }
@@ -404,6 +399,143 @@ select:focus > option:checked {
 			background-color: #2196F3;
 		}
 	}
+
+	&.new-style {
+		position: relative;
+		font-size: 35px;
+		font-weight: 900;
+		border-radius: 17px;
+		padding: 18px 76px !important;
+
+		@media #{$big_pc} {
+			font-size: 30px;
+			padding: 14px 50px !important;
+		}
+
+		@media #{$pc_small} {
+			font-size: 28px;
+		}
+
+		@media #{$tablet} {
+			font-size: 22px;
+		}
+
+		@media #{$phone} {
+			font-size: 18px;
+			border-radius: 10px;
+			padding: 10px 17px !important;
+		}
+
+		&::after {
+			content: "";
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background-color: #d3ebfb;
+			border-radius: 17px;
+			right: -15px;
+			bottom: -11px;
+			z-index: -1;
+
+			@media #{$phone} {
+				border-radius: 10px;
+				right: -11px;
+			}
+		}
+
+		&.with-arrow {
+			position: relative;
+			padding-right: 190px !important;
+
+			@media #{$big_pc} {
+				padding-right: 130px !important;
+			}
+
+			@media #{$pc_small} {
+				padding-right: 110px !important;
+			}
+
+			@media #{$phone} {
+				padding-right: 40px !important;
+			}
+
+			img {
+				max-width: 60px;
+				position: absolute;
+				right: 36px;
+				top: 50%;
+				transform: translateY(-50%);
+
+				@media #{$big_pc} {
+					max-width: 50px;
+				}
+
+				@media #{$pc_small} {
+					max-width: 40px;
+					right: 26px;
+				}
+
+				@media #{$phone} {
+					max-width: 21px;
+					right: 10px;
+				}
+			}
+
+			&:hover {
+				img {
+	    			animation: goEffect 1s infinite;
+
+	    			@media #{$big_pc} {
+	    				animation: goEffectPc 1s infinite;
+	    			}
+
+	    			@media #{$pc_small} {
+	    				animation: goEffectSmallPc 1s infinite;
+	    			}
+
+	    			@media #{$phone} {
+	    				animation: none;
+	    			}
+	    		}
+			}
+		}
+	}
+}
+
+@keyframes goEffect {
+    0% {
+    	right: 36px;
+    }
+    50% {
+    	right: 95px;
+    }
+    100% {
+    	right: 36px;
+    }
+}
+
+@keyframes goEffectPc {
+    0% {
+    	right: 36px;
+    }
+    50% {
+    	right: 70px;
+    }
+    100% {
+    	right: 36px;
+    }
+}
+
+@keyframes goEffectSmallPc {
+    0% {
+    	right: 26px;
+    }
+    50% {
+    	right: 56px;
+    }
+    100% {
+    	right: 26px;
+    }
 }
 
 .red-button {
@@ -784,17 +916,30 @@ select:focus > option:checked {
 }
 
 header {
-	height: 100px;
+	height: 70px;
 	background: white;
+	padding-left: 35px;
+	padding-right: 35px;
+	box-shadow: 0px 0px 35px -9px #979797;
+	position: relative;
+    z-index: 10;
+
+    @media #{$tablet} {
+		padding-left: 15px;
+		padding-right: 15px;
+    }
 
 	@media #{$phone} {
+		padding-left: 10px;
+		padding-right: 10px;
 		height: 60px;
+		box-shadow: none;
 	}
 
 	.navbar {
 		display: flex;
 		align-items: center;
-	    height: 100px;
+	    height: 70px;
 	    margin: 0;
 
 		@media #{$phone} {
@@ -840,11 +985,12 @@ header {
 	}
 
 	.logo {
-		flex: 4;
+		flex: 1;
 
 		img {
 			&.desktop {
 				width: 138px;
+				display: block;
 			}
 			&.mobile {
 				width: 46px;
@@ -854,7 +1000,6 @@ header {
 			@media #{$phone} {
 				&.desktop {
 					display: none;
-					
 				}
 				&.mobile {
 					display: block;
@@ -864,41 +1009,15 @@ header {
 	}
 
 	.header-title {
-		flex: 4;
+		text-align: center;
+		flex: 1;
 
-		@media #{$tablet} {
-			margin: 0 auto;
+		@media #{$phone} {
+			flex: 2;
 		}
-			
-		table {
-			margin: 0 auto;
 
-			@media #{$tablet} {
-				min-width: 300px;
-			}
-
-			@media #{$phone} {
-				min-width: 170px;
-				* {
-					font-size: 9px;
-				}
-			}
-
-			tr {
-				td {
-					width: 50%;
-					padding: 0px 3px;
-
-					@media #{$phone} {
-						width: 60%;
-
-						&:first-child {
-							width: 40%;
-						}
-					}
-
-				}
-			}
+		@media screen and (max-width: 500px) {
+			font-size: 10px;
 		}
 
 		span {
@@ -907,6 +1026,10 @@ header {
 
 		b {
 			font-weight: 900;
+
+			@media screen and (max-width: 500px) {
+				font-size: 10px;
+			}
 		}
 	}
 
@@ -952,7 +1075,7 @@ header {
 	}
 
 	.header-right {
-		flex: 4;
+		flex: 1;
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
@@ -979,7 +1102,6 @@ header {
 			vertical-align: middle;
 
 			&.user-and-price {
-				padding-bottom: 8px;
 				
 				@media #{$phone} {
 					display: none;
@@ -996,6 +1118,7 @@ header {
 			}
 
 			img {
+				display: block;
 				width: 50px;
 				height: 50px;
 				margin-left: 10px;
@@ -1426,13 +1549,19 @@ p.h2-bold {
 	}
 }
 
+.page-index.logged-out {
+	.footer-expander {
+		box-shadow: 0px 0px 35px -9px #979797;
+
+		@media #{$phone} {
+			box-shadow: none;
+		}
+	}
+}
+
 .footer-expander {
 	height: 147px;
 	overflow: hidden;
-
-	@media #{$tablet} {
-		height: 187px;
-	}
 
 	@media #{$phone} {
 		height: auto;
@@ -1448,18 +1577,30 @@ p.h2-bold {
 		justify-content: center;
 		display: flex;
 		position: relative;
+		padding-left: 115px;
+		padding-right: 115px;
 
 		@media #{$tablet} {
-			height: 157px;
+			height: 147px;
 			bottom: -187px;
+			padding-left: 15px;
+			padding-right: 15px;
 		}
 
 		@media #{$phone} {
 			position: static;
 			opacity: 1;
 			height: auto;
-			padding-top: 30px;
+			padding-top: 20px;
 			padding-bottom: 20px;
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+
+		.flex {
+			@media #{$phone} {
+				flex-direction: column;
+			}
 		}
 
 		.container {
@@ -1495,6 +1636,14 @@ p.h2-bold {
 
 			p {
 				font-size: 13px;
+
+				@media #{$tablet} {
+					display: none;
+				}
+
+				@media #{$phone} {
+					display: block;
+				}
 			}
 		}
 
@@ -1503,7 +1652,6 @@ p.h2-bold {
 				order: 2;
 				width: 100%;
 			}
-
 		}
 
 		.footer-menu {
@@ -1518,27 +1666,22 @@ p.h2-bold {
 			}
 
 			a {
-				font-size: 13px;
-				font-weight: 600;
-				padding-right: 20px;
-				margin-right: 18px;
+				font-size: 14px;
+			    font-weight: 600;
+			    padding-right: 9px;
+			    margin-right: 6px;	
 				border-right: 1px solid black;
 				color: black;
 				transition: all 0.3s ease;
 
-				@media #{$tablet} {
-					display: block;
-					border: none;
-    				padding: 3px 0px;
-    				margin: 0px;
-				}				
-
 				@media #{$phone} {
-					display: inline-block;
-					border-right: 1px solid black;
-    				padding: 0px 15px;
-    				margin: 8px 0px;
-    				font-size: 15px;
+    				display: inline-block;
+				    border-right: 1px solid black;
+				    padding: 0px;
+				    margin: 8px 0px;
+				    font-size: 14px;
+				    padding-right: 6px;
+				    padding-left: 4px;
 				}
 
 				&.privacy-item {
@@ -1552,14 +1695,6 @@ p.h2-bold {
 					padding-right: 0px;
 					margin-right: 0px;
 				}
-
-				&:nth-last-child(2) {
-					@media #{$phone} {
-						border-right: none;
-						padding-right: 0px;
-						margin-right: 0px;
-					}
-				}
 				
 				&:hover {
 					color: #38a2e5;
@@ -1569,14 +1704,13 @@ p.h2-bold {
 		}
 
 		small {
-			color: #3e3e3e;
-			font-weight: 300;
-			font-size: 12px;
-			display: block;
+			color: black;
+		    font-size: 14px;
+		    display: block;
 
 			@media #{$phone} {
-				font-weight: normal;
 				color: #0b0b0b;
+				font-size: 12px;
 			}
 		}
 
@@ -3671,6 +3805,11 @@ svg:not(:root) {
 
 .taken-survey-wrapper {
 	padding-bottom: 40px;
+	padding-top: 90px;
+
+	@media #{$phone} {
+		padding-top: 0px;
+	}
 
 	>.container {
 		.flex {
@@ -4623,4 +4762,309 @@ body.dark-mode {
             display: none;
         }
     }
+}
+
+.make-money-wrapper {
+	margin-top: 164px;
+	margin-bottom: 170px;
+
+	@media #{$pc_small} {
+		margin-top: 134px;
+    	margin-bottom: 120px;
+	}
+
+	@media #{$phone} {
+		margin-top: 44px;
+		margin-bottom: 30px;
+	}
+
+	.flex {
+		margin-top: 47px;
+
+		@media #{$phone} {
+			margin-top: 0px;
+		}
+
+		.img-wrap {
+			width: 222px;
+			height: 232px;
+			margin-left: auto;
+			margin-right: auto;
+
+			@media #{$pc_small} {
+			    width: 150px;
+    			height: 157px;
+    		}
+
+			img {
+				max-width: 100px;
+			    position: relative;
+				top: 50%;
+			    transform: translateY(-50%);
+				transition: all 0.5s ease;
+
+				@media #{$pc_small} {
+					max-width: 90px;
+				}
+
+				@media #{$phone} {
+					max-width: 60px;
+				}
+
+				&.animation-activated {
+					max-width: 222px;
+					transition: all 0.5s ease;
+
+					@media #{$pc_small} {
+						max-width: 150px;
+					}
+
+					@media #{$phone} {
+						max-width: 120px;
+					}
+				}
+			}
+		}
+
+		h3 {
+			font-weight: 900;
+			margin-top: 30px;
+			color: #333333;
+
+			@media #{$phone} {
+				margin-top: 0px;
+			}
+		}
+
+		p {
+			font-size: 20px;
+			color: #565656;
+			max-width: 340px;
+			margin-right: auto;
+			margin-left: auto;
+
+			@media #{$phone} {
+				font-size: 16px;
+    			max-width: 250px;
+    			margin-bottom: 20px;
+			}
+		}
+	}
+
+	.blue-button {
+		margin-top: 64px;
+
+		@media #{$phone} {
+			display: none !important;
+		}
+	}
+}
+
+.current-dcn-price-wrapper {
+	background: url('../new-vox-img/paralax-rewards.png') 50% 100% no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
+    padding: 55px 0px 90px;
+
+	@media #{$pc} {
+		// background-image: url('../new-vox-img/paralax-rewards-small-pc.png');
+		background-attachment: unset;
+	}
+
+    @media #{$tablet} {
+    	padding: 35px 0px 40px;
+    }
+
+	@media #{$phone} {
+		padding: 35px 0px 35px;
+	}
+
+	@media screen and (max-width: 650px) {
+		background-size: 144%;
+	}
+
+    & * {
+    	color: white !important;
+    }
+
+    h2 {
+    	margin-bottom: 50px;
+
+    	@media #{$phone} {
+    		margin-bottom: 20px;
+    	}
+    }
+
+    span {
+    	font-size: 50px;
+	    font-weight: 800;
+	    text-transform: uppercase;
+	    line-height: 60px;
+
+	    @media #{$pc_small} {
+	    	font-size: 40px;
+	    	line-height: 50px;
+	    }
+
+	    @media #{$phone} {
+	    	font-size: 22px;
+    		line-height: normal;
+	    }
+    }
+}
+
+.why-dentacoin-wrapper {
+	margin-top: 135px;
+
+	@media #{$pc_small} {
+		margin-top: 105px;
+	}
+
+	@media #{$phone} {
+		margin-top: 50px;
+		position: relative;
+		padding-bottom: 30px;
+
+		&:after {
+			content: "";
+			position: absolute;
+			bottom: 0px;
+			height: 1px;
+			width: 158px;
+			left: 50%;
+			transform: translateX(-50%);
+			background-color: black;
+		}
+	}
+
+	h2 {
+		margin-bottom: 20px;
+	}
+
+	.why-number {
+		font-size: 92px;
+	    font-weight: 900;
+	    color: #38ace5;
+	    margin-right: 25px;
+	    line-height: 118px;
+
+	    @media #{$medium_pc} {
+	    	font-size: 80px;
+		    margin-right: 20px;
+		    line-height: 105px;
+	    }
+
+	    @media #{$pc_small} {
+	    	font-size: 70px;
+		    line-height: 91px;
+	    }
+
+	    @media #{$phone} {
+	    	font-size: 60px;
+    		line-height: 60px;
+    		margin-right: 0px;
+	    }
+	}
+
+	.flex {
+
+		.col {
+			&:first-child {
+				max-width: 664px;
+				margin-right: 30px;
+
+			    @media #{$big_pc} {
+			    	max-width: 534px;
+			    }
+
+			    @media #{$medium_pc} {
+			    	max-width: 480px;
+			    }
+
+			    @media #{$pc_small} {
+			    	max-width: 360px;
+			    }
+
+			    @media #{$phone} {
+			    	width: 100%;
+			    	max-width: 100%;
+			    }
+			}
+		}
+
+		p {
+			text-align: left;
+			font-size: 34px;
+			line-height: 36px;
+			color: #565656;
+
+			@media screen and (max-width: 1730px) {
+		    	font-size: 28px;
+		    }
+
+		    // @media screen and (max-width: 1350px) {
+		    // 	font-size: 28px;
+		    // }
+
+		    @media #{$pc_small} {
+		    	font-size: 24px;
+		    }
+
+		    // @media #{$medium_pc} {
+		    // 	font-size: 28px;
+		    // }
+
+		    @media #{$phone} {
+		    	font-size: 16px;
+			    text-align: center;
+			    max-width: 220px;
+			    line-height: normal;
+			    margin-bottom: 30px;
+		    }
+
+		    br {
+		    	@media #{$phone} {
+		    		display: none;
+		    	}
+		    }
+
+			b {
+				font-weight: 900;
+				color: #333;
+
+				@media #{$phone} {
+					font-size: 20px;
+				    text-transform: uppercase;
+				    max-width: 190px;
+				    display: block;
+				    margin-left: auto;
+				    margin-right: auto;
+				}
+			}
+		}
+
+		img {
+			width: 100%;
+			max-width: 100%;
+
+			@media #{$tablet} {
+				max-width: 400px;
+			    margin-left: auto;
+			    margin-right: auto;
+			    display: block;
+			}
+		}
+	}
+
+	.why-dentacoin-first-reason {
+		margin-top: 80px;
+
+		@media #{$medium_pc} {
+			margin-top: 40px;
+		}
+
+		@media #{$pc_small} {
+			margin-top: 30px;
+		}
+	}
 }

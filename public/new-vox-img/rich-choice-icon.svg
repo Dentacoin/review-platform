@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 742.8 778"
+	 style="enable-background:new 0 0 742.8 778;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#3BABE1;}
+	.st1{fill:#83CDF2;}
+	.st2{fill:#FFFFFF;}
+</style>
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="778" width="742.8" x="32.1" y="-788.7"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<circle class="st0" cx="371.4" cy="406.5" r="371.4"/>
+<circle class="st1" cx="371.4" cy="369.4" r="369.4"/>
+<g>
+	<path class="st2" d="M371.4,62.4c-169.6,0-307,137.4-307,307s137.4,307,307,307c169.6,0,307-137.4,307-307S541,62.4,371.4,62.4z
+		 M371.4,622.4c-139.7,0-252.9-113.3-252.9-253c0-139.7,113.2-252.9,252.9-252.9c139.7,0,253,113.2,253,252.9
+		C624.4,509.1,511.1,622.4,371.4,622.4z"/>
+</g>
+<path class="st2" d="M324.2,357.6h-85.5c-17.6,0-32-14.4-32-32v-85.5c0-17.6,14.4-32,32-32h85.5c17.6,0,32,14.4,32,32v85.5
+	C356.2,343.2,341.8,357.6,324.2,357.6z"/>
+<path class="st2" d="M503.7,357.6h-85.5c-17.6,0-32-14.4-32-32v-85.5c0-17.6,14.4-32,32-32h85.5c17.6,0,32,14.4,32,32v85.5
+	C535.7,343.2,521.3,357.6,503.7,357.6z"/>
+<path class="st2" d="M324.2,530.7h-85.5c-17.6,0-32-14.4-32-32v-85.5c0-17.6,14.4-32,32-32h85.5c17.6,0,32,14.4,32,32v85.5
+	C356.2,516.3,341.8,530.7,324.2,530.7z"/>
+<path class="st2" d="M503.7,530.7h-85.5c-17.6,0-32-14.4-32-32v-85.5c0-17.6,14.4-32,32-32h85.5c17.6,0,32,14.4,32,32v85.5
+	C535.7,516.3,521.3,530.7,503.7,530.7z"/>
+</svg>

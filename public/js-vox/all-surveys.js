@@ -33,7 +33,7 @@ $(document).ready(function(){
                     clickable: true,
                 },
                 breakpoints: {
-                    900: {
+                    1130: {
                       slidesPerView: 2,
                     },
                 },
@@ -86,47 +86,13 @@ $(document).ready(function(){
 
                             $.getScript(window.location.origin+'/js-vox/swiper.min.js', function() {
                                 
-                                if ($('.swiper-container').length && typeof Swiper !== 'undefined' ) {
-                                    if (window.innerWidth > 768) {
+                                handleSwiper();
 
-                                        var swiper_done = new Swiper('.swiper-container', {
-                                            slidesPerView: 3,
-                                            slidesPerGroup: 3,
-                                            spaceBetween: 0,
-                                            pagination: {
-                                                el: '.swiper-pagination',
-                                                clickable: true,
-                                            },
-                                            breakpoints: {
-                                                900: {
-                                                  slidesPerView: 2,
-                                                },
-                                            },
-                                            autoplay: {
-                                                delay: 5000,
-                                            },
-                                        });
-                                    } else {
-                                        var swiper_done = new Swiper('.swiper-container', {
-                                            slidesPerView: 1,
-                                            spaceBetween: 0,
-                                            pagination: {
-                                                el: '.swiper-pagination',
-                                                clickable: true,
-                                            },
-                                            effect: 'coverflow',
-                                            grabCursor: true,
-                                            centeredSlides: true,
-                                            coverflowEffect: {
-                                                rotate: 50,
-                                                stretch: 0,
-                                                depth: 100,
-                                                modifier: 1,
-                                                slideShadows : false,
-                                            },
-                                        });
+                                $(window).scroll( function(e) {
+                                    if(!$('.make-money-wrapper img').hasClass('animation-activated') && $(window).scrollTop() + $(window).height() / 2 > $('.make-money-wrapper').offset().top) {
+                                        $('.make-money-wrapper img').addClass('animation-activated');
                                     }
-                                }
+                                });
                             });
                         }
                     },

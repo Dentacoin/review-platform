@@ -261,6 +261,12 @@ $main-color: #38ace5;
 }
 
 .questions {
+	padding-top: 40px;
+
+	@media #{$phone} {
+		padding-top: 0px;
+	}
+
 	h3 {			
 		color: #060606;
 		margin-bottom: 10px;

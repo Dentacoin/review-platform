@@ -1,4 +1,5 @@
 $small_pc: "screen and (max-width: 1260px)";
+$pc_small: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 1080px)";
 $phone: "screen and (max-width: 768px)";
 $phone_up: "screen and (min-width: 769px)";
@@ -6,12 +7,45 @@ $phone_up: "screen and (min-width: 769px)";
 $main-color: #38ace5;
 
 .page-index {
+
+	p.h2-bold {
+    	font-size: 42px;
+    	color: #333333;
+
+    	@media #{$pc_small} {
+    		font-size: 34px;
+    	}
+
+    	@media #{$phone} {
+    		font-size: 22px;
+    	}
+    }
+
 	h2 {
-		font-size: 30px;
+		font-size: 34px;
+		color: #565656;
+
+		@media #{$pc_small} {
+    		font-size: 26px;
+    	}
+
+    	@media #{$phone} {
+    		font-size: 22px;
+    	}
+	}
+
+	h3 {
+		@media #{$pc_small} {
+			font-size: 26px;
+		}
 
 		@media #{$phone} {
-	    	font-size: 26px;
-	    }
+			font-size: 20px;
+		}
+
+		@media #{$phone} {
+			margin-bottom: 6px;
+		}
 	}
 
 	.blue-button {
@@ -21,12 +55,6 @@ $main-color: #38ace5;
     	@media #{$phone} {
     		font-size: 18px;
     	}
-	}
-
-	.section-work {
-		@media #{$phone} {
-			padding-top: 40px;
-		}
 	}
 }
 

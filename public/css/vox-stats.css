@@ -1,3 +1,9 @@
+.all-stats-wrapper {
+  padding-top: 40px; }
+  @media screen and (max-width: 768px) {
+    .all-stats-wrapper {
+      padding-top: 0px; } }
+
 .page-stats .fb_chb {
   display: none !important; }
 .page-stats .section-take-surveys {
