@@ -1735,6 +1735,7 @@
                         <table class="table table-striped table-question-list">
                             <thead>
                                 <tr>
+                                    <th>Date</th>
                                     <th>Civic info</th>
                                     <th>Check result</th>
                                     <th>Result</th>
@@ -1742,6 +1743,9 @@
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>
+                                        {{ $item->kycValidation->created_at->toDateTimeString() }}
+                                    </td>
                                     <td>
                                         Email: {{ $item->kycEmailPhone()['email'] }} <br/>
                                         Phone: {{ $item->kycEmailPhone()['phone'] }} <br/>
