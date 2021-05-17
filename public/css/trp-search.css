@@ -313,7 +313,8 @@
     width: 228px;
     padding-top: 34%;
     background-size: cover;
-    background-position: 50%; }
+    background-position: 50%;
+    position: relative; }
     @media screen and (max-width: 768px) {
       .result-container .avatar {
         flex: 4;
@@ -321,8 +322,23 @@
         height: 115px;
         padding-top: 0px;
         margin-right: 0px; } }
-    .result-container .avatar.default-avatar {
-      opacity: 0.7; }
+    .result-container .avatar .main-clinic {
+      position: absolute;
+      bottom: 0;
+      left: 0px;
+      right: 0px;
+      font-size: 16px;
+      line-height: 16px;
+      text-align: center;
+      background-color: white;
+      color: #46afda;
+      font-weight: bold;
+      padding: 8px 10px 8px;
+      border-bottom-left-radius: 5px; }
+      @media screen and (max-width: 768px) {
+        .result-container .avatar .main-clinic {
+          font-size: 13px;
+          padding: 5px 10px 5px; } }
   .result-container .media-right {
     flex: 1;
     padding: 15px;

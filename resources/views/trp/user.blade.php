@@ -215,7 +215,10 @@
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
-				<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;"> 
+				<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;">
+				@if($item->is_clinic && $item->branches->isNotEmpty() && $item->id == $item->mainBranchClinic->id)
+					<div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
+				@endif
 			</div>
 			<div class="profile-mobile-info tac">
 				<h3>
@@ -366,7 +369,7 @@
 			    		</a>
 			    	@else
 			    		@if($item->branches->isNotEmpty())
-				    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->mainBranchEmail() }}">
+				    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : ($item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email) }}">
 				    			<i class="fas fa-envelope"></i>
 				    		</a>
 				    	@endif
@@ -565,7 +568,10 @@
 
     		<div class="view-profile clearfix">
 				<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');">
-					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;"> 
+					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;">
+					@if($item->is_clinic && $item->branches->isNotEmpty() && $item->id == $item->mainBranchClinic->id)
+						<div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
+					@endif 
 				</div>
 				<div class="media-right">
 					<h3>
@@ -660,7 +666,7 @@
 				    		</a>
 				    	@else
 				    		@if($item->branches->isNotEmpty())
-					    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->mainBranchEmail() }}">
+					    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : ($item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email) }}">
 					    			<i class="fas fa-envelope"></i>
 					    		</a>
 					    	@endif

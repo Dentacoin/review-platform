@@ -83,6 +83,13 @@ class BranchesController extends AdminController {
 		                $newbranch->clinic_id = $branch_clinic->id;
 		                $newbranch->branch_clinic_id = $main_clinic->id;
 		                $newbranch->save();
+
+                        $branch_clinic->main_branch_clinic_id = $main_clinic->id;
+                        $branch_clinic->save();
+                        if(empty($main_clinic->main_branch_clinic_id)) {
+                            $main_clinic->main_branch_clinic_id = $main_clinic->id;
+                            $main_clinic->save();
+                        }
     				}
 
     				$this->request->session()->flash('success-message', 'Branch added!');

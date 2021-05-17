@@ -70,7 +70,8 @@
         bottom: 0;
         width: 215px;
         height: 215px;
-        background: url("../img-trp/avatar-border.svg") no-repeat 50% 50%; }
+        background: url("../img-trp/avatar-border.svg") no-repeat 50% 50%;
+        z-index: 10; }
         @media screen and (max-width: 1200px) {
           .information .profile-info .avatar:before {
             left: -4px;
@@ -100,6 +101,27 @@
         @media screen and (max-width: 998px) {
           .information .profile-info .avatar::after {
             display: none; } }
+      .information .profile-info .avatar .main-clinic {
+        position: absolute;
+        bottom: 0;
+        left: 0px;
+        right: 0px;
+        font-size: 16px;
+        line-height: 16px;
+        text-align: center;
+        background-color: white;
+        color: #46afda;
+        font-weight: bold;
+        padding: 4px 50px 8px; }
+        @media screen and (max-width: 1200px) {
+          .information .profile-info .avatar .main-clinic {
+            font-size: 11px;
+            line-height: normal;
+            padding: 1px 22px 13px; } }
+        @media screen and (max-width: 998px) {
+          .information .profile-info .avatar .main-clinic {
+            font-size: 17px;
+            padding: 10px 22px 30px; } }
     .information .profile-info .type {
       color: #676767;
       font-size: 20px; }
@@ -210,7 +232,20 @@
       bottom: 0;
       width: 100%;
       height: 100%;
-      background: url("../img-trp/avatar-border.svg") no-repeat 50% 50%; }
+      background: url("../img-trp/avatar-border.svg") no-repeat 50% 50%;
+      z-index: 10; }
+    .profile-info-mobile .avatar .main-clinic {
+      position: absolute;
+      bottom: 0;
+      left: 0px;
+      right: 0px;
+      text-align: center;
+      background-color: white;
+      color: #46afda;
+      font-weight: bold;
+      font-size: 10px;
+      padding: 1px 18px 7px;
+      line-height: 10px; }
   .profile-info-mobile .share-mobile {
     position: absolute;
     right: 12px;

@@ -38,7 +38,7 @@
 
 @if($item->status == 'clinic_branch')
     <div class="alert alert-info">
-        This clinic is a branch of <a href="{{ url('cms/users/edit/'.$item->mainBranchClinicEmail->id) }}">{{ $item->mainBranchClinicEmail->name }}</a>
+        This clinic is a branch of <a href="{{ url('cms/users/edit/'.$item->mainBranchClinic->id) }}">{{ $item->mainBranchClinic->name }}</a>
     </div>
 @endif
 
@@ -317,7 +317,7 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Main Clinic Email</label>
                                     <div class="col-md-10">
-                                        <input class="form-control" disabled="disabled" type="text" value="{{ $item->email_clinic_branch }}">
+                                        <input class="form-control" disabled="disabled" type="text" value="{{ $item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email }}">
                                     </div>
                                 </div>
                             @else

@@ -1998,33 +1998,33 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     return Response::json( $ret );
                 } else {
 
-                    $info = User::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
-                    if(empty($info)) {
-                        return Response::json( array(
-                            'success' => false,
-                            'messages' => array(
-                                'clinic_address' => trans('trp.common.invalid-address')
-                            )
-                        ));
-                    }
+                    // $info = User::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
+                    // if(empty($info)) {
+                    //     return Response::json( array(
+                    //         'success' => false,
+                    //         'messages' => array(
+                    //             'clinic_address' => trans('trp.common.invalid-address')
+                    //         )
+                    //     ));
+                    // }
 
-                    $phone = null;
-                    $c = Country::find( Request::Input('clinic_country_id') );
-                    $phone = ltrim( str_replace(' ', '', Request::Input('clinic_phone')), '0');
-                    $pn = $c->phone_code.' '.$phone;
+                    // $phone = null;
+                    // $c = Country::find( Request::Input('clinic_country_id') );
+                    // $phone = ltrim( str_replace(' ', '', Request::Input('clinic_phone')), '0');
+                    // $pn = $c->phone_code.' '.$phone;
 
-                    $validator = Validator::make(['clinic_phone' => $pn], [
-                        'clinic_phone' => ['required','phone:'.$c->code],
-                    ]);
+                    // $validator = Validator::make(['clinic_phone' => $pn], [
+                    //     'clinic_phone' => ['required','phone:'.$c->code],
+                    // ]);
 
-                    if ($validator->fails()) {
-                        return Response::json( [
-                            'success' => false, 
-                            'messages' => [
-                                'clinic_phone' => trans('trp.popup.registration.phone')
-                            ]
-                        ] );
-                    }
+                    // if ($validator->fails()) {
+                    //     return Response::json( [
+                    //         'success' => false, 
+                    //         'messages' => [
+                    //             'clinic_phone' => trans('trp.popup.registration.phone')
+                    //         ]
+                    //     ] );
+                    // }
 
                     return Response::json( ['success' => true] );
                 }
@@ -2070,42 +2070,40 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     ] );
                 }
 
-                $info = User::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
-                if(empty($info)) {
-                    return Response::json( array(
-                        'success' => false,
-                        'messages' => array(
-                            'clinic_address' => trans('trp.common.invalid-address')
-                        )
-                    ));
-                }
+                // $info = User::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
+                // if(empty($info)) {
+                //     return Response::json( array(
+                //         'success' => false,
+                //         'messages' => array(
+                //             'clinic_address' => trans('trp.common.invalid-address')
+                //         )
+                //     ));
+                // }
 
-                $phone = null;
-                $c = Country::find( Request::Input('clinic_country_id') );
+                // $phone = null;
+                // $c = Country::find( Request::Input('clinic_country_id') );
                 $phone = ltrim( str_replace(' ', '', Request::Input('clinic_phone')), '0');
-                $pn = $c->phone_code.' '.$phone;
+                // $pn = $c->phone_code.' '.$phone;
 
-                $validator = Validator::make(['clinic_phone' => $pn], [
-                    'clinic_phone' => ['required','phone:'.$c->code],
-                ]);
+                // $validator = Validator::make(['clinic_phone' => $pn], [
+                //     'clinic_phone' => ['required','phone:'.$c->code],
+                // ]);
 
-                if ($validator->fails()) {
-                    return Response::json( [
-                        'success' => false, 
-                        'messages' => [
-                            'clinic_phone' => trans('trp.popup.registration.phone')
-                        ]
-                    ] );
-                }
+                // if ($validator->fails()) {
+                //     return Response::json( [
+                //         'success' => false, 
+                //         'messages' => [
+                //             'clinic_phone' => trans('trp.popup.registration.phone')
+                //         ]
+                //     ] );
+                // }
                 
                 $newuser = new User;
                 $newuser->name = Request::input('clinic_name');
                 $newuser->name_alternative = Request::input('clinic_name_alternative');
-                $newuser->email_clinic_branch = $this->user->email ?? $this->user->email_clinic_branch ;
-                // $newuser->email = Request::input('email');
+                $newuser->main_branch_clinic_id = $this->user->status == 'clinic_branch' ? $this->user->main_branch_clinic_id : $this->user->id;
                 $newuser->country_id = Request::input('clinic_country_id');
                 $newuser->address = Request::input('clinic_address');
-                // $newuser->password = bcrypt(Request::input('password'));
                 $newuser->phone = $phone;
                 $newuser->platform = 'trp';
                 $newuser->website = Request::input('clinic_website');
@@ -2148,6 +2146,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                         $newbranch->branch_clinic_id = $newuser->id;
                         $newbranch->save();
                     }
+                } else {
+                    $this->user->main_branch_clinic_id = $this->user->id;
+                    $this->user->save();
                 }
 
                 $newbranch = new UserBranch;

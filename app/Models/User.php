@@ -64,7 +64,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     protected $fillable = [
     	'email',
-        'email_clinic_branch',
         'email_public',
         'email_clean',
     	'password', 
@@ -74,6 +73,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'is_partner',
         'featured',
         'top_dentist_month',
+        'main_branch_clinic_id',
         'title',
         'name',
         'name_alternative',
@@ -344,24 +344,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function branches() {
         return $this->hasMany('App\Models\UserBranch', 'clinic_id', 'id');
     }
-    public function mainBranchClinicEmail() {
-        return $this->hasOne('App\Models\User', 'email', 'email_clinic_branch');
+    public function mainBranchClinic() {
+        return $this->hasOne('App\Models\User', 'id', 'main_branch_clinic_id');
     }
     public function mainBranchEmail() {
-        $email = null;
-
-        if(!empty($this->email_clinic_branch)) {
-            $email = $this->email_clinic_branch;
-        } else if($this->branches->isNotEmpty()) {
-            foreach($this->branches as $branch) {
-                if(!empty($branch->branchClinic->email)) {
-                    $email = $branch->branchClinic->email;
-                    break;
-                }
-            }
-        }
-
-        return $email;
+        return $this->mainBranchClinic->email;
     }
 
     public function kycEmailPhone() {

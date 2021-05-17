@@ -18,6 +18,9 @@
 				@if($clinic->hasimage)
 					<img src="{{ $clinic->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $clinic->getNames(), 'location' => ($clinic->city_name ? $clinic->city_name.', ' : '').($clinic->state_name ? $clinic->state_name.', ' : '').($clinic->country->name) ]) }}" style="display: none !important;"> 
 				@endif
+				@if($clinic->id == $clinic->mainBranchClinic->id)
+					<div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
+				@endif
 			</div>
 			<div class="media-right">
 				<h4>
@@ -94,6 +97,9 @@
 				<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}"  style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
 					@if($dentist->hasimage)
 						<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getNames(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
+					@endif
+					@if($dentist->id == $dentist->mainBranchClinic->id)
+						<div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
 					@endif
 				</div>
 				<div class="media-right">
