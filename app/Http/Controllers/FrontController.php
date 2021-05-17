@@ -540,7 +540,16 @@ class FrontController extends BaseController {
 
                 $branchClinic = $branch->branchClinic;
 
-                if($branchClinic->review_notification) {
+                $has_ask_notification = false;
+                if ($branchClinic->asks->isNotEmpty()) {
+                    foreach ($branchClinic->asks as $p_ask) {
+                        if ($p_ask->status == 'waiting') {
+                            $has_ask_notification = true;
+                        }
+                    }
+                }
+
+                if($branchClinic->review_notification || $has_ask_notification) {
                     //user asks
                     $params['has_review_notification'] = true;
                     break;
@@ -625,6 +634,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '20210517';
+        $params['cache_version'] = '2021051701';
     }
 }
