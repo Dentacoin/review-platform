@@ -1,6 +1,6 @@
 <div class="section-recent-surveys">
-	<p class="h2-bold">{!! nl2br(trans('vox.page.index.recent-surveys.title')) !!}</p>
-	<h2>{!! nl2br(trans('vox.page.index.recent-surveys.subtitle')) !!}</h2>
+	<p class="h2-bold">Our Most Recent</p>
+	<h2>Paid Surveys</h2>
 
 	<div class="swiper-container">
 	    <div class="swiper-wrapper">

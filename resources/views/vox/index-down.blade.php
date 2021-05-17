@@ -1,5 +1,4 @@
 <div class="section-recent-surveys new-style-swiper">
-
 	<div class="swiper-container">
 	    <div class="swiper-wrapper">
 	    	@foreach($voxes as $survey)
@@ -25,32 +24,32 @@
 
 <div class="genuine-reports-wrapper index-container">
 	<div class="tac">
-		<p class="h2-bold">GENUINE RESEARCH</p>
-		<h2>Results from 73+ million answers</h2>
+		<p class="h2-bold">{!! nl2br(trans('vox.page.index.genuine-research.title')) !!}</p>
+		<h2>{!! nl2br(trans('vox.page.index.genuine-research.subtitle')) !!}</h2>
 	</div>
 	<div class="flex flex-center flex-text-center break-mobile">
 		<div class="col">
 			<img src="{{ url('new-vox-img/buy-detailed-reports.png') }}">
-			<h3>BUY DETAILED REPORT</h3>
-			<p>Suitable for researchers, media, <br/> dental professionals, suppliers <br/> and students who seek detailed <br/> data and analysis.</p>
+			<h3>{!! nl2br(trans('vox.page.index.genuine-research.1.title')) !!}</h3>
+			<p>{!! nl2br(trans('vox.page.index.genuine-research.1.description')) !!}</p>
 			<a class="blue-button" href="{{ getLangUrl('welcome-survey') }}">
-				Coming soon
+				{!! nl2br(trans('vox.page.index.genuine-research.1.button')) !!}
 			</a>
 		</div>
 		<div class="col">
 			<img src="{{ url('new-vox-img/browse-free-stats.png') }}">
-			<h3>BROWSE FREE STATS</h3>
-			<p>Every week we publish free, <br/> downloadable charts based <br/> on DentaVox surveys. No strings <br/> attached - just sign up and take a look! </p>
+			<h3>{!! nl2br(trans('vox.page.index.genuine-research.2.title')) !!}</h3>
+			<p>{!! nl2br(trans('vox.page.index.genuine-research.2.description')) !!}</p>
 			<a class="blue-button" href="{{ getLangUrl('dental-survey-stats') }}">
-				See stats
+				{!! nl2br(trans('vox.page.index.genuine-research.2.button')) !!}
 			</a>
 		</div>
 		<div class="col">
 			<img src="{{ url('new-vox-img/read-our-blog.png') }}">
-			<h3>READ OUR BLOG</h3>
-			<p>Curious blitz stats, oral health <br/> myths and facts, dental <br/> infographics… There is so much <br/> content you can read and share <br/> on social media! </p>
+			<h3>{!! nl2br(trans('vox.page.index.genuine-research.3.title')) !!}</h3>
+			<p>{!! nl2br(trans('vox.page.index.genuine-research.3.description')) !!}</p>
 			<a class="blue-button" href="https://dentavox.dentacoin.com/blog/" target="_blank">
-				See blog
+				{!! nl2br(trans('vox.page.index.genuine-research.3.button')) !!}
 			</a>
 		</div>
 	</div>
@@ -62,8 +61,8 @@
 	</div>
 	<div class="col mobile-info-col">
 		<img src="{{ url('new-vox-img/app-logo.png') }}">
-		<p class="h2-bold">WHEREVER YOU ARE</p>
-		<h2>Get DentaVox mobile app!</h2>
+		<p class="h2-bold">{!! nl2br(trans('vox.page.index.mobile-app.title')) !!}</p>
+		<h2>{!! nl2br(trans('vox.page.index.mobile-app.subtitle')) !!}</h2>
 		<div class="flex flex-text-center">
 			<a class="mobile-app-button google-play" href="https://play.google.com/store/apps/details?id=com.dentacoin.dentavox" target="_blank"></a>
 			@if(false)
@@ -84,8 +83,8 @@
 			<img src="{{ url('new-vox-img/before-footer-img.png') }}">
 		</div>
 		<div class="col tal">
-			<p class="h2-bold">READY TO START?</p>
-			<h2>Choose a survey and earn DCN!</h2>
+			<p class="h2-bold">{!! nl2br(trans('vox.page.index.start.title')) !!}</p>
+			<h2>{!! nl2br(trans('vox.page.index.start.subtitle')) !!}</h2>
 			<a class="blue-button new-style with-arrow" href="{{ getLangUrl('welcome-survey') }}">
 				{!! nl2br(trans('vox.page.index.start')) !!} <img src="{{ url('new-vox-img/white-arrow-right.svg') }}">
 			</a>

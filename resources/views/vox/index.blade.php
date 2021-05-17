@@ -14,15 +14,11 @@
 			</a>
 		</div>
 		<img class="blue-circle" src="{{ url('new-vox-img/blue-circle-corner.png') }}"/>
-		<!-- main-image-bottom-wave.png -->
 	</div>
 
 	<div class="section-recent-surveys new-style-swiper">
-		<!-- <p class="h2-bold">{!! nl2br(trans('vox.page.index.recent-surveys.title')) !!}</p> -->
-		<p class="h2-bold">NEW SURVEYS WEEKLY</p>
-		
-		<!-- <h2>{!! nl2br(trans('vox.page.index.recent-surveys.subtitle')) !!}</h2> -->
-		<h2>Get paid for every answer!</h2>
+		<p class="h2-bold">{!! nl2br(trans('vox.page.index.recent-surveys.title')) !!}</p>
+		<h2>{!! nl2br(trans('vox.page.index.recent-surveys.subtitle')) !!}</h2>
 	</div>
 
 	<div id="to-append"></div>

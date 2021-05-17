@@ -293,9 +293,8 @@
 					@if(empty(request('app')))
 						<div class="footer-text flex-6 tac">
 							<div class="footer-menu">
-								<a href="{{ getLangUrl('paid-dental-surveys') }}">Surveys</a>
-								<a href="{{ getLangUrl('dental-survey-stats') }}">Research Results</a>
-								<!-- <a href="{{ getLangUrl('dental-survey-stats') }}">{{ trans('vox.footer.stats') }}</a> -->
+								<a href="{{ getLangUrl('paid-dental-surveys') }}">{{ trans('vox.footer.surveys') }}</a>
+								<a href="{{ getLangUrl('dental-survey-stats') }}">{{ trans('vox.footer.stats') }}</a>
 								<a href="{{ getLangUrl('daily-polls') }}">{{ trans('vox.footer.daily-polls') }}</a>
 								<a href="{{ getLangUrl('faq') }}">{{ trans('vox.footer.faq') }}</a>
 							</div>
@@ -306,8 +305,6 @@
 							</small>
 						</div>
 						<div class="socials flex-3">
-							<!-- {{ trans('vox.footer.socials') }}
-							 &nbsp; -->
 							<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
 							<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank"><i class="fab fa-facebook-f"></i></a>
 						</div>
