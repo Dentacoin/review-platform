@@ -339,7 +339,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\DcnTransaction', 'user_id', 'id');
     }
     public function kycValidation() {
-        return $this->hasOne('App\Models\Civic', 'user_id', 'id');
+        return $this->hasOne('App\Models\Civic', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function branches() {
         return $this->hasMany('App\Models\UserBranch', 'clinic_id', 'id');
