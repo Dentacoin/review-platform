@@ -2101,7 +2101,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                 $newuser = new User;
                 $newuser->name = Request::input('clinic_name');
                 $newuser->name_alternative = Request::input('clinic_name_alternative');
-                $newuser->email_clinic_branch = $this->user->email;
+                $newuser->email_clinic_branch = $this->user->email ?? $this->user->email_clinic_branch ;
                 // $newuser->email = Request::input('email');
                 $newuser->country_id = Request::input('clinic_country_id');
                 $newuser->address = Request::input('clinic_address');
