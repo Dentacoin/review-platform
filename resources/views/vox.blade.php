@@ -268,12 +268,14 @@
 		<div class="footer-expander">
 			<footer>
 				<div class="flex flex-end">
-					<a href="https://dentacoin.com/" target="_blank" class="footer-logo flex-3 flex flex-center">
-						<img src="{{ url('img-vox/dc-logo.png') }}" alt="Dentacoin logo" width="37" height="37">
-						<p class="bold">
-							{{ trans('vox.footer.company-name') }}
-						</p>
-					</a>
+					<div class="footer-logo flex-3 flex flex-center">
+						<a href="https://dentacoin.com/" target="_blank" class="flex flex-center">
+							<img src="{{ url('img-vox/dc-logo.png') }}" alt="Dentacoin logo" width="37" height="37">
+							<p class="bold">
+								{{ trans('vox.footer.company-name') }}
+							</p>
+						</a>
+					</div>
 
 					@if(empty(request('app')))
 						<div class="footer-text flex-6 tac">
@@ -281,6 +283,7 @@
 								<a href="{{ getLangUrl('paid-dental-surveys') }}">{{ trans('vox.footer.surveys') }}</a>
 								<a href="{{ getLangUrl('dental-survey-stats') }}">{{ trans('vox.footer.stats') }}</a>
 								<a href="{{ getLangUrl('daily-polls') }}">{{ trans('vox.footer.daily-polls') }}</a>
+								<a href="https://dentavox.dentacoin.com/blog" target="_blank">{{ trans('vox.footer.blog') }}</a>
 								<a href="{{ getLangUrl('faq') }}">{{ trans('vox.footer.faq') }}</a>
 							</div>
 							<small>

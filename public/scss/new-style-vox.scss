@@ -1684,6 +1684,10 @@ p.h2-bold {
 				    padding-left: 4px;
 				}
 
+				@media screen and (max-width: 340px) {
+					font-size: 12px;
+				}
+
 				&.privacy-item {
 					@media #{$phone} {
 						display: none;

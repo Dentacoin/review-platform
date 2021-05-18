@@ -1232,6 +1232,9 @@ p.h2-bold {
             font-size: 14px;
             padding-right: 6px;
             padding-left: 4px; } }
+        @media screen and (max-width: 340px) {
+          .footer-expander footer .footer-menu a {
+            font-size: 12px; } }
         @media screen and (max-width: 768px) {
           .footer-expander footer .footer-menu a.privacy-item {
             display: none; } }
