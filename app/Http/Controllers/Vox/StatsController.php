@@ -381,7 +381,6 @@ class StatsController extends FrontController {
                         }
                     }
 
-
                     if(!empty($rows_diez)) {
 
                         $keys = array_map(function($val) { return $val[1]; }, $rows_diez);

@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="flex-3">
-				<img class="image-left" src="{{ url('new-vox-img/dentavox-surveys-welcome-blinking-man.png') }}" alt="Dentavox surveys welcome blinking man">
+				<img class="image-left" src="{{ url('new-vox-img/dentavox-surveys-welcome-blinking-man.png') }}" alt="{{ trans('vox.welcome-survey.image.alt') }}">
 			</div>
 
 			<div class="flex-9">
@@ -31,7 +31,7 @@
 						{{ $vox->description }}
 					</p>
 					<p class="demographic-questionnaire-description" style="display: none;" >
-						You're almost done! Help us complete your demographic profile to ensure quality dental survey results!
+						{!! nl2br(trans('vox.welcome-survey.description')) !!}
 					</p>
 					<div class="questions-dots">
 						<div class="dot" id="current-question-bar" style="width: 0%;"></div>
@@ -143,7 +143,7 @@
 						{!! trans('vox.page.questionnaire.answer-error') !!}
 					</div>
 					<div style="display: none; margin-top: 10px;text-align: center;" class="birthday-answer-error alert alert-warning">
-						You must be at least 18 to register
+						{!! nl2br(trans('vox.page.questionnaire.birthday-error')) !!}
 					</div>
 
 				</div>
@@ -162,7 +162,6 @@
 		var welcome_vox_now = true;
 	</script>
 
-
 	@if($user)
 		<div class="section-welcome-done" style="display: none;">
 			<div class="container flex">
@@ -172,23 +171,27 @@
 				</div>
 
 				<div class="flex-9 tac">
-					<h3 class="done-title">Good job, <span class="blue-text"> {{ $user->getNames() }}!</span></h3>
+					<h3 class="done-title">{!! trans('vox.welcome-survey.done.title', ['username' => '<span class="blue-text">'.$user->getNames().'!</span>']) !!}</h3>
 					<h4>
-						You’ve just earned <span class="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! To withdraw your <br/> reward, just go to your <a href="https://account.dentacoin.com/?platform=dentavox">Wallet.</a> Ready to get more <br/> Dentacoin tokens?
+						{!! nl2br(trans('vox.welcome-survey.done.description', [
+							'reward' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
+							'walletlink' => '<a href="https://account.dentacoin.com/?platform=dentavox">',
+							'endlink' => '</a>',
+						])) !!}
 					</h4>
 
-					<a class="blue-button gradient-line" href="{{ getLangUrl('/') }}">Take me to the surveys</a>
+					<a class="blue-button gradient-line" href="{{ getLangUrl('/') }}">{{ trans('vox.welcome-survey.done.button') }}</a>
 				</div>
 			</div>
 
 			<div class="section-stats">
 				<div class="container clearfix">
 					<img src="{{ url('new-vox-img/dentavox-dental-statistics-icon.png') }}" alt="Dentavox dental statistics icon">
-					<h3>Curious to see our survey stats?</h3>
-					<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">Check stats</a>
+					<h3>{{ trans('vox.page.welcome-to-dentavox.curious') }}</h3>
+					<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">{{ trans('vox.common.check-statictics') }}</a>
 				</div>
 			</div>
 		</div>
 	@endif
-    	
+	
 @endsection

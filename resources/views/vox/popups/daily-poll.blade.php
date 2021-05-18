@@ -6,9 +6,12 @@
 			<div class="white-bubble">
 				<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
 				<h4>{!! nl2br(trans('vox.daily-polls.popup.title')) !!}</h4>
-				<p><span class="daily-respondents">{{ !empty($daily_poll) ? $daily_poll->respondentsCount() : '' }}</span>/100 people</p>
+				<p>
+					{!! nl2br(trans('vox.daily-polls.popup.respondents-short', ['current_respondents' => '<span class="daily-respondents">'.$daily_poll->respondentsCount().'</span>' ])) !!}
+					{{ $daily_poll->respondentsCount() }}
+				</p>
 				<div class="poll-reward twerk-it"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ $daily_poll_reward }} DCN</div>
-				<a href="javascript:;" class="answer-poll {{ $current_page == 'daily-polls' ? 'regenerate-poll-popup' : '' }}" cur-poll-id="{{ !empty($daily_poll) ? $daily_poll->id : ''  }}" q="{{ !empty($daily_poll) ? $daily_poll->question : '' }}" {!! $current_page != 'daily-polls' ? 'data-popup="poll-popup"' : '' !!} data-href="{{ date('d-m-Y',$daily_poll->launched_at->timestamp) }}">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
+				<a href="javascript:;" class="answer-poll {{ $current_page == 'daily-polls' ? 'regenerate-poll-popup' : '' }}" cur-poll-id="{{ $daily_poll->id }}" q="{{ $daily_poll->question }}" {!! $current_page != 'daily-polls' ? 'data-popup="poll-popup"' : '' !!} data-href="{{ date('d-m-Y',$daily_poll->launched_at->timestamp) }}">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
 			</div>
 		</div>
 	</div>
@@ -19,10 +22,10 @@
 			<img class="main-bubble-image" src="{{ url('new-vox-img/dentavox-man-daily-polls-rewards.png') }}" alt="Dentavox man daily polls rewards">
 			<div class="white-bubble closed-bubble">
 				<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
-				<h4>Daily Poll</h4>
-				<h4 class="closed">Closed</h4>
-				<p class="closed-p">You missed your chance. Try tomorrow. </p>
-				<a href="javascript:;" class="closed-poll-button see-stats" poll-id="{{ $closed_daily_poll->id }}">Results</a>
+				<h4>{!! nl2br(trans('vox.daily-polls.popup.closed-poll.title.1')) !!}</h4>
+				<h4 class="closed">{!! nl2br(trans('vox.daily-polls.popup.closed-poll.title.2')) !!}</h4>
+				<p class="closed-p">{!! nl2br(trans('vox.daily-polls.popup.closed-poll.title.3')) !!}</p>
+				<a href="javascript:;" class="closed-poll-button see-stats" poll-id="{{ $closed_daily_poll->id }}">{!! nl2br(trans('vox.daily-polls.popup.closed-poll.button')) !!}</a>
 			</div>
 		</div>
 	</div>

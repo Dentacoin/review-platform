@@ -22,7 +22,7 @@
 		@else
 			<a href="javascript:;" class="red-button scroll-to-blurred">
 		@endif
-			<img src="{{ url('new-vox-img/download.png') }}"/>Download
+			<img src="{{ url('new-vox-img/download.png') }}"/>{!! trans('vox.page.stats.download') !!}
 		</a>
 	</div>
 </div>
@@ -47,17 +47,17 @@
 			{!! trans('vox.page.stats.total') !!}: <b></b>
 		</div>
 		<div class="hint"></div>
-		<div class="relation-hint" style="display: none;" for-single="Click on a pie slice to see data for the respective answer." for-multiple="Click on a column to see data for the respective answer.">Click on a pie slice to see data for the respective answer.</div>
+		<div class="relation-hint" style="display: none;" for-single="{!! trans('vox.page.stats.click-on-chart-single') !!}" for-multiple="{!! trans('vox.page.stats.click-on-chart-multiple') !!}">{!! trans('vox.page.stats.click-on-chart-single') !!}</div>
 	</div>
 	@if($question->type!='multiple_choice' && $question->type!='rank')
 		<a href="javascript:;" class="mobile-button-legend">
-			<img src="{{ url('new-vox-img/stats-legend.svg') }}"><i class="fas fa-arrow-up"></i>Check legend
+			<img src="{{ url('new-vox-img/stats-legend.svg') }}"><i class="fas fa-arrow-up"></i>{!! trans('vox.page.stats.check-legend') !!}
 		</a>
 	@endif
 	<div class="scales flex flex-center mobile-scales">
 		{!! trans('vox.page.stats.scale-by') !!}:
 		@if($question->used_for_stats=='dependency')
-			<a href="javascript:;" class="active" scale="dependency" scale-name="Relation">Relation</a>
+			<a href="javascript:;" class="active" scale="dependency" scale-name="{{ trans('vox.page.stats.relation') }}">{{ trans('vox.page.stats.relation') }}</a>
 		@endif
 		@foreach( $question->stats_fields as $sk)
 			<a href="javascript:;" class="{!! $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' !!} {!! $sk == 'gender' && $question->used_for_stats=='dependency' ? '' : (array_key_exists($sk, config('vox.details_fields')) || $sk == 'age' || ($sk == 'gender' && ($question->type == 'multiple_choice' || $question->type == 'rank' )) ? 'with-children' : '') !!}" scale="{{ $sk }}"  scale-name="{{ trans('vox.page.stats.group-by-'.$sk) }}">
@@ -68,7 +68,7 @@
 						<label for="scale-{{ $sk }}-all-{{ $question->id }}-1" class="select-all-scales-label active">
 							<i class="far fa-square"></i>
 							<input type="checkbox" name="scale-{{ $sk }}[]" value="all" id="scale-{{ $sk }}-all-{{ $question->id }}-1" class="select-all-scales scale-checkbox" checked="checked">
-							Select all
+							{{ trans('vox.page.stats.select-all') }}
 						</label>
 						@foreach(config('vox.details_fields')[$sk]['values'] as $skk => $sv)
 							<label for="scale-{{ $sk }}-{{ $skk }}-{{ $question->id }}-1" class="active">
@@ -83,7 +83,7 @@
 						<label for="scale-age-all-{{ $question->id }}-1" class="select-all-scales-label active">
 							<i class="far fa-square"></i>
 							<input type="checkbox" name="scale-age[]" value="all" id="scale-age-all-{{ $question->id }}-1" class="select-all-scales scale-checkbox" checked="checked">
-							Select all
+							{{ trans('vox.page.stats.select-all') }}
 						</label>
 						@foreach(config('vox.age_groups') as $ak => $av)
 							<label for="scale-age-{{ $ak }}-{{ $question->id }}-1" class="active">
@@ -98,17 +98,17 @@
 						<label for="scale-gender-all-{{ $question->id }}-1" class="select-all-scales-label active">
 							<i class="far fa-square"></i>
 							<input type="checkbox" name="scale-gender[]" value="all" id="scale-gender-all-{{ $question->id }}-1" class="select-all-scales scale-checkbox" checked="checked">
-							Select all
+							{{ trans('vox.page.stats.select-all') }}
 						</label>
 						<label for="scale-gender-f-{{ $question->id }}-1" class="active">
 							<i class="far fa-square"></i>
 							<input type="checkbox" name="scale-gender[]" value="f" id="scale-gender-f-{{ $question->id }}-1" class="scale-checkbox" checked="checked">
-							Women
+							{{ trans('vox.page.stats.sex.women') }}
 						</label>
 						<label for="scale-gender-m-{{ $question->id }}-1" class="active">
 							<i class="far fa-square"></i>
 							<input type="checkbox" name="scale-gender[]" value="m" id="scale-gender-m-{{ $question->id }}-1" class="scale-checkbox" checked="checked">
-							Men
+							{{ trans('vox.page.stats.sex.men') }}
 						</label>
 					</div>
 				
@@ -177,7 +177,7 @@
 </div>
 
 <div class="alert alert-info" id="daterange-error" style="display: none;">
-	There are no results
+	{{ trans('vox.page.stats.no-results-query') }}
 	<!-- {!! trans('vox.page.stats.no-results-single') !!} -->
 </div>
 <!-- @if( $question->type=='multiple_choice' )

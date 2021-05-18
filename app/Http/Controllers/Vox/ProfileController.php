@@ -117,10 +117,15 @@ class ProfileController extends FrontController {
                 $more_surveys = true;
             }
 
+            $os = false;
+            if(isset($_SERVER['HTTP_USER_AGENT'])) {
+                preg_match("/iPhone|Android|iPad|iPod|webOS/", $_SERVER['HTTP_USER_AGENT'], $matches);
+                $os = current($matches);
+            }
 
             $params = [
                 'xframe' => true,
-                'latest_voxes' => Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('created_at', 'desc')->take(3)->get(),
+                'latest_voxes' => $os ? Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('created_at', 'desc')->take(3)->get() : collect(),
                 'more_surveys' => $more_surveys,
                 'prev_bans' => $prev_bans,
                 'current_ban' => $current_ban,

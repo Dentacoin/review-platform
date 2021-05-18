@@ -129,9 +129,9 @@
 	<div class="blog-wrapper">
 		<div class="container flex">
 			<div class="col">
-				<h2>DENTAVOX BLOG</h2>
-				<p>Check our blog for more curious statistics & infographics!</p>
-				<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">VISIT BLOG</a>
+				<h2>{{ trans('vox.page.stats.dv-blog.title') }}</h2>
+				<p>{{ trans('vox.page.stats.dv-blog.description') }}</p>
+				<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">{{ trans('vox.page.stats.dv-blog.button') }}</a>
 			</div>
 			<div class="col">
 				<img src="{{ url('new-vox-img/dentavox-blog-preview.png') }}" alt="Dentavox blog preview" width="500" height="351">
@@ -145,18 +145,18 @@
 				<img src="{{ url('new-vox-img/custom-survey-vox.png') }}" alt="Dentavox custom survey" width="130" height="131">
 				<h3>
 					@if($user->is_dentist)
-						You  want to explore a topic <br> within a targeted audience?
+						{!! nl2br(trans('vox.page.stats.request-survey-dentist.title')) !!}
 					@else
-						You have an idea for a new survey?
+						{!! nl2br(trans('vox.page.stats.request-survey-patient.title')) !!}
 					@endif
 				</h3>
 				@if($user->is_dentist)
-					<a href="javascript:;" data-popup="request-survey-popup" class="white-button {!! $user->status != 'approved' && $user->status != 'added_by_clinic_claimed' && $user->status!='added_by_dentist_claimed' && $user->status != 'test' ? 'disabled' : '' !!}">
-						REQUEST A SURVEY
+					<a href="javascript:;" data-popup="request-survey-popup" class="white-button">
+						{{ trans('vox.page.stats.request-survey-dentist.button') }}
 					</a>
 				@else
 					<a href="javascript:;" data-popup="request-survey-patient-popup" class="white-button">
-						Share it
+						{{ trans('vox.page.stats.request-survey-patient.button') }}
 					</a>
 				@endif
 			</div>

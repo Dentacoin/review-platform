@@ -5,7 +5,7 @@
 	<div class="page-questions">
 		<div class="loader-mask">
 		    <div class="loader">
-		      	"Loading..."
+		      	{{ trans('vox.common.loading') }}
 		    </div>
 		</div>
 
@@ -280,10 +280,10 @@
 				<p>
 				</p>
 				<small>
-					Note: Bans are irreversible. Please, do not send appeals to our Support.
+					{!! nl2br(trans('vox.popup.ban-popup.title')) !!}
 				</small>
 				<h3 class="hours-countdown">
-					Return to DentaVox in: <span></span>
+					{!! nl2br(trans('vox.popup.ban-popup.return-to-vox')) !!} <span></span>
 				</h3>
 			</div>
 			<a class="closer-pop x">
@@ -302,7 +302,7 @@
 				</p>
 				<div class="tac">
 					<a class="btn inactive closer-pop simple-countdown" alt-text="Continue">
-						Continue in: <span>10</span>
+						{!! nl2br(trans('vox.popup.warning-popup.continue')) !!} <span>10</span>
 					</a>
 				</div>
 			</div>
@@ -318,10 +318,10 @@
 			</p>
 			<a class="btn back-btn btn-start-over">
 				<i class="fas fa-redo"></i>
-				Start over
+				{!! nl2br(trans('vox.popup.warning-popup.start-over')) !!}
 			</a>
 			<a class="btn back-btn btn-roll-back">
-				<i class="far fa-arrow-alt-circle-left"></i> Roll Back
+				<i class="far fa-arrow-alt-circle-left"></i> {!! nl2br(trans('vox.popup.warning-popup.roll-back')) !!}
 			</a>
 		</div>
 	</div>
@@ -350,15 +350,15 @@
 					<div class="flex icons">
 						<div class="col">
 							<img src="{{ url('new-vox-img/popup-sign-1.png') }}" />
-							24h
+							{{ trans('vox.page.bans.24h') }}
 						</div>
 						<div class="col">
 							<img src="{{ url('new-vox-img/popup-sign-2.png') }}" />
-							72h
+							{{ trans('vox.page.bans.72h') }}
 						</div>
 						<div class="col">
 							<img src="{{ url('new-vox-img/popup-sign-3.png') }}" />
-							168h
+							{{ trans('vox.page.bans.168h') }}
 						</div>
 						<div class="col">
 							<img src="{{ url('new-vox-img/popup-sign-4.png') }}" />
@@ -378,18 +378,16 @@
 							]) !!}
 							</label>
 						</div>
-						<div class="alert alert-warning rules-error" style="display: none;margin-bottom: 20px;">Please, read the FAQ and agree to the Terms.</div> 
+						<div class="alert alert-warning rules-error" style="display: none;margin-bottom: 20px;">{!! trans('vox.page.bans.rules.error') !!}</div> 
 						<a class="btn rules-ok">
-							{!! trans('vox.page.bans.rules-got-it') !!}							
+							{!! trans('vox.page.bans.rules-got-it') !!}
 						</a>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	@endif
     	
-
 	{!! csrf_field() !!}
 	
 @endsection

@@ -9,7 +9,7 @@
 					<img class="taken-survey-image" src="{{ url('new-vox-img/dentavox-man-taken-survey.jpg') }}" alt="Dentavox man taken survey" width="550" height="507">
 				</div>
 				<div class="col taken-survey-description">
-					<h3>Oops! Survey not available...</h3>
+					<h3>{!! trans('vox.page.restricted-questionnaire.title') !!}</h3>
 					<p>
 						{!! $res_desc !!} 
 					</p>

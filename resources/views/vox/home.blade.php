@@ -12,25 +12,25 @@
 					</div>
 					<div class="col">
 						<p class="big bold">{{ $user->countAllSurveysRewards() }}</p>
-						<p>Surveys Taken</p>
+						<p>{{ trans('vox.page.home.levels.surveys-taken') }}</p>
 					</div>
 					<div class="col">
 						<p class="big bold">{{ count($user->filledDailyPolls()) }}</p>
-						<p>Daily Polls</p>
+						<p>{{ trans('vox.page.home.levels.daily-polls') }}</p>
 					</div>
 					<div class="col lifetime-rewards">
 						<div class="flex flex-center">
 							<div class="circle"></div>
 							<div class="rew">
 								<p class="bold">{{ number_format($user->all_rewards->sum('reward')) }} DCN</p>
-								<p>Lifetime Rewards</p>
+								<p>{{ trans('vox.page.home.levels.lifetime-rewards') }}</p>
 							</div>
 						</div>
 						<div class="flex flex-center">
 							<div class="circle"></div>
 							<div class="rew">
 								<p class="bold">{{ number_format($user->getTotalBalance()) }} DCN</p>
-								<p>Currently redeemable</p>
+								<p>{{ trans('vox.page.home.levels.curently-redeemable') }}</p>
 							</div>
 						</div>
 					</div>

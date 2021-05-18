@@ -9,9 +9,9 @@
 					<img class="taken-survey-image" src="{{ url('new-vox-img/dentavox-man-survey-taken.jpg') }}" alt="Dentavox man survey taken" width="550" height="524">
 				</div>
 				<div class="col taken-survey-description">
-					<h3>Great! You've reached your daily limit.</h3>
+					<h3>{!! trans('vox.page.vox-daily-limit-reached.title') !!}</h3>
 					<p>
-						It seems you've been on a roll today. Come back tomorrow to share your valuable opinion on other topics!
+						{!! trans('vox.page.vox-daily-limit-reached.description') !!}
 					</p>
 					<div class="countdown daily-limit-reached">
 						<div class="hours-countdown">
@@ -27,9 +27,9 @@
 		<div class="blog-wrapper">
 			<div class="container flex">
 				<div class="col">
-					<h2>DENTAVOX BLOG</h2>
-					<p>Check our blog for more curious statistics & infographics!</p>
-					<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">VISIT BLOG</a>
+					<h2>{{ trans('vox.page.stats.dv-blog.title') }}</h2>
+					<p>{{ trans('vox.page.stats.dv-blog.description') }}</p>
+					<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">{{ trans('vox.page.stats.dv-blog.button') }}</a>
 				</div>
 				<div class="col">
 					<img src="{{ url('new-vox-img/dentavox-blog-preview.png') }}" alt="Dentavox blog preview" width="500" height="351">
@@ -39,8 +39,8 @@
 
 		<div class="taken-vox-stats without-line">
 			<div class="container">
-				<h3 class="taken-title">DENTAL STATISTICS</h3>
-				<p class="vox-stats-subtitle">Check up-to-date market statistics to stay on top of industry trends!</p>
+				<h3 class="taken-title">{!! trans('vox.page.vox-daily-limit-reached.stats.title') !!}</h3>
+				<p class="vox-stats-subtitle">{!! trans('vox.page.vox-daily-limit-reached.stats.description') !!}</p>
 				<a class="video-parent" href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}">
 					<video id="myVideo" class="video-stats" playsinline autoplay muted loop src="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
 				</a>

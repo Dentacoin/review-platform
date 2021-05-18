@@ -4,7 +4,7 @@
 
 	<div class="loader-mask">
 	    <div class="loader">
-	      	"Loading..."
+	      	{{ trans('vox.common.loading') }}
 	    </div>
 	</div>
 

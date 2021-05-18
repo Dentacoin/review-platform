@@ -392,7 +392,7 @@ class PollsController extends FrontController {
 			        	'success' => true,
 			        	'logged' => false,
 			        	'chart' => $this->chartData($poll),
-	        			'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
+	        			'respondents' => trans('vox.daily-polls.popup.respondents', ['current_respondents' => $poll->respondentsCount() ]),
 	        			'has_user' => false,
 			        ];
 
@@ -451,7 +451,7 @@ class PollsController extends FrontController {
 			        	'success' => true,
 			        	'chart' => $this->chartData($poll),
 			        	'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
-		        		'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
+		        		'respondents' => trans('vox.daily-polls.popup.respondents', ['current_respondents' => $poll->respondentsCount() ]),
 		        		'has_user' => true,
 			        ];
 

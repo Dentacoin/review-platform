@@ -96,8 +96,8 @@
 		<footer>			
 			<div class="footer-expander">
 				<p>
-					Source survey: "{!! $original_title !!}" <br/>
-					Base: {{ $respondents }} respondents, {{ $period }}
+					{{ trans('vox.page.export-stats.source') }}: "{!! $original_title !!}" <br/>
+					{{ trans('vox.page.export-stats.base') }}: {{ $respondents }} {{ trans('vox.page.export-stats.respondents') }}, {{ $period }}
 				</p>
 				<img src="{{ url('new-vox-img/pdf-footer.png') }}" style="max-width: 100%;">
 			</div>

@@ -6,7 +6,7 @@
 		<div class="flex flex-mobile flex-center break-tablet">
 			<div class="content">
 				<p class="h1">
-					DO YOU ENJOY DENTAVOX?
+					{!! nl2br(trans('vox.popup.recommend.title')) !!}
 				</p>
 
 				<form class="form" action="{{ getLangUrl('recommend') }}" method="post" id="recommend-form">
@@ -40,22 +40,22 @@
 							<div class="modern-field alert-after">
 								<textarea name="description" id="recommend-description" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"></textarea>
 								<label for="recommend-description">
-									<span>Share how we can improve</span>
+									<span>{!! nl2br(trans('vox.popup.recommend.share')) !!}</span>
 								</label>
 							</div>
 
 							<div class="tac">
-								<button type="submit" id="recommend-button" class="blue-button">Send</button>
+								<button type="submit" id="recommend-button" class="blue-button">{!! nl2br(trans('vox.popup.recommend.send')) !!}</button>
 							</div>
 						</div>
 					</div>
-					<div class="alert alert-success" style="display: none;">Thank you for your feedback!</div>
-					<div class="alert alert-warning" style="display: none; margin-top: 20px;">Please, share your opinion so we can improve DentaVox</div>
+					<div class="alert alert-success" style="display: none;">{!! nl2br(trans('vox.popup.recommend.success')) !!}</div>
+					<div class="alert alert-warning" style="display: none; margin-top: 20px;">{!! nl2br(trans('vox.popup.recommend.error')) !!}</div>
 				</form>
 
 				<div class="recommend-fb" style="display: none;">
-					<h4>Recommend us on Facebook!</h4>
-					<a class="blue-button" href="https://www.facebook.com/pg/dentavox.dentacoin/reviews/?ref=page_internal" target="_blank">Post recommendation</a>
+					<h4>{!! nl2br(trans('vox.popup.recommend.recommend-fb')) !!}</h4>
+					<a class="blue-button" href="https://www.facebook.com/pg/dentavox.dentacoin/reviews/?ref=page_internal" target="_blank">{!! nl2br(trans('vox.popup.recommend.post')) !!}</a>
 					<video id="myVideoRecommend" playsinline muted loop src="{{ url('new-vox-img/recommend.mp4') }}" type="video/mp4" controls=""></video>
 				</div>
 			</div>

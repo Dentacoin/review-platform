@@ -299,7 +299,7 @@
 		<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
 
 		<div style="display: none; margin-top: 10px;text-align: center;" class="answer-rank-error alert alert-warning">
-			Please rank all answers.
+			{!! trans('vox.page.questionnaire.rank-error') !!}
 		</div>
 	</div>
 @else

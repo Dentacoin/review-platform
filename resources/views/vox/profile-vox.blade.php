@@ -23,7 +23,6 @@
 	            				{{ trans('vox.page.profile.vox.list-date') }}
 	            			</th>
 	            			<th>
-	            				
 	            				{{ trans('vox.page.profile.vox.list-questionnaire') }}
 	            			</th>
 	            			<th>
@@ -32,7 +31,6 @@
             			</tr>
             		</thead>
             		<tbody>
-
 						@if($histories->isNotEmpty())
 							@foreach($histories as $completed)
 								@if( $completed->vox )
@@ -56,13 +54,12 @@
 
 		  	@if($more_surveys)
 			  	<div class="alert alert-info">				
-					You haven't taken any surveys yet. Just pick a topic and start earning more DCN!
+					{{ trans('vox.page.profile.vox.no-surveys-taken') }}
 				</div>
 
 				@if($latest_voxes->count())
-
 					<div class="section-recent-surveys">
-						<h4>Latest Surveys:</h4>
+						<h4>{{ trans('vox.page.profile.vox.latest-survey') }}:</h4>
 
 						<div class="swiper-container">
 						    <div class="swiper-wrapper">

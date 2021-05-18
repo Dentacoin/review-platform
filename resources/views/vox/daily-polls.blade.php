@@ -14,7 +14,7 @@
 
 		<div class="monthly-description tac" style="{!! !empty($monthly_descr) ? '' : 'display:none;' !!}">
 			<div class="container">
-				<h2>MONTHLY POLLS</h2>
+				<h2>{!! nl2br(trans('vox.daily-polls.monthly-polls')) !!}</h2>
 				<p>
 					@if(!empty($monthly_descr))
 						{{ $monthly_descr->description }}

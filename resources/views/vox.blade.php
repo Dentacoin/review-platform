@@ -154,8 +154,8 @@
 				<header>
 					<div class="navbar clearfix {{ !empty($user) && $user->platform == 'external' ? 'external-navbar' : '' }}">
 						<a href="{{ getLangUrl('/') }}" class="logo">
-							<img src="{{ url('new-vox-img/logo-vox.png') }}" alt="Dentavox logo" class="desktop" width="138" height="34">
-							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" alt="Dentavox logo mobile" class="mobile" width="46" height="29">
+							<img src="{{ url('new-vox-img/logo-vox.png') }}" alt="{{ trans('vox.header.logo-desktop.alt') }}" class="desktop" width="138" height="34">
+							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" alt="{{ trans('vox.header.logo-mobile.alt') }}" class="mobile" width="46" height="29">
 						</a>
 						<div class="header-title">
 							@if($current_page=='index')

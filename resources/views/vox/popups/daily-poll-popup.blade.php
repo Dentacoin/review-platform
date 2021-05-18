@@ -13,7 +13,7 @@
 			<form action="{{ !empty($daily_poll) ? getLangUrl('poll/'.$daily_poll->id) : '' }}" class="poll-form">
 				<div class="loader-mask" style="position: absolute;">
 				    <div class="loader">
-				      	"Loading..."
+				      	{{ trans('vox.common.loading') }}
 				    </div>
 				</div>
 				<h3>
@@ -42,7 +42,7 @@
 			<div class="poll-group">
 				<div class="loader-mask" style="position: absolute;">
 				    <div class="loader">
-				      	"Loading..."
+				      	{{ trans('vox.common.loading') }}
 				    </div>
 				</div>
 				<h3 alternative-title="{!! nl2br(trans('vox.daily-polls.popup.we-asked')) !!}" title="{!! nl2br(trans('vox.daily-polls.popup.get-exited', ['reward' => '<b>'. $daily_poll_reward.' DCN</b>'])) !!}">
@@ -50,7 +50,7 @@
 				</h3>
 				@if(!empty($daily_poll))
 					<p>
-						Respondents: {{ $daily_poll->respondentsCount() }}/100 people
+						{!! nl2br(trans('vox.daily-polls.popup.respondents', ['current_respondents' => $daily_poll->respondentsCount() ])) !!}
 					</p>
 				@endif
 				{!! csrf_field() !!}
@@ -72,7 +72,7 @@
 						</a>
 					@else					
 						<a href="javascript:;" class="white-button next-stat">
-							NEXT RESULTS
+							{!! nl2br(trans('vox.daily-polls.popup.next-results')) !!}
 							<img src="{{ url('new-vox-img/next-arrow-blue.svg') }}">
 						</a>
 					@endif
@@ -89,7 +89,7 @@
 
 				<div class="get-reward-buttons" style="display: none;">
 					<a href="javascript:;" class="white-button next-stat">
-						NEXT RESULTS
+						{!! nl2br(trans('vox.daily-polls.popup.next-results')) !!}
 						<img src="{{ url('new-vox-img/next-arrow-blue.svg') }}">
 					</a>
 					<a href="javascript:;" class="blue-button next-poll">
@@ -118,10 +118,10 @@
 			<h3>
 				{!! nl2br(trans('vox.daily-polls.popup.title')) !!}
 			</h3>
-			<h2>Oops! No more open polls for you. <br><br> Check again tomorrow for the new daily poll! Meanwhile, why don't you dive into our pool of paid surveys?</h2>
+			<h2>{!! nl2br(trans('vox.daily-polls.popup.no-open-polls')) !!}</h2>
 			<div class="get-reward-buttons">
 				<a href="{{ getLangUrl('paid-dental-surveys') }}" class="blue-button">
-					TAKE PAID SURVEYS
+					{!! nl2br(trans('vox.daily-polls.popup.take-paid-surveys')) !!}
 				</a>
 			</div>
 		</div>

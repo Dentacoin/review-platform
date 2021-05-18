@@ -6,7 +6,7 @@
 		<div class="flex flex-mobile flex-center break-tablet">
 			<div class="content">
 				<p class="h1">
-					DOWNLOAD STATS
+					{!! nl2br(trans('vox.popup.download-stats.title')) !!}
 				</p>
 				
 				<form method="post" id="download-form" class="page-statistics" action="{{ getLangUrl('download-statistics') }}" stat-url="{{ getLangUrl('dental-survey-stats/'.$vox->slug) }}">
@@ -37,13 +37,13 @@
 
 					<div class="filters-wrapper alert-after">
 						<div class="filters-custom-wrap">
-							<b>Period:</b>
+							<b>{!! nl2br(trans('vox.popup.download-stats.period')) !!}:</b>
 							@foreach($filters as $filterkey => $filter)
 								@if($filterkey == 'all')
 									<label for="download-date-all" class="active download-filter">
 										<input type="radio" name="download-date" class="download-date-radio" id="download-date-all" checked="checked" value="all">
 										<span class="d">{{ $filter }}</span>
-										<span class="m">All times</span>
+										<span class="m">{!! trans('vox.popup.download-stats.all-times') !!}</span>
 									</label>
 								@endif
 							@endforeach
@@ -73,12 +73,11 @@
 					</div>
 
 					<div class="download-demographics alert-after">
-						<b>Demographic Breakdown:</b>
-
+						<b>{!! trans('vox.popup.download-stats.demographic-breakdown') !!}:</b>
 
 					</div>
 
-				    <button type="submit" name="create_pdf" id="create_pdf" class="red-button">Download</button>
+				    <button type="submit" name="create_pdf" id="create_pdf" class="red-button">{!! trans('vox.popup.download-stats.download') !!}</button>
 			   	</form>
 			</div>
 		</div>

@@ -6,7 +6,7 @@
 		@if(empty($user))
 			<div class="loader-mask" id="main-loader" style="display: none;">
 			    <div class="loader">
-			      	"Loading..."
+			      	{{ trans('vox.common.loading') }}
 			    </div>
 			</div>
 		@endif
@@ -90,7 +90,7 @@
 						<img src="{{ url('new-vox-img/mobile-dv-stats-banner-left-img.svg') }}" class="mobile-stat-img" />
 					</div>
 					<div class="col">
-						<a href="javascript::" id="load-stats" class="red-button"><img src="{{ url('new-vox-img/chart-icon.svg') }}"/>Show live stats</a>
+						<a href="javascript::" id="load-stats" class="red-button"><img src="{{ url('new-vox-img/chart-icon.svg') }}"/>{!! trans('vox.page.stats.show-stats') !!}</a>
 					</div>
 					<div class="col">
 						<img src="{{ url('new-vox-img/dv-stats-banner-right-img.svg') }}" class="pc-stat-img" style="width: 92%;">
@@ -129,7 +129,7 @@
 											@if($question->used_for_stats=='dependency')
 												<label for="format-relation-{{ $question->id }}-{{ $key + 1 }}" class="active dem-label">
 													<input type="checkbox" name="download-demographic[]" value="relation" id="format-relation-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox" checked="checked">
-													Relation
+													{{ trans('vox.page.stats.relation') }}
 													<div class="active-removal"><span>x</span></div>
 												</label>
 											@endif
@@ -137,15 +137,15 @@
 												@if($sk == 'gender')
 													<label for="format-gender-{{ $question->id }}-{{ $key + 1 }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
 														<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox" checked="checked">
-														Sex
+														{{ trans('vox.page.stats.sex') }}
 												@elseif($sk == 'country_id')
 													<label for="format-country_id-{{ $question->id }}-{{ $key + 1 }}" class="{{ $loop->first ? 'active' : '' }} dem-label" style="display: none;">
 														<input type="checkbox" name="download-demographic[]" value="country_id" id="format-country_id-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox">
-														Location
+														{{ trans('vox.page.stats.location') }}
 												@elseif($sk == 'age')
 													<label for="format-age-{{ $question->id }}-{{ $key + 1 }}" class="{{ $loop->first ? 'active' : '' }} dem-dropdown dem-label">
 														<input type="checkbox" name="download-demographic[]" value="age" id="format-age-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox">
-														Age group
+														{{ trans('vox.page.stats.age') }}
 														<div class="dem-arrow">
 															<i class="fas fa-caret-down"></i>
 														</div>
@@ -154,7 +154,7 @@
 															<label for="download-age-all-{{ $question->id }}-{{ $key + 1 }}" class="select-all-dem-label active">
 																<i class="far fa-square"></i>
 																<input type="checkbox" name="download-age[]" value="all" id="download-age-all-{{ $question->id }}-{{ $key + 1 }}" class="select-all-dem dem-checkbox" checked="checked">
-																Select all
+																{{ trans('vox.page.stats.select-all') }}
 															</label>
 															@foreach(config('vox.age_groups') as $ak => $av)
 																<label for="download-age-{{ $ak }}-{{ $question->id }}-{{ $key + 1 }}" class="active">
@@ -176,7 +176,7 @@
 															<label for="download-{{ $sk }}-all-{{ $question->id }}-{{ $key + 1 }}" class="select-all-dem-label active">
 																<i class="far fa-square"></i>
 																<input type="checkbox" name="download-{{ $sk }}[]" value="all" id="download-{{ $sk }}-all-{{ $question->id }}-{{ $key + 1 }}" class="select-all-dem dem-checkbox" checked="checked">
-																Select all
+																{{ trans('vox.page.stats.select-all') }}
 															</label>
 															@foreach(config('vox.details_fields.'.$sk.'.values') as $skk => $sv)
 																<label for="download-{{ $sk }}-{{ $skk }}-{{ $question->id }}-{{ $key + 1 }}" class="active">
@@ -207,7 +207,7 @@
 							@if($question->used_for_stats=='dependency')
 								<label for="format-relation-{{ $question->id }}" class="active dem-label">
 									<input type="checkbox" name="download-demographic[]" value="relation" id="format-relation-{{ $question->id }}" class="download-demographic-checkbox" checked="checked">
-									Relation
+									{{ trans('vox.page.stats.relation') }}
 									<div class="active-removal"><span>x</span></div>
 								</label>
 							@endif
@@ -215,15 +215,15 @@
 								@if($sk == 'gender')
 									<label for="format-gender-{{ $question->id }}" class="{{ $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' }} dem-label">
 										<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}" class="download-demographic-checkbox" {!! $question->used_for_stats!='dependency' ? 'checked="checked"' : '' !!} >
-										Sex
+										{{ trans('vox.page.stats.sex') }}
 								@elseif($sk == 'country_id')
 									<label for="format-country_id-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-label" style="display: none;">
 										<input type="checkbox" name="download-demographic[]" value="country_id" id="format-country_id-{{ $question->id }}" class="download-demographic-checkbox">
-										Location
+										{{ trans('vox.page.stats.location') }}
 								@elseif($sk == 'age')
 									<label for="format-age-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-dropdown dem-label">
 										<input type="checkbox" name="download-demographic[]" value="age" id="format-age-{{ $question->id }}" class="download-demographic-checkbox">
-										Age group
+										{{ trans('vox.page.stats.age') }}
 										<div class="dem-arrow">
 											<i class="fas fa-caret-down"></i>
 										</div>
@@ -232,7 +232,7 @@
 											<label for="download-age-all-{{ $question->id }}" class="select-all-dem-label active">
 												<i class="far fa-square"></i>
 												<input type="checkbox" name="download-age[]" value="all" id="download-age-all-{{ $question->id }}" class="select-all-dem dem-checkbox" checked="checked">
-												Select all
+												{{ trans('vox.page.stats.select-all') }}
 											</label>
 											@foreach(config('vox.age_groups') as $ak => $av)
 												<label for="download-age-{{ $ak }}-{{ $question->id }}" class="active">
@@ -254,7 +254,7 @@
 											<label for="download-{{ $sk }}-all-{{ $question->id }}" class="select-all-dem-label active">
 												<i class="far fa-square"></i>
 												<input type="checkbox" name="download-{{ $sk }}[]" value="all" id="download-{{ $sk }}-all-{{ $question->id }}" class="select-all-dem dem-checkbox" checked="checked">
-												Select all
+												{{ trans('vox.page.stats.select-all') }}
 											</label>
 											@foreach(config('vox.details_fields.'.$sk.'.values') as $skk => $sv)
 												<label for="download-{{ $sk }}-{{ $skk }}-{{ $question->id }}" class="active">
@@ -291,18 +291,23 @@
 					<img class="pc-blurred" src="{{ url('new-vox-img/blurred-stats-1.jpg') }}" width="1140" height="516">
 					<img class="mobile-blurred" src="{{ url('new-vox-img/blurred-stats-mobile.jpg') }}">
 					<div class="blurred-text">
-						<div class="free-text">Free</div>
-						<h2>EXCLUSIVE FUNCTIONS</h2>
-						<p>for registered users only</p>
+						<div class="free-text">{{ trans('vox.page.stats.blurred.title.1') }}</div>
+						<h2>{{ trans('vox.page.stats.blurred.title.2') }}</h2>
+						<p>{{ trans('vox.page.stats.blurred.title.3') }}</p>
 						<div class="download-functions-wrap">
 							<div class="download-functions">
-								<p>✓ Access to all public statistics</p>
-								<p>✓ Downloads in .pdf, .png{{empty(request('app')) ? ', .xlsx' : ''}}</p>
-								<p>✓ Custom survey orders available</p>
+								<p>✓ {{ trans('vox.page.stats.blurred.function.1') }}</p>
+								<p>✓ {{ trans('vox.page.stats.blurred.function.2') }}</p>
+								<p>✓ {{ trans('vox.page.stats.blurred.function.3') }}</p>
 							</div>
 						</div>
-						<a href="javascript:;" class="blue-button blurred-button">SIGN UP FOR FREE</a>
-						<span>Already have an account? <a class="blurred-button log" href="javascript:;">Log in</a></span>
+						<a href="javascript:;" class="blue-button blurred-button">{{ trans('vox.page.stats.blurred.sign-in') }}</a>
+						<span>
+							{!! trans('vox.page.stats.blurred.login', [
+								'link' => '<a class="blurred-button log" href="javascript:;">',
+								'endlink' => '</a>'
+							]) !!}
+						</span>
 					</div>
 				</div>
 			</div>
@@ -311,7 +316,7 @@
 
 	<div class="all-stats-section tac">
 		<div class="container">
-			<h2>STATS SUMMARY</h2>
+			<h2>{{ trans('vox.page.stats.summary.title') }}</h2>
 			<p>				
 				{{ $vox->translateorNew(App::getLocale())->stats_description }}
 			</p>
@@ -328,8 +333,8 @@
 			@endif
 		</div>
 	</div>
-	<a style="display: none;" id="download-link" class="{{ session('download_stat') ? 'for-download' : '' }}" href="{{ session('download_stat') ? getLangUrl('download-pdf/'.session('download_stat')) : 'javascript:;' }}">Download link</a>
-	<a style="display: none;" id="download-link-png" class="{{ session('download_stat_png') ? 'for-download' : '' }}" href="{{ session('download_stat_png') ? getLangUrl('download-png/'.session('download_stat_png')) : 'javascript:;' }}">Download png link</a>
+	<a style="display: none;" id="download-link" class="{{ session('download_stat') ? 'for-download' : '' }}" href="{{ session('download_stat') ? getLangUrl('download-pdf/'.session('download_stat')) : 'javascript:;' }}">{{ trans('vox.page.stats.download-link') }}</a>
+	<a style="display: none;" id="download-link-png" class="{{ session('download_stat_png') ? 'for-download' : '' }}" href="{{ session('download_stat_png') ? getLangUrl('download-png/'.session('download_stat_png')) : 'javascript:;' }}">{{ trans('vox.page.stats.download-png-link') }}</a>
 
 	@if(!empty($user))
 		<input type="hidden" name="current-stats-vox" id="current-stats-vox" value="{{ $vox->id }}">

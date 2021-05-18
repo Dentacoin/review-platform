@@ -9,7 +9,7 @@
 		<div class="flex flex-mobile flex-center break-tablet">
 			<div class="content">
 				<p class="h1">
-					Share your survey idea
+					{{ trans('vox.page.home.request-survey-patient.popup.title') }}
 				</p>
 
 				<form class="form" action="{{ getLangUrl('request-survey-patients') }}" method="post" id="request-survey-form">
@@ -27,7 +27,7 @@
 					<div class="tac">
 						<button type="submit" class="blue-button">{{ trans('vox.page.home.request-survey.popup.send') }}</button>
 					</div>
-					<div class="alert alert-success" style="display: none;">Thank you for helping us improve DentaVox</div>
+					<div class="alert alert-success" style="display: none;">{{ trans('vox.page.home.request-survey-patient.popup.success') }}</div>
 				</form>
 			</div>
 		</div>

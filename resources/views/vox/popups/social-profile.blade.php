@@ -6,10 +6,10 @@
 		<div class="flex flex-mobile flex-center break-tablet">
 			<div class="content">
 				<p class="h1">
-					GET VERIFIED FASTER
+					{!! nl2br(trans('vox.popup.social-profile.title')) !!}
 				</p>
 
-				<p>Let's get to know each other better! If you complete your profile now, you will get verified much faster upon requesting your first rewards.</p>
+				<p>{!! nl2br(trans('vox.popup.social-profile.description')) !!}</p>
 
 				<form class="form" action="{{ getLangUrl('social-profile') }}" method="post" id="social-profile-form">
 					{!! csrf_field() !!}
@@ -19,7 +19,7 @@
 							<div class="centered-hack">
 				    			<img src="{{ url('img/camera.svg') }}">
 								<p>
-			    					+ Add profile photo
+									{!! nl2br(trans('vox.popup.social-profile.add-photo')) !!}
 					    		</p>
 							</div>
 				    		<div class="loader">
@@ -31,22 +31,22 @@
 						<input type="hidden" class="photo-thumb" name="photo-thumb" >
 
 						<div class="tac max-size">
-							<span>Max size: 2MB</span>
+							<span>{!! nl2br(trans('vox.popup.social-profile.max-size')) !!}</span>
 						</div>
 					@endif
 
 					<div class="modern-field alert-after">
 						<input type="text" name="link" id="link" class="modern-input link" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 						<label for="link">
-							<span>Link to your social media profile:</span>
+							<span>{!! nl2br(trans('vox.popup.social-profile.link')) !!}:</span>
 						</label>
 					</div>
 
 					<div class="flex flex-center flex-text-center break-mobile">
-						<a href="javascript:;" class="closer-pop cancel white-button">Cancel</a>
-						<button type="submit" class="blue-button">Update profile</button>
+						<a href="javascript:;" class="closer-pop cancel white-button">{!! nl2br(trans('vox.popup.social-profile.cancel')) !!}</a>
+						<button type="submit" class="blue-button">{!! nl2br(trans('vox.popup.social-profile.update-profile')) !!}</button>
 					</div>
-					<div class="alert alert-warning without-image mobile" style="display: none; margin-top: 20px;">The image is required.</div>
+					<div class="alert alert-warning without-image mobile" style="display: none; margin-top: 20px;">{!! nl2br(trans('vox.popup.social-profile.image-error')) !!}</div>
 				</form>
 			</div>
 		</div>

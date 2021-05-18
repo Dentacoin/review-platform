@@ -285,9 +285,9 @@ class VoxController extends FrontController {
 				$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
 
 				if ($this->user->isVoxRestricted($vox)) {
-					$res_desc = 'The target group of this survey consists of respondents with different demographics. No worries: We have plenty of other opportunities for you! ';
+					$res_desc = trans('vox.page.restricted-questionnaire.description-target');
 				} else {
-					$res_desc = 'This survey reached the limit for users with your demographics. Check again later. No worries: We have plenty of other opportunities for you! ';
+					$res_desc = trans('vox.page.restricted-questionnaire.description-limit');
 				}
 
 				$seos = PageSeo::find(18);
@@ -969,10 +969,7 @@ class VoxController extends FrontController {
 			        				}
 								    $answered[$q] = $a;
 			        			}
-
 			        		}
-
-
 
 	        				$reallist = $list->filter(function ($value, $key) {
 							    return !$value->is_skipped;
