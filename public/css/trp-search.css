@@ -306,6 +306,19 @@
   .result-container.branch .button-submit i {
     background: transparent;
     font-size: 15px; }
+  .result-container.branch .button-submit.mt {
+    bottom: 38px; }
+  .result-container.branch .delete-branch {
+    position: absolute;
+    right: 35px;
+    bottom: 14px;
+    font-size: 14px;
+    background: transparent;
+    color: #46afda; }
+    @media screen and (max-width: 768px) {
+      .result-container.branch .delete-branch {
+        position: static;
+        margin-top: 10px; } }
   .result-container .avatar {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;

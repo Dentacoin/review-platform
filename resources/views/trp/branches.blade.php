@@ -53,7 +53,7 @@
 		    		</div>
 		    	@endif
 		    	@if( $clinic->website )
-		    		<div class="p dentist-website" href="{{ $clinic->getWebsiteUrl() }}" target="_blank">
+		    		<div class="p dentist-website">
 		    			<div class="img">
 			    			<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
 			    		</div>
@@ -134,7 +134,7 @@
 			    		</div>
 			    	@endif
 			    	@if( $dentist->website )
-			    		<div class="p dentist-website" href="{{ $dentist->getWebsiteUrl() }}" target="_blank">
+			    		<div class="p dentist-website">
 			    			<div class="img">
 				    			<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
 				    		</div>
@@ -161,9 +161,15 @@
 						</span>
 					</div>
 					@if(!empty($user) && $user->id == $clinic->id)
-						<div href="javascript:;" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $dentist->id }}" class="button button-submit login-as">
+						<div href="javascript:;" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $dentist->id }}" class="button button-submit login-as {{ $dentist->id != $dentist->mainBranchClinic->id ? 'mt' : '' }}">
 							{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
 						</div>
+
+						@if($dentist->id != $dentist->mainBranchClinic->id)
+							<div href="javascript:;" delete-url="{{ getLangUrl('delete-branch') }}" branch-id="{{ $dentist->id }}" class="delete-branch">
+								Delete Branch X
+							</div>
+						@endif
 					@else
 						<div href="{{ $dentist->getLink() }}" class="button button-submit">
 							{!! nl2br(trans('trp.common.see-profile')) !!}

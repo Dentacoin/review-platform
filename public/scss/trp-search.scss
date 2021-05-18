@@ -453,6 +453,24 @@ $sort_popup_padding: 70px;
   				background: transparent;
     			font-size: 15px;
   			}
+
+  			&.mt {
+  			    bottom: 38px;
+  			}
+  		}
+
+  		.delete-branch {
+			position: absolute;
+			right: 35px;
+			bottom: 14px;
+			font-size: 14px;
+			background: transparent;
+			color: #46afda;
+
+			@media #{$phone} {
+				position: static;
+				margin-top: 10px;
+			}
   		}
     }
 

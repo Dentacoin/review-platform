@@ -2266,6 +2266,13 @@ footer {
           #popup-branch .popup-inner .branch-content .image-label {
             width: 110px;
             height: 110px; } }
+      #popup-branch .popup-inner .branch-content .phone-code-holder {
+        margin-top: 20px;
+        display: block;
+        margin-right: 5px; }
+        @media screen and (max-width: 998px) {
+          #popup-branch .popup-inner .branch-content .phone-code-holder {
+            margin-top: 13px; } }
       #popup-branch .popup-inner .branch-content .max-size-label {
         max-width: 170px;
         margin-left: auto;

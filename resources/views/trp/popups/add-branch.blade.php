@@ -88,11 +88,16 @@
 					<p>{{ trans('trp.popup.add-branch.website.description') }}</p>
 				</div>
 
-				<div class="modern-field alert-after">
-					<input type="text" name="clinic_phone" id="clinic_phone" class="modern-input clinic_phone" autocomplete="off">
-					<label for="clinic_phone">
-						<span>{{ trans('trp.popup.add-branch.phone') }}:</span>
-					</label>
+				<div class="flex flex-mobile alert-after">
+					<div>
+	    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
+					</div>
+					<div style="flex: 1;" class="modern-field alert-after">
+						<input type="text" name="clinic_phone" id="clinic_phone" class="modern-input clinic_phone" autocomplete="off">
+						<label for="clinic_phone">
+							<span>{{ trans('trp.popup.add-branch.phone') }}:</span>
+						</label>
+					</div>
 				</div>
 
 				<div class="flex flex-mobile">

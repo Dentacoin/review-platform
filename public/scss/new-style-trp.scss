@@ -1943,6 +1943,16 @@ footer {
     			}
 			}
 
+			.phone-code-holder {
+				margin-top: 20px;
+			    display: block;
+			    margin-right: 5px;
+
+			    @media #{$tablet} {
+    				margin-top: 13px;
+    			}
+			}
+
 			.max-size-label {
 				max-width: 170px;
 				margin-left: auto;
