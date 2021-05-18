@@ -208,9 +208,9 @@ class VoxesController extends AdminController {
                             if(!empty($q)) {
                                 if (!empty(explode(':',$v)[1])) {
                                     $answ = explode(':',$v)[1];
-                                    $triggers[$question->id] .= $q->question.': '.$answ.'<br/>';
+                                    $triggers[$question->id] .= $q->order.'. '.$q->question.': '.$answ.'<br/>';
                                 } else {
-                                    $triggers[$question->id] .= $q->question.'<br/>';
+                                    $triggers[$question->id] .= $q->order.'. '.$q->question.'<br/>';
                                 }                            
                             }
                         }                        
