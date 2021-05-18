@@ -228,7 +228,7 @@ class VoxesController extends AdminController {
                 })->first();
 
                 if($vox_with_same_slug) {
-                    Request::session()->flash('error-message', 'Slug dublicated!!!!!');
+                    Request::session()->flash('error-message', 'Slug duplicated!!!!!');
                 } else if($item->has_stats && $item->stats_questions->isEmpty()) {
                     Request::session()->flash('error-message', 'Missing stats questions');
                 } else {
