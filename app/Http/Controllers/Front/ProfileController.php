@@ -1216,7 +1216,7 @@ class ProfileController extends FrontController {
      * dentist uploads a profile photo
      */
     public function upload($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') {
+        if(empty($this->user) || !$this->user->is_dentist || ($this->user->is_dentist && !in_array($this->user->status, config('dentist-statuses.approved_test')))) {
             return Response::json(['success' => false ]);
         }
 
@@ -1251,7 +1251,14 @@ class ProfileController extends FrontController {
      * dentist profile edit
      */
     public function info($locale=null) {
-        if(empty($this->user) || ($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test')) {
+
+        if(empty($this->user) || !$this->user->is_dentist || ($this->user->is_dentist && !in_array($this->user->status, config('dentist-statuses.approved_test')))) {
+            if( Request::input('json') ) {
+                $ret = [
+                    'success' => false,
+                ];
+                return Response::json($ret);
+            }
             return redirect(getLangUrl('/'));
         }
 
@@ -1467,7 +1474,7 @@ class ProfileController extends FrontController {
      * dentist verifies patient
      */
     public function asks_accept($locale=null, $ask_id) {
-        if(empty($this->user) || ($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
+        if(empty($this->user) || !$this->user->is_dentist || ($this->user->is_dentist && !in_array($this->user->status, config('dentist-statuses.approved_test')))) {
             return redirect(getLangUrl('/'));
         }
 
@@ -1549,7 +1556,7 @@ class ProfileController extends FrontController {
      * dentist denies patient's request
      */
     public function asks_deny($locale=null, $ask_id) {
-        if(empty($this->user) || ($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
+        if(empty($this->user) || !$this->user->is_dentist || ($this->user->is_dentist && !in_array($this->user->status, config('dentist-statuses.approved_test')))) {
             return redirect(getLangUrl('/'));
         }
 
