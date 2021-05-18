@@ -66,11 +66,11 @@ class ProfileController extends FrontController {
                 'type' => 'array',
                 'required' => false,
             ],
-            'email' => [
-                'type' => 'text',
-                'required' => true,
-                'is_email' => true,
-            ],
+            // 'email' => [
+            //     'type' => 'text',
+            //     'required' => true,
+            //     'is_email' => true,
+            // ],
             'phone' => [
                 'type' => 'text',
                 'required' => true,
@@ -1384,24 +1384,24 @@ class ProfileController extends FrontController {
                 ]);
             }
 
-            if($this->user->validateMyEmail() == true) {
+            // if($this->user->validateMyEmail() == true) {
 
-                if( Request::input('json') ) {
-                    $ret = [
-                        'success' => false,
-                        'messages' => [
-                            'email' => trans('trp.common.invalid-email')
-                        ]
-                    ];
-                    return Response::json($ret);
-                }
+            //     if( Request::input('json') ) {
+            //         $ret = [
+            //             'success' => false,
+            //             'messages' => [
+            //                 'email' => trans('trp.common.invalid-email')
+            //             ]
+            //         ];
+            //         return Response::json($ret);
+            //     }
 
-                return redirect( getLangUrl('/') )
-                ->withInput()
-                ->withErrors([
-                    'email' => trans('trp.common.invalid-email')
-                ]);
-            }
+            //     return redirect( getLangUrl('/') )
+            //     ->withInput()
+            //     ->withErrors([
+            //         'email' => trans('trp.common.invalid-email')
+            //     ]);
+            // }
 
             foreach ($this->profile_fields as $key => $value) {
                 if( Request::exists($key) || (Request::input('field')=='specialization' && $key=='specialization') || $key=='email_public' || (Request::input('field')=='accepted_payment' && $key=='accepted_payment') ) {
