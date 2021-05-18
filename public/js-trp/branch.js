@@ -90,7 +90,9 @@ $(document).ready(function(){
 
         var that = $(this);
 
-        that.html('<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>');
+        if(!that.hasClass('result-container')) {
+            that.html('<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>');
+        }
 
         // $.ajax({
         //     type: "GET",
@@ -138,7 +140,11 @@ $(document).ready(function(){
                                         // $('.sso-imgs').on('load error', function() {
                                         //     ssoLoaded++;        
                                         //     if(ssoLoaded==ssoTotal) {
+                                            if(typeof that.attr('redirect-url') !== 'undefined' && that.attr('redirect-url') !== false) {
+                                                window.location.href = that.attr('redirect-url');
+                                            } else {
                                                 window.location.href = window.location.origin;
+                                            }
                                             // }
                                         // });
                                     },

@@ -92,8 +92,7 @@
 		</a>
 
     	@foreach($items as $dentist)
-
-			<a href="{{ $dentist->getLink() }}" class="result-container branch dentist clearfix" full-dentist-id="{{ $dentist->id }}">
+			<a href="{{ !empty($user) && $user->id == $clinic->id ? 'javascript:;' : $dentist->getLink() }}" class="result-container branch dentist clearfix {{ !empty($user) && $user->id == $clinic->id ? 'login-as' : '' }}" {!! !empty($user) && $user->id == $clinic->id ? 'login-url="'.getLangUrl('loginas').'" branch-id="'.$dentist->id.'" redirect-url="'.getLangUrl('branches/'.$dentist->slug).'"' : '' !!} full-dentist-id="{{ $dentist->id }}">
 				<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}"  style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
 					@if($dentist->hasimage)
 						<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getNames(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
