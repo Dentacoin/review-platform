@@ -348,7 +348,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasOne('App\Models\User', 'id', 'main_branch_clinic_id');
     }
     public function mainBranchEmail() {
-        return $this->mainBranchClinic->email;
+        return $this->main_branch_clinic_id ? $this->mainBranchClinic->email : $this->email;
     }
 
     public function kycEmailPhone() {
