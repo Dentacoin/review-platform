@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\FrontController;
 
+use App\Models\UserCategory;
 use App\Models\UserAction;
 use App\Models\UserBranch;
 use App\Models\PageSeo;
