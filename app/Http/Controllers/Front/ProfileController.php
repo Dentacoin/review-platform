@@ -1385,6 +1385,17 @@ class ProfileController extends FrontController {
             }
 
             if($this->user->validateMyEmail() == true) {
+
+                if( Request::input('json') ) {
+                    $ret = [
+                        'success' => false,
+                        'messages' => [
+                            'email' => trans('trp.common.invalid-email')
+                        ]
+                    ];
+                    return Response::json($ret);
+                }
+
                 return redirect( getLangUrl('/') )
                 ->withInput()
                 ->withErrors([
@@ -1394,6 +1405,7 @@ class ProfileController extends FrontController {
 
             foreach ($this->profile_fields as $key => $value) {
                 if( Request::exists($key) || (Request::input('field')=='specialization' && $key=='specialization') || $key=='email_public' || (Request::input('field')=='accepted_payment' && $key=='accepted_payment') ) {
+
                     if($key=='work_hours') {
                         $wh = Request::input('work_hours');
 

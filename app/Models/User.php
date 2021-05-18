@@ -960,11 +960,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function validateMyEmail() {
+
+        if($this->status == 'clinic_branch') {
+            return false;
+        }
+
         $result = false;
-
-        $email = $this->email ? $this->email : $this->mainBranchEmail();
-
-        $clean_email = str_replace('.', '', $email);
+        $clean_email = str_replace('.', '', $this->email);
         $found_email = self::where('email_clean', 'LIKE', $clean_email)->where('id', '!=', $this->id)->first();
      
         if ($found_email) {
