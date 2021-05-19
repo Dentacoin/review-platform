@@ -132,6 +132,7 @@ return [
                 //'front' => 'front',
                 'trp' => 'trp',
                 'vox' => 'vox',
+                'vox-ios' => 'vox-ios',
                 'validation' => 'validation',
                 'translations' => 'translations',
                 'login-register' => 'login-register',

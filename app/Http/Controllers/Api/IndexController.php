@@ -159,7 +159,7 @@ class IndexController extends ApiController {
 
 		return Response::json( array(
 			'translations_android' => Lang::get('vox', array(), 'en'),
-			'translations_ios' => Lang::get('vox', array(), 'en'),
+			'translations_ios' => Lang::get('vox-ios', array(), 'en'),
 			'users_count' => User::getCount('vox'),
 			'answers_count' => VoxAnswer::getCount(),
 			'dcn_price' => @file_get_contents('/tmp/dcn_price'),
