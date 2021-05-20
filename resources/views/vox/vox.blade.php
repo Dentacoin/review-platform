@@ -301,7 +301,7 @@
 					
 				</p>
 				<div class="tac">
-					<a class="btn inactive closer-pop simple-countdown" alt-text="Continue">
+					<a class="btn inactive closer-pop simple-countdown" alt-text="{{ trans('vox.popup.warning-popup.continue-button') }}">
 						{!! nl2br(trans('vox.popup.warning-popup.continue')) !!} <span>10</span>
 					</a>
 				</div>
@@ -370,12 +370,12 @@
 					<div class="tac">
 						<div class="checkbox">
 							<label class="checkbox-label agree-label" for="agree-faq" style="text-align: left; margin-bottom: 30px; margin-top: -20px;">
-							<input type="checkbox" class="special-checkbox" id="agree-faq" name="agree-faq" value="1">
-							<i class="far fa-square"></i>
-							{!! trans('vox.page.bans.agree-faq', [
-								'link' => '<a href="'.getLangUrl('faq').'" target="_blank">',
-								'endlink' => '</a>',
-							]) !!}
+								<input type="checkbox" class="special-checkbox" id="agree-faq" name="agree-faq" value="1">
+								<i class="far fa-square"></i>
+								{!! trans('vox.page.bans.agree-faq', [
+									'link' => '<a href="'.getLangUrl('faq').'" target="_blank">',
+									'endlink' => '</a>',
+								]) !!}
 							</label>
 						</div>
 						<div class="alert alert-warning rules-error" style="display: none;margin-bottom: 20px;">{!! trans('vox.page.bans.rules.error') !!}</div> 

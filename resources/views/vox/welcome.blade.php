@@ -107,7 +107,6 @@
 								<label class="answer answer" for="answer-gende-m" data-num="m">
 									<input id="answer-gender-m" type="radio" name="gender-answer" class="answer" value="m" style="display: none;">
 									{!! trans('vox.page.questionnaire.question-sex-m') !!}
-									
 								</label>
 								<label class="answer answer" for="answer-gender-f" data-num="f">
 									<input id="answer-gender-f" type="radio" name="gender-answer" class="answer" value="f" style="display: none;">

@@ -2369,6 +2369,19 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
         })->cron("* * * * *");
 
+
+        $schedule->call(function () {
+            echo 'Empty logs '.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            exec('truncate -s 0 /root/.pm2/logs/civic-web-out-temp.log');
+            exec('truncate -s 0 /var/www/html/trp/storage/logs/geoip.log');
+
+            echo 'Empty logs - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+        })->cron("35 * * * *");
+        // })->cron("0 0 * * 0"); //At 00:00 on Sunday
+
+
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
 

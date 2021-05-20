@@ -168,7 +168,7 @@
 							@elseif($user)
 								<div class="user-and-price header-a">
 									@if( $user->platform=='external' )
-										<r style="display: block; color: #38ace5;">Hello, {{ $user->getNames() }}</r>
+										<r style="display: block; color: #38ace5;">{!! trans('vox.header.username', ['username' => $user->getNames() ]) !!}</r>
 										<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
 									@else
 										<a class="my-name" href="javascript:;">
