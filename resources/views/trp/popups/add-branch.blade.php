@@ -48,7 +48,7 @@
 				<div class="alert invite-alert" style="display: none; margin-top: 20px;">
 				</div>
 
-				<a href="javascript:;" id="first-branch-next" class="button next-branch-button" to-step="2" branch-url="{{ getLangUrl('profile/add-new-branch/1') }}">{{ trans('trp.popup.add-branch.button-next') }}</a>
+				<a href="javascript:;" id="first-branch-next" class="button next-branch-button" to-step="2" branch-url="{{ getLangUrl('profile/add-new-branch/1') }}" style="margin-right: auto;">{{ trans('trp.popup.add-branch.button-next') }}</a>
 			</div>
 
 			<div id="branch-option-2" class="branch-content" style="display: none;">
