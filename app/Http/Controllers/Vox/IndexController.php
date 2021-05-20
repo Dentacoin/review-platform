@@ -204,30 +204,27 @@ class IndexController extends FrontController {
 		$voxList = $this->getVoxList();
 
 		$all_taken = false;
+		$latest_blog_posts = null;
 		if(!empty($this->user)) {
 
 			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
 			$untaken_voxes = $untaken_voxes->where('type', 'normal')->count();
-			if($untaken_voxes == count($taken)) {
+			if($untaken_voxes == count($taken) || $this->user->id == 37530) {
 				$all_taken = true;
-			}
-		}
+				$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
 
-		$latest_blog_posts = null;
-		if($all_taken){
-			$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
+				foreach($latest_blog_posts as $lbp) {
+					$post_terms = DB::connection('vox_wordpress_db')->table('term_relationships')->where('object_id', $lbp->ID)->get()->pluck('term_taxonomy_id')->toArray();
+					$category = DB::connection('vox_wordpress_db')->table('terms')->whereIn('term_id', $post_terms)->first();
 
-			foreach($latest_blog_posts as $lbp) {
-				$post_terms = DB::connection('vox_wordpress_db')->table('term_relationships')->where('object_id', $lbp->ID)->get()->pluck('term_taxonomy_id')->toArray();
-				$category = DB::connection('vox_wordpress_db')->table('terms')->whereIn('term_id', $post_terms)->first();
+					$lbp->cat_name = $category->name;
 
-				$lbp->cat_name = $category->name;
+					$post_image_id = DB::connection('vox_wordpress_db')->table('postmeta')->where('post_id', $lbp->ID)->where('meta_key', '_thumbnail_id')->first()->meta_value;
+					$post_image_link = DB::connection('vox_wordpress_db')->table('posts')->where('id', $post_image_id)->first();
 
-				$post_image_id = DB::connection('vox_wordpress_db')->table('postmeta')->where('post_id', $lbp->ID)->where('meta_key', '_thumbnail_id')->first()->meta_value;
-				$post_image_link = DB::connection('vox_wordpress_db')->table('posts')->where('id', $post_image_id)->first();
+					$lbp->img = $post_image_link->guid;
 
-				$lbp->img = $post_image_link->guid;
-
+				}
 			}
 		}
 
