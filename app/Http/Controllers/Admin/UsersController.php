@@ -1960,7 +1960,7 @@ class UsersController extends AdminController {
 
                 $habits_tests[] = [
                     'question' => $v['label'],
-                    'old_answer' => $old_an ? $old_an : (!empty($item->$k) ? $v['values'][$item->$k] : ''),
+                    'old_answer' => $old_an || $old_an === 0 ? $old_an : (!empty($item->$k) || $item->$k === 0 ? $v['values'][$item->$k] : ''),
                     'answer' => $old_an && !empty($item->$k) ? $v['values'][$item->$k] : '',
                     'last_updated' => !empty($habits_last) ? $habits_last->created_at : '',
                     'updates_count' => $habits_count ? $habits_count : '',

@@ -150,6 +150,14 @@ class BanAppealsController extends AdminController {
         } else {
             $item = BanAppeal::find($id);
             $user = $item->user;
+
+            $last_appeal = UserAction::where('user_id', $user->id)->orderBy('id', 'desc');
+
+            if (mb_strpos($last_appeal->reason, 'KYC country') !== false) {
+                $user->skip_civic_kyc_country = true;
+                $user->save();
+            }
+
             $user->restoreActions();
             $user->restore();
 

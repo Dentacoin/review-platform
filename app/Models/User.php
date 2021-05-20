@@ -133,6 +133,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'civic_id',
         'civic_kyc',
         'civic_kyc_hash',
+        'skip_civic_kyc_country',
         'platform',
         'patient_of',
         'is_hub_app_dentist',
