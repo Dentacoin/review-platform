@@ -1313,6 +1313,24 @@ class VoxesController extends AdminController {
 
     }
 
+    public function faqiOS() {
+
+        $pathToFile = base_path().'/resources/lang/en/faq-ios.php';
+        $content = json_decode( file_get_contents($pathToFile), true );
+
+        if(Request::isMethod('post') && request('faq')) {
+            file_put_contents($pathToFile, json_encode(request('faq')));
+            $this->request->session()->flash('success-message', 'FAQs are saved!');
+
+            return Response::json( [
+                'success' => true
+            ] );
+        }
+
+        return $this->showView('voxes-faq', array(
+            'content' => $content
+        ));
+    }
 
 
     public function badges() {

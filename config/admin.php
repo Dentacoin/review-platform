@@ -93,6 +93,7 @@ return [
                 'categories' => 'categories',
                 'scales' => 'scales',
                 'faq' => 'faq',
+                'faq-ios' => 'faq-ios',
                 'badges' => 'badges',
                 'explorer' => 'explorer',
                 'export-survey-data' => 'export-survey-data',
