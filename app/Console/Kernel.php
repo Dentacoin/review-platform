@@ -2378,8 +2378,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             echo 'Empty logs - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron("35 * * * *");
-        // })->cron("0 0 * * 0"); //At 00:00 on Sunday
+        })->cron("0 0 * * 0"); //At 00:00 on Sunday
 
 
         $schedule->call(function () {
