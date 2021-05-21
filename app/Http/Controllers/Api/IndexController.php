@@ -45,6 +45,7 @@ use Validator;
 use Response;
 use Request;
 use Session;
+use Image;
 use Route;
 use Hash;
 use Auth;
@@ -1868,10 +1869,19 @@ class IndexController extends ApiController {
 
     public function socialProfile() {
 
-    	Log::info(json_encode(request()->all()));
+    	$user = Auth::guard('api')->user();
 
-    	return Response::json( [
-            'success' => true,
+    	if(!empty($user)) {
+
+			$newuser->addImage(request()->file('avatar') ? Image::make( request()->file('avatar') )->orientate());
+
+	    	return Response::json( [
+	            'success' => true,
+	        ] );
+	    }
+
+	    return Response::json( [
+            'success' => false,
         ] );
     }
 
