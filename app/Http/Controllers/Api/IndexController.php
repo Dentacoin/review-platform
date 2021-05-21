@@ -1867,22 +1867,22 @@ class IndexController extends ApiController {
 
     }
 
-    public function socialProfile() {
+   //  public function socialProfile() {
 
-    	$user = Auth::guard('api')->user();
+   //  	$user = Auth::guard('api')->user();
 
-    	if(!empty($user)) {
+   //  	if(!empty($user)) {
 
-			$newuser->addImage(request()->file('avatar') ? Image::make( request()->file('avatar') )->orientate());
+			// $newuser->addImage(request()->file('avatar') ? Image::make( request()->file('avatar') )->orientate());
 
-	    	return Response::json( [
-	            'success' => true,
-	        ] );
-	    }
+	  //   	return Response::json( [
+	  //           'success' => true,
+	  //       ] );
+	  //   }
 
-	    return Response::json( [
-            'success' => false,
-        ] );
-    }
+	  //   return Response::json( [
+   //          'success' => false,
+   //      ] );
+   //  }
 
 }
