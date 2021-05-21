@@ -282,6 +282,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::post('dentist-request-survey',			'IndexController@dentistRequestSurvey');
 	Route::any('recommend-dentavox',				'IndexController@recommendDentavox');
 	Route::post('encrypt-user-token',				'IndexController@encryptUserToken');
+	Route::post('social-profile',					'IndexController@socialProfile');
 
 
 	Route::get('get-daily-polls',					'DailyPollsController@getPolls');

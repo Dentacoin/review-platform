@@ -1866,4 +1866,13 @@ class IndexController extends ApiController {
 
     }
 
+    public function socialProfile() {
+
+    	Log::info(json_encode(request()->all()));
+
+    	return Response::json( [
+            'success' => true,
+        ] );
+    }
+
 }
