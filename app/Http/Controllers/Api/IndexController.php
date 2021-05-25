@@ -1873,6 +1873,7 @@ class IndexController extends ApiController {
 
     		Log::info(request()->file('avatar'));
     		Log::info('avatar');
+    		Log::info('user: '.json_encode($user));
     	if(!empty($user)) {
 
 			$user->addImage(Image::make( request()->file('avatar') )->orientate());
