@@ -1907,6 +1907,10 @@ class IndexController extends ApiController {
                 $this->user->save();
 
                 if( Request::input('avatar') ) {
+
+                	Log::info(request()->file('avatar'));
+    				Log::info('avatar');
+
                     $img = Image::make( User::getTempImagePath( Request::input('avatar') ) )->orientate();
                     $this->user->addImage($img);
                 }
