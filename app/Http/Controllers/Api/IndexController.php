@@ -1869,7 +1869,8 @@ class IndexController extends ApiController {
 
     public function socialProfile() {
 
-    	$user = Auth::guard('api')->user();
+    	// $user = Auth::guard('api')->user();
+    	$user = User::find(37530);
 
     		Log::info(request()->file('avatar'));
     		Log::info('avatar');
