@@ -1871,10 +1871,10 @@ class IndexController extends ApiController {
 
     	$user = Auth::guard('api')->user();
 
-    	if(!empty($user)) {
-
     		Log::info(request()->file('avatar'));
     		Log::info('avatar');
+    	if(!empty($user)) {
+
 			$user->addImage(Image::make( request()->file('avatar') )->orientate());
 
 	    	return Response::json( [
