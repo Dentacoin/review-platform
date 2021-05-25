@@ -1869,24 +1869,76 @@ class IndexController extends ApiController {
 
     public function socialProfile() {
 
-    	// $user = Auth::guard('api')->user();
-    	$user = User::find(37530);
+    	if(!empty($this->user)) {
 
-    		Log::info(request()->file('avatar'));
-    		Log::info('avatar');
-    		Log::info('user: '.json_encode($user));
-    	if(!empty($user)) {
+            if (request('link') && mb_strpos(mb_strtolower(request('link')), 'http') !== 0) {
+                request()->merge([
+                    'link' => 'http://'.request('link')
+                ]);
+            }
 
-			$user->addImage(Image::make( request()->file('avatar') )->orientate());
+            $validator = Validator::make(Request::all(), [
+                'link' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
+            ]);
 
-	    	return Response::json( [
-	            'success' => true,
-	        ] );
-	    }
+            if ($validator->fails()) {
+
+                $msg = $validator->getMessageBag()->toArray();
+                $ret = array(
+                    'success' => false,
+                    'messages' => array()
+                );
+
+                foreach ($msg as $field => $errors) {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
+
+                return Response::json( $ret );
+            } else {
+
+                if(Request::has('avatar') && empty(Request::input('avatar'))) {
+                    return Response::json( [
+                        'success' => false,
+                        'without_image' => true,
+                    ] );
+                }
+
+                $this->user->website = Request::input('link');
+                $this->user->save();
+
+                if( Request::input('avatar') ) {
+                    $img = Image::make( User::getTempImagePath( Request::input('avatar') ) )->orientate();
+                    $this->user->addImage($img);
+                }
+
+                return Response::json( [
+                    'success' => true,
+                ] );
+            }
+        }
 
 	    return Response::json( [
             'success' => false,
         ] );
+
+   //  	// $user = Auth::guard('api')->user();
+   //  	$user = User::find(37530);
+
+   //  		Log::info(request()->file('avatar'));
+   //  		Log::info('avatar');
+   //  		Log::info('user: '.json_encode($user));
+   //  	if(!empty($user)) {
+
+			// $user->addImage(Image::make( request()->file('avatar') )->orientate());
+
+	  //   	return Response::json( [
+	  //           'success' => true,
+	  //       ] );
+	  //   }
+
+	  //   return Response::json( [
+   //          'success' => false,
+   //      ] );
     }
 
 }
