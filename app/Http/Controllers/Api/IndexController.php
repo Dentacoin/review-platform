@@ -1867,7 +1867,30 @@ class IndexController extends ApiController {
 
     }
 
-    public function socialProfile() {
+    public function socialProfileImage() {
+
+    	// $user = Auth::guard('api')->user();
+    	$user = User::find(37530);
+
+    		Log::info(request()->file('avatar'));
+    		Log::info(request()->all());
+    		Log::info('avatar');
+    		Log::info('user: '.json_encode($user));
+    	if(!empty($user)) {
+
+			$user->addImage(Image::make( request()->file('avatar') )->orientate());
+
+	    	return Response::json( [
+	            'success' => true,
+	        ] );
+	    }
+
+	    return Response::json( [
+            'success' => false,
+        ] );
+    }
+
+    public function socialProfileLink() {
 
     	if(!empty($this->user)) {
 
@@ -1896,24 +1919,8 @@ class IndexController extends ApiController {
                 return Response::json( $ret );
             } else {
 
-                if(Request::has('avatar') && empty(Request::input('avatar'))) {
-                    return Response::json( [
-                        'success' => false,
-                        'without_image' => true,
-                    ] );
-                }
-
                 $this->user->website = Request::input('link');
                 $this->user->save();
-
-                if( Request::input('avatar') ) {
-
-                	Log::info(request()->file('avatar'));
-    				Log::info('avatar');
-
-                    $img = Image::make( User::getTempImagePath( Request::input('avatar') ) )->orientate();
-                    $this->user->addImage($img);
-                }
 
                 return Response::json( [
                     'success' => true,
@@ -1924,25 +1931,6 @@ class IndexController extends ApiController {
 	    return Response::json( [
             'success' => false,
         ] );
-
-   //  	// $user = Auth::guard('api')->user();
-   //  	$user = User::find(37530);
-
-   //  		Log::info(request()->file('avatar'));
-   //  		Log::info('avatar');
-   //  		Log::info('user: '.json_encode($user));
-   //  	if(!empty($user)) {
-
-			// $user->addImage(Image::make( request()->file('avatar') )->orientate());
-
-	  //   	return Response::json( [
-	  //           'success' => true,
-	  //       ] );
-	  //   }
-
-	  //   return Response::json( [
-   //          'success' => false,
-   //      ] );
     }
 
 }
