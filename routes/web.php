@@ -253,6 +253,15 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('ban_appeals/reject/{id}', 			'BanAppealsController@reject');
 	Route::any('ban_appeals/pending/{id}', 			'BanAppealsController@pending');
 	Route::any('ban_appeals/info/{id}', 			'BanAppealsController@userInfo');
+
+	Route::any('support/content', 					'SupportController@content');
+	Route::any('support/content/add', 				'SupportController@add_content');
+	Route::any('support/content/edit/{id}', 		'SupportController@edit_content');
+	Route::any('support/content/delete/{id}', 		'SupportController@delete_content');
+	Route::any('support/categories', 				'SupportController@categories');
+	Route::any('support/categories/add', 			'SupportController@add_category');
+	Route::any('support/categories/edit/{id}', 		'SupportController@edit_category');
+	Route::any('support/categories/delete/{id}', 	'SupportController@delete_category');
 });
 
 
@@ -282,7 +291,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::post('dentist-request-survey',			'IndexController@dentistRequestSurvey');
 	Route::any('recommend-dentavox',				'IndexController@recommendDentavox');
 	Route::post('encrypt-user-token',				'IndexController@encryptUserToken');
-	Route::post('social-profile',					'IndexController@socialProfile');
+	Route::post('social-profile-link',				'IndexController@socialProfileLink');
+	Route::post('social-profile-image',				'IndexController@socialProfileImage');
 
 
 	Route::get('get-daily-polls',					'DailyPollsController@getPolls');
@@ -434,6 +444,12 @@ $reviewRoutes = function () {
 			Route::get('{query?}/{filter?}', 					'DentistsController@search')->where('locale', '(en)');
 
 		});
+
+		// Route::group(['namespace' => 'Support'], function () {
+
+		// 	Route::get('support', 								'IndexController@index');
+
+		// });
 	});
 	//Route::any('/{any}', 								'Front\NotFoundController@home')->where('any', '.*');
 	//Route::any('page-not-found', 								'Front\NotFoundController@home');
@@ -525,7 +541,5 @@ $voxRoutes = function () {
 };
 
 Route::domain('vox.dentacoin.com')->group($voxRoutes);
-Route::domain('vox.dentavox.dentacoin.com')->group($voxRoutes);
-
 Route::domain('dentavox.dentacoin.com')->group($voxRoutes);
 Route::domain('urgent.dentavox.dentacoin.com')->group($voxRoutes);
