@@ -1869,21 +1869,27 @@ class IndexController extends ApiController {
 
     public function socialProfileImage() {
 
-    	// $user = Auth::guard('api')->user();
-    	$user = User::find(37530);
+    	if(!empty(request('userId'))) {
 
-    		Log::info(request()->file('avatar'));
-    		Log::info(request()->all());
-    		Log::info('avatar');
-    		Log::info('user: '.json_encode($user));
-    	if(!empty($user)) {
+	    	$user = User::decrypt(request('userId')) ? User::find(User::decrypt(request('userId'))) : null;
 
-			$user->addImage(Image::make( request()->file('avatar') )->orientate());
+	    	if(!empty($user)) {
 
-	    	return Response::json( [
-	            'success' => true,
-	        ] );
-	    }
+	    		Log::info(request()->file('avatar'));
+	    		Log::info(request()->all());
+	    		Log::info('avatar');
+	    		Log::info('user: '.json_encode($user));
+
+		    	if(!empty($user)) {
+
+					$user->addImage(Image::make( request()->file('avatar') )->orientate());
+
+			    	return Response::json( [
+			            'success' => true,
+			        ] );
+			    }
+	    	}
+    	}
 
 	    return Response::json( [
             'success' => false,
