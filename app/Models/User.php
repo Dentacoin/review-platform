@@ -2650,6 +2650,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $i++;
                     $info .= '<p>'.$i.'. <a href="'.url('cms/users/edit/'.$dn->id).'">'.$dn->name.' '.($dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' ).'</a></p><div class="bottom-border"> </div>';
                 }
+            } else {
+                $duplicated_kyc = UserAction::where('user_id', $this->id)->where('reason', '%LIKE%', 'Duplicated Civic KYC')->first();
+
+                if(!empty($duplicated_kyc)) {
+                    $info .= '<p>Duplicated KYC</p>';
+                }
             }
         }
 
