@@ -2627,7 +2627,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         $info = '';
 
-        $duplicated_names = collect();
         if( !empty($this->name)) {
             $duplicated_names = self::where('id', '!=', $this->id)->where('name', 'LIKE', $this->name)->withTrashed()->get();
             if($duplicated_names->isNotEmpty()) {
@@ -2640,7 +2639,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
         }
 
-        $duplicated_kyc = collect();
         if( !empty($this->civic_kyc_hash)) {
             $duplicated_kyc = self::where('id', '!=', $this->id)->where('civic_kyc_hash', $this->civic_kyc_hash)->withTrashed()->get();
             if($duplicated_kyc->isNotEmpty()) {
@@ -2650,13 +2648,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $i++;
                     $info .= '<p>'.$i.'. <a href="'.url('cms/users/edit/'.$dn->id).'">'.$dn->name.' '.($dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' ).'</a></p><div class="bottom-border"> </div>';
                 }
-            } else {
-                $duplicated_kyc = UserAction::where('user_id', $this->id)->where('reason', 'LIKE', '%Duplicated Civic KYC%')->first();
-
-                if(!empty($duplicated_kyc)) {
-                    $info .= '<p>Duplicated KYC</p>';
-                }
             }
+        }
+
+        $duplicated_kyc_reason = UserAction::where('user_id', $this->id)->where('reason', 'LIKE', '%Duplicated Civic KYC%')->first();
+
+        if(!empty($duplicated_kyc_reason)) {
+            $info .= '<p>Duplicated KYC</p>';
         }
 
         if( $this->wallet_addresses->isNotEmpty()) {
