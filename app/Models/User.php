@@ -2655,6 +2655,18 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         if(!empty($duplicated_kyc_reason)) {
             $info .= '<p>Duplicated KYC</p>';
+            $reason = explode('Duplicated Civic KYC: ',$duplicated_kyc_reason->reason);
+
+            if(isset($reason[1])) {
+                $user = User::where('email', 'LIKE', $reason[1])->first();
+                if(!empty($user)) {
+                    $info .= '<p><a href="'.url('cms/users/edit/'.$user->id).'">'.$user->name.'</a></p>';
+                } else {
+                    $info .= '<p>Deleted user</p>';
+                }
+            } else {
+                '<p>We didn\'t record the user</p>';
+            }
         }
 
         if( $this->wallet_addresses->isNotEmpty()) {
