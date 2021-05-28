@@ -2660,12 +2660,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             if(isset($reason[1])) {
                 $user = User::where('email', 'LIKE', $reason[1])->first();
                 if(!empty($user)) {
-                    $info .= '<p><a href="'.url('cms/users/edit/'.$user->id).'">'.$user->name.'</a></p>';
+                    $info .= '<p>1. <a href="'.url('cms/users/edit/'.$user->id).'">'.$user->name.'</a></p>';
                 } else {
-                    $info .= '<p>Deleted user</p>';
+                    $info .= '<p>1. Deleted user</p>';
                 }
             } else {
-                '<p>We didn\'t record the user</p>';
+                '<p>1. We didn\'t record the user</p>';
             }
         }
 
