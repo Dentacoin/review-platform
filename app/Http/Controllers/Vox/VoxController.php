@@ -1658,6 +1658,10 @@ class VoxController extends FrontController {
                                             $trigger_question = $triggerId;
                                         }
 
+                                     //    if($next_question->id == 18573) {
+	                                    //     echo '<br/>Q id: '.$triggerId;
+	                                    // }
+
                                         if(mb_strpos($triggerAnswers, '!')!==false) {
                                             $invert_trigger_logic = true;
                                             $triggerAnswers = substr($triggerAnswers, 1);
@@ -1698,7 +1702,6 @@ class VoxController extends FrontController {
                                         }
 
 
-
                                         if(!empty($allowedAnswers)) {
                                             $givenAnswers = [];
                                             if(is_object($trigger_question)) {
@@ -1710,6 +1713,11 @@ class VoxController extends FrontController {
                                                 //demographic
                                                 $givenAnswers[] = $user->$trigger_question;
                                             }
+
+                                      //       if($next_question->id == 18573) {
+		                                    //     echo '<br/>allowedAnswers: '.json_encode($allowedAnswers);
+		                                    //     echo '<br/>givenAnswers: '.json_encode($givenAnswers);
+		                                    // }
 
                                             // echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($allowedAnswers, true).' / Answer: '.var_export($givenAnswers, true).' / Inverted logic: '.($invert_trigger_logic ? 'da' : 'ne').'<br/>';
 
@@ -1727,16 +1735,16 @@ class VoxController extends FrontController {
 
                                                     if($invert_trigger_logic) {
                                                         if(!$found) {
-                                                            $triggerSuccess[$ga] = true;
+                                                            $triggerSuccess[$triggerId] = true;
                                                         } else {
-                                                            $triggerSuccess[$ga] = false;
+                                                            $triggerSuccess[$triggerId] = false;
                                                         }
                                                     } else {
 
                                                         if($found) {
-                                                            $triggerSuccess[$ga] = true;
+                                                            $triggerSuccess[$triggerId] = true;
                                                         } else {
-                                                            $triggerSuccess[$ga] = false;
+                                                            $triggerSuccess[$triggerId] = false;
                                                         }
                                                     }
                                                 } else {
@@ -1759,23 +1767,33 @@ class VoxController extends FrontController {
                                                     } else {
                                                         if($invert_trigger_logic) {
                                                             if( !empty($ga) && !in_array($ga, $allowedAnswers) ) {
-                                                                $triggerSuccess[$ga] = true;
+                                                                $triggerSuccess[$triggerId] = true;
                                                             } else {
-                                                                $triggerSuccess[$ga] = false;
+                                                                $triggerSuccess[$triggerId] = false;
                                                             }
                                                         } else {
                                                             // echo in_array($ga, $allowedAnswers) ? '<br/>in _array' : '<br/>not_in array';
                                                             if( !empty($ga) && in_array($ga, $allowedAnswers) ) {
-                                                                $triggerSuccess[$ga] = true;
+                                                                $triggerSuccess[$triggerId] = true;
                                                             } else {
-                                                                $triggerSuccess[$ga] = false;
+                                                                $triggerSuccess[$triggerId] = false;
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
+
+                                      //       if($next_question->id == 18573) {
+		                                    //     echo '<br/>Q id - trugger success: '.json_encode($triggerSuccess);
+		                                    // }
                                         }
                                     }
+
+
+
+                                    // if($next_question->id == 18573) {
+                                    // 	dd($triggerSuccess);
+                                    // }
 
                                     if( $next_question->trigger_type == 'or' ) { // ANY of the conditions should be met (A or B or C)
                                         if( !in_array(true, $triggerSuccess) ) {
