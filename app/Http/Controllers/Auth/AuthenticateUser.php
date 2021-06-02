@@ -114,7 +114,7 @@ class AuthenticateUser extends FrontController
         $header[] = 'Authorization: Bearer ' . $token;
         $header[] = 'Cache-Control: no-cache';
 
-        if(request()->getHttpHost() == 'urgent.dentavox.dentacoin.com' || request()->getHttpHost() == 'urgent.reviews.dentacoin.com') {
+        if(request()->getHttpHost() == 'urgent.dentavox.dentacoin.com' || request()->getHttpHost() == 'urgent.reviews.dentacoin.com' || request()->getHttpHost() == 'dev-support.dentacoin.com') {
             $url = 'https://dev-api.dentacoin.com/api/check-user-info/';
         } else {
             $url = 'https://api.dentacoin.com/api/check-user-info/';
