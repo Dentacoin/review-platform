@@ -331,8 +331,8 @@
     position: relative; }
     @media screen and (max-width: 768px) {
       .result-container .avatar {
-        width: 115px;
-        height: 115px;
+        width: 100px;
+        height: 100px;
         padding-top: 0px;
         margin-left: auto;
         margin-right: auto; } }
