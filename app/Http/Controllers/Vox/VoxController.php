@@ -520,14 +520,14 @@ class VoxController extends FrontController {
 
         	} else {
 
-				$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
-				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
-				if(!empty($using_vpn) && empty($is_whitelist_ip)) {
-					$ret['success'] = false;
-					$ret['is_vpn'] = true;
+				// $using_vpn = VpnIp::where('ip', User::getRealIp())->first();
+				// $is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
+				// if(!empty($using_vpn) && empty($is_whitelist_ip)) {
+				// 	$ret['success'] = false;
+				// 	$ret['is_vpn'] = true;
 
-					return Response::json( $ret );
-				}
+				// 	return Response::json( $ret );
+				// }
 
 
 	        	$q = Request::input('question');
