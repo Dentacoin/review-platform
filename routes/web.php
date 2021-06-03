@@ -265,6 +265,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('support/categories/edit/{id}', 		'SupportController@edit_category');
 	Route::any('support/categories/delete/{id}', 	'SupportController@delete_category');
 	Route::any('support/contact', 					'SupportController@contact');
+
+	Route::any('vpn', 								'VpnIpsController@list');
 });
 
 

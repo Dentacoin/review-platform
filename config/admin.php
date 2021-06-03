@@ -140,6 +140,9 @@ return [
         'registrations' => array(
             'icon' => 'plus-circle',
         ),
+        'vpn' => array(
+            'icon' => 'wifi',
+        ),
         'translations' => array(
             'icon' => 'globe',
             'js' => array(
@@ -175,7 +178,6 @@ return [
             'subpages' => array(
                 'trp' => 'trp',
                 'api' => 'api',
-                'api_civic' => 'api_civic',
                 'api_withdraw' => 'api_withdraw',
                 'api-ban-appeals' => 'api-ban-appeals',
             ),

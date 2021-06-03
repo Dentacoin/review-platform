@@ -482,7 +482,9 @@ $(document).ready(function(){
                         $('input[name="_token"]').val(data.token);
 
                         if(data.is_vpn) {
-                            // $('.popup.ban').addClass('active');
+                            $('.question-group').find('.loader').remove();
+                            $('.popup.vpn').addClass('active');
+                            ajax_is_running = false;
                             return;
                         }
 

@@ -1456,25 +1456,46 @@ p.h2-bold {
             width: 30px;
             height: 30px;
             margin: 0px 5px; }
-  .popup.unbanned .wrapper .inner, .popup.ban .wrapper .inner, .popup.warning .wrapper .inner {
+  .popup.vpn .wrapper .inner, .popup.unbanned .wrapper .inner, .popup.ban .wrapper .inner, .popup.warning .wrapper .inner {
     margin: 60px 0 30px auto; }
     @media screen and (max-width: 768px) {
-      .popup.unbanned .wrapper .inner, .popup.ban .wrapper .inner, .popup.warning .wrapper .inner {
+      .popup.vpn .wrapper .inner, .popup.unbanned .wrapper .inner, .popup.ban .wrapper .inner, .popup.warning .wrapper .inner {
         margin: 10px 0 0px auto; } }
-    .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
+    .popup.vpn .wrapper .inner p, .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
       margin-top: 55px;
       margin-bottom: 75px;
       font-size: 20px;
       color: #060606; }
       @media screen and (max-width: 1100px) {
-        .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
+        .popup.vpn .wrapper .inner p, .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
           font-size: 16px; } }
       @media screen and (max-width: 768px) {
-        .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
+        .popup.vpn .wrapper .inner p, .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
           font-size: 12px;
           text-align: center;
           margin-top: 15px;
           margin-bottom: 25px; } }
+  .popup.vpn .wrapper {
+    padding: 60px 30px 80px; }
+    @media screen and (max-width: 1080px) {
+      .popup.vpn .wrapper {
+        padding: 20px 30px 60px; } }
+    @media screen and (max-width: 768px) {
+      .popup.vpn .wrapper {
+        padding: 15px; } }
+    .popup.vpn .wrapper .inner p {
+      margin-top: 15px;
+      margin-bottom: 50px; }
+      @media screen and (max-width: 768px) {
+        .popup.vpn .wrapper .inner p {
+          font-size: 15px;
+          margin-bottom: 10px; } }
+    .popup.vpn .wrapper .inner small {
+      font-size: 15px;
+      font-style: italic; }
+      @media screen and (max-width: 768px) {
+        .popup.vpn .wrapper .inner small {
+          font-size: 11px; } }
   .popup.unbanned .wrapper .inner h2 {
     text-transform: none; }
   .popup.unbanned .wrapper .inner p {

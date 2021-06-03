@@ -1989,6 +1989,7 @@ p.h2-bold {
 		}
 	}
 
+	&.vpn,
 	&.unbanned,
 	&.ban,
 	&.warning {
@@ -2016,6 +2017,41 @@ p.h2-bold {
 						margin-top: 15px;
 						margin-bottom: 25px;
 					}
+				}
+			}
+		}
+	}
+
+	&.vpn {
+		.wrapper {
+		    padding: 60px 30px 80px;
+
+		    @media #{$tablet} {
+		    	padding: 20px 30px 60px;
+		    }
+
+		    @media #{$phone} {
+		    	padding: 15px;
+		    }
+
+			.inner {
+				p {
+					margin-top: 15px;
+					margin-bottom: 50px;
+
+					@media #{$phone} {
+						font-size: 15px;
+						margin-bottom: 10px;
+					}
+				}
+
+				small {
+					font-size: 15px;
+    				font-style: italic;
+
+    				@media #{$phone} {
+    					font-size: 11px;
+    				}
 				}
 			}
 		}

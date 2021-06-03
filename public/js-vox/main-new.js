@@ -627,7 +627,7 @@ $(document).ready(function(){
 					$(this).find('.ajax-alert').remove();
 				}
 
-				if($(this).hasClass('warning') || $(this).hasClass('download-stats-popup') || $(this).hasClass('ban') ) {
+				if($(this).hasClass('warning') || $(this).hasClass('download-stats-popup') || $(this).hasClass('ban') || $(this).hasClass('vpn') ) {
 					$(this).removeClass('active');
 				} else {
 					$('.popup:not(.ban):not(.warning):not(.first-test):not(.download-stats-popup)').remove();

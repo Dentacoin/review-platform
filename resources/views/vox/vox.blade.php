@@ -326,6 +326,24 @@
 		</div>
 	</div>
 
+	<div class="popup vpn close-on-shield">
+		<div class="wrapper">
+			<img src="{{ url('new-vox-img/vpn.png') }}" class="zman" />
+			<div class="inner">
+				<h2>Oops, VPN or proxy detected</h2>
+				<p>
+					It seems like you are using VPN or proxy. Please turn it off to access your DentaVox platform. 
+				</p>
+				<small>
+					If you have disabled the VPN, proxy or routing software and you still see this message, contact your internet service provider for further assistance.
+				</small>
+			</div>
+			<a class="closer-pop x">
+				<i class="fas fa-times"></i>
+			</a>
+		</div>
+	</div>
+
 	@if($welcomerules)
 
 		<div class="popup active first-test">
