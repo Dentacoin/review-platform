@@ -19,6 +19,7 @@ use App\Models\Recommendation;
 use App\Models\VoxCrossCheck;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
+use App\Models\WhitelistIp;
 use App\Models\UserDevice;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -31,6 +32,7 @@ use App\Models\VoxScale;
 use App\Models\PageSeo;
 use App\Models\Country;
 use App\Models\Reward;
+use App\Models\VpnIp;
 use App\Models\Admin;
 use App\Models\Email;
 use App\Models\User;
@@ -631,6 +633,16 @@ class IndexController extends ApiController {
 	    	$ret = [
 	    		'success' => true,
 	    	];
+
+	    	if(!$user->is_dentist) {
+				$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
+				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
+				if(!empty($using_vpn) && empty($is_whitelist_ip)) {
+					$ret['is_vpn'] = true;
+
+					return Response::json( $ret );
+				}
+    		}
 
 	    	$q = request('question');
 	    	$vox = Vox::find(request('vox_id'));
