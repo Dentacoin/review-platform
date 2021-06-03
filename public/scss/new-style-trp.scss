@@ -761,8 +761,8 @@ footer {
 		position: static;
 		opacity: 1;
 		height: auto;
-		padding-top: 40px;
-		padding-bottom: 40px;
+		padding-top: 20px;
+		padding-bottom: 20px;
 	}
 
 	&.gray-footer {
@@ -800,7 +800,7 @@ footer {
 		    display: block;
 		    text-align: center;
 		    width: 100%;
-		    margin-top: 25px;
+		    margin-top: 15px;
 		}
 
 		img {
@@ -834,7 +834,7 @@ footer {
 			margin: 7px 0px 10px 0px;
 		}
 		@media #{$phone} {
-			margin: 0px 0px 20px 0px;
+			margin: 0px 0px 10px 0px;
 		}
 
 		a {
@@ -846,7 +846,6 @@ footer {
 			color: black;
 			transition: all 0.3s ease;
 
-
 			@media #{$tablet} {
 				display: block;
 				border: none;
@@ -857,8 +856,9 @@ footer {
 			@media #{$phone} {
 				display: inline-block;
 				border-right: 1px solid black;
-				padding: 0px 18px;
-				margin: 8px 0px;
+				padding: 0px 9px;
+			    margin: 8px 0px;
+			    margin-left: -6px;
 			}
 
 
@@ -899,7 +899,7 @@ footer {
 		@media #{$phone} {
 			order: 1;
 			font-size: 0px;
-			margin: 0px auto 25px auto;
+			margin: 0px auto 15px auto;
 		}
 
 		.social {

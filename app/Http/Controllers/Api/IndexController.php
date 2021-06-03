@@ -635,7 +635,7 @@ class IndexController extends ApiController {
 	    	];
 
 	    	if($user->id == 37530) {
-	    		
+	    	// if(!$user->is_dentist) {
 				$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
 				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
 				if(!empty($using_vpn) && empty($is_whitelist_ip)) {
@@ -644,8 +644,6 @@ class IndexController extends ApiController {
 					return Response::json( $ret );
 				}
 	    	}
-	    	// if(!$user->is_dentist) {
-    		// }
 
 	    	$q = request('question');
 	    	$vox = Vox::find(request('vox_id'));

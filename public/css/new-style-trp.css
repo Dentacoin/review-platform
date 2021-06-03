@@ -1454,8 +1454,8 @@ footer {
       position: static;
       opacity: 1;
       height: auto;
-      padding-top: 40px;
-      padding-bottom: 40px; } }
+      padding-top: 20px;
+      padding-bottom: 20px; } }
   footer.gray-footer {
     background-color: #f7f7f7; }
   footer .container {
@@ -1483,7 +1483,7 @@ footer {
       display: block;
       text-align: center;
       width: 100%;
-      margin-top: 25px; } }
+      margin-top: 15px; } }
   footer .footer-logo img {
     width: 37px;
     height: 37px;
@@ -1505,7 +1505,7 @@ footer {
         margin: 7px 0px 10px 0px; } }
     @media screen and (max-width: 768px) {
       footer .footer-menu {
-        margin: 0px 0px 20px 0px; } }
+        margin: 0px 0px 10px 0px; } }
     footer .footer-menu a {
       font-size: 13px;
       font-weight: 600;
@@ -1524,8 +1524,9 @@ footer {
         footer .footer-menu a {
           display: inline-block;
           border-right: 1px solid black;
-          padding: 0px 18px;
-          margin: 8px 0px; } }
+          padding: 0px 9px;
+          margin: 8px 0px;
+          margin-left: -6px; } }
       footer .footer-menu a:first-child {
         padding-left: 0px;
         margin-left: 0px; }
@@ -1553,7 +1554,7 @@ footer {
       footer .socials {
         order: 1;
         font-size: 0px;
-        margin: 0px auto 25px auto; } }
+        margin: 0px auto 15px auto; } }
     footer .socials .social {
       display: block;
       float: right;

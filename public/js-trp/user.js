@@ -39,7 +39,7 @@ $(document).ready(function(){
         });
     }
 
-    $('.header-info i').click( function() {
+    $('.header-info .fa-search').click( function() {
         $('.home-search-form').show();
         $(this).hide();
         $('#search-input').focus();

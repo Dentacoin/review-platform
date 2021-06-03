@@ -389,6 +389,7 @@ $sort_popup_padding: 70px;
     	width: 300px;
 	    margin-right: auto;
 	    margin-left: auto;
+	    flex-direction: column;
     }
 
     &.current-branch {
@@ -485,8 +486,7 @@ $sort_popup_padding: 70px;
 	    position: relative;
 
 	    @media #{$phone} {
-	    	flex: 4;
-	    	min-width: 115px;
+	    	width: 115px;
 		    height: 115px;
 		    padding-top: 0px;
 		    margin-right: 0px;
@@ -533,6 +533,7 @@ $sort_popup_padding: 70px;
 
     		@media #{$phone} {
     			margin-bottom: 10px;
+    			text-align: center;
     		}
     	}
 
@@ -567,6 +568,10 @@ $sort_popup_padding: 70px;
     		align-items: center;
     		margin-bottom: 20px;
 
+    		@media #{$phone} {
+    			margin-bottom: 10px;
+    		}
+
     		img {
     			max-width: 15px;
     			margin-right: 12px;
@@ -577,7 +582,7 @@ $sort_popup_padding: 70px;
 				font-size: 14px;
 
 				@media #{$phone} {
-					font-size: 12px;
+					font-size: 14px;
 				}
 			}
     	}
@@ -623,7 +628,8 @@ $sort_popup_padding: 70px;
 		display: flex;
 
 		@media #{$phone} {
-			font-size: 12px;
+			font-size: 14px;
+			margin-bottom: 7px;
 		}
 
 		.img {
@@ -643,7 +649,7 @@ $sort_popup_padding: 70px;
 			}
 
 			@media #{$phone} {
-				font-size: 12px;
+				font-size: 14px;
 			}
 		}
 	}
@@ -665,6 +671,16 @@ $sort_popup_padding: 70px;
     .ratings {
     	@media #{$phone} {
 			margin-top: 10px;
+			margin-bottom: 10px;
+			display: flex;
+		    align-items: center;
+		    justify-content: center;
+		}
+
+		.stars {
+			@media #{$phone} {
+			    margin-right: 3px;
+			}
 		}
 
 		.rating {

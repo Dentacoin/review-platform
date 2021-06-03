@@ -268,7 +268,8 @@
     .result-container {
       width: 300px;
       margin-right: auto;
-      margin-left: auto; } }
+      margin-left: auto;
+      flex-direction: column; } }
   .result-container.current-branch {
     border: 10px solid;
     border-image-slice: 1;
@@ -330,8 +331,7 @@
     position: relative; }
     @media screen and (max-width: 768px) {
       .result-container .avatar {
-        flex: 4;
-        min-width: 115px;
+        width: 115px;
         height: 115px;
         padding-top: 0px;
         margin-right: 0px; } }
@@ -367,7 +367,8 @@
       margin-bottom: 20px; }
       @media screen and (max-width: 768px) {
         .result-container .media-right h4 {
-          margin-bottom: 10px; } }
+          margin-bottom: 10px;
+          text-align: center; } }
     .result-container .media-right .dentist-website {
       display: flex; }
       .result-container .media-right .dentist-website .img {
@@ -389,6 +390,9 @@
       display: flex;
       align-items: center;
       margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .result-container .media-right .top-dentist {
+          margin-bottom: 10px; } }
       .result-container .media-right .top-dentist img {
         max-width: 15px;
         margin-right: 12px; }
@@ -397,7 +401,7 @@
         font-size: 14px; }
         @media screen and (max-width: 768px) {
           .result-container .media-right .top-dentist span {
-            font-size: 12px; } }
+            font-size: 14px; } }
   .result-container .type {
     color: #9f9f9f;
     font-size: 14px;
@@ -425,7 +429,8 @@
     display: flex; }
     @media screen and (max-width: 768px) {
       .result-container .p {
-        font-size: 12px; } }
+        font-size: 14px;
+        margin-bottom: 7px; } }
     .result-container .p .img {
       width: 25px; }
       .result-container .p .img img {
@@ -436,7 +441,7 @@
         color: gray; }
       @media screen and (max-width: 768px) {
         .result-container .p span {
-          font-size: 12px; } }
+          font-size: 14px; } }
   .result-container h4 {
     font-weight: bold; }
     @media screen and (max-width: 768px) {
@@ -446,7 +451,14 @@
     text-decoration: none; }
   @media screen and (max-width: 768px) {
     .result-container .ratings {
-      margin-top: 10px; } }
+      margin-top: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center; } }
+  @media screen and (max-width: 768px) {
+    .result-container .ratings .stars {
+      margin-right: 3px; } }
   @media screen and (max-width: 768px) {
     .result-container .ratings .rating {
       vertical-align: text-top;
