@@ -11,6 +11,7 @@ class UserLogin extends Model {
         'user_id',
         'platform',
         'ip',
+        'is_vpn',
         'device',
         'brand',
         'model',
