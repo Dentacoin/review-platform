@@ -8,6 +8,7 @@ use DeviceDetector\DeviceDetector;
 
 use App\Models\VoxCrossCheck;
 use App\Models\VoxQuestion;
+use App\Models\WhitelistIp;
 use App\Models\UserInvite;
 use App\Models\UserAction;
 use App\Models\VoxRelated;
@@ -17,6 +18,7 @@ use App\Models\DcnReward;
 use App\Models\VoxScale;
 use App\Models\PageSeo;
 use App\Models\Reward;
+use App\Models\VpnIp;
 use App\Models\Admin;
 use App\Models\Email;
 use App\Models\User;
@@ -517,6 +519,17 @@ class VoxController extends FrontController {
 	            }
 
         	} else {
+
+				$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
+				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
+				if(!empty($using_vpn) && empty($is_whitelist_ip)) {
+					$ret['success'] = false;
+					$ret['is_vpn'] = true;
+
+					return Response::json( $ret );
+				}
+
+
 	        	$q = Request::input('question');
 
 	        	if( !isset( $answered[$q] ) && $not_bot ) {
