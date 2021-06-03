@@ -86,6 +86,8 @@
                                         </td>
                                     @elseif($v['format']=='bool')
                                         <td>{!! $row[$k] ? '<span class="label label-success">'.trans('admin.common.yes').'</span>' : '<span class="label label-warning">'.trans('admin.common.no').'</span>' !!}</td>
+                                    @elseif($v['format']=='bool-new')
+                                        <td>{!! $row[$k] ? 'Yes' : '' !!}</td>
                                     @elseif($v['format']=='set')
                                         <td>
                                             @foreach($row[$k] as $setval)
