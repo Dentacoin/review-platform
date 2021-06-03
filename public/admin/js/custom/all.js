@@ -450,7 +450,5 @@ $(document).ready(function(){
 	    });
 
     } );
-
-
 });
 

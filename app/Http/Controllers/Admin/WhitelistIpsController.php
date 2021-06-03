@@ -24,7 +24,7 @@ class WhitelistIpsController extends AdminController {
             ]);
 
             if ($validator->fails()) {
-                return redirect('cms/whitelist')
+                return redirect('cms/whitelist/ips')
                 ->withInput()
                 ->withErrors($validator);
             } else {
@@ -35,12 +35,15 @@ class WhitelistIpsController extends AdminController {
                 $new_whitelist->save();
 
                 $this->request->session()->flash('success-message', 'IP added to the whitelist' );
-                return redirect('cms/whitelist');
+                return redirect('cms/whitelist/ips');
             }
 
         }
 
-        $items = WhitelistIp::get();
+        $items = WhitelistIp::where(function($query) {
+            $query->where('for_vpn', '=', 0 )
+            ->orWhereNull('for_vpn');
+        })->get();
 
         return $this->showView('whitelist', array(
             'items' => $items,
@@ -51,7 +54,47 @@ class WhitelistIpsController extends AdminController {
         WhitelistIp::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Whitelist IP deleted' );
-        return redirect('cms/whitelist');
+        return redirect('cms/whitelist/ips');
+    }
+
+    public function vpnList() {
+
+        if(Request::isMethod('post')) {
+
+            $validator = Validator::make($this->request->all(), [
+                'ip' => array('required'),
+            ]);
+
+            if ($validator->fails()) {
+                return redirect('cms/whitelist/vpn-ips')
+                ->withInput()
+                ->withErrors($validator);
+            } else {
+                
+                $new_whitelist = new WhitelistIp;
+                $new_whitelist->ip = $this->request->input('ip');
+                $new_whitelist->for_vpn = true;
+                $new_whitelist->comment = $this->request->input('comment');
+                $new_whitelist->save();
+
+                $this->request->session()->flash('success-message', 'VPN IP added to the whitelist' );
+                return redirect('cms/whitelist/vpn-ips');
+            }
+
+        }
+
+        $items = WhitelistIp::where('for_vpn', 1)->get();
+
+        return $this->showView('whitelist-vpn', array(
+            'items' => $items,
+        ));
+    }
+
+    public function vpnDelete( $id ) {
+        WhitelistIp::destroy( $id );
+
+        $this->request->session()->flash('success-message', 'Whitelist VPN IP deleted' );
+        return redirect('cms/whitelist/vpn-ips');
     }
 
 }

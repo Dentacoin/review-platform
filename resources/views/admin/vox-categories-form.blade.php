@@ -11,17 +11,6 @@
     <div class="col-md-12 ui-sortable">
         {{ Form::open(array('id' => 'category-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true)) }}
 
-            <!-- begin panel -->
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                    </div>
-                    <h4 class="panel-title">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.category.title') : trans('admin.page.'.$current_page.'.edit.category.title') }}</h4>
-                </div>
-            </div>
-            <!-- end panel -->
-
             <div class="panel panel-inverse panel-with-tabs" data-sortable-id="ui-unlimited-tabs-1">
                 <div class="panel-heading p-0">
                     <div class="panel-heading-btn m-r-10 m-t-10">

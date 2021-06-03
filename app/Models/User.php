@@ -1792,7 +1792,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         $ip = self::getRealIp();
 
-        $is_whitelist_ip = WhitelistIp::where('ip', 'like', $ip)->first();
+        $is_whitelist_ip = WhitelistIp::where(function($query) {
+            $query->where('for_vpn', '=', 0 )
+            ->orWhereNull('for_vpn');
+        })->where('ip', 'like', $ip)->first();
 
         if (!empty($is_whitelist_ip)) {
             return false;

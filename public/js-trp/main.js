@@ -29,8 +29,6 @@ jQuery(document).ready(function($){
 		type: 'GET',
 		success: function( data ) {
 			dentacoin_down = false;
-
-			
 		},
 		error: function(data) {
 			console.log(data);
@@ -40,7 +38,7 @@ jQuery(document).ready(function($){
 	});
 
     $.ajax( {
-		url: 'https://dev-api.dentacoin.com/api/enums/',
+		url: 'https://api.dentacoin.com/api/enums/',
 		type: 'GET',
 		success: function( data ) {
 			if(data) {

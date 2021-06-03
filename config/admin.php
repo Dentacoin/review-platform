@@ -30,6 +30,10 @@ return [
         ),
         'whitelist' => array(
             'icon' => 'list-ul',
+            'subpages' => array(
+                'ips' => 'ips',
+                'vpn-ips' => 'vpn-ips',
+            ),
         ),
         'blacklist' => array(
             'icon' => 'umbrella',
@@ -110,12 +114,25 @@ return [
                 '../jquery.multi-select.min.js',
             ),
         ),
+        'support' => array(
+            'icon' => 'question-circle',
+            'subpages' => array(
+                'contact' => 'contact',
+                'content' => 'content',
+                'categories' => 'categories',
+            ),
+            'js' => array(
+                'support.js',
+                '../ckeditor/ckeditor.js',
+                '../../plugins/html5lightbox/html5lightbox.js'
+            )
+        ),
         'pages' => array(
             'icon' => 'image',
             'subpages' => array(
                 'vox' => 'vox',
                 'trp' => 'trp',
-            )
+            ),
         ),
         'rewards' => array(
             'icon' => 'bitcoin',

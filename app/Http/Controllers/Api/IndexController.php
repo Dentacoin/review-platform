@@ -1392,12 +1392,17 @@ class IndexController extends ApiController {
 
 			if( $ret['success'] ) {
 				$open_recommend = false;
+				$social_profile = false;
 				$filled_voxes = $user->filledVoxes();
-				if ((count($filled_voxes) == 5 || count($filled_voxes) == 10 || count($filled_voxes) == 20 || count($filled_voxes) == 50) && empty($user->fb_recommendation)) {
+
+				if(!$user->is_dentist && count($filled_voxes) == 1) {
+					$social_profile = true;
+				} else if ((count($filled_voxes) == 5 || count($filled_voxes) == 10 || count($filled_voxes) == 20 || count($filled_voxes) == 50) && empty($user->fb_recommendation)) {
 					$open_recommend = true;
 				}
 
 				$ret['recommend'] = $open_recommend;
+				$ret['social_profile'] = $social_profile;
 				$ret['vox_id'] = $vox->id;
 				$ret['question_id'] = !empty($q) ? $q : null;
 
@@ -1875,19 +1880,11 @@ class IndexController extends ApiController {
 
 	    	if(!empty($user)) {
 
-	    		Log::info(request()->file('avatar'));
-	    		Log::info(request()->all());
-	    		Log::info('avatar');
-	    		Log::info('user: '.json_encode($user));
+				$user->addImage(Image::make( request()->file('avatar') )->orientate());
 
-		    	if(!empty($user)) {
-
-					$user->addImage(Image::make( request()->file('avatar') )->orientate());
-
-			    	return Response::json( [
-			            'success' => true,
-			        ] );
-			    }
+		    	return Response::json( [
+		            'success' => true,
+		        ] );
 	    	}
     	}
 

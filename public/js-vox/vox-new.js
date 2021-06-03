@@ -481,9 +481,13 @@ $(document).ready(function(){
 
                         $('input[name="_token"]').val(data.token);
 
+                        if(data.is_vpn) {
+                            // $('.popup.ban').addClass('active');
+                            return;
+                        }
+
                         if(data.ban) {
                             var wpopup = $('.popup.ban');
-                            wpopup.addClass('active');
                             wpopup.find('h2').html(data.title);
                             wpopup.find('h3 span').html( (parseInt(data.ban_duration)*24)+':00:00' );
                             wpopup.find('p').html(data.content);

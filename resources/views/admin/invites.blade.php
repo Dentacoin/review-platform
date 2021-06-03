@@ -88,7 +88,7 @@
             </div>
             <div class="panel-body" id="link" link="{{ url('cms/update-blog-preferences') }}">
                 <div class="row table-responsive-md">
-
+                    <p>Total count: {{ $total_count }}</p>
                     <table class="table table-striped table-question-list">
                         <thead>
                             <tr>

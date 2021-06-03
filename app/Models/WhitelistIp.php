@@ -11,6 +11,7 @@ class WhitelistIp extends Model {
         
     protected $fillable = [
         'ip',
+        'for_vpn',
         'comment'
     ];
 

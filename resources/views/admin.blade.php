@@ -129,12 +129,12 @@
                         @foreach ( config('admin.pages') as $key => $page )
                             <li class="@if (!empty($page['subpages']))has-sub @endif @if ($key==$current_page)active @endif">
                                 <a href="@if (!empty($page['subpages']))javascript:;@else{{ !empty($page['href']) ? url('cms/'.$page['href']) : url('cms/'.$key) }}@endif">
-                                    <?php if(!empty($counters[$key]) ) { ?>
-                                        <span class="badge pull-right">{{ $counters[$key] }}</span>
-                                    <?php } ?>
                                     @if (!empty($page['subpages']))
                                         <b class="caret pull-right"></b>
                                     @endif
+                                    <?php if(!empty($counters[$key]) ) { ?>
+                                        <span class="badge pull-right">{{ $counters[$key] }}</span>
+                                    <?php } ?>
                                     <i class="fa fa-{{ $page['icon'] }}"></i>
                                     <span>{{ trans('admin.page.'.$key.'.title') }}</span>
                                 </a>

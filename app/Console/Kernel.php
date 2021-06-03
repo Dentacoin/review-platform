@@ -2373,7 +2373,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Empty logs '.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            exec('truncate -s 0 /root/.pm2/logs/civic-web-out-temp.log');
+            exec('truncate -s 0 /root/.pm2/logs/civic-web-out.log');
             exec('truncate -s 0 /var/www/html/trp/storage/logs/geoip.log');
 
             echo 'Empty logs - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;

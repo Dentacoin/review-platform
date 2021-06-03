@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 
-use App\Models\Admin;
-use App\Models\Review;
-use App\Models\BanAppeal;
-use App\Models\DcnTransaction;
-use App\Models\TransactionScammersByDay;
 use App\Models\TransactionScammersByBalance;
+use App\Models\TransactionScammersByDay;
+use App\Models\DcnTransaction;
+use App\Models\SupportContact;
+use App\Models\BanAppeal;
+use App\Models\Review;
+use App\Models\Admin;
 
-use Auth;
-use DB;
 use Session;
 use Config;
+use Auth;
+use DB;
 
-class AdminController extends BaseController
-{
+class AdminController extends BaseController {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
     public $request;
@@ -118,6 +118,9 @@ class AdminController extends BaseController
         $params['counters']['ban_appeals'] = BanAppeal::where('status', 'new')->whereNull('pending_fields')->count();
 
         $params['counters']['transactions'] = TransactionScammersByDay::where('checked', '!=', 1)->count() ? TransactionScammersByDay::where('checked', '!=', 1)->count() : TransactionScammersByBalance::where('checked', '!=', 1)->count();
+
+        $params['counters']['support'] = SupportContact::count();
+        $params['counters']['contact'] = SupportContact::count();
         
         $params['cache_version'] = '20210511';
 

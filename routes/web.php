@@ -49,8 +49,10 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('blacklist', 						'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 			'BlacklistController@delete');
 
-	Route::any('whitelist', 						'WhitelistIpsController@list');
-	Route::get('whitelist/delete/{id}', 			'WhitelistIpsController@delete');
+	Route::any('whitelist/ips', 					'WhitelistIpsController@list');
+	Route::get('whitelist/ips/delete/{id}', 		'WhitelistIpsController@delete');
+	Route::any('whitelist/vpn-ips', 				'WhitelistIpsController@vpnList');
+	Route::get('whitelist/vpn-ips/delete/{id}', 	'WhitelistIpsController@vpnDelete');
 
 	Route::get('users', 							'UsersController@list');
 	Route::post('users/mass-delete', 				'UsersController@massdelete');
@@ -262,6 +264,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('support/categories/add', 			'SupportController@add_category');
 	Route::any('support/categories/edit/{id}', 		'SupportController@edit_category');
 	Route::any('support/categories/delete/{id}', 	'SupportController@delete_category');
+	Route::any('support/contact', 					'SupportController@contact');
 });
 
 
@@ -444,15 +447,9 @@ $reviewRoutes = function () {
 			Route::get('{query?}/{filter?}', 					'DentistsController@search')->where('locale', '(en)');
 
 		});
-
-		// Route::group(['namespace' => 'Support'], function () {
-
-		// 	Route::get('support', 								'IndexController@index');
-
-		// });
 	});
-	//Route::any('/{any}', 								'Front\NotFoundController@home')->where('any', '.*');
-	//Route::any('page-not-found', 								'Front\NotFoundController@home');
+	// Route::any('/{any}', 										'Front\NotFoundController@home')->where('any', '.*');
+	// Route::any('page-not-found', 								'Front\NotFoundController@home');
 };
 Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
 Route::domain('urgent.reviews.dentacoin.com')->group($reviewRoutes);
