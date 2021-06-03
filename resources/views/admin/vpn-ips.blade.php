@@ -17,7 +17,7 @@
                 <h4 class="panel-title">VPN Ips filter</h4>
             </div>
             <div class="panel-body users-filters">
-                <form method="get" action="{{ url('cms/'.$current_page) }}" id="users-filter-form">
+                <form method="get" action="{{ url('cms/ips/vpn/') }}" id="users-filter-form">
                     <div class="row custom-row" style="margin-bottom: 10px;">
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-ip" value="{{ $search_ip }}" placeholder="IP">
@@ -85,25 +85,25 @@
     <nav aria-label="Page navigation" style="text-align: center;">
         <ul class="pagination">
             <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                <a class="page-link" href="{{ url('cms/vpn/?page=1'.$pagination_link) }}" aria-label="Previous">
+                <a class="page-link" href="{{ url('cms/ips/vpn/?page=1'.$pagination_link) }}" aria-label="Previous">
                     <span aria-hidden="true"> << </span>
                 </a>
             </li>
             <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                <a class="page-link prev" href="{{ url('cms/vpn/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
+                <a class="page-link prev" href="{{ url('cms/ips/vpn/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
                     <span aria-hidden="true"> < </span>
                 </a>
             </li>
             @for($i=$start; $i<=$end; $i++)
                 <li class="{{ ($i == $page ?  'active' : '') }}">
-                    <a class="page-link" href="{{ url('cms/vpn/?page='.$i.$pagination_link) }}">{{ $i }}</a>
+                    <a class="page-link" href="{{ url('cms/ips/vpn/?page='.$i.$pagination_link) }}">{{ $i }}</a>
                 </li>
             @endfor
             <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                <a class="page-link next" href="{{ url('cms/vpn/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+                <a class="page-link next" href="{{ url('cms/ips/vpn/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
             </li>
             <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                <a class="page-link" href="{{ url('cms/vpn/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                <a class="page-link" href="{{ url('cms/ips/vpn/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
             </li>
         </ul>
     </nav>

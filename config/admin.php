@@ -25,8 +25,12 @@ return [
         'users_stats' => array(
             'icon' => 'users',
         ),
-        'scammers' => array(
-            'icon' => 'transgender-alt',
+        'ips' => array(
+            'icon' => 'wifi',
+            'subpages' => array(
+                'bad' => 'bad',
+                'vpn' => 'vpn',
+            ),
         ),
         'whitelist' => array(
             'icon' => 'list-ul',
@@ -139,9 +143,6 @@ return [
         ),
         'registrations' => array(
             'icon' => 'plus-circle',
-        ),
-        'vpn' => array(
-            'icon' => 'wifi',
         ),
         'translations' => array(
             'icon' => 'globe',

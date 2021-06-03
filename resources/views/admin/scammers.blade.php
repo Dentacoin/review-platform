@@ -36,25 +36,25 @@
     <nav aria-label="Page navigation" style="text-align: center;">
         <ul class="pagination">
             <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                <a class="page-link" href="{{ url('cms/scammers/?page=1') }}" aria-label="Previous">
+                <a class="page-link" href="{{ url('cms/ips/bad/?page=1') }}" aria-label="Previous">
                     <span aria-hidden="true"> << </span>
                 </a>
             </li>
             <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                <a class="page-link prev" href="{{ url('cms/scammers/?page='.($page>1 ? $page-1 : '1')) }}"  aria-label="Previous">
+                <a class="page-link prev" href="{{ url('cms/ips/bad/?page='.($page>1 ? $page-1 : '1')) }}"  aria-label="Previous">
                     <span aria-hidden="true"> < </span>
                 </a>
             </li>
             @for($i=$start; $i<=$end; $i++)
                 <li class="{{ ($i == $page ?  'active' : '') }}">
-                    <a class="page-link" href="{{ url('cms/scammers/?page='.$i) }}">{{ $i }}</a>
+                    <a class="page-link" href="{{ url('cms/ips/bad/?page='.$i) }}">{{ $i }}</a>
                 </li>
             @endfor
             <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                <a class="page-link next" href="{{ url('cms/scammers/?page='.($page < $total_pages ? $page+1 :  $total_pages)) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+                <a class="page-link next" href="{{ url('cms/ips/bad/?page='.($page < $total_pages ? $page+1 :  $total_pages)) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
             </li>
             <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                <a class="page-link" href="{{ url('cms/scammers/?page='.$total_pages) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                <a class="page-link" href="{{ url('cms/ips/bad/?page='.$total_pages) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
             </li>
         </ul>
     </nav>

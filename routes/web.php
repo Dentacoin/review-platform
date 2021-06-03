@@ -44,8 +44,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('admins/edit/{id}',					'AdminsController@update');
 	Route::post('admins/add',						'AdminsController@add');
 
-	Route::get('scammers', 							'ScammersController@list');
-
 	Route::any('blacklist', 						'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 			'BlacklistController@delete');
 
@@ -266,7 +264,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('support/categories/delete/{id}', 	'SupportController@delete_category');
 	Route::any('support/contact', 					'SupportController@contact');
 
-	Route::any('vpn', 								'VpnIpsController@list');
+	Route::any('ips/bad', 							'IPsController@bad');
+	Route::any('ips/vpn', 							'IPsController@vpn');
 });
 
 
