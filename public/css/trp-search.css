@@ -334,7 +334,8 @@
         width: 115px;
         height: 115px;
         padding-top: 0px;
-        margin-right: 0px; } }
+        margin-left: auto;
+        margin-right: auto; } }
     .result-container .avatar .main-clinic {
       position: absolute;
       bottom: 0;
