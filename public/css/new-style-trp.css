@@ -2856,6 +2856,10 @@ footer {
 .page-dentists .main-top {
   padding-bottom: 170px; }
 
+@media screen and (max-width: 768px) {
+  .page-dentists .home-search-form {
+    padding: 0px 10px; } }
+
 .blue-background {
   background-color: #12b3e7;
   height: 117px;

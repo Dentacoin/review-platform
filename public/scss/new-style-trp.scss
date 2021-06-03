@@ -2844,6 +2844,14 @@ footer {
 	}
 }
 
+.page-dentists {
+	.home-search-form {
+		@media #{$phone} {
+	    	padding: 0px 10px;
+	    }
+	}
+}
+
 .blue-background {
 	background-color: #12b3e7;
 	height: 117px;
