@@ -386,11 +386,15 @@ $sort_popup_padding: 70px;
     display: flex;
 
     @media #{$phone} {
-    	width: 300px;
+    	width: 320px;
 	    margin-right: auto;
 	    margin-left: auto;
 	    flex-direction: column;
     }
+
+    @media screen and (max-width: 340px) {
+    	width: 300px;
+	}
 
     &.current-branch {
 		border: 10px solid;
@@ -520,7 +524,7 @@ $sort_popup_padding: 70px;
     	position: relative;
 
     	@media #{$phone} {
-	    	padding: 4px 8px;
+	    	padding: 4px 12px;
 		    position: relative;
 		    flex: 8;
 	    }
@@ -670,15 +674,17 @@ $sort_popup_padding: 70px;
     }
 
     .ratings {
+		display: flex;
+	    align-items: center;
+
     	@media #{$phone} {
 			margin-top: 10px;
 			margin-bottom: 10px;
-			display: flex;
-		    align-items: center;
-		    justify-content: center;
 		}
 
 		.stars {
+			margin-right: 4px;
+
 			@media #{$phone} {
 			    margin-right: 3px;
 			}
@@ -687,7 +693,7 @@ $sort_popup_padding: 70px;
 		.rating {
 			@media #{$phone} {
 			    vertical-align: text-top;
-			    font-size: 10px;
+			    font-size: 11px;
 			}
 		}
     }
