@@ -269,7 +269,8 @@
       width: 320px;
       margin-right: auto;
       margin-left: auto;
-      flex-direction: column; } }
+      flex-direction: column;
+      padding-top: 10px; } }
   @media screen and (max-width: 340px) {
     .result-container {
       width: 300px; } }
@@ -364,7 +365,8 @@
       .result-container .media-right {
         padding: 4px 12px;
         position: relative;
-        flex: 8; } }
+        flex: 8;
+        border-radius: 11px; } }
     .result-container .media-right div {
       word-break: break-word; }
     .result-container .media-right h4 {
