@@ -491,6 +491,7 @@ $sort_popup_padding: 70px;
 	    position: relative;
 
 	    @media #{$phone} {
+	    	border-radius: 5px;
 	    	width: 100px;
 		    height: 100px;
 		    padding-top: 0px;
