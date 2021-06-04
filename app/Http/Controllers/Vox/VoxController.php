@@ -1672,7 +1672,7 @@ class VoxController extends FrontController {
                                             $trigger_question = $triggerId;
                                         }
 
-                                     //    if($next_question->id == 18573) {
+                                     //    if($next_question->id == 18655) {
 	                                    //     echo '<br/>Q id: '.$triggerId;
 	                                    // }
 
@@ -1713,6 +1713,10 @@ class VoxController extends FrontController {
 
                                         } else {
                                             $allowedAnswers = explode(',', $triggerAnswers);
+
+                                            // foreach($allowedAnswers as $kk => $vv) {
+                                            // 	$allowedAnswers[$kk] = intval($vv);
+                                            // }
                                         }
 
 
@@ -1728,7 +1732,7 @@ class VoxController extends FrontController {
                                                 $givenAnswers[] = $user->$trigger_question;
                                             }
 
-                                      //       if($next_question->id == 18573) {
+                                      //       if($next_question->id == 18655) {
 		                                    //     echo '<br/>allowedAnswers: '.json_encode($allowedAnswers);
 		                                    //     echo '<br/>givenAnswers: '.json_encode($givenAnswers);
 		                                    // }
@@ -1736,6 +1740,7 @@ class VoxController extends FrontController {
                                             // echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($allowedAnswers, true).' / Answer: '.var_export($givenAnswers, true).' / Inverted logic: '.($invert_trigger_logic ? 'da' : 'ne').'<br/>';
 
                                             foreach ($givenAnswers as $ga) {
+
                                                 if(str_contains($ga,',') !== false) {
                                                     $given_answers_array = explode(',', $ga);
 
@@ -1749,16 +1754,16 @@ class VoxController extends FrontController {
 
                                                     if($invert_trigger_logic) {
                                                         if(!$found) {
-                                                            $triggerSuccess[$triggerId] = true;
+                                                            $triggerSuccess[$triggerId + $ga] = true;
                                                         } else {
-                                                            $triggerSuccess[$triggerId] = false;
+                                                            $triggerSuccess[$triggerId + $ga] = false;
                                                         }
                                                     } else {
 
                                                         if($found) {
-                                                            $triggerSuccess[$triggerId] = true;
+                                                            $triggerSuccess[$triggerId + $ga] = true;
                                                         } else {
-                                                            $triggerSuccess[$triggerId] = false;
+                                                            $triggerSuccess[$triggerId + $ga] = false;
                                                         }
                                                     }
                                                 } else {
@@ -1781,23 +1786,24 @@ class VoxController extends FrontController {
                                                     } else {
                                                         if($invert_trigger_logic) {
                                                             if( !empty($ga) && !in_array($ga, $allowedAnswers) ) {
-                                                                $triggerSuccess[$triggerId] = true;
+                                                                $triggerSuccess[$triggerId + $ga] = true;
                                                             } else {
-                                                                $triggerSuccess[$triggerId] = false;
+                                                                $triggerSuccess[$triggerId + $ga] = false;
                                                             }
                                                         } else {
-                                                            // echo in_array($ga, $allowedAnswers) ? '<br/>in _array' : '<br/>not_in array';
+                                                            // echo in_array($ga, $allowedAnswers) ? '<br/>'.$ga.' in _array' : '<br/>'.$ga.' not_in array';
+
                                                             if( !empty($ga) && in_array($ga, $allowedAnswers) ) {
-                                                                $triggerSuccess[$triggerId] = true;
+                                                                $triggerSuccess[$triggerId + $ga] = true;
                                                             } else {
-                                                                $triggerSuccess[$triggerId] = false;
+                                                                $triggerSuccess[$triggerId + $ga] = false;
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
 
-                                      //       if($next_question->id == 18573) {
+                                      //       if($next_question->id == 18655) {
 		                                    //     echo '<br/>Q id - trugger success: '.json_encode($triggerSuccess);
 		                                    // }
                                         }
@@ -1805,7 +1811,7 @@ class VoxController extends FrontController {
 
 
 
-                                    // if($next_question->id == 18573) {
+                                    // if($next_question->id == 18655) {
                                     // 	dd($triggerSuccess);
                                     // }
 
