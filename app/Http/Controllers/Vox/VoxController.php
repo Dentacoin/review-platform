@@ -1739,8 +1739,10 @@ class VoxController extends FrontController {
 
                                             // echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($allowedAnswers, true).' / Answer: '.var_export($givenAnswers, true).' / Inverted logic: '.($invert_trigger_logic ? 'da' : 'ne').'<br/>';
 
+                                            $int = 0;
                                             foreach ($givenAnswers as $ga) {
-
+                                            	$int++;
+                                            	
                                                 if(str_contains($ga,',') !== false) {
                                                     $given_answers_array = explode(',', $ga);
 
@@ -1754,16 +1756,16 @@ class VoxController extends FrontController {
 
                                                     if($invert_trigger_logic) {
                                                         if(!$found) {
-                                                            $triggerSuccess[$triggerId + $ga] = true;
+                                                            $triggerSuccess[$int] = true;
                                                         } else {
-                                                            $triggerSuccess[$triggerId + $ga] = false;
+                                                            $triggerSuccess[$int] = false;
                                                         }
                                                     } else {
 
                                                         if($found) {
-                                                            $triggerSuccess[$triggerId + $ga] = true;
+                                                            $triggerSuccess[$int] = true;
                                                         } else {
-                                                            $triggerSuccess[$triggerId + $ga] = false;
+                                                            $triggerSuccess[$int] = false;
                                                         }
                                                     }
                                                 } else {
@@ -1771,32 +1773,32 @@ class VoxController extends FrontController {
                                                         $trg_ans = substr($allowedAnswers[0], 1);
 
                                                         if($ga > intval($trg_ans)) {
-                                                            $triggerSuccess[] = true;
+                                                            $triggerSuccess[$int] = true;
                                                         } else {
-                                                            $triggerSuccess[] = false;
+                                                            $triggerSuccess[$int] = false;
                                                         }
                                                     } else if(strpos($allowedAnswers[0], '<') !== false) {
                                                         $trg_ans = substr($allowedAnswers[0], 1);
 
                                                         if(intval($ga) < intval($trg_ans)) {
-                                                            $triggerSuccess[] = true;
+                                                            $triggerSuccess[$int] = true;
                                                         } else {
-                                                            $triggerSuccess[] = false;
+                                                            $triggerSuccess[$int] = false;
                                                         }
                                                     } else {
                                                         if($invert_trigger_logic) {
                                                             if( !empty($ga) && !in_array($ga, $allowedAnswers) ) {
-                                                                $triggerSuccess[$triggerId + $ga] = true;
+                                                                $triggerSuccess[$int] = true;
                                                             } else {
-                                                                $triggerSuccess[$triggerId + $ga] = false;
+                                                                $triggerSuccess[$int] = false;
                                                             }
                                                         } else {
                                                             // echo in_array($ga, $allowedAnswers) ? '<br/>'.$ga.' in _array' : '<br/>'.$ga.' not_in array';
 
                                                             if( !empty($ga) && in_array($ga, $allowedAnswers) ) {
-                                                                $triggerSuccess[$triggerId + $ga] = true;
+                                                                $triggerSuccess[$int] = true;
                                                             } else {
-                                                                $triggerSuccess[$triggerId + $ga] = false;
+                                                                $triggerSuccess[$int] = false;
                                                             }
                                                         }
                                                     }
