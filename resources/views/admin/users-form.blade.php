@@ -519,6 +519,13 @@
                                         'info' => $fields['civic_email']
                                     ])
                                 </div>
+                                <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Skip check for KYC country</label>
+                                <div class="col-md-1" style="padding-left: 0px;">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'skip_civic_kyc_country',
+                                        'info' => $fields['skip_civic_kyc_country']
+                                    ])
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-2 control-label">DCN Address</label>

@@ -241,6 +241,9 @@ class UsersController extends AdminController {
             'is_admin' => [
                 'type' => 'bool',
             ],
+            'skip_civic_kyc_country' => [
+                'type' => 'bool',
+            ],
         ];
     }
 
