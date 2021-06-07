@@ -153,7 +153,7 @@ class BanAppealsController extends AdminController {
 
             $last_user_action = UserAction::where('user_id', $user->id)->orderBy('id', 'desc')->first();
 
-            if (empty($last_user_action) && !empty($last_user_action->reason) && mb_strpos($last_user_action->reason, 'KYC country') !== false) {
+            if (!empty($last_user_action) && !empty($last_user_action->reason) && mb_strpos($last_user_action->reason, 'KYC country') !== false) {
                 $user->skip_civic_kyc_country = true;
                 $user->save();
             }
