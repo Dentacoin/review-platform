@@ -132,7 +132,7 @@
 		                    <div class="form-group clearfix">
 		                        <label class="col-md-1 control-label">Category</label>
 		                        <div class="col-md-11">
-		                            Form::select('category_id', $categories->pluck('name', 'id')->toArray(), $categories->first()->name, array('class' => 'form-control', 'id' => 'question-category')) }}
+		                            {{ Form::select('category_id', $categories->pluck('name', 'id')->toArray(), $categories->first()->name, array('class' => 'form-control', 'id' => 'question-category')) }}
 		                        </div>
 		                    </div>
 		                    <div class="form-group clearfix">
