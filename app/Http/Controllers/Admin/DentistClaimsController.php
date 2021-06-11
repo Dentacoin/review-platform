@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Models\AnonymousUser;
 use App\Models\EmailTemplate;
 use App\Models\DentistClaim;
+use App\Models\UserHistory;
 use App\Models\User;
 
 use Carbon\Carbon;
@@ -31,6 +32,11 @@ class DentistClaimsController extends AdminController {
 
         //if phone is empty is old added by patient dentist
         if(empty($item->phone) && !empty($user->old_unclaimed_profile)) {
+            $user_history = new UserHistory;
+            $user_history->user_id = $user->id;
+            $user_history->status = $user->status;
+            $user_history->save();
+
             $user->password = $item->password;
             $user->status = 'approved';
             $user->ownership = 'approved';
@@ -77,6 +83,11 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             if(!empty($existing_anonymous)) {
                 AnonymousUser::destroy($existing_anonymous->id);
             }
+
+            $user_history = new UserHistory;
+            $user_history->user_id = $user->id;
+            $user_history->status = $user->status;
+            $user_history->save();
 
             $user->email_public = $user->email;
             $user->email = $item->email;

@@ -18,6 +18,7 @@ use App\Models\AnonymousUser;
 use App\Models\VoxCrossCheck;
 use App\Models\ReviewAnswer;
 use App\Models\UserCategory;
+use App\Models\UserHistory;
 use App\Models\VoxQuestion;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -197,6 +198,9 @@ class UsersController extends AdminController {
                 'type' => 'text',
             ],
             'fb_id' => [
+                'type' => 'text',
+            ],
+            'apple_id' => [
                 'type' => 'text',
             ],
             'allow_withdraw' => [
@@ -1413,7 +1417,36 @@ class UsersController extends AdminController {
 
             if(Request::isMethod('post')) {
 
+                $user_history = new UserHistory;
+                $user_history->user_id = $item->id;
+                $user_history->admin_id = $this->user->id;
+
+                $dont_delete = false;
+                $other_fields = '';
+
                 foreach ($this->fields as $key => $value) {
+                    if(!in_array($key, ['slug', 'type'])) {
+
+                        if($this->request->input($key) != $item->$key) {
+                            $dont_delete = true;
+
+                            if(in_array($key, UserHistory::$fields)) {
+                                $user_history->$key = $item->$key;
+                            } else {
+                                $other_fields.= 'old '.$key.' = '.$item->$key.'<br/>';
+                            }
+                        }
+                    }
+                }
+                
+                if($dont_delete) {
+                    $user_history->history = $other_fields;
+                    $user_history->save();
+                }
+
+
+                foreach ($this->fields as $key => $value) {
+
                     if(empty($value['disabled']) && $value['type']!='avatar') {
                         if($key=='city_name') {
 

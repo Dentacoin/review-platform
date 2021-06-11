@@ -37,6 +37,7 @@ use App\Models\AnonymousUser;
 use App\Models\DentistClaim;
 use App\Models\UserStrength;
 use App\Models\WhitelistIp;
+use App\Models\UserHistory;
 use App\Models\UserAction;
 use App\Models\DcnCashout;
 use App\Models\UserLogin;
@@ -350,6 +351,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     public function mainBranchEmail() {
         return $this->main_branch_clinic_id ? $this->mainBranchClinic->email : $this->email;
+    }
+    public function historyFields() {
+        return $this->hasMany('App\Models\UserHistory', 'user_id', 'id')->where('history', '!=', '');
     }
 
     public function kycEmailPhone() {
@@ -1433,6 +1437,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 if(!empty($dent) && $dent->is_clinic) {
 
                     if ($dent->status == 'added_by_clinic_new') {
+
+                        $user_history = new UserHistory;
+                        $user_history->user_id = $dent->id;
+                        $user_history->status = $dent->status;
+                        $user_history->save();
+
                         $dent->status = 'added_by_clinic_rejected';
                         $dent->save();
                     } else if($dent->status == 'dentist_no_email') {
@@ -1468,6 +1478,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 
         if(!$this->is_dentist && $this->patient_status != 'deleted') {
+            $user_history = new UserHistory;
+            $user_history->user_id = $this->id;
+            $user_history->patient_status = $this->patient_status;
+            $user_history->save();
 
             $this->patient_status = 'deleted';
             $this->save();
@@ -1811,6 +1825,19 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $s_user = self::find($su->user_id);
 
                     if(!empty($s_user) && !$s_user->ip_protected && !$s_user->allow_withdraw && !$s_user->is_dentist && $s_user->patient_status != 'suspicious_badip') {
+
+                        $user_history = new UserHistory;
+                        $user_history->user_id = $s_user->id;
+                        $user_history->patient_status = $s_user->patient_status;
+                        $user_history->save();
+
+                        $action = new UserAction;
+                        $action->user_id = $s_user->id;
+                        $action->action = 'bad_ip';
+                        $action->reason = 'Automatically - Bad IP ( because of '.$this->id.' )';
+                        $action->actioned_at = Carbon::now();
+                        $action->save();
+
                         $s_user->patient_status = 'suspicious_badip';
                         $s_user->save();
                         
@@ -1819,6 +1846,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         $s_user->logoutActions();
                     }
                 }
+
+                $user_history = new UserHistory;
+                $user_history->user_id = $this->id;
+                $user_history->patient_status = $this->patient_status;
+                $user_history->save();
 
                 $this->patient_status = 'suspicious_badip';
                 $this->save();

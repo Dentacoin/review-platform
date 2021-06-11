@@ -10,6 +10,7 @@ use App\Models\DcnTransactionHistory;
 use App\Models\WithdrawalsCondition;
 use App\Models\StopTransaction;
 use App\Models\DcnTransaction;
+use App\Models\UserHistory;
 use App\Models\UserAction;
 use App\Models\DcnCashout;
 use App\Models\DcnReward;
@@ -201,6 +202,12 @@ class TransactionsController extends AdminController
         $item = DcnTransaction::find($id);
 
         if($item->status == 'first' && !empty($item->user) && !$item->user->is_dentist) {
+
+            $user_history = new UserHistory;
+            $user_history->user_id = $item->user->id;
+            $user_history->patient_status = $item->user->patient_status;
+            $user_history->save();
+
             $item->user->patient_status = 'new_verified';
             $item->user->save();
         }
@@ -320,6 +327,12 @@ class TransactionsController extends AdminController
             foreach ($bumptrans as $bt) {
 
                 if($bt->status == 'first' && !empty($bt->user) && !$bt->user->is_dentist) {
+
+                    $user_history = new UserHistory;
+                    $user_history->user_id = $bt->user->id;
+                    $user_history->patient_status = $bt->user->patient_status;
+                    $user_history->save();
+
                     $bt->user->patient_status = 'new_verified';
                     $bt->user->save();
                 }

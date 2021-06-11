@@ -6,4 +6,5 @@
 		@endif
 	@endforeach
 	<img src="//vox.dentacoin.com/custom-cookie?logout-token={{ urlencode($token) }}" class="hide"/>
+	<img src="//hub.dentacoin.com/custom-cookie?logout-token={{ urlencode($token) }}" class="hide"/>
 </div>

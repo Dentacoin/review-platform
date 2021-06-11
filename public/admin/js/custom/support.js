@@ -151,7 +151,8 @@ $(document).ready(function(){
 
     } );
 
-    $('.show-answer').click( function() {
+    $('.show-answer').click( function(e) {
+    	e.preventDefault();
     	$(this).next().show();
     	$(this).hide();
     });

@@ -21,6 +21,7 @@ use App\Models\EmailTemplate;
 use App\Models\ScrapeDentist;
 use App\Models\AnonymousUser;
 use App\Models\VoxQuestion;
+use App\Models\UserHistory;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -872,6 +873,11 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 foreach ($users as $user) {
                     $userNames[] = $user->getNames();
 
+                    $user_history = new UserHistory;
+                    $user_history->user_id = $user->id;
+                    $user_history->status = $user->status;
+                    $user_history->save();
+
                     $user->status='rejected';
                     $user->save();
 
@@ -944,6 +950,11 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     $user = $item->user;
 
                     if($user->patient_status != 'deleted') {
+
+                        $user_history = new UserHistory;
+                        $user_history->user_id = $user->id;
+                        $user_history->patient_status = $user->patient_status;
+                        $user_history->save();
 
                         $user->patient_status = 'deleted';
                         $user->save();

@@ -164,6 +164,21 @@
                                                         <option value="test" {{ $item->status == 'test' ? 'selected="selected"' : ''}} >Test</option>
                                                     </select>
                                                 </div>
+
+                                                @if(!empty(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('status')->first()))
+                                                    <div class="user-history-wrapper">
+                                                        <img src="{{ url('img/info-dark-green.png') }}" style="max-width: 15px;">
+
+                                                        <div class="user-history">
+                                                            Old statuses: <br/>
+                                                            <div>
+                                                                @foreach(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('status')->get() as $old_status)
+                                                                    - {{ config('user-statuses')[$old_status->status] }} <br/>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                             <!-- @if($item->invited_by)
                                                 <div>
@@ -206,6 +221,21 @@
                                                         @endif
                                                     </select>
                                                 </div>
+
+                                                @if(!empty(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('patient_status')->first()))
+                                                    <div class="user-history-wrapper">
+                                                        <img src="{{ url('img/info-dark-green.png') }}" style="max-width: 15px;">
+
+                                                        <div class="user-history">
+                                                            Old statuses: <br/>
+                                                            <div>
+                                                                @foreach(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('patient_status')->get() as $old_status)
+                                                                    - {{ config('patient-statuses')[$old_status->patient_status] }} <br/>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                         @endif
                                         <div>
@@ -296,7 +326,23 @@
                                 </div>
                             @endif
                             <div class="form-group">
-                                <label class="col-md-2 control-label">Gender</label>
+                                <label class="col-md-2 control-label">
+                                    Gender
+                                    @if(!empty(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('gender')->first()))
+                                        <div class="user-history-wrapper">
+                                            <img src="{{ url('img/info-dark-green.png') }}" style="max-width: 15px;">
+
+                                            <div class="user-history">
+                                                Old genders: <br/>
+                                                <div>
+                                                    @foreach(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('gender')->get() as $old_history)
+                                                        - {{ $old_history->gender == 'm' ? 'Male' : 'Female' }} <br/>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </label>
                                 <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'gender',
@@ -305,7 +351,23 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">Birth Year</label>
+                                <label class="col-md-2 control-label">
+                                    Birth Year
+                                    @if(!empty(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('birthyear')->first()))
+                                        <div class="user-history-wrapper">
+                                            <img src="{{ url('img/info-dark-green.png') }}" style="max-width: 15px;">
+
+                                            <div class="user-history">
+                                                Old birth years: <br/>
+                                                <div>
+                                                    @foreach(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('birthyear')->get() as $old_history)
+                                                        - {{ $old_history->birthyear }} <br/>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </label>
                                 <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'birthyear',
@@ -355,7 +417,23 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">Phone</label>
+                                <label class="col-md-2 control-label">
+                                    Phone
+                                    @if(!empty(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('phone')->first()))
+                                        <div class="user-history-wrapper">
+                                            <img src="{{ url('img/info-dark-green.png') }}" style="max-width: 15px;">
+
+                                            <div class="user-history">
+                                                Old phones: <br/>
+                                                <div>
+                                                    @foreach(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('phone')->get() as $old_history)
+                                                        - {{ $old_history->phone }} <br/>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </label>
                                 <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'phone',
@@ -366,7 +444,23 @@
 
                             <div class="address-suggester-wrapper">
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Country</label>
+                                    <label class="col-md-2 control-label">
+                                        Country
+                                        @if(!empty(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('country_id')->first()))
+                                            <div class="user-history-wrapper">
+                                                <img src="{{ url('img/info-dark-green.png') }}" style="max-width: 15px;">
+
+                                                <div class="user-history">
+                                                    Old countries: <br/>
+                                                    <div>
+                                                        @foreach(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('country_id')->get() as $old_history)
+                                                            - {{ App\Models\Country::find($old_history->country_id)->name }} <br/>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </label>
                                     <div class="col-md-10">
                                         <select name="country_id" class="form-control country-select">
                                             <option></option>
@@ -480,7 +574,23 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">Facebook ID</label>
+                                <label class="col-md-2 control-label">
+                                    Facebook ID
+                                    @if(!empty(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('fb_id')->first()))
+                                        <div class="user-history-wrapper">
+                                            <img src="{{ url('img/info-dark-green.png') }}" style="max-width: 15px;">
+
+                                            <div class="user-history">
+                                                Old FB IDs: <br/>
+                                                <div>
+                                                    @foreach(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('fb_id')->get() as $old_history)
+                                                        - {{ $old_history->fb_id }} <br/>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </label>
                                 <div class="col-md-7">
                                     @include('admin.parts.user-field',[
                                         'key' => 'fb_id',
@@ -492,6 +602,17 @@
                                     @include('admin.parts.user-field',[
                                         'key' => 'fb_recommendation',
                                         'info' => $fields['fb_recommendation']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">
+                                    Apple ID
+                                </label>
+                                <div class="col-md-7">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'apple_id',
+                                        'info' => $fields['apple_id']
                                     ])
                                 </div>
                             </div>
@@ -512,7 +633,23 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">Civic Email</label>
+                                <label class="col-md-2 control-label">
+                                    Civic Email
+                                    @if(!empty(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('civic_email')->first()))
+                                        <div class="user-history-wrapper">
+                                            <img src="{{ url('img/info-dark-green.png') }}" style="max-width: 15px;">
+
+                                            <div class="user-history">
+                                                Old Civic Emails: <br/>
+                                                <div>
+                                                    @foreach(App\Models\UserHistory::where('user_id', $item->id)->whereNotNull('civic_email')->get() as $old_history)
+                                                        - {{ $old_history->civic_email }} <br/>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </label>
                                 <div class="col-md-7">
                                     @include('admin.parts.user-field',[
                                         'key' => 'civic_email',
@@ -840,8 +977,27 @@
                                 </div>
                             </div>
 
+                            @if($item->historyFields->isNotEmpty())
+                                <br/>
+                                <br/>
+                                <div class="form-group">
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6">
+                                        <a class="btn btn-sm btn-info form-control user-b show-history" href="javascript:;" >
+                                            Show History
+                                        </a>
+
+                                        <div class="user-history-wrapper" style="display:none;">
+                                            <h3>History</h3>
+
+                                            @foreach($item->historyFields as $history)
+                                                <p>{!! nl2br($history->history) !!}</p>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
-                        
                     </div>
 
                 {!! Form::close() !!}
@@ -2003,6 +2159,27 @@
 <style type="text/css">
     tr {
         font-size: 12px;
+    }
+
+    .user-history-wrapper {
+        display: inline-block;
+    }
+
+    .user-history-wrapper .user-history {
+        display: none;
+        position: absolute;
+        border: 1px solid black;
+        padding: 10px;
+        border-radius: 5px;
+        background: white;
+        z-index: 100;
+        text-align: left;
+        font-weight: normal;
+        min-width: 170px;
+    }
+
+    .user-history-wrapper:hover .user-history {
+        display: block;
     }
 </style>
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
 
 use App\Models\DcnTransaction;
+use App\Models\UserHistory;
 use App\Models\UserAction;
 use App\Models\BanAppeal;
 use App\Models\User;
@@ -195,6 +196,11 @@ class BanAppealsController extends AdminController {
 
             $item = BanAppeal::find($id);
             $user = $item->user;
+
+            $user_history = new UserHistory;
+            $user_history->user_id = $user->id;
+            $user_history->patient_status = $user->patient_status;
+            $user_history->save();
 
             $user->patient_status = 'deleted';
             $user->save();

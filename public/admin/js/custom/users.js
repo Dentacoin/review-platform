@@ -226,4 +226,11 @@ $(document).ready(function(){
         });
     });
 
+    $('.show-history').click( function(e) {
+    	e.preventDefault();
+
+    	$(this).next().show();
+    	$(this).hide();
+    });
+
 });

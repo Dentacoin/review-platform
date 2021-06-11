@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\UserGuidedTour;
 use App\Models\AnonymousUser;
 use App\Models\UserCategory;
+use App\Models\UserHistory;
 use App\Models\UserInvite;
 use App\Models\UserAction;
 use App\Models\DcnReward;
@@ -1056,6 +1057,11 @@ class ProfileController extends FrontController {
                             } else if(empty($existing_dentist->self_deleted) && empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'new') ) {
 
                                 if (!empty($this->user)) {
+                                    $user_history = new UserHistory;
+                                    $user_history->user_id = $existing_dentist->id;
+                                    $user_history->status = $existing_dentist->status;
+                                    $user_history->save();
+
                                     $existing_dentist->status = 'added_by_clinic_claimed';
                                     $existing_dentist->slug = $existing_dentist->makeSlug();
                                     $existing_dentist->save();
