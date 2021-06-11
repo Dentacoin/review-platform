@@ -99,7 +99,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'accepted_payment',
         'status',
         'patient_status',
-        'is_verified',
         'is_approved',
         'city_id',
         'country_id',
