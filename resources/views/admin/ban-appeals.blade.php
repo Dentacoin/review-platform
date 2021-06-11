@@ -138,6 +138,11 @@
 				                    		</td>
 				                    		<td>
 				                    			{{ !empty($item->user) ? $item->user->patient_status == 'deleted' && $item->id < 23 ? 'Deleted' : $types[$item->type] : '-' }}
+
+                                                @if($item->type == 'deleted' && !empty(App\Models\UserAction::where('user_id', $item->user_id)->whereIn('action', ['deleted'])->orderBy('id', 'desc')->first()))
+                                                    <br/>
+                                                    <p style="color: red;">{{ App\Models\UserAction::where('user_id', $item->user_id)->whereIn('action', ['deleted'])->orderBy('id', 'desc')->first()->reason }}</p>
+                                                @endif
 				                    		</td>
 				                    		<td>
 				                    			{{ date('d.m.Y, H:i:s', $item->created_at->timestamp) }}
