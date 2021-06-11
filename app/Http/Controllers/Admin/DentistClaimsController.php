@@ -39,7 +39,6 @@ class DentistClaimsController extends AdminController {
 
             $user->password = bcrypt($item->password);
             $user->status = 'approved';
-            $user->ownership = 'approved';
             $user->save();
 
             $user->old_unclaimed_profile->completed = true;
@@ -92,7 +91,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             $user->email = $item->email;
             $user->password = bcrypt($item->password);
             $user->status = 'approved';
-            $user->ownership = 'approved';
             $user->save();
 
             $substitutions = [
@@ -113,8 +111,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
         $item->save();
 
         $user = User::find($item->dentist_id);
-        $user->ownership = 'rejected';
-        $user->save();
 
         $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $item->email);
 
@@ -152,8 +148,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
         $item->save();
 
         $user = User::find($item->dentist_id);
-        $user->ownership = 'suspicious';
-        $user->save();
 
         $unsubscribed = User::isUnsubscribedAnonymous(67, 'trp', $item->email);
 

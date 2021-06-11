@@ -180,17 +180,6 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            <!-- @if($item->invited_by)
-                                                <div>
-                                                    <label class="control-label" style="padding-right: 10px;">Ownership</label>
-                                                    <div style="display: inline-block;">
-                                                        @include('admin.parts.user-field',[
-                                                            'key' => 'ownership',
-                                                            'info' => $fields['ownership']
-                                                        ])
-                                                    </div>
-                                                </div>
-                                            @endif -->
                                             <div>
                                                 <label class="control-label" style="padding-right: 10px;">Partner</label>
                                                 <div style="display: inline-block;">

@@ -128,7 +128,6 @@ class AddDentistController extends FrontController {
                 $newdentist->phone = Request::input('phone');
                 $newdentist->platform = 'trp';
                 $newdentist->status = 'added_new';
-                $newdentist->ownership = 'unverified';
                 $newdentist->address = Request::input('address');
                 $newdentist->website = Request::input('website');
                 $newdentist->is_dentist = 1;

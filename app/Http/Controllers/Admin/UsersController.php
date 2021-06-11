@@ -63,13 +63,6 @@ class UsersController extends AdminController {
             'f' => trans('admin.common.gender.f'),
         ];
 
-        $this->ownership = [
-            'unverified' => 'Unverified',
-            'approved' => 'Approved',
-            'rejected' => 'Rejected',
-            'suspicious' => 'Suspicious',
-        ];
-
         $this->ban_types = [
             'deleted' => 'Deleted',
             'bad_ip' => 'Bad IP',
@@ -208,10 +201,6 @@ class UsersController extends AdminController {
             ],
             'civic_kyc' => [
                 'type' => 'bool',
-            ],
-            'ownership' => [
-                'type' => 'select',
-                'values' => $this->ownership
             ],
             'status' => [
                 'type' => 'select',
@@ -1611,7 +1600,6 @@ class UsersController extends AdminController {
                                     ];
 
                                     $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
-                                    $item->ownership = 'approved';
                                     $item->verified_on = Carbon::now();
                                     $item->save();
 
@@ -1758,20 +1746,6 @@ class UsersController extends AdminController {
                                 $item->generateSocialCover();
                             }
                             $item->$key = $this->request->input($key);
-                        } else if($key=='ownership') {
-                            if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
-
-                                if ($this->request->input($key)=='rejected') {
-
-                                    $item->sendGridTemplate(66, null, 'trp');
-                                    
-                                } else if ($this->request->input($key)=='suspicious') {
-                                    
-                                    $item->sendGridTemplate(67, null, 'trp');
-                                }
-                            }
-                            $item->$key = $this->request->input($key);
-
                         } else if($key=='vip_access') {
                             
                             if($item->$key!=$this->request->input($key)) {
