@@ -113,7 +113,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'income',
         'avg_rating',
         'ratings',
-        'strength',
         'widget_activated',
         'widget_site',
         'invited_by',
