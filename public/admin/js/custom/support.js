@@ -108,5 +108,52 @@ $(document).ready(function(){
 	    });
 	});
 
+	$('.answer-contact').click( function() {
+
+		var action = $('#answerModal form').attr('original-action') + '/' + $(this).attr('contact-id');
+		$('#answerModal form').attr('action' , action);
+		$('#answerModal form').attr('contact-id' , $(this).attr('contact-id'));
+	});
+
+	if ($('.select2').length) {
+        $(".select2").select2({
+            placeholder: 'Select Template',
+        });
+    }
+
+	$('.contact-form').submit( function(e) {
+        e.preventDefault();
+
+        $(this).find('.contact-error').hide();
+        var formData = new FormData(this);
+
+        $.ajax({
+	        url: $(this).attr('action'),
+	        type: 'POST',
+	        data: formData,
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    }).done( (function (data) {
+			console.log(data);
+
+			if(data.success) {
+				$('.modal').modal('hide');
+				$('tr[contact-id="'+$(this).attr('contact-id')+'"]').find('.actions').html('Sended');
+			} else {
+				$(this).find('.contact-error').html(data.message);
+				$(this).find('.contact-error').show();
+			}
+
+	    }).bind(this) ).fail(function (data) {
+			console.log(data);
+	    });
+
+    } );
+
+    $('.show-answer').click( function() {
+    	$(this).next().show();
+    	$(this).hide();
+    });
 });
 

@@ -144,7 +144,7 @@
                                         <li @if ($key==$current_page && $skey==$current_subpage)class="active"@endif>
                                             <a href="{{ url('cms/'.$key.'/'.$skey.'/') }}" >
                                                 {{ trans('admin.page.'.$key.'.'.$skey.'.title') }}
-                                                <?php if(!empty($counters[$skey]) ) { ?>
+                                                <?php if(!empty($counters[$skey]) && $key != 'emails' ) { ?>
                                                     <span class="badge pull-right">{{ $counters[$skey] }}</span>
                                                 <?php } ?>
                                             </a>

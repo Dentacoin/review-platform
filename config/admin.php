@@ -67,6 +67,7 @@ return [
                 'dentacoin' => 'dentacoin',
                 'dentists' => 'dentists',
                 'common' => 'common',
+                'support' => 'support',
             ),
         ),
         'email_validations' => array(

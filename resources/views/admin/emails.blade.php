@@ -101,4 +101,83 @@
     </div>
 </div>
 
+@if($platform == 'support')
+    <div class="row">
+    <!-- begin col-6 -->
+        <div class="col-md-12">
+            <!-- begin panel -->
+            <form class="form-horizontal" method="post" action="{{ url('cms/emails/add') }}">
+                <div class="panel panel-inverse">
+                    <div class="panel-heading">
+                        <div class="panel-heading-btn">
+                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        </div>
+                        <h4 class="panel-title">Add email template</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Template name ( only for cms info )</label>
+                            <div class="col-md-10">
+                                {{ Form::text('name', null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                            </div>
+                        </div>
+                        @foreach($langs as $langkey => $lang)
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Subject line</label>
+                                <div class="col-md-10">
+                                    {{ Form::text('subject_'.$langkey, null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Title</label>
+                                <div class="col-md-10">
+                                    {{ Form::text('title_'.$langkey, null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Subtitle</label>
+                                <div class="col-md-10">
+                                    {{ Form::text('subtitle_'.$langkey, null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Content</label>
+                                <div class="col-md-10">
+                                    {{ Form::textarea('content_'.$langkey, null, array('class' => 'form-control')) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Category</label>
+                                <div class="col-md-10">
+                                    {{ Form::text('category_'.$langkey, null, array('maxlength' => 512, 'class' => 'form-control')) }}
+                                </div>
+                            </div>
+                        @endforeach
+                        <input type="hidden" name="type" value="support">
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Note</label>
+                            <div class="col-md-10">
+                                {{ Form::textarea('note', null, array('maxlength' => 255, 'class' => 'form-control')) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-10 control-label"></label>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-block btn-sm btn-success">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+@endif
+
 @endsection

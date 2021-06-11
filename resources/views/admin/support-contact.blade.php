@@ -84,12 +84,13 @@
 				                    	<th>Platform</th>
 				                    	<th>Issue</th>
 				                    	<th>Description</th>
-				                    	<th>File</th>
+                                        <th>File</th>
+                                        <th>Admin answer</th>
 				                    </tr>
 				                </thead>
 				                <tbody>
 				                	@foreach($items as $item)
-				                    	<tr appeal-id="{{ $item->id }}">
+				                    	<tr contact-id="{{ $item->id }}">
 				                    		<td>
 				                    			{{ date('d.m.Y, H:i:s', $item->created_at->timestamp) }}
 				                    		</td>
@@ -121,15 +122,29 @@
 				                    		<td style="word-break: break-all; max-width: 300px;">
 				                    			{{ $item->description }}
 				                    		</td>
-				                    		<td>
-				                    			@if(in_array($item->file_extension, $video_extensions))
-													<a href="{{ $item->getFileUrl() }}" class="html5lightbox">Video</a>
-												@else
-					                    			<a href="{{ $item->getFileUrl() }}" data-lightbox="contact{{ $item->id }}">
-					                    				<img src="{{ $item->getFileUrl(true) }}" style="max-width: 30px;">
-					                    			</a>
-												@endif
-				                    		</td>
+                                            <td>
+                                                @if(in_array($item->file_extension, $video_extensions))
+                                                    <a href="{{ $item->getFileUrl() }}" class="html5lightbox">Video</a>
+                                                @else
+                                                    <a href="{{ $item->getFileUrl() }}" data-lightbox="contact{{ $item->id }}">
+                                                        <img src="{{ $item->getFileUrl(true) }}" style="max-width: 30px;">
+                                                    </a>
+                                                @endif
+                                            </td>
+                                            <td class="actions">
+                                                @if(empty($item->admin_answer) && empty($item->admin_answer_id))
+                                                    <a class="btn btn-sm btn-primary answer-contact" href="javascript:;" data-toggle="modal" data-target="#answerModal" contact-id="{{ $item->id }}">
+                                                        Answer
+                                                    </a>
+                                                @else
+                                                    @if(!empty($item->admin_answer))
+                                                        <a href="javascript;:" class="show-answer">Show answer</a>
+                                                        <p style="display: none;">{!! nl2br($item->admin_answer) !!}</p>
+                                                    @elseif(!empty($item->admin_answer_id))
+                                                        Email: <a href="{{ url('cms/emails/edit/'.$item->admin_answer_id) }}">{{ $item->emailTemplate->name }}</a>
+                                                    @endif
+                                                @endif
+                                            </td>
 				                    	</tr>
 				                    @endforeach
 				                </tbody>
@@ -169,5 +184,51 @@
         </ul>
     </nav>
 @endif
+
+<div id="answerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Contact answer</h4>
+            </div>
+            <div class="modal-body">
+                <form class="contact-form" action="{{ url('cms/support/contact/') }}" original-action="{{ url('cms/support/contact/') }}" method="post" contact-id="">
+                    <p>Select email template:</p>
+                    <select name="template-id" class="form-control select2">
+                        <option value="">-</option>
+                        @foreach(App\Models\EmailTemplate::where('type', 'support')->get() as $template)
+                            <option value="{{ $template->id }}">{{ $template->name }}</option>
+                        @endforeach
+                    </select>
+
+                    <br/>
+                    <br/>
+                    <p>OR</p>
+                    <br/>
+
+                    <p>Write an answer:</p>
+                    <textarea class="form-control" name="answer" style="height: 100px;"></textarea>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Send</button>
+                    <label class="alert alert-danger contact-error" style="display: none;margin-top: 10px;"></label>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<style type="text/css">
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
 
 @endsection

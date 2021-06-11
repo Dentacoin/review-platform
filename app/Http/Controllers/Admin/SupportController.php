@@ -3,9 +3,17 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
+use \SendGrid\Mail\PlainTextContent as PlainTextContent;
+use \SendGrid\Mail\HtmlContent as HtmlContent;
+use \SendGrid\Mail\Mail as SendGridMail;
+use \SendGrid\Mail\Subject as Subject;
+use \SendGrid\Mail\From as From;
+use \SendGrid\Mail\To as To;
+
 use App\Models\SupportQuestion;
 use App\Models\SupportCategory;
 use App\Models\SupportContact;
+use App\Models\EmailTemplate;
 
 use Carbon\Carbon;
 
@@ -270,6 +278,126 @@ class SupportController extends AdminController {
             'video_extensions' => ['mp4', 'm3u8', 'ts', 'mov', 'avi', 'wmv', 'qt'],
             'image_extensions' => ['png', 'jpg', 'jpeg'],
         ));
+    }
+
+
+    public function sendAnswer($id) {
+
+        $contact = SupportContact::find($id);
+
+        if(!empty($contact)) {
+
+            if(empty(Request::input('template-id')) && empty(Request::input('answer'))) {
+                return Response::json( ['success' => false, 'message' => "All fields are empty"] );
+            }
+
+            if(!empty($contact->user)) {
+                $user_email = $contact->user->email ? $contact->user->email : $contact->user->mainBranchEmail();
+            } else {
+                $user_email = $contact->email;
+            }
+
+            if(!empty(Request::input('template-id'))) {
+                $template = EmailTemplate::find(Request::input('template-id'));
+
+                if(!empty($template)) {
+
+                    $title = stripslashes($template->title);
+                    $subtitle = stripslashes($template->subtitle);
+                    $subject = stripslashes($template->subject);
+                    if(empty($subject)) {
+                        $subject = $title;
+                    }
+                    $content = $template->content;
+
+
+                    $platform = 'dentacoin';
+                    $sender = config('mail.from.address-dentacoin');
+                    $sender_name = config('mail.from.name-dentacoin');
+                    
+                    $contents = view('emails.template', [
+                        'content' => $content,
+                        'title' => $title,
+                        'subtitle' => $subtitle,
+                        'platform' => $platform,
+                        'unsubscribe' => '',
+                    ])->render();
+
+                    $from = new From($sender, $sender_name);
+                    $tos = [new To( $user_email)];
+
+                    $email = new SendGridMail(
+                        $from,
+                        $tos
+                    );
+                    
+                    if ($template->category) {
+                        $email->addCategory($template->category); //?????? default cat?
+                    } else {
+                        $email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
+                    }
+                    $email->setSubject($subject);
+                    $email->setReplyTo($sender, $sender_name);
+                    $email->addContent(
+                        "text/html", $contents
+                    );
+                    
+                    $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
+                    $sendgrid->send($email);
+
+                    $contact->admin_answer_id = $template->id;
+                    $contact->save();
+
+                    return Response::json( ['success' => true] );
+                }
+
+                return Response::json( ['success' => false, 'message' => "Invalid email template"] );
+
+            } else if(!empty(Request::input('answer'))) {
+
+                $title = 'Some title';
+                $subtitle = 'Some subtitle';
+                $subject = 'Some subject';
+                $content = Request::input('answer');
+
+                $platform = 'dentacoin';
+                $sender = config('mail.from.address-dentacoin');
+                $sender_name = config('mail.from.name-dentacoin');
+                
+                $contents = view('emails.template', [
+                    'content' => $content,
+                    'title' => $title,
+                    'subtitle' => $subtitle,
+                    'platform' => $platform,
+                    'unsubscribe' => '',
+                ])->render();
+
+                $from = new From($sender, $sender_name);
+                $tos = [new To( $user_email)];
+
+                $email = new SendGridMail(
+                    $from,
+                    $tos
+                );
+                
+                $email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
+
+                $email->setSubject($subject);
+                $email->setReplyTo($sender, $sender_name);
+                $email->addContent(
+                    "text/html", $contents
+                );
+                
+                $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
+                $sendgrid->send($email);
+
+                $contact->admin_answer = $content;
+                $contact->save();
+
+                return Response::json( ['success' => true] );
+            }
+            // dd(Request::all());
+        }
     }
 
 }

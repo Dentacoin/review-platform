@@ -210,6 +210,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('emails/{what?}', 					'EmailsController@list');
 	Route::get('emails/edit/{id}', 					'EmailsController@edit');
 	Route::post('emails/edit/{id}', 				'EmailsController@save');
+	Route::post('emails/add', 						'EmailsController@add');
 	Route::get('emails/trp/send-engagement-email',  'EmailsController@engagement_email');
 	Route::get('emails/trp/send-monthly-email',  	'EmailsController@monthly_email');
 
@@ -263,6 +264,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('support/categories/edit/{id}', 		'SupportController@edit_category');
 	Route::any('support/categories/delete/{id}', 	'SupportController@delete_category');
 	Route::any('support/contact', 					'SupportController@contact');
+	Route::post('support/contact/{id}', 			'SupportController@sendAnswer');
 
 	Route::any('ips/bad', 							'IPsController@bad');
 	Route::any('ips/vpn', 							'IPsController@vpn');

@@ -2,27 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 
-use Carbon\Carbon;
-use App\Models\EmailTemplate;
-use App\Models\User;
-use App\Models\Review;
-use App\Models\Reward;
-use Mail;
-use Session;
-
-
-use \SendGrid\Mail\From as From;
-use \SendGrid\Mail\To as To;
-use \SendGrid\Mail\Subject as Subject;
 use \SendGrid\Mail\PlainTextContent as PlainTextContent;
 use \SendGrid\Mail\HtmlContent as HtmlContent;
 use \SendGrid\Mail\Mail as SendGridMail;
+use \SendGrid\Mail\Subject as Subject;
+use \SendGrid\Mail\From as From;
+use \SendGrid\Mail\To as To;
 
-class Email extends Model
-{
+use App\Models\EmailTemplate;
+use App\Models\Review;
+use App\Models\Reward;
+use App\Models\User;
+
+use Carbon\Carbon;
+
+use Session;
+use Mail;
+
+class Email extends Model {
+	
     use SoftDeletes;
 
     protected $fillable = [
@@ -37,7 +38,7 @@ class Email extends Model
 
 
 	public static $template_types = [
-		'trp', 'vox', 'common', 'assurance', 'dentacare', 'dentacoin', 'dentists',
+		'trp', 'vox', 'common', 'assurance', 'dentacare', 'dentacoin', 'dentists', 'support',
 	];
 
 	public function template() {

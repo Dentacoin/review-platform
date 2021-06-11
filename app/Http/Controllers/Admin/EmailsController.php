@@ -122,6 +122,43 @@ class EmailsController extends AdminController {
         }
     }
 
+    public function add() {
+
+        $validator = Validator::make($this->request->all(), [
+            'name' => array('required'),
+            'content_en' => array('required'),
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('cms/emails/support')
+            ->withInput()
+            ->withErrors($validator);
+        } else {
+
+            $template = new EmailTemplate;
+            $template->name = $this->request->input('name');
+            $template->note = $this->request->input('note');
+            $template->type = $this->request->input('type');
+            $template->save();
+
+            $langs = config('langs');
+
+            foreach ($langs as $langkey => $lang) {
+                $translation = $template->translateOrNew($langkey);
+                $translation->email_template_id = $template->id;
+                $translation->title = $this->request->input('title_'.$langkey);
+                $translation->subject = $this->request->input('subject_'.$langkey);
+                $translation->subtitle = $this->request->input('subtitle_'.$langkey);
+                $translation->content = $this->request->input('content_'.$langkey);
+                $translation->category = $this->request->input('category_'.$langkey);
+                $translation->save();
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'Saved');
+        return redirect('cms/emails/support');
+    }
+
 
     public function engagement_email() {
 

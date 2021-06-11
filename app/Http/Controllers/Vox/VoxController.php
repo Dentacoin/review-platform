@@ -142,7 +142,7 @@ class VoxController extends FrontController {
 	        ));
         }
 
-        $admin_ids = Admin::getAdminProfileIds();
+        $admin_ids = ['65003'];
         $isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
 
         if (!$isAdmin && $vox->type=='hidden') {
@@ -1558,7 +1558,7 @@ class VoxController extends FrontController {
                 $cur_question = VoxQuestion::find($question_id);
             }
 
-            $admin_ids = Admin::getAdminProfileIds();
+        	$admin_ids = ['65003'];
             $isAdmin = $for_app ? ( $user->is_admin ? true : false) : (Auth::guard('admin')->user() || in_array($user->id, $admin_ids));
             $testmode = session('testmode') && $isAdmin;
 

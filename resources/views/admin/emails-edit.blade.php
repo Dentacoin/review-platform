@@ -85,7 +85,6 @@
                                 <input type="checkbox" name="validate-email" class="form-control" value="1" id="validate-email" style="vertical-align: sub;width: 30px;" {!! !empty($item) && !empty($item->validate_email) ? 'checked="checked"' : '' !!} />
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label class="col-md-2 control-label">Subscribe Category</label>
                             <div class="col-md-10">

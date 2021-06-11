@@ -119,8 +119,8 @@ class AdminController extends BaseController {
 
         $params['counters']['transactions'] = TransactionScammersByDay::where('checked', '!=', 1)->count() ? TransactionScammersByDay::where('checked', '!=', 1)->count() : TransactionScammersByBalance::where('checked', '!=', 1)->count();
 
-        $params['counters']['support'] = SupportContact::count();
-        $params['counters']['contact'] = SupportContact::count();
+        $params['counters']['support'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
+        $params['counters']['contact'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
         
         $params['cache_version'] = '20210511';
 

@@ -12,6 +12,8 @@ class SupportContact extends Model {
         "issue",
         "description",
         "file_extension",
+        "admin_answer",
+        "admin_answer_id"
     ];
     
     protected $dates = [
@@ -26,6 +28,10 @@ class SupportContact extends Model {
 
     public function userEmail() {
         return $this->hasOne('App\Models\User', 'email', 'email')->withTrashed();
+    }
+
+    public function emailTemplate() {
+        return $this->hasOne('App\Models\EmailTemplate', 'id', 'admin_answer_id')->withTrashed();
     }
 
     public function getFileUrl($thumb = false) {

@@ -32,6 +32,9 @@ class RecommendationsController extends AdminController {
         if(!empty($this->request->input('search-scale'))) {
             $recommendations = $recommendations->where('scale', $this->request->input('search-scale'));
         }
+        if(!empty($this->request->input('with-comment'))) {
+            $recommendations = $recommendations->whereNotNull('description');
+        }
 
         $total_count = $recommendations->count();
 
@@ -82,6 +85,8 @@ class RecommendationsController extends AdminController {
             'search_name_user' => $this->request->input('search-name-user'),
             'search_user_id' => $this->request->input('search-user-id'),
             'search_scale' => $this->request->input('search-scale'),
+            'with_comment' => $this->request->input('with-comment'),
+
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,

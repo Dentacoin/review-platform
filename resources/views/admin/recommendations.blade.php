@@ -24,7 +24,20 @@
                         <input type="text" class="form-control" name="search-name-user" value="{{ $search_name_user }}" placeholder="User name">
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" name="search-scale" value="{{ $search_scale }}" placeholder="Scale number">
+                        <select class="form-control" name="search-scale">
+                            <option value="">Scale number</option>
+                            <option value="1" {!! '1'==$search_scale ? 'selected="selected"' : '' !!}>1</option>
+                            <option value="2" {!! '2'==$search_scale ? 'selected="selected"' : '' !!}>2</option>
+                            <option value="3" {!! '3'==$search_scale ? 'selected="selected"' : '' !!}>3</option>
+                            <option value="4" {!! '4'==$search_scale ? 'selected="selected"' : '' !!}>4</option>
+                            <option value="5" {!! '5'==$search_scale ? 'selected="selected"' : '' !!}>5</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="with-comment" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                            <input id="with-comment" type="checkbox" name="with-comment" value="1" {!! !empty($with_comment) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                            With comment
+                        </label>
                     </div>
                     <input type="submit" class="btn btn-sm btn-primary col-md-1" name="search" value="Search">
                 </form>

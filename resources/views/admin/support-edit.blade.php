@@ -86,6 +86,8 @@
 
 <style type="text/css">
     
+    #cke_advanced_236,
+    #cke_target_184,
     #cke_42,
 	#cke_18,
 	#cke_39,
