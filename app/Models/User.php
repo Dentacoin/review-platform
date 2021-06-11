@@ -120,8 +120,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'invited_himself_reg',
         'hasimage',
         'hasimage_social',
-        'tw_id',
-        'gp_id',
         'fb_id',
         'apple_id',
         'civic_id',
