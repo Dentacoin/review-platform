@@ -37,14 +37,13 @@ class DentistClaimsController extends AdminController {
             $user_history->status = $user->status;
             $user_history->save();
 
-            $user->password = $item->password;
+            $user->password = bcrypt($item->password);
             $user->status = 'approved';
             $user->ownership = 'approved';
             $user->save();
 
             $user->old_unclaimed_profile->completed = true;
             $user->old_unclaimed_profile->save();
-
 
             $user->sendGridTemplate(104, [], 'trp');
 
@@ -91,7 +90,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
             $user->email_public = $user->email;
             $user->email = $item->email;
-            $user->password = $item->password;
+            $user->password = bcrypt($item->password);
             $user->status = 'approved';
             $user->ownership = 'approved';
             $user->save();
