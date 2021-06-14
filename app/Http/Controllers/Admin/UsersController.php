@@ -1414,7 +1414,7 @@ class UsersController extends AdminController {
                 $other_fields = '';
 
                 foreach ($this->fields as $key => $value) {
-                    if(!in_array($key, ['slug', 'type'])) {
+                    if(!in_array($key, ['slug', 'type', 'password'])) {
 
                         if($this->request->input($key) != $item->$key) {
                             $dont_delete = true;
