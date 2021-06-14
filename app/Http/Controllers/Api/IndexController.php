@@ -635,7 +635,6 @@ class IndexController extends ApiController {
 	    	];
 
 	    	if($user->id == 37530 || $user->id == 155091 ) {
-	    		Log::info('vpn ip: '.User::getRealIp());
 	    	// if(!$user->is_dentist) {
 				$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
 				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
@@ -1910,6 +1909,10 @@ class IndexController extends ApiController {
     public function socialProfileLink() {
 
     	if(!empty($this->user)) {
+
+    		request()->merge([
+                'link' => strtolower(request('link'))
+            ]);
 
             if (request('link') && mb_strpos(mb_strtolower(request('link')), 'http') !== 0) {
                 request()->merge([
