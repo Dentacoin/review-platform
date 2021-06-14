@@ -310,6 +310,24 @@ class SupportController extends AdminController {
                     }
                     $content = $template->content;
 
+                    $deafult_searches = array(
+                        '[issue]',
+                        '[platform]',
+                        '[b]',
+                        '[/b]',
+                    );
+                    $deafult_replaces = array(
+                        config('support.issues.'.$this->issue),
+                        config('support.platforms.'.$this->platform),
+                        '<b>',
+                        '</b>',
+                    );
+
+                    $title = str_replace($deafult_searches, $deafult_replaces, $title);
+                    $subtitle = str_replace($deafult_searches, $deafult_replaces, $subtitle);
+                    $subject = str_replace($deafult_searches, $deafult_replaces, $subject);
+                    $content = str_replace($deafult_searches, $deafult_replaces, $content);
+
 
                     $platform = 'dentacoin';
                     $sender = config('mail.from.address-dentacoin');
@@ -359,6 +377,24 @@ class SupportController extends AdminController {
                 $subtitle = 'Some subtitle';
                 $subject = 'Some subject';
                 $content = Request::input('answer');
+
+                $deafult_searches = array(
+                    '[issue]',
+                    '[platform]',
+                    '[b]',
+                    '[/b]',
+                );
+                $deafult_replaces = array(
+                    config('support.issues.'.$this->issue),
+                    config('support.platforms.'.$this->platform),
+                    '<b>',
+                    '</b>',
+                );
+
+                $title = str_replace($deafult_searches, $deafult_replaces, $title);
+                $subtitle = str_replace($deafult_searches, $deafult_replaces, $subtitle);
+                $subject = str_replace($deafult_searches, $deafult_replaces, $subject);
+                $content = str_replace($deafult_searches, $deafult_replaces, $content);
 
                 $platform = 'dentacoin';
                 $sender = config('mail.from.address-dentacoin');

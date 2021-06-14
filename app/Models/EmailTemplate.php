@@ -41,18 +41,26 @@ class EmailTemplate extends Model
     ];
 
     public function shortcodes() {
-        $codes = [
-            '[name]',
-            '[platform]',
-            '[b]bold[/b]',
-            '[i]italic[/i]',
-            '[u]underline[/u]',
-            '[h1]Heading 1 (18px)[/h1]',
-            '[h2]Heading 2 (15px)[/h2]',
-            '[homepage]Click here[/homepage]',
-            '[metamask] Instructions [/metamask]',
-            '[invite-patients-button]Invite patients[/invite-patients-button]'
-        ];
+        if($this->type == 'support') {
+            $codes = [
+                '[issue]',
+                '[platform]',
+                '[b]bold[/b]',
+            ];
+        } else {
+            $codes = [
+                '[name]',
+                '[platform]',
+                '[b]bold[/b]',
+                '[i]italic[/i]',
+                '[u]underline[/u]',
+                '[h1]Heading 1 (18px)[/h1]',
+                '[h2]Heading 2 (15px)[/h2]',
+                '[homepage]Click here[/homepage]',
+                '[metamask] Instructions [/metamask]',
+                '[invite-patients-button]Invite patients[/invite-patients-button]'
+            ];
+        }
 
         if($this->id==4) {
             $codes[] = '[register_reward]';
