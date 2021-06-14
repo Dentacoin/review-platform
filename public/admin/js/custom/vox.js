@@ -653,5 +653,39 @@ $(document).ready(function(){
 		});
     });
 
+    $('.show-reward').click( function() {
+    	var that = $(this);
+
+    	$.ajax( {
+			url: window.location.origin+'/cms/vox/get-reward/'+$(this).attr('vox-id'),
+			type: 'POST',
+			dataType: 'json',
+			success: function( data ) {
+				that.hide();
+				that.closest('div').html(data.reward);
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+    });
+
+    $('.show-duration').click( function() {
+    	var that = $(this);
+
+    	$.ajax( {
+			url: window.location.origin+'/cms/vox/get-duration/'+$(this).attr('vox-id'),
+			type: 'POST',
+			dataType: 'json',
+			success: function( data ) {
+				that.hide();
+				that.closest('div').html(data.duration);
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+    });
+
     
 });

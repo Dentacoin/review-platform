@@ -2095,6 +2095,28 @@ class VoxesController extends AdminController {
         }
     }
 
+    public function getReward($vox_id) {
+
+        $vox = Vox::find($vox_id);
+
+        if( !empty($vox)) {
+            return Response::json( [
+                'reward' => $vox->getRewardTotal(),
+            ] );
+        }
+    }
+
+    public function getDuration($vox_id) {
+
+        $vox = Vox::find($vox_id);
+
+        if( !empty($vox)) {
+            return Response::json( [
+                'duration' => '~'.ceil($vox->questions()->count()/6).'min',
+            ] );
+        }
+    }
+
     public function showAllResults() {
 
         session([
