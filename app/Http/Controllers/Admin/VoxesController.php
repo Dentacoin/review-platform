@@ -70,7 +70,7 @@ class VoxesController extends AdminController {
         $error_arr = [];
 
     	return $this->showView('voxes', array(
-            'voxes' => Vox::with('translations')->with('questions')->with('questions.translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
+            'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
             'active_voxes_count' => Vox::where('type', '!=', 'hidden')->count(),
             'hidden_voxes_count' => Vox::where('type', 'hidden')->count(),
             'are_all_results_shown' => session('vox-show-all-results') ? true : false,
