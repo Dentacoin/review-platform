@@ -634,7 +634,7 @@ class IndexController extends ApiController {
 	    		'success' => true,
 	    	];
 
-	    	if($user->id == 37530) {
+	    	if($user->id == 37530 || $user->id == 155091 ) {
 	    	// if(!$user->is_dentist) {
 				$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
 				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
