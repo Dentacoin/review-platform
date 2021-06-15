@@ -64,7 +64,7 @@ class VoxController extends FrontController {
      * Single vox page by slug
      */
 	public function home_slug($locale=null, $slug) {
-		$vox = Vox::whereTranslationLike('slug', $slug)->with('questions.translations')->with('questions.vox')->first();
+		$vox = Vox::whereTranslationLike('slug', $slug)->first();
 		if(Request::isMethod('post')) {
 			if (empty($vox)) {
 				$ret['success'] = false;
@@ -1361,6 +1361,19 @@ class VoxController extends FrontController {
 				        $reward->save();
         				$ret['balance'] = $this->user->getTotalBalance('vox');
 
+						$open_recommend = false;
+						$social_profile = false;
+						$filled_voxes = $this->user->filledVoxes();
+
+						if(!$this->user->is_dentist && count($filled_voxes) == 1) {
+							$social_profile = true;
+						} else if ((count($filled_voxes) == 5 || count($filled_voxes) == 10 || count($filled_voxes) == 20 || count($filled_voxes) == 50) && empty($this->user->fb_recommendation)) {
+							$open_recommend = true;
+						}
+
+						$ret['recommend'] = $open_recommend;
+						$ret['social_profile'] = $social_profile;
+
         				VoxAnswer::where('user_id', $this->user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
         				$vox->recalculateUsersPercentage($this->user);
@@ -1458,19 +1471,6 @@ class VoxController extends FrontController {
 		if( $ret['success'] ) {
 			request()->session()->regenerateToken();
 			$ret['token'] = request()->session()->token();
-
-			$open_recommend = false;
-			$social_profile = false;
-			$filled_voxes = $this->user->filledVoxes();
-
-			if(!$this->user->is_dentist && count($filled_voxes) == 1) {
-				$social_profile = true;
-			} else if ((count($filled_voxes) == 5 || count($filled_voxes) == 10 || count($filled_voxes) == 20 || count($filled_voxes) == 50) && empty($this->user->fb_recommendation)) {
-				$open_recommend = true;
-			}
-
-			$ret['recommend'] = $open_recommend;
-			$ret['social_profile'] = $social_profile;
 			$ret['vox_id'] = $vox->id;
 			$ret['question_id'] = !empty($q) ? $q : null;
 		}
