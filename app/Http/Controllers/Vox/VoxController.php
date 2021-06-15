@@ -779,25 +779,20 @@ class VoxController extends FrontController {
 			$type = Request::input('type');
         	$found = isset( $this->details_fields[$type] ) || $type=='gender-question' || $type=='birthyear-question' || $type=='location-question' ? true : false;
 
-        	if(empty($found)) {
-	        	foreach ($vox->questions as $question) {
+        	foreach ($vox->questions as $question) {
+        		if($question->id == $q) {
+        			$found = $question;
+        			break;
+        		}
+        	}
+        	if (!empty($welcome_vox)) {
+	        	foreach ($welcome_vox->questions as $question) {
 	        		if($question->id == $q) {
 	        			$found = $question;
 	        			break;
 	        		}
 	        	}
         	}
-
-        	if(empty($found)) {
-	        	if (!empty($welcome_vox)) {
-		        	foreach ($welcome_vox->questions as $question) {
-		        		if($question->id == $q) {
-		        			$found = $question;
-		        			break;
-		        		}
-		        	}
-	        	}
-	        }
 
         	if($found) {
         		$valid = false;
