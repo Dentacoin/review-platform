@@ -732,10 +732,6 @@ class VoxController extends FrontController {
 			$scales[$sitem->id] = $sitem;
 		}
 
-    	$ret = [
-    		'success' => true,
-    	];
-
     	if(Request::input('captcha')) {
             $captcha = false;
             $cpost = [
@@ -771,6 +767,10 @@ class VoxController extends FrontController {
             	$ret['vox_id'] = $vox->id;
             }
     	}
+
+    	$ret = [
+    		'success' => true,
+    	];
 
     	$q = Request::input('question');
 
