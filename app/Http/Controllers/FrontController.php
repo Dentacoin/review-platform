@@ -342,14 +342,6 @@ class FrontController extends BaseController {
                 $this->user->save();
             }
 
-            // if($this->user) {
-            //     $details_vox = Vox::where('type', 'user_details')->first();
-            //     if( !empty($this->admin) && !empty($details_vox) && !$this->user->madeTest(  $details_vox->id ) && $request->fullUrl() != getLangUrl('questionnaire/'.$details_vox->id) ) {
-            //         $this->welcome_test = getLangUrl('questionnaire/'.$details_vox->id);
-            //     }
-            // }
-
-
             $request->attributes->add([
                 'admin' => $this->admin,
                 'user' => $this->user,

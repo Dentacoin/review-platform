@@ -48,25 +48,12 @@ class VoxController extends FrontController {
 	}
 
 	/**
-     * Single vox page by id
-     */
-	public function home($locale=null, $id) {
-		$vox = Vox::find($id);
-
-		if (!empty($vox)) {
-			return redirect( getLangUrl('paid-dental-surveys/'.$vox->slug) );
-		}
-
-		return redirect( getLangUrl('page-not-found') );
-	}
-
-	/**
      * Single vox page by slug
      */
-	public function home_slug($locale=null, $slug) {
+	public function vox($locale=null, $slug) {
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();
 		if(Request::isMethod('post')) {
-			if (empty($vox)) {
+			if (empty($vox) || $vox->id == 11) {
 				$ret['success'] = false;
 
     			return Response::json( $ret );
@@ -75,7 +62,7 @@ class VoxController extends FrontController {
 			return $this->surveyAnswer($locale, $vox);
 		} else {
 
-			if (empty($vox)) {
+			if (empty($vox) || $vox->id == 11) {
 				return redirect( getLangUrl('page-not-found') );
 			}
 

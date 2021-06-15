@@ -500,11 +500,9 @@ $voxRoutes = function () {
 			Route::any('download-pdf/{name}', 					'StatsController@download_file');
 			Route::any('download-png/{name}', 					'StatsController@download_file_png');
 
-			Route::any('questionnaire/{id}', 					'VoxController@home');
 			Route::any('paid-dental-surveys', 					'IndexController@surveys_public');
-			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
+			Route::any('paid-dental-surveys/{id}', 				'VoxController@vox');
 			Route::post('get-next-question', 					'VoxController@getNextQuestion');
-			Route::any('get-started/{id}', 						'VoxController@home_slug');
 			Route::post('start-over', 							'VoxController@start_over');
 			Route::post('vox-public-down', 						'VoxController@vox_public_down');
 
