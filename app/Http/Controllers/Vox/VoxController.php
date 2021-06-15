@@ -616,8 +616,6 @@ class VoxController extends FrontController {
      * Answer vox
      */
 	public function surveyAnswer($locale=null, $vox) {
-        $admin_ids = ['65003'];
-        $isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
 
     	$ret['success'] = false;
 
@@ -641,6 +639,8 @@ class VoxController extends FrontController {
 			return Response::json( $ret );
 		}
 
+        $admin_ids = ['65003'];
+        $isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
 		$testmode = session('testmode') && $isAdmin;
 
 		$first = Vox::where('type', 'home')->first();
@@ -797,7 +797,7 @@ class VoxController extends FrontController {
         	if($found) {
         		$valid = false;
 
-        		$answer_count = $type == 'multiple' || $type == 'rank' || $type == 'scale' || $type == 'single' ? count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
+        		$answer_count = in_array($type, ['multiple', 'rank', 'scale', 'single']) ? count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
 
         		if ($type == 'skip') {
         			$valid = true;
