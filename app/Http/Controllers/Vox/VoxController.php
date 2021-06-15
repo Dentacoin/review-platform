@@ -39,13 +39,6 @@ use Mail;
 use DB;
 
 class VoxController extends FrontController {
-	
-    public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
-
-        parent::__construct($request, $route, $locale);
-
-    	$this->details_fields = config('vox.details_fields');
-	}
 
 	/**
      * Single vox page by slug
@@ -68,28 +61,6 @@ class VoxController extends FrontController {
 
 			return $this->doVox($locale, $vox);
 		}
-	}
-
-	/**
-     * bottom content of single vox page
-     */
-	public function vox_public_down($locale=null) {
-		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
-
-		if( $featured_voxes->count() < 9 ) {
-
-			$arr_v = [];
-			foreach ($featured_voxes as $fv) {
-				$arr_v[] = $fv->id;
-			}
-
-			$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
-
-			$featured_voxes = $featured_voxes->concat($swiper_voxes);
-		}
-		return $this->ShowVoxView('template-parts.recent-surveys-vox-public', array(
-        	'voxes' => $featured_voxes,
-        ));	
 	}
 
 	/**
@@ -503,7 +474,7 @@ class VoxController extends FrontController {
         	$total_questions++;
         }
 
-        foreach ($this->details_fields as $key => $value) {
+        foreach (config('vox.details_fields') as $key => $value) {
         	if($this->user->$key==null) {
         		$total_questions++;		
         	}
@@ -563,7 +534,7 @@ class VoxController extends FrontController {
 			'cross_checks_references' => $cross_checks_references,
 			'welcomerules' => $welcomerules,
 			'not_bot' => $not_bot,
-			'details_fields' => $this->details_fields,
+			'details_fields' => config('vox.details_fields'),
 			'vox' => $vox,
 			'scales' => $scales,
 			'answered' => $answered,
@@ -764,7 +735,7 @@ class VoxController extends FrontController {
     	if( !isset( $answered[$q] ) && $not_bot ) {
 
 			$type = Request::input('type');
-        	$found = isset( $this->details_fields[$type] ) || $type=='gender-question' || $type=='birthyear-question' || $type=='location-question' ? true : false;
+        	$found = isset( config('vox.details_fields')[$type] ) || $type=='gender-question' || $type=='birthyear-question' || $type=='location-question' ? true : false;
 
         	foreach ($vox->questions as $question) {
         		if($question->id == $q) {
@@ -793,7 +764,7 @@ class VoxController extends FrontController {
         		} else if($type == 'previous') {
         			$valid = true;
         			$a = Request::input('answer');
-        		} else if ( isset( $this->details_fields[$type] ) ) {
+        		} else if ( isset( config('vox.details_fields')[$type] ) ) {
 
         			$should_reward = false;
         			if($this->user->$type===null) {
@@ -1110,7 +1081,7 @@ class VoxController extends FrontController {
 					    		}
 					        }
 
-	        			} else if(isset( $this->details_fields[$type] ) || $type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
+	        			} else if(isset( config('vox.details_fields')[$type] ) || $type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
 	        				$answered[$q] = 1;
 	        				$answer = null;
 
@@ -1571,6 +1542,28 @@ class VoxController extends FrontController {
 	        	}
         	}
         }
+	}
+
+	/**
+     * bottom content of single vox page
+     */
+	public function vox_public_down($locale=null) {
+		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
+
+		if( $featured_voxes->count() < 9 ) {
+
+			$arr_v = [];
+			foreach ($featured_voxes as $fv) {
+				$arr_v[] = $fv->id;
+			}
+
+			$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
+
+			$featured_voxes = $featured_voxes->concat($swiper_voxes);
+		}
+		return $this->ShowVoxView('template-parts.recent-surveys-vox-public', array(
+        	'voxes' => $featured_voxes,
+        ));	
 	}
 
 	/**
