@@ -628,7 +628,7 @@ class IndexController extends ApiController {
 
         $is_admin = $user->is_admin;
 
-        if(!empty($user) && !empty(request('vox_id')) && !empty(Vox::find(request('vox_id'))) && !empty(request('type'))) {
+        if(!empty($user) && !empty(request('vox_id')) && !empty(Vox::find(request('vox_id'))) && Vox::find(request('vox_id'))->type != 'hidden' && !empty(request('type')) && !$user->isBanned('vox')) {
 
 	    	$ret = [
 	    		'success' => true,

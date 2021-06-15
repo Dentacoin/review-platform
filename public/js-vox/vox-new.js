@@ -481,13 +481,6 @@ $(document).ready(function(){
 
                         $('input[name="_token"]').val(data.token);
 
-                        if(data.is_vpn) {
-                            $('.question-group').find('.loader').remove();
-                            $('.popup.vpn').addClass('active');
-                            ajax_is_running = false;
-                            return;
-                        }
-
                         if(data.ban) {
                             var wpopup = $('.popup.ban');
                             wpopup.find('h2').html(data.title);
@@ -545,6 +538,10 @@ $(document).ready(function(){
                 } else {
                     if (data.restricted) {
                         window.location.reload();
+
+                    } else if(data.is_vpn) {
+                        $('.question-group').find('.loader').remove();
+                        $('.popup.vpn').addClass('active');
                     }
                     console.log('ERROR');
                     console.log(data);
