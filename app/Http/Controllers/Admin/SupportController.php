@@ -331,8 +331,8 @@ class SupportController extends AdminController {
                         '[/b]',
                     );
                     $deafult_replaces = array(
-                        config('support.issues.'.$this->issue),
-                        config('support.platforms.'.$this->platform),
+                        config('support.issues.'.$contact->issue),
+                        config('support.platforms.'.$contact->platform),
                         '<b>',
                         '</b>',
                     );
@@ -399,8 +399,8 @@ class SupportController extends AdminController {
                     '[/b]',
                 );
                 $deafult_replaces = array(
-                    config('support.issues.'.$this->issue),
-                    config('support.platforms.'.$this->platform),
+                    config('support.issues.'.$contact->issue),
+                    config('support.platforms.'.$contact->platform),
                     '<b>',
                     '</b>',
                 );
