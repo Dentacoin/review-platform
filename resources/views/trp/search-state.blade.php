@@ -9,9 +9,9 @@
 			<div class="home-search-form">
 			    @include('trp.parts.search-form')
 			</div>
-	    	<!-- <h1 class="white-title">
+	    	<h1 class="white-title">
 	    		{!! $main_title !!}
-	    	</h1> -->
+	    	</h1>
 		</div>
 
 	    <div class="countries-wrapper container">
