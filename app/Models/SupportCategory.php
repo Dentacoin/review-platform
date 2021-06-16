@@ -25,7 +25,7 @@ class SupportCategory extends Model {
     ];
 
     public function questions() {
-        return $this->hasMany('App\Models\SupportQuestion', 'category_id', 'id');
+        return $this->hasMany('App\Models\SupportQuestion', 'category_id', 'id')->orderBy('order_number', 'asc');
     }
 }
 

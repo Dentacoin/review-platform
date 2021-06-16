@@ -62,6 +62,7 @@ $(document).ready(function(){
 
                     // <td>'+answer+'</td>\
 				$('#nav-tab-'+category).find('tbody').append('<tr>\
+                    <td>'+data.order+'</td>\
                     <td>'+question+'</td>\
                     <td>'+(is_main ? 'Yes' : '')+'</td>\
                     <td>\
@@ -156,5 +157,33 @@ $(document).ready(function(){
     	$(this).next().show();
     	$(this).hide();
     });
+
+    $( ".questions-draggable" ).sortable({
+		update: function( event, ui ) {	
+			// console.log($(this));
+			var ids = [];
+			$(this).find('tr').each( function() {
+				ids.push( $(this).attr('question-id') );
+			} );
+
+	        $.ajax({
+	            url     : $(this).attr('reorder-url'),
+	            type    : 'POST',
+	            data 	: {
+	            	list: ids
+	            },
+	            dataType: 'json',
+	            success : (function( res ) {
+	            	var i=1;
+	            	$(this).find('tr').each( function() {
+						$(this).find('.question-number').html(i);
+						i++;
+					} )
+	            }).bind( this ),
+	            error : function( data ) {
+	            }
+	        });
+		},
+	}).disableSelection();
 });
 

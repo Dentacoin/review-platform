@@ -23,16 +23,16 @@ use Request;
 
 class SupportController extends AdminController {
 
-    public function content( ) {
+    public function questions( ) {
         
         $categories = SupportCategory::get();
 
-        return $this->showView('support', array(
+        return $this->showView('support-questions', array(
             'categories' => $categories,
         ));
     }
 
-    public function add_content( ) {
+    public function add_question( ) {
 
         $slug = str_slug($this->request->input('slug'), '-');
 
@@ -65,6 +65,7 @@ class SupportController extends AdminController {
             $item = new SupportQuestion;
             $item->category_id = $this->request->input('category_id');
             $item->is_main = $this->request->input('is_main');
+            $item->order_number = SupportCategory::find($this->request->input('category_id'))->questions->count()+1;
             $item->save();
 
             $translation = $item->translateOrNew('en');
@@ -74,17 +75,17 @@ class SupportController extends AdminController {
             $translation->content = $this->request->input('answer');
             $translation->save();
         
-            return Response::json( ['success' => true, 'q_id' => $item->id] );
+            return Response::json( ['success' => true, 'q_id' => $item->id, 'order' => $item->order_number] );
         }
     }
 
-    public function delete_content( $id ) {
+    public function delete_question( $id ) {
         SupportQuestion::destroy( $id );
 
         return Response::json( ['success' => true] );
     }
 
-    public function edit_content( $id ) {
+    public function edit_question( $id ) {
         $item = SupportQuestion::find($id);
 
         if(!empty($item)) {
@@ -110,13 +111,26 @@ class SupportController extends AdminController {
                 return redirect('cms/support/content');
             }
 
-            return $this->showView('support-edit', [
+            return $this->showView('support-questions-edit', [
             	'item' => $item,
                 'categories' => SupportCategory::get(),
             ]);
         } else {
             return redirect('cms/'.$this->current_page);
         }
+    }
+
+    public function questionsReorder() {
+        $list = Request::input('list');
+        $i=1;
+        foreach ($list as $qid) {
+            $question = SupportQuestion::find($qid);
+            $question->order_number = $i;
+            $question->save();
+            $i++;
+        }
+
+        return Response::json( ['success' => true] );
     }
 
     public function categories() {

@@ -257,10 +257,11 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('ban_appeals/pending/{id}', 			'BanAppealsController@pending');
 	Route::any('ban_appeals/info/{id}', 			'BanAppealsController@userInfo');
 
-	Route::any('support/content', 					'SupportController@content');
-	Route::any('support/content/add', 				'SupportController@add_content');
-	Route::any('support/content/edit/{id}', 		'SupportController@edit_content');
-	Route::any('support/content/delete/{id}', 		'SupportController@delete_content');
+	Route::any('support/content', 					'SupportController@questions');
+	Route::any('support/content/add', 				'SupportController@add_question');
+	Route::any('support/content/edit/{id}', 		'SupportController@edit_question');
+	Route::any('support/content/delete/{id}', 		'SupportController@delete_question');
+	Route::any('support/content/reorder', 			'SupportController@questionsReorder');
 	Route::any('support/categories', 				'SupportController@categories');
 	Route::any('support/categories/add', 			'SupportController@add_category');
 	Route::any('support/categories/edit/{id}', 		'SupportController@edit_category');

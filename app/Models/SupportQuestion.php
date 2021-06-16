@@ -19,6 +19,7 @@ class SupportQuestion extends Model {
     protected $fillable = [
         'category_id',
     	'is_main',
+        'order_number'
     ];
 
     protected $dates = [
