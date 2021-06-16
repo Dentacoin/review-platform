@@ -632,7 +632,11 @@ class VoxController extends FrontController {
 	    			$i=0;
 	    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
 	    				if($key==$this->user->$cc) {
-	    					$cross_checks[$vq->id] = $i;
+	    					if($cc == 'household_children') {
+	    						$cross_checks[$vq->id] = $i + 1;
+	    					} else {	    						
+		    					$cross_checks[$vq->id] = $i;
+	    					}
 	    					$cross_checks_references[$vq->id] = $cc;
 	    					break;
 	    				}
@@ -1941,7 +1945,11 @@ class VoxController extends FrontController {
                                     $i=1;
                                     foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
                                         if($key==$user->$cc) {
-                                            $cross_check_answer = $i;
+                                        	if($key == 'household_children') {
+					    						$cross_checks[$vq->id] = $i + 1;
+					    					} else {	    						
+						    					$cross_checks[$vq->id] = $i;
+					    					}
                                             break;
                                         }
                                         $i++;
@@ -1976,7 +1984,11 @@ class VoxController extends FrontController {
                                     $i=0;
                                     foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
                                         if($key==$user->$cc) {
-                                            $cross_checks[$vq->id] = $i;
+                                            if($cc == 'household_children') {
+					    						$cross_checks[$vq->id] = $i + 1;
+					    					} else {	    						
+						    					$cross_checks[$vq->id] = $i;
+					    					}
                                             $cross_checks_references[$vq->id] = $cc;
                                             break;
                                         }

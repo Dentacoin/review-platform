@@ -26,6 +26,8 @@
         <meta property="og:site_name" content="{{ trans('front.social.site-name') }}" />
         
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@trustedreviews">
+        <meta name="twitter:creator" content="@dentacoin">
         <meta name="twitter:title" content="{{ $social_title }}" />
         <meta name="twitter:description" content="{{ $social_description }}" />
         <meta name="twitter:image" content="{{ $social_image }}"/>
