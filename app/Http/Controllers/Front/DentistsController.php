@@ -547,15 +547,13 @@ class DentistsController extends FrontController {
             'social_image' => $seos->getImageUrl(),
             'countries_groups' => $countries_groups,
             'breakpoints' => $breakpoints,
+            'extra_body_class' => 'search-dentists-by',
             'css' => [
                 'trp-search.css',
             ],
             'js' => [
                 'search.js'
             ],
-            'jscdn' => [
-                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
-            ]
         ));
     }
 
@@ -635,6 +633,7 @@ class DentistsController extends FrontController {
             'breakpoints' => $breakpoints,
             'country' => $country,
             'total_rows' => $total_rows,
+            'extra_body_class' => 'search-dentists-by',
             'noIndex' => !count($cities_groups),
             'css' => [
                 'trp-search.css',
@@ -642,9 +641,6 @@ class DentistsController extends FrontController {
             'js' => [
                 'search.js'
             ],
-            'jscdn' => [
-                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
-            ]
         ));
     }
 
@@ -722,6 +718,7 @@ class DentistsController extends FrontController {
             'country' => $country,
             'total_rows' => $total_rows,
             'main_title' => $main_title,
+            'extra_body_class' => 'search-dentists-by',
             'noIndex' => !count($states_groups),
             'css' => [
                 'trp-search.css',
@@ -729,9 +726,6 @@ class DentistsController extends FrontController {
             'js' => [
                 'search.js'
             ],
-            'jscdn' => [
-                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
-            ]
         ));
     }
 }
