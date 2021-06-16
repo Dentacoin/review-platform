@@ -721,6 +721,7 @@ class DentistsController extends FrontController {
             'breakpoints' => $breakpoints,
             'country' => $country,
             'total_rows' => $total_rows,
+            'main_title' => $main_title,
             'noIndex' => !count($states_groups),
             'css' => [
                 'trp-search.css',
