@@ -2,22 +2,16 @@
 
 @section('content')
 
-	<div class="page-dentists page-c">
-		<div class="black-overflow" style="display: none;">
-		</div>
+	<div class="page-c">
+		<div class="black-overflow" style="display: none;"></div>
+		
 		<div class="search-gradient-wave green-gradient">
 			<div class="home-search-form">
 			    @include('trp.parts.search-form')
 			</div>
-
-			<div class="main-top">
-		    </div>
-
-		    <div class="sort-wrapper">
-		    	<h1 class="white-title">
-		    		{!! $main_title !!}
-		    	</h1>
-		    </div>
+	    	<h1 class="white-title">
+	    		{!! $main_title !!}
+	    	</h1>
 		</div>
 
 	    <div class="countries-wrapper container">
