@@ -15,9 +15,7 @@
 
 		    <div class="sort-wrapper">
 		    	<h1 class="white-title">
-		    		{!! nl2br(trans('trp.page.search.city-title', [
-			            'country' => $country->name,
-			        ])) !!}
+		    		{!! $main_title !!}
 		    	</h1>
 		    </div>
 		</div>

@@ -494,7 +494,7 @@ class DentistsController extends FrontController {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
 
-        $dentists = User::where('is_dentist', 1)->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
+        $dentists = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
 
         $dentist_countries = Country::whereIn('id', $dentists )->get();
 
@@ -574,9 +574,9 @@ class DentistsController extends FrontController {
             return redirect('page-not-found');
         }
 
-        $cities_name = User::where('is_dentist', 1)->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
+        $cities_name = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
 
-        $all_dentists = User::where('is_dentist', 1)->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->count();
+        $all_dentists = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->count();
 
         $cities_groups = [];
         $letter = null;
@@ -657,15 +657,15 @@ class DentistsController extends FrontController {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
 
-        $country = Country::where('slug', 'like', $country_slug )->first();
+        $country = Country::with('translations')->where('slug', 'like', $country_slug )->first();
 
         if(empty($country)) {
             return redirect('page-not-found');
         }
 
-        $states = User::where('is_dentist', 1)->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->whereNotNull('state_name')->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();
+        $states = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->whereNotNull('state_name')->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();
 
-        $all_dentists = User::where('is_dentist', 1)->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->whereNotNull('state_name')->whereNotNull('city_name')->count();
+        $all_dentists = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->whereNotNull('state_name')->whereNotNull('city_name')->count();
 
         $states_groups = [];
         $letter = null;
@@ -708,6 +708,8 @@ class DentistsController extends FrontController {
 
         $social_description = str_replace(':country', $country->name, $seos->social_description);
         $social_description = str_replace(':results_number', $all_dentists, $social_description);
+
+        $main_title = trans('trp.page.search.city-title', [ 'country' => $country->name]);
 
         return $this->ShowView('search-state', array(            
             'seo_title' => !empty($seo_title) ? $seo_title : null,
