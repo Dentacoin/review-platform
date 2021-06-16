@@ -10,10 +10,13 @@
     transform: none;
     top: auto;
     z-index: 1002;
-    width: 620px;
+    width: 800px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 20px; }
+    @media screen and (max-width: 1200px) {
+      .site-content .home-search-form {
+        width: 620px; } }
     @media screen and (max-width: 998px) {
       .site-content .home-search-form {
         width: 450px; } }

@@ -16,10 +16,14 @@ $phone: "screen and (max-width: 768px)";
 	    transform: none;
 	    top: auto;
 	    z-index: 1002;
-	    width: 620px;
+	    width: 800px;
 	    margin-left: auto;
 	    margin-right: auto;
 	    margin-bottom: 20px;
+
+	    @media #{$pc} {
+	    	width: 620px;
+	    }
 
 	    @media #{$tablet} {
 	    	width: 450px;
