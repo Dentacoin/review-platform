@@ -38,8 +38,8 @@
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
 		
-		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-brands-400.woff2') }}" as="font" crossorigin>
-		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-solid-900.woff2') }}" as="font" crossorigin>
+		<!-- <link rel="preload" href="{{ url('font-awesome/webfonts/fa-brands-400.woff2') }}" as="font" crossorigin>
+		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-solid-900.woff2') }}" as="font" crossorigin> -->
 		<link rel="preload" href="{{ url('fonts/Calibri-Light.woff2') }}" as="font" crossorigin>
 		<link rel="preload" href="{{ url('fonts/Calibri-Bold.woff2') }}" as="font" crossorigin>
 		<link rel="preload" href="{{ url('fonts/Calibri.woff2') }}" as="font" crossorigin>
