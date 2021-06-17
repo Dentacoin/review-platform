@@ -577,29 +577,40 @@ class VoxController extends FrontController {
 
     	$ret['success'] = false;
 
-        if(empty($this->user) || $vox->type == 'hidden' || $this->user->madeTest($vox->id)) {
+        if(empty($this->user) || empty($vox) || !in_array($this->user->status, config('dentist-statuses.approved'))) {
 			return Response::json( $ret );
         }
-
-		if(!$this->user->is_dentist) {
-			$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
-			$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
-
-			if(!empty($using_vpn) && empty($is_whitelist_ip)) {
-				$ret['is_vpn'] = true;
-				return Response::json( $ret );
-			}
-		}
-
-		if($this->user->isVoxRestricted($vox)) {
-			$ret['restricted'] = true;
-
-			return Response::json( $ret );
-		}
 
         $admin_ids = ['65003'];
         $isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
 		$testmode = session('testmode') && $isAdmin;
+
+		if( $this->user->madeTest($vox->id) && !(Request::input('goback') && $testmode) ) {
+			return Response::json( $ret );
+		}
+
+		if(!$testmode) {
+			if($vox->type=='hidden' ) {
+	        	return Response::json( $ret );
+	        }
+
+			if(!$this->user->is_dentist ) {
+				$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
+				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
+
+				if(!empty($using_vpn) && empty($is_whitelist_ip)) {
+					$ret['is_vpn'] = true;
+					return Response::json( $ret );
+				}
+			}
+
+			if($this->user->isVoxRestricted($vox)) {
+				$ret['restricted'] = true;
+
+				return Response::json( $ret );
+			}
+		}
+
 
 		$first = Vox::where('type', 'home')->first();
 		$welcome_vox = '';
