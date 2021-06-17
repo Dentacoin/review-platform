@@ -48,23 +48,6 @@
 			    @endif
 		    </div>
 		</div>
-
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
-		<p>Learn and earn from up-to-date, qualified and detailed reviews from verified patients and see your dental practice succeed! Your willingness to improve is rewarded with Dentacoin (DCN) currency, accepted by dental practices, laboratories, and suppliers worldwide.</p>
 	</div>
 
 @endsection
