@@ -315,6 +315,13 @@ class SupportController extends AdminController {
                 $template = EmailTemplate::find(Request::input('template-id'));
 
                 if(!empty($template)) {
+                    $user_name = null;
+
+                    if($contact->user) {
+                        $user_name = $contact->user->name;
+                    } else if($contact->userEmail) {
+                        $user_name = $contact->userEmail->name;
+                    }
 
                     $title = stripslashes($template->title);
                     $subtitle = stripslashes($template->subtitle);
@@ -325,12 +332,14 @@ class SupportController extends AdminController {
                     $content = $template->content;
 
                     $deafult_searches = array(
+                        '[name]',
                         '[issue]',
                         '[platform]',
                         '[b]',
                         '[/b]',
                     );
                     $deafult_replaces = array(
+                        $user_name ?? 'User',
                         config('support.issues.'.$contact->issue),
                         config('support.platforms.'.$contact->platform),
                         '<b>',
@@ -400,12 +409,14 @@ class SupportController extends AdminController {
                 $content = Request::input('answer');
 
                 $deafult_searches = array(
+                    '[name]',
                     '[issue]',
                     '[platform]',
                     '[b]',
                     '[/b]',
                 );
                 $deafult_replaces = array(
+                    $user_name ?? 'User',
                     config('support.issues.'.$contact->issue),
                     config('support.platforms.'.$contact->platform),
                     '<b>',
@@ -439,7 +450,7 @@ class SupportController extends AdminController {
                 
                 $email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
 
-                // $email->setSubject($subject);
+                $email->setSubject($title);
                 $email->setReplyTo($sender, $sender_name);
                 $email->addContent(
                     "text/html", $contents
