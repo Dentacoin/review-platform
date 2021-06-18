@@ -43,6 +43,7 @@ class EmailTemplate extends Model
     public function shortcodes() {
         if($this->type == 'support') {
             $codes = [
+                '[name]',
                 '[issue]',
                 '[platform]',
                 '[b]bold[/b]',

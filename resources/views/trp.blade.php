@@ -214,7 +214,6 @@
 			<img src="{{ url('img/support-icon.png') }}"/ width="60" height="60">
 		</a> 
 
-
 		@if(!empty($user) && !$user->is_dentist)
 			@include('trp.popups.social-profile')
 		@endif

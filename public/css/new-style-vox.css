@@ -3659,3 +3659,17 @@ body.dark-mode {
     @media screen and (max-width: 1200px) {
       .why-dentacoin-wrapper .why-dentacoin-first-reason {
         margin-top: 30px; } }
+
+.support-icon {
+  position: fixed;
+  left: 20px;
+  bottom: 25px;
+  z-index: 10000000000;
+  cursor: pointer;
+  display: block; }
+  @media screen and (max-width: 768px) {
+    .support-icon {
+      bottom: 18pt;
+      left: 10px; } }
+  .support-icon img {
+    display: block; }
