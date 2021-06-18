@@ -209,7 +209,10 @@
                     <br/>
 
                     <p>Write an answer:</p>
-                    <textarea class="form-control" name="answer" style="height: 100px;"></textarea>
+                    <textarea class="form-control" name="answer" style="height: 100px; margin-bottom: 10px;" placeholder="Answer"></textarea>
+                    <input type="text" class="form-control" name="subject" style="margin-bottom: 10px;" placeholder="Subject (default is 'Re: your inquiry about [issue]')">
+                    <input type="text" class="form-control" name="title" style="margin-bottom: 10px;" placeholder="Title (default is 'Dear [name]')">
+                    <input type="text" class="form-control" name="subtitle" style="margin-bottom: 10px;" placeholder="Subtitle (default is empty)">
 
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Send</button>
                     <label class="alert alert-danger contact-error" style="display: none;margin-top: 10px;"></label>

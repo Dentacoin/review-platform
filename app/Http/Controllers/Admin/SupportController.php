@@ -403,9 +403,9 @@ class SupportController extends AdminController {
                     $user_name = $contact->userEmail->name;
                 }
 
-                $title = $user_name ? 'Dear '.$user_name.',' : 'Hello,';
-                $subtitle = '';
-                $subject = 'Re: your inquiry about '.config('support.issues.'.$contact->issue);
+                $title = Request::input('title') ?? ($user_name ? 'Dear '.$user_name.',' : 'Hello,');
+                $subtitle = Request::input('subtitle') ?? '';
+                $subject = Request::input('subject') ?? 'Re: your inquiry about '.config('support.issues.'.$contact->issue);
                 $content = Request::input('answer');
 
                 $deafult_searches = array(
