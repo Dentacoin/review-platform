@@ -210,7 +210,7 @@
 			</div>
 		@endif
 
-		<a href="https://support.dentacoin.com/" class="support-icon">
+		<a href="https://support.dentacoin.com/" target="_blank" class="support-icon">
 			<img src="{{ url('img/support-icon.png') }}"/ width="60" height="60">
 		</a> 
 
