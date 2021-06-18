@@ -3387,13 +3387,6 @@ body.dark-mode {
   body.dark-mode .tooltip-window {
     color: black; }
 
-[data-testid="bubble_iframe"] {
-  right: auto !important;
-  left: 4px !important; }
-  @media screen and (max-width: 768px) {
-    [data-testid="bubble_iframe"] {
-      left: -1px !important; } }
-
 .image-label {
   cursor: pointer;
   width: 180px;

@@ -4720,16 +4720,6 @@ body.dark-mode {
 	}
 }
 
-//fb chat
-[data-testid="bubble_iframe"] {
-	right: auto !important;
-	left: 4px !important;
-
-	@media #{$phone} {
-		left: -1px !important;
-	}
-}
-
 .image-label {
 	cursor: pointer;
 	width: 180px;
