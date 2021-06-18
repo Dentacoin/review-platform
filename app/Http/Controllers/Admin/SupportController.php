@@ -403,10 +403,9 @@ class SupportController extends AdminController {
                     $user_name = $contact->userEmail->name;
                 }
 
-                // $title = 'Re: your inquiry about '.config('support.issues.'.$contact->issue);
                 $title = $user_name ? 'Dear '.$user_name.',' : 'Hello,';
                 $subtitle = '';
-                // $subject = 'Some subject';
+                $subject = 'Re: your inquiry about '.config('support.issues.'.$contact->issue);
                 $content = Request::input('answer');
 
                 $deafult_searches = array(
@@ -426,7 +425,7 @@ class SupportController extends AdminController {
 
                 $title = str_replace($deafult_searches, $deafult_replaces, $title);
                 $subtitle = str_replace($deafult_searches, $deafult_replaces, $subtitle);
-                // $subject = str_replace($deafult_searches, $deafult_replaces, $subject);
+                $subject = str_replace($deafult_searches, $deafult_replaces, $subject);
                 $content = str_replace($deafult_searches, $deafult_replaces, $content);
 
                 $platform = 'dentacoin';
@@ -451,7 +450,7 @@ class SupportController extends AdminController {
                 
                 $email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
 
-                $email->setSubject($title);
+                $email->setSubject($subject);
                 $email->setReplyTo($sender, $sender_name);
                 $email->addContent(
                     "text/html", $contents
