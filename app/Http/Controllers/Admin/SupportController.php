@@ -306,7 +306,7 @@ class SupportController extends AdminController {
             }
 
             if(!empty($contact->user)) {
-                $user_email = $contact->user->email ? $contact->user->email : $contact->user->mainBranchEmail();
+                $user_email = $contact->user->email ?? $contact->user->mainBranchEmail();
             } else {
                 $user_email = $contact->email;
             }
@@ -386,10 +386,17 @@ class SupportController extends AdminController {
                 return Response::json( ['success' => false, 'message' => "Invalid email template"] );
 
             } else if(!empty(Request::input('answer'))) {
+                $user_name = null;
 
-                $title = 'Some title';
-                $subtitle = 'Some subtitle';
-                $subject = 'Some subject';
+                if($contact->user) {
+                    $user_name = $contact->user->name;
+                } else if($contact->userEmail) {
+                    $user_name = $contact->userEmail->name;
+                }
+
+                $title = 'Re: your inquiry about '.config('support.issues.'.$contact->issue);
+                $subtitle = $user_name ? 'Dear '.$user_name.',' : 'Hello,';
+                // $subject = 'Some subject';
                 $content = Request::input('answer');
 
                 $deafult_searches = array(
@@ -407,7 +414,7 @@ class SupportController extends AdminController {
 
                 $title = str_replace($deafult_searches, $deafult_replaces, $title);
                 $subtitle = str_replace($deafult_searches, $deafult_replaces, $subtitle);
-                $subject = str_replace($deafult_searches, $deafult_replaces, $subject);
+                // $subject = str_replace($deafult_searches, $deafult_replaces, $subject);
                 $content = str_replace($deafult_searches, $deafult_replaces, $content);
 
                 $platform = 'dentacoin';
@@ -432,7 +439,7 @@ class SupportController extends AdminController {
                 
                 $email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
 
-                $email->setSubject($subject);
+                // $email->setSubject($subject);
                 $email->setReplyTo($sender, $sender_name);
                 $email->addContent(
                     "text/html", $contents

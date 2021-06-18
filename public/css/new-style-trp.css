@@ -4177,3 +4177,17 @@ body.strength-pb {
   border: none; }
   .dcn-privacy-policy-cookie .button a {
     font-size: 18px !important; }
+
+.support-icon {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10000000000;
+  cursor: pointer;
+  display: block; }
+  @media screen and (max-width: 768px) {
+    .support-icon {
+      bottom: 10px;
+      right: 10px; } }
+  .support-icon img {
+    display: block; }

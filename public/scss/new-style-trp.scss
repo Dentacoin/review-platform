@@ -4815,3 +4815,21 @@ body.strength-pb {
 	    }
 	}
 }
+
+.support-icon {
+	position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10000000000;
+    cursor: pointer;
+    display: block;
+
+    @media #{$phone} {
+    	bottom: 10px;
+    	right: 10px;
+    }
+
+    img {
+    	display: block;
+    }
+}

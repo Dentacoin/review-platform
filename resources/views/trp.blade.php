@@ -106,37 +106,6 @@
     </head>
 
     <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($extra_body_class) ? $extra_body_class : '' }} {{ !empty(session('first_guided_tour')) ? 'guided-tour' : '' }}">
-    	
-    	@if(!empty($_COOKIE['marketing_cookies']) )
-	    	<!-- Load Facebook SDK for JavaScript -->
-		    <div id="fb-root"></div>
-		    <script>
-		        window.fbAsyncInit = function() {
-		          	FB.init({
-		          		appId: '1906201509652855',
-		            	xfbml: true,
-		            	version: 'v7.0',
-		          	});
-		        };
-
-		        (function(d, s, id) {
-		        	var js, fjs = d.getElementsByTagName(s)[0];
-		        	if (d.getElementById(id)) return;
-	        		js = d.createElement(s); js.id = id;
-		        	js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-		        	fjs.parentNode.insertBefore(js, fjs);
-		      	}(document, 'script', 'facebook-jssdk'));
-		    </script>
-	    @endif
-
-      	<!-- Your Chat Plugin code -->
-      	<div class="fb-customerchat"
-        attribution=setup_tool
-        page_id="127981491160115"
-        greeting_dialog_display="hide"
-  		logged_in_greeting="👋  {!! !empty($user) ? trans('trp.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('trp.chatbox.greeting.not-login')  !!}"
-  		logged_out_greeting="👋  {!! !empty($user) ? trans('trp.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('trp.chatbox.greeting.not-login')  !!}">
-      	</div>
 
     	<div id="site-url" url="{{ empty($_SERVER['REQUEST_URI']) ? getLangUrl('/') : 'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] }}"></div>
 		<header class="header">
@@ -240,6 +209,10 @@
 			<div class="bottom-drawer">
 			</div>
 		@endif
+
+		<a href="https://support.dentacoin.com/" class="support-icon">
+			<img src="{{ url('img/support-icon.png') }}"/ width="60" height="60">
+		</a> 
 
 
 		@if(!empty($user) && !$user->is_dentist)
