@@ -1437,7 +1437,7 @@
 								    return $elm['status']=='waiting' ? -1 : 1;
 								}) as $ask )
 
-									@if(!$ask->hidden)
+									@if(!$ask->hidden && $ask->user)
 										<tr>
 											<td>
 												{{ $ask->created_at->toDateString() }}
