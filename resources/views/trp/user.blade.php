@@ -1253,7 +1253,7 @@
 							</div>
 						@endif
 			        	@foreach( $item->teamApproved as $team)
-							<a class="slider-wrapper approved-team {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}" {!! !empty($user) && $item->id==$user->id ? 'team-id="'.$team->id.'"' : '' !!}>
+							<a class="slider-wrapper approved-team {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : ($team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;') }}" dentist-id="{{ $team->clinicTeam->id }}" {!! !empty($user) && $item->id==$user->id ? 'team-id="'.$team->id.'"' : '' !!}>
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
 										<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
@@ -1282,7 +1282,7 @@
 							    		<div>
 							    			{!! nl2br(trans('trp.common.see-profile')) !!}
 							    		</div>
-							    		<div href="{{ $team->clinicTeam->getLink() }}?popup-loged=submit-review-popup">
+							    		<div href="{{ $team->clinicTeam ? $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' : 'javascript:;' }}">
 							    			{!! nl2br(trans('trp.common.submit-review')) !!}
 							    		</div>
 							    	</div>
@@ -1328,7 +1328,7 @@
 
 						@if(!empty($user) && $item->id==$user->id)
 							@foreach( $item->teamUnapproved as $team)
-								<a class="slider-wrapper pending " href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
+								<a class="slider-wrapper pending " href="{{ $team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;' }}" dentist-id="{{ $team->clinicTeam->id }}">
 									<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 										@if( $team->clinicTeam->is_partner )
 											<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
@@ -1359,7 +1359,7 @@
 							    		<div>
 							    			{!! nl2br(trans('trp.common.see-profile')) !!}
 							    		</div>
-							    		<div href="{{ $team->clinicTeam->getLink() }}?popup-loged=submit-review-popup">
+							    		<div href="{{ $team->clinicTeam ? $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' : 'javascript:;' }}">
 							    			{!! nl2br(trans('trp.common.submit-review')) !!}
 							    		</div>
 							    	</div>
