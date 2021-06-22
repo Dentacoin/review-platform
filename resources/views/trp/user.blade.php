@@ -1233,7 +1233,150 @@
 			</div>
 
 
-		    
+		    @if($item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty() ) )
+	    		<h2 class="black-left-line clearfix">
+	    			{!! nl2br(trans('trp.page.user.team')) !!}
+	    		</h2>
+
+	    		<div class="team-container {!! (!empty($user) && $item->id==$user->id ? count($item->team) : count($item->teamApproved)) + count($item->invites_team_unverified) > (!empty($user) && $item->id==$user->id ? 3 : 4) ? 'with-arrows' : '' !!}" {!! !empty($user) && $item->id==$user->id ? 'team-reorder-link="'.getLangUrl('reorder-teams').'"' : '' !!}>
+		    		<div class="flickity {{ !empty($user) && $item->id==$user->id && $item->team->isNotEmpty() && count($item->team) > 1 ? 'no-b-padding' : '' }}">
+		    			@if( (!empty($user) && $item->id==$user->id) )
+							<div class="slider-wrapper">
+								<a href="javascript:;" class="slider-image add-team-member dont-count" data-popup="add-team-popup" guided-action="team">
+									<div class="plus-team">
+										<img src="{{ url('img-trp/add-member.png') }}">
+										<span>
+											{!! nl2br(trans('trp.page.user.team-add')) !!}
+										</span>
+									</div>
+								</a>
+							</div>
+						@endif
+			        	@foreach( $item->teamApproved as $team)
+			        		@if($team->clinicTeam)
+								<a class="slider-wrapper approved-team {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : ($team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;') }}" dentist-id="{{ $team->clinicTeam ? $team->clinicTeam->id : '' }}" {!! !empty($user) && $item->id==$user->id ? 'team-id="'.$team->id.'"' : '' !!}>
+									<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
+										@if( $team->clinicTeam->is_partner )
+											<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
+										@endif
+										@if( (!empty($user) && $item->id==$user->id) )
+											<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
+												<i class="fas fa-times"></i>
+											</div>
+										@endif
+									</div>
+								    <div class="slider-container">
+								    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
+									    <div class="ratings">
+											<div class="stars">
+												<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
+												</div>
+											</div>
+											<span class="rating">
+												({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
+											</span>
+										</div>
+										<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
+								    </div>
+								    @if($team->clinicTeam->status != 'dentist_no_email' && $team->clinicTeam->status != 'added_new')
+								    	<div class="flickity-buttons clearfix">
+								    		<div>
+								    			{!! nl2br(trans('trp.common.see-profile')) !!}
+								    		</div>
+								    		<div href="{{ $team->clinicTeam ? $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' : 'javascript:;' }}">
+								    			{!! nl2br(trans('trp.common.submit-review')) !!}
+								    		</div>
+								    	</div>
+								    @endif
+								</a>
+							@endif
+						@endforeach
+
+						@if($item->invites_team_unverified->isNotEmpty())
+				        	@foreach( $item->invites_team_unverified as $invite)
+								<a class="slider-wrapper no-upper" href="javascript:;" invite-id="{{ $invite->id }}">
+									<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
+										@if( (!empty($user) && $item->id==$user->id) )
+											<div class="delete-invite delete-button" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
+												<i class="fas fa-times"></i>
+											</div>
+										@endif
+									</div>
+								    <div class="slider-container">
+								    	@if(empty($invite->job))
+								    		<div class="not-verified">{!! nl2br(trans('trp.page.user.team-not-verified')) !!}</div>
+								    	@endif
+								    	<h4>{{ $invite->invited_name }}</h4>
+								    	@if(empty($invite->job))
+										    <div class="ratings">
+												<div class="stars">
+													<div class="bar" style="width: 0%;">
+													</div>
+												</div>
+												<span class="rating">
+													({{ trans('trp.common.reviews-count', [ 'count' => '0']) }})
+												</span>
+											</div>
+											<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
+										@else
+											<p style="margin-top: 18px;color: #0fb0e5;">{!! trans('trp.team-jobs.'.$invite->job) !!}</p>
+										@endif
+								    </div>
+							    	<div class="flickity-buttons clearfix">
+							    	</div>
+								</a>
+							@endforeach
+						@endif
+
+						@if(!empty($user) && $item->id==$user->id)
+							@foreach( $item->teamUnapproved as $team)
+								@if($team->clinicTeam)
+									<a class="slider-wrapper pending " href="{{ $team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;' }}" dentist-id="{{ $team->clinicTeam ? $team->clinicTeam->id : '' }}">
+										<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
+											@if( $team->clinicTeam->is_partner )
+												<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
+											@endif
+										</div>
+									    <div class="slider-container">
+									    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
+										    <div class="ratings">
+												<div class="stars">
+													<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
+													</div>
+												</div>
+												<span class="rating">
+													({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
+												</span>
+											</div>
+											<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
+								    		<div class="approve-buttons clearfix">
+									    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.($team->clinicTeam ? $team->clinicTeam->id : '')) }}">
+									    			{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
+									    		</div>
+									    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.($team->clinicTeam ? $team->clinicTeam->id : '')) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam ? $team->clinicTeam->getNames() : '' ]) !!}">
+									    			{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
+									    		</div>
+									    	</div>
+									    </div>
+								    	<div class="flickity-buttons clearfix">
+								    		<div>
+								    			{!! nl2br(trans('trp.common.see-profile')) !!}
+								    		</div>
+								    		<div href="{{ $team->clinicTeam ? $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' : 'javascript:;' }}">
+								    			{!! nl2br(trans('trp.common.submit-review')) !!}
+								    		</div>
+								    	</div>
+									</a>
+								@endforeach
+							@endforeach
+						@endif
+					</div>
+				</div>
+
+    			@if(!empty($user) && $item->id==$user->id && $item->team->isNotEmpty() && count($item->team) > 1)
+    				<a href="javascript:;" class="rearrange-team button" done-text="{!! trans('trp.page.user.rearrange-team-done') !!}" rearrange-text="{!! trans('trp.page.user.rearrange-team') !!}">{!! trans('trp.page.user.rearrange-team') !!}</a>
+    			@endif
+		    @endif
 
 		    @if( ($item->lat && $item->lon) || ( !empty($user) && $user->id==$item->id) )
 				<h2 class="black-left-line">
