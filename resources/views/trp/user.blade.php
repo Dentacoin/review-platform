@@ -1331,29 +1331,29 @@
 						@if(!empty($user) && $item->id==$user->id)
 							@foreach( $item->teamUnapproved as $team)
 								@if($team->clinicTeam)
-									<a class="slider-wrapper pending " href="{{ $team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;' }}" dentist-id="{{ $team->clinicTeam ? $team->clinicTeam->id : '' }}">
-										<div class="slider-image" style="background-image: url('{{ $team->clinicTeam ? $team->clinicTeam->getImageUrl(true) : ''' }}')">
-											@if( $team->clinicTeam && $team->clinicTeam->is_partner )
+									<a class="slider-wrapper pending " href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
+										<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
+											@if( $team->clinicTeam->is_partner )
 												<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
 											@endif
 										</div>
 									    <div class="slider-container">
-									    	<h4>{{ $team->clinicTeam ? $team->clinicTeam->getNames() : '' }}</h4>
+									    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
 										    <div class="ratings">
 												<div class="stars">
-													<div class="bar" style="width: {{ $team->clinicTeam ? $team->clinicTeam->avg_rating/5*100 : '0' }}%;">
+													<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
 													</div>
 												</div>
 												<span class="rating">
-													({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam ? $team->clinicTeam->ratings : 0)]) }})
+													({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
 												</span>
 											</div>
 											<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
 								    		<div class="approve-buttons clearfix">
-									    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.($team->clinicTeam ? $team->clinicTeam->id : '')) }}">
+									    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.($team->clinicTeam->id)) }}">
 									    			{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
 									    		</div>
-									    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.($team->clinicTeam ? $team->clinicTeam->id : '')) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam ? $team->clinicTeam->getNames() : '' ]) !!}">
+									    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.($team->clinicTeam->id)) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
 									    			{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
 									    		</div>
 									    	</div>
@@ -1362,7 +1362,7 @@
 								    		<div>
 								    			{!! nl2br(trans('trp.common.see-profile')) !!}
 								    		</div>
-								    		<div href="{{ $team->clinicTeam ? $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' : 'javascript:;' }}">
+								    		<div href="{{ $team->clinicTeam->getLink().'?popup-loged=submit-review-popup'}}">
 								    			{!! nl2br(trans('trp.common.submit-review')) !!}
 								    		</div>
 								    	</div>
