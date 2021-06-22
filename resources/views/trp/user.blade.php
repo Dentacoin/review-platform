@@ -1330,22 +1330,22 @@
 
 						@if(!empty($user) && $item->id==$user->id)
 							@foreach( $item->teamUnapproved as $team)
-								@if(!empty($team->clinicTeam))
+								@if($team->clinicTeam)
 									<a class="slider-wrapper pending " href="{{ $team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;' }}" dentist-id="{{ $team->clinicTeam ? $team->clinicTeam->id : '' }}">
-										<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
-											@if( $team->clinicTeam->is_partner )
+										<div class="slider-image" style="background-image: url('{{ $team->clinicTeam ? $team->clinicTeam->getImageUrl(true) : ''' }}')">
+											@if( $team->clinicTeam && $team->clinicTeam->is_partner )
 												<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
 											@endif
 										</div>
 									    <div class="slider-container">
-									    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
+									    	<h4>{{ $team->clinicTeam ? $team->clinicTeam->getNames() : '' }}</h4>
 										    <div class="ratings">
 												<div class="stars">
-													<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
+													<div class="bar" style="width: {{ $team->clinicTeam ? $team->clinicTeam->avg_rating/5*100 : '0' }}%;">
 													</div>
 												</div>
 												<span class="rating">
-													({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
+													({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam ? $team->clinicTeam->ratings : 0)]) }})
 												</span>
 											</div>
 											<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
