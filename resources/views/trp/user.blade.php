@@ -801,156 +801,154 @@
 	    		<h2 class="black-left-line section-title">
 	    			{!! nl2br(trans('trp.page.user.reviews')) !!}
 	    		</h2>
-	    		@if($item->id != 57286)
-					@foreach($item->reviews_in_standard() as $review)
+				@foreach($item->reviews_in_standard() as $review)
 
-				    	<div class="review review-wrapper" review-id="{{ $review->id }}">
-							<div class="review-header">
-				    			<div class="review-avatar" style="background-image: url('{{ $review->user ? $review->user->getImageUrl(true) : '' }}');"></div>
-				    			<span class="review-name">{{ !empty($review->user) && !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : ($review->user ? $review->user->name : 'Deleted') }}: </span>
+			    	<div class="review review-wrapper" review-id="{{ $review->id }}">
+						<div class="review-header">
+			    			<div class="review-avatar" style="background-image: url('{{ $review->user ? $review->user->getImageUrl(true) : '' }}');"></div>
+			    			<span class="review-name">{{ !empty($review->user) && !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : ($review->user ? $review->user->name : 'Deleted') }}: </span>
 
-								<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}" style="{{ !$review->verified ? 'display:none;' : '' }}">
-									{!! nl2br(trans('trp.common.trusted')) !!}
-									<i class="fas fa-info-circle"></i>
-								</div>
-
-				    			@if($review->title)
-					    			<span class="review-title">
-					    				“{{ $review->title }}”
-					    			</span>
-				    			@endif
-
-								<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}"  style="{{ !$review->verified ? 'display:none;' : '' }}">
-									{!! nl2br(trans('trp.common.trusted')) !!}
-									<i class="fas fa-info-circle"></i>
-								</div>
-			    			</div>
-			    			<div class="review-rating">
-			    				<div class="ratings">
-									<div class="stars">
-										<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
-										</div>
-									</div>
-									<span class="rating">
-										({{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating }})
-									</span>
-								</div>
-								<span class="review-date">
-									{{ $review->created_at ? $review->created_at->toFormattedDateString() : '-' }}
-								</span>
-								@if(!empty($review->treatments))
-									@foreach($review->treatments as $t)
-										<span class="treatment">• {!! App\Models\Review::handleTreatmentTooltips(trans('trp.treatments.'.$t)) !!}</span>
-									@endforeach
-								@endif
+							<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}" style="{{ !$review->verified ? 'display:none;' : '' }}">
+								{!! nl2br(trans('trp.common.trusted')) !!}
+								<i class="fas fa-info-circle"></i>
 							</div>
-							<div class="review-content">
-								{!! nl2br($review->answer) !!}
-								<a href="javascript:;" class="more">
-									{!! nl2br(trans('trp.page.user.show-entire')) !!}
+
+			    			@if($review->title)
+				    			<span class="review-title">
+				    				“{{ $review->title }}”
+				    			</span>
+			    			@endif
+
+							<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}"  style="{{ !$review->verified ? 'display:none;' : '' }}">
+								{!! nl2br(trans('trp.common.trusted')) !!}
+								<i class="fas fa-info-circle"></i>
+							</div>
+		    			</div>
+		    			<div class="review-rating">
+		    				<div class="ratings">
+								<div class="stars">
+									<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
+									</div>
+								</div>
+								<span class="rating">
+									({{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating }})
+								</span>
+							</div>
+							<span class="review-date">
+								{{ $review->created_at ? $review->created_at->toFormattedDateString() : '-' }}
+							</span>
+							@if(!empty($review->treatments))
+								@foreach($review->treatments as $t)
+									<span class="treatment">• {!! App\Models\Review::handleTreatmentTooltips(trans('trp.treatments.'.$t)) !!}</span>
+								@endforeach
+							@endif
+						</div>
+						<div class="review-content">
+							{!! nl2br($review->answer) !!}
+							<a href="javascript:;" class="more">
+								{!! nl2br(trans('trp.page.user.show-entire')) !!}
+							</a>
+						</div>
+
+						<div class="review-footer flex flex-mobile break-mobile">
+
+							@if($review->reply)
+								<a class="reply-button show-hide" href="javascript:;" alternative="▾ {{ trans('trp.page.user.show-replies') }}" >
+									▴ {!! nl2br(trans('trp.page.user.hire-replies')) !!}
+								</a>
+							@endif
+							<div class="col">
+								@if(!empty($user) && $user->id==$item->id && !$review->verified && !empty($user->trusted))
+									<a class="button verify-review" href="javascript:;">
+										Verify
+									</a>
+								@endif
+
+								@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
+									<a class="reply-review" href="javascript:;">
+										<span>
+											{!! nl2br(trans('trp.page.user.reply')) !!}
+										</span>
+									</a>
+								@endif
+								
+								<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
+									<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}" style=height: 30px;">
+									<span>
+										{{ intval($review->upvotes) }}
+									</span>
+								</a>
+								<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes)) ? 'voted' : '' !!}" href="javascript:;">
+									<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}" style=height: 30px;">
+									<span>
+										{{ intval($review->downvotes) }}
+									</span>
+								</a>
+
+								<a class="share-review" href="javascript:;" data-popup="popup-share" share-href="{{ $item->getLink() }}?review_id={{ $review->id }}">
+									<img src="{{ url('img-trp/share-review.png') }}" style=height: 30px;">
+									<span>
+										{!! nl2br(trans('trp.common.share')) !!}
+									</span>
 								</a>
 							</div>
+						</div>
 
-							<div class="review-footer flex flex-mobile break-mobile">
-
-								@if($review->reply)
-									<a class="reply-button show-hide" href="javascript:;" alternative="▾ {{ trans('trp.page.user.show-replies') }}" >
-										▴ {!! nl2br(trans('trp.page.user.hire-replies')) !!}
-									</a>
-								@endif
-								<div class="col">
-									@if(!empty($user) && $user->id==$item->id && !$review->verified && !empty($user->trusted))
-										<a class="button verify-review" href="javascript:;">
-											Verify
-										</a>
-									@endif
-
-									@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
-										<a class="reply-review" href="javascript:;">
-											<span>
-												{!! nl2br(trans('trp.page.user.reply')) !!}
-											</span>
-										</a>
-									@endif
-									
-									<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-										<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}" style=height: 30px;">
-										<span>
-											{{ intval($review->upvotes) }}
-										</span>
-									</a>
-									<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes)) ? 'voted' : '' !!}" href="javascript:;">
-										<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}" style=height: 30px;">
-										<span>
-											{{ intval($review->downvotes) }}
-										</span>
-									</a>
-
-									<a class="share-review" href="javascript:;" data-popup="popup-share" share-href="{{ $item->getLink() }}?review_id={{ $review->id }}">
-										<img src="{{ url('img-trp/share-review.png') }}" style=height: 30px;">
-										<span>
-											{!! nl2br(trans('trp.common.share')) !!}
-										</span>
-									</a>
+						@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
+							<div class="review-replied-wrapper reply-form" style="display: none;">
+								<div class="review">
+				    				<div class="review-header">
+						    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
+						    			<span class="review-name">{{ $item->getNames() }}</span>
+					    			</div>
+									<div class="review-content">
+										<form method="post" action="{{ $item->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
+											{!! csrf_field() !!}
+											<textarea class="input" name="reply" placeholder="{!! nl2br(trans('trp.page.user.reply-enter')) !!}"></textarea>
+											<button class="button" type="submit" name="">{!! nl2br(trans('trp.page.user.reply-submit')) !!}</button>
+											<div class="alert alert-warning" style="display: none;">
+												{!! nl2br(trans('trp.page.user.reply-error')) !!}
+												
+											</div>
+										</form>
+									</div>
 								</div>
 							</div>
+						@elseif($review->reply)
+							<div class="review-replied-wrapper">
+								<div class="review">
+				    				<div class="review-header">
+						    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
+						    			<span class="review-name">{{ $item->getNames() }}</span>
+						    			<span class="review-date">
+											{{ $review->replied_at ? $review->replied_at->toFormattedDateString() : '-' }}
+										</span>
+					    			</div>
+									<div class="review-content">
+										{!! nl2br($review->reply) !!}
+									</div>
 
-							@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
-								<div class="review-replied-wrapper reply-form" style="display: none;">
-									<div class="review">
-					    				<div class="review-header">
-							    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-							    			<span class="review-name">{{ $item->getNames() }}</span>
-						    			</div>
-										<div class="review-content">
-											<form method="post" action="{{ $item->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
-												{!! csrf_field() !!}
-												<textarea class="input" name="reply" placeholder="{!! nl2br(trans('trp.page.user.reply-enter')) !!}"></textarea>
-												<button class="button" type="submit" name="">{!! nl2br(trans('trp.page.user.reply-submit')) !!}</button>
-												<div class="alert alert-warning" style="display: none;">
-													{!! nl2br(trans('trp.page.user.reply-error')) !!}
-													
-												</div>
-											</form>
+									<div class="review-footer">
+										<div class="col">
+											<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
+												<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}">
+												<span>
+													{{ intval($review->upvotes_reply) }}
+												</span>
+											</a>
+											<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes) ) ? 'voted' : '' !!}" href="javascript:;">
+												<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}">
+												<span>
+													{{ intval($review->downvotes_reply) }}
+												</span>
+											</a>
 										</div>
 									</div>
 								</div>
-							@elseif($review->reply)
-								<div class="review-replied-wrapper">
-									<div class="review">
-					    				<div class="review-header">
-							    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-							    			<span class="review-name">{{ $item->getNames() }}</span>
-							    			<span class="review-date">
-												{{ $review->replied_at ? $review->replied_at->toFormattedDateString() : '-' }}
-											</span>
-						    			</div>
-										<div class="review-content">
-											{!! nl2br($review->reply) !!}
-										</div>
-
-										<div class="review-footer">
-											<div class="col">
-												<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-													<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}">
-													<span>
-														{{ intval($review->upvotes_reply) }}
-													</span>
-												</a>
-												<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-													<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}">
-													<span>
-														{{ intval($review->downvotes_reply) }}
-													</span>
-												</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							@endif
-			    		</div>
-			    	@endforeach
-			    @endif
+							</div>
+						@endif
+		    		</div>
+		    	@endforeach
 	    	</div>
 	    </div>
 	@endif
@@ -1235,146 +1233,7 @@
 			</div>
 
 
-		    @if($item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty() ) )
-	    		<h2 class="black-left-line clearfix">
-	    			{!! nl2br(trans('trp.page.user.team')) !!}
-	    		</h2>
-
-	    		<div class="team-container {!! (!empty($user) && $item->id==$user->id ? count($item->team) : count($item->teamApproved)) + count($item->invites_team_unverified) > (!empty($user) && $item->id==$user->id ? 3 : 4) ? 'with-arrows' : '' !!}" {!! !empty($user) && $item->id==$user->id ? 'team-reorder-link="'.getLangUrl('reorder-teams').'"' : '' !!}>
-		    		<div class="flickity {{ !empty($user) && $item->id==$user->id && $item->team->isNotEmpty() && count($item->team) > 1 ? 'no-b-padding' : '' }}">
-		    			@if( (!empty($user) && $item->id==$user->id) )
-							<div class="slider-wrapper">
-								<a href="javascript:;" class="slider-image add-team-member dont-count" data-popup="add-team-popup" guided-action="team">
-									<div class="plus-team">
-										<img src="{{ url('img-trp/add-member.png') }}">
-										<span>
-											{!! nl2br(trans('trp.page.user.team-add')) !!}
-										</span>
-									</div>
-								</a>
-							</div>
-						@endif
-			        	@foreach( $item->teamApproved as $team)
-							<a class="slider-wrapper approved-team {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : ($team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;') }}" dentist-id="{{ $team->clinicTeam ? $team->clinicTeam->id : '' }}" {!! !empty($user) && $item->id==$user->id ? 'team-id="'.$team->id.'"' : '' !!}>
-								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
-									@if( $team->clinicTeam->is_partner )
-										<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
-									@endif
-									@if( (!empty($user) && $item->id==$user->id) )
-										<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
-											<i class="fas fa-times"></i>
-										</div>
-									@endif
-								</div>
-							    <div class="slider-container">
-							    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
-								    <div class="ratings">
-										<div class="stars">
-											<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
-											</div>
-										</div>
-										<span class="rating">
-											({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
-										</span>
-									</div>
-									<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
-							    </div>
-							    @if($team->clinicTeam->status != 'dentist_no_email' && $team->clinicTeam->status != 'added_new')
-							    	<div class="flickity-buttons clearfix">
-							    		<div>
-							    			{!! nl2br(trans('trp.common.see-profile')) !!}
-							    		</div>
-							    		<div href="{{ $team->clinicTeam ? $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' : 'javascript:;' }}">
-							    			{!! nl2br(trans('trp.common.submit-review')) !!}
-							    		</div>
-							    	</div>
-							    @endif
-							</a>
-						@endforeach
-
-						@if($item->invites_team_unverified->isNotEmpty())
-				        	@foreach( $item->invites_team_unverified as $invite)
-								<a class="slider-wrapper no-upper" href="javascript:;" invite-id="{{ $invite->id }}">
-									<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
-										@if( (!empty($user) && $item->id==$user->id) )
-											<div class="delete-invite delete-button" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
-												<i class="fas fa-times"></i>
-											</div>
-										@endif
-									</div>
-								    <div class="slider-container">
-								    	@if(empty($invite->job))
-								    		<div class="not-verified">{!! nl2br(trans('trp.page.user.team-not-verified')) !!}</div>
-								    	@endif
-								    	<h4>{{ $invite->invited_name }}</h4>
-								    	@if(empty($invite->job))
-										    <div class="ratings">
-												<div class="stars">
-													<div class="bar" style="width: 0%;">
-													</div>
-												</div>
-												<span class="rating">
-													({{ trans('trp.common.reviews-count', [ 'count' => '0']) }})
-												</span>
-											</div>
-											<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
-										@else
-											<p style="margin-top: 18px;color: #0fb0e5;">{!! trans('trp.team-jobs.'.$invite->job) !!}</p>
-										@endif
-								    </div>
-							    	<div class="flickity-buttons clearfix">
-							    	</div>
-								</a>
-							@endforeach
-						@endif
-
-						@if(!empty($user) && $item->id==$user->id)
-							@foreach( $item->teamUnapproved as $team)
-								<a class="slider-wrapper pending " href="{{ $team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;' }}" dentist-id="{{ $team->clinicTeam ? $team->clinicTeam->id : '' }}">
-									<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
-										@if( $team->clinicTeam->is_partner )
-											<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
-										@endif
-									</div>
-								    <div class="slider-container">
-								    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
-									    <div class="ratings">
-											<div class="stars">
-												<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
-												</div>
-											</div>
-											<span class="rating">
-												({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
-											</span>
-										</div>
-										<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
-							    		<div class="approve-buttons clearfix">
-								    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.($team->clinicTeam ? $team->clinicTeam->id : '')) }}">
-								    			{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
-								    		</div>
-								    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.($team->clinicTeam ? $team->clinicTeam->id : '')) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam ? $team->clinicTeam->getNames() : '' ]) !!}">
-								    			{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
-								    		</div>
-								    	</div>
-								    </div>
-							    	<div class="flickity-buttons clearfix">
-							    		<div>
-							    			{!! nl2br(trans('trp.common.see-profile')) !!}
-							    		</div>
-							    		<div href="{{ $team->clinicTeam ? $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' : 'javascript:;' }}">
-							    			{!! nl2br(trans('trp.common.submit-review')) !!}
-							    		</div>
-							    	</div>
-								</a>
-							@endforeach
-						@endif
-					</div>
-				</div>
-
-    			@if(!empty($user) && $item->id==$user->id && $item->team->isNotEmpty() && count($item->team) > 1)
-    				<a href="javascript:;" class="rearrange-team button" done-text="{!! trans('trp.page.user.rearrange-team-done') !!}" rearrange-text="{!! trans('trp.page.user.rearrange-team') !!}">{!! trans('trp.page.user.rearrange-team') !!}</a>
-    			@endif
-		    @endif
+		    
 
 		    @if( ($item->lat && $item->lon) || ( !empty($user) && $user->id==$item->id) )
 				<h2 class="black-left-line">
