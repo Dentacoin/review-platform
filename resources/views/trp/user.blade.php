@@ -1253,7 +1253,7 @@
 							</div>
 						@endif
 			        	@foreach( $item->teamApproved as $team)
-							<a class="slider-wrapper approved-team {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : ($team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;') }}" dentist-id="{{ $team->clinicTeam->id }}" {!! !empty($user) && $item->id==$user->id ? 'team-id="'.$team->id.'"' : '' !!}>
+							<a class="slider-wrapper approved-team {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : ($team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;') }}" dentist-id="{{ $team->clinicTeam ? $team->clinicTeam->id : '' }}" {!! !empty($user) && $item->id==$user->id ? 'team-id="'.$team->id.'"' : '' !!}>
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
 										<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
@@ -1328,7 +1328,7 @@
 
 						@if(!empty($user) && $item->id==$user->id)
 							@foreach( $item->teamUnapproved as $team)
-								<a class="slider-wrapper pending " href="{{ $team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;' }}" dentist-id="{{ $team->clinicTeam->id }}">
+								<a class="slider-wrapper pending " href="{{ $team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;' }}" dentist-id="{{ $team->clinicTeam ? $team->clinicTeam->id : '' }}">
 									<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 										@if( $team->clinicTeam->is_partner )
 											<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
@@ -1347,10 +1347,10 @@
 										</div>
 										<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
 							    		<div class="approve-buttons clearfix">
-								    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.$team->clinicTeam->id) }}">
+								    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.($team->clinicTeam ? $team->clinicTeam->id : '')) }}">
 								    			{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
 								    		</div>
-								    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.$team->clinicTeam->id) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
+								    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.($team->clinicTeam ? $team->clinicTeam->id : '')) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam ? $team->clinicTeam->getNames() : '' ]) !!}">
 								    			{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
 								    		</div>
 								    	</div>
