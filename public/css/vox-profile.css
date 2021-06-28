@@ -179,7 +179,8 @@ body.sp-vox-iframe {
         .page-profile.sp-vox .section-recent-surveys .swiper-slide .vox-header .btns a {
           font-size: 12px; } }
 
-.page-profile .poll-bubble {
+.page-profile .poll-bubble,
+.page-prpfile .support-icon {
   display: none !important; }
 
 .popup.banned .wrapper {
