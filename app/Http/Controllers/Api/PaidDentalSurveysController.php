@@ -83,7 +83,7 @@ class PaidDentalSurveysController extends ApiController {
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
         if(!empty($user)) {
-        	$vox_levels['level_name'] = $user->getVoxLevelName();
+        	$vox_levels['level_name'] = trans('vox.page.home.levels.'.$user->getVoxLevelName());
         	$vox_levels['level_img'] = url('new-vox-img/vox-'.$user->getVoxLevelName().'-icon.svg');
         	$vox_levels['count_surveys'] = $user->countAllSurveysRewards();
         	$vox_levels['count_polls'] = count($user->filledDailyPolls());

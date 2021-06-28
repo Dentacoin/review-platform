@@ -2615,6 +2615,7 @@ body.popup-visible {
     .gray-button.secondary i {
       color: #888888; }
   .gray-button:focus, .gray-button:hover {
+    background-color: #888888;
     color: #d4ebfb; }
   .gray-button i {
     color: #d4ebfb;

@@ -32,7 +32,7 @@
 			<img src="{{ url('new-vox-img/buy-detailed-reports.png') }}">
 			<h3>{!! nl2br(trans('vox.page.index.genuine-research.1.title')) !!}</h3>
 			<p>{!! nl2br(trans('vox.page.index.genuine-research.1.description')) !!}</p>
-			<a class="blue-button" href="javascript:;">
+			<a class="blue-button gray-button" href="javascript:;">
 				{!! nl2br(trans('vox.page.index.genuine-research.1.button')) !!}
 			</a>
 		</div>
