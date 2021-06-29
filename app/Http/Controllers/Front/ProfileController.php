@@ -1034,9 +1034,9 @@ class ProfileController extends FrontController {
                                 if($existing_dentist->status == 'test') {
                                     $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is with status Test.
                                     Link to dentist\'s profile:
-                                    '.url('https://reviews.dentacoin.com/cms/users/edit/'.$existing_dentist->id).'
+                                    '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$existing_dentist->id).'
                                     Link to clinic\'s profile: 
-                                    '.url('https://reviews.dentacoin.com/cms/users/edit/'.$current_user->id).'
+                                    '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$current_user->id).'
                                     '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
                                     ';
 
@@ -1094,9 +1094,9 @@ class ProfileController extends FrontController {
                             } else if(!empty($existing_dentist->self_deleted) || !empty($existing_dentist->deleted_at) || $existing_dentist->status == 'rejected' || $existing_dentist->status == 'added_by_clinic_rejected' || $existing_dentist->status == 'added_rejected' || $existing_dentist->status == 'pending') {
 
                                 $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
-                                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$existing_dentist->id).'
+                                '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$existing_dentist->id).'
                                 Link to clinic\'s profile: 
-                                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$current_user->id).'
+                                '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$current_user->id).'
                                 '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
                                 ';
 
@@ -1162,7 +1162,7 @@ class ProfileController extends FrontController {
 
                         $mtext = 'Clinic '.$current_user->getNames().' added a new team member. Link to profile:
                         '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-                        '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
+                        '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$newuser->id).'
 
                         ';
 

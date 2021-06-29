@@ -1712,7 +1712,7 @@ class IndexController extends ApiController {
       
             	$mtext = 'New survey request from '.$user->getNames().'
 	                
-		        Link to CMS: '.url("/cms/users/edit/".$user->id).'
+		        Link to CMS: '.url("/cms/users/users/edit/".$user->id).'
 		        Survey title: '.request('title').'
 		        Survey target group location/s: '.request('target');
 

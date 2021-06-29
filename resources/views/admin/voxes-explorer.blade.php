@@ -53,7 +53,7 @@
                         <div>
                             <span>Respondents shown: {{ $respondents_shown }}</span>
                         </div>
-                        <form method="post" action="{{ url('cms/users/mass-delete') }}" >
+                        <form method="post" action="{{ url('cms/users/users/mass-delete') }}" >
                             {!! csrf_field() !!}
                             @include('admin.parts.table', [
                                 'table_id' => 'respondents',
@@ -170,7 +170,7 @@
                         <div>
                             <span>Respondents shown: {{ $respondents_shown }}</span>
                         </div>
-                        <form method="post" action="{{ url('cms/users/mass-delete') }}" >
+                        <form method="post" action="{{ url('cms/users/users/mass-delete') }}" >
                             {!! csrf_field() !!}
                             @include('admin.parts.table', [
                                 'table_id' => 'respondents',

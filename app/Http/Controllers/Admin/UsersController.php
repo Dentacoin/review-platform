@@ -243,7 +243,7 @@ class UsersController extends AdminController {
     public function list() {
 
         if( Auth::guard('admin')->user()->role!='admin' ) {
-            return redirect('cms/users/edit/'.Auth::guard('admin')->user()->user_id);            
+            return redirect('cms/users/users/edit/'.Auth::guard('admin')->user()->user_id);            
         }
 
         $getArr = $_GET;
@@ -769,7 +769,7 @@ class UsersController extends AdminController {
         $table_fields['delete'] = array('template' => 'admin.parts.table-users-delete');
 
         // dd($getArrNoSort);
-        $current_url = url('cms/users/').'?'.http_build_query($getArrNoSort);
+        $current_url = url('cms/users/users/').'?'.http_build_query($getArrNoSort);
 
         return $this->showView('users', array(
             'users' => $users,
@@ -811,7 +811,7 @@ class UsersController extends AdminController {
     public function anonymous_list() {
 
         if( Auth::guard('admin')->user()->role!='admin' ) {
-            return redirect('cms/users/edit/'.Auth::guard('admin')->user()->user_id);            
+            return redirect('cms/users/users/edit/'.Auth::guard('admin')->user()->user_id);            
         }
 
         $users = AnonymousUser::orderBy('id', 'DESC');
@@ -882,14 +882,14 @@ class UsersController extends AdminController {
                 User::destroy( $id );
 
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
-                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
+                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users/');
 
             } else {
                 $this->request->session()->flash('error-message', "You have to write a reason why this user has to be deleted" );
-                return redirect('cms/users/edit/'.$item->id);
+                return redirect('cms/users/users/edit/'.$item->id);
             }
         } else {
-            return redirect('cms/'.$this->current_page);
+            return redirect('cms/users/users/');
         }
     }
 
@@ -1023,7 +1023,7 @@ class UsersController extends AdminController {
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.avatar-deleted') );
-        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+        return redirect('cms/users/users/edit/'.$id);
     }
 
     public function add_avatar( $id ) {
@@ -1065,7 +1065,7 @@ class UsersController extends AdminController {
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.photo-deleted') );
-        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+        return redirect('cms/users/users/edit/'.$id);
     }
 
     public function delete_ban( $id, $ban_id ) {
@@ -1081,7 +1081,7 @@ class UsersController extends AdminController {
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.ban-deleted') );
-        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+        return redirect('cms/users/users/edit/'.$id);
     }
 
     public function restore_ban( $id, $ban_id ) {
@@ -1106,7 +1106,7 @@ class UsersController extends AdminController {
         }
 
         $this->request->session()->flash('success-message', 'Ban restored!' );
-        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+        return redirect('cms/users/users/edit/'.$id);
     }
 
     public function delete_vox( $id, $reward_id ) {
@@ -1123,7 +1123,7 @@ class UsersController extends AdminController {
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.reward-deleted') );
-        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+        return redirect('cms/users/users/edit/'.$id);
     }
 
     public function delete_unfinished( $id, $vox_id ) {
@@ -1138,7 +1138,7 @@ class UsersController extends AdminController {
         }
 
         $this->request->session()->flash('success-message', 'Survey answers deleted!' );
-        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+        return redirect('cms/users/users/edit/'.$id);
     }
 
     public function delete_review( $review_id ) {
@@ -1217,7 +1217,7 @@ class UsersController extends AdminController {
             $patient->sendGridTemplate(86, null, 'trp');
 
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.review-deleted') );
-            return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : ('cms/'.$this->current_page.'/edit/'.(!empty($item->dentist_id) ? $item->dentist_id : $item->clinic_id )));
+            return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : ('cms/users/users/edit/'.(!empty($item->dentist_id) ? $item->dentist_id : $item->clinic_id )));
         }
 
         return redirect('cms/users');
@@ -1245,15 +1245,15 @@ class UsersController extends AdminController {
                 $item->restore();
 
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
-                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
+                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users');
 
             } else {
                 $this->request->session()->flash('error-message', "You have to write a reason why this user has to be restored" );
-                return redirect('cms/users/edit/'.$item->id);
+                return redirect('cms/users/users/edit/'.$item->id);
             }            
         }
 
-        return redirect('cms/users/');
+        return redirect('cms/users/users/');
     }
 
     public function restore_self_deleted( $id ) {
@@ -1274,15 +1274,15 @@ class UsersController extends AdminController {
                 $item->save();
 
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
-                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
+                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users');
 
             } else {
                 $this->request->session()->flash('error-message', "You have to write a reason why this user has to be restored" );
-                return redirect('cms/users/edit/'.$item->id);
+                return redirect('cms/users/users/edit/'.$item->id);
             }            
         }
 
-        return redirect('cms/users/');
+        return redirect('cms/users/users/');
     }
 
 
@@ -1336,7 +1336,7 @@ class UsersController extends AdminController {
 
             if ($validator->fails()) {;
 
-                return redirect(url('cms/users/add'))
+                return redirect(url('cms/users/users/add'))
                 ->withInput()
                 ->withErrors($validator);
             } else {
@@ -1376,7 +1376,7 @@ class UsersController extends AdminController {
                 $newuser->sendGridTemplate(81, $substitutions, 'trp');
 
                 Request::session()->flash('success-message', 'Dentist Added');
-                return redirect('cms/'.$this->current_page.'/edit/'.$newuser->id);
+                return redirect('cms/users/users/edit/'.$newuser->id);
             }
         }
 
@@ -1461,7 +1461,7 @@ class UsersController extends AdminController {
 
                                 if (!empty($existing_slug)) {
                                     Request::session()->flash('error-message', 'This slug is already used by another user');
-                                    return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+                                    return redirect('cms/users/users/edit/'.$item->id);
                                 } else {
                                     $existed_old_slug = OldSlug::where('user_id', $item->id)->where('slug', 'like', $this->request->input($key))->first();
 
@@ -1511,7 +1511,7 @@ class UsersController extends AdminController {
                                         $item->$key = $this->request->input($key);
                                     } else {
                                         Request::session()->flash('error-message', 'This '.$key.' is already used by another user - ID '.$existing->id);
-                                        return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+                                        return redirect('cms/users/users/edit/'.$item->id);
                                     }
                                     
                                 } else {
@@ -1880,7 +1880,7 @@ class UsersController extends AdminController {
                 }
 
                 Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated'));
-                return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+                return redirect('cms/users/users/edit/'.$item->id);
             }
 
             $all_questions_answerd = VoxAnswer::where('user_id', $id)
@@ -2002,11 +2002,307 @@ class UsersController extends AdminController {
                 'dev_domain' => Request::getHost() == 'urgent.dentavox.dentacoin.com' || Request::getHost() == 'urgent.reviews.dentacoin.com' ? true : false,
             ));
         } else {
-            return redirect('cms/'.$this->current_page);
+            return redirect('cms/users/users/');
         }
     }
 
-    public function incomplete() {
+    public function import() {
+
+        if(Request::isMethod('post')) {
+
+            if(Input::file('file')) {
+
+                if (Input::file('file')->getMimeType() != 'application/vnd.ms-excel') {
+                    $this->request->session()->flash('error-message', 'File format not accepted. Upload .xls');
+                    return redirect('cms/users/users/import');
+                }
+
+                global $results, $not_imported;
+
+                $newName = '/tmp/'.str_replace(' ', '-', Input::file('file')->getClientOriginalName());
+                copy( Input::file('file')->path(), $newName );
+
+                $results = Excel::toArray(new Import, $newName );
+
+                if(!empty($results)) {
+
+                    unset($results[0][0]);
+
+                    $not_imported = [];
+                    if(!empty($results)) {
+
+                        foreach ($results[0] as $k => $row) {
+
+                            //dd($results, $k, $row);
+                            if (!empty($row[2]) && !empty($row[0]) && filter_var($row[2], FILTER_VALIDATE_EMAIL)) {
+                                $existing_user = User::where('email', 'like', $row[2] )->first();
+                                $existing_place = !empty($row[10]) ? User::where('place_id', $row[10] )->first() : null;
+
+                                if (!empty($existing_user)) {
+                                    $not_imported[] = $row[0];
+                                } else if(!empty($existing_place)) {
+                                    $not_imported[] = 'already imported user '.$row[0].'. Existing user ID: '.$existing_place->id;
+                                } else {
+                                    $newuser = new User;
+                                    $newuser->name = $row[0];
+                                    $newuser->name_alternative = $row[1];
+                                    $newuser->email = $row[2];
+                                    $newuser->phone = $row[3];
+                                    $newuser->website = $row[4];
+                                    $newuser->work_hours = $row[5];
+                                    $newuser->is_dentist = 1;
+                                    $newuser->is_clinic = ($row[6] == 'clinic') ? 1 : 0;
+                                    $country_n = $row[7];
+                                    $country = Country::whereHas('translations', function ($query) use ($country_n) {
+                                        $query->where('name', 'LIKE', $country_n);
+                                    })->first();
+                                    $newuser->country_id = $country->id;
+                                    $newuser->address = $row[8];
+                                    $newuser->place_id = $row[10];
+                                    $newuser->status = 'admin_imported';
+                                    $newuser->platform = 'trp';
+                                    $newuser->save();
+
+                                    $newuser->slug = $newuser->makeSlug();
+                                    $newuser->save();
+
+                                    if (!empty($row[9])) {
+                                        $img = Image::make( $row[9] )->orientate();
+                                        $newuser->addImage($img);
+                                    }
+
+                                    $newuser->generateSocialCover();
+
+                                    $substitutions = [
+                                        "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+                                    ];
+
+                                    $newuser->sendGridTemplate(81, $substitutions);
+                                }
+                            } else {
+                                $not_imported[] = $row[0] ? $row[0] : ($row[2] ? $row[2] : 'without name and mail');
+                            }
+
+                        }
+                    }
+
+                }
+
+                unlink($newName);
+
+                if(!empty($not_imported)) {
+                    $this->request->session()->flash('warning-message', 'Dentists were imported successfully. However, there were some invalid or missing dentist emails which were skipped - '.implode(',', $not_imported));
+                } else {
+                    $this->request->session()->flash('success-message', 'Dentists were imported successfully.');
+                }
+                
+                return redirect('cms/users/users/import');
+
+            } else {
+                return redirect('cms/users/users/import');
+            }
+        }
+
+        return $this->showView('users-import');
+    }
+
+    public function upload_temp($locale=null) {
+
+        if( Request::file('image') && Request::file('image')->isValid() ) {
+            $img = Image::make( Input::file('image') )->orientate();
+            list($thumb, $full, $name) = User::addTempImage($img);
+            return Response::json(['success' => true, 'thumb' => $thumb, 'name' => $name ]);
+        }
+    }
+
+    public function resetFirstGudedTour($id) {
+
+        $item = UserGuidedTour::where('user_id', $id)->first();
+
+        if(!empty($item)) {
+            $item->first_login_trp = null;
+            $item->save();
+        }
+
+        return redirect('cms/users/users/edit/'.$id);
+    }
+
+    public function anonymousDelete($id) {
+
+        $item = AnonymousUser::find($id);
+
+        if(!empty($item)) {
+            $item->delete();
+        }
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/anonymous_users');
+    }
+
+    public function convertToPatient($id) {
+
+        $item = User::find($id);
+
+        if(!empty($item)) {
+            $item->status = 'approved';
+            $item->is_dentist = 0;
+            $item->is_clinic = 0;
+            $item->is_partner = null;
+            $item->featured = null;
+            $item->top_dentist_month = null;
+            $item->title = null;
+            $item->slug = null;
+            $item->patient_status = 'new_not_verified';
+
+            $item->product_news = ['dentacoin', 'trp', 'vox'];
+            $item->save();
+
+            //create recipients
+            $item->removeFromSendgridSubscribes();
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+            $user_info = new \stdClass();
+            $user_info->email = $item->email;
+            $user_info->first_name = explode(' ', $item->name)[0];
+            $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
+            $user_info->type = 'patient';
+
+            $request_body = [
+                $user_info
+            ];
+
+            $response = $sg->client->contactdb()->recipients()->post($request_body);
+            $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+            //add to list
+            if($recipient_id) {
+                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                $list_id = config('email-preferences')['product_news']['vox']['sendgrid_list_id'];
+                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+            }
+        }
+
+        return redirect('cms/users/users/edit/'.$id);
+    }
+
+
+    public function convertToDentist($id) {
+
+        $item = User::find($id);
+
+        if(!empty($item)) {
+            $item->status = 'new';
+            $item->is_dentist = 1;
+            $item->user_patient_type = null;
+            $item->is_clinic = 0;
+            $item->patient_status = null;
+
+            $item->product_news = null;
+            $item->save();
+            $item->removeFromSendgridSubscribes();
+
+            $this->request->session()->flash('warning-message', 'Please, check the following fields "user type", "title"! Set a password and send it to the dentist!! Add country and address!');
+        }
+
+        return redirect('cms/users/users/edit/'.$id);
+    }
+
+    public function userInfo($id) {
+        $user = User::withTrashed()->find($id);
+
+        $duplicated_names = collect();
+        if( !empty($user->name)) {
+            $duplicated_names = User::where('id', '!=', $user->id)->where('name', 'LIKE', $user->name)->withTrashed()->get();
+        }
+
+        return $this->showView('user-info', [
+            'user' => $user,
+            'duplicated_names' => $duplicated_names
+        ]);
+    }
+
+    public function usersStats() {
+
+        $user_types = User::groupBy('is_dentist')->select('is_dentist', DB::raw('count(*) as total'))->get();
+
+        $dentist_partners = User::where('is_dentist', '1')->where('is_partner' , 1)->select('is_partner', DB::raw('count(*) as total'))->get();
+
+        $user_genders = User::groupBy('gender')->select('gender', DB::raw('count(*) as total'))->get();
+
+        $users_country = User::groupBy('country_id')->select('country_id', DB::raw('count(*) as total'))->orderBy('total', 'DESC')->get();
+
+        return $this->showView('users-stats', array(
+            'user_types' => $user_types,
+            'dentist_partners' => $dentist_partners,
+            'user_genders' => $user_genders,
+            'users_country' => $users_country,
+        ));
+    }
+
+    public function registrations( ) {
+        $weeks = DB::select("
+            SELECT 
+                CONCAT(YEAR(`created_at`), 'W', REPLACE(LPAD( WEEK( DATE_SUB(  `created_at` , INTERVAL 16 HOUR ) , 5 ) , 2 , '0' ) , '00', '52') ) AS  `week`,
+                SUM( IF(  `is_dentist` AND `platform` = 'trp', 1, 0 ) ) AS `dentist`, 
+                SUM( IF(  !`is_dentist` AND `platform` = 'trp' , 1, 0 ) ) AS `patient`, 
+                SUM( IF(  `platform` = 'vox' , 1, 0 ) ) AS `vox`,
+                SUM( IF(  `platform` = 'dentacare' , 1, 0 ) ) AS `dentacare`,
+                SUM( IF(  `platform` = 'assurance' , 1, 0 ) ) AS `assurance`,
+                SUM( IF(  `platform` = 'dentacoin' , 1, 0 ) ) AS `dentacoin`,
+                SUM( IF(  `platform` = 'dentists' , 1, 0 ) ) AS `dentists`
+            FROM  `users` 
+            GROUP BY `week` 
+            ORDER BY `id` DESC
+        ");
+
+        $table = [];
+        // dd($weeks);
+        foreach ($weeks as $w) {
+            $s = date('d.m.Y', strtotime($w->week) - 86400*3 );
+            $e = date('d.m.Y', strtotime($w->week) + 86400*4 );
+            $table[] = [
+                'week' => [
+                    'value' => $s.'-'.$e,
+                    'label' => 'Week',
+                ],
+                'dentists' => [
+                    'value' => $w->dentist,
+                    'label' => 'TRP Dentist',
+                ],
+                'patients' => [
+                    'value' => $w->patient,
+                    'label' => 'TRP Patient',
+                ],
+                'voxes' => [
+                    'value' => $w->vox,
+                    'label' => 'DentaVox',
+                ],
+                'dentacare' => [
+                    'value' => $w->dentacare,
+                    'label' => 'Dentacare',
+                ],
+                'assurance' => [
+                    'value' => $w->assurance,
+                    'label' => 'Assurance',
+                ],
+                'dentacoin' => [
+                    'value' => $w->dentacoin,
+                    'label' => 'Dentacoin',
+                ],
+                'dentists' => [
+                    'value' => $w->dentists,
+                    'label' => 'Dentists',
+                ],
+            ];
+        }
+
+        return $this->showView('users-reg-stats', array(
+            'name' => 'registrations',
+            'table' => $table,
+        ));
+
+    }
+
+    public function incompleteRegs() {
 
         if(request('export')) {
             $incomplete = IncompleteRegistration::whereNull('completed')->orderBy('id', 'desc')->get();
@@ -2033,7 +2329,6 @@ class UsersController extends AdminController {
                     $country = Country::find($u->country_id);
                     $info['country'] = mb_strtoupper($country->code);
                 }
-
 
                 if( !empty($country) && $u->phone ) {
                     $phone = trim(str_replace(' ', '', $u->phone));
@@ -2147,7 +2442,7 @@ class UsersController extends AdminController {
             }
         }
 
-        return $this->showView('users-incomplete', array(
+        return $this->showView('users-incomplete-regs', array(
             'items' => $incompletes,
             'total_count' => $total_count,
             'search_email' =>  request('search-email'),
@@ -2167,7 +2462,7 @@ class UsersController extends AdminController {
         ));
     }
 
-    public function leads() {
+    public function leadMagnet() {
 
         if(request('export-lead')) {
             $leads_export = LeadMagnet::orderBy('id', 'desc')->get();
@@ -2243,222 +2538,8 @@ class UsersController extends AdminController {
 
 
         $leads = LeadMagnet::orderBy('id', 'desc')->get();
-        return $this->showView('users-leads', array(
+        return $this->showView('users-lead-magnet', array(
             'leads' => $leads,
         ));
-    }
-
-    public function import() {
-
-        if(Request::isMethod('post')) {
-
-            if(Input::file('file')) {
-
-                if (Input::file('file')->getMimeType() != 'application/vnd.ms-excel') {
-                    $this->request->session()->flash('error-message', 'File format not accepted. Upload .xls');
-                    return redirect('cms/'.$this->current_page.'/import');
-                }
-
-                global $results, $not_imported;
-
-                $newName = '/tmp/'.str_replace(' ', '-', Input::file('file')->getClientOriginalName());
-                copy( Input::file('file')->path(), $newName );
-
-                $results = Excel::toArray(new Import, $newName );
-
-                if(!empty($results)) {
-
-                    unset($results[0][0]);
-
-                    $not_imported = [];
-                    if(!empty($results)) {
-
-                        foreach ($results[0] as $k => $row) {
-
-                            //dd($results, $k, $row);
-                            if (!empty($row[2]) && !empty($row[0]) && filter_var($row[2], FILTER_VALIDATE_EMAIL)) {
-                                $existing_user = User::where('email', 'like', $row[2] )->first();
-                                $existing_place = !empty($row[10]) ? User::where('place_id', $row[10] )->first() : null;
-
-                                if (!empty($existing_user)) {
-                                    $not_imported[] = $row[0];
-                                } else if(!empty($existing_place)) {
-                                    $not_imported[] = 'already imported user '.$row[0].'. Existing user ID: '.$existing_place->id;
-                                } else {
-                                    $newuser = new User;
-                                    $newuser->name = $row[0];
-                                    $newuser->name_alternative = $row[1];
-                                    $newuser->email = $row[2];
-                                    $newuser->phone = $row[3];
-                                    $newuser->website = $row[4];
-                                    $newuser->work_hours = $row[5];
-                                    $newuser->is_dentist = 1;
-                                    $newuser->is_clinic = ($row[6] == 'clinic') ? 1 : 0;
-                                    $country_n = $row[7];
-                                    $country = Country::whereHas('translations', function ($query) use ($country_n) {
-                                        $query->where('name', 'LIKE', $country_n);
-                                    })->first();
-                                    $newuser->country_id = $country->id;
-                                    $newuser->address = $row[8];
-                                    $newuser->place_id = $row[10];
-                                    $newuser->status = 'admin_imported';
-                                    $newuser->platform = 'trp';
-                                    $newuser->save();
-
-                                    $newuser->slug = $newuser->makeSlug();
-                                    $newuser->save();
-
-                                    if (!empty($row[9])) {
-                                        $img = Image::make( $row[9] )->orientate();
-                                        $newuser->addImage($img);
-                                    }
-
-                                    $newuser->generateSocialCover();
-
-                                    $substitutions = [
-                                        "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
-                                    ];
-
-                                    $newuser->sendGridTemplate(81, $substitutions);
-                                }
-                            } else {
-                                $not_imported[] = $row[0] ? $row[0] : ($row[2] ? $row[2] : 'without name and mail');
-                            }
-
-                        }
-                    }
-
-                }
-
-                unlink($newName);
-
-                if(!empty($not_imported)) {
-                    $this->request->session()->flash('warning-message', 'Dentists were imported successfully. However, there were some invalid or missing dentist emails which were skipped - '.implode(',', $not_imported));
-                } else {
-                    $this->request->session()->flash('success-message', 'Dentists were imported successfully.');
-                }
-                
-                return redirect('cms/'.$this->current_page.'/import');
-
-            } else {
-                return redirect('cms/'.$this->current_page.'/import');
-            }
-        }
-
-        return $this->showView('users-import');
-    }
-
-    public function upload_temp($locale=null) {
-
-        if( Request::file('image') && Request::file('image')->isValid() ) {
-            $img = Image::make( Input::file('image') )->orientate();
-            list($thumb, $full, $name) = User::addTempImage($img);
-            return Response::json(['success' => true, 'thumb' => $thumb, 'name' => $name ]);
-        }
-    }
-
-    public function resetFirstGudedTour($id) {
-
-        $item = UserGuidedTour::where('user_id', $id)->first();
-
-        if(!empty($item)) {
-            $item->first_login_trp = null;
-            $item->save();
-        }
-
-        return redirect('cms/users/edit/'.$id);
-    }
-
-    public function anonymousDelete($id) {
-
-        $item = AnonymousUser::find($id);
-
-        if(!empty($item)) {
-            $item->delete();
-        }
-
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/anonymous_users');
-    }
-
-    public function convertToPatient($id) {
-
-        $item = User::find($id);
-
-        if(!empty($item)) {
-            $item->status = 'approved';
-            $item->is_dentist = 0;
-            $item->is_clinic = 0;
-            $item->is_partner = null;
-            $item->featured = null;
-            $item->top_dentist_month = null;
-            $item->title = null;
-            $item->slug = null;
-            $item->patient_status = 'new_not_verified';
-
-            $item->product_news = ['dentacoin', 'trp', 'vox'];
-            $item->save();
-
-            //create recipients
-            $item->removeFromSendgridSubscribes();
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-            $user_info = new \stdClass();
-            $user_info->email = $item->email;
-            $user_info->first_name = explode(' ', $item->name)[0];
-            $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
-            $user_info->type = 'patient';
-
-            $request_body = [
-                $user_info
-            ];
-
-            $response = $sg->client->contactdb()->recipients()->post($request_body);
-            $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
-
-            //add to list
-            if($recipient_id) {
-                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-                $list_id = config('email-preferences')['product_news']['vox']['sendgrid_list_id'];
-                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
-            }
-        }
-
-        return redirect('cms/users/edit/'.$id);
-    }
-
-
-    public function convertToDentist($id) {
-
-        $item = User::find($id);
-
-        if(!empty($item)) {
-            $item->status = 'new';
-            $item->is_dentist = 1;
-            $item->user_patient_type = null;
-            $item->is_clinic = 0;
-            $item->patient_status = null;
-
-            $item->product_news = null;
-            $item->save();
-            $item->removeFromSendgridSubscribes();
-
-            $this->request->session()->flash('warning-message', 'Please, check the following fields "user type", "title"! Set a password and send it to the dentist!! Add country and address!');
-        }
-
-        return redirect('cms/users/edit/'.$id);
-    }
-
-    public function userInfo($id) {
-        $user = User::withTrashed()->find($id);
-
-        $duplicated_names = collect();
-        if( !empty($user->name)) {
-            $duplicated_names = User::where('id', '!=', $user->id)->where('name', 'LIKE', $user->name)->withTrashed()->get();
-        }
-
-        return $this->showView('user-info', [
-            'user' => $user,
-            'duplicated_names' => $duplicated_names
-        ]);
     }
 }

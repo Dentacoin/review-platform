@@ -4,6 +4,6 @@
 &nbsp;
 &middot;
 &nbsp;
-<a target="_blank" href="{{ url('cms/users/loginas/'.$item->user->id) }}">
+<a target="_blank" href="{{ url('cms/users/users/loginas/'.$item->user->id) }}">
 	{{ trans('admin.common.login-as') }}
 </a>

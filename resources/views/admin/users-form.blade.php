@@ -5,7 +5,7 @@
 <h1 class="page-header"> 
     {{ trans('admin.page.'.$current_page.'.title-edit') }}
     @if( $item->getSameIPUsers() && !$item->is_dentist )
-        <a class="label label-danger" href="{{ url('cms/users/edit/'.$item->id) }}#logins-list">Click for Suspicious Logins</a>
+        <a class="label label-danger" href="{{ url('cms/users/users/edit/'.$item->id) }}#logins-list">Click for Suspicious Logins</a>
     @endif
     @if($item->permanentVoxBan)
         <div class="label label-warning">Permanent Vox Ban</div>
@@ -18,14 +18,14 @@
             <a onclick="$('#claim-link').show();" class="btn btn-primary" style="float: right;">Short Claim Form</a>
             <p id="claim-link" style="display:none;font-size: 12px;text-align: right;clear: both;">{{ getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup', 'utm_content' => '1']) }}</p>
         @else
-            <a href="{{ url('cms/users/reset-first-guided-tour/'.$item->id) }}" class="btn btn-primary" style="float: right;">Reset first guided tour</a>
+            <a href="{{ url('cms/users/users/reset-first-guided-tour/'.$item->id) }}" class="btn btn-primary" style="float: right;">Reset first guided tour</a>
         @endif
     @endif
 
     @if($item->is_dentist)
-        <a href="{{ url('cms/users/convert-to-patient/'.$item->id) }}" class="btn btn-info" style="float: right; margin-right: 10px;" onclick="return confirm('Are you sure you want to convert this user to patient?');">Convert to patient</a>
+        <a href="{{ url('cms/users/users/convert-to-patient/'.$item->id) }}" class="btn btn-info" style="float: right; margin-right: 10px;" onclick="return confirm('Are you sure you want to convert this user to patient?');">Convert to patient</a>
     @else
-        <a href="{{ url('cms/users/convert-to-dentist/'.$item->id) }}" class="btn btn-info" style="float: right;" onclick="return confirm('Are you sure you want to convert this user to dentist?');">Convert to dentist</a>
+        <a href="{{ url('cms/users/users/convert-to-dentist/'.$item->id) }}" class="btn btn-info" style="float: right;" onclick="return confirm('Are you sure you want to convert this user to dentist?');">Convert to dentist</a>
     @endif
 </h1>
 <!-- end page-header -->
@@ -38,14 +38,14 @@
 
 @if($item->status == 'clinic_branch')
     <div class="alert alert-info">
-        This clinic is a branch of <a href="{{ url('cms/users/edit/'.$item->mainBranchClinic->id) }}">{{ $item->mainBranchClinic->name }}</a>
+        This clinic is a branch of <a href="{{ url('cms/users/users/edit/'.$item->mainBranchClinic->id) }}">{{ $item->mainBranchClinic->name }}</a>
     </div>
 @endif
 
 @if($item->status == 'new' && $item->is_dentist && !$item->is_clinic && $item->my_workplace->isNotEmpty())
     <div class="alert alert-info">
         @foreach($item->my_workplace as $wp)
-            This dentist works in clinic <a href="{{ url('cms/users/edit/'.$wp->clinicWithTrashed->id) }}">{{ $wp->clinicWithTrashed->name }}</a> <br/>
+            This dentist works in clinic <a href="{{ url('cms/users/users/edit/'.$wp->clinicWithTrashed->id) }}">{{ $wp->clinicWithTrashed->name }}</a> <br/>
         @endforeach
     </div>
 @endif
@@ -53,7 +53,7 @@
 @if($item->status == 'added_by_dentist_new' && $item->is_clinic && $item->team->isNotEmpty())
     <div class="alert alert-info">
         @foreach($item->team as $t)
-            This clinic is listed as a workplace for new dentist <a href="{{ url('cms/users/edit/'.$t->clinicTeamWithTrashed->id) }}">{{ $t->clinicTeamWithTrashed->name }}</a> <br/>
+            This clinic is listed as a workplace for new dentist <a href="{{ url('cms/users/users/edit/'.$t->clinicTeamWithTrashed->id) }}">{{ $t->clinicTeamWithTrashed->name }}</a> <br/>
         @endforeach
     </div>
 @endif
@@ -61,7 +61,7 @@
 @if($item->status == 'new' && $item->is_clinic && $item->team->isNotEmpty())
     <div class="alert alert-info">
         @foreach($item->team as $t)
-            This clinic added a new dentist <a href="{{ url('cms/users/edit/'.$t->clinicTeamWithTrashed->id) }}">{{ $t->clinicTeamWithTrashed->name }}</a> <br/>
+            This clinic added a new dentist <a href="{{ url('cms/users/users/edit/'.$t->clinicTeamWithTrashed->id) }}">{{ $t->clinicTeamWithTrashed->name }}</a> <br/>
         @endforeach
     </div>
 @endif
@@ -89,7 +89,7 @@
                 <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-edit') }} </h4>
             </div>
             <div class="panel-body">
-                {!! Form::open(array('url' => url('cms/'.$current_page.'/edit/'.$item->id), 'method' => 'post', 'class' => 'form-horizontal')) !!}
+                {!! Form::open(array('url' => url('cms/users/users/edit/'.$item->id), 'method' => 'post', 'class' => 'form-horizontal')) !!}
                     {!! csrf_field() !!}
 
                     <div class="row">
@@ -248,7 +248,7 @@
                             @if($duplicated_names->isNotEmpty())
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this name already exists:</p>
                                 @foreach($duplicated_names as $dn)
-                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dn->id) }}">{{ $dn->name }} {{ $dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' }}</a></p>
+                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/users/edit/'.$dn->id) }}">{{ $dn->name }} {{ $dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' }}</a></p>
                                 @endforeach
                             @endif
                             @if(!$item->is_dentist && !empty($item->user_patient_type))
@@ -385,7 +385,7 @@
                             @if($duplicated_mails->isNotEmpty())
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this email already exists:</p>
                                 @foreach($duplicated_mails as $dm)
-                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dm->id) }}">{{ $dm->name }} {{ $dm->is_dentist ? '('.config('user-statuses')[$dm->status].')' : '' }}</a></p>
+                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/users/edit/'.$dm->id) }}">{{ $dm->name }} {{ $dm->is_dentist ? '('.config('user-statuses')[$dm->status].')' : '' }}</a></p>
                                 @endforeach
                             @endif
                             @if($item->oldEmails->isNotEmpty())
@@ -665,7 +665,7 @@
                                                 <p style="color: red;" class="col-md-12">⇧ User/s with this dcn address already exists:</p>
                                                 @foreach(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get() as $dw)
                                                     @if(!empty(App\Models\User::withTrashed()->find($dw->user_id)))
-                                                        <p style="color: red;" class="col-md-12">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dw->user_id) }}">{{ App\Models\User::withTrashed()->find($dw->user_id)->name }}</a></p>
+                                                        <p style="color: red;" class="col-md-12">{{ $loop->iteration }}. <a href="{{ url('cms/users/users/edit/'.$dw->user_id) }}">{{ App\Models\User::withTrashed()->find($dw->user_id)->name }}</a></p>
                                                     @endif
                                                 @endforeach
                                             @endif
@@ -796,7 +796,7 @@
                                         </div>
                                         <input type="file" name="image" id="add-avatar" upload-url="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/addavatar') }}">
                                     </label>
-                                    <a class="btn btn-primary delete-avatar" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/deleteavatar') }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
+                                    <a class="btn btn-primary delete-avatar" href="{{ url('cms/users/users/edit/'.$item->id.'/deleteavatar') }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
                                         <i class="fa fa-remove"></i> {{ trans('admin.page.'.$current_page.'.delete-avatar') }}
                                     </a>
                                 </div>
@@ -873,24 +873,24 @@
                                     <div class="col-md-12">
                                         @if(!empty($item->platform) && $item->platform == 'trp')
                                             @if($item->id <= 79174)
-                                                Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                Added by patient <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                             @else
                                                 @if($item->invited_from_form)
-                                                    Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                    Added by patient <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                                 @else
                                                     @if($item->is_dentist)
                                                         @if(App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->is_clinic)
-                                                            Added by clinic at {{ config('platforms')[$item->platform]['name'] }} - <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                            Added by clinic at {{ config('platforms')[$item->platform]['name'] }} - <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                                         @else
-                                                            Added by dentist at {{ config('platforms')[$item->platform]['name'] }} signup <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                            Added by dentist at {{ config('platforms')[$item->platform]['name'] }} signup <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                                         @endif
                                                     @else
-                                                        Registered from {{ config('platforms')[$item->platform]['name'] }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                        Registered from {{ config('platforms')[$item->platform]['name'] }} friend invite <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                                     @endif
                                                 @endif
                                             @endif
                                         @else
-                                            Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                            Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                         @endif
                                     </div>
                                 </div>
@@ -905,20 +905,20 @@
                             @if(!empty($item->invited_by) && !$item->is_dentist)
                                 <div class="form-group" style="text-align: right;">
                                     <div class="col-md-12">
-                                        Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                        Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                     </div>
                                 </div>
                             @endif
                             <div class="form-group">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
-                                    <a href="{{ url('cms/users/loginas/'.$item->id) }}" target="_blank" class="btn btn-sm btn-primary form-control user-b"> {{ trans('admin.page.profile.loginas') }} </a>
+                                    <a href="{{ url('cms/users/users/loginas/'.$item->id) }}" target="_blank" class="btn btn-sm btn-primary form-control user-b"> {{ trans('admin.page.profile.loginas') }} </a>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
-                                    <a href="{{ url('cms/users/user-data/'.$item->id) }}" target="_blank" class="btn btn-sm btn-warning form-control user-b">Export Personal Data</a>
+                                    <a href="{{ url('cms/users/users/user-data/'.$item->id) }}" target="_blank" class="btn btn-sm btn-warning form-control user-b">Export Personal Data</a>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -937,7 +937,7 @@
                                     @endif
                                     
                                     @if($item->id != 3 && ($admin->id == 14 || $admin->id == 15 || $admin->id == 1))
-                                        <a class="btn btn-sm btn-danger form-control user-b" href="{{ url('cms/users/delete-database/'.$item->id) }}" onclick="return confirm('Are you sure you want to DELETE this user? Тhis cannot be reversed!!!');" style="margin-top: 10px;background: black;">
+                                        <a class="btn btn-sm btn-danger form-control user-b" href="{{ url('cms/users/users/delete-database/'.$item->id) }}" onclick="return confirm('Are you sure you want to DELETE this user? Тhis cannot be reversed!!!');" style="margin-top: 10px;background: black;">
                                             Delete from database
                                         </a>
                                     @endif
@@ -1176,7 +1176,7 @@
                                 <div class="thumbnail">
                                     <img src="{{ $photo->getImageUrl(true) }} ">
                                 </div>
-                                <a class="btn btn-primary" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/deletephoto/'.$loop->index) }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
+                                <a class="btn btn-primary" href="{{ url('cms/users/users/edit/'.$item->id.'/deletephoto/'.$loop->index) }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
                                     <i class="fa fa-remove"></i> {{ trans('admin.page.'.$current_page.'.delete-photo') }}
                                 </a>
                             </div>
@@ -1215,7 +1215,7 @@
                                 @foreach($item->branches as $branch)
                                     <tr>
                                         <td>
-                                            <a href="{{ url('cms/users/edit/'.$branch->branch_clinic_id) }}">{{ $branch->branchClinic->name }}</a>
+                                            <a href="{{ url('cms/users/users/edit/'.$branch->branch_clinic_id) }}">{{ $branch->branchClinic->name }}</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -1287,7 +1287,7 @@
                                                     {{ $team->created_at ? $team->created_at->toDateTimeString() : '' }}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ url('/cms/users/edit/'.$team->clinicTeamWithTrashed->id) }}">
+                                                    <a href="{{ url('/cms/users/users/edit/'.$team->clinicTeamWithTrashed->id) }}">
                                                         {{ $team->clinicTeamWithTrashed->getNames() }} {{ $team->clinicTeamWithTrashed->deleted_at ? '(deleted)' : '' }}
                                                     </a>
                                                 </td>
@@ -1941,7 +1941,7 @@
                 <h4 class="modal-title">Delete user</h4>
             </div>
             <div class="modal-body">
-                <form action="{{ url('cms/users/delete/'.$item->id) }}" method="post">
+                <form action="{{ url('cms/users/users/delete/'.$item->id) }}" method="post">
                     @if($item->platform == 'external')
                         <div class="external-patients-wrap">
                             <p style="color: red;">You are about to delete Dentaprimes patient. Are you sure you want to continue? This type of users are using the Hub App application.</p>
@@ -1973,7 +1973,7 @@
                 <h4 class="modal-title">Restore user</h4>
             </div>
             <div class="modal-body">
-                <form action="{{ url('cms/users/restore/'.$item->id) }}" method="post">
+                <form action="{{ url('cms/users/users/restore/'.$item->id) }}" method="post">
                     <textarea class="form-control" name="restored_reason" placeholder="Write the reason why you want to restore this user"></textarea>
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Restore</button>
                 </form>
@@ -1995,7 +1995,7 @@
                 <h4 class="modal-title">Restore self deleted user</h4>
             </div>
             <div class="modal-body">
-                <form action="{{ url('cms/users/restore-self-deleted/'.$item->id) }}" method="post">
+                <form action="{{ url('cms/users/users/restore-self-deleted/'.$item->id) }}" method="post">
                     <textarea class="form-control" name="restored_reason" placeholder="Write the reason why you want to restore this user"></textarea>
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Restore</button>
                 </form>

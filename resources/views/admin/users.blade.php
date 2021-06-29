@@ -10,8 +10,8 @@
             <a href="javascript:;" class="btn btn-primary pull-right btn-export">Export</a>
             <a href="javascript:;" class="btn btn-primary pull-right btn-export-fb" style="margin-right: 10px;">FB Export</a>
             <a href="javascript:;" class="btn btn-primary pull-right btn-export-sendgrid" style="margin-right: 10px;">SendGrid Export</a>
-            <a href="{{ url('cms/users/add') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Add dentist</a>
-            <a href="{{ url('cms/users/import') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Import dentists</a>
+            <a href="{{ url('cms/users/users/add') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Add dentist</a>
+            <a href="{{ url('cms/users/users/import') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Import dentists</a>
         </div>
     </div>
     <!-- end page-header -->
@@ -39,7 +39,7 @@
                     <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-filter') }} </h4>
                 </div>
                 <div class="panel-body users-filters">
-                    <form method="get" action="{{ url('cms/'.$current_page) }}" id="users-filter-form">
+                    <form method="get" action="{{ url('cms/users/users/') }}" id="users-filter-form">
                         <div class="row custom-row" style="margin-bottom: 10px;">
                             <div class="col-md-2">
                                 <select class="form-control select2" multiple name="exclude-countries[]">
@@ -202,7 +202,7 @@
                     <!-- <b>
                         Showing {{ $users->isNotEmpty() ? $users->count() : '0' }} out of total {{ $total_count }} profiles that match this search
                     </b> -->
-                    <form method="post" action="{{ url('cms/users/mass-reject') }}" id="mass-delete-form" mass-delete-action="{{ url('cms/users/mass-delete') }}" mass-reject-action="{{ url('cms/users/mass-reject') }}">
+                    <form method="post" action="{{ url('cms/users/users/mass-reject') }}" id="mass-delete-form" mass-delete-action="{{ url('cms/users/users/mass-delete') }}" mass-reject-action="{{ url('cms/users/users/mass-reject') }}">
                         {!! csrf_field() !!}
     					@include('admin.parts.table', [
     						'table_id' => 'users',
@@ -233,7 +233,7 @@
                     <h4 class="modal-title">Delete user</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('cms/users/delete/') }}" original-action="{{ url('cms/users/delete/') }}" method="post">
+                    <form action="{{ url('cms/users/users/delete/') }}" original-action="{{ url('cms/users/users/delete/') }}" method="post">
                         <textarea class="form-control" name="deleted_reason" placeholder="Write the reason why you want to delete this user"></textarea>
                         <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Delete</button>
                     </form>

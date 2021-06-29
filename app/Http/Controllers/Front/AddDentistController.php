@@ -141,8 +141,8 @@ class AddDentistController extends FrontController {
                 
 //                 if(!empty($this->user)) {
 //                     $mtext = 'Patient - '.$this->user->name.' invited his dentist to register 
-// Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$this->user->id.'
-// Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$newdentist->id;
+// Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$this->user->id.'
+// Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$newdentist->id;
 
 //                     $patient = $this->user;
 
@@ -157,7 +157,7 @@ class AddDentistController extends FrontController {
 //                     });
 //                 } else {
 //                     $mtext = 'Not registered patient invited his dentist to register
-// Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$newdentist->id;
+// Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$newdentist->id;
 
 //                     Mail::raw($mtext, function ($message) {
 //                         $sender = config('mail.from.address');

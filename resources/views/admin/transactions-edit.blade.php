@@ -29,7 +29,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">User</label>
                         <div class="col-md-10" style="margin-top: 7px;">
-                            <a href="{{ url('/cms/users/edit/'.$item->user_id) }}">
+                            <a href="{{ url('/cms/users/users/edit/'.$item->user_id) }}">
                                 {{ !empty($item->user) ? $item->user->name : ''  }}
                             </a>
                         </div>

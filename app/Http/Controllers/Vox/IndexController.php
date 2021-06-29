@@ -458,7 +458,7 @@ class IndexController extends FrontController {
       
             	$mtext = 'New survey request from '.$this->user->getNames().'
 	                
-		        Link to CMS: '.url("/cms/users/edit/".$this->user->id).'
+		        Link to CMS: '.url("/cms/users/users/edit/".$this->user->id).'
 		        Survey title: '.request('title').'
 		        Survey target group location/s: '.request('target');
 

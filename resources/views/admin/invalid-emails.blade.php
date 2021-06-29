@@ -79,7 +79,7 @@
                                         {{ $invalid->user_id }}
                                     </td>
                                     <td>
-                                        <a href="{{ url('cms/users/edit/'.$invalid->user_id) }}" target="_blank">{{ $invalid->user->name }}</a>
+                                        <a href="{{ url('cms/users/users/edit/'.$invalid->user_id) }}" target="_blank">{{ $invalid->user->name }}</a>
                                     </td>
                                     <td>
                                         {{ $invalid->email }}

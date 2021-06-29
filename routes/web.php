@@ -27,8 +27,8 @@ Route::get('custom-cookie', 						'SSOController@manageCustomCookie')->name('cus
 Route::post('wait', 								'CitiesController@wait');
 
 Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin'] ], function () {
-	Route::get('/', 								'HomeController@list');
-	Route::get('home', 								'HomeController@list');
+	Route::get('/', 											'HomeController@list');
+	Route::get('home', 											'HomeController@list');
 
 	Route::post('translations/{subpage?}/add', 									'TranslationsController@add');
 	Route::post('translations/{subpage?}/update', 								'TranslationsController@update');
@@ -38,54 +38,62 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('translations/{subpage?}/{source?}/{target?}', 					'TranslationsController@list');
 	Route::get('translations/{subpage?}/{source?}/{target?}/del/{delkey?}', 	'TranslationsController@delete');
 
-	Route::get('admins', 							'AdminsController@list');
-	Route::get('admins/delete/{id}',				'AdminsController@delete');
-	Route::get('admins/edit/{id}',					'AdminsController@edit');
-	Route::post('admins/edit/{id}',					'AdminsController@update');
-	Route::post('admins/add',						'AdminsController@add');
+	Route::get('admins', 											'AdminsController@list');
+	Route::get('admins/delete/{id}',								'AdminsController@delete');
+	Route::get('admins/edit/{id}',									'AdminsController@edit');
+	Route::post('admins/edit/{id}',									'AdminsController@update');
+	Route::post('admins/add',										'AdminsController@add');
 
-	Route::any('blacklist', 						'BlacklistController@list');
-	Route::get('blacklist/delete/{id}', 			'BlacklistController@delete');
+	Route::any('blacklist', 										'BlacklistController@list');
+	Route::get('blacklist/delete/{id}', 							'BlacklistController@delete');
 
-	Route::any('whitelist/ips', 					'WhitelistIpsController@list');
-	Route::get('whitelist/ips/delete/{id}', 		'WhitelistIpsController@delete');
-	Route::any('whitelist/vpn-ips', 				'WhitelistIpsController@vpnList');
-	Route::get('whitelist/vpn-ips/delete/{id}', 	'WhitelistIpsController@vpnDelete');
+	Route::any('whitelist/ips', 									'WhitelistIpsController@list');
+	Route::get('whitelist/ips/delete/{id}', 						'WhitelistIpsController@delete');
+	Route::any('whitelist/vpn-ips', 								'WhitelistIpsController@vpnList');
+	Route::get('whitelist/vpn-ips/delete/{id}', 					'WhitelistIpsController@vpnDelete');
 
-	Route::get('users', 							'UsersController@list');
-	Route::post('users/mass-delete', 				'UsersController@massdelete');
-	Route::post('users/mass-reject', 				'UsersController@massReject');
-	Route::get('users/byweek', 						'UsersController@byweek');
-	Route::any('users/loginas/{id}/{platform?}', 	'UsersController@loginas');
-	Route::any('users/user-data/{id}', 				'UsersController@personal_data');
-	Route::any('users/import', 						'UsersController@import');
-	Route::any('users/upload-temp', 				'UsersController@upload_temp');
-	Route::any('users/add', 						'UsersController@add');
-	Route::any('users/edit/{id}', 					'UsersController@edit');
-	Route::any('users/edit/{id}/addavatar', 		'UsersController@add_avatar');
-	Route::any('users/edit/{id}/deleteavatar', 		'UsersController@delete_avatar');
-	Route::any('users/edit/{id}/deletephoto/{position}', 'UsersController@delete_photo');
-	Route::any('users/edit/{id}/deleteban/{banid}', 'UsersController@delete_ban');
-	Route::any('users/edit/{id}/restoreban/{banid}', 'UsersController@restore_ban');
-	Route::get('users/edit/{id}/delete-reward/{rewardid}', 	'UsersController@delete_vox');
-	Route::get('users/edit/{id}/delete-unfinished/{vox_id}', 	'UsersController@delete_unfinished');
-	Route::any('users/delete/{id}', 				'UsersController@delete');
-	Route::any('users/delete-database/{id}', 		'UsersController@deleteDatabase');
-	Route::any('users/restore/{id}', 				'UsersController@restore');
-	Route::any('users/restore-self-deleted/{id}', 	'UsersController@restore_self_deleted');
-	Route::any('users/reviews/delete/{id}',		 	'UsersController@delete_review');
-	Route::any('users/reset-first-guided-tour/{id}','UsersController@resetFirstGudedTour');
-	Route::get('users/convert-to-dentist/{id}',		'UsersController@convertToDentist');
-	Route::get('users/convert-to-patient/{id}',		'UsersController@convertToPatient');
-	Route::get('users/info/{id}',					'UsersController@userInfo');
+	Route::get('users/users', 										'UsersController@list');
+	Route::post('users/users/mass-delete', 							'UsersController@massdelete');
+	Route::post('users/users/mass-reject', 							'UsersController@massReject');
+	Route::get('users/users/byweek', 								'UsersController@byweek');
+	Route::any('users/users/loginas/{id}/{platform?}', 				'UsersController@loginas');
+	Route::any('users/users/user-data/{id}', 						'UsersController@personal_data');
+	Route::any('users/users/import', 								'UsersController@import');
+	Route::any('users/users/upload-temp', 							'UsersController@upload_temp');
+	Route::any('users/users/add', 									'UsersController@add');
+	Route::any('users/edit/{id}', 									'UsersController@edit'); //for old links
+	Route::any('users/users/edit/{id}', 							'UsersController@edit');
+	Route::any('users/users/edit/{id}/addavatar', 					'UsersController@add_avatar');
+	Route::any('users/users/edit/{id}/deleteavatar', 				'UsersController@delete_avatar');
+	Route::any('users/users/edit/{id}/deletephoto/{position}', 		'UsersController@delete_photo');
+	Route::any('users/users/edit/{id}/deleteban/{banid}', 			'UsersController@delete_ban');
+	Route::any('users/users/edit/{id}/restoreban/{banid}', 			'UsersController@restore_ban');
+	Route::get('users/users/edit/{id}/delete-reward/{rewardid}', 	'UsersController@delete_vox');
+	Route::get('users/users/edit/{id}/delete-unfinished/{vox_id}', 	'UsersController@delete_unfinished');
+	Route::any('users/users/delete/{id}', 							'UsersController@delete');
+	Route::any('users/users/delete-database/{id}', 					'UsersController@deleteDatabase');
+	Route::any('users/users/restore/{id}', 							'UsersController@restore');
+	Route::any('users/users/restore-self-deleted/{id}', 			'UsersController@restore_self_deleted');
+	Route::any('users/users/reviews/delete/{id}',		 			'UsersController@delete_review');
+	Route::any('users/users/reset-first-guided-tour/{id}',			'UsersController@resetFirstGudedTour');
+	Route::get('users/users/convert-to-dentist/{id}',				'UsersController@convertToDentist');
+	Route::get('users/users/convert-to-patient/{id}',				'UsersController@convertToPatient');
+	Route::get('users/users/info/{id}',								'UsersController@userInfo');
 
-	Route::get('anonymous_users', 					'UsersController@anonymous_list');
-	Route::get('anonymous_users/delete/{id}',		'UsersController@anonymousDelete');
+	Route::get('users/anonymous_users', 							'UsersController@anonymous_list');
+	Route::get('users/anonymous_users/delete/{id}',					'UsersController@anonymousDelete');
+
+	Route::get('users/users_stats', 								'UsersController@usersStats');
+
+	Route::any('users/registrations', 								'UsersController@registrations');
+
+	Route::any('users/incomplete-registrations', 					'UsersController@incompleteRegs');
+	Route::any('users/lead-magnet', 								'UsersController@leadMagnet');
+
+
 
 	Route::get('invites',							'InvitesController@list');
 	Route::get('invites/delete/{id}',				'InvitesController@delete');
-
-	Route::get('users_stats', 						'UsersStatsController@list');
 
 	Route::get('trp/reviews', 						'ReviewsController@list');
 	Route::post('trp/reviews/mass-delete', 			'ReviewsController@massdelete');
@@ -227,11 +235,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('email_validations/old_emails/delete/{id}',			'EmailsController@old_emails_delete');
 
 	Route::any('rewards', 							'RewardsController@list');
-
-	Route::any('registrations', 					'StatsController@registrations');
-
-	Route::any('incomplete/incomplete', 			'UsersController@incomplete');
-	Route::any('incomplete/leads', 					'UsersController@leads');
 
 	Route::any('claims/approve/{id}', 				'DentistClaimsController@approve');
 	Route::any('claims/reject/{id}', 				'DentistClaimsController@reject');

@@ -64,7 +64,7 @@
                                         {{ $old->user_id }}
                                     </td>
                                     <td>
-                                        <a href="{{ url('cms/users/edit/'.$old->user_id) }}" target="_blank">{{ $old->user ? $old->user->name : 'deleted user' }}</a>
+                                        <a href="{{ url('cms/users/users/edit/'.$old->user_id) }}" target="_blank">{{ $old->user ? $old->user->name : 'deleted user' }}</a>
                                     </td>
                                     <td>
                                         {{ $old->user ? $old->user->email : '-' }}

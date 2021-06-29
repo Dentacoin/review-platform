@@ -1043,12 +1043,12 @@ class DentistController extends FrontController {
                             Email: '.$claim->email.' <br/>
                             Job position: '.$claim->job.' <br/>
                             Explain how dentist is related to this office: '.$claim->explain_related.' <br/>
-                            Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+                            Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id;
                         } else {
                             $mtext = 'Old Added by Patient Dentist claimed his profile '.$fromm.'<br/>
                             Name: '.$claim->name.' <br/>
                             Job position: '.$claim->job.' <br/>
-                            Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+                            Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id;
                         }                    
 
                         Mail::send([], [], function ($message) use ($mtext, $user) {
@@ -1086,7 +1086,7 @@ class DentistController extends FrontController {
                             $mtext = 'Dentist claimed his profile from short link. The profile was automatically approved.<br/>
                             Name: '.$claim->name.' <br/>
                             Email: '.$claim->email.' <br/>
-                            Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+                            Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id;
 
                             Mail::send([], [], function ($message) use ($mtext, $user) {
                                 $sender = config('mail.from.address');
@@ -1505,7 +1505,7 @@ class DentistController extends FrontController {
 
                 if (count($current_month_reviews) == 3) {
                     $mtext = 'Patient - '.$patient->name.' writes his third review to different dentist. 
-Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$patient->id;
+Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$patient->id;
 
                     Mail::raw($mtext, function ($message) use ($patient) {
                         $sender = config('mail.from.address');

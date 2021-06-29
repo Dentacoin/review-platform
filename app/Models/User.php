@@ -1489,7 +1489,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if($this->reviews_out->isNotEmpty()) {
             $mtext = 'User with reviews was deleted.
-Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$this->id;
+Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$this->id;
 
             Mail::raw($mtext, function ($message) {
                 $message->from(config('mail.from.address'), config('mail.from.name'));
@@ -2650,7 +2650,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $i=0;
                 foreach($duplicated_names as $dn) {
                     $i++;
-                    $info .= '<p>'.$i.'. <a href="'.url('cms/users/edit/'.$dn->id).'">'.$dn->name.' '.($dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' ).'</a></p><div class="bottom-border"> </div>';
+                    $info .= '<p>'.$i.'. <a href="'.url('cms/users/users/edit/'.$dn->id).'">'.$dn->name.' '.($dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' ).'</a></p><div class="bottom-border"> </div>';
                 }
             }
         }
@@ -2662,7 +2662,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $i=0;
                 foreach($duplicated_kyc as $dn) {
                     $i++;
-                    $info .= '<p>'.$i.'. <a href="'.url('cms/users/edit/'.$dn->id).'">'.$dn->name.' '.($dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' ).'</a></p><div class="bottom-border"> </div>';
+                    $info .= '<p>'.$i.'. <a href="'.url('cms/users/users/edit/'.$dn->id).'">'.$dn->name.' '.($dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' ).'</a></p><div class="bottom-border"> </div>';
                 }
             }
         }
@@ -2676,7 +2676,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             if(isset($reason[1])) {
                 $user = User::where('email', 'LIKE', $reason[1])->first();
                 if(!empty($user)) {
-                    $info .= '<p>1. <a href="'.url('cms/users/edit/'.$user->id).'">'.$user->name.'</a></p>';
+                    $info .= '<p>1. <a href="'.url('cms/users/users/edit/'.$user->id).'">'.$user->name.'</a></p>';
                 } else {
                     $info .= '<p>1. Deleted user</p>';
                 }
@@ -2696,7 +2696,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         $i++;
 
                         if(!empty(User::withTrashed()->find($dw->user_id))) {
-                            $info .= '<p>'.$i.'. <a href="'.url('cms/users/edit/'.$dw->user_id).'">'.User::withTrashed()->find($dw->user_id)->name.'</a></p>';
+                            $info .= '<p>'.$i.'. <a href="'.url('cms/users/users/edit/'.$dw->user_id).'">'.User::withTrashed()->find($dw->user_id)->name.'</a></p>';
                         }
                     }
                 }
@@ -2712,7 +2712,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $i++;
 
                     if(!empty(User::withTrashed()->find($di->user_id))) {
-                        $info .= '<p>'.$i.'. <a href="'.url('cms/users/edit/'.$di->user_id).'">'.User::withTrashed()->find($di->user_id)->name.'</a></p>';
+                        $info .= '<p>'.$i.'. <a href="'.url('cms/users/users/edit/'.$di->user_id).'">'.User::withTrashed()->find($di->user_id)->name.'</a></p>';
                     }
                 }
             }

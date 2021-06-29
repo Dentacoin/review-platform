@@ -18,7 +18,7 @@
                 <h4 class="panel-title">Add Dentist</h4>
             </div>
             <div class="panel-body">
-                {!! Form::open(array('url' => url('cms/'.$current_page.'/add'), 'method' => 'post', 'class' => 'form-horizontal','files' => true)) !!}
+                {!! Form::open(array('url' => url('cms/users/users/add'), 'method' => 'post', 'class' => 'form-horizontal','files' => true)) !!}
                     {!! csrf_field() !!}
 
                     <div class="row">
@@ -113,7 +113,7 @@
                             <label class="col-md-6 control-label">Add avatar</label>
                             <div class="col-md-6">
                                 <label for="add-avatar" class="image-label">
-                                    <input type="file" name="image" id="add-avatar" upload-url="{{ url('cms/users/upload-temp') }}">
+                                    <input type="file" name="image" id="add-avatar" upload-url="{{ url('cms/users/users/upload-temp') }}">
                                 </label>
                             </div>
                         </div>

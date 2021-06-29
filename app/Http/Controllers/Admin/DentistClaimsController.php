@@ -47,7 +47,7 @@ class DentistClaimsController extends AdminController {
             $user->sendGridTemplate(104, [], 'trp');
 
             $mtext = 'Old Added by Patient Dentist claim request was approved<br/>
-Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id;
 
             Mail::send([], [], function ($message) use ($mtext, $user) {
                 $sender = config('mail.from.address');
@@ -100,7 +100,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             $user->sendGridTemplate(26, $substitutions, 'trp');
         }
 
-        return redirect( 'cms/users/edit/'.$item->dentist_id );
+        return redirect( 'cms/users/users/edit/'.$item->dentist_id );
 
     }
 
@@ -120,7 +120,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
 
         $mtext = 'Dentist claim request was rejected<br/>
-Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id;
 
         Mail::send([], [], function ($message) use ($mtext, $user) {
             $sender = config('mail.from.address');
@@ -136,7 +136,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             $message->setBody($mtext, 'text/html'); // for HTML rich messages
         });
 
-        return redirect( 'cms/users/edit/'.$item->dentist_id );
+        return redirect( 'cms/users/users/edit/'.$item->dentist_id );
 
     }
 
@@ -157,7 +157,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
 
         $mtext = 'Dentist claim request was suspicious<br/>
-Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id;
 
         Mail::send([], [], function ($message) use ($mtext, $user) {
             $sender = config('mail.from.address');
@@ -171,7 +171,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             $message->setBody($mtext, 'text/html'); // for HTML rich messages
         });
 
-        return redirect( 'cms/users/edit/'.$item->dentist_id );
+        return redirect( 'cms/users/users/edit/'.$item->dentist_id );
 
     }
 

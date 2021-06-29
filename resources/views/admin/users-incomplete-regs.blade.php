@@ -17,7 +17,7 @@
                     <h4 class="panel-title"> Filter Incompletes </h4>
                 </div>
                 <div class="panel-body">
-                    <form method="get" action="{{ url('cms/incomplete/incomplete/') }}" >
+                    <form method="get" action="{{ url('cms/users/incomplete-registrations/') }}" >
 
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-2">
@@ -74,7 +74,7 @@
             <div class="panel panel-inverse">
                 <div class="panel-heading">
                     <div class="panel-heading-btn">
-                        <a href="{{ url('/cms/incomplete/') }}?export=1" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="{{ url('/cms/users/incomplete-registrations/') }}?export=1" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
                     <h4 class="panel-title">Incomplete Dentist Registrations</h4>
                 </div>
@@ -115,25 +115,25 @@
         <nav aria-label="Page navigation" style="text-align: center;">
             <ul class="pagination">
                 <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                    <a class="page-link" href="{{ url('cms/incomplete/incomplete/?page=1'.$pagination_link) }}" aria-label="Previous">
+                    <a class="page-link" href="{{ url('cms/users/incomplete-registrations/?page=1'.$pagination_link) }}" aria-label="Previous">
                         <span aria-hidden="true"> << </span>
                     </a>
                 </li>
                 <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                    <a class="page-link prev" href="{{ url('cms/incomplete/incomplete/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
+                    <a class="page-link prev" href="{{ url('cms/users/incomplete-registrations/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
                         <span aria-hidden="true"> < </span>
                     </a>
                 </li>
                 @for($i=$start; $i<=$end; $i++)
                     <li class="{{ ($i == $page ?  'active' : '') }}">
-                        <a class="page-link" href="{{ url('cms/incomplete/incomplete/?page='.$i.$pagination_link) }}">{{ $i }}</a>
+                        <a class="page-link" href="{{ url('cms/users/incomplete-registrations/?page='.$i.$pagination_link) }}">{{ $i }}</a>
                     </li>
                 @endfor
                 <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                    <a class="page-link next" href="{{ url('cms/incomplete/incomplete/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+                    <a class="page-link next" href="{{ url('cms/users/incomplete-registrations/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
                 </li>
                 <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                    <a class="page-link" href="{{ url('cms/incomplete/incomplete/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                    <a class="page-link" href="{{ url('cms/users/incomplete-registrations/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
                 </li>
             </ul>
         </nav>

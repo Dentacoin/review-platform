@@ -97,7 +97,7 @@
 				                    		<td>
                                                 @if(!empty($item->user_id))
 	                                                @if(!empty($item->user))
-	    				                    			<a href="{{ url('cms/users/edit/'.$item->user_id) }}">
+	    				                    			<a href="{{ url('cms/users/users/edit/'.$item->user_id) }}">
 	    													{{ $item->user->name }}
 	    												</a>
 	    											@else
@@ -105,7 +105,7 @@
 	                                                @endif
                                                 @else
                                                 	@if($item->userEmail)
-                                                		<a href="{{ url('cms/users/edit/'.$item->userEmail->id) }}">
+                                                		<a href="{{ url('cms/users/users/edit/'.$item->userEmail->id) }}">
 	    													{{ $item->email }}
 	    												</a>
 	    											@else

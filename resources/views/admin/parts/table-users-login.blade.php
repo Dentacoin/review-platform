@@ -4,13 +4,13 @@
 &nbsp;
 &middot;
 &nbsp;
-<a target="_blank" href="{{ url('cms/users/loginas/'.$item->id) }}">
+<a target="_blank" href="{{ url('cms/users/users/loginas/'.$item->id) }}">
 	{{ trans('admin.common.login-as') }}
 </a> -->
 
 @if($item->id == 113928)
 @else
-	<a target="_blank" href="{{ url('cms/users/loginas/'.$item->id.(!empty(request()->input('search-platform')) ? '/'.request()->input( 'search-platform' ) : '')) }}">
+	<a target="_blank" href="{{ url('cms/users/users/loginas/'.$item->id.(!empty(request()->input('search-platform')) ? '/'.request()->input( 'search-platform' ) : '')) }}">
 		{{ trans('admin.common.login-as') }}
 	</a>
 @endif

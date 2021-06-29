@@ -18,7 +18,7 @@
                 <h4 class="panel-title">Search dentists</h4>
             </div>
             <div class="panel-body">
-                {!! Form::open(array('url' => url('cms/'.$current_page.'/import'), 'method' => 'post', 'class' => 'form-horizontal','files' => true, 'accept'=>'.xls')) !!}
+                {!! Form::open(array('url' => url('cms/users/users/import'), 'method' => 'post', 'class' => 'form-horizontal','files' => true, 'accept'=>'.xls')) !!}
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label class="col-md-1 control-label">Upload File</label>

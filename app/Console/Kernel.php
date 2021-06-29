@@ -1476,7 +1476,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
                     if (!empty($user)) {
                         $user_links[] = [
-                            'link' => 'https://reviews.dentacoin.com/cms/users/edit/'.$user->id,
+                            'link' => 'https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id,
                             'name' => $user->name,
                         ];
                     }
@@ -2097,7 +2097,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             if ($users->isNotEmpty()) {
                 foreach ($users as $user) {
                     $user_links[] = [
-                        'link' => 'https://reviews.dentacoin.com/cms/users/edit/'.$user->id,
+                        'link' => 'https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id,
                         'name' => $user->name,
                     ];
                 }
@@ -2171,7 +2171,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             if (!empty($uknown_by_user)) {
                 foreach ($uknown_by_user as $u) {
                     $user = User::where('id', $u->user_id)->withTrashed()->first();
-                    $mtext .= '<a href="https://reviews.dentacoin.com/cms/users/edit/'.$user->id.'">'.$user->name.'</a><br/>';
+                    $mtext .= '<a href="https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id.'">'.$user->name.'</a><br/>';
                 }
             }
 

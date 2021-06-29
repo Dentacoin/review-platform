@@ -4,26 +4,23 @@ return [
     'pages' => array(
         'users' => array(
             'icon' => 'users',
+            'subpages' => array(
+                'users' => 'users',
+                'anonymous_users' => 'anonymous_users',
+                'users_stats' => 'users_stats',
+                'registrations' => 'registrations',
+                'incomplete-registrations' => 'incomplete-registrations',
+                'lead-magnet' => 'lead-magnet',
+            ),
             'js' => array(
                 'users.js',
                 'address.js',
+                'anonymous-users.js',
                 '../jquery.multi-select.min.js',
             ),
             'jscdn' => array(
                 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
             ),
-        ),
-        'anonymous_users' => array(
-            'icon' => 'user-secret',
-            'js' => array(
-                'anonymous-users.js'
-            ),
-        ),
-        'invites' => array(
-            'icon' => 'paper-plane-o',
-        ),
-        'users_stats' => array(
-            'icon' => 'users',
         ),
         'ips' => array(
             'icon' => 'wifi',
@@ -42,6 +39,9 @@ return [
         'blacklist' => array(
             'icon' => 'umbrella',
         ),
+        'invites' => array(
+            'icon' => 'paper-plane-o',
+        ),
         'transactions' => array(
             'icon' => 'bitcoin',
             'js' => array(
@@ -56,6 +56,9 @@ return [
         ),
         'spending' => array(
             'icon' => 'area-chart',
+        ),
+        'rewards' => array(
+            'icon' => 'bitcoin',
         ),
         'emails' => array(
             'icon' => 'envelope',
@@ -139,12 +142,6 @@ return [
                 'trp' => 'trp',
             ),
         ),
-        'rewards' => array(
-            'icon' => 'bitcoin',
-        ),
-        'registrations' => array(
-            'icon' => 'plus-circle',
-        ),
         'translations' => array(
             'icon' => 'globe',
             'js' => array(
@@ -167,13 +164,6 @@ return [
         ),
         'admins' => array(
             'icon' => 'user-plus',
-        ),
-        'incomplete' => array(
-            'icon' => 'heartbeat',
-            'subpages' => array(
-                'incomplete' => 'incomplete',
-                'leads' => 'leads',
-            ),
         ),
         'logs' => array(
             'icon' => 'bug',

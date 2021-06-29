@@ -23,7 +23,7 @@
                             </a>
                         </h3>
                         @foreach($users as $user)
-                            <a target="_blank" {!! $user->deleted_at ? 'style="text-decoration: line-through;"' : '' !!} href="{{ url('cms/users/edit/'.$user->id) }}"><b>{{ $user->getNames() }}</b> ({{ $user->email }})</a><br/>
+                            <a target="_blank" {!! $user->deleted_at ? 'style="text-decoration: line-through;"' : '' !!} href="{{ url('cms/users/users/edit/'.$user->id) }}"><b>{{ $user->getNames() }}</b> ({{ $user->email }})</a><br/>
                         @endforeach
                     @endforeach
                 </div>

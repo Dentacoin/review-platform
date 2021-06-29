@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title.'.$name) }}</h1>
+<h1 class="page-header">Users Registration Statsistics</h1>
 <!-- end page-header -->
 
 <div class="row">
@@ -12,7 +12,7 @@
                 <div class="panel-heading-btn">
                     <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                 </div>
-                <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title.'.$name) }}</h4>
+                <h4 class="panel-title">Users Registration Statsistics</h4>
             </div>
             <div class="panel-body">
         		<div class="panel-body">
@@ -20,7 +20,7 @@
                         <thead>
                             <tr>
                                 @foreach(current($table) as $k => $v)
-                                    <th>{{ trans('admin.page.'.$current_page.'.field.'.$k) }}</th>
+                                    <th>{{ $v['label'] }}</th>
                                 @endforeach
                             </tr>
                         </thead>
@@ -28,7 +28,7 @@
                             @foreach($table as $row)
                                 <tr>
                                 @foreach($row as $v)
-                                    <td>{{ $v }}</td>
+                                    <td>{{ $v['value'] }}</td>
                                 @endforeach                                
                                 </tr>
                             @endforeach

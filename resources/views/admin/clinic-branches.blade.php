@@ -57,10 +57,10 @@
 	                            @foreach($clinic_user->branches as $br)
 	                                <tr>
 	                                    <td>
-	                                    	<a href="{{ url('cms/users/edit/'.$clinic_user->id) }}">{{ $clinic_user->name }}</a>
+	                                    	<a href="{{ url('cms/users/users/edit/'.$clinic_user->id) }}">{{ $clinic_user->name }}</a>
 	                                    </td>
 	                                    <td>
-	                                    	<a href="{{ url('cms/users/edit/'.$br->branchClinic->id) }}">{{ $br->branchClinic->name }}</a>
+	                                    	<a href="{{ url('cms/users/users/edit/'.$br->branchClinic->id) }}">{{ $br->branchClinic->name }}</a>
 	                                    </td>
                                 	</tr>
 	                            @endforeach

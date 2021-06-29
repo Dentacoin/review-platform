@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="page-header">Claim Dentist Profile For <a href="{{ url('cms/users/edit/'.$item->user->id) }}"> {{ $item->user->name }} </a></h1>
+<h1 class="page-header">Claim Dentist Profile For <a href="{{ url('cms/users/users/edit/'.$item->user->id) }}"> {{ $item->user->name }} </a></h1>
 <!-- end page-header -->
 
 <div class="row">

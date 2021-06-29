@@ -36,7 +36,7 @@
 							                <tbody>
 							                	@foreach($scammers as $scam)
 								                	<tr style="{{ $scam->checked ? 'opacity: 0.5;' : '' }}">
-								                		<td style="width: 40%;"><a href="{{ url('cms/users/edit/'.$scam->user_id) }}" target="_blank">{{ $scam->user->name }}</a></td>
+								                		<td style="width: 40%;"><a href="{{ url('cms/users/users/edit/'.$scam->user_id) }}" target="_blank">{{ $scam->user->name }}</a></td>
 								                		<td style="width: 40%;">
 								                			@if($scam->user->is_dentist)
 																<span class="label label-{{ config('user-statuses-classes')[$scam->user->status] }}">{{ config('user-statuses')[$scam->user->status] }}</span>

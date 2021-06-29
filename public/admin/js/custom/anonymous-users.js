@@ -2,7 +2,7 @@ var ajax_is_running = false;
 
 $(document).ready(function(){
 
-    $('.preferences-button').click( function() {
+    $('.preferences-button-anonymous').click( function() {
     	var email = $(this).attr('email');
     	var that = $(this);
 

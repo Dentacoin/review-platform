@@ -116,7 +116,7 @@
                                         </td>
                                     @elseif($v['format']=='user')
                                         @if($row->$k)
-                                            <td><a href="{{ url('cms/users/edit/'.$row->$k->id) }}" target="_blank">{{ $row->$k->name }}</a></td>
+                                            <td><a href="{{ url('cms/users/users/edit/'.$row->$k->id) }}" target="_blank">{{ $row->$k->name }}</a></td>
                                         @else
                                             <td>-</td>
                                         @endif

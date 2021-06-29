@@ -100,7 +100,7 @@
 				                    	<tr appeal-id="{{ $item->id }}">
 				                    		<td>
                                                 @if(!empty($item->user))
-    				                    			<a href="{{ url('cms/users/edit/'.$item->user->id) }}">
+    				                    			<a href="{{ url('cms/users/users/edit/'.$item->user->id) }}">
     													{{ $item->user->name }}
     												</a>
                                                     @if($item->user->allBanAppeals->count() > 1)

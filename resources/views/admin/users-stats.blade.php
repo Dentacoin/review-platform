@@ -3,7 +3,7 @@
 @section('content')
 
 <h1 class="page-header">
-    {{ trans('admin.page.'.$current_page.'.title') }}
+    Users Statsistics
 </h1>
 <!-- end page-header -->
 
@@ -24,11 +24,11 @@
 				                <thead>
 				                    <tr>
 				                    	@foreach($user_types as $key => $type)
-					                    	<th>
+					                    	<th style="width: 33%;">
 					                    		{{ $type->is_dentist == 1 ? 'Dentists Total' : 'Patients' }}
 					                    	</th>
 					                    @endforeach
-					                    <th>
+					                    <th style="width: 33%;">
 					                    	Dentists Partners
 					                    </th>
 				                    </tr>
@@ -36,10 +36,10 @@
 				                <tbody>
 				                	<tr>
 					                	@foreach($user_types as $key => $type)
-					                    	<td>{{ $type->total }}</td>
+					                    	<td style="width: 33%;">{{ $type->total }}</td>
 					                    @endforeach
 					                    @foreach($dentist_partners as $key => $partner)
-					                    	<td>{{ $partner->total }}</td>
+					                    	<td style="width: 33%;">{{ $partner->total }}</td>
 					                    @endforeach
 				                    </tr>
 				                </tbody>
@@ -71,7 +71,7 @@
 				                <thead>
 				                    <tr>
 				                    	@foreach($user_genders as $key => $g)
-					                    	<th>
+					                    	<th style="width: 33%;">
 					                    		{{ $g->gender == 'm' ? 'Male' : ($g->gender == 'f' ? 'Female' : '-') }}
 					                    	</th>
 					                    @endforeach
@@ -80,7 +80,7 @@
 				                <tbody>
 				                	<tr>
 					                	@foreach($user_genders as $key => $g)
-					                    	<td>{{ $g->total }}</td>
+					                    	<td style="width: 33%;">{{ $g->total }}</td>
 					                    @endforeach
 				                    </tr>
 				                </tbody>
@@ -108,20 +108,22 @@
 				    		<table class="table table-striped">
 				                <thead>
 				                    <tr>
-				                    	<th>Country</th>
-				                    	<th>Users in this country</th>
+				                    	<th style="width: 33%;">Country</th>
+				                    	<th style="width: 33%;">Users in this country</th>
+					                    <th style="width: 33%;"></th>
 				                    </tr>
 				                </thead>
 				                <tbody>
 					                @foreach($users_country as $key => $c)
 
 				                		<tr>
-					                    	<td>
+					                    	<td style="width: 33%;">
 					                    		{{ !empty($c->country_id) ? $c->country->name : '-' }}
 					                    	</td>
-					                    	<td>
+					                    	<td style="width: 33%;">
 					                    		{{ $c->total }}
-					                    	</td>						                    
+					                    	</td>
+					                    	<td style="width: 33%;"></td>
 				                    	</tr>
 
 					                @endforeach

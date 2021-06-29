@@ -18,7 +18,7 @@
                 <h4 class="panel-title"> Not registered users filter</h4>
             </div>
             <div class="panel-body users-filters">
-                <form method="get" action="{{ url('cms/'.$current_page) }}" id="users-filter-form">
+                <form method="get" action="{{ url('cms/users/anonymous_users/') }}" id="users-filter-form">
                     <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder=Email>
@@ -73,10 +73,10 @@
                                         {!! !empty($user->unsubscribed_blog) ? implode(',', $user->unsubscribed_blog) : '' !!}
                                     </td>
                                     <td>
-                                        <a href="javascript:;" email="{{ App\Models\User::encrypt($user->email) }}" class="btn btn-primary preferences-button">Refresh blog preferences</a>
+                                        <a href="javascript:;" email="{{ App\Models\User::encrypt($user->email) }}" class="btn btn-primary preferences-button-anonymous">Refresh blog preferences</a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-sm btn-deafult" href="{{ url('cms/anonymous_users/delete/'.$user->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>
+                                        <a class="btn btn-sm btn-deafult" href="{{ url('cms/users/anonymous_users/delete/'.$user->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>
                                     </td>
 	                            </tr>
 	                        @endforeach
@@ -92,25 +92,25 @@
     <nav aria-label="Page navigation" style="text-align: center;">
         <ul class="pagination">
             <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                <a class="page-link" href="{{ url('cms/anonymous_users/?page=1'.$pagination_link) }}" aria-label="Previous">
+                <a class="page-link" href="{{ url('cms/users/anonymous_users/?page=1'.$pagination_link) }}" aria-label="Previous">
                     <span aria-hidden="true"> << </span>
                 </a>
             </li>
             <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                <a class="page-link prev" href="{{ url('cms/anonymous_users/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
+                <a class="page-link prev" href="{{ url('cms/users/anonymous_users/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
                     <span aria-hidden="true"> < </span>
                 </a>
             </li>
             @for($i=$start; $i<=$end; $i++)
                 <li class="{{ ($i == $page ?  'active' : '') }}">
-                    <a class="page-link" href="{{ url('cms/anonymous_users/?page='.$i.$pagination_link) }}">{{ $i }}</a>
+                    <a class="page-link" href="{{ url('cms/users/anonymous_users/?page='.$i.$pagination_link) }}">{{ $i }}</a>
                 </li>
             @endfor
             <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                <a class="page-link next" href="{{ url('cms/anonymous_users/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+                <a class="page-link next" href="{{ url('cms/users/anonymous_users/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
             </li>
             <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                <a class="page-link" href="{{ url('cms/anonymous_users/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                <a class="page-link" href="{{ url('cms/users/anonymous_users/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
             </li>
         </ul>
     </nav>

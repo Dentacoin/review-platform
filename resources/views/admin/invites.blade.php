@@ -111,7 +111,7 @@
                                         {{ date('d.m.Y, H:i:s', $invite->created_at->timestamp) }}
                                     </td>
                                     <td>
-                                        <a href="{{ url('cms/users/edit/'.$invite->user_id) }}"> {{ !empty($invite->user) ? $invite->user->name : 'unknown' }}</a>
+                                        <a href="{{ url('cms/users/users/edit/'.$invite->user_id) }}"> {{ !empty($invite->user) ? $invite->user->name : 'unknown' }}</a>
                                     </td>
                                     <td>
                                         {!! $invite->invited_email !!}
@@ -120,7 +120,7 @@
                                         {!! $invite->invited_name !!}
                                     </td>
                                     <td>
-                                        {!! $invite->invited_id ? '<a href="'.url('cms/users/edit/'.$invite->invited_id).'">'.(!empty($invite->invited) ? $invite->invited->name : 'unknown').'</a>' : '-' !!}
+                                        {!! $invite->invited_id ? '<a href="'.url('cms/users/users/edit/'.$invite->invited_id).'">'.(!empty($invite->invited) ? $invite->invited->name : 'unknown').'</a>' : '-' !!}
                                     </td>
                                     <td>
                                         {!! $invite->invited_id ? (App\Models\UserAsk::where('user_id', $invite->invited_id)->where('dentist_id', $invite->user_id)->where('status', 'yes')->first() ? '🗸' : '') : '' !!}
