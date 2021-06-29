@@ -20,7 +20,7 @@ class ReviewsController extends AdminController {
 
     public function list() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -83,7 +83,7 @@ class ReviewsController extends AdminController {
 
     public function delete( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -173,7 +173,7 @@ class ReviewsController extends AdminController {
 
     public function massdelete(  ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -268,7 +268,7 @@ class ReviewsController extends AdminController {
 
     public function restore( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

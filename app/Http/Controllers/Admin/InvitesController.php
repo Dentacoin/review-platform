@@ -15,7 +15,7 @@ class InvitesController extends AdminController {
 
     public function list( ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

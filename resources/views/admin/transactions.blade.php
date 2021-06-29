@@ -8,11 +8,13 @@
             <a href="{{ $is_warning_message_shown ? url('cms/transactions/remove-message') : url('cms/transactions/add-message') }}" class="btn btn-info pull-right" style="margin-left: 10px;">{{ $is_warning_message_shown ? 'Hide warning message on DV homepage' : 'Show warning message on DV homepage' }}</a>
             <a href="{{ $are_transactions_stopped ? url('cms/transactions/start') : url('cms/transactions/stop') }}" class="btn btn-{{ $are_transactions_stopped ? 'success' : 'danger' }} pull-right" style="margin-left: 10px;">{{ $are_transactions_stopped ? 'Allow users to withdraw' : 'Disallow users to withdraw' }}</a>
 
-            @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
-                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right" style="margin-left: 10px;">Bump trans with status 'DONT RETRY'</a>
+            @if($admin->role!='support')
+                @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
+                    <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right" style="margin-left: 10px;">Bump trans with status 'DONT RETRY'</a>
+                @endif
             @endif
 
-            @if($admin->id == 14 || $admin->id == 15 || $admin->id == 1)
+            @if($admin->id == 14 || $admin->id == 15 || $admin->id == 1 || $admin->role=='support')
                 <a href="{{ $is_retry_stopped ? url('cms/transactions/enable-retry') : url('cms/transactions/disable-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_stopped ? 'Enable' : 'Disable' }} Retry</a>
 
                 <a href="{{ $is_retry_paid_by_the_user_stopped ? url('cms/transactions/enable-paid-by-user-retry') : url('cms/transactions/disable-paid-by-user-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_paid_by_the_user_stopped ? 'Enable' : 'Disable' }} Paid By User Retry</a>
@@ -153,11 +155,13 @@
                                     'pagination_link' => array()
             					])
                             </div>
-                            <div style="display: flex">
-                                <button type="submit" name="mass-bump" id="mass-bump" class="btn btn-primary" style="flex: 1">Bump transactions</button>
-                                <button type="submit" name="mass-stop" id="mass-stop" class="btn btn-danger" style="flex: 1">Stop transactions</button>
-                                <button type="submit" name="mass-pending" id="mass-pending" class="btn btn-warning" style="flex: 1">"Pending" transactions</button>
-                            </div>
+                            @if($admin->role!='support')
+                                <div style="display: flex">
+                                    <button type="submit" name="mass-bump" id="mass-bump" class="btn btn-primary" style="flex: 1">Bump transactions</button>
+                                    <button type="submit" name="mass-stop" id="mass-stop" class="btn btn-danger" style="flex: 1">Stop transactions</button>
+                                    <button type="submit" name="mass-pending" id="mass-pending" class="btn btn-warning" style="flex: 1">"Pending" transactions</button>
+                                </div>
+                            @endif
                         </form>
                     </div>
                 </div>
@@ -263,12 +267,14 @@
                             $query->whereNull('is_paid_by_the_user')
                             ->orWhere('is_paid_by_the_user', 0);
                         })->get()->sum('amount') * @file_get_contents('/tmp/dcn_original_price')) }}$</p>
-                                                
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
+                        
+                        @if($admin->role!='support')
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </form>
                 </div>
             </div>

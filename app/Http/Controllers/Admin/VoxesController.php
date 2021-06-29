@@ -67,13 +67,38 @@ class VoxesController extends AdminController {
 
     public function list( ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='voxer') {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
 
         $error = false;
         $error_arr = [];
+
+        $table_fields = [
+            'sort_order'        => array('label' => 'Sort'),
+            'id'                => array(),
+            'title'             => array(),
+            'category'          => array('template' => 'admin.parts.table-voxes-category'),
+            'count'             => array('template' => 'admin.parts.table-voxes-count'),
+            'reward'            => array('template' => 'admin.parts.table-voxs-reward'),
+            'duration'          => array('template' => 'admin.parts.table-voxs-duration'),
+            'respondents'       => array('template' => 'admin.parts.table-voxs-respondents'),
+            'featured'          => array('template' => 'admin.parts.table-voxes-featured'),
+            'type'              => array('template' => 'admin.parts.table-voxes-type'),
+            'stats'             => array('template' => 'admin.parts.table-voxes-stats'),
+            'stats_featured'    => array('template' => 'admin.parts.table-voxes-stats-featured'),
+            'date'              => array('template' => 'admin.parts.table-voxes-date'),
+            'launched_date'     => array('template' => 'admin.parts.table-voxes-launched-date'),
+            'updated_date'      => array('template' => 'admin.parts.table-voxes-updated-date'),
+        ];
+
+        if(Auth::guard('admin')->user()->role != 'support') {
+            $table_fields['update'] = array('template' => 'admin.parts.table-voxes-edit');
+            $table_fields['delete'] = array('template' => 'admin.parts.table-voxes-delete');
+        } else {
+            $table_fields['update'] = array('template' => 'admin.parts.table-voxes-edit', 'label' => 'View');
+        }
 
     	return $this->showView('voxes', array(
             'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
@@ -82,6 +107,7 @@ class VoxesController extends AdminController {
             'are_all_results_shown' => session('vox-show-all-results') ? true : false,
             'error_arr' => $error_arr,
             'error' => $error,
+            'table_fields' => $table_fields,
         ));
     }
 
@@ -227,9 +253,13 @@ class VoxesController extends AdminController {
 
     public function edit( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='voxer') {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
+            return redirect('cms/home');
+        }
+
+        if(Request::isMethod('post') && Auth::guard('admin')->user()->role == 'support') {
+            return redirect('cms/home');
         }
 
         $item = Vox::find($id);
@@ -2300,7 +2330,7 @@ class VoxesController extends AdminController {
 
     public function getQuestionsCount($vox_id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='voxer') {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2316,7 +2346,7 @@ class VoxesController extends AdminController {
 
     public function getRespondentsCount($vox_id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='voxer') {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2332,7 +2362,7 @@ class VoxesController extends AdminController {
 
     public function getReward($vox_id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='voxer') {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2348,7 +2378,7 @@ class VoxesController extends AdminController {
 
     public function getDuration($vox_id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='voxer') {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2364,7 +2394,7 @@ class VoxesController extends AdminController {
 
     public function showAllResults() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='voxer') {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2378,7 +2408,7 @@ class VoxesController extends AdminController {
 
     public function showIndividualResults() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='voxer') {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

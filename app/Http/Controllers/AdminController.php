@@ -107,6 +107,23 @@ class AdminController extends BaseController {
             }
         }
         
+        if($params['admin']->role=='support') {
+            foreach ($menu as $key => $value) {
+                if($key=='users' || $key=='ips' || $key=='whitelist' || $key=='blacklist' || $key=='transactions' || $key=='email_validations' || $key=='trp' || $key=='vox' || $key=='support' || $key=='rewards' || $key=='invites' || $key=='ban_appeals' ) {
+                    if(isset($menu[$key]['subpages'])) {
+
+                        foreach ($menu[$key]['subpages'] as $sk => $sv) {
+                            if($sk == 'anonymous_users' || $sk == 'users_stats' || $sk == 'incomplete-registrations' || $sk == 'lead-magnet' || $sk == 'users_stats'|| $sk == 'questions'|| $sk == 'faq' || $sk == 'testimonials' || $sk == 'scrape-google-dentists' || $sk == 'add' || ($sk == 'categories' && $key != 'support') || $sk == 'scales' || $sk == 'faq-ios' || $sk == 'badges' || $sk == 'explorer' || $sk == 'export-survey-data' || $sk == 'polls-explorer' || $sk == 'recommendations') {
+                                unset( $menu[$key]['subpages'][$sk] );
+                            }
+                        }
+                    }
+                } else {
+                    unset($menu[$key]);
+                }
+            }
+        }
+        
         config([
             'admin.pages' => $menu
         ]);

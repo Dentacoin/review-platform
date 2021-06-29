@@ -242,7 +242,7 @@ class UsersController extends AdminController {
 
     public function list() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             return redirect('cms/users/users/edit/'.Auth::guard('admin')->user()->user_id);            
         }
 
@@ -872,7 +872,7 @@ class UsersController extends AdminController {
 
     public function delete( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -991,7 +991,7 @@ class UsersController extends AdminController {
 
     public function massdelete(  ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1020,7 +1020,7 @@ class UsersController extends AdminController {
 
     public function massReject(  ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1043,7 +1043,7 @@ class UsersController extends AdminController {
 
     public function delete_avatar( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1061,7 +1061,7 @@ class UsersController extends AdminController {
 
     public function add_avatar( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1096,7 +1096,7 @@ class UsersController extends AdminController {
 
     public function delete_photo( $id, $position ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1115,7 +1115,7 @@ class UsersController extends AdminController {
 
     public function delete_ban( $id, $ban_id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1137,7 +1137,7 @@ class UsersController extends AdminController {
 
     public function restore_ban( $id, $ban_id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1168,7 +1168,7 @@ class UsersController extends AdminController {
 
     public function delete_vox( $id, $reward_id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1191,7 +1191,7 @@ class UsersController extends AdminController {
 
     public function delete_unfinished( $id, $vox_id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1300,7 +1300,7 @@ class UsersController extends AdminController {
 
     public function restore( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1335,7 +1335,7 @@ class UsersController extends AdminController {
 
     public function restore_self_deleted( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1370,7 +1370,7 @@ class UsersController extends AdminController {
 
     public function loginas( $id, $platform=null ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1395,7 +1395,7 @@ class UsersController extends AdminController {
 
     public function personal_data( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1415,7 +1415,7 @@ class UsersController extends AdminController {
 
     public function add() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1484,8 +1484,8 @@ class UsersController extends AdminController {
 
     public function edit( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->user_id != $id) {
-            return redirect('cms/users/users/edit/'.Auth::guard('admin')->user()->user_id);            
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' && Auth::guard('admin')->user()->user_id != $id) {
+            return redirect('cms/users/users/edit/'.Auth::guard('admin')->user()->user_id);
         }
 
         $item = User::withTrashed()->find($id);
@@ -2109,7 +2109,7 @@ class UsersController extends AdminController {
 
     public function import() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2214,7 +2214,7 @@ class UsersController extends AdminController {
 
     public function upload_temp($locale=null) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2228,7 +2228,7 @@ class UsersController extends AdminController {
 
     public function resetFirstGudedTour($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2261,7 +2261,7 @@ class UsersController extends AdminController {
 
     public function convertToPatient($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2313,7 +2313,7 @@ class UsersController extends AdminController {
 
     public function convertToDentist($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2339,7 +2339,7 @@ class UsersController extends AdminController {
 
     public function userInfo($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -2382,7 +2382,7 @@ class UsersController extends AdminController {
 
     public function registrations( ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

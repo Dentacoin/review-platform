@@ -14,12 +14,17 @@ class RewardsController extends AdminController {
 
     public function list( ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
 
         if(Request::isMethod('post')) {
+            if(Auth::guard('admin')->user()->role == 'support') {
+                $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+                return redirect('cms/home'); 
+            }
+
         	$rewards = Reward::get();
         	foreach ($rewards as $reward) {
         		if(isset(Request::input('rewards')[$reward->reward_type])) {

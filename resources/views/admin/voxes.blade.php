@@ -45,25 +45,7 @@
         		<div class="panel-body">
 					@include('admin.parts.table', [
 						'table_id' => 'voxs',
-						'table_fields' => [
-                            'sort_order'        => array('label' => 'Sort'),
-                            'id'                => array(),
-                            'title'             => array(),
-                            'category'          => array('template' => 'admin.parts.table-voxes-category'),
-                            'count'             => array('template' => 'admin.parts.table-voxes-count'),
-                            'reward'            => array('template' => 'admin.parts.table-voxs-reward'),
-                            'duration'          => array('template' => 'admin.parts.table-voxs-duration'),
-                            'respondents'       => array('template' => 'admin.parts.table-voxs-respondents'),
-                            'featured'          => array('template' => 'admin.parts.table-voxes-featured'),
-                            'type'              => array('template' => 'admin.parts.table-voxes-type'),
-                            'stats'             => array('template' => 'admin.parts.table-voxes-stats'),
-                            'stats_featured'    => array('template' => 'admin.parts.table-voxes-stats-featured'),
-                            'date'              => array('template' => 'admin.parts.table-voxes-date'),
-                            'launched_date'     => array('template' => 'admin.parts.table-voxes-launched-date'),
-                            'updated_date'      => array('template' => 'admin.parts.table-voxes-updated-date'),
-							'update'			=> array('template' => 'admin.parts.table-voxes-edit'),
-							'delete'			=> array('template' => 'admin.parts.table-voxes-delete'),
-						],
+						'table_fields' => $table_fields,
                         'table_data' => $voxes,
 						'table_pagination' => false,
                         'pagination_link' => array()

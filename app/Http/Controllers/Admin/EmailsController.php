@@ -384,7 +384,7 @@ class EmailsController extends AdminController {
 
     public function list_validations( ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -454,7 +454,7 @@ class EmailsController extends AdminController {
 
     public function stop_validations() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -469,7 +469,7 @@ class EmailsController extends AdminController {
 
     public function start_validations() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -484,7 +484,7 @@ class EmailsController extends AdminController {
 
     public function mark_valid($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -505,7 +505,7 @@ class EmailsController extends AdminController {
 
     public function invalid_emails( ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -638,7 +638,7 @@ class EmailsController extends AdminController {
 
     public function old_emails( ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

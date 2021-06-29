@@ -101,7 +101,9 @@
                                 <th>Platform</th>
                                 <th>Rewarded</th>
                                 <th>Suspicious email</th>
-                                <th>Delete</th>
+                                @if($admin->role!='support')
+                                    <th>Delete</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -134,9 +136,11 @@
                                     <td>
                                         {!! $invite->suspicious_email ? '<span class="label label-danger">Yes</span>' : '' !!}
                                     </td>
-                                    <td>
-                                        <a class="btn btn-sm btn-deafult" href="{{ url('cms/invites/delete/'.$invite->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>
-                                    </td>
+                                    @if($admin->role!='support')
+                                        <td>
+                                            <a class="btn btn-sm btn-deafult" href="{{ url('cms/invites/delete/'.$invite->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

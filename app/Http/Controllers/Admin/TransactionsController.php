@@ -28,7 +28,7 @@ class TransactionsController extends AdminController {
 
     public function list() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -483,7 +483,7 @@ class TransactionsController extends AdminController {
 
     public function allowWithdraw() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -498,7 +498,7 @@ class TransactionsController extends AdminController {
 
     public function disallowWithdraw() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -513,7 +513,7 @@ class TransactionsController extends AdminController {
 
     public function removeMessage() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -528,7 +528,7 @@ class TransactionsController extends AdminController {
 
     public function addMessage() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -591,7 +591,7 @@ class TransactionsController extends AdminController {
 
     public function scammers() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -603,7 +603,7 @@ class TransactionsController extends AdminController {
 
     public function scammersChecked($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -620,7 +620,7 @@ class TransactionsController extends AdminController {
 
     public function scammersBalance() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -632,7 +632,7 @@ class TransactionsController extends AdminController {
 
     public function scammersBalanceChecked($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -649,7 +649,7 @@ class TransactionsController extends AdminController {
 
     public function disableRetry() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -668,7 +668,7 @@ class TransactionsController extends AdminController {
 
     public function enableRetry() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -686,7 +686,7 @@ class TransactionsController extends AdminController {
 
     public function disablePaidByUserRetry() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -704,7 +704,7 @@ class TransactionsController extends AdminController {
 
     public function enablePaidByUserRetry() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -813,7 +813,7 @@ class TransactionsController extends AdminController {
 
     public function checkPendingTransactions() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -836,7 +836,7 @@ class TransactionsController extends AdminController {
 
     public function checkConnectedNodes() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

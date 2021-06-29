@@ -37,11 +37,13 @@
                             </div>
                         </div>
                     @endforeach
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-sm btn-success btn-block">{{ trans('admin.page.'.$current_page.'.submit') }}</button>
+                    @if($admin->role!='support')
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-sm btn-success btn-block">{{ trans('admin.page.'.$current_page.'.submit') }}</button>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </form>
             </div>
         </div>

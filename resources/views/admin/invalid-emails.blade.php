@@ -68,8 +68,10 @@
                                 <th>Invalid Email</th>
                                 <th>Christmas invite</th>
                                 <th>New email</th>
-                                <th>Change email</th>
-                                <th>Delete</th>
+                                @if($admin->role!='support')
+                                    <th>Change email</th>
+                                    <th>Delete</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -90,16 +92,18 @@
                                     <td>
                                         {{ $invalid->new_email }}
                                     </td>
-                                    <td>
-                                    	<form action="{{ url('cms/email_validations/invalid_emails/new/') }}" method="POST">
-                                    		<input type="hidden" name="id" value="{{ $invalid->id }}">
-                                        	<input type="email" name="new-email" value="">
-                                        	<input type="submit" name="submit" class="btn btn-info">
-                                    	</form>
-                                    </td>
-                                    <th>
-                                    	<a href="{{ url('cms/email_validations/invalid_emails/delete/'.$invalid->id) }}" class="btn btn-danger">delete</a>
-                                    </th>
+                                    @if($admin->role!='support')
+                                        <td>
+                                        	<form action="{{ url('cms/email_validations/invalid_emails/new/') }}" method="POST">
+                                        		<input type="hidden" name="id" value="{{ $invalid->id }}">
+                                            	<input type="email" name="new-email" value="">
+                                            	<input type="submit" name="submit" class="btn btn-info">
+                                        	</form>
+                                        </td>
+                                        <th>
+                                        	<a href="{{ url('cms/email_validations/invalid_emails/delete/'.$invalid->id) }}" class="btn btn-danger">delete</a>
+                                        </th>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

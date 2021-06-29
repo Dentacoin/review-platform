@@ -54,7 +54,9 @@
                                 <th>User</th>
                                 <th>Current Email</th>
                                 <th>Old Email</th>
-                                <th>Delete</th>
+                                @if($admin->role!='support')
+                                    <th>Delete</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -72,11 +74,13 @@
                                     <td>
                                         {{ $old->email }}
                                     </td>
-                                    <th>
-                                    	@if($admin->id == 14 || $admin->id == 15 || $admin->id == 1)
-                                    		<a href="{{ url('cms/email_validations/old_emails/delete/'.$old->id) }}" class="btn btn-danger">delete</a>
-                                    	@endif
-                                    </th>
+                                    @if($admin->role!='support')
+                                        <th>
+                                        	@if($admin->id == 14 || $admin->id == 15 || $admin->id == 1)
+                                        		<a href="{{ url('cms/email_validations/old_emails/delete/'.$old->id) }}" class="btn btn-danger">delete</a>
+                                        	@endif
+                                        </th>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

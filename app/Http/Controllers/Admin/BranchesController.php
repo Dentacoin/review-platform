@@ -18,7 +18,7 @@ class BranchesController extends AdminController {
 
     public function clinicBranches() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -52,7 +52,7 @@ class BranchesController extends AdminController {
 
     public function addClinicBranch() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
