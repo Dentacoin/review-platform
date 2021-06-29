@@ -74,8 +74,10 @@
 	data-id="{{ $question->id }}"
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
 
-		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+		@php($imageQuestion = !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+
+		<div class="question {{ $imageQuestion ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if($imageQuestion)
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -85,15 +87,20 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+			@if($imageQuestion)
 				</div>
 			@endif
 		</div>
-		<div class="answers {!! !$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 ? 'in-columns' : '' !!} {{ $question->allAnswersHaveImages() ? 'question-pictures' : '' }}">
-			@if(!$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8)
+
+		@php($questionAnswers = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true))
+
+		@php($isInColumns = (!$question->allAnswersHaveImages() && count($questionAnswers) >= 8))
+
+		<div class="answers {!! $isInColumns ? 'in-columns' : '' !!} {{ $question->allAnswersHaveImages() ? 'question-pictures' : '' }}">
+			@if($isInColumns)
 				<div class="answers-column"> 
 			@endif
-			@foreach( $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $k => $answer)
+			@foreach( $questionAnswers as $k => $answer)
 				@if(empty($answers_shown) || (!empty($answers_shown) && in_array($loop->iteration, $answers_shown)))
 					<div class="checkbox {!! mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}">
 						<label class="answer-checkbox no-mobile-tooltips {{ !empty($question->hasAnswerTooltip($answer, $question)) ? 'tooltip-text' : '' }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!}
@@ -121,13 +128,13 @@
 						{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? '<img src="'.$question->getAnswerImageUrl(false, $k).'" style="display: none !important;" />' : '' !!}
 					</div>
 				@endif
-				@if(!$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 && round(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) / 2) == $loop->iteration )
+				@if($isInColumns && round(count($questionAnswers) / 2) == $loop->iteration )
 					</div> 
 					<div class="answers-column"> 
 				@endif
 			@endforeach
 
-			@if( !$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8)
+			@if( $isInColumns)
 				</div> 
 			@endif
 		</div>
@@ -137,8 +144,10 @@
 @elseif($question->type == 'scale')
 	<div class="question-group question-group-{{ $question->id }} scale" data-id="{{ $question->id }}" welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
 
-		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+		@php($imageQuestion = !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+
+		<div class="question {{ $imageQuestion ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if($imageQuestion)
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -148,7 +157,7 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+			@if($imageQuestion)
 				</div>
 			@endif
 		</div>
@@ -222,8 +231,10 @@
 	{!! array_key_exists($question->id, $cross_checks) ? 'cross-check-correct="'.$cross_checks[$question->id].'" cross-check-id="'.$cross_checks_references[$question->id].'"' : '' !!} 
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
 
-		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+		@php($imageQuestion = !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+
+		<div class="question {{ $imageQuestion ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if($imageQuestion)
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -233,7 +244,7 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+			@if($imageQuestion)
 				</div>
 			@endif
 		</div>
@@ -253,9 +264,11 @@
 	data-id="{{ $question->id }}" 
 	{!! array_key_exists($question->id, $cross_checks) ? 'cross-check-correct="'.$cross_checks[$question->id].'" cross-check-id="'.$cross_checks_references[$question->id].'"' : '' !!} 
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
+
+		@php($imageQuestion = !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 	
-		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+		<div class="question {{ $imageQuestion ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if($imageQuestion)
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -265,13 +278,15 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 			<p>{!! !empty($question->rank_explanation) ? $question->rank_explanation : trans('vox.page.questionnaire.rank-info') !!}</p>
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+			@if($imageQuestion)
 				</div>
 			@endif
-			
 		</div>
+
+		@php($questionAnswers = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true))
+
 		<div class="answers answers-draggable">
-			@foreach($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $key => $answer)
+			@foreach($questionAnswers as $key => $answer)
 				<label class="answer-rank no-mobile-tooltips" data-num="{{ $loop->iteration }}" rank-order="{{ $loop->iteration }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}"  {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!} 
 				{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $key ).'"' : '' !!}>
 					<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
@@ -304,15 +319,18 @@
 	</div>
 @else
 	<div class="
-		question-group question-group-{{ $question->id }} single-choice 
+		question-group question-group-{{ $question->id }}
+		single-choice 
 		{{ $question->is_control == -1 || (empty($question->dont_randomize_answers) && empty($question->vox_scale_id) && empty($scales[$question->vox_scale_id])) ? 'shuffle' : '' }} 
 	" 
 	data-id="{{ $question->id }}"
 	{!! array_key_exists($question->id, $cross_checks) ? 'cross-check-correct="'.$cross_checks[$question->id].'" cross-check-id="'.$cross_checks_references[$question->id].'"' : '' !!} 
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
-	
-		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+
+		@php($imageQuestion = !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+
+		<div class="question {{ $imageQuestion ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if($imageQuestion)
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -322,12 +340,23 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 
-			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
+			@if($imageQuestion)
 				</div>
 			@endif
 		</div>
-		<div class="answers {{ $question->allAnswersHaveImages() ? 'question-pictures' : '' }}">
-			@foreach($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $key => $answer)
+
+		@php($questionAnswers = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true))
+
+		@php($isInColumns = (empty($answers_shown) && !$question->allAnswersHaveImages() && count($questionAnswers) >= 8))
+
+		<div class="answers
+		{!! $isInColumns ? 'in-columns' : '' !!}
+		{{ $question->allAnswersHaveImages() ? 'question-pictures' : '' }}
+		">
+			@if($isInColumns)
+				<div class="answers-column"> 
+			@endif
+			@foreach($questionAnswers as $key => $answer)
 				@if(empty($answers_shown) || (!empty($answers_shown) && in_array($loop->iteration, $answers_shown)))
 					<label class="answer answer no-mobile-tooltips {!! mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}" data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}"  {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!} 
 					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $key ).'"' : '' !!}>
@@ -351,7 +380,15 @@
 						{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? '<img src="'.$question->getAnswerImageUrl(false, $key).'" style="display: none !important;" />' : '' !!}
 					</label>
 				@endif
+				@if($isInColumns && round(count($questionAnswers) / 2) == $loop->iteration )
+					</div>
+					<div class="answers-column"> 
+				@endif
 			@endforeach
+
+			@if( $isInColumns)
+				</div> 
+			@endif
 		</div>
 	</div>
 @endif
