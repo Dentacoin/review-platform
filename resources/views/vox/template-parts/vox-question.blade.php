@@ -163,6 +163,7 @@
 		</div>
 		<div class="answers">
 			<div class="answers-inner">
+				<div class="mobile-overflow"></div>
 				<div class="flickity">
 					
 					@foreach(json_decode($question->answers, true) as $k => $answer)
