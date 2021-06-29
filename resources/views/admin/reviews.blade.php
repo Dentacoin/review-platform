@@ -16,27 +16,24 @@
                 <h4 class="panel-title"> Filters </h4>
             </div>
             <div class="panel-body">
-                <form class="col-md-12" method="get" action="{{ url('cms/trp/'.$current_subpage) }}" >
+                <form class="row" method="get" action="{{ url('cms/trp/'.$current_subpage) }}" >
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="search-name-dentist" value="{{ $search_name_dentist }}" placeholder="Dentist/Clinic name">
                     </div>
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="search-name-user" value="{{ $search_name_user }}" placeholder="Patient name">
                     </div>
-                    <div class="col-md-1">
-                        <input type="text" class="form-control" name="search-reviews-to" value="{{ $search_reviews_to }}" placeholder="Written before date">
+                    <div class="col-md-2">
+                        <input type="text" class="form-control datepicker" name="search-reviews-from" value="{{ $search_reviews_from }}" placeholder="From Date" style="min-width: auto !important;">
                     </div>
-                    <div class="col-md-1">
-                        <input type="text" class="form-control" name="search-reviews-from" value="{{ $search_reviews_from }}" placeholder="Written after date">
+                    <div class="col-md-2">
+                        <input type="text" class="form-control datepicker" name="search-reviews-to" value="{{ $search_reviews_to }}" placeholder="To Date" style="min-width: auto !important;">
                     </div>
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="search-answer" value="{{ $search_answer }}" placeholder="Review content">
                     </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="results-number" value="{{ $results_number }}" placeholder="Results ( enter 0 to show all )">
-                    </div>
-                    <input type="submit" class="btn btn-sm btn-primary col-md-1" name="search" value="Search">
-                    <input type="submit" class="btn btn-secondary btn-sm col-md-1" name="search-deleted" value="Search Deleted">
+                    <input type="submit" class="btn btn-sm btn-primary col-md-1" name="search" value="Search" style="line-height: 31px;">
+                    <input type="submit" class="btn btn-secondary btn-sm col-md-1" name="search-deleted" value="Search Deleted" style="line-height: 31px;">
                 </form>
             </div>
         </div>
@@ -80,4 +77,33 @@
         </div>
     </div>
 </div>
+
+@if($total_pages > 1)
+    <nav aria-label="Page navigation" style="text-align: center;">
+        <ul class="pagination">
+            <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
+                <a class="page-link" href="{{ url('cms/trp/reviews/?page=1'.$pagination_link) }}" aria-label="Previous">
+                    <span aria-hidden="true"> << </span>
+                </a>
+            </li>
+            <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
+                <a class="page-link prev" href="{{ url('cms/trp/reviews/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
+                    <span aria-hidden="true"> < </span>
+                </a>
+            </li>
+            @for($i=$start; $i<=$end; $i++)
+                <li class="{{ ($i == $page ?  'active' : '') }}">
+                    <a class="page-link" href="{{ url('cms/trp/reviews/?page='.$i.$pagination_link) }}">{{ $i }}</a>
+                </li>
+            @endfor
+            <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
+                <a class="page-link next" href="{{ url('cms/trp/reviews/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+            </li>
+            <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
+                <a class="page-link" href="{{ url('cms/trp/reviews/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+            </li>
+        </ul>
+    </nav>
+@endif
+
 @endsection

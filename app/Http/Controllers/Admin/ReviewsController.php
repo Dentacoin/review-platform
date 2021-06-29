@@ -57,26 +57,57 @@ class ReviewsController extends AdminController {
             $reviews = $reviews->onlyTrashed();
         }
 
-        if( null !== $this->request->input('results-number')) {
-            $results = trim($this->request->input('results-number'));
+        $total_count = $reviews->count();
+
+        $page = max(1,intval(request('page')));
+        
+        $ppp = 50;
+        $adjacents = 2;
+        $total_pages = ceil($total_count/$ppp);
+
+        //Here we generates the range of the page numbers which will display.
+        if($total_pages <= (1+($adjacents * 2))) {
+          $start = 1;
+          $end   = $total_pages;
         } else {
-            $results = 50;
+          if(($page - $adjacents) > 1) { 
+            if(($page + $adjacents) < $total_pages) { 
+              $start = ($page - $adjacents);            
+              $end   = ($page + $adjacents);         
+            } else {             
+              $start = ($total_pages - (1+($adjacents*2)));  
+              $end   = $total_pages;               
+            }
+          } else {               
+            $start = 1;                                
+            $end   = (1+($adjacents * 2));             
+          }
         }
 
-        if($results == 0) {
-            $reviews = $reviews->take(1000)->get();
-        } else {
-            $reviews = $reviews->take($results)->get();
+        $reviews = $reviews->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        $pagination_link = '';
+
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search' && $key != 'page') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
         }
 
         return $this->showView('reviews', array(
             'reviews' => $reviews,
             'search_name_user' => $this->request->input('search-name-user'),
             'search_name_dentist' => $this->request->input('search-name-dentist'),
-            'results_number' => $this->request->input('results-number'),
             'search_reviews_from' => $this->request->input('search-reviews-from'),
             'search_reviews_to' => $this->request->input('search-reviews-to'),
             'search_answer' => $this->request->input('search-answer'),
+            'total_count' => $total_count,
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
+            'pagination_link' => $pagination_link,
         ));
     }
 
