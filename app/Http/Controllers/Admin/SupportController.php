@@ -14,6 +14,8 @@ use App\Models\SupportQuestion;
 use App\Models\SupportCategory;
 use App\Models\SupportContact;
 use App\Models\EmailTemplate;
+use App\Models\AnonymousUser;
+use App\Models\User;
 
 use Carbon\Carbon;
 
@@ -309,6 +311,17 @@ class SupportController extends AdminController {
                 $user_email = $contact->user->email ?? $contact->user->mainBranchEmail();
             } else {
                 $user_email = $contact->email;
+
+                if(empty($contact->userEmail)) {
+
+                    $existing_anonymous = AnonymousUser::where('email', 'LIKE', $contact->email)->first();
+
+                    if(empty($existing_anonymous)) {
+                        $new_anonymous_user = new AnonymousUser;
+                        $new_anonymous_user->email = $contact->email;
+                        $new_anonymous_user->save();
+                    }
+                }
             }
 
             if(!empty(Request::input('template-id'))) {
@@ -361,7 +374,7 @@ class SupportController extends AdminController {
                         'title' => $title,
                         'subtitle' => $subtitle,
                         'platform' => $platform,
-                        'unsubscribe' => '',
+                        'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($user_email),'email_category' => 'service_info', 'platform' => $platform ))))]),
                     ])->render();
 
                     $from = new From($sender, $sender_name);
@@ -437,7 +450,7 @@ class SupportController extends AdminController {
                     'title' => $title,
                     'subtitle' => $subtitle,
                     'platform' => $platform,
-                    'unsubscribe' => '',
+                    'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($user_email),'email_category' => 'service_info', 'platform' => $platform ))))]),
                 ])->render();
 
                 $from = new From($sender, $sender_name);

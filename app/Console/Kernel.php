@@ -2393,6 +2393,23 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Remove support uploaded files'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $files = glob(storage_path().'/app/public/support-contact/*');
+
+            foreach ($files as $file) {
+
+                if (Carbon::now()->addMonths(-6)->timestamp > filectime($file)) {
+                    unlink($file);
+                }
+            }
+
+            echo 'Remove support uploaded files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->dailyAt('10:00');
+
+
+        $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *");
