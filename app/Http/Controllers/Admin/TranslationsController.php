@@ -15,10 +15,16 @@ use App\Http\Requests;
 
 use Validator;
 use Lang;
+use Auth;
 
 class TranslationsController extends AdminController {
 
 	public function add() {
+
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $validator = Validator::make($this->request->all(), [
             'key' => array('required'), //, 'regex:/[\W.]+/'
@@ -48,6 +54,11 @@ class TranslationsController extends AdminController {
 
 	public function update() {
 
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
 		$validator = Validator::make($this->request->all(), [
             'source' => array('required'),
             'target' => array('required'),
@@ -76,6 +87,11 @@ class TranslationsController extends AdminController {
 
     public function export($subpage=null, $source=null, $target=null) {
 
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $list = Lang::get($this->current_subpage, array(), $source);
         $target_list = Lang::get($this->current_subpage, array(), $target);
         //dd($list);
@@ -95,6 +111,11 @@ class TranslationsController extends AdminController {
     }
 
     public function export_missing($subpage=null, $source=null, $target=null) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $list = Lang::get($this->current_subpage, array(), $source);
         $target_list = Lang::get($this->current_subpage, array(), $target);
@@ -117,6 +138,11 @@ class TranslationsController extends AdminController {
     }
 
     public function import($subpage=null, $source=null, $target=null) {
+
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(!empty(Input::file('table'))) {
 
@@ -157,6 +183,11 @@ class TranslationsController extends AdminController {
 
 	public function delete($subpage=null, $source=null, $target=null, $delid=null) {
 
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         foreach (config('langs') as $lang => $bla) {
             $keysarr = Lang::get($this->current_subpage, array(), $lang);
             if(isset($keysarr[$delid])) {
@@ -170,6 +201,11 @@ class TranslationsController extends AdminController {
 	}
 
     public function list($subpage=null, $source=null, $target=null) {
+
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $available_langs = config('langs');
 
@@ -243,6 +279,7 @@ class TranslationsController extends AdminController {
     }
 
     private function translations_save($lang, $data) {
+        
     	$output = '<?php
 
 return [

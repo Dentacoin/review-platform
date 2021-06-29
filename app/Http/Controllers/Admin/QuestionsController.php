@@ -8,10 +8,16 @@ use App\Models\Question;
 
 use Validator;
 use Request;
+use Auth;
 
 class QuestionsController extends AdminController {
 
     public function list( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
     	return $this->showView('questions', array(
             'questions' => Question::orderBy('order', 'ASC')->get()
@@ -19,6 +25,11 @@ class QuestionsController extends AdminController {
     }
 
     public function add( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(Request::isMethod('post')) {
             $item = new Question;
@@ -55,6 +66,12 @@ class QuestionsController extends AdminController {
     }
 
     public function delete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         Question::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Question deleted' );
@@ -62,6 +79,12 @@ class QuestionsController extends AdminController {
     }
 
     public function edit( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         $item = Question::find($id);
 
         if(!empty($item)) {

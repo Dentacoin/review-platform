@@ -21,6 +21,11 @@ class YoutubeController extends AdminController {
     
     public function list() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $pending = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->get();
 
         return $this->showView('youtube', array(
@@ -29,6 +34,11 @@ class YoutubeController extends AdminController {
     }
 
     public function approve($rid) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $review = Review::find($rid);
 
@@ -78,6 +88,11 @@ class YoutubeController extends AdminController {
     }
 
     public function delete($rid) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $review = Review::find($rid);
 

@@ -20,10 +20,16 @@ use Validator;
 use Request;
 use Config;
 use Lang;
+use Auth;
 
 class ImportExportController extends AdminController {
 
     public function list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(Request::isMethod('post')) {
 

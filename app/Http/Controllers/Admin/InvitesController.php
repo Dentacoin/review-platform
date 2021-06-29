@@ -9,10 +9,16 @@ use Carbon\Carbon;
 
 use Validator;
 use Request;
+use Auth;
 
 class InvitesController extends AdminController {
 
     public function list( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $items = UserInvite::orderBy('id', 'desc');
 
@@ -145,6 +151,12 @@ class InvitesController extends AdminController {
     }
 
     public function delete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         UserInvite::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Invite Deleted' );

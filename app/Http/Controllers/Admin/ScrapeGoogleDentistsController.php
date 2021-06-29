@@ -14,10 +14,16 @@ use App\Exports\Export;
 
 use Validator;
 use Request;
+use Auth;
 
 class ScrapeGoogleDentistsController extends AdminController {
 
     public function list( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
     	if(Request::isMethod('post')) {
 
@@ -89,6 +95,11 @@ class ScrapeGoogleDentistsController extends AdminController {
 
     public function download( $id ) {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
     	$dentists = ScrapeDentistResult::where('scrape_dentists_id', $id)->get();
 
         if (!empty($dentists)) {
@@ -139,8 +150,6 @@ class ScrapeGoogleDentistsController extends AdminController {
             return Excel::download($export, 'scrapes.xls');
 	    }
     }
-
-
 
     private function geLatLonInDegrees($km, $lat) {
         $lat = ($km / 6378) * (180 / pi());

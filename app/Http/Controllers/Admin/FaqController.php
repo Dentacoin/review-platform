@@ -9,14 +9,19 @@ use Illuminate\Support\Facades\Input;
 use Response;
 use Request;
 use Route;
+use Auth;
 
 class FaqController extends AdminController {
 
     public function faq($locale = null) {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $pathToFile = base_path().'/resources/lang/'.($locale ? $locale : 'en').'/faq-trp.php';
         $content = json_decode( file_get_contents($pathToFile), true );
-
 
         if(Request::isMethod('post') && request('faq')) {
             file_put_contents($pathToFile, json_encode(request('faq')));
@@ -26,8 +31,7 @@ class FaqController extends AdminController {
                 'success' => true
             ] );
         }
-            
-
+        
         return $this->showView('voxes-faq', array(
             'content' => $content
         ));

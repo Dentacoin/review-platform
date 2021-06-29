@@ -18,11 +18,18 @@ use Request;
 use Route;
 use Auth;
 use Mail;
+use Auth;
 use DB;
 
 class DentistClaimsController extends AdminController {
 
     public function approve($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = DentistClaim::find($id);
 
         $item->status = 'approved';
@@ -105,6 +112,12 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
     }
 
     public function reject($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = DentistClaim::find($id);
 
         $item->status = 'rejected';
@@ -142,6 +155,12 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
 
 
     public function suspicious($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         $item = DentistClaim::find($id);
 
         $item->status = 'suspicious';

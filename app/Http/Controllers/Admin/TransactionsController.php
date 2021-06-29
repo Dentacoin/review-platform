@@ -24,9 +24,15 @@ use Request;
 use Route;
 use Auth;
 
-class TransactionsController extends AdminController
-{
+class TransactionsController extends AdminController {
+
     public function list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $transactions = DcnTransaction::orderBy('id', 'DESC');
 
         if(!empty($this->request->input('search-address'))) {
@@ -199,6 +205,12 @@ class TransactionsController extends AdminController
     }
 
     public function bump( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = DcnTransaction::find($id);
 
         if($item->status == 'first' && !empty($item->user) && !$item->user->is_dentist) {
@@ -230,6 +242,12 @@ class TransactionsController extends AdminController
     }
 
     public function pending( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = DcnTransaction::find($id);
 
         $item->status = 'pending';
@@ -247,6 +265,12 @@ class TransactionsController extends AdminController
     }
 
     public function stop( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = DcnTransaction::find($id);
 
         if($item->status == 'first') {
@@ -276,6 +300,12 @@ class TransactionsController extends AdminController
     }
 
     public function delete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = DcnTransaction::find($id);
 
         if(!empty($item)) {
@@ -322,6 +352,12 @@ class TransactionsController extends AdminController
     }
 
     public function massbump(  ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if( Request::input('ids') ) {
             $bumptrans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($bumptrans as $bt) {
@@ -355,6 +391,12 @@ class TransactionsController extends AdminController
     }
 
     public function massstop(  ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if( Request::input('ids') ) {
             $stoptrans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($stoptrans as $st) {
@@ -388,6 +430,12 @@ class TransactionsController extends AdminController
     }
 
     public function massPending(  ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if( Request::input('ids') ) {
             $pending_trans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($pending_trans as $pt) {
@@ -410,6 +458,11 @@ class TransactionsController extends AdminController
 
     public function bumpDontRetry() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $transactions = DcnTransaction::where('status', 'dont_retry')->get();
         foreach ($transactions as $transaction) {
 
@@ -430,6 +483,11 @@ class TransactionsController extends AdminController
 
     public function allowWithdraw() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $allow = StopTransaction::find(1);
         $allow->stopped = false;
         $allow->save();
@@ -439,6 +497,11 @@ class TransactionsController extends AdminController
     }
 
     public function disallowWithdraw() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $allow = StopTransaction::find(1);
         $allow->stopped = true;
@@ -450,6 +513,11 @@ class TransactionsController extends AdminController
 
     public function removeMessage() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $allow = StopTransaction::find(1);
         $allow->show_warning_text = false;
         $allow->save();
@@ -460,6 +528,11 @@ class TransactionsController extends AdminController
 
     public function addMessage() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $allow = StopTransaction::find(1);
         $allow->show_warning_text = true;
         $allow->save();
@@ -469,6 +542,11 @@ class TransactionsController extends AdminController
     }
 
     public function withdrawalConditions() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $withdrawal_conditions = WithdrawalsCondition::find(1);
     
@@ -513,12 +591,22 @@ class TransactionsController extends AdminController
 
     public function scammers() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         return $this->showView('transactions-scammers', array(
             'scammers' => TransactionScammersByDay::get(),
         ));
     }
 
     public function scammersChecked($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $scam = TransactionScammersByDay::find($id);
 
@@ -532,12 +620,22 @@ class TransactionsController extends AdminController
 
     public function scammersBalance() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         return $this->showView('transactions-scammers-balance', array(
             'scammers' => TransactionScammersByBalance::get(),
         ));
     }
 
     public function scammersBalanceChecked($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $scam = TransactionScammersByBalance::find($id);
 
@@ -550,6 +648,11 @@ class TransactionsController extends AdminController
     }
 
     public function disableRetry() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
 
@@ -565,6 +668,11 @@ class TransactionsController extends AdminController
 
     public function enableRetry() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
             $allow = GasPrice::find(1);
             $allow->cron_new_trans = Carbon::now()->addDays(-1);
@@ -577,6 +685,11 @@ class TransactionsController extends AdminController
     }
 
     public function disablePaidByUserRetry() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
             $allow = GasPrice::find(1);
@@ -591,6 +704,11 @@ class TransactionsController extends AdminController
 
     public function enablePaidByUserRetry() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
             $allow = GasPrice::find(1);
             $allow->cron_paid_by_user_trans = Carbon::now()->addDays(-1);
@@ -603,6 +721,12 @@ class TransactionsController extends AdminController
     }
 
     public function editMode() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         session([
             'edit-mode' => true
         ]); 
@@ -612,6 +736,12 @@ class TransactionsController extends AdminController
     }
 
     public function normalMode() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         session([
             'edit-mode' => false
         ]); 
@@ -621,6 +751,12 @@ class TransactionsController extends AdminController
     }
 
     public function edit($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
             $item = DcnTransaction::find($id);
 
@@ -676,6 +812,12 @@ class TransactionsController extends AdminController
     }
 
     public function checkPendingTransactions() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_RETURNTRANSFER => 1,
@@ -693,6 +835,12 @@ class TransactionsController extends AdminController
     }
 
     public function checkConnectedNodes() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_RETURNTRANSFER => 1,

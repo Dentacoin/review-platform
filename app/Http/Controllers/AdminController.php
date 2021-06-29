@@ -98,7 +98,7 @@ class AdminController extends BaseController {
                 } else {
                     if( isset( $menu[$key]['subpages'] ) ) {
                         foreach ($menu[$key]['subpages'] as $sk => $sv) {
-                            if($sk=='categories' || $sk=='faq' || $sk=='badges') {
+                            if($sk !='list' && $sk!='add' && $sk !='scales') {
                                 unset( $menu[$key]['subpages'][$sk] );
                             }
                         }
@@ -130,7 +130,6 @@ class AdminController extends BaseController {
         if($this->current_page!='home' && !isset($menu[$this->current_page])) {
             return redirect('cms');
         }
-
 
 		return view('admin.'.$page, $params);
     }

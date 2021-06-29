@@ -10,10 +10,16 @@ use Carbon\Carbon;
 
 use Request;
 use Route;
+use Auth;
 
 class RecommendationsController extends AdminController {
     
     public function list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $recommendations = Recommendation::orderBy('id', 'DESC');
 

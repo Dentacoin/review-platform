@@ -15,10 +15,17 @@ use App\Imports\Import;
 use Validator;
 use Request;
 use Image;
+use Auth;
 
 class PagesSeoController extends AdminController {
 
     public function vox_list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $pages = PageSeo::where('platform', 'vox')->get();
 
         return $this->ShowView('pages-vox', array(
@@ -27,6 +34,12 @@ class PagesSeoController extends AdminController {
     }
 
     public function trp_list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $pages = PageSeo::where('platform', 'trp')->get();
 
         return $this->ShowView('pages-trp', array(
@@ -35,6 +48,11 @@ class PagesSeoController extends AdminController {
     }
 
     public function add($platform) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(Request::isMethod('post')) {
 
@@ -54,6 +72,12 @@ class PagesSeoController extends AdminController {
     }
 
     public function edit( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = PageSeo::find($id);
 
         if(!empty($item)) {
@@ -102,6 +126,12 @@ class PagesSeoController extends AdminController {
     }
 
     public function removepic( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = PageSeo::find($id);
 
         if(!empty($item)) {
@@ -117,7 +147,11 @@ class PagesSeoController extends AdminController {
 
 
     public function export($platform) {
-
+        
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $from = Request::input('from');
         $to = Request::input('to');
@@ -173,6 +207,11 @@ class PagesSeoController extends AdminController {
 
 
     public function import($platform) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $source = Request::input('source');
         $from = Request::input('from');

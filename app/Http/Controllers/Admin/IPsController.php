@@ -15,11 +15,17 @@ use Carbon\Carbon;
 use Request;
 use Image;
 use Route;
+use Auth;
 use DB;
 
 class IPsController extends AdminController {
 
     public function bad() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $list = [];
 
@@ -100,6 +106,12 @@ class IPsController extends AdminController {
     }
 
     public function vpn() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
     	$items = VpnIp::orderBy('id', 'desc');
 
         if(!empty(request('search-ip'))) {

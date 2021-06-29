@@ -45,6 +45,7 @@ class VoxController extends FrontController {
      */
 	public function vox($locale=null, $slug) {
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();
+		// $surveys = Vox::whereTranslationLike('slug', $slug)->orWhere('type', 'home')->all();
 		if(Request::isMethod('post')) {
 			if (empty($vox) || $vox->id == 11) {
 				$ret['success'] = false;
@@ -596,7 +597,7 @@ class VoxController extends FrontController {
 
 			if(!$this->user->is_dentist ) {
 				$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
-				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first();
+				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first(); //
 
 				if(!empty($using_vpn) && empty($is_whitelist_ip)) {
 					$ret['is_vpn'] = true;
@@ -881,7 +882,7 @@ class VoxController extends FrontController {
 
         		} else if ($type == 'number') {
 
-        			$cur_question = VoxQuestion::find($q);
+        			$cur_question = VoxQuestion::find($q); //sort/filter
         			$min_num = intval(explode(':',$cur_question->number_limit)[0]);
         			$max_num = intval(explode(':',$cur_question->number_limit)[1]);
     				$a = intval(Request::input('answer'));
@@ -889,7 +890,7 @@ class VoxController extends FrontController {
         		}
 
         		if( $valid ) {
-        			VoxAnswer::where('user_id', $this->user->id )->where('vox_id',$vox->id )->where('question_id', $q)->delete();
+        			// VoxAnswer::where('user_id', $this->user->id )->where('vox_id',$vox->id )->where('question_id', $q)->delete();
 
         			$is_scam = false;
 
@@ -1691,6 +1692,7 @@ class VoxController extends FrontController {
 
                         if(!empty($question_id) && is_numeric($question_id)) {
                             $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
+                            
                             if(!empty($next_question->prev_q_id_answers)) {
                                 $prev_q = VoxQuestion::find($next_question->prev_q_id_answers);
 

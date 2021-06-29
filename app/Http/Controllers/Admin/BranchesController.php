@@ -11,11 +11,17 @@ use Carbon\Carbon;
 
 use Validator;
 use Request;
+use Auth;
 use DB;
 
 class BranchesController extends AdminController {
 
     public function clinicBranches() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
     	$items = User::where('email', '!=', '');
     	
@@ -45,6 +51,11 @@ class BranchesController extends AdminController {
     }
 
     public function addClinicBranch() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
     	if(Request::isMethod('post')) {
 

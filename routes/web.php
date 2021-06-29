@@ -52,6 +52,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('whitelist/vpn-ips', 								'WhitelistIpsController@vpnList');
 	Route::get('whitelist/vpn-ips/delete/{id}', 					'WhitelistIpsController@vpnDelete');
 
+	Route::get('users', 											'UsersController@list'); //for old links
 	Route::get('users/users', 										'UsersController@list');
 	Route::post('users/users/mass-delete', 							'UsersController@massdelete');
 	Route::post('users/users/mass-reject', 							'UsersController@massReject');

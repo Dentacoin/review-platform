@@ -15,10 +15,16 @@ use Validator;
 use Response;
 use Request;
 use Image;
+use Auth;
 
 class TestimonialSliderController extends AdminController {
 
     public function list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
     	$testimonials = DentistTestimonial::orderBy('id', 'desc')->get();
 
@@ -28,6 +34,11 @@ class TestimonialSliderController extends AdminController {
     }
 
     public function add() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $validator = Validator::make($this->request->all(), [
             'name-en' => array('required'),
@@ -64,6 +75,12 @@ class TestimonialSliderController extends AdminController {
     }
 
     public function edit( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = DentistTestimonial::find($id);
 
         if(!empty($item)) {
@@ -106,6 +123,12 @@ class TestimonialSliderController extends AdminController {
     }
 
     public function add_avatar( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = DentistTestimonial::find($id);
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
@@ -117,6 +140,12 @@ class TestimonialSliderController extends AdminController {
     }
 
     public function delete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         DentistTestimonial::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Testimonial deleted' );
@@ -126,6 +155,10 @@ class TestimonialSliderController extends AdminController {
 
     public function export() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $from = Request::input('from');
         $to = Request::input('to');
@@ -181,6 +214,11 @@ class TestimonialSliderController extends AdminController {
 
 
     public function import() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $source = Request::input('source');
         $from = Request::input('from');

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin;
 
 use Validator;
+use Auth;
 
 class AdminsController extends AdminController {
 
@@ -22,6 +23,7 @@ class AdminsController extends AdminController {
             'admin' => 'Admin',
             'translator' => 'Translator',
             'voxer' => 'Voxer',
+            'support' => 'Support',
         ];
 
         $this->domainlist = [];
@@ -35,6 +37,12 @@ class AdminsController extends AdminController {
     }
 
     public function list( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
     	return $this->showView('admins', array(
         	'admins_list' => Admin::get(),
             'roles' => $this->roles,
@@ -42,6 +50,12 @@ class AdminsController extends AdminController {
     }
 
     public function add( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $validator = Validator::make($this->request->all(), [
             'username' => array('required', 'unique:admins,username', 'min:3'),
             'password' => array('required', 'min:6'),
@@ -68,6 +82,12 @@ class AdminsController extends AdminController {
     }
 
     public function delete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         Admin::destroy( $id );
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
@@ -75,6 +95,12 @@ class AdminsController extends AdminController {
     }
 
     public function edit( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = Admin::find($id);
 
         if(!empty($item)) {
@@ -91,6 +117,12 @@ class AdminsController extends AdminController {
     }
 
     public function update( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         $item = Admin::find($id);
 
         if(!empty($item)) {

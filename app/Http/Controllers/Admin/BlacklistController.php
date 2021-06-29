@@ -12,11 +12,17 @@ use Carbon\Carbon;
 
 use Validator;
 use Request;
+use Auth;
 use DB;
 
 class BlacklistController extends AdminController {
     
     public function list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(Request::isMethod('post')) {
 
@@ -68,6 +74,12 @@ class BlacklistController extends AdminController {
     }
 
     public function delete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         Blacklist::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Blacklist item deleted' );

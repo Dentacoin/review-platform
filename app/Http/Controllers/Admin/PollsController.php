@@ -21,6 +21,7 @@ use Response;
 use Request;
 use Image;
 use Route;
+use Auth;
 use DB;
 
 class PollsController extends AdminController {
@@ -42,6 +43,11 @@ class PollsController extends AdminController {
     }
 
     public function list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if (!empty($this->request->input('date' ))) {
             $order = $this->request->input( 'date' );
@@ -121,6 +127,11 @@ class PollsController extends AdminController {
 
     public function add() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if(Request::isMethod('post')) {
 
             $newpoll = new Poll;
@@ -186,6 +197,12 @@ class PollsController extends AdminController {
     }
 
     public function edit( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
     	$item = Poll::find($id);
 
         if(!empty($item)) {
@@ -288,6 +305,12 @@ class PollsController extends AdminController {
     }
 
     public function delete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         Poll::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Poll deleted' );
@@ -295,6 +318,12 @@ class PollsController extends AdminController {
     }
 
     public function change_poll_question( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $poll = Poll::find($id);
 
         if(!empty($poll)) {
@@ -308,6 +337,12 @@ class PollsController extends AdminController {
     }
 
     public function change_poll_date( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $poll = Poll::find($id);
 
         if(!empty($poll)) {
@@ -320,6 +355,11 @@ class PollsController extends AdminController {
     }
 
     public function duplicate_poll($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $poll = Poll::find($id);
 
@@ -360,6 +400,11 @@ class PollsController extends AdminController {
 
     public function polls_explorer($poll_id=null) {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if(!empty($poll_id)) {
 
             $poll = Poll::find($poll_id);
@@ -385,9 +430,12 @@ class PollsController extends AdminController {
         return $this->showView('polls-explorer', $viewParams);
     }
 
-
-
     public function import($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $item = Poll::find($id);
 
@@ -436,6 +484,11 @@ class PollsController extends AdminController {
     }
 
     public function pollsMonthlyDescriptions() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $descriptions = PollsMonthlyDescription::orderBy('year', 'desc')->orderBy('month', 'desc');
 
@@ -504,9 +557,12 @@ class PollsController extends AdminController {
         ));
     }
 
-
-
     public function pollsMonthlyDescriptionsAdd() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(Request::isMethod('post')) {
 
@@ -551,6 +607,12 @@ class PollsController extends AdminController {
     }
 
     public function pollsMonthlyDescriptionsEdit( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = PollsMonthlyDescription::find($id);
 
         if(!empty($item)) {
@@ -604,6 +666,12 @@ class PollsController extends AdminController {
     }
 
     public function pollsMonthlyDescriptionsDelete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         PollsMonthlyDescription::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Polls monthly description deleted' );

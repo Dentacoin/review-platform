@@ -14,10 +14,16 @@ use Carbon\Carbon;
 
 use Request;
 use Route;
+use Auth;
 
 class ReviewsController extends AdminController {
 
     public function list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $reviews = Review::orderBy('id', 'DESC');
 
@@ -76,6 +82,12 @@ class ReviewsController extends AdminController {
 
 
     public function delete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = Review::find($id);
         
         if(!empty($item)) {
@@ -160,6 +172,12 @@ class ReviewsController extends AdminController {
     }
 
     public function massdelete(  ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if( Request::input('ids') ) {
             foreach (Request::input('ids') as $r_id) {
                 $item = Review::find($r_id);
@@ -249,6 +267,12 @@ class ReviewsController extends AdminController {
 
 
     public function restore( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         $item = Review::onlyTrashed()->find($id);
 
         if(!empty($item)) {            

@@ -19,6 +19,7 @@ use Response;
 use Request;
 use Image;
 use Route;
+use Auth;
 
 class BanAppealsController extends AdminController {
 
@@ -34,6 +35,12 @@ class BanAppealsController extends AdminController {
     }
 
     public function list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
     	$items = BanAppeal::orderBy('id', 'desc');
 
         if(!empty(request('search-user-id'))) {
@@ -145,6 +152,11 @@ class BanAppealsController extends AdminController {
 
     public function approve($id) {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         if (empty(Request::input('approve_radio')) || (!empty(Request::input('approve_radio')) && Request::input('approve_radio') == 'Other' && empty(Request::input('approved_reason')))) {
             // $this->request->session()->flash('error-message', "You have to write a reason why this appeal has to be approved" );
             return Response::json( ['success' => false, 'message' => "You have to write a reason why this appeal has to be approved"] );
@@ -181,6 +193,11 @@ class BanAppealsController extends AdminController {
     }
 
     public function reject($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if (empty(Request::input('reject_radio')) || (!empty(Request::input('reject_radio')) && (Request::input('reject_radio') == 'Other' || Request::input('reject_radio') == 'Multiple accounts') && empty(Request::input('rejected_reason')))) {
 
@@ -231,6 +248,11 @@ class BanAppealsController extends AdminController {
 
     public function pending($id) {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
 	    if(!empty(Request::input('pending_info'))) {
 	        $missing_info = Request::input('pending_info');
 
@@ -265,6 +287,12 @@ class BanAppealsController extends AdminController {
     }
 
     public function userInfo($user_id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $user = User::withTrashed()->find($user_id);
 
         if(!empty($user)) {

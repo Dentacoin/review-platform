@@ -4,9 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use Auth;
+
 class LogsController extends AdminController {
     
     public function list($type=null) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(!empty($type)) {
 

@@ -22,10 +22,16 @@ use Carbon\Carbon;
 use Validator;
 use Response;
 use Request;
+use Auth;
 
 class SupportController extends AdminController {
 
     public function questions( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
         
         $categories = SupportCategory::orderBy('order_number', 'asc')->get();
 
@@ -35,6 +41,11 @@ class SupportController extends AdminController {
     }
 
     public function add_question( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $slug = str_slug($this->request->input('slug'), '-');
 
@@ -82,12 +93,24 @@ class SupportController extends AdminController {
     }
 
     public function delete_question( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         SupportQuestion::destroy( $id );
 
         return Response::json( ['success' => true] );
     }
 
     public function edit_question( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $item = SupportQuestion::find($id);
 
         if(!empty($item)) {
@@ -123,6 +146,12 @@ class SupportController extends AdminController {
     }
 
     public function questionsReorder() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $list = Request::input('list');
         $i=1;
         foreach ($list as $qid) {
@@ -136,6 +165,12 @@ class SupportController extends AdminController {
     }
 
     public function categoriesReorder() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         $list = Request::input('list');
         $i=1;
         foreach ($list as $qid) {
@@ -149,6 +184,12 @@ class SupportController extends AdminController {
     }
 
     public function categories() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
     	$categories = SupportCategory::orderBy('order_number', 'asc')->get();
 
         return $this->showView('support-categories', array(
@@ -157,6 +198,11 @@ class SupportController extends AdminController {
     }
 
     public function add_category( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(Request::isMethod('post')) {
             $item = new SupportCategory;
@@ -181,6 +227,12 @@ class SupportController extends AdminController {
     }
 
     public function delete_category( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         SupportCategory::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Category Deleted' );
@@ -188,6 +240,12 @@ class SupportController extends AdminController {
     }
 
     public function edit_category( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         $item = SupportCategory::find($id);
 
         if(!empty($item)) {
@@ -216,6 +274,11 @@ class SupportController extends AdminController {
     }
 
     public function contact() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $items = SupportContact::orderBy('id', 'desc');
 
@@ -312,6 +375,11 @@ class SupportController extends AdminController {
 
 
     public function sendAnswer($id) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         $contact = SupportContact::find($id);
 

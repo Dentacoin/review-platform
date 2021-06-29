@@ -11,11 +11,17 @@ use Carbon\Carbon;
 
 use Validator;
 use Request;
+use Auth;
 use DB;
 
 class WhitelistIpsController extends AdminController {
 
     public function list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(Request::isMethod('post')) {
 
@@ -51,6 +57,12 @@ class WhitelistIpsController extends AdminController {
     }
 
     public function delete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
         WhitelistIp::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Whitelist IP deleted' );
@@ -58,6 +70,11 @@ class WhitelistIpsController extends AdminController {
     }
 
     public function vpnList() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(Request::isMethod('post')) {
 
@@ -91,6 +108,12 @@ class WhitelistIpsController extends AdminController {
     }
 
     public function vpnDelete( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
         WhitelistIp::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Whitelist VPN IP deleted' );

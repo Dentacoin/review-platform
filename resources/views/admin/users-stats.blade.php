@@ -3,7 +3,7 @@
 @section('content')
 
 <h1 class="page-header">
-    Users Statsistics
+    Users Statistics
 </h1>
 <!-- end page-header -->
 

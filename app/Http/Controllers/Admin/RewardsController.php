@@ -8,10 +8,16 @@ use App\Models\Reward;
 
 use Validator;
 use Request;
+use Auth;
 
 class RewardsController extends AdminController {
 
     public function list( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
 
         if(Request::isMethod('post')) {
         	$rewards = Reward::get();

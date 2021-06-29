@@ -6,11 +6,18 @@ use App\Http\Controllers\AdminController;
 use App\Models\DcnTransaction;
 
 use Carbon\Carbon;
+
+use Auth;
 use DB;
 
 class SpendingController extends AdminController {
 
     public function list( ) {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
         
         $groups = [
             'day', 
