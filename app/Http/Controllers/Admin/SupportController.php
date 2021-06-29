@@ -27,7 +27,7 @@ class SupportController extends AdminController {
 
     public function questions( ) {
         
-        $categories = SupportCategory::get();
+        $categories = SupportCategory::orderBy('order_number', 'asc')->get();
 
         return $this->showView('support-questions', array(
             'categories' => $categories,
@@ -135,8 +135,21 @@ class SupportController extends AdminController {
         return Response::json( ['success' => true] );
     }
 
+    public function categoriesReorder() {
+        $list = Request::input('list');
+        $i=1;
+        foreach ($list as $qid) {
+            $question = SupportCategory::find($qid);
+            $question->order_number = $i;
+            $question->save();
+            $i++;
+        }
+
+        return Response::json( ['success' => true] );
+    }
+
     public function categories() {
-    	$categories = SupportCategory::get();
+    	$categories = SupportCategory::orderBy('order_number', 'asc')->get();
 
         return $this->showView('support-categories', array(
             'categories' => $categories,
@@ -148,6 +161,7 @@ class SupportController extends AdminController {
         if(Request::isMethod('post')) {
             $item = new SupportCategory;
             $item->name = $this->request->input('category-name-en');
+            $item->order_number = SupportCategory::count()+1;
             $item->save();
 
             foreach ($this->langs as $key => $value) {

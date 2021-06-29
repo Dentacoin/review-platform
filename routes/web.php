@@ -266,6 +266,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('support/categories/add', 			'SupportController@add_category');
 	Route::any('support/categories/edit/{id}', 		'SupportController@edit_category');
 	Route::any('support/categories/delete/{id}', 	'SupportController@delete_category');
+	Route::any('support/categories/reorder', 		'SupportController@categoriesReorder');
 	Route::any('support/contact', 					'SupportController@contact');
 	Route::post('support/contact/{id}', 			'SupportController@sendAnswer');
 

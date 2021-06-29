@@ -21,9 +21,12 @@
 				    		<table class="table table-striped">
 				                <thead>
 				                    <tr>
-				                       	<th>
-				                            Category name
-				                        </th>
+                                        <th>
+                                            Order
+                                        </th>
+                                        <th>
+                                            Category name
+                                        </th>
 				                        <th>
 				                            Edit
 				                        </th>
@@ -32,12 +35,15 @@
 				                        </th>
 				                    </tr>
 				                </thead>
-				                <tbody>
+				                <tbody class="questions-draggable" reorder-url="{{ url('cms/support/categories/reorder') }}">
 				                	@foreach($categories as $cat)
-				                    	<tr>
-				                            <td>
-				                                {{ $cat->name }}
-				                            </td>
+				                    	<tr question-id="{{ $cat->id }}">
+                                            <td class="question-number">
+                                                {{ $cat->order_number }}
+                                            </td>
+                                            <td>
+                                                {{ $cat->name }}
+                                            </td>
 				                            <td>
 				                                <a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.'/categories/edit/'.$cat->id) }}">{{ trans('admin.table.edit') }}</a>
 				                            </td>

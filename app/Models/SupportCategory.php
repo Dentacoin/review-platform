@@ -16,6 +16,7 @@ class SupportCategory extends Model {
 
     protected $fillable = [
         'name',
+        'order_number'
     ];
 
     protected $dates = [
