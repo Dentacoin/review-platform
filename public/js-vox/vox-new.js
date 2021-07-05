@@ -60,7 +60,12 @@ $(document).ready(function(){
 
                         getNextQuestion(data.vox_id);
                     } else {
-                        $('#captcha-error').show();
+                        if(data.is_vpn) {
+                            $('.popup.vpn').addClass('active');
+                        } else {
+
+                            $('#captcha-error').show();
+                        }
                     }
                 }
             );
