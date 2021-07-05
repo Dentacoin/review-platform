@@ -18,7 +18,7 @@ class WhitelistIpsController extends AdminController {
 
     public function list() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -58,7 +58,7 @@ class WhitelistIpsController extends AdminController {
 
     public function delete( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -71,7 +71,7 @@ class WhitelistIpsController extends AdminController {
 
     public function vpnList() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -109,7 +109,7 @@ class WhitelistIpsController extends AdminController {
 
     public function vpnDelete( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

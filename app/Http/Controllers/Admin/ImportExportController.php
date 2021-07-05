@@ -26,7 +26,7 @@ class ImportExportController extends AdminController {
 
     public function list() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'translator']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

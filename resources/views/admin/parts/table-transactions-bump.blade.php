@@ -24,15 +24,13 @@
 		@endif
 	@endif
 @endif
-@if($admin->role!='support')
-	@if(($admin->id == 14 || $admin->id == 15 || $admin->id == 1) && ($item->status != 'completed' && $item->status != 'unconfirmed' && $item->status != 'pending' && $item->status != 'failed'))
+@if($admin->role='super_admin')
+	@if($item->status != 'completed' && $item->status != 'unconfirmed' && $item->status != 'pending' && $item->status != 'failed')
 		<a class="btn btn-info" onclick="return confirm('Are you sure you want to DELETE this?');" href="{{ url('cms/transactions/delete/'.$item->id) }}" style="background: black;border-color: black;">
 			Delete
 		</a>
 	@endif
-	@if($admin->id == 14 || $admin->id == 15 || $admin->id == 1)
-		<a class="btn btn-info" href="{{ url('cms/transactions/edit/'.$item->id) }}">
-			Edit
-		</a>
-	@endif
+	<a class="btn btn-info" href="{{ url('cms/transactions/edit/'.$item->id) }}">
+		Edit
+	</a>
 @endif

@@ -936,7 +936,7 @@
                                         @endif
                                     @endif
                                     
-                                    @if($item->id != 3 && ($admin->id == 14 || $admin->id == 15 || $admin->id == 1))
+                                    @if($item->id != 3 && $admin->role='super_admin')
                                         <a class="btn btn-sm btn-danger form-control user-b" href="{{ url('cms/users/users/delete-database/'.$item->id) }}" onclick="return confirm('Are you sure you want to DELETE this user? Тhis cannot be reversed!!!');" style="margin-top: 10px;background: black;">
                                             Delete from database
                                         </a>

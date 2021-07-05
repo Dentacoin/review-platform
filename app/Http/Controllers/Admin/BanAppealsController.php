@@ -36,7 +36,7 @@ class BanAppealsController extends AdminController {
 
     public function list() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -152,7 +152,7 @@ class BanAppealsController extends AdminController {
 
     public function approve($id) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -194,7 +194,7 @@ class BanAppealsController extends AdminController {
 
     public function reject($id) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -248,7 +248,7 @@ class BanAppealsController extends AdminController {
 
     public function pending($id) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -288,7 +288,7 @@ class BanAppealsController extends AdminController {
 
     public function userInfo($user_id) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

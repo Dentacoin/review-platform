@@ -21,7 +21,7 @@ class TestimonialSliderController extends AdminController {
 
     public function list() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -35,7 +35,7 @@ class TestimonialSliderController extends AdminController {
 
     public function add() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -76,7 +76,7 @@ class TestimonialSliderController extends AdminController {
 
     public function edit( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -124,7 +124,7 @@ class TestimonialSliderController extends AdminController {
 
     public function add_avatar( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -141,7 +141,7 @@ class TestimonialSliderController extends AdminController {
 
     public function delete( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -155,7 +155,7 @@ class TestimonialSliderController extends AdminController {
 
     public function export() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -215,7 +215,7 @@ class TestimonialSliderController extends AdminController {
 
     public function import() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

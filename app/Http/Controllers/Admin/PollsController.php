@@ -44,7 +44,7 @@ class PollsController extends AdminController {
 
     public function list() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -127,7 +127,7 @@ class PollsController extends AdminController {
 
     public function add() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -198,7 +198,7 @@ class PollsController extends AdminController {
 
     public function edit( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -306,7 +306,7 @@ class PollsController extends AdminController {
 
     public function delete( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -319,7 +319,7 @@ class PollsController extends AdminController {
 
     public function change_poll_question( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -338,7 +338,7 @@ class PollsController extends AdminController {
 
     public function change_poll_date( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -356,7 +356,7 @@ class PollsController extends AdminController {
 
     public function duplicate_poll($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -400,7 +400,7 @@ class PollsController extends AdminController {
 
     public function polls_explorer($poll_id=null) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -432,7 +432,7 @@ class PollsController extends AdminController {
 
     public function import($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -485,7 +485,7 @@ class PollsController extends AdminController {
 
     public function pollsMonthlyDescriptions() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -559,7 +559,7 @@ class PollsController extends AdminController {
 
     public function pollsMonthlyDescriptionsAdd() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -608,7 +608,7 @@ class PollsController extends AdminController {
 
     public function pollsMonthlyDescriptionsEdit( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -667,7 +667,7 @@ class PollsController extends AdminController {
 
     public function pollsMonthlyDescriptionsDelete( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

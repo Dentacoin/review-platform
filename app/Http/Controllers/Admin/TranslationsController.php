@@ -21,7 +21,7 @@ class TranslationsController extends AdminController {
 
 	public function add() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'translator'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -54,7 +54,7 @@ class TranslationsController extends AdminController {
 
 	public function update() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'translator'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -87,7 +87,7 @@ class TranslationsController extends AdminController {
 
     public function export($subpage=null, $source=null, $target=null) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'translator'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -112,7 +112,7 @@ class TranslationsController extends AdminController {
 
     public function export_missing($subpage=null, $source=null, $target=null) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'translator'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -139,7 +139,7 @@ class TranslationsController extends AdminController {
 
     public function import($subpage=null, $source=null, $target=null) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'translator'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -183,7 +183,7 @@ class TranslationsController extends AdminController {
 
 	public function delete($subpage=null, $source=null, $target=null, $delid=null) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'translator'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -202,7 +202,7 @@ class TranslationsController extends AdminController {
 
     public function list($subpage=null, $source=null, $target=null) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='translator' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'translator'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

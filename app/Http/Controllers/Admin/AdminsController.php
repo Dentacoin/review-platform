@@ -24,6 +24,7 @@ class AdminsController extends AdminController {
 
         $this->roles = [
             'admin' => 'Admin',
+            'super_admin' => 'Super admin',
             'translator' => 'Translator',
             'voxer' => 'Voxer',
             'support' => 'Support',
@@ -41,7 +42,7 @@ class AdminsController extends AdminController {
 
     public function list( ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -54,7 +55,7 @@ class AdminsController extends AdminController {
 
     public function add( ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -86,7 +87,7 @@ class AdminsController extends AdminController {
 
     public function delete( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -99,7 +100,7 @@ class AdminsController extends AdminController {
 
     public function edit( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -121,7 +122,7 @@ class AdminsController extends AdminController {
 
     public function update( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -163,7 +164,7 @@ class AdminsController extends AdminController {
 
     public function listIps() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -200,7 +201,7 @@ class AdminsController extends AdminController {
 
     public function deleteIp( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin') {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

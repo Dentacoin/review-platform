@@ -28,7 +28,7 @@ class TransactionsController extends AdminController {
 
     public function list() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -206,7 +206,7 @@ class TransactionsController extends AdminController {
 
     public function bump( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -243,7 +243,7 @@ class TransactionsController extends AdminController {
 
     public function pending( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -266,7 +266,7 @@ class TransactionsController extends AdminController {
 
     public function stop( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -301,7 +301,7 @@ class TransactionsController extends AdminController {
 
     public function delete( $id ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -310,7 +310,7 @@ class TransactionsController extends AdminController {
 
         if(!empty($item)) {
 
-            if(($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) && ($item->status != 'completed' && $item->status != 'unconfirmed' && $item->status != 'pending')) {
+            if(!in_array($item->status, ['completed', 'unconfirmed', 'pending'])) {
 
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $item->id;
@@ -353,7 +353,7 @@ class TransactionsController extends AdminController {
 
     public function massbump(  ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -392,7 +392,7 @@ class TransactionsController extends AdminController {
 
     public function massstop(  ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -431,7 +431,7 @@ class TransactionsController extends AdminController {
 
     public function massPending(  ) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -458,7 +458,7 @@ class TransactionsController extends AdminController {
 
     public function bumpDontRetry() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -483,7 +483,7 @@ class TransactionsController extends AdminController {
 
     public function allowWithdraw() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -498,7 +498,7 @@ class TransactionsController extends AdminController {
 
     public function disallowWithdraw() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -513,7 +513,7 @@ class TransactionsController extends AdminController {
 
     public function removeMessage() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -528,7 +528,7 @@ class TransactionsController extends AdminController {
 
     public function addMessage() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -543,7 +543,7 @@ class TransactionsController extends AdminController {
 
     public function withdrawalConditions() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -591,7 +591,7 @@ class TransactionsController extends AdminController {
 
     public function scammers() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -603,7 +603,7 @@ class TransactionsController extends AdminController {
 
     public function scammersChecked($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -620,7 +620,7 @@ class TransactionsController extends AdminController {
 
     public function scammersBalance() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -632,7 +632,7 @@ class TransactionsController extends AdminController {
 
     public function scammersBalanceChecked($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -649,80 +649,71 @@ class TransactionsController extends AdminController {
 
     public function disableRetry() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
 
-        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
+        $allow = GasPrice::find(1);
+        $allow->cron_new_trans = Carbon::now()->addYears(5);
+        $allow->save();
 
-            $allow = GasPrice::find(1);
-            $allow->cron_new_trans = Carbon::now()->addYears(5);
-            $allow->save();
-
-            $this->request->session()->flash('success-message', 'Disabled!' );
-        }
+        $this->request->session()->flash('success-message', 'Disabled!' );
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
     public function enableRetry() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
 
-        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
-            $allow = GasPrice::find(1);
-            $allow->cron_new_trans = Carbon::now()->addDays(-1);
-            $allow->save();
+        $allow = GasPrice::find(1);
+        $allow->cron_new_trans = Carbon::now()->addDays(-1);
+        $allow->save();
 
-            $this->request->session()->flash('success-message', 'Enabled!' );
-        }
+        $this->request->session()->flash('success-message', 'Enabled!' );
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
     public function disablePaidByUserRetry() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
 
-        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
-            $allow = GasPrice::find(1);
-            $allow->cron_paid_by_user_trans = Carbon::now()->addYears(5);
-            $allow->save();
+        $allow = GasPrice::find(1);
+        $allow->cron_paid_by_user_trans = Carbon::now()->addYears(5);
+        $allow->save();
 
-            $this->request->session()->flash('success-message', 'Disabled!' );
-        }
+        $this->request->session()->flash('success-message', 'Disabled!' );
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
     public function enablePaidByUserRetry() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
 
-        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
-            $allow = GasPrice::find(1);
-            $allow->cron_paid_by_user_trans = Carbon::now()->addDays(-1);
-            $allow->save();
+        $allow = GasPrice::find(1);
+        $allow->cron_paid_by_user_trans = Carbon::now()->addDays(-1);
+        $allow->save();
 
-            $this->request->session()->flash('success-message', 'Enabled!' );
-        }
+        $this->request->session()->flash('success-message', 'Enabled!' );
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
     public function editMode() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -737,7 +728,7 @@ class TransactionsController extends AdminController {
 
     public function normalMode() {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -752,68 +743,66 @@ class TransactionsController extends AdminController {
 
     public function edit($id) {
 
-        if( Auth::guard('admin')->user()->role!='admin' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
 
-        if($this->user->id == 14 || $this->user->id == 15 || $this->user->id == 1) {
-            $item = DcnTransaction::find($id);
+        $item = DcnTransaction::find($id);
 
-            if(Request::isMethod('post')) {
+        if(Request::isMethod('post')) {
 
-                if((!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) || (!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) || (!empty(request('status')) && request('status') != $item->status) || (!empty(request('message')) && request('message') != $item->message)) {
+            if((!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) || (!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) || (!empty(request('status')) && request('status') != $item->status) || (!empty(request('message')) && request('message') != $item->message)) {
 
-                    $dcn_history = new DcnTransactionHistory;
-                    $dcn_history->transaction_id = $item->id;
-                    $dcn_history->admin_id = $this->user->id;
+                $dcn_history = new DcnTransactionHistory;
+                $dcn_history->transaction_id = $item->id;
+                $dcn_history->admin_id = $this->user->id;
 
-                    if(!empty(request('status')) && request('status') != $item->status) {
-                        $dcn_history->status = request('status');
-                    }
-
-                    if(!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) {
-                        $dcn_history->tx_hash = request('tx_hash');
-                    }
-
-                    if(!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) {
-                        $dcn_history->allowance_hash = request('allowance_hash');
-                    }
-
-                    if(!empty(request('message')) && request('message') != $item->message) {
-                        $dcn_history->message = request('message');
-                    }
-
-                    $dcn_history->history_message = 'Edited by admin';
-                    $dcn_history->save();
+                if(!empty(request('status')) && request('status') != $item->status) {
+                    $dcn_history->status = request('status');
                 }
 
-                $item->tx_hash = request('tx_hash');
-                $item->message = request('message');
-                if($item->is_paid_by_the_user) {
-                    $item->allowance_hash = request('allowance_hash');
+                if(!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) {
+                    $dcn_history->tx_hash = request('tx_hash');
                 }
-                $item->status = request('status');
 
-                if(request('status') == 'new') {
-                    $item->processing = 0;
+                if(!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) {
+                    $dcn_history->allowance_hash = request('allowance_hash');
                 }
-                $item->save();
 
+                if(!empty(request('message')) && request('message') != $item->message) {
+                    $dcn_history->message = request('message');
+                }
 
-                $this->request->session()->flash('success-message', 'Saved!' );
-                return redirect('cms/transactions');
+                $dcn_history->history_message = 'Edited by admin';
+                $dcn_history->save();
             }
 
-            return $this->showView('transactions-edit', array(
-                'item' => $item,
-            ));
+            $item->tx_hash = request('tx_hash');
+            $item->message = request('message');
+            if($item->is_paid_by_the_user) {
+                $item->allowance_hash = request('allowance_hash');
+            }
+            $item->status = request('status');
+
+            if(request('status') == 'new') {
+                $item->processing = 0;
+            }
+            $item->save();
+
+
+            $this->request->session()->flash('success-message', 'Saved!' );
+            return redirect('cms/transactions');
         }
+
+        return $this->showView('transactions-edit', array(
+            'item' => $item,
+        ));
     }
 
     public function checkPendingTransactions() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -836,7 +825,7 @@ class TransactionsController extends AdminController {
 
     public function checkConnectedNodes() {
 
-        if( Auth::guard('admin')->user()->role!='admin' && Auth::guard('admin')->user()->role!='support' ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

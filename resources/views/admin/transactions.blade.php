@@ -14,7 +14,7 @@
                 @endif
             @endif
 
-            @if($admin->id == 14 || $admin->id == 15 || $admin->id == 1 || $admin->role=='support')
+            @if(in_array($admin->role, ['super_admin', 'support']))
                 <a href="{{ $is_retry_stopped ? url('cms/transactions/enable-retry') : url('cms/transactions/disable-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_stopped ? 'Enable' : 'Disable' }} Retry</a>
 
                 <a href="{{ $is_retry_paid_by_the_user_stopped ? url('cms/transactions/enable-paid-by-user-retry') : url('cms/transactions/disable-paid-by-user-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_paid_by_the_user_stopped ? 'Enable' : 'Disable' }} Paid By User Retry</a>

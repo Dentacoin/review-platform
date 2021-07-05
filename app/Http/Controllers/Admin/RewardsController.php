@@ -14,7 +14,7 @@ class RewardsController extends AdminController {
 
     public function list( ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }

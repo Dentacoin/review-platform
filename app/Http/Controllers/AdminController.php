@@ -124,6 +124,14 @@ class AdminController extends BaseController {
             }
         }
         
+        if($params['admin']->role=='admin') {
+            foreach ($menu as $key => $value) {
+                if($key=='admins' || $key=='logs') {
+                    unset($menu[$key]);
+                }
+            }
+        }
+        
         config([
             'admin.pages' => $menu
         ]);

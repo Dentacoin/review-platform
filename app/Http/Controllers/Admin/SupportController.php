@@ -28,7 +28,7 @@ class SupportController extends AdminController {
 
     public function questions( ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -42,7 +42,7 @@ class SupportController extends AdminController {
 
     public function add_question( ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -94,7 +94,7 @@ class SupportController extends AdminController {
 
     public function delete_question( $id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -106,7 +106,7 @@ class SupportController extends AdminController {
 
     public function edit_question( $id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -147,7 +147,7 @@ class SupportController extends AdminController {
 
     public function questionsReorder() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -166,7 +166,7 @@ class SupportController extends AdminController {
 
     public function categoriesReorder() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -185,7 +185,7 @@ class SupportController extends AdminController {
 
     public function categories() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -199,7 +199,7 @@ class SupportController extends AdminController {
 
     public function add_category( ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -228,7 +228,7 @@ class SupportController extends AdminController {
 
     public function delete_category( $id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -241,7 +241,7 @@ class SupportController extends AdminController {
 
     public function edit_category( $id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -275,7 +275,7 @@ class SupportController extends AdminController {
 
     public function contact() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -376,7 +376,7 @@ class SupportController extends AdminController {
 
     public function sendAnswer($id) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
