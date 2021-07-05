@@ -12,13 +12,13 @@
 		</h2>
 
 		<div class="popup-tabs branch-tabs colorful-tabs flex flex-mobile">
-			<a class="active col" href="javascript:;" data-branch="1" style="z-index: 3">
+			<a class="{!! !session('user_branch') ? 'active' : '' !!} col" href="javascript:;" data-branch="1" style="z-index: 3">
 				1
 			</a>
-			<a class="col" href="javascript:;" data-branch="2" style="z-index: 2">
+			<a class="col {!! session('user_branch') && !isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}" href="javascript:;" data-branch="2" style="z-index: 2">
 				2
 			</a>
-			<a class="col" href="javascript:;" data-branch="3" style="z-index: 1">
+			<a class="col {!! session('user_branch') && isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}" href="javascript:;" data-branch="3" style="z-index: 1">
 				3
 			</a>
 		</div>
@@ -28,17 +28,17 @@
 		{!! Form::open(array('method' => 'post', 'class' => 'add-new-branch-form', 'url' => getLangUrl('profile/add-new-branch'), 'success-url' => getLangUrl('branches/'.$user->slug) )) !!}
 			{!! csrf_field() !!}
 
-			<div id="branch-option-1" class="branch-content">
+			<div id="branch-option-1" class="branch-content" {!! session('user_branch') ? 'style="display: none;"' : '' !!}>
 
-				<div class="modern-field alert-after">
-					<input type="text" name="clinic_name" id="clinic_name" class="modern-input tooltip-text input-tooltip clinic_name" text="{{ trans('trp.popup.add-branch.clinic-name.tooltip') }}" autocomplete="off">
+				<div class="modern-field alert-after {!! isset(session('user_branch')['clinic_name']) ? 'active' : '' !!}" >
+					<input type="text" name="clinic_name" id="clinic_name" class="modern-input tooltip-text input-tooltip clinic_name" text="{{ trans('trp.popup.add-branch.clinic-name.tooltip') }}" autocomplete="off" {!! isset(session('user_branch')['clinic_name']) ? 'value="'.session('user_branch')['clinic_name'].'"' : '' !!}>
 					<label for="clinic_name">
 						<span>{{ trans('trp.popup.add-branch.clinic-name') }}</span>
 					</label>
 					<p>{{ trans('trp.popup.add-branch.clinic-name.description') }}</p>
 				</div>
-				<div class="modern-field alert-after">
-					<input type="text" name="clinic_name_alternative" id="clinic_name_alternative" class="modern-input clinic_name_alternative" autocomplete="off">
+				<div class="modern-field alert-after {!! isset(session('user_branch')['clinic_name_alternative']) ? 'active' : '' !!}">
+					<input type="text" name="clinic_name_alternative" id="clinic_name_alternative" class="modern-input clinic_name_alternative" autocomplete="off" {!! isset(session('user_branch')['clinic_name_alternative']) ? 'value="'.session('user_branch')['clinic_name_alternative'].'"' : '' !!}>
 					<label for="clinic_name_alternative">
 						<span>{{ trans('trp.popup.add-branch.clinic-name-alternative') }}:</span>
 					</label>
@@ -51,7 +51,8 @@
 				<a href="javascript:;" id="first-branch-next" class="button next-branch-button" to-step="2" branch-url="{{ getLangUrl('profile/add-new-branch/1') }}" style="margin-right: auto;">{{ trans('trp.popup.add-branch.button-next') }}</a>
 			</div>
 
-			<div id="branch-option-2" class="branch-content" style="display: none;">
+			<div id="branch-option-2" class="branch-content" {!! session('user_branch') && !isset(session('user_branch')['clinic_website']) ? '' : 'style="display: none;"' !!}>
+
 				<div class="address-suggester-wrapper-input">
 					<div class="modern-field alert-after">
 			  			<select name="clinic_country_id" id="clinic_country_id" class="modern-input country-select">
@@ -59,12 +60,12 @@
 				  				<option>-</option>
 				  			@endif
 			  				@foreach( $countries as $country )
-			  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+			  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! isset(session('user_branch')['clinic_country_id']) ? (session('user_branch')['clinic_country_id'] == $country->id ? 'selected="selected"' : '') : ($country_id==$country->id ? 'selected="selected"' : '') !!} >{{ $country->name }}</option>
 			  				@endforeach
 			  			</select>
 					</div>
-					<div class="modern-field alert-after">
-						<input type="text" name="clinic_address" id="clinic_address" class="modern-input tooltip-text input-tooltip clinic_address address-suggester-input" autocomplete="chrome-off" text="{{ trans('trp.popup.add-branch.address.tooltip') }}">
+					<div class="modern-field alert-after" {!! isset(session('user_branch')['clinic_address']) ? 'active' : '' !!}>
+						<input type="text" name="clinic_address" id="clinic_address" class="modern-input tooltip-text input-tooltip clinic_address address-suggester-input" autocomplete="chrome-off" text="{{ trans('trp.popup.add-branch.address.tooltip') }}" {!! isset(session('user_branch')['clinic_address']) ? 'value="'.session('user_branch')['clinic_address'].'"' : '' !!}>
 						<label for="clinic_address">
 							<span>{{ trans('trp.popup.add-branch.address') }}:</span>
 						</label>
@@ -80,8 +81,8 @@
                     </div>
                 </div>
 
-                <div class="modern-field alert-after">
-					<input type="text" name="clinic_website" id="clinic_website" class="modern-input clinic_website" autocomplete="off">
+                <div class="modern-field alert-after" {!! isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}>
+					<input type="text" name="clinic_website" id="clinic_website" class="modern-input clinic_website" autocomplete="off" {!! isset(session('user_branch')['clinic_website']) ? 'value="'.session('user_branch')['clinic_website'].'"' : '' !!}>
 					<label for="clinic_website">
 						<span>{{ trans('trp.popup.add-branch.website') }}</span>
 					</label>
@@ -90,10 +91,10 @@
 
 				<div class="flex flex-mobile alert-after">
 					<div>
-	    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
+	    				<span class="phone-code-holder">{{ isset(session('user_branch')['clinic_country_id']) ? '+'.$countries->where('id', session('user_branch')['clinic_country_id'])->first()->phone_code : ($country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '') }}</span>
 					</div>
-					<div style="flex: 1;" class="modern-field">
-						<input type="text" name="clinic_phone" id="clinic_phone" class="modern-input clinic_phone" autocomplete="off">
+					<div style="flex: 1;" class="modern-field" {!! isset(session('user_branch')['clinic_phone']) ? 'active' : '' !!}>
+						<input type="text" name="clinic_phone" id="clinic_phone" class="modern-input clinic_phone" autocomplete="off" {!! isset(session('user_branch')['clinic_phone']) ? 'value="'.session('user_branch')['clinic_phone'].'"' : '' !!}>
 						<label for="clinic_phone">
 							<span>{{ trans('trp.popup.add-branch.phone') }}:</span>
 						</label>
@@ -110,7 +111,7 @@
 				</div>
 			</div>
 
-			<div id="branch-option-3" class="branch-content" style="display: none;">
+			<div id="branch-option-3" class="branch-content" {!! session('user_branch') && isset(session('user_branch')['clinic_website']) ? '' : 'style="display: none;"' !!}>
 
 				<div class="flex flex-mobile alert-after last-step-flex">
 					<div class="col">

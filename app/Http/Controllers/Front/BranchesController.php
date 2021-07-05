@@ -67,6 +67,7 @@ class BranchesController extends FrontController {
     public function addNewBranch($locale=null, $step=null) {
         if(!empty($step)) {
 
+
             if($step == 1) {
                 $validator = Validator::make(Request::all(), [
                     'clinic_name' => array('required', 'min:3'),
@@ -86,6 +87,7 @@ class BranchesController extends FrontController {
 
                 } else {
 
+
                     if(User::validateLatin(Request::input('clinic_name')) == false) {
                         return Response::json( [
                             'success' => false, 
@@ -95,10 +97,20 @@ class BranchesController extends FrontController {
                         ] );
                     }
 
+                    $session_user_branch = [];
+                    if(session('user_branch')) {
+                        $session_user_branch = session('user_branch');
+                    }
+                    $session_user_branch['clinic_name'] = Request::input('clinic_name');
+                    $session_user_branch['clinic_name_alternative'] = Request::input('clinic_name_alternative');
+
+                    session([
+                        'user_branch' => $session_user_branch
+                    ]);
+
                     $ret = array(
                         'success' => true
                     );
-
                 }
 
                 return Response::json( $ret );
@@ -166,6 +178,19 @@ class BranchesController extends FrontController {
                             ]
                         ] );
                     }
+
+                    $session_user_branch = [];
+                    if(session('user_branch')) {
+                        $session_user_branch = session('user_branch');
+                    }
+                    $session_user_branch['clinic_country_id'] = Request::input('clinic_country_id');
+                    $session_user_branch['clinic_address'] = Request::input('clinic_address');
+                    $session_user_branch['clinic_website'] = Request::input('clinic_website');
+                    $session_user_branch['clinic_phone'] = Request::input('clinic_phone');
+
+                    session([
+                        'user_branch' => $session_user_branch
+                    ]);
 
                     return Response::json( ['success' => true] );
                 }
@@ -304,6 +329,8 @@ class BranchesController extends FrontController {
                 $newbranch->clinic_id = $newuser->id;
                 $newbranch->branch_clinic_id = $this->user->id;
                 $newbranch->save();
+
+                session()->pull('user_branch');
 
                 return Response::json( [
                     'success' => true,
