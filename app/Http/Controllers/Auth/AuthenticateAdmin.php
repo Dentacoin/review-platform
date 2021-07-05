@@ -8,14 +8,15 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
+use App\Models\AdminIp;
+use App\Models\User as UserModel;
 use App\User;
 
 use Validator;
 use Auth;
 use Lang;
 
-class AuthenticateAdmin extends BaseController
-{
+class AuthenticateAdmin extends BaseController {
     /*
     |--------------------------------------------------------------------------
     | Registration & Login Controller
@@ -38,20 +39,31 @@ class AuthenticateAdmin extends BaseController
     protected function guard() {
         return Auth::guard('admin');
     }
-    public function showLoginForm()
-    {
+
+    public function showLoginForm() {
         return view('admin.login');
     }
 
-    public function postLogin(Request $request)
-    {
-        if (Auth::guard('admin')->attempt( ['username' => $request->input('username'), 'password' => $request->input('password') ], $request->input('remember') )) {
-            return redirect()->intended('');
+    public function postLogin(Request $request) {
+        // AdminIps
+
+        $safeIp = AdminIp::where('ip', UserModel::getRealIp())->first();
+
+        if($safeIp) {
+
+            if (Auth::guard('admin')->attempt( ['username' => $request->input('username'), 'password' => $request->input('password') ], $request->input('remember') )) {
+                return redirect()->intended('');
+            } else {
+                return redirect('cms/login')
+                ->withInput()
+                ->with('error-message', 'Wrong username or password!');
+            }
         } else {
             return redirect('cms/login')
             ->withInput()
-            ->with('error-message', trans('admin.page.login.error'));;
+            ->with('error-message', 'You can\'t login with this IP!');
         }
+
     }
 
     public function getLogout() {

@@ -7,6 +7,8 @@ use App\Http\Controllers\ApiController;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
+use App\Services\VoxService as ServicesVox;
+
 use Illuminate\Support\Facades\Input;
 
 use App\Models\StopTransaction;
@@ -44,11 +46,12 @@ class PaidDentalSurveysController extends ApiController {
 			'all' => trans('vox.page.home.sort-all'),
 		];
 
-		$user = Auth::guard('api')->user();
+        $user = Auth::guard('api')->user();
+        // $user = User::find(37530);
 
 		$taken = !empty($user) ? $user->filledVoxes() : null;
 
-		$voxList = app('App\Http\Controllers\Vox\IndexController')->getVoxList();
+		$voxList = ServicesVox::getVoxList($user, false);
 
 		$voxes = [];
 		foreach ($voxList as $fv) {
@@ -61,7 +64,7 @@ class PaidDentalSurveysController extends ApiController {
 
 			$untaken_voxes = $user->voxesTargeting();
 			$untaken_voxes = $untaken_voxes->where('type', 'normal')->count();
-			if($untaken_voxes == count($taken)) {
+			if($untaken_voxes <= count($taken)) {
 				$all_taken = true;
 
 				$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
@@ -105,14 +108,16 @@ class PaidDentalSurveysController extends ApiController {
         	'voxes' => $voxes,
         	'categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
 			'vox_levels' => $vox_levels,
-			'user' => Auth::guard('api')->user(),
+			'user' => $user,
 		);
 
         return Response::json( $arr );
     }
 
 	public function getVoxes() {
-		$voxList = app('App\Http\Controllers\Vox\IndexController')->getVoxList((request('slice') * 6) );
+		$user = Auth::guard('api')->user();
+        // $user = User::find(37530);
+		$voxList = ServicesVox::getVoxList($user, false);
 
 		if($voxList->count()) {
 

@@ -233,21 +233,19 @@ class Vox extends Model {
         }        
     }
 
-    public function getRewardForUser($user_id) {
+    public function getRewardForUser($user, $answers_count) {
         if ($this->type == 'user_details') {
             return 0;
         } else {
-            $how_many_questions = VoxAnswer::where('vox_id', $this->id)->where('user_id', $user_id)->where('answer', '!=' , 0)->groupBy('question_id')->get()->count();
             $reward_per_question = $this->getRewardPerQuestion()->dcn;
 
             $double_reward = 1;
 
-            $user = User::find($user_id);
-            if(!empty($user) && !empty($user->vip_access)) {
+            if(!empty($user->vip_access)) {
                 $double_reward = 2;
             }
 
-            return $how_many_questions * $reward_per_question * $double_reward;
+            return $answers_count * $reward_per_question * $double_reward;
         }        
     }
 

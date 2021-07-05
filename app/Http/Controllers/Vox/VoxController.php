@@ -6,6 +6,8 @@ use App\Http\Controllers\FrontController;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use DeviceDetector\DeviceDetector;
 
+use App\Services\VoxService as ServicesVox;
+
 use App\Models\VoxCrossCheck;
 use App\Models\VoxQuestion;
 use App\Models\WhitelistIp;
@@ -44,8 +46,8 @@ class VoxController extends FrontController {
      * Single vox page by slug
      */
 	public function vox($locale=null, $slug) {
-		$vox = Vox::whereTranslationLike('slug', $slug)->first();
-		// $surveys = Vox::whereTranslationLike('slug', $slug)->orWhere('type', 'home')->all();
+		$vox = Vox::whereTranslationLike('slug', $slug)->with('questions')->first();
+
 		if(Request::isMethod('post')) {
 			if (empty($vox) || $vox->id == 11) {
 				$ret['success'] = false;
@@ -53,14 +55,22 @@ class VoxController extends FrontController {
     			return Response::json( $ret );
 			}
 
-			return $this->surveyAnswer($locale, $vox);
+			return ServicesVox::surveyAnswer($vox, $this->user, false);
+			// return $this->surveyAnswer($locale, $vox);
 		} else {
+			$doVox = ServicesVox::doVox($vox, $this->user, false);
 
-			if (empty($vox) || $vox->id == 11) {
-				return redirect( getLangUrl('page-not-found') );
+			if(isset($doVox['view'])) {
+				if($doVox['view'] == 'vox') {
+					$this->current_page = 'questionnaire';
+				}
+				return $this->ShowVoxView($doVox['view'], $doVox['params']);
+
+			} else if( isset($doVox['url'])) {
+				return redirect($doVox['url']);
 			}
 
-			return $this->doVox($locale, $vox);
+			// return $this->doVox($vox);
 		}
 	}
 
@@ -69,1496 +79,1294 @@ class VoxController extends FrontController {
      * Single vox page for taken vox
      * Single vox page for restricted vox
      */
-	public function doVox($locale=null, $vox) {
+	// public function doVox($vox) {
 
-		ini_set('max_execution_time', 0);
-        set_time_limit(0);
-        ini_set('memory_limit','1024M');
+	// 	if (empty($vox) || $vox->id == 11) {
+	// 		return redirect( getLangUrl('page-not-found') );
+	// 	}
 
-		if(empty($this->user) && !empty($this->admin) && ($this->admin->id) == 11 && !empty($this->admin->user_id)) {
-			$adm = User::find($this->admin->user_id);
+	// 	ini_set('max_execution_time', 0);
+ //        set_time_limit(0);
+ //        ini_set('memory_limit','1024M');
 
-	        if(!empty($adm)) {
-	            Auth::login($adm, true);
-	        }
-	        return redirect(url()->current().'?testmode=1');
-	    }
+ //        //to log Dobrina, because of problems
+	// 	if(empty($this->user) && !empty($this->admin) && ($this->admin->id) == 11 && !empty($this->admin->user_id)) {
+	// 		$adm = User::find($this->admin->user_id);
 
-        if(!$this->user) {
+	//         if(!empty($adm)) {
+	//             Auth::login($adm, true);
+	//         }
+	//         return redirect(url()->current().'?testmode=1');
+	//     }
 
-            $seos = PageSeo::find(16);
+	//     //vox for not logged users
+ //        if(!$this->user) {
 
-            $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
-            $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
-            $social_title = str_replace(':title', $vox->title, $seos->social_title);
-            $social_description = str_replace(':description', $vox->description, $seos->social_description);
+ //            $seos = PageSeo::find(16);
+ //            $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+ //            $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+ //            $social_title = str_replace(':title', $vox->title, $seos->social_title);
+ //            $social_description = str_replace(':description', $vox->description, $seos->social_description);
 
-            return $this->ShowVoxView('vox-public', array(
-				'vox' => $vox,
-				'custom_body_class' => 'vox-public',
-				'js' => [
-					'all-surveys.js',
-				],
-				'css' => [
-					'vox-public-vox.css',
-				],
-	            'canonical' => $vox->getLink(),
-	            'social_image' => $vox->getSocialImageUrl('survey'),
-	            'seo_title' => $seo_title,
-	            'seo_description' => $seo_description,
-	            'social_title' => $social_title,
-	            'social_description' => $social_description,
-	        ));
-        }
+ //            return $this->ShowVoxView('vox-public', array(
+	// 			'vox' => $vox,
+	// 			'custom_body_class' => 'vox-public',
+	// 			'js' => [
+	// 				'all-surveys.js',
+	// 			],
+	// 			'css' => [
+	// 				'vox-public-vox.css',
+	// 			],
+	//             'canonical' => $vox->getLink(),
+	//             'social_image' => $vox->getSocialImageUrl('survey'),
+	//             'seo_title' => $seo_title,
+	//             'seo_description' => $seo_description,
+	//             'social_title' => $social_title,
+	//             'social_description' => $social_description,
+	//         ));
+ //        }
 
-        if($this->user->isBanned('vox')) {
-            return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
-        }
+ //        //when the user is banned
+ //        if($this->user->isBanned('vox')) {
+ //            return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
+ //        }
 
-		if(($this->user->loggedFromBadIp() && !$this->user->is_dentist && $this->user->platform != 'external')) {
+ //        //when the user is logged from bad IP
+	// 	if(!$this->user->is_dentist && $this->user->platform != 'external' && $this->user->loggedFromBadIp()) {
+	// 		$ul = new UserLogin;
+ //            $ul->user_id = $this->user->id;
+ //            $ul->ip = User::getRealIp();
+ //            $ul->platform = 'vox';
+ //            $ul->country = \GeoIP::getLocation()->country;
 
-			$ul = new UserLogin;
-            $ul->user_id = $this->user->id;
-            $ul->ip = User::getRealIp();
-            $ul->platform = 'vox';
-            $ul->country = \GeoIP::getLocation()->country;
+ //            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+ //            $dd = new DeviceDetector($userAgent);
+ //            $dd->parse();
 
-            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-            $dd = new DeviceDetector($userAgent);
-            $dd->parse();
-
-            if ($dd->isBot()) {
-                // handle bots,spiders,crawlers,...
-                $ul->device = $dd->getBot();
-            } else {
-                $ul->device = $dd->getDeviceName();
-                $ul->brand = $dd->getBrandName();
-                $ul->model = $dd->getModel();
-                $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-            }
+ //            if ($dd->isBot()) {
+ //                // handle bots,spiders,crawlers,...
+ //                $ul->device = $dd->getBot();
+ //            } else {
+ //                $ul->device = $dd->getDeviceName();
+ //                $ul->brand = $dd->getBrandName();
+ //                $ul->model = $dd->getModel();
+ //                $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+ //            }
             
-            $ul->save();
+ //            $ul->save();
             
-            $u_id = $this->user->id;
+ //            $u_id = $this->user->id;
 
-            $action = new UserAction;
-            $action->user_id = $u_id;
-            $action->action = 'bad_ip';
-            $action->reason = 'Automatically - Bad IP ( vox questionnaire )';
-            $action->actioned_at = Carbon::now();
-            $action->save();
+ //            $action = new UserAction;
+ //            $action->user_id = $u_id;
+ //            $action->action = 'bad_ip';
+ //            $action->reason = 'Automatically - Bad IP ( vox questionnaire )';
+ //            $action->actioned_at = Carbon::now();
+ //            $action->save();
 
-            Auth::guard('web')->user()->logoutActions();
-            Auth::guard('web')->user()->removeTokens();
-            Auth::guard('web')->logout();
+ //            Auth::guard('web')->user()->logoutActions();
+ //            Auth::guard('web')->user()->removeTokens();
+ //            Auth::guard('web')->logout();
             
-			return redirect( 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id)) );
-		}
+	// 		return redirect( 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id)) );
+	// 	}
 
-        $admin_ids = ['65003'];
-        $isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
+ //        $admin_ids = ['65003']; //Dobrina
+ //        $isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
 
-        if (request()->has('testmode')) {
-            if(request('testmode')) {
-                $ses = [
-		            'testmode' => true
-		        ];
-            } else {
-                $ses = [
-		            'testmode' => false
-		        ];
-            }
-            session($ses);
-		}
-		$testmode = session('testmode') && $isAdmin;
+ //        if (request()->has('testmode')) {
+ //            if(request('testmode')) {
+ //                $ses = [
+	// 	            'testmode' => true
+	// 	        ];
+ //            } else {
+ //                $ses = [
+	// 	            'testmode' => false
+	// 	        ];
+ //            }
+ //            session($ses);
+	// 	}
+	// 	$testmode = session('testmode') && $isAdmin;
 
-        $taken = $this->user->filledVoxes();
+ //        $taken = $this->user->filledVoxes();
 
-		if((!$isAdmin && $vox->type=='hidden') || empty($vox) || !in_array($this->user->status, config('dentist-statuses.approved')) ) {
-			return redirect( getLangUrl('page-not-found') );
-		} else if( $this->user->madeTest($vox->id) && !(Request::input('goback') && $testmode) ) { //because of GoBack
+	// 	if((!$isAdmin && $vox->type=='hidden') || empty($vox) || !in_array($this->user->status, config('dentist-statuses.approved')) ) {
+	// 		return redirect( getLangUrl('page-not-found') );
 
-			$related_voxes = [];
-			$related_voxes_ids = [];
-			if ($vox->related->isNotEmpty()) {
-				foreach ($vox->related as $r) {
-					if (!in_array($r->related_vox_id, $taken)) {
-						$related_voxes[] = Vox::find($r->related_vox_id);
-						$related_voxes_ids[] = $r->related_vox_id;
-					}
-				}
-			}
+	// 	} else if( $this->user->madeTest($vox->id) && !(Request::input('goback') && $testmode) ) { //because of GoBack
 
-			$suggested_voxes = $this->user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
+	// 		$related_voxes = [];
+	// 		$related_voxes_ids = [];
+	// 		if ($vox->related->isNotEmpty()) {
+	// 			foreach ($vox->related as $r) {
+	// 				if (!in_array($r->related_vox_id, $taken)) {
+	// 					$related_voxes[] = Vox::find($r->related_vox_id);
+	// 					$related_voxes_ids[] = $r->related_vox_id;
+	// 				}
+	// 			}
+	// 		}
 
-			$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
+	// 		$suggested_voxes = $this->user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
 
-	        $seos = PageSeo::find(17);
+	// 		$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
 
-	        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
-	        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
-	        $social_title = str_replace(':title', $vox->title, $seos->social_title);
-	        $social_description = str_replace(':title', $vox->description, $seos->social_description);
+	//         $seos = PageSeo::find(17);
 
-			return $this->showVoxView('taken-survey', [
-				'vox' => $vox,
-				'related_voxes' => $related_voxes,
-	            'suggested_voxes' => $suggested_voxes,
-	            'seo_title' => $seo_title,
-	            'seo_description' => $seo_description,
-	            'social_title' => $social_title,
-	            'social_description' => $social_description,
-            	'canonical' => $vox->getLink(),
-            	'social_image' => $vox->getSocialImageUrl('survey'),
-				'js' => [
-					'taken-vox.js',
-                    'swiper.min.js'
-				],
-                'css' => [
-                    'swiper.min.css'
-                ],
-			]);
-		}
+	//         $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+	//         $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+	//         $social_title = str_replace(':title', $vox->title, $seos->social_title);
+	//         $social_description = str_replace(':title', $vox->description, $seos->social_description);
 
-		if (!$testmode) {
+	// 		return $this->showVoxView('vox-taken', [
+	// 			'vox' => $vox,
+	// 			'related_voxes' => $related_voxes,
+	//             'suggested_voxes' => $suggested_voxes,
+	//             'seo_title' => $seo_title,
+	//             'seo_description' => $seo_description,
+	//             'social_title' => $social_title,
+	//             'social_description' => $social_description,
+ //            	'canonical' => $vox->getLink(),
+ //            	'social_image' => $vox->getSocialImageUrl('survey'),
+	// 			'js' => [
+	// 				'taken-vox.js',
+ //                    'swiper.min.js'
+	// 			],
+ //                'css' => [
+ //                    'swiper.min.css'
+ //                ],
+	// 		]);
+	// 	}
 
-			if ($this->user->isVoxRestricted($vox) || $vox->voxCountryRestricted($this->user)) {
-				$related_voxes = [];
-				$related_voxes_ids = [];
-				if ($vox->related->isNotEmpty()) {
-					foreach ($vox->related as $r) {
-						if (!in_array($r->related_vox_id, $taken)) {
-							$related_voxes[] = Vox::find($r->related_vox_id);
-							$related_voxes_ids[] = $r->related_vox_id;
-						}
-					}
-				}
+	// 	if (!$testmode) {
 
-				$suggested_voxes = $this->user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
+	// 		if ($this->user->isVoxRestricted($vox) || $vox->voxCountryRestricted($this->user)) {
+	// 			$related_voxes = [];
+	// 			$related_voxes_ids = [];
+	// 			if ($vox->related->isNotEmpty()) {
+	// 				foreach ($vox->related as $r) {
+	// 					if (!in_array($r->related_vox_id, $taken)) {
+	// 						$related_voxes[] = Vox::find($r->related_vox_id);
+	// 						$related_voxes_ids[] = $r->related_vox_id;
+	// 					}
+	// 				}
+	// 			}
 
-				$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
+	// 			$suggested_voxes = $this->user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
 
-				if ($this->user->isVoxRestricted($vox)) {
-					$res_desc = trans('vox.page.restricted-questionnaire.description-target');
-				} else {
-					$res_desc = trans('vox.page.restricted-questionnaire.description-limit');
-				}
+	// 			$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
 
-				$seos = PageSeo::find(18);
+	// 			if ($this->user->isVoxRestricted($vox)) {
+	// 				$res_desc = trans('vox.page.restricted-questionnaire.description-target');
+	// 			} else {
+	// 				$res_desc = trans('vox.page.restricted-questionnaire.description-limit');
+	// 			}
 
-		        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
-		        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
-		        $social_title = str_replace(':title', $vox->title, $seos->social_title);
-		        $social_description = str_replace(':title', $vox->description, $seos->social_description);
+	// 			$seos = PageSeo::find(18);
 
-				return $this->showVoxView('restricted-survey', [
-					'res_desc' => $res_desc,
-					'vox' => $vox,
-					'related_voxes' => $related_voxes,
-		            'suggested_voxes' => $suggested_voxes,
-		            'seo_title' => $seo_title,
-		            'seo_description' => $seo_description,
-		            'social_title' => $social_title,
-		            'social_description' => $social_description,
-		            'canonical' => $vox->getLink(),
-		            'social_image' => $vox->getSocialImageUrl('survey'),
-					'js' => [
-						'taken-vox.js',
-                    	'swiper.min.js'
-					],
-					'css' => [
-                    	'swiper.min.css'
-					],
-				]);
-			}
+	// 	        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+	// 	        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+	// 	        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+	// 	        $social_description = str_replace(':title', $vox->description, $seos->social_description);
 
-			$daily_voxes = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('created_at', '>', Carbon::now()->subDays(1))->count();
+	// 			return $this->showVoxView('vox-restricted', [
+	// 				'res_desc' => $res_desc,
+	// 				'vox' => $vox,
+	// 				'related_voxes' => $related_voxes,
+	// 	            'suggested_voxes' => $suggested_voxes,
+	// 	            'seo_title' => $seo_title,
+	// 	            'seo_description' => $seo_description,
+	// 	            'social_title' => $social_title,
+	// 	            'social_description' => $social_description,
+	// 	            'canonical' => $vox->getLink(),
+	// 	            'social_image' => $vox->getSocialImageUrl('survey'),
+	// 				'js' => [
+	// 					'taken-vox.js',
+ //                    	'swiper.min.js'
+	// 				],
+	// 				'css' => [
+ //                    	'swiper.min.css'
+	// 				],
+	// 			]);
+	// 		}
 
-			if($daily_voxes >= 10) {
-				$last_vox = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('created_at', '>', Carbon::now()->subDays(1))->orderBy('id', 'desc')->first();
+	// 		$daily_voxes = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('created_at', '>', Carbon::now()->subDays(1))->count();
 
-				$time_left = '';
+	// 		if($daily_voxes >= 10) {
+	// 			$last_vox = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('created_at', '>', Carbon::now()->subDays(1))->orderBy('id', 'desc')->first();
 
-	            $now = Carbon::now()->subDays(1);
-	            $time_left = $last_vox->created_at->diffInHours($now).':'.
-	            str_pad($last_vox->created_at->diffInMinutes($now)%60, 2, '0', STR_PAD_LEFT).':'.
-	            str_pad($last_vox->created_at->diffInSeconds($now)%60, 2, '0', STR_PAD_LEFT);
+	// 			$time_left = '';
 
-				$seos = PageSeo::find(19);
+	//             $now = Carbon::now()->subDays(1);
+	//             $time_left = $last_vox->created_at->diffInHours($now).':'.
+	//             str_pad($last_vox->created_at->diffInMinutes($now)%60, 2, '0', STR_PAD_LEFT).':'.
+	//             str_pad($last_vox->created_at->diffInSeconds($now)%60, 2, '0', STR_PAD_LEFT);
 
-		        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
-		        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
-		        $social_title = str_replace(':title', $vox->title, $seos->social_title);
-		        $social_description = str_replace(':description', $vox->description, $seos->social_description);
+	// 			$seos = PageSeo::find(19);
 
-				return $this->ShowVoxView('daily-limit-reached', array(
-					'vox' => $vox,
-					'time_left' => $time_left,					
-		            'canonical' => $vox->getLink(),
-		            'social_image' => $vox->getSocialImageUrl('survey'),
-		            'seo_title' => $seo_title,
-		            'seo_description' => $seo_description,
-		            'social_title' => $social_title,
-		            'social_description' => $social_description,
-				));
-			}
-		}
+	// 	        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+	// 	        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+	// 	        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+	// 	        $social_description = str_replace(':description', $vox->description, $seos->social_description);
 
-		$first = Vox::where('type', 'home')->first();
-		$welcome_vox = '';
-		$welcome_vox_question_ids = [];
-		if (!$this->user->madeTest($first->id)) {
-			$welcome_vox = $first;
-			$welcome_vox_question_ids = $welcome_vox->questions->pluck('id')->toArray();
-		}
+	// 			return $this->ShowVoxView('vox-limit-reached', array(
+	// 				'vox' => $vox,
+	// 				'time_left' => $time_left,					
+	// 	            'canonical' => $vox->getLink(),
+	// 	            'social_image' => $vox->getSocialImageUrl('survey'),
+	// 	            'seo_title' => $seo_title,
+	// 	            'seo_description' => $seo_description,
+	// 	            'social_title' => $social_title,
+	// 	            'social_description' => $social_description,
+	// 			));
+	// 		}
+	// 	}
 
-    	$cross_checks = [];
-    	$cross_checks_references = [];
-    	$vox_questions = $vox->questions;
+	// 	$welcome_vox = '';
+	// 	$welcome_vox_question_ids = [];
 
-    	foreach ($vox_questions as $vq) {
-	    	if (!empty($vq->cross_check)) {
+	// 	if(!session('made-welcome-test')) {
+	// 		session([
+	// 			'made-welcome-test' => $this->user->madeTest(11),
+	// 		]);
+	// 	}
 
-	    		if (is_numeric($vq->cross_check)) {
-	    			$va = VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
-	    			$cross_checks[$vq->id] = $va ? $va->answer : null;
-	    			$cross_checks_references[$vq->id] = $vq->cross_check;
-	    		} else if($vq->cross_check == 'gender') {
-	    			$cc = $vq->cross_check;
-	    			$cross_checks[$vq->id] = $this->user->$cc == 'm' ? 1 : 2;
-	    			$cross_checks_references[$vq->id] = 'gender';
-	    		} else if($vq->cross_check == 'birthyear') {
-	    			$cc = $vq->cross_check;
-	    			$cross_checks[$vq->id] = $this->user->$cc;
-	    			$cross_checks_references[$vq->id] = 'birthyear';
-	    		} else {
-	    			$cc = $vq->cross_check;
-	    			$i=0;
-	    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
-	    				if($key==$this->user->$cc) {
-	    					$cross_checks[$vq->id] = $i;
-	    					$cross_checks_references[$vq->id] = $cc;
-	    					break;
-	    				}
-	    				$i++;
-	    			}
-	    		}
-	    	}
-    	}
+	// 	if (!session('made-welcome-test')) {
+	// 		$welcome_vox = Vox::with('questions')->find(11);
+	// 		$welcome_vox_question_ids = $welcome_vox->questions->pluck('id')->toArray();
+	// 	}
 
-		$list = VoxAnswer::where('vox_id', $vox->id)
-		->with('question')
-		->where('user_id', $this->user->id)
-		->orderBy('id', 'ASC')
-		->get();
+	// 	$vox_questions = $vox->questions;
+	// 	$crossCheckParams = ServicesVox::getCrossChecks($vox_questions);
+ //    	$cross_checks = $crossCheckParams['cross_checks'];
+ //    	$cross_checks_references = $crossCheckParams['cross_checks_references'];
 
-		$answered = [];
+	// 	$list = VoxAnswer::select('vox_id', 'question_id', 'user_id', 'answer')
+	// 	->where('vox_id', $vox->id)
+	// 	->with('question')
+	// 	->where('user_id', $this->user->id)
+	// 	->orderBy('id', 'ASC')
+	// 	->get();
 
-		foreach ($list as $l) {
-			if(!isset( $answered[$l->question_id] )) {
-				$answered[$l->question_id] = $l->answer; //3
-			} else {
-				if(!is_array($answered[$l->question_id])) {
-					$answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
-				}
-				$answered[$l->question_id][] = $l->answer; // [3,5,7]
-			}
-		}
+	// 	$answered = $list->count();
 
-		$answered_without_skip = [];
-		foreach ($list as $l) {
-			if(!isset( $answered_without_skip[$l->question_id] )) {
-				if($l->question) {
+	// 	$answered_without_skip_count = 0;
+	// 	$answered_without_skip = [];
+	// 	foreach ($list as $l) {
+	// 		if(!isset( $answered_without_skip[$l->question_id] ) && $l->question && $l->answer > 0 || $l->question->type == 'number' || $l->question->cross_check == 'birthyear' || $l->question->cross_check == 'household_children') {
+	// 			$answered_without_skip[$l->question_id] = ['1']; //3
+	// 			$answered_without_skip_count++;
+	// 		}
+	// 	}
 
-					$answered_without_skip[$l->question_id] = ($l->question->type == 'number' && $l->answer == 0) || $l->question->cross_check == 'birthyear' ? 1 : $l->answer; //3
-				}
-			} else {
-				if(!is_array($answered_without_skip[$l->question_id])) {
-					$answered_without_skip[$l->question_id] = [ $answered_without_skip[$l->question_id] ]; // [3]
-				}
-				$answered_without_skip[$l->question_id][] = ($l->question->type == 'number' && $l->answer == 0) || $l->question->cross_check == 'birthyear' ? 1 : $l->answer; // [3,5,7]
-			}
-		}
+	// 	if($testmode) {
+	// 		if(Request::input('goback')) {
+	// 			$q_id = ServicesVox::goBack($this->user->id, $answered, $list, $vox);
 
-		$answered_without_skip_count = 0;
-		foreach ($answered_without_skip as $key => $value) {
-			if($value != 0) {
-				$answered_without_skip_count++;
-			}
-		}
+	// 			if(!empty(VoxQuestion::find($q_id))) {
 
-		$not_bot = $testmode || session('not_not-'.$vox->id);
+	// 				$vq = VoxQuestion::where('vox_id', $vox->id)->where('order', VoxQuestion::find($q_id)->order-1)->first();
+	// 				if(!empty($vq)) {
+	// 					$quest_id = $vq->id;
+	// 				} else {
+	// 					$quest_id = $q_id;
+	// 				}
+	// 			} else {
+	// 				$quest_id = $q_id;
+	// 			}
 
-		//dd($answered);
-		if(Request::input('goback') && $testmode) {
-			$q_id = $this->goBack($answered, $list, $vox);
+	//             return redirect( $vox->getLink().'?testmode=1&q-id='.$quest_id );
+	// 		}
 
-			if(!empty(VoxQuestion::find($q_id))) {
+	// 		if(Request::input('start-from')) {
+	// 			$q_id = $this->testAnswers($answered, Request::input('start-from'), $vox);
 
-				$vq = VoxQuestion::where('vox_id', $vox->id)->where('order', VoxQuestion::find($q_id)->order-1)->first();
-				if(!empty($vq)) {
-					$quest_id = $vq->id;
-				} else {
-					$quest_id = $q_id;
-				}
-			} else {
-				$quest_id = $q_id;
-			}
+	// 			if(!empty(VoxQuestion::find($q_id))) {
 
-            return redirect( $vox->getLink().'?testmode=1&q-id='.$quest_id );
-		}
+	// 				$vq = VoxQuestion::where('vox_id', $vox->id)->where('order', VoxQuestion::find($q_id)->order-1)->first();
+	// 				if(!empty($vq)) {
+	// 					$quest_id = $vq->id;
+	// 				} else {
+	// 					$quest_id = $q_id;
+	// 				}
+	// 			} else {
+	// 				$quest_id = $q_id;
+	// 			}
 
-		if(Request::input('start-from') && $testmode) {
-			$q_id = $this->testAnswers($answered, Request::input('start-from'), $vox);
+	//             return redirect( $vox->getLink().'?testmode=1&q-id='.$quest_id );
+	// 		}
+	// 	}
 
-			if(!empty(VoxQuestion::find($q_id))) {
+	// 	if(!session('scales')) {
+	// 		$slist = VoxScale::get();
+	// 		$scales = [];
+	// 		foreach ($slist as $sitem) {
+	// 			$scales[$sitem->id] = $sitem;
+	// 		}
 
-				$vq = VoxQuestion::where('vox_id', $vox->id)->where('order', VoxQuestion::find($q_id)->order-1)->first();
-				if(!empty($vq)) {
-					$quest_id = $vq->id;
-				} else {
-					$quest_id = $q_id;
-				}
-			} else {
-				$quest_id = $q_id;
-			}
+	// 		session([
+	// 			'scales' => $scales,
+	// 		]);
+	// 	}
 
-            return redirect( $vox->getLink().'?testmode=1&q-id='.$quest_id );
-		}
+ //        $first_question_num = 0;
+ //    	if (!empty($welcome_vox)) {
+ //    		$first_question_num++;
+ //    	} else {
+ //        	$first_question_num = $answered + 1;
+ //    	}
 
-		$slist = VoxScale::get();
-		$scales = [];
-		foreach ($slist as $sitem) {
-			$scales[$sitem->id] = $sitem;
-		}
+ //        $total_questions = $vox_questions->count();
 
-        $first_question = null;
-        $first_question_num = 0;
-        // if($not_bot) {
-        	if (!empty($welcome_vox)) {
-	        	foreach ($welcome_vox->questions as $question) {
-		    		$first_question_num++;
-		    		if(!isset($answered[$question->id])) {
-		    			$first_question = $question->id;
-		    			break;
-		    		}
-		    	}
-        	} else {
-        		if($testmode && request('back-q')) {
-        			$first_question_num++;
-        			$first_question = request('back-q');
-        		} else {
+ //        if (!$this->user->birthyear) {
+ //        	$total_questions++;
+ //        }
+ //        if (!$this->user->country_id) {
+ //        	$total_questions++;
+ //        }
+ //        if (!$this->user->gender) {
+ //        	$total_questions++;
+ //        }
 
-	        		foreach ($vox_questions as $question) {
-			    		$first_question_num++;
-			    		if(!isset($answered[$question->id])) {
-			    			$first_question = $question->id;
-			    			break;
-			    		}
-			    	}
-        		}
-        	}
-      //   } else {
-	    	// $first_question_num++;
-      //   }
+ //        foreach (config('vox.details_fields') as $key => $value) {
+ //        	if($this->user->$key==null) {
+ //        		$total_questions++;		
+ //        	}
+ //        }
 
+ //        if (!empty($welcome_vox)) {
+	//         foreach ($welcome_vox->questions as $key => $value) {
+	//         	$total_questions++;		
+	//         }
+ //        }
 
-        $total_questions = $vox_questions->count();
+	// 	$welcomerules = !session('vox-welcome');
+	// 	if($welcomerules) {
+ //        	session([
+ //        		'vox-welcome' => true
+ //        	]);
+	// 	}
 
-        if (!$this->user->birthyear) {
-        	$total_questions++;
-        }
-        if (!$this->user->country_id) {
-        	$total_questions++;
-        }
-        if (!$this->user->gender) {
-        	$total_questions++;
-        }
+ //        $done_all = false;
+ //        if (Vox::where('type', 'normal')->count() <= count($taken)) {
+ //        	$done_all = true;
+ //        }
 
-        foreach (config('vox.details_fields') as $key => $value) {
-        	if($this->user->$key==null) {
-        		$total_questions++;		
-        	}
-        }
+	// 	$related_voxes = [];
+	// 	$related_voxes_ids = [];
+	// 	if ($vox->related->isNotEmpty()) {
+	// 		foreach ($vox->related as $r) {
+	// 			if (!in_array($r->related_vox_id, $taken)) {
+	// 				$related_voxes_ids[] = $r->related_vox_id;
+	// 			}
+	// 		}
 
-        if (!empty($welcome_vox)) {
-	        foreach ($welcome_vox->questions as $key => $value) {
-	        	$total_questions++;		
-	        }
-        }
+	// 		if (!empty($related_voxes_ids)) {
+	// 			foreach(Vox::with('translations')->with('categories.category')->with('categories.category.translations')->whereIn('id', $related_voxes_ids)->get() as $rv) {
+	// 				$related_voxes[] = $rv;
+	// 			}
+	// 		}
+	// 	}
+	// 	$suggested_voxes = Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
 
-		$welcomerules = !session('vox-welcome');
-		if($welcomerules) {
-        	session([
-        		'vox-welcome' => true
-        	]);
-		}
+	// 	$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
 
-        $done_all = false;
-        if ((Vox::where('type', 'normal')->count() - 1) == count($taken)) {
-        	$done_all = true;
-        }
+	// 	$seos = PageSeo::find(15);
+ //        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+ //        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+ //        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+ //        $social_description = str_replace(':description', $vox->description, $seos->social_description);
 
-		$related_voxes = [];
-		$related_voxes_ids = [];
-		if ($vox->related->isNotEmpty()) {
-			foreach ($vox->related as $r) {
-				if (!in_array($r->related_vox_id, $taken)) {
-					$related_voxes_ids[] = $r->related_vox_id;
-				}
-			}
+	// 	$this->current_page = 'questionnaire';
 
-			if (!empty($related_voxes_ids)) {
-				foreach(Vox::with('translations')->with('categories.category')->with('categories.category.translations')->whereIn('id', $related_voxes_ids)->get() as $rv) {
-					$related_voxes[] = $rv;
-				}
-			}
-		}
-		$suggested_voxes = Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
-
-		$suggested_voxes = $this->user->notRestrictedVoxesList($suggested_voxes);
-
-		$seos = PageSeo::find(15);
-
-        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
-        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
-        $social_title = str_replace(':title', $vox->title, $seos->social_title);
-        $social_description = str_replace(':description', $vox->description, $seos->social_description);
-
-		$this->current_page = 'questionnaire';
-
-		return $this->ShowVoxView('vox', array(
-			'welcome_vox' => $welcome_vox,
-			'related_voxes' => $related_voxes,
-            'suggested_voxes' => $suggested_voxes,
-			'cross_checks' => $cross_checks,
-			'cross_checks_references' => $cross_checks_references,
-			'welcomerules' => $welcomerules,
-			'not_bot' => $not_bot,
-			'details_fields' => config('vox.details_fields'),
-			'vox' => $vox,
-			'scales' => $scales,
-			'answered' => $answered,
-			'real_questions' => $vox_questions->count(),
-			'total_questions' => $total_questions,
-			'first_question' => $first_question,
-			'first_question_num' => $first_question_num,
-			'answered_without_skip_count' => $answered_without_skip_count,
-			'js' => [
-				'all-surveys.js',
-				'vox-new.js',
-				'../js/lightbox.js',
-				'../js/jquery-ui.min.js',
-				'../js/jquery-ui-touch.min.js',
-        		'flickity.pkgd.min.js',
-                'swiper.min.js'
-			],
-			'css' => [
-				'vox-questionnaries.css',
-				'lightbox.css',
-        		'flickity.min.css',
-                'swiper.min.css'
-			],
-            'canonical' => $vox->getLink(),
-            'social_image' => $vox->getSocialImageUrl('survey'),
-            'seo_title' => $seo_title,
-            'seo_description' => $seo_description,
-            'social_title' => $social_title,
-            'social_description' => $social_description,
-            'done_all' => $done_all,
-            'testmode' => $testmode,
-            'isAdmin' => $isAdmin,
-        ));
-	}
+	// 	return $this->ShowVoxView('vox', array(
+	// 		'welcome_vox' => $welcome_vox,
+	// 		'related_voxes' => $related_voxes,
+ //            'suggested_voxes' => $suggested_voxes,
+	// 		'cross_checks' => $cross_checks,
+	// 		'cross_checks_references' => $cross_checks_references,
+	// 		'welcomerules' => $welcomerules,
+	// 		'not_bot' => $testmode || session('not_not-'.$vox->id),
+	// 		'details_fields' => config('vox.details_fields'),
+	// 		'vox' => $vox,
+	// 		'scales' => session('scales'),
+	// 		'answered' => $answered,
+	// 		'real_questions' => $vox_questions->count(),
+	// 		'total_questions' => $total_questions,
+	// 		'first_question_num' => $first_question_num,
+	// 		'answered_without_skip_count' => $answered_without_skip_count,
+	// 		'js' => [
+	// 			'all-surveys.js',
+	// 			'vox-new.js',
+	// 			'../js/lightbox.js',
+	// 			'../js/jquery-ui.min.js',
+	// 			'../js/jquery-ui-touch.min.js',
+ //        		'flickity.pkgd.min.js',
+ //                'swiper.min.js'
+	// 		],
+	// 		'css' => [
+	// 			'vox-questionnaries.css',
+	// 			'lightbox.css',
+ //        		'flickity.min.css',
+ //                'swiper.min.css'
+	// 		],
+ //            'canonical' => $vox->getLink(),
+ //            'social_image' => $vox->getSocialImageUrl('survey'),
+ //            'seo_title' => $seo_title,
+ //            'seo_description' => $seo_description,
+ //            'social_title' => $social_title,
+ //            'social_description' => $social_description,
+ //            'done_all' => $done_all,
+ //            'testmode' => $testmode,
+ //            'isAdmin' => $isAdmin,
+ //        ));
+	// }
 
 	/**
      * Answer vox
      */
-	public function surveyAnswer($locale=null, $vox) {
+	// public function surveyAnswer($locale=null, $vox) {
 
-    	$ret['success'] = false;
+ //    	$ret['success'] = false;
 
-        if(empty($this->user) || empty($vox) || !in_array($this->user->status, config('dentist-statuses.approved'))) {
-			return Response::json( $ret );
-        }
+ //        if(empty($this->user) || empty($vox) || !in_array($this->user->status, config('dentist-statuses.approved'))) {
+	// 		return Response::json( $ret );
+ //        }
 
-        $admin_ids = ['65003'];
-        $isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
-		$testmode = session('testmode') && $isAdmin;
+ //        $admin_ids = ['65003'];
+ //        $isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
+	// 	$testmode = session('testmode') && $isAdmin;
 
-		if( $this->user->madeTest($vox->id) && !(Request::input('goback') && $testmode) ) {
-			return Response::json( $ret );
-		}
+	// 	if(!$testmode) {
+	// 		if($vox->type=='hidden' ) {
+	//         	return Response::json( $ret );
+	//         }
 
-		if(!$testmode) {
-			if($vox->type=='hidden' ) {
-	        	return Response::json( $ret );
-	        }
+	// 		if(!$this->user->is_dentist && !empty(VpnIp::where('ip', User::getRealIp())->first())) {
+	// 			$ret['is_vpn'] = true;
+	// 			return Response::json( $ret );
+	// 		}
 
-			if(!$this->user->is_dentist ) {
-				$using_vpn = VpnIp::where('ip', User::getRealIp())->first();
-				$is_whitelist_ip = WhitelistIp::where('for_vpn', 1)->where('ip', 'like', User::getRealIp())->first(); //
+	// 		if($this->user->isVoxRestricted($vox)) {
+	// 			$ret['restricted'] = true;
 
-				if(!empty($using_vpn) && empty($is_whitelist_ip)) {
-					$ret['is_vpn'] = true;
-					return Response::json( $ret );
-				}
-			}
+	// 			return Response::json( $ret );
+	// 		}
+	// 	}
 
-			if($this->user->isVoxRestricted($vox)) {
-				$ret['restricted'] = true;
+	// 	$welcome_vox = '';
+	// 	$welcome_vox_question_ids = [];
 
-				return Response::json( $ret );
-			}
-		}
+	// 	if(!session('made-welcome-test')) {
+	// 		session([
+	// 			'made-welcome-test' => $this->user->madeTest(11),
+	// 		]);
+	// 	}
 
+	// 	if (!session('made-welcome-test')) {
+	// 		$welcome_vox = Vox::with('questions')->find(11);
+	// 		$welcome_vox_question_ids = $welcome_vox->questions->pluck('id')->toArray();
+	// 	}
 
-		$first = Vox::where('type', 'home')->first();
-		$welcome_vox = '';
-		$welcome_vox_question_ids = [];
-		if (!$this->user->madeTest($first->id)) {
-			$welcome_vox = $first;
-			$welcome_vox_question_ids = $welcome_vox->questions->pluck('id')->toArray();
-		}
+ //    	$crossCheckParams = ServicesVox::getCrossChecks($vox->questions);
+ //    	$cross_checks = $crossCheckParams['cross_checks'];
+ //    	$cross_checks_references = $crossCheckParams['cross_checks_references'];
 
-    	$cross_checks = [];
-    	$cross_checks_references = [];
+	// 	$list = VoxAnswer::select('vox_id', 'question_id', 'user_id', 'answer')
+	// 	->where('vox_id', $vox->id)
+	// 	// ->with('question')
+	// 	->where('user_id', $this->user->id)
+	// 	->orderBy('id', 'ASC')
+	// 	->get();
 
-    	foreach ($vox->questions as $vq) {
-	    	if (!empty($vq->cross_check)) {
+	// 	$answered = [];
+	// 	foreach ($list as $l) {
+	// 		if(!isset( $answered[$l->question_id] )) {
+	// 			$answered[$l->question_id] = $l->answer; //3
+	// 		} else {
+	// 			if(!is_array($answered[$l->question_id])) {
+	// 				$answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
+	// 			}
+	// 			$answered[$l->question_id][] = $l->answer; // [3,5,7]
+	// 		}
+	// 	}
 
-	    		if (is_numeric($vq->cross_check)) {
-	    			$va = VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
-	    			$cross_checks[$vq->id] = $va ? $va->answer : null;
-	    			$cross_checks_references[$vq->id] = $vq->cross_check;
-	    		} else if($vq->cross_check == 'gender') {
-	    			$cc = $vq->cross_check;
-	    			$cross_checks[$vq->id] = $this->user->$cc == 'm' ? 1 : 2;
-	    			$cross_checks_references[$vq->id] = 'gender';
-	    		} else if($vq->cross_check == 'birthyear') {
-	    			$cc = $vq->cross_check;
-	    			$cross_checks[$vq->id] = $this->user->$cc;
-	    			$cross_checks_references[$vq->id] = 'birthyear';
-	    		} else {
-	    			$cc = $vq->cross_check;
-	    			$i=0;
-	    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
-	    				if($key==$this->user->$cc) {
-	    					if($cc == 'household_children') {
-	    						$cross_checks[$vq->id] = $i + 1;
-	    					} else {	    						
-		    					$cross_checks[$vq->id] = $i;
-	    					}
-	    					$cross_checks_references[$vq->id] = $cc;
-	    					break;
-	    				}
-	    				$i++;
-	    			}
-	    		}
-	    	}
-    	}
+	// 	$not_bot = $testmode || session('not_not-'.$vox->id);
 
-		$list = VoxAnswer::where('vox_id', $vox->id)
-		->with('question')
-		->where('user_id', $this->user->id)
-		->orderBy('id', 'ASC')
-		->get();
+	// 	if(!session('scales')) {
+	// 		$slist = VoxScale::get();
+	// 		$scales = [];
+	// 		foreach ($slist as $sitem) {
+	// 			$scales[$sitem->id] = $sitem;
+	// 		}
 
-		$answered = [];
-		foreach ($list as $l) {
-			if(!isset( $answered[$l->question_id] )) {
-				$answered[$l->question_id] = $l->answer; //3
-			} else {
-				if(!is_array($answered[$l->question_id])) {
-					$answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
-				}
-				$answered[$l->question_id][] = $l->answer; // [3,5,7]
-			}
-		}
+	// 		session([
+	// 			'scales' => $scales,
+	// 		]);
+	// 	}
 
-		$answered_without_skip = [];
-		foreach ($list as $l) {
-			if(!isset( $answered_without_skip[$l->question_id] )) {
-				if($l->question) {
+ //    	if(Request::input('captcha')) {
+ //            $captcha = false;
+ //            $cpost = [
+ //                'secret' => env('CAPTCHA_SECRET'),
+ //                'response' => Request::input('captcha'),
+ //                'remoteip' => User::getRealIp()
+ //            ];
+ //            $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
+ //            curl_setopt($ch, CURLOPT_HEADER, 0);
+ //            curl_setopt ($ch, CURLOPT_POST, 1);
+ //            curl_setopt ($ch, CURLOPT_POSTFIELDS, http_build_query($cpost));
+ //            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);    
+ //            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+ //            $response = curl_exec($ch);
+ //            curl_close($ch);
+ //            if($response) {
+ //                $api_response = json_decode($response, true);
 
-					$answered_without_skip[$l->question_id] = ($l->question->type == 'number' && $l->answer == 0) || $l->question->cross_check == 'birthyear' ? 1 : $l->answer; //3
-				}
-			} else {
-				if(!is_array($answered_without_skip[$l->question_id])) {
-					$answered_without_skip[$l->question_id] = [ $answered_without_skip[$l->question_id] ]; // [3]
-				}
-				$answered_without_skip[$l->question_id][] = ($l->question->type == 'number' && $l->answer == 0) || $l->question->cross_check == 'birthyear' ? 1 : $l->answer; // [3,5,7]
-			}
-		}
+ //                if(!empty($api_response['success'])) {
+ //                    $captcha = true;
+ //                }
+ //            }
 
-		$answered_without_skip_count = 0;
-		foreach ($answered_without_skip as $key => $value) {
-			if($value != 0) {
-				$answered_without_skip_count++;
-			}
-		}
+ //            if(!$captcha) {
+ //            	$ret['captcha_error'] = true;
 
-		$not_bot = $testmode || session('not_not-'.$vox->id);
+ //    			return Response::json( $ret );
+ //            } else {
+ //            	session([
+ //            		'not_not-'.$vox->id => true,
+ //            		'reward-for-'.$vox->id => $vox->getRewardTotal()
+ //            	]);
+ //            	$ret['vox_id'] = $vox->id;
+ //            }
+ //    	}
 
-		$slist = VoxScale::get();
-		$scales = [];
-		foreach ($slist as $sitem) {
-			$scales[$sitem->id] = $sitem;
-		}
+ //    	$ret = [
+ //    		'success' => true,
+ //    	];
 
-    	if(Request::input('captcha')) {
-            $captcha = false;
-            $cpost = [
-                'secret' => env('CAPTCHA_SECRET'),
-                'response' => Request::input('captcha'),
-                'remoteip' => User::getRealIp()
-            ];
-            $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt ($ch, CURLOPT_POST, 1);
-            curl_setopt ($ch, CURLOPT_POSTFIELDS, http_build_query($cpost));
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);    
-            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-            $response = curl_exec($ch);
-            curl_close($ch);
-            if($response) {
-                $api_response = json_decode($response, true);
+ //    	$q = Request::input('question');
 
-                if(!empty($api_response['success'])) {
-                    $captcha = true;
-                }
-            }
+ //    	if( !isset( $answered[$q] ) && $not_bot ) {
 
-            if(!$captcha) {
-            	$ret['captcha_error'] = true;
+	// 		$type = Request::input('type');
+ //        	$found = isset( config('vox.details_fields')[$type] ) || in_array($type, ['gender-question', 'birthyear-question', 'location-question']) ? true : false;
 
-    			return Response::json( $ret );
-            } else {
-            	session([
-            		'not_not-'.$vox->id => true,
-            		'reward-for-'.$vox->id => $vox->getRewardTotal()
-            	]);
-            	$ret['vox_id'] = $vox->id;
-            }
-    	}
+ //        	foreach ($vox->questions as $question) {
+ //        		if($question->id == $q) {
+ //        			$found = $question;
+ //        			break;
+ //        		}
+ //        	}
+ //        	if (!empty($welcome_vox)) {
+	//         	foreach ($welcome_vox->questions as $question) {
+	//         		if($question->id == $q) {
+	//         			$found = $question;
+	//         			break;
+	//         		}
+	//         	}
+ //        	}
 
-    	$ret = [
-    		'success' => true,
-    	];
+ //        	if($found) {
+ //        		$valid = false;
 
-    	$q = Request::input('question');
+ //        		$answer_count = in_array($type, ['multiple', 'rank', 'scale', 'single']) ? count($question->vox_scale_id && !empty(session('scales')[$question->vox_scale_id]) ? explode(',', session('scales')[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
 
-    	if( !isset( $answered[$q] ) && $not_bot ) {
+ //        		if ($type == 'skip') {
+ //        			$valid = true;
+ //        			$a = 0;
 
-			$type = Request::input('type');
-        	$found = isset( config('vox.details_fields')[$type] ) || $type=='gender-question' || $type=='birthyear-question' || $type=='location-question' ? true : false;
+ //        		} else if($type == 'previous') {
+ //        			$valid = true;
+ //        			$a = Request::input('answer');
+ //        		} else if ( isset( config('vox.details_fields')[$type] ) ) {
 
-        	foreach ($vox->questions as $question) {
-        		if($question->id == $q) {
-        			$found = $question;
-        			break;
-        		}
-        	}
-        	if (!empty($welcome_vox)) {
-	        	foreach ($welcome_vox->questions as $question) {
-	        		if($question->id == $q) {
-	        			$found = $question;
-	        			break;
-	        		}
-	        	}
-        	}
+ //        			$should_reward = false;
+ //        			if($this->user->$type===null) {
+ //        				$should_reward = true;
+ //        			}
 
-        	if($found) {
-        		$valid = false;
+ //        			$this->user->$type = Request::input('answer');
+ //        			$this->user->save();
+ //        			if( isset( config('vox.stats_scales')[$type] ) ) {
+ //        				VoxAnswer::where('user_id', $this->user->id)->update([
+	//         				$type => Request::input('answer')
+	//         			]);
+ //        			}
+ //        			$valid = true;
+ //        			$a = Request::input('answer');
 
-        		$answer_count = in_array($type, ['multiple', 'rank', 'scale', 'single']) ? count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
+ //        			if( $should_reward ) {
 
-        		if ($type == 'skip') {
-        			$valid = true;
-        			$a = 0;
+	//         			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
+	//         				array(
+	//         					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
+	//         				))
+	//         			);
+ //        			}
 
-        		} else if($type == 'previous') {
-        			$valid = true;
-        			$a = Request::input('answer');
-        		} else if ( isset( config('vox.details_fields')[$type] ) ) {
+ //        		} else if ($type == 'location-question') {
 
-        			$should_reward = false;
-        			if($this->user->$type===null) {
-        				$should_reward = true;
-        			}
+ //        			if($this->user->country_id===null) {
+	//         			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
+	//         				array(
+	//         					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
+	//         				))
+	//         			);
+ //        			}
+ //        			//answer = 71,2312
+ //        			$country_id = Request::input('answer');
+ //        			$this->user->country_id = $country_id;
+ //        			VoxAnswer::where('user_id', $this->user->id)->update([
+ //        				'country_id' => $country_id
+ //        			]);
+ //        			$this->user->save();
 
-        			$this->user->$type = Request::input('answer');
-        			$this->user->save();
-        			if( isset( config('vox.stats_scales')[$type] ) ) {
-        				VoxAnswer::where('user_id', $this->user->id)->update([
-	        				$type => Request::input('answer')
-	        			]);
-        			}
-        			$valid = true;
-        			$a = Request::input('answer');
-
-        			if( $should_reward ) {
-
-	        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
-	        				array(
-	        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
-	        				))
-	        			);
-        			}
-
-        		} else if ($type == 'location-question') {
-
-        			if($this->user->country_id===null) {
-	        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
-	        				array(
-	        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
-	        				))
-	        			);
-        			}
-        			//answer = 71,2312
-        			$country_id = Request::input('answer');
-        			$this->user->country_id = $country_id;
-        			VoxAnswer::where('user_id', $this->user->id)->update([
-        				'country_id' => $country_id
-        			]);
-        			$this->user->save();
-
-        			$a = $country_id;
-        			$valid = true;
+ //        			$a = $country_id;
+ //        			$valid = true;
         		
-        		} else if ($type == 'birthyear-question') {
+ //        		} else if ($type == 'birthyear-question') {
 
-        			if($this->user->birthyear===null || $this->user->birthyear===0) {
-	        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
-	        				array(
-	        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
-	        				))
-	        			);
+ //        			if($this->user->birthyear===null || $this->user->birthyear===0) {
+	//         			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
+	//         				array(
+	//         					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
+	//         				))
+	//         			);
 
-	        			$this->user->birthyear = Request::input('answer');
-	        			$this->user->save();
-        			}
+	//         			$this->user->birthyear = Request::input('answer');
+	//         			$this->user->save();
+ //        			}
 
-        			$agegroup = $this->getAgeGroup(Request::input('answer'));
+ //        			$agegroup = $this->getAgeGroup(Request::input('answer'));
 
-        			VoxAnswer::where('user_id', $this->user->id)->update([
-        				'age' => $agegroup
-        			]);
+ //        			VoxAnswer::where('user_id', $this->user->id)->update([
+ //        				'age' => $agegroup
+ //        			]);
 
-        			$valid = true;
-        			$a = Request::input('answer');
+ //        			$valid = true;
+ //        			$a = Request::input('answer');
 
-        		} else if ($type == 'gender-question') {
+ //        		} else if ($type == 'gender-question') {
 
-        			if($this->user->gender===null) {
-	        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
-	        				array(
-	        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
-	        				))
-	        			);
-        			}
-        			$this->user->gender = Request::input('answer');
-        			$this->user->save();
-        			VoxAnswer::where('user_id', $this->user->id)->update([
-        				'gender' => Request::input('answer')
-        			]);
-        			$valid = true;
-        			$a = Request::input('answer');
+ //        			if($this->user->gender===null) {
+	//         			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
+	//         				array(
+	//         					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
+	//         				))
+	//         			);
+ //        			}
+ //        			$this->user->gender = Request::input('answer');
+ //        			$this->user->save();
+ //        			VoxAnswer::where('user_id', $this->user->id)->update([
+ //        				'gender' => Request::input('answer')
+ //        			]);
+ //        			$valid = true;
+ //        			$a = Request::input('answer');
 
-        		} else if ($type == 'multiple' || $type == 'scale' || $type == 'rank') {
+ //        		} else if ($type == 'multiple' || $type == 'scale' || $type == 'rank') {
 
-        			$valid = true;
-        			$a = Request::input('answer');
-        			foreach ($a as $k => $value) {
-        				if (!($value>=1 && $value<=$answer_count)) {
-        					$valid = false; 
-        					break;
-        				}
-        			}
+ //        			$valid = true;
+ //        			$a = Request::input('answer');
+ //        			foreach ($a as $k => $value) {
+ //        				if (!($value>=1 && $value<=$answer_count)) {
+ //        					$valid = false; 
+ //        					break;
+ //        				}
+ //        			}
         			
-        		} else if ($type == 'single') {
-    				$a = intval(Request::input('answer'));
-    				$valid = $a>=1 && $a<=$answer_count;
+ //        		} else if ($type == 'single') {
+ //    				$a = intval(Request::input('answer'));
+ //    				$valid = $a>=1 && $a<=$answer_count;
 
-        		} else if ($type == 'number') {
+ //        		} else if ($type == 'number') {
+        			
+	// 		    	$cur_question_collection = $vox->questions->filter(function ($value, $key) use ($q) {
+	// 				    return $value->id == $q;
+	// 				});
 
-        			$cur_question = VoxQuestion::find($q); //sort/filter
-        			$min_num = intval(explode(':',$cur_question->number_limit)[0]);
-        			$max_num = intval(explode(':',$cur_question->number_limit)[1]);
-    				$a = intval(Request::input('answer'));
-    				$valid = $a>=$min_num && $a<=$max_num;
-        		}
+ //        			$cur_question = $cur_question_collection->first(); //sort/filter
+ //        			$min_num = intval(explode(':',$cur_question->number_limit)[0]);
+ //        			$max_num = intval(explode(':',$cur_question->number_limit)[1]);
+ //    				$a = intval(Request::input('answer'));
+ //    				$valid = $a>=$min_num && $a<=$max_num;
+ //        		}
 
-        		if( $valid ) {
-        			// VoxAnswer::where('user_id', $this->user->id )->where('vox_id',$vox->id )->where('question_id', $q)->delete();
+ //        		if( $valid ) {
+ //        			// VoxAnswer::where('user_id', $this->user->id )->where('vox_id',$vox->id )->where('question_id', $q)->delete();
 
-        			$is_scam = false;
+ //        			$is_scam = false;
 
-			        if($question->is_control) {
+	// 		        if($question->is_control) {
 
-			        	if ($question->is_control == '-1') {
-	        				if($type == 'single') {
-				        		$is_scam = end($answered) != $a;
-				        	} else if($type == 'multiple') {
-				        		$end_answered = [];
+	// 		        	if ($question->is_control == '-1') {
+	//         				if($type == 'single') {
+	// 			        		$is_scam = end($answered) != $a;
+	// 			        	} else if($type == 'multiple') {
+	// 			        		$end_answered = [];
 
-				        		if (!is_array(end($answered))) {
-				        			$end_answered[] = end($answered);
-				        		} else {
-				        			$end_answered = end($answered);
-				        		}
-				        		$is_scam = !empty(array_diff( $end_answered, $a ));
-				        	}
-			        	} else {
-	        				if($type == 'single') {
-			        			$is_scam = $question->is_control!=$a;
-				        	} else if($type == 'multiple') {
-				        		$is_scam = !empty(array_diff( explode(',', $question->is_control), $a ));
-				        	}
-			        	}
-			        }
+	// 			        		if (!is_array(end($answered))) {
+	// 			        			$end_answered[] = end($answered);
+	// 			        		} else {
+	// 			        			$end_answered = end($answered);
+	// 			        		}
+	// 			        		$is_scam = !empty(array_diff( $end_answered, $a ));
+	// 			        	}
+	// 		        	} else {
+	//         				if($type == 'single') {
+	// 		        			$is_scam = $question->is_control!=$a;
+	// 			        	} else if($type == 'multiple') {
+	// 			        		$is_scam = !empty(array_diff( explode(',', $question->is_control), $a ));
+	// 			        	}
+	// 		        	}
+	// 		        }
 
-		        	if($is_scam && !$testmode && !$this->user->is_partner) {
+	// 	        	if($is_scam && !$testmode && !$this->user->is_partner) {
 		        		
-		        		$wrongs = intval(session('wrongs'));
-		        		$wrongs++;
-		            	session([
-		            		'wrongs' => $wrongs
-		            	]);
+	// 	        		$wrongs = intval(session('wrongs'));
+	// 	        		$wrongs++;
+	// 	            	session([
+	// 	            		'wrongs' => $wrongs
+	// 	            	]);
 
-        				$ret['wrong'] = true;
-        				$prev_bans = $this->user->getPrevBansCount('vox', 'mistakes');
+ //        				$ret['wrong'] = true;
+ //        				$prev_bans = $this->user->getPrevBansCount('vox', 'mistakes');
 
-        				if($wrongs==1 || ($wrongs==2 && !$prev_bans) ) {
-        					$ret['warning'] = true;
-        					$ret['img'] = url('new-vox-img/mistakes'.($prev_bans+1).'.png');
-        					$titles = [
-        						trans('vox.page.bans.warning-mistakes-title-1'),
-        						trans('vox.page.bans.warning-mistakes-title-2'),
-        						trans('vox.page.bans.warning-mistakes-title-3'),
-        						trans('vox.page.bans.warning-mistakes-title-4'),
-	        				];
-        					$contents = [
-        						trans('vox.page.bans.warning-mistakes-content-1'),
-        						trans('vox.page.bans.warning-mistakes-content-2'),
-        						trans('vox.page.bans.warning-mistakes-content-3'),
-        						trans('vox.page.bans.warning-mistakes-content-4'),
-        					];
-        					if( $wrongs==2 && !$prev_bans ) {
-        						$ret['zman'] = url('new-vox-img/mistake2.png');
-        						$ret['title'] = trans('vox.page.bans.warning-mistakes-title-1-second');
-        						$ret['content'] = trans('vox.page.bans.warning-mistakes-content-1-second');
-        					} else {
-        						$ret['zman'] = url('new-vox-img/mistake1.png');
-        						$ret['title'] = $titles[$prev_bans];
-	        					$ret['content'] = $contents[$prev_bans];
-        					}
+ //        				if($wrongs==1 || ($wrongs==2 && !$prev_bans) ) {
+ //        					$ret['warning'] = true;
+ //        					$ret['img'] = url('new-vox-img/mistakes'.($prev_bans+1).'.png');
+ //        					$titles = [
+ //        						trans('vox.page.bans.warning-mistakes-title-1'),
+ //        						trans('vox.page.bans.warning-mistakes-title-2'),
+ //        						trans('vox.page.bans.warning-mistakes-title-3'),
+ //        						trans('vox.page.bans.warning-mistakes-title-4'),
+	//         				];
+ //        					$contents = [
+ //        						trans('vox.page.bans.warning-mistakes-content-1'),
+ //        						trans('vox.page.bans.warning-mistakes-content-2'),
+ //        						trans('vox.page.bans.warning-mistakes-content-3'),
+ //        						trans('vox.page.bans.warning-mistakes-content-4'),
+ //        					];
+ //        					if( $wrongs==2 && !$prev_bans ) {
+ //        						$ret['zman'] = url('new-vox-img/mistake2.png');
+ //        						$ret['title'] = trans('vox.page.bans.warning-mistakes-title-1-second');
+ //        						$ret['content'] = trans('vox.page.bans.warning-mistakes-content-1-second');
+ //        					} else {
+ //        						$ret['zman'] = url('new-vox-img/mistake1.png');
+ //        						$ret['title'] = $titles[$prev_bans];
+	//         					$ret['content'] = $contents[$prev_bans];
+ //        					}
 
-        					if( $wrongs==1 && !$prev_bans ) {
-        						$ret['action'] = 'roll-back';
-        						$ret['go_back'] = $this->goBack($answered, $list, $vox);
-        					} else {
-        						$ret['action'] = 'start-over';
-        						$ret['go_back'] = $vox->questions->first()->id;
-								VoxAnswer::where('vox_id', $vox->id)
-								->where('user_id', $this->user->id)
-								->delete();
-        					}
-        				} else {
-			            	session([
-			            		'wrongs' => null
-			            	]);
-        					$ban = $this->user->banUser('vox', 'mistakes', $vox->id);
-        					$ret['ban'] = true;
-        					$ret['ban_duration'] = $ban['days'];
-        					$ret['ban_times'] = $ban['times'];
-        					$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
-        					$titles = [
-        						trans('vox.page.bans.ban-mistakes-title-1'),
-        						trans('vox.page.bans.ban-mistakes-title-2'),
-        						trans('vox.page.bans.ban-mistakes-title-3'),
-        						trans('vox.page.bans.ban-mistakes-title-4', [
-        							'name' => $this->user->getNames()
-        						]),
-        					];
-        					$ret['title'] = $titles[$prev_bans];
-        					$contents = [
-        						trans('vox.page.bans.ban-mistakes-content-1'),
-        						trans('vox.page.bans.ban-mistakes-content-2'),
-        						trans('vox.page.bans.ban-mistakes-content-3'),
-        						trans('vox.page.bans.ban-mistakes-content-4'),
-        					];
-        					$ret['content'] = $contents[$prev_bans];
+ //        					if( $wrongs==1 && !$prev_bans ) {
+ //        						$ret['action'] = 'roll-back';
+ //        						$ret['go_back'] = ServicesVox::goBack($this->user->id, $answered, $list, $vox);
+ //        					} else {
+ //        						$ret['action'] = 'start-over';
+ //        						$ret['go_back'] = $vox->questions->first()->id;
+	// 							VoxAnswer::where('vox_id', $vox->id)
+	// 							->where('user_id', $this->user->id)
+	// 							->delete();
+ //        					}
+ //        				} else {
+	// 		            	session([
+	// 		            		'wrongs' => null
+	// 		            	]);
+ //        					$ban = $this->user->banUser('vox', 'mistakes', $vox->id);
+ //        					$ret['ban'] = true;
+ //        					$ret['ban_duration'] = $ban['days'];
+ //        					$ret['ban_times'] = $ban['times'];
+ //        					$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
+ //        					$titles = [
+ //        						trans('vox.page.bans.ban-mistakes-title-1'),
+ //        						trans('vox.page.bans.ban-mistakes-title-2'),
+ //        						trans('vox.page.bans.ban-mistakes-title-3'),
+ //        						trans('vox.page.bans.ban-mistakes-title-4', [
+ //        							'name' => $this->user->getNames()
+ //        						]),
+ //        					];
+ //        					$ret['title'] = $titles[$prev_bans];
+ //        					$contents = [
+ //        						trans('vox.page.bans.ban-mistakes-content-1'),
+ //        						trans('vox.page.bans.ban-mistakes-content-2'),
+ //        						trans('vox.page.bans.ban-mistakes-content-3'),
+ //        						trans('vox.page.bans.ban-mistakes-content-4'),
+ //        					];
+ //        					$ret['content'] = $contents[$prev_bans];
 
-        					//Delete all answers
-							VoxAnswer::where('vox_id', $vox->id)
-							->where('user_id', $this->user->id)
-							->delete();
-        				}
-		        	} else {
+ //        					//Delete all answers
+	// 						VoxAnswer::where('vox_id', $vox->id)
+	// 						->where('user_id', $this->user->id)
+	// 						->delete();
+ //        				}
+	// 	        	} else {
 
-	        			if($type == 'skip') {
-	        				$answer = new VoxAnswer;
-					        $answer->user_id = $this->user->id;
-					        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
-					        $answer->question_id = $q;
-					        $answer->answer = 0;
-					        $answer->is_skipped = true;
-					        $answer->country_id = $this->user->country_id;
+	// 	        		if($type == 'skip') {
+	//         				$answer = new VoxAnswer;
+	// 				        $answer->user_id = $this->user->id;
+	// 				        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+	// 				        $answer->question_id = $q;
+	// 				        $answer->answer = 0;
+	// 				        $answer->is_skipped = true;
+	// 				        $answer->country_id = $this->user->country_id;
 					        
-					        if($testmode) {
-					        	$answer->is_admin = true;
-					        }
-					        $answer->save();
-					        $answered[$q] = 0;
+	// 				        if($testmode) {
+	// 				        	$answer->is_admin = true;
+	// 				        }
+	// 				        $answer->save();
+	// 				        $answered[$q] = 0;
 					        
-	        			} else if($type == 'previous') {
-	        				$answer = new VoxAnswer;
-					        $answer->user_id = $this->user->id;
-					        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
-					        $answer->question_id = $q;
-				        	$answer->answer = $a;
-				        	$this->setupAnswerStats($answer);
-					        $answer->country_id = $this->user->country_id;
+	//         			} else if($type == 'previous') {
+	//         				$answer = new VoxAnswer;
+	// 				        $answer->user_id = $this->user->id;
+	// 				        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+	// 				        $answer->question_id = $q;
+	// 			        	$answer->answer = $a;
+	// 			        	$this->setupAnswerStats($answer);
+	// 				        $answer->country_id = $this->user->country_id;
 					        
-					        if($testmode) {
-					        	$answer->is_admin = true;
-					        }
-					        $answer->save();
-					        $answered[$q] = 0;
+	// 				        if($testmode) {
+	// 				        	$answer->is_admin = true;
+	// 				        }
+	// 				        $answer->save();
+	// 				        $answered[$q] = 0;
 					        
-	        			} else if($type == 'single') {
+	//         			} else if($type == 'single') {
 
-							$answer = new VoxAnswer;
-					        $answer->user_id = $this->user->id;
-					        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
-					        if (in_array($q, $welcome_vox_question_ids)===true) {
-					        	$answer->is_completed = 1;
-					        	$answer->is_skipped = 0;
-					        }
-					        $answer->question_id = $q;
-					        $answer->answer = $a;
-					        $answer->country_id = $this->user->country_id;
+	// 						$answer = new VoxAnswer;
+	// 				        $answer->user_id = $this->user->id;
+	// 				        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+	// 				        if (in_array($q, $welcome_vox_question_ids)===true) {
+	// 				        	$answer->is_completed = 1;
+	// 				        	$answer->is_skipped = 0;
+	// 				        }
+	// 				        $answer->question_id = $q;
+	// 				        $answer->answer = $a;
+	// 				        $answer->country_id = $this->user->country_id;
 
-					        $this->setupAnswerStats($answer);
+	// 				        $this->setupAnswerStats($answer);
 				        	
-					        if($testmode) {
-					        	$answer->is_admin = true;
-					        }
-					        $answer->save();
-					        $answered[$q] = $a;
+	// 				        if($testmode) {
+	// 				        	$answer->is_admin = true;
+	// 				        }
+	// 				        $answer->save();
+	// 				        $answered[$q] = $a;
 
-					        if( $found->cross_check ) {
-					    		if (is_numeric($found->cross_check)) {
-					    			$v_quest = VoxQuestion::where('id', $q )->first();
+	// 				        if( $found->cross_check ) {
+	// 				    		if (is_numeric($found->cross_check)) {
+	// 				    			$v_quest = VoxQuestion::where('id', $q )->first();
 
-					    			if (!empty($cross_checks) && $cross_checks[$q] != $a) {
-						    			$vcc = new VoxCrossCheck;
-						    			$vcc->user_id = $this->user->id;
-						    			$vcc->question_id = $found->cross_check;
-						    			$vcc->old_answer = $cross_checks[$q];
-						    			$vcc->save();
-						    		}
+	// 				    			if (!empty($cross_checks) && $cross_checks[$q] != $a) {
+	// 					    			$vcc = new VoxCrossCheck;
+	// 					    			$vcc->user_id = $this->user->id;
+	// 					    			$vcc->question_id = $found->cross_check;
+	// 					    			$vcc->old_answer = $cross_checks[$q];
+	// 					    			$vcc->save();
+	// 					    		}
 
-					    			VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $found->cross_check )->update([
-					    				'answer' => $a,
-					    			]);
+	// 				    			VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $found->cross_check )->update([
+	// 				    				'answer' => $a,
+	// 				    			]);
 
-					    		} else if($found->cross_check == 'gender') {
-				    				if (!empty($cross_checks) && $cross_checks[$q] != $a) {
-				    					$vcc = new VoxCrossCheck;
-						    			$vcc->user_id = $this->user->id;
-						    			$vcc->question_id = $found->cross_check;
-						    			$vcc->old_answer = $cross_checks[$q];
-						    			$vcc->save();
-						    		}
-						    		// $this->user->gender = $a == 1 ? 'm' : 'f';
-					    			// $this->user->save();
+	// 				    		} else if($found->cross_check == 'gender') {
+	// 			    				if (!empty($cross_checks) && $cross_checks[$q] != $a) {
+	// 			    					$vcc = new VoxCrossCheck;
+	// 					    			$vcc->user_id = $this->user->id;
+	// 					    			$vcc->question_id = $found->cross_check;
+	// 					    			$vcc->old_answer = $cross_checks[$q];
+	// 					    			$vcc->save();
+	// 					    		}
+	// 					    		// $this->user->gender = $a == 1 ? 'm' : 'f';
+	// 				    			// $this->user->save();
 
-					    		} else {
-					    			$cc = $found->cross_check;
+	// 				    		} else {
+	// 				    			$cc = $found->cross_check;
 
-					    			$i=0;
-					    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
-					    				if($i==$a) {
-							    			if (!empty($cross_checks) && $cross_checks[$q] != $a) {
-								    			$vcc = new VoxCrossCheck;
-								    			$vcc->user_id = $this->user->id;
-								    			$vcc->question_id = $found->cross_check;
-								    			$vcc->old_answer = $cross_checks[$q];
-								    			$vcc->save();
-								    		}
-					    					$this->user->$cc = $key;
-					    					$this->user->save();
-					    					break;
-					    				}
-					    				$i++;
-					    			}
-					    		}
-					        }
+	// 				    			$i=0;
+	// 				    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
+	// 				    				if($i==$a) {
+	// 						    			if (!empty($cross_checks) && $cross_checks[$q] != $a) {
+	// 							    			$vcc = new VoxCrossCheck;
+	// 							    			$vcc->user_id = $this->user->id;
+	// 							    			$vcc->question_id = $found->cross_check;
+	// 							    			$vcc->old_answer = $cross_checks[$q];
+	// 							    			$vcc->save();
+	// 							    		}
+	// 				    					$this->user->$cc = $key;
+	// 				    					$this->user->save();
+	// 				    					break;
+	// 				    				}
+	// 				    				$i++;
+	// 				    			}
+	// 				    		}
+	// 				        }
 
-	        			} else if(isset( config('vox.details_fields')[$type] ) || $type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
-	        				$answered[$q] = 1;
-	        				$answer = null;
+	//         			} else if(isset( config('vox.details_fields')[$type] ) || $type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
+	//         				$answered[$q] = 1;
+	//         				$answer = null;
 
-	        				if( !empty($found->cross_check) ) {
-	        					if($found->cross_check == 'birthyear') {
+	//         				if( !empty($found->cross_check) ) {
+	//         					if($found->cross_check == 'birthyear') {
 
-					    			if (!empty($cross_checks) && $cross_checks[$q] != $a) {
-				    					$vcc = new VoxCrossCheck;
-						    			$vcc->user_id = $this->user->id;
-						    			$vcc->question_id = $found->cross_check;
-						    			$vcc->old_answer = $cross_checks[$q];
-						    			$vcc->save();
-						    		}
-						    		// $this->user->birthyear = $a;
-					    			// $this->user->save();
+	// 				    			if (!empty($cross_checks) && $cross_checks[$q] != $a) {
+	// 			    					$vcc = new VoxCrossCheck;
+	// 					    			$vcc->user_id = $this->user->id;
+	// 					    			$vcc->question_id = $found->cross_check;
+	// 					    			$vcc->old_answer = $cross_checks[$q];
+	// 					    			$vcc->save();
+	// 					    		}
+	// 					    		// $this->user->birthyear = $a;
+	// 				    			// $this->user->save();
 
-			        				$answer = new VoxAnswer;
-							        $answer->user_id = $this->user->id;
-							        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
-							        if (in_array($q, $welcome_vox_question_ids)===true) {
-							        	$answer->is_completed = 1;
-					        			$answer->is_skipped = 0;
-							        }
-							        $answer->question_id = $q;
-							        $answer->answer = 0;
-							        $answer->country_id = $this->user->country_id;
-					        		$this->setupAnswerStats($answer);
+	// 		        				$answer = new VoxAnswer;
+	// 						        $answer->user_id = $this->user->id;
+	// 						        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+	// 						        if (in_array($q, $welcome_vox_question_ids)===true) {
+	// 						        	$answer->is_completed = 1;
+	// 				        			$answer->is_skipped = 0;
+	// 						        }
+	// 						        $answer->question_id = $q;
+	// 						        $answer->answer = 0;
+	// 						        $answer->country_id = $this->user->country_id;
+	// 				        		$this->setupAnswerStats($answer);
 
-							        if($testmode) {
-							        	$answer->is_admin = true;
-							        }
-							        $answer->save();
-							        $answered[$q] = 0;
-					    		}
-	        				}
+	// 						        if($testmode) {
+	// 						        	$answer->is_admin = true;
+	// 						        }
+	// 						        $answer->save();
+	// 						        $answered[$q] = 0;
+	// 				    		}
+	//         				}
 
-	        			} else if($type == 'number') {
-        					$answer = new VoxAnswer;
-					        $answer->user_id = $this->user->id;
-					        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
-					        if (in_array($q, $welcome_vox_question_ids)===true) {
-					        	$answer->is_completed = 1;
-				        		$answer->is_skipped = 0;
-					        }
-					        $answer->question_id = $q;
-					        $answer->answer = $a;
-					        $answer->country_id = $this->user->country_id;
-				        	$this->setupAnswerStats($answer);
+	//         			} else if($type == 'number') {
+ //        					$answer = new VoxAnswer;
+	// 				        $answer->user_id = $this->user->id;
+	// 				        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+	// 				        if (in_array($q, $welcome_vox_question_ids)===true) {
+	// 				        	$answer->is_completed = 1;
+	// 			        		$answer->is_skipped = 0;
+	// 				        }
+	// 				        $answer->question_id = $q;
+	// 				        $answer->answer = $a;
+	// 				        $answer->country_id = $this->user->country_id;
+	// 			        	$this->setupAnswerStats($answer);
 				        
-					        if($testmode) {
-					        	$answer->is_admin = true;
-					        }
-					        $answer->save();
+	// 				        if($testmode) {
+	// 				        	$answer->is_admin = true;
+	// 				        }
+	// 				        $answer->save();
 
-						    $answered[$q] = $a;
+	// 					    $answered[$q] = $a;
 
-	        			} else if($type == 'multiple') {
-	        				foreach ($a as $value) {
-	        					$answer = new VoxAnswer;
-						        $answer->user_id = $this->user->id;
-						        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
-						        if (in_array($q, $welcome_vox_question_ids)===true) {
-						        	$answer->is_completed = 1;
-					        		$answer->is_skipped = 0;
-						        }
-						        $answer->question_id = $q;
-						        $answer->answer = $value;
-						        $answer->country_id = $this->user->country_id;
-					        	$this->setupAnswerStats($answer);
+	//         			} else if($type == 'multiple') {
+	//         				foreach ($a as $value) {
+	//         					$answer = new VoxAnswer;
+	// 					        $answer->user_id = $this->user->id;
+	// 					        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+	// 					        if (in_array($q, $welcome_vox_question_ids)===true) {
+	// 					        	$answer->is_completed = 1;
+	// 				        		$answer->is_skipped = 0;
+	// 					        }
+	// 					        $answer->question_id = $q;
+	// 					        $answer->answer = $value;
+	// 					        $answer->country_id = $this->user->country_id;
+	// 				        	$this->setupAnswerStats($answer);
 					        
-						        if($testmode) {
-						        	$answer->is_admin = true;
-						        }
-						        $answer->save();
-	        				}
-						    $answered[$q] = $a;
+	// 					        if($testmode) {
+	// 					        	$answer->is_admin = true;
+	// 					        }
+	// 					        $answer->save();
+	//         				}
+	// 					    $answered[$q] = $a;
 
-	        			} else if($type == 'scale' || $type == 'rank') {
-	        				foreach ($a as $k => $value) {
-	        					$answer = new VoxAnswer;
-						        $answer->user_id = $this->user->id;
-						        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
-						        if (in_array($q, $welcome_vox_question_ids)===true) {
-						        	$answer->is_completed = 1;
-					        		$answer->is_skipped = 0;
-						        }
-						        $answer->question_id = $q;
-						        $answer->answer = $k+1;
-						        $answer->scale = $value;
-						        $answer->country_id = $this->user->country_id;
-					        	$this->setupAnswerStats($answer);
+	//         			} else if($type == 'scale' || $type == 'rank') {
+	//         				foreach ($a as $k => $value) {
+	//         					$answer = new VoxAnswer;
+	// 					        $answer->user_id = $this->user->id;
+	// 					        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+	// 					        if (in_array($q, $welcome_vox_question_ids)===true) {
+	// 					        	$answer->is_completed = 1;
+	// 				        		$answer->is_skipped = 0;
+	// 					        }
+	// 					        $answer->question_id = $q;
+	// 					        $answer->answer = $k+1;
+	// 					        $answer->scale = $value;
+	// 					        $answer->country_id = $this->user->country_id;
+	// 				        	$this->setupAnswerStats($answer);
 						        
-						        if($testmode) {
-						        	$answer->is_admin = true;
-						        }
-						        $answer->save();
-	        				}
-						    $answered[$q] = $a;
-	        			}
-	        		}
+	// 					        if($testmode) {
+	// 					        	$answer->is_admin = true;
+	// 					        }
+	// 					        $answer->save();
+	//         				}
+	// 					    $answered[$q] = $a;
+	//         			}
+	//         		}
 
-    				$reallist = $list->filter(function ($value, $key) {
-					    return !$value->is_skipped;
-					});
+ //    				$reallist = $list->filter(function ($value, $key) {
+	// 				    return !$value->is_skipped;
+	// 				});
 
-    				$ppp = 10;
-        			if( $reallist->count() && $reallist->count()%$ppp==0 && !$testmode && !$this->user->is_partner ) {
+ //    				$ppp = 10;
+ //        			if( $reallist->count() && $reallist->count()%$ppp==0 && !$testmode && !$this->user->is_partner ) {
 
-        				$pagenum = $reallist->count()/$ppp;
-        				$start = $reallist->forPage($pagenum, $ppp)->first();
+ //        				$pagenum = $reallist->count()/$ppp;
+ //        				$start = $reallist->forPage($pagenum, $ppp)->first();
         				
-				        $diff = Carbon::now()->diffInSeconds( $start->created_at );
-				        $normal = $ppp*2;
-				        if($normal > $diff) {
+	// 			        $diff = Carbon::now()->diffInSeconds( $start->created_at );
+	// 			        $normal = $ppp*2;
+	// 			        if($normal > $diff) {
 
-				        	$warned_before = session('too-fast');
-				        	if(!$warned_before) {
-				        		session([
-				            		'too-fast' => true
-				            	]);
-				        	} else {
-				        		session([
-				            		'too-fast' => null
-				            	]);
-				        	}
+	// 			        	$warned_before = session('too-fast');
+	// 			        	if(!$warned_before) {
+	// 			        		session([
+	// 			            		'too-fast' => true
+	// 			            	]);
+	// 			        	} else {
+	// 			        		session([
+	// 			            		'too-fast' => null
+	// 			            	]);
+	// 			        	}
 
-        					$prev_bans = $this->user->getPrevBansCount('vox', 'too-fast');
-	        				$ret['toofast'] = true;
-	        				if(!$warned_before) {
-	        					$ret['warning'] = true;
-	        					$ret['img'] = url('new-vox-img/ban-warning-fast-'.($prev_bans+1).'.png');
-	        					$titles = [
-        							trans('vox.page.bans.warning-too-fast-title-1'),
-        							trans('vox.page.bans.warning-too-fast-title-2'),
-        							trans('vox.page.bans.warning-too-fast-title-3'),
-        							trans('vox.page.bans.warning-too-fast-title-4'),
-	        					];
-	        					$ret['title'] = $titles[$prev_bans];
-	        					$contents = [
-        							trans('vox.page.bans.warning-too-fast-content-1'),
-        							trans('vox.page.bans.warning-too-fast-content-2'),
-        							trans('vox.page.bans.warning-too-fast-content-3'),
-        							trans('vox.page.bans.warning-too-fast-content-4'),
-	        					];
-	        					$ret['content'] = $contents[$prev_bans];
+ //        					$prev_bans = $this->user->getPrevBansCount('vox', 'too-fast');
+	//         				$ret['toofast'] = true;
+	//         				if(!$warned_before) {
+	//         					$ret['warning'] = true;
+	//         					$ret['img'] = url('new-vox-img/ban-warning-fast-'.($prev_bans+1).'.png');
+	//         					$titles = [
+ //        							trans('vox.page.bans.warning-too-fast-title-1'),
+ //        							trans('vox.page.bans.warning-too-fast-title-2'),
+ //        							trans('vox.page.bans.warning-too-fast-title-3'),
+ //        							trans('vox.page.bans.warning-too-fast-title-4'),
+	//         					];
+	//         					$ret['title'] = $titles[$prev_bans];
+	//         					$contents = [
+ //        							trans('vox.page.bans.warning-too-fast-content-1'),
+ //        							trans('vox.page.bans.warning-too-fast-content-2'),
+ //        							trans('vox.page.bans.warning-too-fast-content-3'),
+ //        							trans('vox.page.bans.warning-too-fast-content-4'),
+	//         					];
+	//         					$ret['content'] = $contents[$prev_bans];
 
-	        				} else {
-            					$ban = $this->user->banUser('vox', 'too-fast', $vox->id);
-            					$ret['ban'] = true;
-            					$ret['ban_duration'] = $ban['days'];
-            					$ret['ban_times'] = $ban['times'];
-	        					$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
-	        					$titles = [
-        							trans('vox.page.bans.ban-too-fast-title-1'),
-        							trans('vox.page.bans.ban-too-fast-title-2'),
-        							trans('vox.page.bans.ban-too-fast-title-3'),
-        							trans('vox.page.bans.ban-too-fast-title-4',[
-        								'name' => $this->user->getNames()
-        							]),
-	        					];
-	        					$ret['title'] = $titles[$prev_bans];
-	        					$contents = [
-        							trans('vox.page.bans.ban-too-fast-content-1'),
-        							trans('vox.page.bans.ban-too-fast-content-2'),
-        							trans('vox.page.bans.ban-too-fast-content-3'),
-        							trans('vox.page.bans.ban-too-fast-content-4'),
-	        					];
-	        					$ret['content'] = $contents[$prev_bans];
+	//         				} else {
+ //            					$ban = $this->user->banUser('vox', 'too-fast', $vox->id);
+ //            					$ret['ban'] = true;
+ //            					$ret['ban_duration'] = $ban['days'];
+ //            					$ret['ban_times'] = $ban['times'];
+	//         					$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
+	//         					$titles = [
+ //        							trans('vox.page.bans.ban-too-fast-title-1'),
+ //        							trans('vox.page.bans.ban-too-fast-title-2'),
+ //        							trans('vox.page.bans.ban-too-fast-title-3'),
+ //        							trans('vox.page.bans.ban-too-fast-title-4',[
+ //        								'name' => $this->user->getNames()
+ //        							]),
+	//         					];
+	//         					$ret['title'] = $titles[$prev_bans];
+	//         					$contents = [
+ //        							trans('vox.page.bans.ban-too-fast-content-1'),
+ //        							trans('vox.page.bans.ban-too-fast-content-2'),
+ //        							trans('vox.page.bans.ban-too-fast-content-3'),
+ //        							trans('vox.page.bans.ban-too-fast-content-4'),
+	//         					];
+	//         					$ret['content'] = $contents[$prev_bans];
 
-	        					//Delete all answers
-								VoxAnswer::where('vox_id', $vox->id)
-								->where('user_id', $this->user->id)
-								->delete();
-	        				}
-				        }
-        			}
+	//         					//Delete all answers
+	// 							VoxAnswer::where('vox_id', $vox->id)
+	// 							->where('user_id', $this->user->id)
+	// 							->delete();
+	//         				}
+	// 			        }
+ //        			}
 
-    				// dd($answered, count($vox->questions));
+ //    				if (!empty($welcome_vox_question_ids) && $q==end($welcome_vox_question_ids)) {
+	// 					$reward = new DcnReward;
+	// 			        $reward->user_id = $this->user->id;
+	// 			        $reward->reference_id = 11;
+	// 			        $reward->type = 'survey';
+	// 			        $reward->platform = 'vox';
+	// 			        $reward->reward = 100;
 
-    				if (!empty($welcome_vox_question_ids) && $q==end($welcome_vox_question_ids)) {
-						$reward = new DcnReward;
-				        $reward->user_id = $this->user->id;
-				        $reward->reference_id = 11;
-				        $reward->type = 'survey';
-				        $reward->platform = 'vox';
-				        $reward->reward = 100;
+	// 			        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+	// 	                $dd = new DeviceDetector($userAgent);
+	// 	                $dd->parse();
 
-				        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-		                $dd = new DeviceDetector($userAgent);
-		                $dd->parse();
+	// 	                if ($dd->isBot()) {
+	// 	                    // handle bots,spiders,crawlers,...
+	// 	                    $reward->device = $dd->getBot();
+	// 	                } else {
+	// 	                    $reward->device = $dd->getDeviceName();
+	// 	                    $reward->brand = $dd->getBrandName();
+	// 	                    $reward->model = $dd->getModel();
+ //        					$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+	// 	                }
 
-		                if ($dd->isBot()) {
-		                    // handle bots,spiders,crawlers,...
-		                    $reward->device = $dd->getBot();
-		                } else {
-		                    $reward->device = $dd->getDeviceName();
-		                    $reward->brand = $dd->getBrandName();
-		                    $reward->model = $dd->getModel();
-        					$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-		                }
+	// 			        $reward->save();
+ //    				}
 
-				        $reward->save();
-    				}
+	// 		        if(count($answered) == count($vox->questions)) {
 
-			        if(count($answered) == count($vox->questions)) {
-			        	$reward = DcnReward::where('user_id', $this->user->id)->where('reference_id', $vox->id)->where('platform', 'vox')->where('type', 'survey')->first();
+	// 		        	session([
+	// 						'scales' => null,
+	// 					]);
 
-			        	if (empty($reward)) {
-							$reward = new DcnReward;
-					        $reward->user_id = $this->user->id;
-					        $reward->reference_id = $vox->id;
-					        $reward->platform = 'vox';
-					        $reward->type = 'survey';
-					    }
-				        $reward->reward = $vox->getRewardForUser($this->user->id);
-				        $start = $list->first()->created_at;
-				        $diff = Carbon::now()->diffInSeconds( $start );
-				        $normal = count($vox->questions)*2;
-				        $reward->seconds = $diff;
+	// 					if( $this->user->madeTest($vox->id) && !(Request::input('goback') && $testmode) ) {
+	// 						return Response::json( [
+	// 							'success' => false
+	// 						] );
+	// 					}
 
-				        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-		                $dd = new DeviceDetector($userAgent);
-		                $dd->parse();
+	// 					$answered_without_skip_count = 0;
+	// 					$answered_without_skip = [];
+	// 					foreach ($list as $l) {
+	// 						if(!isset( $answered_without_skip[$l->question_id] ) && $l->question && $l->answer > 0 || $l->question->type == 'number' || $l->question->cross_check == 'birthyear' || $l->question->cross_check == 'household_children') {
+	// 							$answered_without_skip[$l->question_id] = ['1']; //3
+	// 							$answered_without_skip_count++;
+	// 						}
+	// 					}
 
-		                if ($dd->isBot()) {
-		                    // handle bots,spiders,crawlers,...
-		                    $reward->device = $dd->getBot();
-		                } else {
-		                    $reward->device = $dd->getDeviceName();
-		                    $reward->brand = $dd->getBrandName();
-		                    $reward->model = $dd->getModel();
-        					$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-		                }
+	// 					$reward = new DcnReward;
+	// 			        $reward->user_id = $this->user->id;
+	// 			        $reward->reference_id = $vox->id;
+	// 			        $reward->platform = 'vox';
+	// 			        $reward->type = 'survey';
+	// 			        $reward->reward = $vox->getRewardForUser($this->user, $answered_without_skip_count);
+	// 			        $start = $list->first()->created_at;
+	// 			        $diff = Carbon::now()->diffInSeconds( $start );
+	// 			        $normal = count($vox->questions)*2;
+	// 			        $reward->seconds = $diff;
 
-				        $reward->save();
-        				$ret['balance'] = $this->user->getTotalBalance('vox');
+	// 			        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+	// 	                $dd = new DeviceDetector($userAgent);
+	// 	                $dd->parse();
 
-						$open_recommend = false;
-						$social_profile = false;
-						$filled_voxes = $this->user->filledVoxes();
+	// 	                if ($dd->isBot()) {
+	// 	                    // handle bots,spiders,crawlers,...
+	// 	                    $reward->device = $dd->getBot();
+	// 	                } else {
+	// 	                    $reward->device = $dd->getDeviceName();
+	// 	                    $reward->brand = $dd->getBrandName();
+	// 	                    $reward->model = $dd->getModel();
+ //        					$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+	// 	                }
 
-						if(!$this->user->is_dentist && count($filled_voxes) == 1) {
-							$social_profile = true;
-						} else if ((count($filled_voxes) == 5 || count($filled_voxes) == 10 || count($filled_voxes) == 20 || count($filled_voxes) == 50) && empty($this->user->fb_recommendation)) {
-							$open_recommend = true;
-						}
+	// 			        $reward->save();
+ //        				$ret['balance'] = $this->user->getTotalBalance('vox');
 
-						$ret['recommend'] = $open_recommend;
-						$ret['social_profile'] = $social_profile;
+	// 					$open_recommend = false;
+	// 					$social_profile = false;
+	// 					$filled_voxes = $this->user->filledVoxesCount();
 
-        				VoxAnswer::where('user_id', $this->user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
+	// 					if(!$this->user->is_dentist && $filled_voxes == 1) {
+	// 						$social_profile = true;
+	// 					} else if (($filled_voxes == 5 || $filled_voxes == 10 || $filled_voxes == 20 || $filled_voxes == 50) && empty($this->user->fb_recommendation)) {
+	// 						$open_recommend = true;
+	// 					}
 
-        				$vox->recalculateUsersPercentage($this->user);
+	// 					$ret['recommend'] = $open_recommend;
+	// 					$ret['social_profile'] = $social_profile;
 
-                        if($this->user->invited_by && !empty($this->user->invitor)) {
+ //        				VoxAnswer::where('user_id', $this->user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
-                        	$inv = UserInvite::where('user_id', $this->user->invited_by)
-				            ->where(function ($query) {
-				                $query->where('platform', '!=', 'trp')
-				                ->orWhere('platform', null);
-				            })
-				            ->where('invited_id', $this->user->id)
-				            ->whereNull('rewarded')
-				            ->first();
+ //        				$vox->recalculateUsersPercentage($this->user);
 
-                            if(!empty($inv) && !$inv->dont_rewarded) {
+ //                        if($this->user->invited_by && !empty($this->user->invitor)) {
 
-                            	$reward = new DcnReward;
-						        $reward->user_id = $this->user->invited_by;
-						        $reward->reference_id = $this->user->id;
-						        $reward->type = 'invitation';
-						        $reward->platform = 'vox';
-						        $reward->reward = Reward::getReward('reward_invite');
+ //                        	$inv = UserInvite::where('user_id', $this->user->invited_by)
+	// 			            ->where(function ($query) {
+	// 			                $query->where('platform', '!=', 'trp')
+	// 			                ->orWhere('platform', null);
+	// 			            })
+	// 			            ->where('invited_id', $this->user->id)
+	// 			            ->whereNull('rewarded')
+	// 			            ->first();
 
-						        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-				                $dd = new DeviceDetector($userAgent);
-				                $dd->parse();
+ //                            if(!empty($inv) && !$inv->dont_rewarded) {
 
-				                if ($dd->isBot()) {
-				                    // handle bots,spiders,crawlers,...
-				                    $reward->device = $dd->getBot();
-				                } else {
-				                    $reward->device = $dd->getDeviceName();
-				                    $reward->brand = $dd->getBrandName();
-				                    $reward->model = $dd->getModel();
-        							$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-				                }
+ //                            	$reward = new DcnReward;
+	// 					        $reward->user_id = $this->user->invited_by;
+	// 					        $reward->reference_id = $this->user->id;
+	// 					        $reward->type = 'invitation';
+	// 					        $reward->platform = 'vox';
+	// 					        $reward->reward = Reward::getReward('reward_invite');
 
-						        $reward->save();
+	// 					        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+	// 			                $dd = new DeviceDetector($userAgent);
+	// 			                $dd->parse();
 
-                                $inv->rewarded = true;
-                                $inv->save();
+	// 			                if ($dd->isBot()) {
+	// 			                    // handle bots,spiders,crawlers,...
+	// 			                    $reward->device = $dd->getBot();
+	// 			                } else {
+	// 			                    $reward->device = $dd->getDeviceName();
+	// 			                    $reward->brand = $dd->getBrandName();
+	// 			                    $reward->model = $dd->getModel();
+ //        							$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+	// 			                }
+
+	// 					        $reward->save();
+
+ //                                $inv->rewarded = true;
+ //                                $inv->save();
                                 
-                                if($this->user->invitor->is_dentist) {
-                                    $this->user->invitor->sendGridTemplate( 82, [
-                                        'who_joined_name' => $this->user->getNames()
-                                    ], 'vox' );
-                                } else {
-                                	$this->user->invitor->sendGridTemplate( 113, [
-                                        'who_joined_name' => $this->user->getNames()
-                                    ], 'vox' );
-                                }
-                            }
-                        }
+ //                                if($this->user->invitor->is_dentist) {
+ //                                    $this->user->invitor->sendGridTemplate( 82, [
+ //                                        'who_joined_name' => $this->user->getNames()
+ //                                    ], 'vox' );
+ //                                } else {
+ //                                	$this->user->invitor->sendGridTemplate( 113, [
+ //                                        'who_joined_name' => $this->user->getNames()
+ //                                    ], 'vox' );
+ //                                }
+ //                            }
+ //                        }
 
-                        if ($this->user->platform == 'external') {
-                            $curl = curl_init();
-							curl_setopt_array($curl, array(
-								CURLOPT_RETURNTRANSFER => 1,
-								CURLOPT_POST => 1,
-								CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
-								CURLOPT_SSL_VERIFYPEER => 0,
-							    CURLOPT_POSTFIELDS => array(
-							        'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $this->user->id, 'value' => Reward::getReward('reward_invite'))))
-							    )
-							));
+ //                        if ($this->user->platform == 'external') {
+ //                            $curl = curl_init();
+	// 						curl_setopt_array($curl, array(
+	// 							CURLOPT_RETURNTRANSFER => 1,
+	// 							CURLOPT_POST => 1,
+	// 							CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
+	// 							CURLOPT_SSL_VERIFYPEER => 0,
+	// 						    CURLOPT_POSTFIELDS => array(
+	// 						        'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $this->user->id, 'value' => Reward::getReward('reward_invite'))))
+	// 						    )
+	// 						));
 							 
-							$resp = json_decode(curl_exec($curl));
-							curl_close($curl);
+	// 						$resp = json_decode(curl_exec($curl));
+	// 						curl_close($curl);
 
-                        } else if(!empty($this->user->patient_of)) {
+ //                        } else if(!empty($this->user->patient_of)) {
 
-                        	$curl = curl_init();
-							curl_setopt_array($curl, array(
-								CURLOPT_RETURNTRANSFER => 1,
-								CURLOPT_POST => 1,
-								CURLOPT_URL => 'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications',
-								CURLOPT_SSL_VERIFYPEER => 0,
-							    CURLOPT_POSTFIELDS => array(
-							        'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $this->user->id, 'value' => Reward::getReward('reward_invite'))))
-							    )
-							));
+ //                        	$curl = curl_init();
+	// 						curl_setopt_array($curl, array(
+	// 							CURLOPT_RETURNTRANSFER => 1,
+	// 							CURLOPT_POST => 1,
+	// 							CURLOPT_URL => 'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications',
+	// 							CURLOPT_SSL_VERIFYPEER => 0,
+	// 						    CURLOPT_POSTFIELDS => array(
+	// 						        'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $this->user->id, 'value' => Reward::getReward('reward_invite'))))
+	// 						    )
+	// 						));
 							 
-							$resp = json_decode(curl_exec($curl));
-							curl_close($curl);
-                        }
+	// 						$resp = json_decode(curl_exec($curl));
+	// 						curl_close($curl);
+ //                        }
 
-			        }
-        		} else {
-        			$ret['success'] = false;
-        		}
-        	}
-    	}
+	// 		        }
+ //        		} else {
+ //        			$ret['success'] = false;
+ //        		}
+ //        	}
+ //    	}
 
-		if( $ret['success'] ) {
-			request()->session()->regenerateToken();
-			$ret['token'] = request()->session()->token();
-			$ret['vox_id'] = $vox->id;
-			$ret['question_id'] = !empty($q) ? $q : null;
-		}
+	// 	if( $ret['success'] ) {
+	// 		request()->session()->regenerateToken();
+	// 		$ret['token'] = request()->session()->token();
+	// 		$ret['vox_id'] = $vox->id;
+	// 		$ret['question_id'] = !empty($q) ? $q : null;
+	// 	}
 
-    	return Response::json( $ret );
-	}
-
-	private function getAgeGroup($by) {
-
-		$years = date('Y') - intval($by);
-		$agegroup = 'more';
-		if($years<=24) {
-			$agegroup = '24';
-		} else if($years<=34) {
-			$agegroup = '34';
-		} else if($years<=44) {
-			$agegroup = '44';
-		} else if($years<=54) {
-			$agegroup = '54';
-		} else if($years<=64) {
-			$agegroup = '64';
-		} else if($years<=74) {
-			$agegroup = '74';
-		}
-
-		return $agegroup;
-
-	}
-
-	private function goBack($answered, $list, $vox) {
-
-		$lastkey = null;
-		if(!empty($answered)) {
-			foreach ($list as $aq) {
-				if(!$aq->is_skipped) {
-					$lastkey = $aq->question_id;
-				}
-			}
-
-			$found = false;
-			foreach ($vox->questions as $question) {
-				if($question->id==$lastkey) {
-					$found = true;
-				}
-				if($found) {
-					VoxAnswer::where('vox_id', $vox->id)
-					->where('user_id', $this->user->id)
-					->where('question_id', $question->id)
-					->delete();
-
-					DcnReward::where('reference_id', $vox->id)
-					->where('platform', 'vox')
-					->where('type', 'survey')
-					->where('user_id', $this->user->id)
-					->delete();
-				}
-			}
-		}
-
-		$lastest_key = VoxAnswer::where('vox_id', $vox->id)
-		->where('user_id', $this->user->id)
-		->where('question_id', $lastkey)
-		->first();
-
-		if(!empty($lastest_key) && $lastest_key->answer == 0) {
-			do {
-				$this->goBack($answered, $list, $vox);
-			} while ( $lastest_key->answer == 0);
-		}
-
-		return $lastkey;
-	}
-
-	private function testAnswers($answered, $q_id, $vox) {
-
-		if(!empty($answered)) {
-
-			foreach ($vox->questions as $question) {
-				if($question->id==$q_id) {
-					foreach ($vox->questions as $vq) {
-						if($vq->order >= $question->order) {
-							VoxAnswer::where('vox_id', $vox->id)
-							->where('user_id', $this->user->id)
-							->where('question_id', $vq->id)
-							->delete();
-
-							DcnReward::where('reference_id', $vox->id)
-							->where('platform', 'vox')
-							->where('type', 'survey')
-							->where('user_id', $this->user->id)
-							->delete();
-						}
-					}
-					break;
-				}
-			}
-		}
-
-		return $q_id;
-	}
-
-	private function setupAnswerStats(&$answer) {
-
-        foreach (config('vox.stats_scales') as $df => $dv) {
-        	if($df=='age') {
-				$agegroup = $this->getAgeGroup($this->user->birthyear);
-				$answer->$df = $agegroup;
-        	} else {
-        		if($this->user->$df!==null) {
-	        		$answer->$df = $this->user->$df;
-	        	}
-        	}
-        }
-	}
+ //    	return Response::json( $ret );
+	// }
 
 	/**
      * bottom content of single vox page
@@ -1587,24 +1395,7 @@ class VoxController extends FrontController {
      */
 	public function start_over() {
 
-		$vox = Vox::find(Request::input('vox_id'));
-
-		if (!empty($vox) && !empty(Request::input('user_id'))) {
-	        VoxAnswer::where('vox_id', Request::input('vox_id'))
-			->where('user_id', Request::input('user_id'))
-			->delete();
-
-			$ret = [
-				'success' => true,
-				'first_q' => $vox->questions->first()->id
-			];
-		} else {
-			$ret = [
-				'success' => false,
-			];
-		}
-
-		return Response::json( $ret );
+		return ServicesVox::startOver($this->user->id);
 	}
 
 	/**
@@ -1612,437 +1403,6 @@ class VoxController extends FrontController {
      */
     public function getNextQuestion() {
 
-        return self::getNextQuestionFunction($this->admin, $this->user, false, $this->country_id);
+        return ServicesVox::getNextQuestionFunction($this->admin, $this->user, false, $this->country_id);
     }
-
-	public static function getNextQuestionFunction($admin, $user, $for_app, $country_id) {
-
-//        if($for_app) {
-//            $user = Auth::guard('api')->user();
-//        } else {
-//            $user = $this->user;
-//        }
-
-        if(!empty($user)) {
-
-            $vox_id = request('vox_id');
-            $welcome_vox = Vox::where('type', 'home')->first();
-            $question_id = request('question_id');
-            if(!empty($question_id)) {
-                $cur_question = VoxQuestion::find($question_id);
-            }
-
-        	$admin_ids = ['65003'];
-            $isAdmin = $for_app ? ( $user->is_admin ? true : false) : (Auth::guard('admin')->user() || in_array($user->id, $admin_ids));
-            $testmode = session('testmode') && $isAdmin;
-
-            if(!empty($vox_id)) {
-                $vox = Vox::where('id', $vox_id);
-
-                if(empty($testmode)) {
-                    $vox = $vox->where('type', 'normal');
-                }
-                $vox = $vox->first();
-            }
-
-            if(!empty($vox_id) && (!empty($vox) || !empty($admin) )) {
-
-                $array = [];
-
-                if (!$user->madeTest($vox->id)) {
-
-                    if (!$user->madeTest($welcome_vox->id)) {
-                        // welcome qs
-                        $array['welcome_vox'] = true;
-
-                        if(!empty($question_id)) {
-                            //question order
-                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
-                            $array['question'] = $next_question;
-                        } else {
-                            //first question
-                            $question = VoxQuestion::where('vox_id', $welcome_vox->id)->orderBy('order', 'ASC')->first();
-                            $array['question'] = $question;
-                        }
-                    } else if(empty($user->birthyear)) {
-                        //demographic qs
-                        $array['birthyear_q'] = true;
-                    } else if(empty($user->gender)) {
-                        //demographic qs
-                        $array['gender_q'] = true;
-                    } else if(empty($user->country_id)) {
-                        //demographic qs
-                        $array['country_id_q'] = true;
-                    }
-
-                    if(empty($array)) {
-                        foreach (config('vox.details_fields') as $key => $info) {
-                            if($user->$key==null) {
-                                $array['details_question'] = $info;
-                                $array['details_question_id'] = $key;
-                                break;
-                            }
-                        }
-                    }
-                    if(empty($array)) {
-
-                        if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
-                            $question_id=null;
-                        }
-
-                        if(!empty($question_id) && is_numeric($question_id)) {
-                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
-                            
-                            if(!empty($next_question->prev_q_id_answers)) {
-                                $prev_q = VoxQuestion::find($next_question->prev_q_id_answers);
-
-                                $prev_answers = VoxAnswer::where('vox_id', $vox_id)->where('question_id', $prev_q->id)->where('user_id', $user->id)->get();
-                                if($prev_answers->count() == 1) {
-
-                                    if($prev_answers->first()->answer != 0) {
-                                        $prev_q_answers_text = $prev_q->vox_scale_id && !empty($scales[$prev_q->vox_scale_id]) ? explode(',', $scales[$prev_q->vox_scale_id]->answers) :  json_decode($prev_q->answers, true);
-
-                                        if(mb_strpos($prev_q_answers_text[$prev_answers->pluck('answer')->toArray()[0] - 1], '!') !== false) {
-                                            return 'skip-dvq:'.$next_question->id;
-                                        } else {
-                                            return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
-                                        }
-                                    } else {
-                                        return 'skip-dvq:'.$next_question->id;
-                                    }
-
-                                } else {
-                                    $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
-                                }
-                            }
-
-                            if(!empty($next_question->question_trigger)) {
-
-                                if($next_question->question_trigger=='-1') {
-                                    foreach ($vox->questions as $originalTrigger) {
-                                        if($originalTrigger->id == $next_question->id) {
-                                            break;
-                                        }
-
-                                        if( $originalTrigger->question_trigger && $originalTrigger->question_trigger!='-1' ) {
-                                           $triggers = $originalTrigger->question_trigger;
-                                        }
-                                    }
-                                } else {
-                                    $triggers = $next_question->question_trigger;
-                                }
-
-                                if(!empty($triggers)) {
-
-                                    $triggers = explode(';', $triggers);
-                                    $triggerSuccess = [];
-
-                                    foreach ($triggers as $trigger) {
-
-                                        list($triggerId, $triggerAnswers) = explode(':', $trigger);
-                                        if(is_numeric($triggerId)) {
-                                            $trigger_question = VoxQuestion::find($triggerId);
-                                        } else {
-                                            //demographic
-                                            $trigger_question = $triggerId;
-                                        }
-
-                                     //    if($next_question->id == 18655) {
-	                                    //     echo '<br/>Q id: '.$triggerId;
-	                                    // }
-
-                                        if(mb_strpos($triggerAnswers, '!')!==false) {
-                                            $invert_trigger_logic = true;
-                                            $triggerAnswers = substr($triggerAnswers, 1);
-                                        } else {
-                                            $invert_trigger_logic = false;
-                                        }
-
-                                        if(mb_strpos($triggerAnswers, '-')!==false) {
-
-                                            if(mb_strpos($triggerAnswers, ',')!==false) {
-
-                                                $allowedAnswers = [];
-
-                                                $answersArr = explode(',', $triggerAnswers);
-
-                                                foreach ($answersArr as $ar) {
-                                                    if(mb_strpos($ar, '-')!==false) {
-                                                        list($from, $to) = explode('-', $ar);
-
-                                                        for ($i=$from; $i <= $to ; $i++) {
-                                                            $allowedAnswers[] = $i;
-                                                        }
-                                                    } else {
-                                                        $allowedAnswers[] = intval($ar);
-                                                    }
-                                                }
-                                            } else {
-                                                list($from, $to) = explode('-', $triggerAnswers);
-
-                                                $allowedAnswers = [];
-                                                for ($i=$from; $i <= $to ; $i++) {
-                                                    $allowedAnswers[] = $i;
-                                                }
-                                            }
-
-                                        } else {
-                                            $allowedAnswers = explode(',', $triggerAnswers);
-
-                                            // foreach($allowedAnswers as $kk => $vv) {
-                                            // 	$allowedAnswers[$kk] = intval($vv);
-                                            // }
-                                        }
-
-
-                                        if(!empty($allowedAnswers)) {
-                                            $givenAnswers = [];
-                                            if(is_object($trigger_question)) {
-                                                $user_answers = VoxAnswer::where('user_id', $user->id)->where('question_id', $trigger_question->id)->get();
-                                                foreach ($user_answers as $ua) {
-                                                    $givenAnswers[] = $ua->answer;
-                                                }
-                                            } else {
-                                                //demographic
-                                                $givenAnswers[] = $user->$trigger_question;
-                                            }
-
-                                      //       if($next_question->id == 18655) {
-		                                    //     echo '<br/>allowedAnswers: '.json_encode($allowedAnswers);
-		                                    //     echo '<br/>givenAnswers: '.json_encode($givenAnswers);
-		                                    // }
-
-                                            // echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($allowedAnswers, true).' / Answer: '.var_export($givenAnswers, true).' / Inverted logic: '.($invert_trigger_logic ? 'da' : 'ne').'<br/>';
-
-                                            $int = 0;
-                                            foreach ($givenAnswers as $ga) {
-                                            	$int++;
-                                            	
-                                                if(str_contains($ga,',') !== false) {
-                                                    $given_answers_array = explode(',', $ga);
-
-                                                    $found = false;
-                                                    foreach ($given_answers_array as $key => $value) {
-                                                        if(in_array($value, $allowedAnswers)) {
-                                                            $found = true;
-                                                            break;
-                                                        }
-                                                    }
-
-                                                    if($invert_trigger_logic) {
-                                                        if(!$found) {
-                                                            $triggerSuccess[$int] = true;
-                                                        } else {
-                                                            $triggerSuccess[$int] = false;
-                                                        }
-                                                    } else {
-
-                                                        if($found) {
-                                                            $triggerSuccess[$int] = true;
-                                                        } else {
-                                                            $triggerSuccess[$int] = false;
-                                                        }
-                                                    }
-                                                } else {
-                                                    if(strpos($allowedAnswers[0], '>') !== false) {
-                                                        $trg_ans = substr($allowedAnswers[0], 1);
-
-                                                        if($ga > intval($trg_ans)) {
-                                                            $triggerSuccess[$int] = true;
-                                                        } else {
-                                                            $triggerSuccess[$int] = false;
-                                                        }
-                                                    } else if(strpos($allowedAnswers[0], '<') !== false) {
-                                                        $trg_ans = substr($allowedAnswers[0], 1);
-
-                                                        if(intval($ga) < intval($trg_ans)) {
-                                                            $triggerSuccess[$int] = true;
-                                                        } else {
-                                                            $triggerSuccess[$int] = false;
-                                                        }
-                                                    } else {
-                                                        if($invert_trigger_logic) {
-                                                            if( !empty($ga) && !in_array($ga, $allowedAnswers) ) {
-                                                                $triggerSuccess[$int] = true;
-                                                            } else {
-                                                                $triggerSuccess[$int] = false;
-                                                            }
-                                                        } else {
-                                                            // echo in_array($ga, $allowedAnswers) ? '<br/>'.$ga.' in _array' : '<br/>'.$ga.' not_in array';
-
-                                                            if( !empty($ga) && in_array($ga, $allowedAnswers) ) {
-                                                                $triggerSuccess[$int] = true;
-                                                            } else {
-                                                                $triggerSuccess[$int] = false;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                      //       if($next_question->id == 18655) {
-		                                    //     echo '<br/>Q id - trugger success: '.json_encode($triggerSuccess);
-		                                    // }
-                                        }
-                                    }
-
-
-
-                                    // if($next_question->id == 18655) {
-                                    // 	dd($triggerSuccess);
-                                    // }
-
-                                    if( $next_question->trigger_type == 'or' ) { // ANY of the conditions should be met (A or B or C)
-                                        if( !in_array(true, $triggerSuccess) ) {
-                                            return 'skip-dvq:'.$next_question->id;
-                                        }
-                                    }  else { //ALL the conditions should be met (A and B and C)
-                                        if( in_array(false, $triggerSuccess) ) {
-                                            return 'skip-dvq:'.$next_question->id;
-                                        }
-                                    }
-
-                                }
-                            }
-
-                            $array['question'] = $next_question;
-                        } else {
-                            $list = VoxAnswer::where('vox_id', $vox->id)->where('user_id', $user->id)->get();
-                            $answered = [];
-
-                            foreach ($list as $l) {
-                                if(!isset( $answered[$l->question_id] )) {
-                                    $answered[$l->question_id] = $l->answer; //3
-                                } else {
-                                    if(!is_array($answered[$l->question_id])) {
-                                        $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
-                                    }
-                                    $answered[$l->question_id][] = $l->answer; // [3,5,7]
-                                }
-                            }
-
-                            $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
-
-                            $question = $questions_list->first();
-                            if(!isset($answered[$question->id])) {
-                                //first question
-                                $array['question'] = $question;
-                            } else {
-                                //first unanswered question
-                                $array['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_last($answered))->order)->first();
-                            }
-                        }
-                    }
-
-                    if($for_app) {
-                        $cross_check = false;
-                        $cross_check_answer = null;
-                        $cross_check_birthyear = false;
-
-                        if(isset($array['question'])) {
-
-                            $vq = $array['question'];
-                            if (!empty($vq) && !empty($vq->cross_check)) {
-                                $cross_check = true;
-
-                                if (is_numeric($vq->cross_check)) {
-                                    $va = VoxAnswer::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
-                                    $cross_check_answer = $va ? $va->answer : null;
-                                } else if($vq->cross_check == 'gender') {
-                                    $cross_check_answer = $user->gender == 'm' ? 1 : 2;
-                                } else if($vq->cross_check == 'birthyear') {
-                                    $cross_check_birthyear = true;
-                                    $cross_check_answer = $user->birthyear;
-                                } else {
-                                    $cc = $vq->cross_check;
-                                    $i=1;
-                                    foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
-                                        if($key==$user->$cc) {
-                                        	if($key == 'household_children') {
-					    						$cross_checks[$vq->id] = $i + 1;
-					    					} else {	    						
-						    					$cross_checks[$vq->id] = $i;
-					    					}
-                                            break;
-                                        }
-                                        $i++;
-                                    }
-                                }
-                            }
-
-                            $array['question'] = $vq->convertForResponse();
-                        }
-                    } else {
-
-                        $cross_checks = [];
-                        $cross_checks_references = [];
-
-                        foreach ($vox->questions as $vq) {
-                            if (!empty($vq->cross_check)) {
-
-                                if (is_numeric($vq->cross_check)) {
-                                    $va = VoxAnswer::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
-                                    $cross_checks[$vq->id] = $va ? $va->answer : null;
-                                    $cross_checks_references[$vq->id] = $vq->cross_check;
-                                } else if($vq->cross_check == 'gender') {
-                                    $cc = $vq->cross_check;
-                                    $cross_checks[$vq->id] = $user->$cc == 'm' ? 1 : 2;
-                                    $cross_checks_references[$vq->id] = 'gender';
-                                } else if($vq->cross_check == 'birthyear') {
-                                    $cc = $vq->cross_check;
-                                    $cross_checks[$vq->id] = $user->$cc;
-                                    $cross_checks_references[$vq->id] = 'birthyear';
-                                } else {
-                                    $cc = $vq->cross_check;
-                                    $i=0;
-                                    foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
-                                        if($key==$user->$cc) {
-                                            if($cc == 'household_children') {
-					    						$cross_checks[$vq->id] = $i + 1;
-					    					} else {	    						
-						    					$cross_checks[$vq->id] = $i;
-					    					}
-                                            $cross_checks_references[$vq->id] = $cc;
-                                            break;
-                                        }
-                                        $i++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    $slist = VoxScale::get();
-                    $scales = [];
-                    foreach ($slist as $sitem) {
-                        $scales[$sitem->id] = $sitem;
-                    }
-
-                    if($for_app) {
-                        $array['cross_check'] = $cross_check;
-                        $array['cross_check_answer'] = $cross_check_answer;
-                        $array['cross_check_birthyear'] = $cross_check_birthyear;
-                        $array['scales'] = $scales;
-                        $array['user'] = $user;
-                        $array['country_id'] = $user->country_id ?? app('App\Http\Controllers\API\IndexController')->getCountryIdByIp() ?? '';
-
-                        return Response::json( $array );
-
-                    } else {
-
-                        $array['cross_checks'] = $cross_checks;
-                        $array['cross_checks_references'] = $cross_checks_references;
-                        $array['scales'] = $scales;
-                        $array['user'] = $user;
-                        $array['country_id'] = $country_id;
-
-                        return response()->view('vox.template-parts.vox-question', $array, 200)->header('X-Frame-Options', 'DENY');
-                    }
-
-                }
-            }
-        }
-
-        return '';
-	}
 }

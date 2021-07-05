@@ -605,7 +605,7 @@ $(document).ready(function(){
         $('#header-balance').html(data.balance);
 
         VoxTest.handleNextQuestion();
-        $('.coins-test').html( (parseInt($('.coins-test').html()) + vox.reward_single) * parseInt(user_vip_access ));
+        $('.coins-test').html( data.reward_for_cur_vox);
         $("#question-meta").hide();
 
         if ($(window).outerWidth() <= 768) {

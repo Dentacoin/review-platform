@@ -2421,5 +2421,92 @@ class VoxesController extends AdminController {
     }
 
 
+    public function test() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $questions_single = VoxQuestion::where('type', 'single_choice')->whereNull('vox_scale_id')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_multiple = VoxQuestion::where('type', 'multiple_choice')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_scale = VoxQuestion::where('type', 'scale')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_number = VoxQuestion::where('type', 'number')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_rank = VoxQuestion::where('type', 'rank')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_cross_check = VoxQuestion::whereNotNull('cross_check')->orderBy('id', 'DESC')->take(15)->get();
+        $questions_prev_q_answer = VoxQuestion::whereNotNull('prev_q_id_answers')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_with_scale_answers = VoxQuestion::where('type', 'single_choice')->whereNotNull('vox_scale_id')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_with_image_tooltip = VoxQuestion::whereNotNull('has_image')->whereNotNull('image_in_tooltip')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_with_image_question = VoxQuestion::whereNotNull('has_image')->whereNotNull('image_in_question')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_with_image_answers = VoxQuestion::whereNotNull('answers_images_filename')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_control = VoxQuestion::whereNotNull('is_control')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_control_trigger_and = VoxQuestion::where('trigger_type', 'and')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_control_trigger_or = VoxQuestion::where('trigger_type', 'or')->orderBy('id', 'DESC')->take(3)->get();
+
+
+        $arr = [
+            'single' => [
+                'name' => 'Single questions',
+                'value' => $questions_single,
+            ],
+            'multiple' => [
+                'name' => 'Multiple questions',
+                'value' => $questions_multiple,
+            ],
+            'scale' => [
+                'name' => 'Scale questions',
+                'value' => $questions_scale,
+            ],
+            'number' => [
+                'name' => 'Number questions',
+                'value' => $questions_number,
+            ],
+            'rank' => [
+                'name' => 'Rank questions',
+                'value' => $questions_rank,
+            ],
+            'questions_cross_check' => [
+                'name' => 'Questions with cross checks', //to add crosscheck
+                'value' => $questions_cross_check,
+            ],
+            'questions_prev_q_answer' => [
+                'name' => 'Questions with previous question answers',
+                'value' => $questions_prev_q_answer,
+            ],
+            'questions_with_scale_answers' => [
+                'name' => 'Questions with scale answers',
+                'value' => $questions_with_scale_answers,
+            ],
+            'questions_with_image_tooltip' => [
+                'name' => 'Questions with image in tooltip',
+                'value' => $questions_with_image_tooltip,
+            ],
+            'questions_with_image_question' => [
+                'name' => 'Questions with image in question',
+                'value' => $questions_with_image_question,
+            ],
+            'questions_with_image_answers' => [
+                'name' => 'Questions with image answers',
+                'value' => $questions_with_image_answers,
+            ],
+            'questions_control' => [
+                'name' => 'Control questions',
+                'value' => $questions_control,
+            ],
+            'questions_control_trigger_and' => [
+                'name' => 'Questions with trigger type "and"',
+                'value' => $questions_control_trigger_and,
+            ],
+            'questions_control_trigger_or' => [
+                'name' => 'Questions with trigger type "or"',
+                'value' => $questions_control_trigger_or,
+            ],
+        ];
+        return $this->showView('vox-test', [
+            'arr' => $arr
+        ]);
+    }
+
+
 
 }

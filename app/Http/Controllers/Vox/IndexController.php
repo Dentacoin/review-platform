@@ -7,6 +7,8 @@ use App\Http\Controllers\FrontController;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
+use App\Services\VoxService as ServicesVox;
+
 use App\Models\StopTransaction;
 use App\Models\Recommendation;
 use App\Models\UserStrength;
@@ -35,151 +37,8 @@ class IndexController extends FrontController {
      * Home page get voxes by filters
      */
 	public function getVoxList() {
-		$user = Auth::guard('api')->user() ? Auth::guard('api')->user() : $this->user;
-
-		if( $user ) {
-			$taken = $user->filledVoxes();
-
-			$voxes = !empty($this->admin) ? User::getAllVoxes() : $user->voxesTargeting();
-			if(request('filter_item')) {
-				if(request('filter_item') == 'taken') {
-					$voxes = $voxes->whereIn('id', $taken);
-				} else if(request('filter_item') == 'untaken') {
-					$voxes = $voxes->whereNotIn('id', $taken);
-				} else if(request('filter_item') == 'all') {
-
-				}
-			} else {
-				if($taken) {
-					$voxes = $voxes->whereNotIn('id', $taken);
-				}
-			}
-		} else {
-			$voxes = User::getAllVoxes();
-		}
-
-		$voxes = $voxes->where('type', 'normal');
-
-		if(request('category') && request('category') != 'all') {
-			$cat = request('category');
-			$voxes->whereHas('categories', function($query) use ($cat) {
-				$query->whereHas('category', function($q) use ($cat) {
-					$q->where('id', $cat);
-				});
-			});
-		}
-
-		if(request('survey_search')) {
-
-			$searchTitle = trim(Request::input('survey_search'));
-			$titles = preg_split('/\s+/', $searchTitle, -1, PREG_SPLIT_NO_EMPTY);
-
-			$voxes->whereHas('translations', function ($query) use ($titles) {
-				foreach ($titles as $title) {
-					$query->where('title', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
-		        }
-			});
-		}
-
-		$voxList = $voxes->get();
-
-		$sort = request('sortable_items') ?? 'newest-desc';
-		$voxList = $voxList->sortByDesc(function ($voxlist) use ($sort) {
-			$sort_name = explode('-', $sort)[0];
-			$sort_type = explode('-', $sort)[1];
-
-			if($sort_name == 'newest') {
-
-				if($sort_type == 'desc') {
-
-		            if(!empty($voxlist->featured)) {
-		                return 100000 - $voxlist->sort_order;
-		            } else {
-		                return 10000 - $voxlist->sort_order;
-		            }
-				} else {
-					if(!empty($voxlist->featured)) {
-		                return 100000 + $voxlist->sort_order;
-		            } else {
-		                return 10000 + $voxlist->sort_order;
-		            }
-				}
-			} else if($sort_name == 'popular') {
-
-				if($sort_type == 'desc') {
-
-		            if(!empty($voxlist->featured)) {
-		                return 100000 + $voxlist->rewardsCount();
-		            } else {
-		                return 10000 + $voxlist->rewardsCount();
-		            }
-				} else {
-					if(!empty($voxlist->featured)) {
-		                return 100000 - $voxlist->rewardsCount();
-		            } else {
-		                return 10000 - $voxlist->rewardsCount();
-		            }
-				}
-			} else if($sort_name == 'reward') {
-
-				if($sort_type == 'desc') {
-
-		            if(!empty($voxlist->featured)) {
-		                return 10000000000 + $voxlist->getRewardTotal();
-		            } else {
-		                return 10 + $voxlist->getRewardTotal();
-		            }
-				} else {
-					if(!empty($voxlist->featured)) {
-		                return 10000000000 - $voxlist->getRewardTotal();
-		            } else {
-		                return 10 - $voxlist->getRewardTotal();
-		            }
-				}
-			} else if($sort_name == 'duration') {
-
-				$duration = !empty($voxlist->manually_calc_reward) && !empty($voxlist->dcn_questions_count) ? ceil( $voxlist->dcn_questions_count/6) : ceil( $voxlist->questionsCount()/6);
-
-				if($sort_type == 'desc') {
-
-		            if(!empty($voxlist->featured)) {
-		                return 100000 + $duration;
-		            } else {
-		                return 10000 + $duration;
-		            }
-				} else {
-					if(!empty($voxlist->featured)) {
-		                return 100000 - $duration;
-		            } else {
-		                return 10000 - $duration;
-		            }
-				}
-			}
-        });
-
-        $get = request()->query();
-        unset($get['page']);
-        unset($get['submit']);
-
-		if ($user) {
-			$voxList = $user->notRestrictedVoxesList($voxList);
-			$voxList = $this->paginate($voxList, 6, request('slice') ?? 1 )->appends($get);
-		} else {
-			$voxList = $this->paginate($voxList, 6, request('slice') ?? 1)->withPath(App::getLocale().'/paid-dental-surveys/')->appends($get);
-		}
-
-		return $voxList;
+		return ServicesVox::getVoxList($this->user, $this->admin);
 	}
-
-    private function paginate($items, $perPage, $page, $options = []) {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $pageItems = $perPage;
-        $user = Auth::guard('api')->user() ? Auth::guard('api')->user() : $this->user;
-        if(!empty($user) && $user->is_dentist && $page == 1) {
-        	$pageItems = $pageItems - 1;
-        }
-        return new LengthAwarePaginator($items->forPage($page, $pageItems), $items->count(), $pageItems, $page, $options);
-    }
 
     /**
      * Home page view
@@ -201,7 +60,7 @@ class IndexController extends FrontController {
 
 		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
 
-		$voxList = $this->getVoxList();
+		$voxList = ServicesVox::getVoxList($this->user, $this->admin);
 
 		$all_taken = false;
 		$latest_blog_posts = null;
@@ -209,7 +68,7 @@ class IndexController extends FrontController {
 
 			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
 			$untaken_voxes = $untaken_voxes->where('type', 'normal')->count();
-			if($untaken_voxes == count($taken)) {
+			if($untaken_voxes <= count($taken)) {
 				$all_taken = true;
 				$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
 
@@ -273,7 +132,7 @@ class IndexController extends FrontController {
      * Home page load more voxes
      */
 	public function getVoxes() {
-		$voxList = $this->getVoxList((request('slice') * 6) );
+		$voxList = ServicesVox::getVoxList($this->user, $this->admin);
 
 		if($voxList->count()) {
 			return $this->ShowVoxView('template-parts.home-voxes', array(
@@ -426,69 +285,7 @@ class IndexController extends FrontController {
      */
 	public function request_survey($locale=null) {
 
-		if(!empty($this->user) && $this->user->is_dentist) {
-
-			$validator = Validator::make(Request::all(), [
-                'title' => array('required', 'min:6'),
-                'target' => array('required', 'in:worldwide,specific'),
-                'target-countries' => array('required_if:target,==,specific'),
-                'other-specifics' => array('required'),
-                'topics' => array('required'),
-            ]);
-
-            if ($validator->fails()) {
-
-                $msg = $validator->getMessageBag()->toArray();
-                $ret = array(
-                    'success' => false,
-                    'messages' => array()
-                );
-
-                foreach ($msg as $field => $errors) {
-                    $ret['messages'][$field] = implode(', ', $errors);
-                }
-
-                return Response::json( $ret );
-            } else {
-
-            	$target_countries = [];
-				foreach (request('target-countries') as $v) {
-					$target_countries[] = Country::find($v)->name;
-				}
-      
-            	$mtext = 'New survey request from '.$this->user->getNames().'
-	                
-		        Link to CMS: '.url("/cms/users/users/edit/".$this->user->id).'
-		        Survey title: '.request('title').'
-		        Survey target group location/s: '.request('target');
-
-		        if (request('target') == 'specific') {
-		        	$mtext .= '
-		        Survey target group countries: '.implode(',', $target_countries);
-		        }
-		        
-		        $mtext .= '
-		        Other specifics of survey target group: '.request('other-specifics').'
-		        Survey topics and the questions: '.request('topics');
-
-		        Mail::raw($mtext, function ($message) {
-
-		            $sender = config('mail.from.address-vox');
-		            $sender_name = config('mail.from.name-vox');
-
-		            $message->from($sender, $sender_name);
-		            $message->to( 'dentavox@dentacoin.com' );
-		            $message->to( 'donika.kraeva@dentacoin.com' );
-		            $message->replyTo($this->user->email, $this->user->getNames());
-		            $message->subject('Survey Request');
-		        });
-
-                return Response::json( [
-                    'success' => true,
-                ] );
-
-            }
-		}
+		return ServicesVox::requestSurvey($this->user, false);
 	}
 
 	/**
@@ -540,76 +337,7 @@ Survey topics and the questions: '.request('topics');
      */
 	public function recommend($locale=null) {
 
-		if(!empty($this->user)) {
-
-			$validator = Validator::make(Request::all(), [
-                'scale' => array('required'),
-            ]);
-
-            if ($validator->fails()) {
-
-                $msg = $validator->getMessageBag()->toArray();
-                $ret = array(
-                    'success' => false,
-                    'messages' => array()
-                );
-
-                foreach ($msg as $field => $errors) {
-                    $ret['messages'][$field] = implode(', ', $errors);
-                }
-
-                return Response::json( $ret );
-            } else {
-
-            	if (session('recommendation')) {
-            		$new_recommendation = Recommendation::find(session('recommendation'));
-
-                } else {
-                	$new_recommendation = new Recommendation;
-                	$new_recommendation->save();
-                    session([
-                        'recommendation' => $new_recommendation->id
-                    ]);
-                }
-        		
-        		$new_recommendation->user_id = $this->user->id;
-        		$new_recommendation->scale = Request::input('scale');
-        		$new_recommendation->save();
-
-            	if (intval(Request::input('scale')) > 3) {
-            		$this->user->fb_recommendation = false;
-            		$this->user->save();
-
-            		return Response::json( [
-	                    'success' => true,
-	                    'recommend' => true,
-	                    'description' => false,
-	                ] );
-            	}
-
-            	if (intval(Request::input('scale')) <= 3) {
-            		$this->user->fb_recommendation = true;
-            		$this->user->save();
-            	}
-
-            	if (!empty(Request::input('description'))) {
-            		$new_recommendation->description = Request::input('description');
-            		$new_recommendation->save();
-
-            		return Response::json( [
-	                    'success' => true,
-		                'recommend' => false,
-		                'description' => true,
-	                ] );
-            	}
-
-                return Response::json( [
-                    'success' => true,
-	                'recommend' => false,
-		            'description' => false,
-                ] );
-            }
-		}
+		return ServicesVox::recommendDentavox($this->user, false);
 	}
 
 	/**

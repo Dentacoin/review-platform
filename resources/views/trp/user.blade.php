@@ -1283,7 +1283,7 @@
 								    		<div>
 								    			{!! nl2br(trans('trp.common.see-profile')) !!}
 								    		</div>
-								    		<div href="{{ $team->clinicTeam ? $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' : 'javascript:;' }}">
+								    		<div href="{{ $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' }}">
 								    			{!! nl2br(trans('trp.common.submit-review')) !!}
 								    		</div>
 								    	</div>

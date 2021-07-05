@@ -29,7 +29,7 @@
 						<div class="flex flex-center">
 							<div class="circle"></div>
 							<div class="rew">
-								<p class="bold">{{ number_format($user->getTotalBalance()) }} DCN</p>
+								<p class="bold">{{ number_format($user_total_balance) }} DCN</p>
 								<p>{{ trans('vox.page.home.levels.curently-redeemable') }}</p>
 							</div>
 						</div>

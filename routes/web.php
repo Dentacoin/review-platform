@@ -38,11 +38,13 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('translations/{subpage?}/{source?}/{target?}', 					'TranslationsController@list');
 	Route::get('translations/{subpage?}/{source?}/{target?}/del/{delkey?}', 	'TranslationsController@delete');
 
-	Route::get('admins', 											'AdminsController@list');
-	Route::get('admins/delete/{id}',								'AdminsController@delete');
-	Route::get('admins/edit/{id}',									'AdminsController@edit');
-	Route::post('admins/edit/{id}',									'AdminsController@update');
-	Route::post('admins/add',										'AdminsController@add');
+	Route::get('admins/admins', 									'AdminsController@list');
+	Route::get('admins/admins/delete/{id}',							'AdminsController@delete');
+	Route::get('admins/admins/edit/{id}',							'AdminsController@edit');
+	Route::post('admins/admins/edit/{id}',							'AdminsController@update');
+	Route::post('admins/admins/add',								'AdminsController@add');
+	Route::any('admins/ips',										'AdminsController@listIps');
+	Route::get('admins/ips/delete/{id}',							'AdminsController@deleteIp');
 
 	Route::any('blacklist', 										'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 							'BlacklistController@delete');
@@ -190,6 +192,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/scales/edit/{id}', 				'VoxesController@edit_scale');
 	Route::any('vox/faq', 							'VoxesController@faq');
 	Route::any('vox/faq-ios', 						'VoxesController@faqiOS');
+	Route::any('vox/tests', 						'VoxesController@test');
 	Route::any('vox/badges', 						'VoxesController@badges');
 	Route::any('vox/badges/delete/{id}', 			'VoxesController@delbadge');
 	Route::any('vox/explorer/{vox_id?}/{question_id?}', 	'VoxesController@explorer');
@@ -282,9 +285,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::get('index-voxes', 						'IndexController@indexVoxes');
 	Route::get('users-stats', 						'IndexController@headerStats');
-	Route::post('get-next-question', 				'IndexController@getNextQuestion');
-	Route::post('survey-answer', 					'IndexController@surveyAnswer');
-	Route::post('start-over', 						'IndexController@startOver');
 	Route::get('is-dentacoin-down', 			    'IndexController@isDentacoinDown');
     Route::get('is-online', 			            'IndexController@isOnline');
 	Route::post('save-user-device',					'IndexController@saveUserDevice');
@@ -296,14 +296,18 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	
 	Route::get('all-stats', 						'StatsController@allStats');
 
-	Route::get('welcome-survey',					'IndexController@welcomeSurvey');
-	Route::post('welcome-survey-reward',			'IndexController@welcomeSurveyReward');
-	Route::get('do-vox/{slug}',						'IndexController@doVox');
-	Route::get('voxes-daily-limit',					'IndexController@dailyLimitReached');
+	Route::post('get-next-question', 				'VoxController@getNextQuestion');
+	Route::post('survey-answer', 					'VoxController@surveyAnswer');
+	Route::post('start-over', 						'VoxController@startOver');
+	Route::get('welcome-survey',					'VoxController@welcomeSurvey');
+	Route::post('welcome-survey-reward',			'VoxController@welcomeSurveyReward');
+	Route::get('do-vox/{slug}',						'VoxController@doVox');
+	Route::get('voxes-daily-limit',					'VoxController@dailyLimitReached');
+	Route::post('dentist-request-survey',			'VoxController@dentistRequestSurvey');
+	Route::any('recommend-dentavox',				'VoxController@recommendDentavox');
+	
 	Route::get('get-ban-time-left',					'IndexController@getBanTimeLeft');
 	Route::get('get-ban-info',						'IndexController@getBanInfo');
-	Route::post('dentist-request-survey',			'IndexController@dentistRequestSurvey');
-	Route::any('recommend-dentavox',				'IndexController@recommendDentavox');
 	Route::post('encrypt-user-token',				'IndexController@encryptUserToken');
 	Route::post('social-profile-link',				'IndexController@socialProfileLink');
 	Route::post('social-profile-image',				'IndexController@socialProfileImage');

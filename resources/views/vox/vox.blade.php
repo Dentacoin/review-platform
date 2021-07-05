@@ -36,7 +36,7 @@
 							</div>
 						@endif
 					</h1>
-					@if(!empty($answered))
+					@if($answered && !$welcome_vox)
 						<div class="answered-box">
 							<p>
 								{!! trans('vox.page.questionnaire.unfinished-survey.text') !!}
@@ -47,7 +47,7 @@
 							</a>
 						</div>
 					@endif
-					<p class="questionnaire-description tac" {!! !empty($answered) && count($answered)>1 ? 'style="display: none;"' : '' !!} >
+					<p class="questionnaire-description tac" {!! $answered>1 ? 'style="display: none;"' : '' !!} >
 						{{ $vox->description }}
 					</p>
 
@@ -133,12 +133,12 @@
 							</h3>
 							@if($user->platform == 'external')
 								<p>
-									You’ve just earned <span class="coins-test"> {{ $vox->getRewardTotal() }}</span> DCN!
+									You’ve just earned <span class="coins-test"></span> DCN!
 								</p>
 							@else
 								<p>
 									{!! nl2br(trans('vox.page.questionnaire.well-done-content', [
-										'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
+										'amount' => '<span class="coins-test"></span>',
 										'link' => '<a href="https://account.dentacoin.com/?platform=dentavox">',
 										'endlink' => '</a>',
 									])) !!}

@@ -336,7 +336,7 @@ class FrontController extends BaseController {
                 Cookie::queue(Cookie::forget('first-login-recommendation'));
             }
 
-            if(!empty($this->user) && count($this->user->filledVoxes()) >= 5 && empty($this->user->first_login_recommendation) && !empty(Cookie::get('marketing_cookies')) && empty(Cookie::get('first-login-recommendation')) && (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com' )) {
+            if(!empty($this->user) && !empty(Cookie::get('marketing_cookies')) && empty(Cookie::get('first-login-recommendation')) && (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com' ) && empty($this->user->first_login_recommendation) && $this->user->filledVoxesCount() >= 5) {
                 Cookie::queue('first-login-recommendation', true, 1440, null, null, false, false);
                 $this->user->first_login_recommendation = true;
                 $this->user->save();
@@ -445,45 +445,60 @@ class FrontController extends BaseController {
 
         ///Daily Polls
 
-        $daily_poll = Poll::with('translations')->where('launched_at', date('Y-m-d') )->where('status', 'open')->first();
+        $daily_polls = Poll::with('translations')->where('launched_at', date('Y-m-d') )->whereIn('status', ['open', 'closed'])->get();
 
-        if(!empty($daily_poll)) {
+        if(!empty($daily_polls)) {
             
-            $restrictions = false;
+            $daily_poll = null;
 
-            if(!empty($this->user) && !empty($this->user->country_id)) {
-                $restrictions = $daily_poll->isPollRestricted($this->user->country_id);
-            } else {
-
-                $country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
-                $country_db = Country::where('code', 'like', $country_code)->first();
-
-                if (!empty($country_db)) {
-                    $restrictions =  $daily_poll->isPollRestricted($country_db->id);
+            foreach($daily_polls as $dp) {
+                if($dp->status == 'open') {
+                    $daily_poll = $dp;
+                } else {
+                    $params['closed_daily_poll'] = $dp;
                 }
             }
 
-            if($restrictions) {
-                $daily_poll = null;
-            }
-        }
+            if(!empty($daily_poll)) {
+                
+                $restrictions = false;
 
-        if (!empty($daily_poll)) {
-            $params['daily_poll'] = $daily_poll;
+                if(!empty($this->user) && !empty($this->user->country_id)) {
+                    $restrictions = $daily_poll->isPollRestricted($this->user->country_id);
+                } else {
 
-            if(!empty($this->user)) {
-                $taken_daily_poll = PollAnswer::where('poll_id', $daily_poll->id)->where('user_id', $this->user->id)->first();
+                    $country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
+                    $country_db = Country::where('code', 'like', $country_code)->first();
 
-                if ($taken_daily_poll) {
-                    $params['taken_daily_poll'] = true;
+                    if (!empty($country_db)) {
+                        $restrictions =  $daily_poll->isPollRestricted($country_db->id);
+                    }
+                }
+
+                if($restrictions) {
+                    $daily_poll = null;
                 }
             }
-        }
 
-        $closed_daily_poll = Poll::with('translations')->where('launched_at', date('Y-m-d') )->where('status', 'closed')->first();
+            if (!empty($daily_poll)) {
+                $params['daily_poll'] = $daily_poll;
+                
+                $slist = VoxScale::get();
+                $poll_scales = [];
+                foreach ($slist as $sitem) {
+                    $poll_scales[$sitem->id] = $sitem;
+                }
 
-        if (!empty($closed_daily_poll)) {
-            $params['closed_daily_poll'] = $closed_daily_poll;
+                $params['poll_scales'] = $poll_scales;
+
+                if(!empty($this->user)) {
+                    $taken_daily_poll = PollAnswer::where('poll_id', $daily_poll->id)->where('user_id', $this->user->id)->first();
+
+                    if ($taken_daily_poll) {
+                        $params['taken_daily_poll'] = true;
+                    }
+                }
+            }
         }
 
         $params['daily_poll_reward'] = Reward::getReward('daily_polls');
@@ -492,15 +507,13 @@ class FrontController extends BaseController {
             $params['session_polls'] = true;
         }
 
-        $slist = VoxScale::get();
-        $poll_scales = [];
-        foreach ($slist as $sitem) {
-            $poll_scales[$sitem->id] = $sitem;
-        }
-
-        $params['poll_scales'] = $poll_scales;
-
         $params['dark_mode'] = !empty($this->user) && $this->user->dark_mode ? true : false;
+
+        if(!empty($this->user) && !Request::isMethod('post')) {
+            $params['user_total_balance'] = $this->user->getTotalBalance();
+        } else {
+            $params['user_total_balance'] = 0;
+        }
 
         if(!isset($params['xframe'])) {
             return response()->view('vox.'.$page, $params, $statusCode ? $statusCode : 200)->header('X-Frame-Options', 'DENY');
@@ -626,6 +639,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '20210629';
+        $params['cache_version'] = '20210705';
     }
 }

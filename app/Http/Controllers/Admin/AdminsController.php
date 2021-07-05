@@ -4,15 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request as Requestt;
+
+use App\Models\AdminIp;
 use App\Models\Admin;
 
 use Validator;
+use Request;
 use Auth;
 
 class AdminsController extends AdminController {
 
-    public function __construct(Request $request) {
+    public function __construct(Requestt $request) {
         parent::__construct($request);
         $this->langslist = ['' => '-'];
         foreach(config('langs') as $k=> $v) {
@@ -63,7 +66,7 @@ class AdminsController extends AdminController {
         ]);
 
         if ($validator->fails()) {
-            return redirect('cms/admins')
+            return redirect('cms/admins/admins')
             ->withInput()
             ->withErrors($validator);
         } else {
@@ -77,7 +80,7 @@ class AdminsController extends AdminController {
             $newadmin->save();
 
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.added') );
-            return redirect('cms/admins');
+            return redirect('cms/admins/admins');
         }
     }
 
@@ -91,7 +94,7 @@ class AdminsController extends AdminController {
         Admin::destroy( $id );
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
-        return redirect('cms/admins');
+        return redirect('cms/admins/admins');
     }
 
     public function edit( $id ) {
@@ -112,7 +115,7 @@ class AdminsController extends AdminController {
                 'domainlist' => $this->domainlist,
             ));
         } else {
-            return redirect('cms/admins');
+            return redirect('cms/admins/admins');
         }
     }
 
@@ -132,7 +135,7 @@ class AdminsController extends AdminController {
             ]);
 
             if ($validator->fails()) {
-                return redirect('cms/admins/edit/'.$item->id)
+                return redirect('cms/admins/admins/edit/'.$item->id)
                 ->withInput()
                 ->withErrors($validator);
             } else {
@@ -151,10 +154,60 @@ class AdminsController extends AdminController {
                 $item->save();
 
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated') );
-                return redirect('cms/admins');
+                return redirect('cms/admins/admins');
             }
         } else {
-            return redirect('cms/admins');
+            return redirect('cms/admins/admins');
         }
+    }
+
+    public function listIps() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        if(Request::isMethod('post')) {
+
+            $validator = Validator::make($this->request->all(), [
+                'ip' => array('required'),
+            ]);
+
+            if ($validator->fails()) {
+                return redirect('cms/admins/ips')
+                ->withInput()
+                ->withErrors($validator);
+            } else {
+                
+                $new_whitelist = new AdminIp;
+                $new_whitelist->ip = $this->request->input('ip');
+                $new_whitelist->comment = $this->request->input('comment');
+                $new_whitelist->save();
+
+                $this->request->session()->flash('success-message', 'IP added' );
+                return redirect('cms/admins/ips');
+            }
+
+        }
+
+        $items = AdminIp::get();
+
+        return $this->showView('admin-ips', array(
+            'items' => $items,
+        ));
+    }
+
+    public function deleteIp( $id ) {
+
+        if( Auth::guard('admin')->user()->role!='admin') {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        AdminIp::destroy( $id );
+
+        $this->request->session()->flash('success-message', 'IP deleted' );
+        return redirect('cms/admins/ips');
     }
 }

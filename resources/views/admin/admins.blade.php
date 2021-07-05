@@ -50,7 +50,7 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.add') }}</h4>
             </div>
             <div class="panel-body">
-                <form class="form-horizontal" id="admin-add" method="post" action="{{ url('cms/admins/add') }}">
+                <form class="form-horizontal" id="admin-add" method="post" action="{{ url('cms/admins/admins/add') }}">
                 	{!! csrf_field() !!}
                     
                     <div class="form-group">

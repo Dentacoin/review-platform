@@ -113,6 +113,7 @@ return [
                 'polls-monthly-description' => 'polls-monthly-description',
                 'polls-explorer' => 'polls-explorer',
                 'recommendations' => 'recommendations',
+                'tests' => 'tests',
             ),
             'js' => array(
                 'vox.js',
@@ -164,6 +165,10 @@ return [
         ),
         'admins' => array(
             'icon' => 'user-plus',
+            'subpages' => array(
+                'admins' => 'admins',
+                'ips' => 'ips',
+            ),
         ),
         'logs' => array(
             'icon' => 'bug',

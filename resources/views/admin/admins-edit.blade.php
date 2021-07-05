@@ -15,7 +15,7 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.edit.title') }}</h4>
             </div>
             <div class="panel-body">
-                {!! Form::open(array('url' => url('cms/admins/edit/'.$item->id), 'method' => 'post', 'class' => 'form-horizontal')) !!}
+                {!! Form::open(array('url' => url('cms/admins/admins/edit/'.$item->id), 'method' => 'post', 'class' => 'form-horizontal')) !!}
 
             		{!! csrf_field() !!}
 
