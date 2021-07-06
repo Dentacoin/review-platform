@@ -179,7 +179,7 @@ class VoxService {
                                             $trigger_question = $triggerId;
                                         }
 
-                                     //    if($next_question->id == 18655) {
+                                        // if($next_question->id == 19370) {
                                         //     echo '<br/>Q id: '.$triggerId;
                                         // }
 
@@ -239,16 +239,15 @@ class VoxService {
                                                 $givenAnswers[] = $user->$trigger_question;
                                             }
 
-                                      //       if($next_question->id == 18655) {
+                                            // if($next_question->id == 19370) {
                                             //     echo '<br/>allowedAnswers: '.json_encode($allowedAnswers);
                                             //     echo '<br/>givenAnswers: '.json_encode($givenAnswers);
                                             // }
 
                                             // echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($allowedAnswers, true).' / Answer: '.var_export($givenAnswers, true).' / Inverted logic: '.($invert_trigger_logic ? 'da' : 'ne').'<br/>';
 
-                                            $int = 0;
                                             foreach ($givenAnswers as $ga) {
-                                                $int++;
+                                                $int = $ga + rand(74575,998858);
                                                 
                                                 if(str_contains($ga,',') !== false) {
                                                     $given_answers_array = explode(',', $ga);
@@ -312,7 +311,7 @@ class VoxService {
                                                 }
                                             }
 
-                                      //       if($next_question->id == 18655) {
+                                            // if($next_question->id == 19370) {
                                             //     echo '<br/>Q id - trugger success: '.json_encode($triggerSuccess);
                                             // }
                                         }
@@ -320,7 +319,7 @@ class VoxService {
 
 
 
-                                    // if($next_question->id == 18655) {
+                                    // if($next_question->id == 19370) {
                                     //  dd($triggerSuccess);
                                     // }
 
@@ -447,6 +446,16 @@ class VoxService {
                         ]);
                     }
 
+                    $excluded_answers = [];
+                    if($array['question'] && !empty($array['question']->excluded_answers)) {
+                        foreach($array['question']->excluded_answers as $k => $excluded_answers_array) {
+                            foreach($excluded_answers_array as $excluded_answ) {
+                                $excluded_answers[$excluded_answ] = $k+1;
+                            }
+                        }
+                    }
+
+                    $array['excluded_answers'] = $excluded_answers;
                     $array['cross_checks'] = $cross_checks;
                     $array['cross_checks_references'] = $cross_checks_references;
                     $array['scales'] = session('scales');
@@ -1061,7 +1070,7 @@ class VoxService {
         $cross_checks = $crossCheckParams['cross_checks'];
         $cross_checks_references = $crossCheckParams['cross_checks_references'];
 
-        $list = VoxAnswer::select('vox_id', 'question_id', 'user_id', 'answer')
+        $list = VoxAnswer::select('vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
         ->where('vox_id', $vox->id)
         ->with('question')
         ->where('user_id', $user->id)

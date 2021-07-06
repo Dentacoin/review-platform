@@ -44,6 +44,7 @@
 	</div>
 @elseif(!empty($details_question_id))
 	<div class="question-group question-group-details question-group-{{ $details_question_id }} single-choice user-detail-question" data-id="{{ $details_question_id }}" demogr-id="{{ $details_question_id }}" custom-type="{{ $details_question_id }}">
+
 		<div class="question">
 			{!! nl2br($details_question['label']) !!}
 		</div>
@@ -97,35 +98,46 @@
 		@php($isInColumns = (!$question->allAnswersHaveImages() && count($questionAnswers) >= 8))
 
 		<div class="answers {!! $isInColumns ? 'in-columns' : '' !!} {{ $question->allAnswersHaveImages() ? 'question-pictures' : '' }}">
+
 			@if($isInColumns)
 				<div class="answers-column"> 
 			@endif
+
 			@foreach( $questionAnswers as $k => $answer)
 				@if(empty($answers_shown) || (!empty($answers_shown) && in_array($loop->iteration, $answers_shown)))
-					<div class="checkbox {!! mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}">
-						<label class="answer-checkbox no-mobile-tooltips {{ !empty($question->hasAnswerTooltip($answer, $question)) ? 'tooltip-text' : '' }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!}
-						{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $k).'"' : '' !!}>
+					<div class="checkbox {!! mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? 'disabler-label' : '' !!}">
+
+						@php($answerTooltip = $question->hasAnswerTooltip($answer, $question))
+						@php($answerImage = $question->getAnswerImageUrl(false, $k))
+
+						<label 
+							class="answer-checkbox no-mobile-tooltips {{ !empty($answerTooltip) ? 'tooltip-text' : '' }} {!! $excluded_answers && isset($excluded_answers[$k+1]) ? 'excluded-answer' : '' !!}" 
+							for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty($answerTooltip) ? 'text="'.$answerTooltip.'"' : '' !!}
+							{!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? 'tooltip-image="'.$answerImage.'"' : '' !!}
+							{!! $excluded_answers && isset($excluded_answers[$k+1]) ? 'excluded-group="'.$excluded_answers[$k+1].'"' : '' !!}
+						>
+
 							<i class="far fa-square"></i>
 							<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="checkbox" name="answer" class="answer{!! mb_substr($answer, 0, 1)=='!' ? ' disabler' : '' !!} input-checkbox" value="{{ $loop->index+1 }}">
 
-							@if($question->allAnswersHaveImages() && !empty($question->getAnswerImageUrl(false, $k)))
+							@if($question->allAnswersHaveImages() && !empty($answerImage))
 								<div class="answer-image" style="background-image: url({{ $question->getAnswerImageUrl(true, $k ) }})">
 									<img class="img-unchecked" src="{{ url('new-vox-img/non-selected-img-answer-icon.svg') }}">
 									<img class="img-checked" src="{{ url('new-vox-img/selected-img-answer-icon.svg') }}"/>
-									<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $k }}" href="{{ $question->getAnswerImageUrl(false, $k ) }}">
+									<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $k }}" href="{{ $answerImage }}">
 										<img src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
 									</a>
 								</div>
-
 							@endif
+
 							{!! nl2br(App\Models\VoxQuestion::handleAnswerTooltip( mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer))  !!}
 
-							@if(!empty($question->hasAnswerTooltip($answer, $question)))
-								<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
+							@if(!empty($answerTooltip))
+								<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}"><i class="fas fa-question-circle"></i>
 								</div>
 							@endif
 						</label>
-						{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? '<img src="'.$question->getAnswerImageUrl(false, $k).'" style="display: none !important;" />' : '' !!}
+						{!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? '<img src="'.$answerImage.'" style="display: none !important;" />' : '' !!}
 					</div>
 				@endif
 				@if($isInColumns && round(count($questionAnswers) / 2) == $loop->iteration )
@@ -167,29 +179,34 @@
 				<div class="flickity">
 					
 					@foreach(json_decode($question->answers, true) as $k => $answer)
+						@php($answerTooltip = $question->hasAnswerTooltip($answer, $question))
+						@php($answerImage = $question->getAnswerImageUrl(false, $k))
+						@php($questionAnswers = explode(',', $scales[$question->vox_scale_id]->answers))
+						@php($isInColumns = count($questionAnswers) >= 8)
+
 						<div class="answer-radios-group clearfix">
 							<div class="answer-question">
-								<h3 {!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $k ).'"' : '' !!}>{!!  nl2br( App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer)) !!}
+								<h3 {!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? 'tooltip-image="'.$answerImage.'"' : '' !!}>{!!  nl2br( App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer)) !!}
 								</h3>
-								{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? '<img src="'.$question->getAnswerImageUrl(false, $k).'" style="display: none !important;" />' : '' !!}
+								{!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? '<img src="'.$answerImage.'" style="display: none !important;" />' : '' !!}
 							</div>
-							<div class="buttons-list clearfix {!! count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8 ? 'in-columns' : '' !!}"> 
-								@if(count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8)
+							<div class="buttons-list clearfix {!! $isInColumns ? 'in-columns' : '' !!}"> 
+								@if($isInColumns)
 									<div class="answers-column"> 
 								@endif
-								@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)
-									<div class="tac answer-inner" style="width: {{ 100 / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
+								@foreach( $questionAnswers as $ans)
+									<div class="tac answer-inner" style="width: {{ 100 / count($questionAnswers) }}%;">
 										<label class="answer-radio" for="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}">
 											<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}" type="radio" name="answer-{{ $k }}" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
 											{{ $ans }}											
 										</label>
 									</div>
-									@if(count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8 && round(count(explode(',', $scales[$question->vox_scale_id]->answers)) / 2) == $loop->iteration )
+									@if($isInColumns && round(count($questionAnswers) / 2) == $loop->iteration )
 										</div> 
 										<div class="answers-column"> 
 									@endif
 								@endforeach
-								@if(count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8)
+								@if($isInColumns)
 									</div> 
 								@endif
 							</div> 
@@ -288,8 +305,11 @@
 
 		<div class="answers answers-draggable">
 			@foreach($questionAnswers as $key => $answer)
-				<label class="answer-rank no-mobile-tooltips" data-num="{{ $loop->iteration }}" rank-order="{{ $loop->iteration }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}"  {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!} 
-				{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $key ).'"' : '' !!}>
+				@php($answerTooltip = $question->hasAnswerTooltip($answer, $question))
+				@php($answerImage = $question->getAnswerImageUrl(false, $key))
+
+				<label class="answer-rank no-mobile-tooltips" data-num="{{ $loop->iteration }}" rank-order="{{ $loop->iteration }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}"  {!! !empty($answerTooltip) ? 'text="'.$answerTooltip.'"' : '' !!} 
+				{!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? 'tooltip-image="'.$answerImage.'"' : '' !!}>
 					<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
 					<img src="{{ url('new-vox-img/sortable-squares.png') }}">
 					<select name="rank-order" class="rank-order">
@@ -303,11 +323,11 @@
 						{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
 					</div>
 
-					@if(!empty($question->hasAnswerTooltip($answer, $question)))
-						<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
+					@if(!empty($answerTooltip))
+						<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}"><i class="fas fa-question-circle"></i>
 						</div>
 					@endif
-					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? '<img src="'.$question->getAnswerImageUrl(false, $key).'" style="display: none !important;" />' : '' !!}
+					{!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? '<img src="'.$answerImage.'" style="display: none !important;" />' : '' !!}
 				</label>
 			@endforeach
 		</div>
@@ -359,14 +379,18 @@
 			@endif
 			@foreach($questionAnswers as $key => $answer)
 				@if(empty($answers_shown) || (!empty($answers_shown) && in_array($loop->iteration, $answers_shown)))
-					<label class="answer answer no-mobile-tooltips {!! mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}" data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}"  {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!} 
-					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $key ).'"' : '' !!}>
+
+					@php($answerTooltip = $question->hasAnswerTooltip($answer, $question))
+					@php($answerImage = $question->getAnswerImageUrl(false, $key))
+
+					<label class="answer answer no-mobile-tooltips {!! mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}" data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}"  {!! !empty($answerTooltip) ? 'text="'.$answerTooltip.'"' : '' !!} 
+					{!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? 'tooltip-image="'.$answerImage.'"' : '' !!}>
 						<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
 
-						@if($question->allAnswersHaveImages() && !empty($question->getAnswerImageUrl(false, $key)))
+						@if($question->allAnswersHaveImages() && !empty($answerImage))
 							<div class="answer-image" style="background-image: url({{ $question->getAnswerImageUrl(true, $key) }})">
 
-								<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $key }}" href="{{ $question->getAnswerImageUrl(false, $key) }}">
+								<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $key }}" href="{{ $answerImage }}">
 									<img src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
 								</a>
 							</div>
@@ -374,11 +398,11 @@
 
 						{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
 
-						@if(!empty($question->hasAnswerTooltip($answer, $question)))
-							<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
+						@if(!empty($answerTooltip))
+							<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}"><i class="fas fa-question-circle"></i>
 							</div>
 						@endif
-						{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? '<img src="'.$question->getAnswerImageUrl(false, $key).'" style="display: none !important;" />' : '' !!}
+						{!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? '<img src="'.$answerImage.'" style="display: none !important;" />' : '' !!}
 					</label>
 				@endif
 				@if($isInColumns && round(count($questionAnswers) / 2) == $loop->iteration )

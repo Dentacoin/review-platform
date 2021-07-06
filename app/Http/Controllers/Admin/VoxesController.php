@@ -863,6 +863,15 @@ class VoxesController extends AdminController {
                 }
             }
 
+            $excluded_answers = [];
+            if(!empty($question->excluded_answers)) {
+                foreach($question->excluded_answers as $excluded_answers_array) {
+                    foreach($excluded_answers_array as $excluded_answ) {
+                        $excluded_answers[] = $excluded_answ;
+                    }
+                }
+            }
+
             return $this->showView('voxes-form-question', array(
                 'error' => $error,
                 'error_arr' => $error_arr,
@@ -877,6 +886,7 @@ class VoxesController extends AdminController {
                 'trigger_valid_answers' => $trigger_valid_answers,
                 'triggers_ids' => $triggers_ids,
                 'trigger_type' => $trigger_type,
+                'excluded_answers' => $excluded_answers,
             ));
 
         } else {
@@ -1162,6 +1172,13 @@ class VoxesController extends AdminController {
             $question->number_limit = implode(':', $array);
         } else {
             $question->number_limit = '';
+        }
+
+        //check if empty array
+        if($data['exclude_answers_checked'] && $data['excluded-answers']) {
+            $question->excluded_answers = json_decode($data['excluded-answers'], true);
+        } else {
+            $question->excluded_answers = null;
         }
         
         $question->save();

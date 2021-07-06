@@ -57,7 +57,6 @@ $(document).ready(function(){
 	}
 
 
-
 	//
 	//Others
 	//
@@ -685,7 +684,50 @@ $(document).ready(function(){
 				console.log('error');
 			}
 		});
-    });
+    });	
+
+
+	var excludeAnswersCheckbox = function() {
+
+		if($('#exclude_answers').is(":checked")) {
+			$('.answer-groups-wrapper').show();
+		} else {
+			$('.answer-groups-wrapper').hide();
+		}
+	}
+
+	excludeAnswersCheckbox();
+	$('#exclude_answers').change(excludeAnswersCheckbox);
+	
+	if($('#exclude_answers').length) {
+		$( "ul.answer-group" ).sortable({
+			connectWith: "ul.answer-group",
+			update: function( event, ui ) { 
+				console.log('update');
+				setTimeout( function(){
+					
+					var groups = [];
+					$( "ul.answer-group:not(.with-answers):visible" ).each( function() {
+						if($(this).children().length) {
+							var answers = [];
+							$(this).children().each( function() {
+								answers.push($(this).attr('answer'));
+							});
+							groups.push(answers);
+						}
+					})
+
+					console.log(groups);
+					$('#excluded-answers').val(JSON.stringify(groups));
+				}, 0);
+			},
+		}).disableSelection();
+	}
+
+	$('.add-answer-group').click( function() {
+		var group = $(this).closest('.groups').find('.answer-group:hidden').first().show();
+	});
+	
 
     
 });

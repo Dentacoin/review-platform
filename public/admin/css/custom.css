@@ -705,6 +705,16 @@ input[type="number"]::-webkit-inner-spin-button {
     box-shadow: none !important;
 }
 
+.answer-group {
+    list-style: none;
+    padding: 0px;
+    border: 1px solid black;
+    padding: 6px;
+}
+
+.answer-group li {
+    margin-bottom: 2px;
+}
 
 @media screen and (max-width: 767px) {
     .col-60 {

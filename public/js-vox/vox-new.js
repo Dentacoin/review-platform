@@ -178,6 +178,28 @@ $(document).ready(function(){
 
         $('.input-checkbox').change( function() {
             $(this).closest('label').toggleClass('active');
+
+            if( $(this).is(':checked') ) {
+                if($(this).closest('label').hasClass('excluded-answer')) {
+                    var group = $(this).closest('label').attr('excluded-group');
+                    $('.excluded-answer').each( function() {
+                        if($(this).attr('excluded-group') != group) {
+                            $(this).removeClass('active').addClass('disabled');
+                            $(this).find('input').prop('checked', false).prop('disabled', 'disabled');
+                        }
+                    });
+                }
+            } else {
+                if($(this).closest('label').hasClass('excluded-answer')) {
+                    var group = $(this).closest('label').attr('excluded-group');
+                    $('.excluded-answer').each( function() {
+                        if($(this).attr('excluded-group') != group) {
+                            $(this).removeClass('disabled');
+                            $(this).find('input').prop('disabled', false);
+                        }
+                    });
+                }
+            }
         });
 
         tooltipsFunction();

@@ -884,6 +884,35 @@ $main-color: #38ace5;
 					border-color: #f33651;
 				}
 			}
+			
+			.answer-checkbox {
+				&.disabled {
+					background-color: #ecebeb;
+					border-radius: 11px;
+					color: gray;
+					cursor: auto;
+
+					&:hover {
+						background-color: #ecebeb;
+						border-radius: 11px;
+						color: gray;
+						cursor: auto;
+						border-color: #bdbdbd;
+
+						i {
+							color: #bdbdbd;
+
+							&:before {
+								content: "\f0c8";
+							}
+						}
+
+						.tooltip-text {
+							color: #41afff;
+						}
+					}
+				}
+			}
 
 			.answer-radio,
 			.answer-checkbox,

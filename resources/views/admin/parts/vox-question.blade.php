@@ -206,7 +206,58 @@
                         </div>
                     @endif
 
-                    <div class="form-group clearfix">
+                    @if(false && !empty($question) && $question->type == 'multiple_choice' && !empty($question->{'answers:'.$code}) )
+                        <div class="form-group clearfix">
+                            <label class="col-md-2 control-label" for="exclude_answers">Exclude answers</label>
+                            <input type="checkbox" name="exclude_answers_checked" value="1" id="exclude_answers" style="vertical-align: sub; margin-top: 10px;" {!! $question->excluded_answers ? 'checked="checked"' : '' !!} />
+                        </div>
+
+                        <div class="answer-groups-wrapper" {!! empty($question->excluded_answers) ? 'style="display:none;"' : '' !!}>
+                            <div class="form-group">
+                                <div class="col-md-2"></div>
+                                <label class="col-md-4 control-label" style="text-align: left; padding-left: 0px;">Answers</label>
+                                <label class="col-md-4 control-label" style="text-align: left;">Groups</label>
+                            </div>
+
+                            <div class="form-group clearfix">
+                                <div class="col-md-2"></div>
+                                <ul class="answer-group with-answers col-md-4">
+                                    @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
+                                        @if(empty($question->excluded_answers) || (!in_array($key+1, $excluded_answers))) 
+                                            <li class="answer-from-group" answer="{{ $key+1 }}">{{ $ans }}</li>
+                                        @endif
+                                    @endforeach
+                                </ul>
+                                <div class="answer-groups col-md-4">
+                                    <div class="groups">
+                                        @for($i = 1; $i <= 10; $i++)
+                                            <ul class="answer-group" group="{{ $i }}" {!! $question->excluded_answers ? ($i > count($question->excluded_answers) ? 'style="display:none;"' : '') : ($i>2 ? 'style="display:none;"' : '') !!}>
+                                                Group {{ $i }}
+
+                                                @if(!empty($question->excluded_answers))
+                                                    @foreach($question->excluded_answers as $k => $excluded_answers_array)
+                                                        @if($k+1 == $i)
+                                                            @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
+                                                                @if(in_array($key+1, $excluded_answers_array))
+                                                                    <li class="answer-from-group" answer="{{ $key+1 }}">{{ $ans }}</li>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                        @endfor
+                                        <a href="javascript:;" class="btn btn-info add-answer-group">Add group</a>
+                                        <p style="font-size: 10px;">* 10 groups max</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="excluded-answers" value="{{ json_encode($question->excluded_answers) }}" id="excluded-answers"/>
+                        </div>
+                    @endif
+
+                    <div class="form-group clearfix" style="margin-top: 40px;">
                         <h3 class="col-md-1" style="margin-top: 0px;">Settings</h3>
                         @if(empty($question) || empty($question->question_trigger) )
                             <div class="form-group clearfix col-md-11">

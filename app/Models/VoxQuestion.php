@@ -56,6 +56,10 @@ class VoxQuestion extends Model {
         'image_in_question',
     ];
 
+    protected $casts = [
+        'excluded_answers' => 'array',
+    ];
+
     public $timestamps = false;
     
     public function vox() {

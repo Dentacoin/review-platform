@@ -697,6 +697,23 @@
             font-size: 15px; } }
         .questions .question-group .answers .answer-number.wrong {
           border-color: #f33651; }
+      .questions .question-group .answers .answer-checkbox.disabled {
+        background-color: #ecebeb;
+        border-radius: 11px;
+        color: gray;
+        cursor: auto; }
+        .questions .question-group .answers .answer-checkbox.disabled:hover {
+          background-color: #ecebeb;
+          border-radius: 11px;
+          color: gray;
+          cursor: auto;
+          border-color: #bdbdbd; }
+          .questions .question-group .answers .answer-checkbox.disabled:hover i {
+            color: #bdbdbd; }
+            .questions .question-group .answers .answer-checkbox.disabled:hover i:before {
+              content: "\f0c8"; }
+          .questions .question-group .answers .answer-checkbox.disabled:hover .tooltip-text {
+            color: #41afff; }
       @media screen and (min-width: 769px) {
         .questions .question-group .answers .answer-radio.active-label, .questions .question-group .answers .answer-radio:hover,
         .questions .question-group .answers .answer-checkbox.active-label,
