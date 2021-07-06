@@ -38,6 +38,7 @@ use App\Models\DentistClaim;
 use App\Models\UserStrength;
 use App\Models\WhitelistIp;
 use App\Models\UserHistory;
+use App\Models\UserBranch;
 use App\Models\UserAction;
 use App\Models\DcnCashout;
 use App\Models\UserLogin;
@@ -1457,6 +1458,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
+        if($this->is_dentist) {
+            UserBranch::where('clinic_id', $this->id)->orWhere('branch_clinic_id', $this->id)->delete();
+        }
+
         $user_invites = UserInvite::where(function($query) use ($id) {
             $query->where( 'user_id', $id)->orWhere('invited_id', $id);
         })->get();
@@ -1472,7 +1477,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $c->delete();
             }
         }
-
 
         if(!$this->is_dentist && $this->patient_status != 'deleted') {
             $user_history = new UserHistory;
