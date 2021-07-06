@@ -1213,11 +1213,13 @@
                             </thead>
                             <tbody>
                                 @foreach($item->branches as $branch)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ url('cms/users/users/edit/'.$branch->branch_clinic_id) }}">{{ $branch->branchClinic->name }}</a>
-                                        </td>
-                                    </tr>
+                                    @if($branch->branchClinic)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ url('cms/users/users/edit/'.$branch->branch_clinic_id) }}">{{ $branch->branchClinic->name }}</a>
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>
