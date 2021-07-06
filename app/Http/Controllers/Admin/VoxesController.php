@@ -1174,7 +1174,7 @@ class VoxesController extends AdminController {
             $question->number_limit = '';
         }
 
-        if($data['exclude_answers_checked'] && $data['excluded-answers'] && !empty(json_decode($data['excluded-answers'], true))) {
+        if(isset($data['exclude_answers_checked']) && isset($data['excluded-answers']) && !empty(json_decode($data['excluded-answers'], true))) {
             $question->excluded_answers = json_decode($data['excluded-answers'], true);
         } else {
             $question->excluded_answers = null;
