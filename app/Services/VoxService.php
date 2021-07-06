@@ -1045,9 +1045,7 @@ class VoxService {
             }
         }
 
-        $welcome_vox = '';
-        $welcome_vox_question_ids = [];
-
+        
         if($for_app) {
             $madeWelcomeTest = $user->madeTest(11);
         } else {
@@ -1056,13 +1054,13 @@ class VoxService {
                     'made-welcome-test' => $user->madeTest(11),
                 ]);
             }
-
+            
             $madeWelcomeTest = session('made-welcome-test');
         }
-
+        
+        $welcome_vox = '';
         if (!$madeWelcomeTest) {
             $welcome_vox = Vox::with('questions')->find(11);
-            $welcome_vox_question_ids = $welcome_vox->questions->pluck('id')->toArray();
         }
 
         $vox_questions = $vox->questions;
@@ -1461,7 +1459,6 @@ class VoxService {
 
             if($found) {
                 $valid = false;
-
                 $answer_count = in_array($type, ['multiple', 'rank', 'scale', 'single']) ? count($question->vox_scale_id && !empty(session('scales')[$question->vox_scale_id]) ? explode(',', session('scales')[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
 
                 if ($type == 'skip') {
@@ -1578,19 +1575,39 @@ class VoxService {
                         }
                     }
                     
+                    if(!empty($question->excluded_answers)) {
+
+                        $excluded_answers = [];
+                        foreach($question->excluded_answers as $k => $excluded_answers_array) {
+                            foreach($excluded_answers_array as $excluded_answ) {
+                                $excluded_answers[$excluded_answ] = $k+1;
+                            }
+                        }
+                        $group = null;
+                        foreach ($a as $k => $value) {
+                            if(isset($excluded_answers[$value])) {
+                                if(empty($group)) {
+                                    $group = $excluded_answers[$value];
+
+                                    // echo 'group: '.$group;
+                                }
+
+                                // echo 'group: '.$group.' != '.$excluded_answers[$value];
+                                if($group != $excluded_answers[$value]) {
+                                    $valid = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
                 } else if ($type == 'single') {
                     $a = intval($answ);
                     $valid = $a>=1 && $a<=$answer_count;
 
                 } else if ($type == 'number') {
-                    
-                    $cur_question_collection = $vox->questions->filter(function ($value, $key) use ($q) {
-                        return $value->id == $q;
-                    });
-
-                    $cur_question = $cur_question_collection->first(); //sort/filter
-                    $min_num = intval(explode(':',$cur_question->number_limit)[0]);
-                    $max_num = intval(explode(':',$cur_question->number_limit)[1]);
+                    $min_num = intval(explode(':', $question->number_limit)[0]);
+                    $max_num = intval(explode(':', $question->number_limit)[1]);
                     $a = intval($answ);
                     $valid = $a>=$min_num && $a<=$max_num;
                 }

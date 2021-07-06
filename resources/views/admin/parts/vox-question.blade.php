@@ -206,7 +206,7 @@
                         </div>
                     @endif
 
-                    @if(false && !empty($question) && $question->type == 'multiple_choice' && !empty($question->{'answers:'.$code}) )
+                    @if(!empty($question) && $question->type == 'multiple_choice' && !empty($question->{'answers:'.$code}) )
                         <div class="form-group clearfix">
                             <label class="col-md-2 control-label" for="exclude_answers">Exclude answers</label>
                             <input type="checkbox" name="exclude_answers_checked" value="1" id="exclude_answers" style="vertical-align: sub; margin-top: 10px;" {!! $question->excluded_answers ? 'checked="checked"' : '' !!} />
