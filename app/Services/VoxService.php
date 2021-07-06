@@ -447,7 +447,7 @@ class VoxService {
                     }
 
                     $excluded_answers = [];
-                    if($array['question'] && !empty($array['question']->excluded_answers)) {
+                    if(isset($array['question']) && !empty($array['question']->excluded_answers)) {
                         foreach($array['question']->excluded_answers as $k => $excluded_answers_array) {
                             foreach($excluded_answers_array as $excluded_answ) {
                                 $excluded_answers[$excluded_answ] = $k+1;
