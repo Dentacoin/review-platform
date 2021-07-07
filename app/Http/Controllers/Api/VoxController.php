@@ -7,12 +7,8 @@ use App\Http\Controllers\ApiController;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use DeviceDetector\DeviceDetector;
 
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Log;
-
 use App\Services\VoxService as ServicesVox;
 
-use App\Models\Recommendation;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\Country;
@@ -21,11 +17,8 @@ use App\Models\Vox;
 
 use Carbon\Carbon;
 
-use Validator;
 use Response;
-use Request;
 use Auth;
-use Mail;
 
 class VoxController extends ApiController {
 
@@ -180,7 +173,7 @@ class VoxController extends ApiController {
 				];
 			} else {
                 //all_taken
-				$taken = $user->filledVoxesCount();
+				$taken = $user->filledVoxes();
                 $untaken_voxes = $user->voxesTargeting();
                 $untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)->where('type', 'normal')->get();
 
