@@ -656,23 +656,33 @@
                             <div class="form-group">
                                 <label class="col-md-2 control-label">DCN Address</label>
                                 <div class="col-md-7">
-                                    @if($item->wallet_addresses->isNotEmpty())
-                                        @foreach($item->wallet_addresses as $wa)
-                                            <input type="text" name="dcn_address" class="form-control" value="{{ $wa->dcn_address }}" disabled="disabled"> <br/>
 
-                                            @if(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get()->isNotEmpty())
-
-                                                <p style="color: red;" class="col-md-12">⇧ User/s with this dcn address already exists:</p>
-                                                @foreach(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get() as $dw)
-                                                    @if(!empty(App\Models\User::withTrashed()->find($dw->user_id)))
-                                                        <p style="color: red;" class="col-md-12">{{ $loop->iteration }}. <a href="{{ url('cms/users/users/edit/'.$dw->user_id) }}">{{ App\Models\User::withTrashed()->find($dw->user_id)->name }}</a></p>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        @endforeach
+                                    @if($item->status == 'clinic_branch')
+                                        @if($item->wallet_addresses->isNotEmpty())
+                                            <input type="text" name="dcn_address" class="form-control" value="{{ $item->wallet_addresses->first()->dcn_address }}">
+                                        @else
+                                            <input type="text" name="dcn_address" class="form-control">
+                                        @endif
                                     @else
-                                        <input type="text" name="dcn_address" class="form-control" disabled="disabled">
+                                        @if($item->wallet_addresses->isNotEmpty())
+                                            @foreach($item->wallet_addresses as $wa)
+                                                <input type="text" name="dcn_address" class="form-control" value="{{ $wa->dcn_address }}" disabled="disabled"> <br/>
+
+                                                @if(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get()->isNotEmpty())
+
+                                                    <p style="color: red;" class="col-md-12">⇧ User/s with this dcn address already exists:</p>
+                                                    @foreach(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get() as $dw)
+                                                        @if(!empty(App\Models\User::withTrashed()->find($dw->user_id)))
+                                                            <p style="color: red;" class="col-md-12">{{ $loop->iteration }}. <a href="{{ url('cms/users/users/edit/'.$dw->user_id) }}">{{ App\Models\User::withTrashed()->find($dw->user_id)->name }}</a></p>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            <input type="text" name="dcn_address" class="form-control" disabled="disabled">
+                                        @endif
                                     @endif
+                                    
                                 </div>
                                 <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Allow withdraw</label>
                                 <div class="col-md-1" style="padding-left: 0px;">
