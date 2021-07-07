@@ -247,7 +247,7 @@ class VoxService {
                                             // echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($allowedAnswers, true).' / Answer: '.var_export($givenAnswers, true).' / Inverted logic: '.($invert_trigger_logic ? 'da' : 'ne').'<br/>';
 
                                             foreach ($givenAnswers as $ga) {
-                                                $int = $ga + rand(74575,998858);
+                                                $int = intval($ga) + rand(74575,998858);
                                                 
                                                 if(str_contains($ga,',') !== false) {
                                                     $given_answers_array = explode(',', $ga);
@@ -423,6 +423,16 @@ class VoxService {
                         $scales[$sitem->id] = $sitem;
                     }
 
+                    $excluded_answers = [];
+                    if(isset($array['question']) && !empty($array['question']['excluded_answers'])) {
+                        foreach($array['question']['excluded_answers'] as $k => $excluded_answers_array) {
+                            foreach($excluded_answers_array as $excluded_answ) {
+                                $excluded_answers[$excluded_answ] = $k+1;
+                            }
+                        }
+                    }
+
+                    $array['excluded_answers'] = $excluded_answers;
                     $array['cross_check'] = $cross_check;
                     $array['cross_check_answer'] = $cross_check_answer;
                     $array['cross_check_birthyear'] = $cross_check_birthyear;
