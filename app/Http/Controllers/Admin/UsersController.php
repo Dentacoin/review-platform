@@ -16,8 +16,8 @@ use App\Models\UserGuidedTour;
 use App\Models\DcnTransaction;
 use App\Models\AnonymousUser;
 use App\Models\VoxCrossCheck;
+use App\Models\WalletAddress;
 use App\Models\ReviewAnswer;
-use App\Models\UserCategory;
 use App\Models\UserHistory;
 use App\Models\VoxQuestion;
 use App\Models\UserInvite;
@@ -29,13 +29,11 @@ use App\Models\DcnReward;
 use App\Models\UserTeam;
 use App\Models\OldEmail;
 use App\Models\UserBan;
-use App\Models\UserAsk;
 use App\Models\OldSlug;
 use App\Models\Country;
 use App\Models\Review;
 use App\Models\Reward;
 use App\Models\Email;
-use App\Models\City;
 use App\Models\User;
 use App\Models\Vox;
 
@@ -1531,6 +1529,27 @@ class UsersController extends AdminController {
                     $user_history->save();
                 }
 
+                if($item->status == 'clinic_branch' && !empty($this->request->input('dcn_address'))) {
+
+                    if(mb_strlen($this->request->input('dcn_address'))!=42) {
+                        Request::session()->flash('error-message', 'Please enter a valid DCN address.');
+                        return redirect('cms/users/users/edit/'.$item->id);
+                    }
+        
+                    $existing_address = WalletAddress::where('user_id', $item->id)->first();
+        
+                    if (!empty($existing_address)) {
+                        $existing_address->dcn_address = $this->request->input('dcn_address');
+                        $existing_address->selected_wallet_address = 1;
+                        $existing_address->save();
+                    } else {
+                        $new_address = new WalletAddress;
+                        $new_address->user_id = $item->id;
+                        $new_address->dcn_address = $this->request->input('dcn_address');
+                        $new_address->selected_wallet_address = 1;
+                        $new_address->save();
+                    }
+                }
 
                 foreach ($this->fields as $key => $value) {
 
