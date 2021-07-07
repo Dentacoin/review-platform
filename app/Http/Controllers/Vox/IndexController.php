@@ -65,8 +65,7 @@ class IndexController extends FrontController {
 		$latest_blog_posts = null;
 
 		if(!empty($this->user)) {
-			// $untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
-			$untaken_voxes = $this->user->voxesTargeting();
+			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
 			$untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)->where('type', 'normal')->get();
 
 			if(!$this->user->notRestrictedVoxesList($untaken_voxes)->count()) {

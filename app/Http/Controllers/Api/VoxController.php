@@ -179,24 +179,20 @@ class VoxController extends ApiController {
 					'success' => false,
 				];
 			} else {
-
-				$all_taken = false;
+                //all_taken
 				$taken = $user->filledVoxesCount();
-				$untaken_voxes = $user->voxesTargeting();
-				$untaken_voxes = $untaken_voxes->where('type', 'normal')->count();
-				if($untaken_voxes <= $taken) {
-					$all_taken = true;
-				}
+                $untaken_voxes = $user->voxesTargeting();
+                $untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)->where('type', 'normal')->get();
 
-				if($all_taken) {
-					$ret = [
-						'success' => false,
-					];
-				} else {
-					$ret = [
-						'success' => true,
-					];
-				}
+                if(!$user->notRestrictedVoxesList($untaken_voxes)->count()) {
+                    $ret = [
+                        'success' => false,
+                    ];
+                } else {
+                    $ret = [
+                        'success' => true,
+                    ];
+                }
 			}
         }
 
