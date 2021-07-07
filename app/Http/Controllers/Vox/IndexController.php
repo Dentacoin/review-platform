@@ -60,13 +60,18 @@ class IndexController extends FrontController {
 
 		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
 		$voxList = ServicesVox::getVoxList($this->user, $this->admin);
-		
+
 		$all_taken = false;
 		$latest_blog_posts = null;
 
 		if(!empty($this->user)) {
-			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
+			// $untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
+			$untaken_voxes = $this->user->voxesTargeting();
 			$untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)->where('type', 'normal')->count();
+			if(!empty($this->admin)) {
+
+				dd($untaken_voxes);
+			}
 
 			if(empty($untaken_voxes)) {
 				$all_taken = true;
