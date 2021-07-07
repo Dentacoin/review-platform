@@ -69,15 +69,8 @@ class IndexController extends FrontController {
 			$untaken_voxes = $this->user->voxesTargeting();
 			$untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)->where('type', 'normal')->get();
 
-			$count_untaken = 0;
-			foreach($untaken_voxes as $uv) {
-				if(!$this->user->isVoxRestricted($uv)) {
-					$count_untaken++;
-				}
-			}
 			if(!empty($this->admin)) {
-
-				dd($count_untaken);
+				dd($this->user->notRestrictedVoxesList($untaken_voxes));
 			}
 
 			if(empty($untaken_voxes)) {
