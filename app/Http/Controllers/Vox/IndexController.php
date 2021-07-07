@@ -69,11 +69,7 @@ class IndexController extends FrontController {
 			$untaken_voxes = $this->user->voxesTargeting();
 			$untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)->where('type', 'normal')->get();
 
-			if(!empty($this->admin)) {
-				dd($this->user->notRestrictedVoxesList($untaken_voxes));
-			}
-
-			if(empty($untaken_voxes)) {
+			if(!$this->user->notRestrictedVoxesList($untaken_voxes)->count()) {
 				$all_taken = true;
 				$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
 
