@@ -59,16 +59,16 @@ class IndexController extends FrontController {
 		];
 
 		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
-
 		$voxList = ServicesVox::getVoxList($this->user, $this->admin);
-
+		
 		$all_taken = false;
 		$latest_blog_posts = null;
-		if(!empty($this->user)) {
 
+		if(!empty($this->user)) {
 			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
-			$untaken_voxes = $untaken_voxes->where('type', 'normal')->count();
-			if($untaken_voxes <= count($taken)) {
+			$untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)->where('type', 'normal')->count();
+
+			if(empty($untaken_voxes)) {
 				$all_taken = true;
 				$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
 
@@ -82,7 +82,6 @@ class IndexController extends FrontController {
 					$post_image_link = DB::connection('vox_wordpress_db')->table('posts')->where('id', $post_image_id)->first();
 
 					$lbp->img = $post_image_link->guid;
-
 				}
 			}
 		}
