@@ -6,18 +6,6 @@
 
 		<div class="container flex">
 
-			<div class="mobile-welcome-images">
-				<img class="mobile-bubble-effect" src="{{ url('new-vox-img/blue-circle.png') }}">
-				<img class="mobile-person-effect" src="{{ url('new-vox-img/welcome-test-person.png') }}">
-			</div>
-
-			<div class="finish-test">
-				<div class="mobile-welcome-images">
-					<img class="mobile-bubble-effect" src="{{ url('new-vox-img/blue-circle.png') }}">
-					<img class="mobile-person-effect" src="{{ url('new-vox-img/welcome-test-finish.png') }}">
-				</div>
-			</div>
-
 			<div class="flex-3">
 				<img class="image-left" src="{{ url('new-vox-img/dentavox-surveys-welcome-blinking-man.png') }}" alt="{{ trans('vox.welcome-survey.image.alt') }}">
 			</div>

@@ -3,17 +3,6 @@ var preloadImages;
 
 $(document).ready(function(){
 
-	if ($('.mobile-bubble-effect').length && $('.mobile-person-effect').length && window.innerWidth < 768) {
-        preloadImages([
-            $('.mobile-bubble-effect').attr('src'),
-            $('.mobile-person-effect').attr('src'),
-        ], function(){
-            $('.mobile-welcome-images img').each (function() {
-                $(this).addClass('effect-loaded');
-            });
-        });
-    }
-
     if(typeof(vox)!='undefined') {
         VoxTest.handleNextQuestion();        
     }
@@ -74,36 +63,12 @@ $(document).ready(function(){
                 $('.section-welcome').hide();
                 $('.section-welcome-done').show();
             } else {
-                if (window.innerWidth < 768) {
-                    if ($('.finish-test .mobile-bubble-effect').length && $('.finish-test .mobile-person-effect').length) {
-
-                        $('.finish-test').show();
-                        preloadImages([
-                            $('.finish-test .mobile-bubble-effect').attr('src'),
-                            $('.finish-test .mobile-person-effect').attr('src'),
-                        ], function(){
-                            $('.finish-test .mobile-welcome-images img').each (function() {
-                                $(this).addClass('effect-loaded');
-                            });
-                            
-                            if(dentacoin_down) {
-                                showPopup('failed-popup');
-                            } else {
-                                setTimeout( function() {
-                                    $.event.trigger({type: 'openPatientRegister'});
-                                }, 2000 );
-                            }
-                        });
-                    }
-
+                if(dentacoin_down) {
+                    showPopup('failed-popup');
                 } else {
-                    if(dentacoin_down) {
-                        showPopup('failed-popup');
-                    } else {
-                        setTimeout( function() {
-                            $.event.trigger({type: 'openPatientRegister'});
-                        }, 1000 );
-                    }
+                    setTimeout( function() {
+                        $.event.trigger({type: 'openPatientRegister'});
+                    }, 1000 );
                 }
             }
             // $("#first-test-done").modal({backdrop: 'static', keyboard: false});
