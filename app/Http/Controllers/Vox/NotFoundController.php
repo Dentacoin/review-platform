@@ -5,18 +5,6 @@ namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
 use App\Models\PageSeo;
-use App\Models\Country;
-use App\Models\City;
-use App\Models\User;
-
-use CArbon\Carbon;
-
-use Validator;
-use Response;
-use Request;
-use Cookie;
-use Mail;
-use App;
 
 class NotFoundController extends FrontController {
 	/**

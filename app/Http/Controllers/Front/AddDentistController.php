@@ -9,7 +9,6 @@ use App\Models\User;
 use Validator;
 use Response;
 use Request;
-use Mail;
 
 class AddDentistController extends FrontController {
     

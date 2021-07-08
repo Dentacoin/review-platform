@@ -2428,10 +2428,9 @@ class VoxService {
         ] );
     }
 
-    public static function getVoxList($user, $admin) {
+    public static function getVoxList($user, $admin, $taken) {
 
         if( $user ) {
-            $taken = $user->filledVoxes();
 
             $voxes = !empty($admin) ? User::getAllVoxes() : $user->voxesTargeting();
             if(request('filter_item')) {

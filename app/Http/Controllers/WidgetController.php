@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
-use App;
-use Request;
-use Route;
 
-use App\Models\User;
 use App\Models\Review;
+use App\Models\User;
 
-class WidgetController extends BaseController
-{
+use Route;
+use App;
+
+class WidgetController extends BaseController {
 
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
 

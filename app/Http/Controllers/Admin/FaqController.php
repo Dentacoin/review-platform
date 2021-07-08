@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use Illuminate\Support\Facades\Input;
-
 use Response;
 use Request;
-use Route;
 use Auth;
 
 class FaqController extends AdminController {

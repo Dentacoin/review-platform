@@ -7,7 +7,6 @@ use App\Models\UserInvite;
 
 use Carbon\Carbon;
 
-use Validator;
 use Request;
 use Auth;
 

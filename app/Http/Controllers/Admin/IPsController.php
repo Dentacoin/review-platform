@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use Illuminate\Support\Facades\Input;
-
 use App\Models\UserLogin;
 use App\Models\VpnIp;
 use App\Models\User;
@@ -13,8 +11,6 @@ use App\Models\User;
 use Carbon\Carbon;
 
 use Request;
-use Image;
-use Route;
 use Auth;
 use DB;
 

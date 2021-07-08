@@ -4,31 +4,19 @@ namespace App\Http\Controllers\Vox;
 
 use App\Http\Controllers\FrontController;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-
 use App\Services\VoxService as ServicesVox;
 
 use App\Models\StopTransaction;
-use App\Models\Recommendation;
-use App\Models\UserStrength;
 use App\Models\VoxCategory;
-use App\Models\UserLogin;
-use App\Models\VoxAnswer;
 use App\Models\PageSeo;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\Vox;
 
-use Carbon\Carbon;
-
 use Validator;
 use Response;
 use Request;
-use Cookie;
 use Mail;
-use Auth;
-use App;
 use DB;
 
 class IndexController extends FrontController {
@@ -37,7 +25,8 @@ class IndexController extends FrontController {
      * Home page get voxes by filters
      */
 	public function getVoxList() {
-		return ServicesVox::getVoxList($this->user, $this->admin);
+		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
+		return ServicesVox::getVoxList($this->user, $this->admin, $taken);
 	}
 
     /**
@@ -59,7 +48,7 @@ class IndexController extends FrontController {
 		];
 
 		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
-		$voxList = ServicesVox::getVoxList($this->user, $this->admin);
+		$voxList = ServicesVox::getVoxList($this->user, $this->admin, $taken);
 
 		$all_taken = false;
 		$latest_blog_posts = null;
@@ -93,7 +82,6 @@ class IndexController extends FrontController {
         	'all_taken' => $all_taken,
         	'latest_blog_posts' => $latest_blog_posts,
             'is_warning_message_shown' => $is_warning_message_shown,
-			'countries' => Country::with('translations')->get(),
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,
@@ -131,7 +119,8 @@ class IndexController extends FrontController {
      * Home page load more voxes
      */
 	public function getVoxes() {
-		$voxList = ServicesVox::getVoxList($this->user, $this->admin);
+		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
+		$voxList = ServicesVox::getVoxList($this->user, $this->admin, $taken);
 
 		if($voxList->count()) {
 			return $this->ShowVoxView('template-parts.home-voxes', array(
@@ -149,13 +138,9 @@ class IndexController extends FrontController {
      * Index page for not logged users
      */
 	public function home($locale=null) {
-
-		$first = Vox::where('type', 'home')->first();
+		
 		if(!empty($this->user)) {
 			$this->user->checkForWelcomeCompletion();			
-		}
-
-		if(!empty($this->user)) {
 			
 	        if($this->user->is_dentist && !in_array($this->user->status, config('dentist-statuses.approved_test'))) {
 	            return redirect(getLangUrl('/'));

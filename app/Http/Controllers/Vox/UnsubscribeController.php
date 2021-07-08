@@ -9,13 +9,7 @@ use App\Models\UserInvite;
 use App\Models\PageSeo;
 use App\Models\User;
 
-use CArbon\Carbon;
-
-use Validator;
-use Response;
-use Request;
 use Mail;
-use App;
 
 class UnsubscribeController extends FrontController {
 

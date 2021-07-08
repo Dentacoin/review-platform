@@ -14,24 +14,13 @@ use App\Models\VoxScale;
 use App\Models\Country;
 use App\Models\PageSeo;
 use App\Models\Reward;
-use App\Models\Admin;
 use App\Models\User;
 use App\Models\Poll;
-use App\Models\Dcn;
 
-use Carbon\Carbon;
-
-use Validator;
 use Response;
 use Request;
-use Session;
 use Cookie;
-use Route;
-use Hash;
 use Auth;
-use App;
-use Mail;
-use DB;
 
 class PollsController extends FrontController {
 

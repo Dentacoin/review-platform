@@ -5,14 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use App\Models\WhitelistIp;
-use App\Models\User;
-
-use Carbon\Carbon;
 
 use Validator;
 use Request;
 use Auth;
-use DB;
 
 class WhitelistIpsController extends AdminController {
 

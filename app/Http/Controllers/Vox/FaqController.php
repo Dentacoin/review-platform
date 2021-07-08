@@ -5,9 +5,6 @@ use App\Http\Controllers\FrontController;
 
 use App\Models\PageSeo;
 
-use App;
-use Request;
-
 class FaqController extends FrontController {
 	/**
      * FAQ page view

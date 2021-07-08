@@ -8,7 +8,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\ScrapeDentistResult;
 use App\Models\ScrapeDentist;
 use App\Models\Country;
-use App\Models\User;
 
 use App\Exports\Export;
 

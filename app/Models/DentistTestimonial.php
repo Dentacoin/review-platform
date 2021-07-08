@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use WebPConvert\WebPConvert;
 
-use Image;
-
 class DentistTestimonial extends Model {
 
     use \Dimsav\Translatable\Translatable;

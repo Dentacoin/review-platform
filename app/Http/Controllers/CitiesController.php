@@ -1,19 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Routing\Controller as BaseController;
+
+use App\Models\VoxAnswer;
 use App\Models\Country;
 use App\Models\User;
-use App\Models\UserTeam;
 use App\Models\City;
-use App\Models\VoxAnswer;
 use App\Models\Wait;
+
+use Validator;
 use Response;
 use Request;
-use Validator;
 
-class CitiesController extends BaseController
-{
+class CitiesController extends BaseController {
 
 	public function getUsername() {
 

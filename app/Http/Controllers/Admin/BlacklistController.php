@@ -13,7 +13,6 @@ use Carbon\Carbon;
 use Validator;
 use Request;
 use Auth;
-use DB;
 
 class BlacklistController extends AdminController {
     

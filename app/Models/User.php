@@ -48,7 +48,6 @@ use App\Models\UserTeam;
 use App\Models\GasPrice;
 use App\Models\UserBan;
 use App\Models\UserAsk;
-use App\Models\Reward;
 use App\Models\Review;
 use App\Models\Email;
 use App\Models\Vox;
@@ -58,7 +57,6 @@ use Cookie;
 use Image;
 use Auth;
 use Mail;
-use App;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 

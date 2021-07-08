@@ -4,9 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Review;
-use App\Models\User;
-
 class ReviewDownvote extends Model {
     
     protected $fillable = [

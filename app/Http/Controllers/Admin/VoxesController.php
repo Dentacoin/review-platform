@@ -6,7 +6,11 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
-use App\Models\VoxAnswersDependency;
+use App\Exports\MultipleLangSheetExport;
+use App\Exports\MultipleStatSheetExport;
+use App\Exports\Export;
+use App\Imports\Import;
+
 use App\Models\VoxToCategory;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
@@ -16,16 +20,10 @@ use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\VoxScale;
 use App\Models\VoxBadge;
-use App\Models\User;
 use App\Models\Vox;
 
-use App\Exports\MultipleLangSheetExport;
-use App\Exports\MultipleStatSheetExport;
-use App\Exports\Export;
-use App\Imports\Import;
 use Carbon\Carbon;
 
-use Validator;
 use Response;
 use Request;
 use Image;

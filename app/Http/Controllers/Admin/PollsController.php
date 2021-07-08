@@ -9,7 +9,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PollsMonthlyDescription;
 use App\Models\VoxCategory;
 use App\Models\PollAnswer;
-use App\Models\DcnReward;
 use App\Models\VoxScale;
 use App\Models\Poll;
 
@@ -19,10 +18,8 @@ use Carbon\Carbon;
 use Validator;
 use Response;
 use Request;
-use Image;
 use Route;
 use Auth;
-use DB;
 
 class PollsController extends AdminController {
 

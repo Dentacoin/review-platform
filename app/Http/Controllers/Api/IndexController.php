@@ -4,16 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Log;
-
 use App\Services\VoxService as ServicesVox;
 
-use App\Models\StopTransaction;
 use App\Models\UserDevice;
 use App\Models\PollAnswer;
 use App\Models\VoxAnswer;
-use App\Models\UserLogin;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\Poll;

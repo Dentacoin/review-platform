@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
-use App\Models\DcnTransaction;
-
 use Carbon\Carbon;
 
 use Auth;

@@ -7,14 +7,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use WebPConvert\WebPConvert;
 
-use App\Models\VoxToCategory;
 use App\Models\UserDevice;
-use App\Models\VoxRelated;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\VoxBadge;
 use App\Models\VoxScale;
-use App\Models\Reward;
 use App\Models\User;
 
 use Carbon\Carbon;

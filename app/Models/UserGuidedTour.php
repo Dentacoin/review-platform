@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\User;
-
 class UserGuidedTour extends Model {
     
     protected $fillable = [

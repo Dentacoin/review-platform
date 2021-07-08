@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Vox;
-use App\Http\Controllers\FrontController;
 
-use Request;
-use Response;
+use App\Http\Controllers\FrontController;
 
 class VpnController extends FrontController {
 

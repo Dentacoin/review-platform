@@ -7,14 +7,11 @@ use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
 use App\Http\Controllers\AdminController;
 
-use App\Models\Review;
 use App\Models\DcnReward;
+use App\Models\Review;
 use App\Models\Reward;
 
-use Carbon\Carbon;
-
 use Request;
-use Route;
 use Auth;
 
 class YoutubeController extends AdminController {

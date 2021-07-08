@@ -19,7 +19,6 @@ use Validator;
 use Response;
 use Request;
 use Cookie;
-use Mail;
 
 class IndexController extends FrontController {
 

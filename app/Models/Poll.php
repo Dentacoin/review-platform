@@ -5,15 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\VoxToCategory;
-use App\Models\DcnReward;
-use App\Models\Reward;
-
-use Carbon\Carbon;
+use App\Models\PollAnswer;
 
 use Image;
-use App;
-use DB;
 
 class Poll extends Model {
     

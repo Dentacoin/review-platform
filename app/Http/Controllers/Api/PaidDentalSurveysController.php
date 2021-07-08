@@ -4,27 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-
 use App\Services\VoxService as ServicesVox;
-
-use Illuminate\Support\Facades\Input;
 
 use App\Models\StopTransaction;
 use App\Models\VoxCategory;
-use App\Models\VoxAnswer;
 use App\Models\Country;
 use App\Models\User;
-use App\Models\Vox;
 
-use Validator;
 use Response;
-use Request;
-use Cookie;
 use Auth;
-use Mail;
-use App;
 use DB;
 
 class PaidDentalSurveysController extends ApiController {
@@ -50,8 +38,7 @@ class PaidDentalSurveysController extends ApiController {
         // $user = User::find(37530);
 
 		$taken = !empty($user) ? $user->filledVoxes() : null;
-
-		$voxList = ServicesVox::getVoxList($user, false);
+		$voxList = ServicesVox::getVoxList($user, false, $taken);
 
 		$voxes = [];
 		foreach ($voxList as $fv) {
@@ -118,7 +105,8 @@ class PaidDentalSurveysController extends ApiController {
 	public function getVoxes() {
 		$user = Auth::guard('api')->user();
         // $user = User::find(37530);
-		$voxList = ServicesVox::getVoxList($user, false);
+		$taken = !empty($user) ? $user->filledVoxes() : null;
+		$voxList = ServicesVox::getVoxList($user, false, $taken);
 
 		if($voxList->count()) {
 

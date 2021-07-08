@@ -7,12 +7,8 @@ use App\Http\Controllers\AdminController;
 use App\Models\UserBranch;
 use App\Models\User;
 
-use Carbon\Carbon;
-
-use Validator;
 use Request;
 use Auth;
-use DB;
 
 class BranchesController extends AdminController {
 

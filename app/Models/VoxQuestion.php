@@ -10,7 +10,6 @@ use App\Models\VoxScale;
 
 use WebPConvert\WebPConvert;
 
-use Log;
 use DB;
 
 class VoxQuestion extends Model {

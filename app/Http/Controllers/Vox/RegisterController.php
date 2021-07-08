@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Vox;
-use App\Http\Controllers\FrontController;
 
+use App\Http\Controllers\FrontController;
 
 class RegisterController extends FrontController {
 

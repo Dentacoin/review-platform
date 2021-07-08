@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Routing\Controller as BaseController;
+
 use App\Models\User;
-use Response;
+
 use Request;
 use Auth;
 
-class SSOController extends BaseController
-{
+class SSOController extends BaseController {
+
 	protected function manageCustomCookie() {
 
         if(!empty(request('slug')) && !empty(request('type')) && !empty(request('token'))) {

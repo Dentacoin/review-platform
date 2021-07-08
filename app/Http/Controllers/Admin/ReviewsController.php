@@ -13,7 +13,6 @@ use App\Models\User;
 use Carbon\Carbon;
 
 use Request;
-use Route;
 use Auth;
 
 class ReviewsController extends AdminController {

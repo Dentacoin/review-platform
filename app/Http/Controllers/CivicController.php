@@ -6,10 +6,8 @@ use Illuminate\Routing\Controller as BaseController;
 
 use App\Models\Civic;
 
-use Validator;
 use Response;
 use Request;
-use Log;
 
 class CivicController extends BaseController {
 

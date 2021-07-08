@@ -13,7 +13,6 @@ use App\Models\DcnTransaction;
 use App\Models\UserHistory;
 use App\Models\UserAction;
 use App\Models\DcnCashout;
-use App\Models\DcnReward;
 use App\Models\GasPrice;
 use App\Models\User;
 
@@ -21,7 +20,6 @@ use Carbon\Carbon;
 
 use Response;
 use Request;
-use Route;
 use Auth;
 
 class TransactionsController extends AdminController {

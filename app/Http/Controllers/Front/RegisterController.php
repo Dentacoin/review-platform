@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use DeviceDetector\DeviceDetector;
-
 use Illuminate\Support\Facades\Input;
 
 use App\Models\UserTeam;
-use App\Models\PageSeo;
 use App\Models\User;
 
 use Validator;
 use Response;
-use Redirect;
 use Request;
 use Image;
 

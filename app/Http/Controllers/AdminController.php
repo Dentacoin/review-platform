@@ -17,10 +17,7 @@ use App\Models\BanAppeal;
 use App\Models\Review;
 use App\Models\Admin;
 
-use Session;
-use Config;
 use Auth;
-use DB;
 
 class AdminController extends BaseController {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;

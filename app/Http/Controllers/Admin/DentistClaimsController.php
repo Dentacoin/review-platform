@@ -5,21 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use App\Models\AnonymousUser;
-use App\Models\EmailTemplate;
 use App\Models\DentistClaim;
 use App\Models\UserHistory;
 use App\Models\User;
 
-use Carbon\Carbon;
-
-use Validator;
-use Response;
-use Request;
-use Route;
 use Auth;
 use Mail;
 use Auth;
-use DB;
 
 class DentistClaimsController extends AdminController {
 

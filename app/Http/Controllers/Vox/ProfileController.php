@@ -6,14 +6,9 @@ use App\Http\Controllers\FrontController;
 
 use Illuminate\Support\Facades\Input;
 
-use App\Models\DcnCashout;
-use App\Models\UserInvite;
 use App\Models\DcnReward;
-use App\Models\Country;
-use App\Models\Civic;
 use App\Models\User;
 use App\Models\Vox;
-use App\Models\Dcn;
 
 use Carbon\Carbon;
 
@@ -21,11 +16,7 @@ use Validator;
 use Response;
 use Request;
 use Image;
-use Route;
-use Hash;
-use Mail;
 use Auth;
-use App;
 
 class ProfileController extends FrontController {
 

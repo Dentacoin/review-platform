@@ -17,9 +17,7 @@ use App\Models\ReviewUpvote;
 use App\Models\ReviewAnswer;
 use App\Models\DentistClaim;
 use App\Models\UserStrength;
-use App\Models\UserCategory;
 use App\Models\UserInvite;
-use App\Models\UserBranch;
 use App\Models\UserAction;
 use App\Models\DcnReward;
 use App\Models\UserLogin;
@@ -39,7 +37,6 @@ use Carbon\Carbon;
 use Validator;
 use Response;
 use Request;
-use Image;
 use Auth;
 use Mail;
 

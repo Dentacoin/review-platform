@@ -8,18 +8,15 @@ use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\Dcn;
-use App\Models\User;
-use App\Models\Reward;
 use App\Models\DcnReward;
-use App\Models\ReviewAnswer;
+use App\Models\Reward;
+use App\Models\User;
 
 use Image;
 
 class Review extends Model {
     
     use SoftDeletes;
-    
     
     protected $fillable = [
         'user_id',

@@ -11,30 +11,25 @@ use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use DeviceDetector\DeviceDetector;
 
 use App\Models\UserGuidedTour;
-use App\Models\WhitelistIp;
 use App\Models\PollAnswer;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\VoxAnswer;
 use App\Models\VoxScale;
-use App\Models\Category;
 use App\Models\Country;
 use App\Models\Reward;
 use App\Models\User;
 use App\Models\City;
 use App\Models\Poll;
-use App\Models\Vox;
 
 use Carbon\Carbon;
 
 use Redirect;
-use Session;
 use Request;
 use Cookie;
 use Route;
 use Auth;
 use App;
-use DB;
 
 class FrontController extends BaseController {
 

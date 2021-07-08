@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dimsav\Translatable\Translatable;
 
-use App\Models\Country;
-
-class City extends Model
-{
+class City extends Model {
+    
     use SoftDeletes, Translatable;
     
     public $translatedAttributes = [

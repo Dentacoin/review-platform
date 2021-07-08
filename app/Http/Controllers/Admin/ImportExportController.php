@@ -16,10 +16,7 @@ use App\Imports\Import;
 use App\Http\Requests;
 use Carbon\Carbon;
 
-use Validator;
 use Request;
-use Config;
-use Lang;
 use Auth;
 
 class ImportExportController extends AdminController {

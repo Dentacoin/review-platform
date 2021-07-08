@@ -6,7 +6,6 @@ use App\Http\Controllers\AdminController;
 
 use App\Models\Reward;
 
-use Validator;
 use Request;
 use Auth;
 

@@ -12,15 +12,9 @@ use \SendGrid\Mail\Subject as Subject;
 use \SendGrid\Mail\From as From;
 use \SendGrid\Mail\To as To;
 
-use App\Models\EmailTemplate;
 use App\Models\Review;
 use App\Models\Reward;
 use App\Models\User;
-
-use Carbon\Carbon;
-
-use Session;
-use Mail;
 
 class Email extends Model {
 	

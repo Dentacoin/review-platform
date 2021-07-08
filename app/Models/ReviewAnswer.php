@@ -5,9 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\Review;
-use App\Models\Question;
-
 class ReviewAnswer extends Model {
     
     use SoftDeletes;

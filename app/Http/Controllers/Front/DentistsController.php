@@ -6,10 +6,7 @@ use App\Http\Controllers\FrontController;
 use App\Models\Country;
 use App\Models\PageSeo;
 use App\Models\User;
-use App\Models\City;
 
-use GoogleMaps;
-use Response;
 use Request;
 use App;
 
