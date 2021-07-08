@@ -54,6 +54,18 @@
                         </div>
                         <div class="col-md-1">
                             <input type="text" class="form-control datepicker" name="search-to" value="{{ $search_to }}" placeholder="To" autocomplete="off">
+                        </div>                        
+                        @if($reply_id)
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" name="reply-id" value="{{ $reply_id }}" placeholder="Reply ID">
+                            </div>
+                        @endif
+                        <div class="col-md-2">
+                            <select class="form-control" name="search-answered">
+                                <option value="">Answer</option>
+                                <option value="without-answer" {!! 'without-answer'==$search_answered ? 'selected="selected"' : '' !!}>Without Answer</option>
+                                <option value="with-answer" {!! 'with-answer'==$search_answered ? 'selected="selected"' : '' !!}>With Answer</option>
+                            </select>
                         </div>
                     </div>
                 </form>
@@ -123,11 +135,13 @@
 				                    			{{ $item->description }}
 				                    		</td>
                                             <td>
-                                                @if(in_array($item->file_extension, $video_extensions))
-                                                    <a href="{{ $item->getFileUrl() }}" class="html5lightbox">Video</a>
+                                                @php($cur_item = $item->mainContactReply ?? $item)
+                                                
+                                                @if(in_array($cur_item->file_extension, $video_extensions))
+                                                    <a href="{{ $cur_item->getFileUrl() }}" class="html5lightbox">Video</a>
                                                 @else
-                                                    <a href="{{ $item->getFileUrl() }}" data-lightbox="contact{{ $item->id }}">
-                                                        <img src="{{ $item->getFileUrl(true) }}" style="max-width: 30px;">
+                                                    <a href="{{ $cur_item->getFileUrl() }}" data-lightbox="contact{{ $cur_item->id }}">
+                                                        <img src="{{ $cur_item->getFileUrl(true) }}" style="max-width: 30px;">
                                                     </a>
                                                 @endif
                                             </td>
@@ -143,6 +157,12 @@
                                                     @elseif(!empty($item->admin_answer_id))
                                                         Email: <a href="{{ url('cms/emails/edit/'.$item->admin_answer_id) }}">{{ $item->emailTemplate->name }}</a>
                                                     @endif
+                                                @endif
+                                                @if($item->replied_main_support_id && !$reply_id)
+                                                    <br/>
+                                                    <a href="{{ url('cms/support/contact/?reply-id='.$item->replied_main_support_id) }}" class="btn btn-sm btn-success" style="margin-top: 2px;">
+                                                        Check Old Replies
+                                                    </a>
                                                 @endif
                                             </td>
 				                    	</tr>
@@ -195,25 +215,31 @@
             </div>
             <div class="modal-body">
                 <form class="contact-form" action="{{ url('cms/support/contact/') }}" original-action="{{ url('cms/support/contact/') }}" method="post" contact-id="">
-                    <p>Select email template:</p>
-                    <select name="template-id" class="form-control select2">
-                        <option value="">-</option>
-                        @foreach(App\Models\EmailTemplate::where('type', 'support')->get() as $template)
-                            <option value="{{ $template->id }}">{{ $template->name }}</option>
-                        @endforeach
-                    </select>
 
-                    <br/>
-                    <br/>
-                    <p>OR</p>
-                    <br/>
-
-                    <p>Write an answer:</p>
-                    <textarea class="form-control" name="answer" style="height: 100px; margin-bottom: 10px;" placeholder="Answer"></textarea>
-                    <input type="text" class="form-control" name="subject" style="margin-bottom: 10px;" placeholder="Subject (default is 'Re: your inquiry about [issue]')">
-                    <input type="text" class="form-control" name="title" style="margin-bottom: 10px;" placeholder="Title (default is 'Dear [name]')">
-                    <input type="text" class="form-control" name="subtitle" style="margin-bottom: 10px;" placeholder="Subtitle (default is empty)">
-
+                    <div class="row" style="border-bottom: 1px solid #868787; margin-bottom: 10px;">
+                        <div class="col-md-6">
+                            <p>Select email template:</p>
+                            <select name="template-id" class="form-control select2">
+                                <option value="0">-</option>
+                                @foreach(App\Models\EmailTemplate::where('type', 'support')->get() as $template)
+                                    <option value="{{ $template->id }}">{{ $template->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6" style="border-left: 1px solid #868787;">
+                            <p>Write an answer:</p>
+                            <input type="text" class="form-control" name="subject" style="margin-bottom: 10px;" placeholder="Subject (default is 'Re: your inquiry about [issue]')"/>
+                            <input type="text" class="form-control" name="title" style="margin-bottom: 10px;" placeholder="Title (default is 'Dear [name]')"/>
+                            <input type="text" class="form-control" name="subtitle" style="margin-bottom: 10px;" placeholder="Subtitle (default is empty)"/>
+                            <textarea class="form-control" name="answer" style="height: 100px; margin-bottom: 10px;" placeholder="Answer"></textarea>
+                        </div>
+                    </div>                    
+                    <div class="form-group clearfix">
+                        <label class="control-label" for="can-reply" style="font-weight: normal;">
+                            <input type="checkbox" name="can-reply" value="1" id="can-reply" style="vertical-align: sub; margin-right: 5px;" />
+                            User can reply
+                        </label>
+                    </div>
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Send</button>
                     <label class="alert alert-danger contact-error" style="display: none;margin-top: 10px;"></label>
                 </form>

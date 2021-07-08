@@ -10,6 +10,7 @@ use \SendGrid\Mail\Subject as Subject;
 use \SendGrid\Mail\From as From;
 use \SendGrid\Mail\To as To;
 
+use App\Models\UserNotification;
 use App\Models\SupportQuestion;
 use App\Models\SupportCategory;
 use App\Models\SupportContact;
@@ -280,7 +281,7 @@ class SupportController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $items = SupportContact::orderBy('id', 'desc');
+        $items = SupportContact::orderBy('id', 'desc');        
 
         if(!empty(request('search-user-id'))) {
             $items = $items->where('user_id', request('search-user-id'));
@@ -310,9 +311,24 @@ class SupportController extends AdminController {
             $firstday = new Carbon(request('search-from'));
             $items = $items->where('created_at', '>=', $firstday);
         }
+
         if(!empty(request('search-to'))) {
             $firstday = new Carbon(request('search-to'));
             $items = $items->where('created_at', '<=', $firstday->addDays(1));
+        }
+
+        if(!empty(request('search-answered'))) {
+
+            if(request('search-answered') == 'without-answer') {
+                $items = $items->whereNull('admin_answer')->whereNull('admin_answer_id');
+            } else {
+                $items = $items->whereNotNull('admin_answer')->orWhereNotNull('admin_answer_id');
+            }
+        }
+        
+
+        if(!empty(request('reply-id'))) {
+            $items = $items->where('replied_main_support_id', request('reply-id'))->orWhere('id', request('reply-id'));
         }
 
         $total_count = $items->count();
@@ -343,7 +359,7 @@ class SupportController extends AdminController {
         }
 
         $items = $items->skip( ($page-1)*$ppp )->take($ppp)->get();
-
+        
         $pagination_link = '';
 
         foreach (Request::all() as $key => $value) {
@@ -361,6 +377,8 @@ class SupportController extends AdminController {
             'search_issue' => request('search-issue'),
             'search_from' => request('search-from'),
             'search_to' => request('search-to'),
+            'reply_id' => request('reply-id'),
+            'search_answered' => request('search-answered'),
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
@@ -391,11 +409,13 @@ class SupportController extends AdminController {
 
             if(!empty($contact->user)) {
                 $user_email = $contact->user->email ?? $contact->user->mainBranchEmail();
+                $user_name = $contact->user->name;
             } else {
                 $user_email = $contact->email;
+                $user_name = null;
 
                 if(empty($contact->userEmail)) {
-
+                    $user_name = $contact->userEmail->name;
                     $existing_anonymous = AnonymousUser::where('email', 'LIKE', $contact->email)->first();
 
                     if(empty($existing_anonymous)) {
@@ -410,13 +430,6 @@ class SupportController extends AdminController {
                 $template = EmailTemplate::find(Request::input('template-id'));
 
                 if(!empty($template)) {
-                    $user_name = null;
-
-                    if($contact->user) {
-                        $user_name = $contact->user->name;
-                    } else if($contact->userEmail) {
-                        $user_name = $contact->userEmail->name;
-                    }
 
                     $title = stripslashes($template->title);
                     $subtitle = stripslashes($template->subtitle);
@@ -426,60 +439,7 @@ class SupportController extends AdminController {
                     }
                     $content = $template->content;
 
-                    $deafult_searches = array(
-                        '[name]',
-                        '[issue]',
-                        '[platform]',
-                        '[b]',
-                        '[/b]',
-                    );
-                    $deafult_replaces = array(
-                        $user_name ?? 'User',
-                        config('support.issues.'.$contact->issue),
-                        config('support.platforms.'.$contact->platform),
-                        '<b>',
-                        '</b>',
-                    );
-
-                    $title = str_replace($deafult_searches, $deafult_replaces, $title);
-                    $subtitle = str_replace($deafult_searches, $deafult_replaces, $subtitle);
-                    $subject = str_replace($deafult_searches, $deafult_replaces, $subject);
-                    $content = str_replace($deafult_searches, $deafult_replaces, $content);
-
-
-                    $platform = 'dentacoin';
-                    $sender = config('mail.from.address-dentacoin');
-                    $sender_name = config('mail.from.name-dentacoin');
-                    
-                    $contents = view('emails.template', [
-                        'content' => $content,
-                        'title' => $title,
-                        'subtitle' => $subtitle,
-                        'platform' => $platform,
-                        'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($user_email),'email_category' => 'service_info', 'platform' => $platform ))))]),
-                    ])->render();
-
-                    $from = new From($sender, $sender_name);
-                    $tos = [new To( $user_email)];
-
-                    $email = new SendGridMail(
-                        $from,
-                        $tos
-                    );
-                    
-                    if ($template->category) {
-                        $email->addCategory($template->category); //?????? default cat?
-                    } else {
-                        $email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
-                    }
-                    $email->setSubject($subject);
-                    $email->setReplyTo($sender, $sender_name);
-                    $email->addContent(
-                        "text/html", $contents
-                    );
-                    
-                    $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
-                    $sendgrid->send($email);
+                    $this->sendReply($title, $subtitle, $subject, $content, $contact, $user_email, $user_name);
 
                     $contact->admin_answer_id = $template->id;
                     $contact->save();
@@ -490,76 +450,82 @@ class SupportController extends AdminController {
                 return Response::json( ['success' => false, 'message' => "Invalid email template"] );
 
             } else if(!empty(Request::input('answer'))) {
-                $user_name = null;
-
-                if($contact->user) {
-                    $user_name = $contact->user->name;
-                } else if($contact->userEmail) {
-                    $user_name = $contact->userEmail->name;
-                }
 
                 $title = Request::input('title') ?? ($user_name ? 'Dear '.$user_name.',' : 'Hello,');
                 $subtitle = Request::input('subtitle') ?? '';
                 $subject = Request::input('subject') ?? 'Re: your inquiry about '.config('support.issues.'.$contact->issue);
                 $content = Request::input('answer');
 
-                $deafult_searches = array(
-                    '[name]',
-                    '[issue]',
-                    '[platform]',
-                    '[b]',
-                    '[/b]',
-                );
-                $deafult_replaces = array(
-                    $user_name ?? 'User',
-                    config('support.issues.'.$contact->issue),
-                    config('support.platforms.'.$contact->platform),
-                    '<b>',
-                    '</b>',
-                );
-
-                $title = str_replace($deafult_searches, $deafult_replaces, $title);
-                $subtitle = str_replace($deafult_searches, $deafult_replaces, $subtitle);
-                $subject = str_replace($deafult_searches, $deafult_replaces, $subject);
-                $content = str_replace($deafult_searches, $deafult_replaces, $content);
-
-                $platform = 'dentacoin';
-                $sender = config('mail.from.address-dentacoin');
-                $sender_name = config('mail.from.name-dentacoin');
-                
-                $contents = view('emails.template', [
-                    'content' => $content,
-                    'title' => $title,
-                    'subtitle' => $subtitle,
-                    'platform' => $platform,
-                    'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($user_email),'email_category' => 'service_info', 'platform' => $platform ))))]),
-                ])->render();
-
-                $from = new From($sender, $sender_name);
-                $tos = [new To( $user_email)];
-
-                $email = new SendGridMail(
-                    $from,
-                    $tos
-                );
-                
-                $email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
-
-                $email->setSubject($subject);
-                $email->setReplyTo($sender, $sender_name);
-                $email->addContent(
-                    "text/html", $contents
-                );
-                
-                $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
-                $sendgrid->send($email);
+                $this->sendReply($title, $subtitle, $subject, $content, $contact, $user_email, $user_name);
 
                 $contact->admin_answer = $content;
+                $contact->custom_title = Request::input('title');
+                $contact->custom_subtitle = Request::input('subtitle');
+                $contact->custom_subject = Request::input('subject');
                 $contact->save();
 
                 return Response::json( ['success' => true] );
             }
-            // dd(Request::all());
+        }
+    }
+
+    private function sendReply($title, $subtitle, $subject, $content, &$contact, $user_email, $user_name) {
+
+        $deafult_searches = array(
+            '[name]',
+            '[issue]',
+            '[platform]',
+            '[b]',
+            '[/b]',
+        );
+        $deafult_replaces = array(
+            $user_name ?? 'User',
+            config('support.issues.'.$contact->issue),
+            config('support.platforms.'.$contact->platform),
+            '<b>',
+            '</b>',
+        );
+
+        $title = str_replace($deafult_searches, $deafult_replaces, $title);
+        $subtitle = str_replace($deafult_searches, $deafult_replaces, $subtitle);
+        $subject = str_replace($deafult_searches, $deafult_replaces, $subject);
+        $content = str_replace($deafult_searches, $deafult_replaces, $content);
+
+        $platform = 'dentacoin';
+        $sender = config('mail.from.address-dentacoin');
+        $sender_name = config('mail.from.name-dentacoin');
+        
+        $contents = view('emails.template', [
+            'content' => $content,
+            'title' => $title,
+            'subtitle' => $subtitle,
+            'platform' => $platform,
+            'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($user_email),'email_category' => 'service_info', 'platform' => $platform ))))]),
+        ])->render();
+
+        $from = new From($sender, $sender_name);
+        $tos = [new To( $user_email)];
+
+        $email = new SendGridMail(
+            $from,
+            $tos
+        );
+
+        $email->setSubject($subject);
+        $email->setReplyTo($sender, $sender_name);
+        $email->addContent(
+            "text/html", $contents
+        );
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
+        $sendgrid->send($email);
+
+        if(!empty($user_name)) {
+            $new_user_notification = new UserNotification;
+            $new_user_notification->user_id = $contact->user ? $contact->user->id : $contact->userEmail->id;
+            $new_user_notification->support_id = $contact->id;
+            $new_user_notification->can_reply = Request::input('can-reply') ?? 0;
+            $new_user_notification->save();
         }
     }
 

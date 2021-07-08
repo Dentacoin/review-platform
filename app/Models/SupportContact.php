@@ -13,7 +13,12 @@ class SupportContact extends Model {
         "description",
         "file_extension",
         "admin_answer",
-        "admin_answer_id"
+        "custom_title",
+        "custom_subtitle",
+        "custom_subject",
+        "admin_answer_id",
+        "replied_main_support_id",
+        "replied_support_id"
     ];
     
     protected $dates = [
@@ -32,6 +37,14 @@ class SupportContact extends Model {
 
     public function emailTemplate() {
         return $this->hasOne('App\Models\EmailTemplate', 'id', 'admin_answer_id')->withTrashed();
+    }
+
+    public function mainContactReply() {
+        return $this->hasOne('App\Models\SupportContact', 'id', 'replied_main_support_id');
+    }
+
+    public function oldContactReply() {
+        return $this->hasOne('App\Models\SupportContact', 'id', 'replied_support_id');
     }
 
     public function getFileUrl($thumb = false) {
