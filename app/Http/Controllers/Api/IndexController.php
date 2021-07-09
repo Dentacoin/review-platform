@@ -83,7 +83,7 @@ class IndexController extends ApiController {
 			'poll_type' => $poll_type,
 			'user' => $user,
 			'app_version_android' => '1.0.3',
-			'app_version_ios' => '1.0.3',
+			'app_version_ios' => '1.0.6',
 		) );
     }
 
