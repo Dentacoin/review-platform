@@ -654,6 +654,8 @@ class DentistController extends FrontController {
             $view_params['js'][] = 'codemirror-placeholder.js';
             $view_params['js'][] = 'user-logged.js';
             $view_params['css'][] = 'codemirror.css';
+
+            $view_params['css'][] = 'trp-users-logged.css';
         }
 
         if(!empty($this->user) && $this->user->id == $item->id) {

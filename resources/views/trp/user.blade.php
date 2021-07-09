@@ -43,348 +43,6 @@
 <div class="blue-background"></div>
 
 <div class="container edit-profile-wrapper">
-	<div class="profile-info-mobile">
-
-		@if(!empty($user) && $user->id==$item->id)
-			{!! Form::open(array('method' => 'post', 'class' => 'edit-profile', 'style' => 'display: none;', 'url' => getLangUrl('profile/info') )) !!}
-				{!! csrf_field() !!}
-				<label for="add-avatar-mobile" class="image-label" {!! $user->hasimage ? 'style="background-image: url('.$user->getImageUrl(true).')"' : '' !!}>
-					<div class="centered-hack">
-						<i class="fas fa-camera"></i>
-						<p>
-	    					@if( !$user->hasimage )
-	    						{!! nl2br(trans('trp.page.user.add-photo')) !!}
-		    				@else
-		    					{!! nl2br(trans('trp.page.user.change-photo')) !!}
-							@endif
-			    		</p>
-					</div>
-		    		<div class="loader">
-		    			<i class="fas fa-circle-notch fa-spin"></i>
-		    		</div>
-					<input type="file" name="image" id="add-avatar-mobile" upload-url="{{ getLangUrl('profile/info/upload') }}" accept="image/png,image/jpeg,image/jpg">
-				</label>
-				<a href="javascript:;" class="share-mobile" data-popup="popup-share">
-					<i class="fas fa-share-alt"></i>
-				</a>
-				@if(!$user->is_clinic)
-					{{ Form::select( 'title' , config('titles') , $user->title , array('class' => 'input') ) }}
-				@endif
-				<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
-				<input type="text" name="name_alternative" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alternative }}">
-				<div class="profile-details address-suggester-wrapper-input">
-					<div class="alert alert-warning mobile ip-country" style="display: none;">
-                    	{!! nl2br(trans('trp.common.different-ip')) !!}
-                    </div>	
-
-                    @if(!empty($user->country_id))
-	                    <div class="user-country" style="position: relative;">
-	                    	<div class="covering" style="position: absolute;top: 0px;bottom: 0px;left: 0px;right: 0px; z-index: 1000;background: transparent;"></div>
-	                    	<select class="input country-select country-dropdown" name="country_id" disabled="disabled">
-		                		<option value="{{ \App\Models\Country::find($user->country_id)->name }}" code="{{ \App\Models\Country::find($user->country_id)->code }}" selected="selected" >{{ \App\Models\Country::find($user->country_id)->name }}</option>
-		                	</select>
-		                </div>
-	                	<div class="alert alert-warning mobile" style="margin: 10px 0px; display: none;">
-                        	{!! nl2br(trans('trp.page.user.uneditable-country')) !!}
-                        </div>
-                    @else
-	                	<select class="input country-select country-dropdown" name="country_id" {!! !empty($country_id) ? 'disabled="disabled"' : '' !!} real-country="{{ !empty($country_id) ? $country_id : '' }}">
-	                		@foreach(\App\Models\Country::with('translations')->get() as $country)
-	                			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
-	                		@endforeach
-	                	</select>
-	                @endif
-				    <div>
-				    	<input type="text" name="address" class="input address-suggester-input" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
-                        <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">
-                        </div>
-                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
-                        	{!! nl2br(trans('trp.common.check-address')) !!}
-                        </div>
-                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
-                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
-                        </div>
-				        <div class="alert alert-warning different-country-hint mobile" style="display: none; margin: -10px 0px 10px;">
-				        	{!! nl2br(trans('trp.page.user.invalid-country')) !!}
-				        </div>
-                    </div>
-			    	<input type="text" name="open" class="input dont-count" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time" guided-action="work_hours">
-			    	<div class="flex phone-widget">
-				    	<span class="phone-code-holder">{{ $user->country_id ? '+'.$user->country->phone_code : '' }}</span>
-						<input type="tel" name="phone" class="input" placeholder="{!! nl2br(trans('trp.page.user.phone')) !!}" value="{{ $user->phone }}">
-					</div>
-			    	<input type="text" name="website" class="input" placeholder="{!! nl2br(trans('trp.page.user.website')) !!}" value="{{ $user->website }}">
-			    	<input type="hidden" name="email" value="{{ $user->email }}">
-			    	@if(!$user->is_clinic)
-			    		<input type="text" name="open" class="input wokrplace-input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText(true)) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
-			    	@endif	
-			    	<div class="email-wrapper">
-				    	<div class="flex flexed-wrap email-wrap">
-				    		<div class="col social-networks">
-				    			<a href="javascript:;" class="current-social">
-			    					<i class="fas fa-envelope"></i>
-			    				</a>
-				    		</div>
-				    		<div class="col">
-				    			<input type="text" name="email_public" class="input social-link-input" placeholder="{!! nl2br(trans('trp.page.user.user-public-email')) !!}" value="{{ !empty($user->email_public) ? $user->email_public : $user->email }}" maxlength="100" {!! !empty($user->email_public) ? '' : 'disabled' !!}>
-				    		</div>
-				    	</div>
-				    	<label class="checkbox-label label-public-email {!! !empty($user->email_public) ? '' : 'active' !!}" for="current-email-mobile">
-							<input type="checkbox" class="special-checkbox" id="current-email-mobile" cur-email="{{ $user->email }}" name="current-email" value="{!! !empty($user->email_public) ? '0' : '1' !!}" {!! !empty($user->email_public) ? '' : 'checked' !!} >
-							<i class="far fa-square"></i>
-							{!! nl2br(trans('trp.page.user.user-registration-email')) !!}
-						</label>			    	
-				    </div>
-			    	
-			    	<div class="social-wrapper dont-count" guided-action="socials" style="padding: 5px; margin: -5px;">
-				    	<div class="s-wrap"> 
-					    	@if(!empty($user->socials))
-					    		@foreach($user->socials as $k => $v)
-							    	<div class="flex social-wrap flexed-wrap">
-							    		<div class="col social-networks">
-							    			<a href="javascript:;" class="current-social" cur-type="{{ $k }}">
-						    					<i class="{{ config('trp.social_network')[$k] }}"></i>
-						    				</a>
-							    			<div class="social-dropdown"> 
-								    			@foreach(config('trp.social_network') as $key => $sn)
-								    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
-								    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
-								    				</a>
-								    			@endforeach
-								    		</div>
-							    		</div>
-							    		<div class="col">
-							    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
-							    		</div>
-							    	</div>
-							    @endforeach
-						    @else
-						    	<div class="flex social-wrap flexed-wrap">
-						    		<div class="col social-networks">
-						    			<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
-					    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
-					    				</a>
-						    			<div class="social-dropdown"> 
-							    			@foreach(config('trp.social_network') as $key => $sn)
-							    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
-							    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
-							    				</a>
-							    			@endforeach
-							    		</div>
-						    		</div>
-						    		<div class="col">
-						    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
-						    		</div>
-						    	</div>
-						    @endif
-						</div>
-					    
-					    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
-				    		<a href="javascript:;" class="add-social-profile">{!! nl2br(trans('trp.page.user.add-social-profile')) !!}</a>
-				    	@endif
-				    </div>
-				</div>
-				<div class="edit-buttons">
-					<div style="padding: 5px; width: 49%;" guided-action="save">
-						<button class="button" type="submit" style="width: 100%;">
-							{!! nl2br(trans('trp.page.user.save')) !!}
-						</button>
-					</div>
-					<a href="javascript:;" class="cancel-edit open-edit">
-						{!! nl2br(trans('trp.page.user.cancel')) !!}
-					</a>
-				</div>
-				<input type="hidden" name="json" value="1">
-				<div class="edit-error alert alert-warning" style="display: none;">
-				</div>
-			{!! Form::close() !!}
-		@endif
-
-		<div class="view-profile">
-			<a href="javascript:;" class="share-mobile" data-popup="popup-share">
-				<img src="{{ url('img-trp/share.svg') }}">
-				{!! nl2br(trans('trp.common.share')) !!}
-			</a>
-			@if(!empty($user) && $user->id!=$item->id && !empty($writes_review))
-				<a href="javascript:;" class="recommend-mobile" data-popup="recommend-dentist">
-					<img src="{{ url('img-trp/thumb-up.svg') }}">
-					{{ trans('trp.page.user.recommend') }}
-				</a>
-			@endif
-			@if(in_array($item->status, config('dentist-statuses.unclaimed')))
-				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
-			@endif
-			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
-				<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;">
-				@if($item->is_clinic && $item->branches->isNotEmpty() && $item->id == $item->mainBranchClinic->id)
-					<div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
-				@endif
-			</div>
-			<div class="profile-mobile-info tac">
-				<h3>
-					{{ $item->getNames() }}
-				</h3>
-				@if( $item->name_alternative )
-					<p class="alternative-name">({{ $item->name_alternative }})</p>
-				@endif
-				<span class="type">
-					@if($item->is_partner)
-						<span>
-							{!! nl2br(trans('trp.page.user.partner')) !!}
-						</span> 
-					@endif
-					{{ $item->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
-				</span>
-				@if(!empty($user) && $user->id==$item->id)
-					<a class="edit-button open-edit" guided-action="edit" href="javascript:;">
-						<img src="{{ url('img-trp/penci-bluel.png') }}">
-						{!! nl2br(trans('trp.page.user.edit-profile')) !!}
-					</a>
-				@endif
-				@if(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
-					<a class="claim-button" href="javascript:;"  data-popup="claim-popup">
-						{{ trans('trp.common.claim-practice') }}
-					</a>
-				@endif
-			</div>
-			<div class="profile-rating col tac">
-				<div class="ratings average">
-					<div class="stars">
-						<div class="bar" style="width: {{ $item->avg_rating/5*100 }}%;">
-						</div>
-					</div>
-				</div>
-
-				<div class="rating">
-					({{ trans('trp.common.reviews-count', [ 'count' => intval($item->ratings)]) }})
-				</div>
-
-				@if(!empty($user) && $user->id==$item->id)
-					<div style="padding: 5px;display: inline-block;" guided-action="invite" class="dont-count">
-						<a href="javascript:;" class="button" data-popup-logged="popup-invite">
-							{!! nl2br(trans('trp.page.user.invite')) !!}
-						</a>
-					</div>
-					@if( $item->reviews_in_standard()->count() )
-						<a href="javascript:;" class="button button-inner-white add-widget-button" reviews-guided-action="add" data-popup-logged="popup-widget" style="text-transform: initial;">
-							{!! nl2br(trans('trp.page.user.widget')) !!}
-						</a>
-					@endif
-				@elseif( empty($user) || !$user->is_dentist )
-					<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
-						{!! nl2br(trans('trp.page.user.submit-review')) !!}
-					</a>
-					@if(empty($is_trusted) && !$has_asked_dentist)
-						<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
-							{!! nl2br(trans('trp.page.user.request-invite')) !!}
-						</a>
-					@endif
-				@endif
-			</div>
-			<div class="profile-details">
-				<a href="javascript:;" class="p scroll-to-map" map-tooltip="{{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }} ">
-		    		<div class="img">
-						<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
-					</div>
-					{{ $item->city_name ? $item->city_name.', ' : '' }}
-					{{ $item->state_name ? $item->state_name.', ' : '' }} 
-					{{ $item->country->name }} 
-					<!-- <span class="gray-text">(2 km away)</span> -->
-				</a>
-		    	@if( $time = $item->getWorkHoursText() )
-		    		<div class="p">
-			    		<div class="img">
-			    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
-			    		</div>
-		    			{!! $time !!}
-		    		</div>
-		    	@endif
-		    	@if( $item->phone )
-			    	<a href="tel:{{ $item->getFormattedPhone(true) }}" class="p">
-			    		<div class="img">
-			    			<img class="black-filter" src="{{ url('img-trp/phone.png') }}">
-			    		</div>
-			    		{{ $item->getFormattedPhone() }}
-			    	</a>
-		    	@endif
-		    	@if( $item->website )
-			    	<a href="{{ $item->getWebsiteUrl() }}" target="_blank" class="p website-p">
-			    		<div class="img">
-			    			<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
-			    		</div>
-			    		<span>
-				    		{{ $item->website }}
-				    	</span>
-			    	</a>
-		    	@endif
-		    	@if(!empty($user) && $user->is_clinic && $item->is_clinic && $user->branches->isNotEmpty() && in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
-		    		<a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $item->id }}">
-	    				<div class="img">
-	    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-	    				</div>
-	    				{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
-						{!! csrf_field() !!}
-	    			</a>
-	    		@else
-		    		@if($item->branches->isNotEmpty())
-		    			<a href="{{ getLangUrl('branches/'.$item->slug) }}" class="p clinic-branches">
-		    				<div class="img">
-		    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-		    				</div>
-		    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
-		    			</a>
-		    		@else
-		    			@if(!empty($user) && ($user->id == 37530 || $user->id == 68690))
-			    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
-			    				<div class="img">
-			    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-			    				</div>
-			    				{!! nl2br(trans('trp.page.user.branch.add-branch')) !!}
-			    			</a>
-			    		@endif
-		    		@endif
-		    	@endif
-		    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
-		    		<div class="p workplace-p">
-			    		<div class="img" style="min-width: 25px;">
-			    			<img class="black-filter" src="{{ url('img-trp/clinic.png') }}">
-			    		</div>
-				    	<div>
-		    				{!! $workplace !!}
-		    			</div>
-		    		</div>
-		    	@endif
-		    	@if($item->top_dentist_month)
-					<div class="top-dentist">
-						<img src="{{ url('img-trp/top-dentist.png') }}">
-		    			<span>
-		    				{!! trans('trp.common.top-dentist') !!}
-	    				</span>
-	    			</div>
-				@endif
-			    <div class="p profile-socials">
-			    	@if(!empty($item->email))
-			    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
-			    			<i class="fas fa-envelope"></i>
-			    		</a>
-			    	@else
-			    		@if($item->branches->isNotEmpty())
-				    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : ($item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email) }}">
-				    			<i class="fas fa-envelope"></i>
-				    		</a>
-				    	@endif
-			    	@endif
-		    		@if( $item->socials )
-			    		@foreach($item->socials as $k => $v)
-				    		<a class="social" href="{{ $v }}" target="_blank">
-				    			<i class="{{ config('trp.social_network')[$k] }}"></i>
-				    		</a>
-				    	@endforeach
-				    @endif
-			    </div>		    	
-			</div>
-		</div>
-	</div>
 
 	<div class="information flex">
 		<a href="javascript:;" class="share-button" data-popup="popup-share">
@@ -561,7 +219,6 @@
 				{!! Form::close() !!}
 			@endif
 
-
 			@if(in_array($item->status, config('dentist-statuses.unclaimed')))
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
@@ -574,111 +231,159 @@
 					@endif 
 				</div>
 				<div class="media-right">
-					<h3>
-						{{ $item->getNames() }}
-					</h3>
-					@if( $item->name_alternative )
-						<p class="alternative-name">({{ $item->name_alternative }})</p>
-					@endif
-
-					<span class="type">
-						@if($item->is_partner)
-							<span> {!! nl2br(trans('trp.page.user.partner')) !!}</span> 
+					<div class="phone-styles">
+						<h3>
+							{{ $item->getNames() }}
+						</h3>
+						@if( $item->name_alternative )
+							<p class="alternative-name">({{ $item->name_alternative }})</p>
 						@endif
-						{{ $item->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
-					</span>
-					<a href="javascript:;" class="p scroll-to-map" map-tooltip="{{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }} ">
-						<div class="img">
-							<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
+
+						<span class="type">
+							@if($item->is_partner)
+								<span> {!! nl2br(trans('trp.page.user.partner')) !!}</span> 
+							@endif
+							{{ $item->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
+						</span>
+
+						@if(!empty($user) && $user->id==$item->id)
+							<a class="edit-button open-edit" guided-action="edit" href="javascript:;">
+								<img src="{{ url('img-trp/penci-bluel.png') }}">
+								{!! nl2br(trans('trp.page.user.edit-profile')) !!}
+							</a>
+						@endif
+						@if(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
+							<a class="claim-button" href="javascript:;" data-popup="claim-popup">
+								{{ trans('trp.common.claim-practice') }}
+							</a>
+						@endif
+
+						<div class="ratings average">
+							<div class="stars">
+								<div class="bar" style="width: {{ $item->avg_rating/5*100 }}%;">
+								</div>
+							</div>
 						</div>
-						{{ $item->city_name ? $item->city_name.', ' : '' }}
-						{{ $item->state_name ? $item->state_name.', ' : '' }} 
-						{{ $item->country->name }} 
-						<!-- <span class="gray-text">(2 km away)</span> -->
-					</a>
-			    	@if( $time = $item->getWorkHoursText() )
-			    		<div class="p">
-			    			<div class="img">
-				    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
-				    		</div>
-			    			{!! $time !!}
-			    		</div>
-			    	@endif
-			    	@if( $item->phone )
-			    		<a class="p" href="tel:{{ $item->getFormattedPhone(true) }}">
-			    			<div class="img">
-			    				<img class="black-filter" src="{{ url('img-trp/phone.png') }}">
-			    			</div>
-			    			{{ $item->getFormattedPhone() }}
-			    		</a>
-			    	@endif
-			    	@if( $item->website )
-			    		<a class="p website-p" href="{{ $item->getWebsiteUrl() }}" target="_blank">
-			    			<div class="img">
-			    				<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
-			    			</div>
-				    		<span>
-				    			{{ $item->website }}
-				    		</span>
-			    		</a>
-			    	@endif
-			    	@if(!empty($user) && $user->is_clinic && $item->is_clinic && $user->branches->isNotEmpty() && in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
-			    		<a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $item->id }}">
-		    				<div class="img">
-		    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-		    				</div>
-		    				{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
-		    				{!! csrf_field() !!}
-		    			</a>
-		    		@else
-			    		@if($item->branches->isNotEmpty())
-			    			<a href="{{ getLangUrl('branches/'.$item->slug) }}" class="p clinic-branches">
-			    				<div class="img">
-			    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-			    				</div>
-			    				{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
-			    			</a>
-			    		@else
-			    			@if(!empty($user) && ($user->id == 37530 || $user->id == 68690))
-				    			<a href="javascript:;" data-popup-logged="popup-branch" class="p clinic-branches">
-				    				<div class="img">
-				    					<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-				    				</div>
-				    				{!! nl2br(trans('trp.page.user.branch.add-branch')) !!}
-				    			</a>
-				    		@endif
-			    		@endif
-			    	@endif
-			    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
-			    		<div class="p workplace-p">
-				    		<div class="img" style="min-width: 25px;">
-				    			<img class="black-filter" src="{{ url('img-trp/clinic.png') }}">
-				    		</div>
-				    		<div>
-			    				{!! $workplace !!}
-			    			</div>
-			    		</div>
-			    	@endif
-				    <div class="p profile-socials">
-				    	@if(!empty($item->email))
-				    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
-				    			<i class="fas fa-envelope"></i>
-				    		</a>
-				    	@else
-				    		@if($item->branches->isNotEmpty())
-					    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : ($item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email) }}">
-					    			<i class="fas fa-envelope"></i>
-					    		</a>
-					    	@endif
-				    	@endif
-				    	@if( $item->socials )
-				    		@foreach($item->socials as $k => $v)
-					    		<a class="social" href="{{ $v }}" target="_blank">
-					    			<i class="{{ config('trp.social_network')[$k] }}"></i>
-					    		</a>
-					    	@endforeach
-				    	@endif
-				    </div>
+			
+						<div class="rating">
+							({{ trans('trp.common.reviews-count', [ 'count' => intval($item->ratings)]) }})
+						</div>
+
+						@if(!empty($user) && $user->id==$item->id)
+							<div style="padding: 5px;" guided-action="invite" class="dont-count">
+								<a href="javascript:;" class="button" data-popup-logged="popup-invite">
+									{!! nl2br(trans('trp.page.user.invite')) !!}
+								</a>
+							</div>
+							@if( $item->reviews_in_standard()->count() )
+								<a href="javascript:;" class="button button-inner-white add-widget-button" data-popup-logged="popup-widget" reviews-guided-action="add" style="text-transform: initial;">
+									{!! nl2br(trans('trp.page.user.widget')) !!}
+								</a>
+							@endif
+						@elseif( empty($user) || !$user->is_dentist )
+							<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
+								{!! nl2br(trans('trp.page.user.submit-review')) !!}
+							</a>
+							@if(empty($is_trusted) && !$has_asked_dentist)
+								<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
+									{!! nl2br(trans('trp.page.user.request-invite')) !!}
+								</a>
+							@endif
+						@endif		
+					</div>
+					<div class="profile-details">
+						<a href="javascript:;" class="p scroll-to-map" map-tooltip="{{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }} ">
+							<div class="img">
+								<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
+							</div>
+							{{ $item->city_name ? $item->city_name.', ' : '' }}
+							{{ $item->state_name ? $item->state_name.', ' : '' }} 
+							{{ $item->country->name }} 
+							<!-- <span class="gray-text">(2 km away)</span> -->
+						</a>
+						@if( $time = $item->getWorkHoursText() )
+							<div class="p">
+								<div class="img">
+									<img class="black-filter" src="{{ url('img-trp/open.png') }}">
+								</div>
+								{!! $time !!}
+							</div>
+						@endif
+						@if( $item->phone )
+							<a class="p" href="tel:{{ $item->getFormattedPhone(true) }}">
+								<div class="img">
+									<img class="black-filter" src="{{ url('img-trp/phone.png') }}">
+								</div>
+								{{ $item->getFormattedPhone() }}
+							</a>
+						@endif
+						@if( $item->website )
+							<a class="p website-p" href="{{ $item->getWebsiteUrl() }}" target="_blank">
+								<div class="img">
+									<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
+								</div>
+								<span>
+									{{ $item->website }}
+								</span>
+							</a>
+						@endif
+						@if(!empty($user) && $user->is_clinic && $item->is_clinic && $user->branches->isNotEmpty() && in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
+							<a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $item->id }}">
+								<div class="img">
+									<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+								</div>
+								{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
+								{!! csrf_field() !!}
+							</a>
+						@else
+							@if($item->branches->isNotEmpty())
+								<a href="{{ getLangUrl('branches/'.$item->slug) }}" class="p clinic-branches">
+									<div class="img">
+										<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+									</div>
+									{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
+								</a>
+							@endif
+						@endif
+						@if($item->top_dentist_month)
+							<div class="top-dentist">
+								<img src="{{ url('img-trp/top-dentist.png') }}">
+								<span>
+									{!! trans('trp.common.top-dentist') !!}
+								</span>
+							</div>
+						@endif
+						@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
+							<div class="p workplace-p">
+								<div class="img" style="min-width: 25px;">
+									<img class="black-filter" src="{{ url('img-trp/clinic.png') }}">
+								</div>
+								<div>
+									{!! $workplace !!}
+								</div>
+							</div>
+						@endif
+						<div class="p profile-socials">
+							@if(!empty($item->email))
+								<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
+									<i class="fas fa-envelope"></i>
+								</a>
+							@else
+								@if($item->branches->isNotEmpty())
+									<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : ($item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email) }}">
+										<i class="fas fa-envelope"></i>
+									</a>
+								@endif
+							@endif
+							@if( $item->socials )
+								@foreach($item->socials as $k => $v)
+									<a class="social" href="{{ $v }}" target="_blank">
+										<i class="{{ config('trp.social_network')[$k] }}"></i>
+									</a>
+								@endforeach
+							@endif
+						</div>
+					</div>
 				</div>
 			</div>
 			@if(!empty($user) && $user->id==$item->id)
@@ -692,7 +397,6 @@
 					{{ trans('trp.common.claim-practice') }}
 				</a>
 			@endif
-
 		</div>
 
 		<div class="profile-rating col tac">
