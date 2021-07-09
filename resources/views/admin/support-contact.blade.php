@@ -161,7 +161,7 @@
                                                 @if($item->replied_main_support_id && !$reply_id)
                                                     <br/>
                                                     <a href="{{ url('cms/support/contact/?reply-id='.$item->replied_main_support_id) }}" class="btn btn-sm btn-success" style="margin-top: 2px;">
-                                                        Check Old Replies
+                                                        Check full story
                                                     </a>
                                                 @endif
                                             </td>
