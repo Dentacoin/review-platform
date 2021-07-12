@@ -415,7 +415,6 @@ class SupportController extends AdminController {
                 $user_name = null;
 
                 if(empty($contact->userEmail)) {
-                    $user_name = $contact->userEmail->name;
                     $existing_anonymous = AnonymousUser::where('email', 'LIKE', $contact->email)->first();
 
                     if(empty($existing_anonymous)) {
@@ -423,6 +422,8 @@ class SupportController extends AdminController {
                         $new_anonymous_user->email = $contact->email;
                         $new_anonymous_user->save();
                     }
+                } else {
+                    $user_name = $contact->userEmail->name;
                 }
             }
 
