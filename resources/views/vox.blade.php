@@ -358,7 +358,7 @@
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 
 		@if(empty($user))
-			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js"></script>
+			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js?ver={{$cache_version}}"></script>
 			@if(strpos($_SERVER['HTTP_HOST'], 'urgent') !== false) 
 				<script type="text/javascript">
 					dcnGateway.init({
@@ -377,12 +377,13 @@
 			@endif
 		@else
 			@if($user->platform != 'external')
-				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style.css">
-				<script src="https://dentacoin.com/assets/libs/dentacoin-package/js/init.js"></script>
+				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style.css?ver={{$cache_version}}">
+				<script src="https://dentacoin.com/assets/libs/dentacoin-package/js/init.js?ver={{$cache_version}}"></script>
 
 				<script type="text/javascript">
 					if(typeof dcnHub !== 'undefined') {
 						var miniHubParams = {
+							'notifications_counter' : true,
 							'element_id_to_bind' : 'header-avatar',
 							'platform' : 'dentavox',
 							'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}.dentacoin.com/user-logout'
@@ -396,8 +397,8 @@
 		@endif
 
 		@if(empty($user) && empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']) && $current_page != 'profile')
-			<script src="https://dentacoin.com/assets/libs/dentacoin-package/js/init.js"></script>
-			<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style-cookie.css">
+			<script src="https://dentacoin.com/assets/libs/dentacoin-package/js/init.js?ver={{$cache_version}}"></script>
+			<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style-cookie.css?ver={{$cache_version}}">
 
 			<script type="text/javascript">
 				if (typeof dcnCookie !== 'undefined') {

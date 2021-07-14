@@ -23,6 +23,7 @@ Route::get('question-count', 						'CitiesController@getQuestions');
 Route::any('suggest-clinic/{id?}', 					'CitiesController@getClinic');
 Route::any('suggest-dentist/{id?}', 				'CitiesController@getDentist');
 Route::get('custom-cookie', 						'SSOController@manageCustomCookie')->name('custom-cookie');
+Route::get('get-unseen-notifications-count', 		'SSOController@getUnseenNotificationsCount');
 
 Route::post('wait', 								'CitiesController@wait');
 
