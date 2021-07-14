@@ -147,7 +147,7 @@
 									@endif
 								</div>
 								@if( $user->platform!='external' )
-									<a class="header-a" href="javascript:;" >
+									<a class="header-a header-avatar" href="javascript:;" >
 										<img class="header-avatar" id="header-avatar" src="{{ $user->getImageUrl(true) }}" width="46" height="46">
 									</a>
 								@endif

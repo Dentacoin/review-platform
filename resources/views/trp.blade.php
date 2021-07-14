@@ -119,7 +119,7 @@
 							@endif
 
 	                        @if(!empty($user))
-								<a href="javascript:;" class="profile-btn" id="header-avatar">
+								<a href="javascript:;" class="profile-btn header-avatar" id="header-avatar">
 									<span class="name">
 										{{ $user->getNameShort() }}
 									</span>
