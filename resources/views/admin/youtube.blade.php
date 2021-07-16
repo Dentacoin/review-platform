@@ -57,10 +57,12 @@
                                         <iframe width="480" height="270" src="https://www.youtube.com/embed/{{ $review->youtube_id }}" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
                                     </td>
                                     <td>
-                                        <a class="btn btn-primary btn-block" href="{{ url('cms/trp/youtube/approve/'.$review->id) }}">
-                                            <i class="fa fa-check"></i>
-                                            Approve
-                                        </a>
+                                        @if(!$review->youtube_approved)
+                                            <a class="btn btn-primary btn-block" href="{{ url('cms/trp/youtube/approve/'.$review->id) }}">
+                                                <i class="fa fa-check"></i>
+                                                Approve
+                                            </a>
+                                        @endif
                                         <br/>
                                         <a class="btn btn-success btn-block" href="{{ url('cms/trp/youtube/delete/'.$review->id) }}">
                                             <i class="fa fa-remove"></i>
