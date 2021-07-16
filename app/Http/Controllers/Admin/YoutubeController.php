@@ -22,8 +22,8 @@ class YoutubeController extends AdminController {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
-
-        $pending = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->get();
+        // ->where('youtube_approved', 0)
+        $pending = Review::where('youtube_id', '!=', '')->get();
 
         return $this->showView('youtube', array(
             'pending' => $pending,
