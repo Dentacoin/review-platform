@@ -660,9 +660,7 @@
                 <option value="">Select question</option>
                 <optgroup label="{{ $item->title }} survey questions">
                     @foreach($item->questions as $iq)
-                        @if($iq->order <= $question->order)
-                            <option value="{{ $iq->id }}" {{ !empty($question) && $question->id == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
-                        @endif
+                        <option value="{{ $iq->id }}" {{ !empty($question) && $question->id == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
                     @endforeach
                 </optgroup>
                 <optgroup label="Welcome survey questions">
