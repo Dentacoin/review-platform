@@ -657,7 +657,8 @@ $main-color: #38ace5;
 
 				    @media #{$phone} {
 					    width: calc(33% - 4px);
-					    margin-right: 4px;
+						margin-right: 2px;
+						margin-left: 2px;
 					    margin-bottom: 10px;
 					}
 

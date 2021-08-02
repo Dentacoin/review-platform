@@ -488,7 +488,8 @@
             .questions .question-group .answers.question-pictures .checkbox,
             .questions .question-group .answers.question-pictures .answer {
               width: calc(33% - 4px);
-              margin-right: 4px;
+              margin-right: 2px;
+              margin-left: 2px;
               margin-bottom: 10px; } }
           @media screen and (min-width: 769px) {
             .questions .question-group .answers.question-pictures .checkbox.active-label, .questions .question-group .answers.question-pictures .checkbox:hover,
