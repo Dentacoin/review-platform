@@ -643,7 +643,7 @@ $main-color: #38ace5;
 				margin: 0 auto;
 
 				@media #{$phone} {
-					justify-content: space-between;
+					flex-flow: row wrap;
 				}
 
 				.checkbox,
@@ -656,7 +656,8 @@ $main-color: #38ace5;
 				    margin-bottom: 30px;
 
 				    @media #{$phone} {
-					    width: calc(33% - 14px);
+						flex: 1;
+					    width: calc(33% - 4px);
 					    margin-right: 4px;
 					    margin-bottom: 10px;
 					}
