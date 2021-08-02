@@ -92,6 +92,7 @@ $(document).ready(function(){
             },
             success: function( data ) {
                 $('.question-group').find('.loader').remove();
+
                 if(data) {
                     if(data.indexOf("skip-dvq") >= 0) {
 
@@ -116,6 +117,10 @@ $(document).ready(function(){
                         $('#questions-box').prepend(data);
                         answerOnQuestion();
                         hangleQuestionStructure();
+                        
+                        $('html, body').animate({
+                            scrollTop: $('body').offset().top
+                        }, 500);
                     }
                 }
                 if($('.tooltip-window').length) {

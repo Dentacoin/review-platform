@@ -96,7 +96,7 @@
 	    </div>
 		
 	@else
-		<div class="container">
+		<div class="container all-qs-wrap">
 
 			@if($user && $is_warning_message_shown && !request()->exists('daily-answer'))
 				<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
@@ -180,7 +180,7 @@
 					</div>
 
 					@if(!empty($user))
-						<div class="questions-menu clearfix">
+						<div class="questions-menu filter-items clearfix">
 							<div class="filter-menu tal"> 
 								@foreach($filters as $k => $v)
 									@if($k == 'taken' && empty($taken))

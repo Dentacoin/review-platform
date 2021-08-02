@@ -34,7 +34,10 @@ $(document).ready(function(){
                 },
                 breakpoints: {
                     1130: {
-                      slidesPerView: 2,
+                        slidesPerView: 2,
+                    },
+                    768: {
+                        slidesPerView: 1,
                     },
                 },
                 autoplay: {
@@ -44,6 +47,7 @@ $(document).ready(function(){
         } else {
             var swiper_done = new Swiper('.swiper-container', {
                 slidesPerView: 1,
+                slidesPerGroup: 1,
                 spaceBetween: 0,
                 pagination: {
                     el: '.swiper-pagination',

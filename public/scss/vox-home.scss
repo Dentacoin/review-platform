@@ -183,6 +183,12 @@ $main-color: #38ace5;
 	}
 }
 
+.all-qs-wrap {
+	@media #{$phone} {
+		padding: 0px;
+	}
+}
+
 .all-taken-wrapper {
 	max-width: 980px;
     margin: 0 auto;
@@ -406,6 +412,7 @@ $main-color: #38ace5;
 	@media #{$phone} {
     	margin-left: 5%;
     	width: 45%;
+    	margin-top: 25px;
 	}
 
 	&::after {
@@ -433,6 +440,13 @@ $main-color: #38ace5;
 	}
 }
 
+#questions-wrapper {
+
+	@media #{$phone} {
+		margin-top: 10px;
+	}
+}
+
 .questions-menu {
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -440,6 +454,12 @@ $main-color: #38ace5;
 
 	@media #{$phone} {
 		margin-bottom: 20px;
+	}
+
+	&.filter-items {
+		@media #{$phone} {
+			margin-bottom: 0px;
+		}
 	}
 
 	.sort-menu,
@@ -487,6 +507,10 @@ $main-color: #38ace5;
 			color: #50ade8;
 			margin-right: 5px;
 			transition: all 0.3s ease;
+
+			@media #{$phone} {
+				min-width: 90px;
+			}
 
 			&:hover,
 			&.active {
@@ -618,7 +642,6 @@ $main-color: #38ace5;
 	}
 
 	h1 {
-
 		font-size: 30px;
 		font-weight: normal;
 		text-transform: uppercase;
@@ -630,7 +653,7 @@ $main-color: #38ace5;
 		@media #{$phone} {
 			font-size: 26px;
 			margin-bottom: 0px;
-			padding: 0px 30px;
+			padding: 0px 10px;
 		}
 	}
 
@@ -682,10 +705,11 @@ $main-color: #38ace5;
 					width: 320px;
 				}
 
-				@media (max-width: 768px) {
+				@media #{$phone} {
 					width: 100%;
 					margin-left: 0;
 					margin-right: 0;
+					margin-bottom: 20px;
 				}
 
 				&.request-vox {

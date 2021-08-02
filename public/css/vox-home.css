@@ -126,6 +126,10 @@
             .level-wrapper .container .col.lifetime-rewards .circle {
               display: none; } }
 
+@media screen and (max-width: 768px) {
+  .all-qs-wrap {
+    padding: 0px; } }
+
 .all-taken-wrapper {
   max-width: 980px;
   margin: 0 auto;
@@ -280,7 +284,8 @@
   @media screen and (max-width: 768px) {
     .search-survey {
       margin-left: 5%;
-      width: 45%; } }
+      width: 45%;
+      margin-top: 25px; } }
   .search-survey::after {
     content: '';
     display: block;
@@ -304,6 +309,10 @@
     padding-left: 5px;
     width: calc(100% - 25px); }
 
+@media screen and (max-width: 768px) {
+  #questions-wrapper {
+    margin-top: 10px; } }
+
 .questions-menu {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -311,6 +320,9 @@
   @media screen and (max-width: 768px) {
     .questions-menu {
       margin-bottom: 20px; } }
+  @media screen and (max-width: 768px) {
+    .questions-menu.filter-items {
+      margin-bottom: 0px; } }
   .questions-menu .sort-menu,
   .questions-menu .sort-category {
     width: 50%;
@@ -347,6 +359,9 @@
       color: #50ade8;
       margin-right: 5px;
       transition: all 0.3s ease; }
+      @media screen and (max-width: 768px) {
+        .questions-menu .filter-menu label {
+          min-width: 90px; } }
       .questions-menu .filter-menu label:hover, .questions-menu .filter-menu label.active {
         background-color: #d3ebfb;
         transition: all 0.3s ease; }
@@ -445,7 +460,7 @@
       .another-questions h1 {
         font-size: 26px;
         margin-bottom: 0px;
-        padding: 0px 30px; } }
+        padding: 0px 10px; } }
   .another-questions .filters-section {
     max-width: 980px;
     margin: 0 auto; }
@@ -481,11 +496,12 @@
       @media (max-width: 992px) {
         .another-questions .section-recent-surveys .questions-inner .swiper-slide {
           width: 320px; } }
-      @media (max-width: 768px) {
+      @media screen and (max-width: 768px) {
         .another-questions .section-recent-surveys .questions-inner .swiper-slide {
           width: 100%;
           margin-left: 0;
-          margin-right: 0; } }
+          margin-right: 0;
+          margin-bottom: 20px; } }
       .another-questions .section-recent-surveys .questions-inner .swiper-slide.request-vox .slide-padding {
         background-color: #ffd9e4; }
         .another-questions .section-recent-surveys .questions-inner .swiper-slide.request-vox .slide-padding .cover {
