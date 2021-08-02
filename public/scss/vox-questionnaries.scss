@@ -656,7 +656,6 @@ $main-color: #38ace5;
 				    margin-bottom: 30px;
 
 				    @media #{$phone} {
-						flex: 1;
 					    width: calc(33% - 4px);
 					    margin-right: 4px;
 					    margin-bottom: 10px;
