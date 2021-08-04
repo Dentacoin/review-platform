@@ -118,7 +118,6 @@ class SSOController extends BaseController {
     }
 
     public function getUnseenNotificationsCount() {
-
         if(session('logged_user') && isset(session('logged_user')['token'])) {
             $header = array();
             $header[] = 'Accept: */*';
@@ -135,15 +134,14 @@ class SSOController extends BaseController {
 
             $resp = json_decode(curl_exec($curl));
             curl_close($curl);
-
             if (!empty($resp))   {
                 return response()->json($resp);
             } else {
-                return false;
+                return response()->json(['success' => false]);
             }
         }
 
-        return false;
+        return response()->json(['success' => false]);
     }
 
 }
