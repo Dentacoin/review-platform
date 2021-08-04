@@ -135,10 +135,10 @@
                                         {!! $invite->rewarded ? '<span class="label label-success">Yes</span>' : '<span class="label label-warning">No</span>' !!}
                                     </td>
                                     <td>
-                                        {!! $invite->for_dentist_patients ? '<span class="label label-success">Yes</span>' : '' !!}
+                                        {!! $invite->suspicious_email ? '<span class="label label-danger">Yes</span>' : '' !!}
                                     </td>
                                     <td>
-                                        {!! $invite->suspicious_email ? '<span class="label label-danger">Yes</span>' : '' !!}
+                                        {!! $invite->for_dentist_patients ? '<span class="label label-success">Yes</span>' : '' !!}
                                     </td>
                                     @if($admin->role!='support')
                                         <td>
