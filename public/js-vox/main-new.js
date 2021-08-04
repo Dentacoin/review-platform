@@ -389,6 +389,14 @@ $(document).ready(function(){
 				                   		history.pushState({}, null, '/en/daily-polls/'+ret.date_href);
 				                	}
 	                			}
+
+								if($('body').hasClass('page-daily-polls')) {
+									$('.browse-all-polls').hide();
+									$('.browse-next-stats').show();
+								} else {
+									$('.browse-all-polls').show();
+									$('.browse-next-stats').hide();
+								}
 	                		}
 	                	} else if($('.popup.active').attr('id') == 'request-survey-popup') {
 	                		$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/select2.min.css">');
@@ -1095,6 +1103,7 @@ $(document).ready(function(){
 
 		                	$('#poll-popup').find('.content').hide();
 		                	$('#poll-popup').find('.poll-form-wrapper').show();
+
 		                	tooltipsFunction();
 		                	pollStats();
 		                	pollsFunction();

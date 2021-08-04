@@ -65,17 +65,14 @@
 
 			@if(!empty($user))
 				<div class="get-reward-buttons">
-					@if($current_page != 'daily-polls')
-						<a href="{{ getLangUrl('daily-polls') }}" class="white-button browse-polls">
-							<img src="{{ url('new-vox-img/polls-calendar.svg') }}" alt="Dentavox daily polls calendar">
-							{!! nl2br(trans('vox.daily-polls.popup.browse-polls')) !!}
-						</a>
-					@else					
-						<a href="javascript:;" class="white-button next-stat">
-							{!! nl2br(trans('vox.daily-polls.popup.next-results')) !!}
-							<img src="{{ url('new-vox-img/next-arrow-blue.svg') }}">
-						</a>
-					@endif
+					<a href="{{ getLangUrl('daily-polls') }}" class="white-button browse-polls browse-all-polls">
+						<img src="{{ url('new-vox-img/polls-calendar.svg') }}" alt="Dentavox daily polls calendar">
+						{!! nl2br(trans('vox.daily-polls.popup.browse-polls')) !!}
+					</a>			
+					<a href="javascript:;" class="white-button next-stat browse-next-stats">
+						{!! nl2br(trans('vox.daily-polls.popup.next-results')) !!}
+						<img src="{{ url('new-vox-img/next-arrow-blue.svg') }}">
+					</a>
 					<a href="javascript:;" class="blue-button next-poll">
 						{!! nl2br(trans('vox.daily-polls.popup.next-poll')) !!}
 						<img src="{{ url('new-vox-img/next-arrow.svg') }}">
