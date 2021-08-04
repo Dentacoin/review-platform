@@ -101,6 +101,7 @@
                                 <th>Platform</th>
                                 <th>Rewarded</th>
                                 <th>Suspicious email</th>
+                                <th>For HubApp</th>
                                 @if($admin->role!='support')
                                     <th>Delete</th>
                                 @endif
@@ -132,6 +133,9 @@
                                     </td>
                                     <td>
                                         {!! $invite->rewarded ? '<span class="label label-success">Yes</span>' : '<span class="label label-warning">No</span>' !!}
+                                    </td>
+                                    <td>
+                                        {!! $invite->for_dentist_patients ? '<span class="label label-danger">Yes</span>' : '' !!}
                                     </td>
                                     <td>
                                         {!! $invite->suspicious_email ? '<span class="label label-danger">Yes</span>' : '' !!}
