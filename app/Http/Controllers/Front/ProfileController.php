@@ -172,6 +172,8 @@ class ProfileController extends FrontController {
                         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
                             return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month') ] );
                         }
+
+                        $invitation->invited_id = $existing_patient->id;
                     }
 
                     if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
@@ -218,6 +220,9 @@ class ProfileController extends FrontController {
                     $invitation->review = true;
                     if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
                         $invitation->for_dentist_patients = true;
+                    }
+                    if(!empty($existing_patient)) {
+                        $invitation->invited_id = $existing_patient->id;
                     }
                     $invitation->save();
                 }
@@ -619,6 +624,10 @@ class ProfileController extends FrontController {
                                     $invitation->suspicious_email = true;
                                 } else {
                                     $send_mail = true;
+                                    
+                                    if(!empty($existing_patient)) {
+                                        $invitation->invited_id = $existing_patient->id;
+                                    }
                                 }
 
                                 $invitation->save();
@@ -1513,6 +1522,11 @@ class ProfileController extends FrontController {
                 $inv->invited_id = $ask->user->id;
                 $inv->platform = 'trp';
                 $inv->rewarded = true;
+                
+                $existing_patient = User::withTrashed()->where('email', 'LIKE', $ask->user->email )->where('is_dentist', 0)->first();
+                if(!empty($existing_patient)) {
+                    $inv->invited_id = $existing_patient->id;
+                }
                 $inv->save();                    
             }
 
@@ -1543,7 +1557,7 @@ class ProfileController extends FrontController {
                         $reward->platform = 'trp';
                         $reward->reward = Reward::getReward('review_trusted');
                         $reward->type = 'review_trusted';
-                        $reward->reference_id = null;
+                        $reward->reference_id = $review->id;
 
                         $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
                         $dd = new DeviceDetector($userAgent);
