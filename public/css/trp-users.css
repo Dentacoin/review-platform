@@ -1966,6 +1966,9 @@ body.edit-user .information {
       .fixed-popup .popup-inner .reviews-wrapper .review-box .checkbox-label i,
       .fixed-popup .popup-inner .reviews-wrapper .review-box .checkbox-label a {
         color: #116684; }
+      .fixed-popup .popup-inner .reviews-wrapper .review-box .checkbox-label a {
+        font-size: 16px;
+        font-weight: bold; }
     .fixed-popup .popup-inner .reviews-wrapper .review-box label[for="video-agree"] {
       margin-top: 8px; }
     .fixed-popup .popup-inner .reviews-wrapper .review-box p {

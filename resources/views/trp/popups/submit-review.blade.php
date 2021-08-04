@@ -245,6 +245,7 @@
 												<i class="far fa-square"></i>
 												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-terms', [
 													'link' => '<a class="read-privacy" target="_blank" href="https://dentacoin.com/privacy-policy">',
+													'link_youtube' => '<a class="read-privacy" target="_blank" href="https://www.youtube.com/t/terms">',
 													'endlink' => '</a>',												
 												])) !!}
 											</label>
