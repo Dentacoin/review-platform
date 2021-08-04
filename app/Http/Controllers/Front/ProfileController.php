@@ -1574,6 +1574,30 @@ class ProfileController extends FrontController {
                         }
 
                         $reward->save();
+
+
+                        $reward = new DcnReward();
+                        $reward->user_id = $ask->dentist_id;
+                        $reward->platform = 'trp';
+                        $reward->reward = Reward::getReward('reward_dentist');
+                        $reward->type = 'dentist-review';
+                        $reward->reference_id = $review->id;
+
+                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                        $dd = new DeviceDetector($userAgent);
+                        $dd->parse();
+
+                        if ($dd->isBot()) {
+                            // handle bots,spiders,crawlers,...
+                            $reward->device = $dd->getBot();
+                        } else {
+                            $reward->device = $dd->getDeviceName();
+                            $reward->brand = $dd->getBrandName();
+                            $reward->model = $dd->getModel();
+                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                        }
+
+                        $reward->save();
                     }
                 }
             }
