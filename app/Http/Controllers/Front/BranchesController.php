@@ -55,7 +55,7 @@ class BranchesController extends FrontController {
                 'js' => [
                     'search.js',
                     'branch.js',
-                    'upload.js',
+                    '../js/upload.js',
                     'address.js',
                 ],
             ]);

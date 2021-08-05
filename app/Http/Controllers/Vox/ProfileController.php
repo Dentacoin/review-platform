@@ -128,7 +128,7 @@ class ProfileController extends FrontController {
                 'voxBans' => $user->vox_bans,
                 'js' => [
                     'profile.js',
-                    'swiper.min.js'
+                    '../js/swiper.min.js'
                 ],
                 'csscdn' => [
                     'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',

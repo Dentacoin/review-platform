@@ -88,7 +88,7 @@ $(document).ready(function(){
                             $('#to-append-public').append(ret);
                             $('#to-append-public').addClass('appended');
 
-                            $.getScript(window.location.origin+'/js-vox/swiper.min.js', function() {
+                            $.getScript(window.location.origin+'/js/swiper.min.js', function() {
                                 
                                 handleSwiper();
 

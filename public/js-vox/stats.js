@@ -567,8 +567,8 @@ $(document).ready(function(){
 
             var that = $(this);
 
-            $.getScript(window.location.origin+'/js-vox/moment.js', function() {
-                $.getScript(window.location.origin+'/js-vox/daterangepicker.min.js', function() {
+            $.getScript(window.location.origin+'/js/moment.js', function() {
+                $.getScript(window.location.origin+'/js/daterangepicker.min.js', function() {
                     $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/daterangepicker.min.css">');
 
                     that.closest('.filters-wrapper').find('.filters-custom').show();
@@ -656,10 +656,10 @@ $(document).ready(function(){
             $('#main-loader').fadeIn();
             $('#main-loader').find('.loader-mask').fadeIn();
 
-            $.getScript(window.location.origin+'/js-vox/amcharts-core.js', function() {
-                $.getScript(window.location.origin+'/js-vox/amcharts-maps.js', function() {
-                    $.getScript(window.location.origin+'/js-vox/amcharts-worldLow.js', function() {
-                        $.getScript(window.location.origin+'/js-vox/gstatic-charts-loader.js', function() {
+            $.getScript(window.location.origin+'/js/amcharts-core.js', function() {
+                $.getScript(window.location.origin+'/js/amcharts-maps.js', function() {
+                    $.getScript(window.location.origin+'/js/amcharts-worldLow.js', function() {
+                        $.getScript(window.location.origin+'/js/gstatic-charts-loader.js', function() {
                             google.charts.load('current', {
                                 packages: ['corechart', 'bar'],
                             });
@@ -1575,10 +1575,10 @@ $(document).ready(function(){
             $('#main-loader').fadeIn();
             $('#main-loader').find('.loader-mask').fadeIn();
 
-            $.getScript(window.location.origin+'/js-vox/amcharts-core.js', function() {
-                $.getScript(window.location.origin+'/js-vox/amcharts-maps.js', function() {
-                    $.getScript(window.location.origin+'/js-vox/amcharts-worldLow.js', function() {
-                        $.getScript(window.location.origin+'/js-vox/gstatic-charts-loader.js', function() {
+            $.getScript(window.location.origin+'/js/amcharts-core.js', function() {
+                $.getScript(window.location.origin+'/js/amcharts-maps.js', function() {
+                    $.getScript(window.location.origin+'/js/amcharts-worldLow.js', function() {
+                        $.getScript(window.location.origin+'/js/gstatic-charts-loader.js', function() {
 
                             google.charts.load('current', {
                                 packages: ['corechart', 'bar'],

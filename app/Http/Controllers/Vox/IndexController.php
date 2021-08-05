@@ -104,12 +104,12 @@ class IndexController extends FrontController {
 
 		if (!empty($this->user)) {
 			$arr['css'][] = 'select2.min.css';
-			$arr['js'][] = 'select2.min.js';
+			$arr['js'][] = '../js/select2.min.js';
 		}
 
 		if($all_taken) {
 			$arr['css'][] = 'flickity.min.css';
-            $arr['js'][] = 'flickity.min.js';
+            $arr['js'][] = '../js/flickity.min.js';
 		}
 
 		return $this->ShowVoxView('home', $arr);

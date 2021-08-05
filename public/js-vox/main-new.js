@@ -400,7 +400,7 @@ $(document).ready(function(){
 	                		}
 	                	} else if($('.popup.active').attr('id') == 'request-survey-popup') {
 	                		$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/select2.min.css">');
-	                		$.getScript(window.location.origin+'/js-vox/select2.min.js', function() {
+	                		$.getScript(window.location.origin+'/js/select2.min.js', function() {
 	                			if ($('.select2').length) {
 							        $(".select2").select2({
 							            multiple: true,
@@ -410,7 +410,7 @@ $(document).ready(function(){
 	                		});
 	                	} else if($('.popup.active').attr('id') == 'social-profile-popup') {
 
-	                		$.getScript(window.location.origin+'/js-vox/upload.js', function() {
+	                		$.getScript(window.location.origin+'/js/upload.js', function() {
 	                			handleActivePopupFunctions();
 
 	                			$('.popup .closer-pop').click( function() {

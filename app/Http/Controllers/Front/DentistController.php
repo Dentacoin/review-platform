@@ -649,9 +649,9 @@ class DentistController extends FrontController {
             $view_params['jscdn'][] = '//vjs.zencdn.net/6.4.0/video.min.js';
             $view_params['jscdn'][] = '//cdn.WebRTC-Experiment.com/RecordRTC.js';
             $view_params['jscdn'][] = '//webrtc.github.io/adapter/adapter-latest.js';
-            $view_params['js'][] = 'videojs.record.min.js';
-            $view_params['js'][] = 'codemirror.min.js';
-            $view_params['js'][] = 'codemirror-placeholder.js';
+            $view_params['js'][] = '../js/videojs.record.min.js';
+            $view_params['js'][] = '../js/codemirror.min.js';
+            $view_params['js'][] = '../js/codemirror-placeholder.js';
             $view_params['js'][] = 'user-logged.js';
             $view_params['css'][] = 'codemirror.css';
 
@@ -694,12 +694,12 @@ class DentistController extends FrontController {
             if(!empty($this->user) && $this->user->id == $item->id) {
                 $load_flickity = 'true';
                 $view_params['css'][] = 'flickity.min.css';
-                $view_params['js'][] = 'flickity.min.js';
+                $view_params['js'][] = '../js/flickity.min.js';
             } else {
                 if($item->reviews_in()->isEmpty()) {
                     $load_flickity = 'true';
                     $view_params['css'][] = 'flickity.min.css';
-                    $view_params['js'][] = 'flickity.min.js';
+                    $view_params['js'][] = '../js/flickity.min.js';
                 } else {
                     $load_flickity = 'false';
                 }
@@ -757,7 +757,7 @@ class DentistController extends FrontController {
         }
 
         if(!empty($this->user) && $this->user->id==$item->id) {
-            $view_params['js'][] = 'upload.js';
+            $view_params['js'][] = '../js/upload.js';
             $view_params['hours'] = [
             ];
             for($i=0;$i<=23;$i++) {

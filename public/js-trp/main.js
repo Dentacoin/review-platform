@@ -219,7 +219,7 @@ jQuery(document).ready(function($){
 	                	} else if($('.popup.active').attr('id') == 'verification-popup') {
 	                		$.getScript(window.location.origin+'/js-trp/login.js', function() {
 							});
-					        $.getScript(window.location.origin+'/js-trp/upload.js', function() {
+					        $.getScript(window.location.origin+'/js/upload.js', function() {
 							});
 
 							if(event_res) {
@@ -483,7 +483,7 @@ jQuery(document).ready(function($){
 	                $('.all-days-equal').hide();
 		        }
 		    } else if(id =='social-profile-popup') {
-		    	$.getScript(window.location.origin+'/js-trp/upload.js', function() {
+		    	$.getScript(window.location.origin+'/js/upload.js', function() {
 
         			$('.popup .closer-pop').click( function() {
 

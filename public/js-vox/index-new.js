@@ -62,7 +62,7 @@ $(document).ready(function(){
                             $('#to-append').append(ret);
                             $('#to-append').addClass('appended');
 
-                            $.getScript(window.location.origin+'/js-vox/swiper.min.js', function() {
+                            $.getScript(window.location.origin+'/js/swiper.min.js', function() {
                                 
                                 if ($('.swiper-container').length && typeof Swiper !== 'undefined' ) {
                                     if (window.innerWidth > 1150) {

@@ -159,7 +159,7 @@ $(document).ready(function(){
             }
 
             if (!load_flickity ) {
-                $.getScript(window.location.origin+'/js-trp/flickity.min.js', function() {
+                $.getScript(window.location.origin+'/js/flickity.min.js', function() {
                     $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
                     flickityFunctions();
                     load_flickity = true;

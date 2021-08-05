@@ -241,14 +241,14 @@
 
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
-		<script src="{{ url('/js-vox/dom-to-image.min.js') }}"></script>
+		<script src="{{ url('/js/dom-to-image.min.js') }}"></script>
 		<script src="{{ url('/js-vox/main-new.js').'?ver='.$cache_version }}"></script>
-		<script src="{{ url('/js-vox/moment.js') }}"></script>
 		<script src="{{ url('/js-vox/stats.js').'?ver='.$cache_version }}"></script>
-		<script src="{{ url('/js-vox/amcharts-core.js') }}"></script>
-		<script src="{{ url('/js-vox/amcharts-maps.js') }}"></script>
-		<script src="{{ url('/js-vox/amcharts-worldLow.js') }}"></script>
-		<script src="{{ url('/js-vox/gstatic-charts-loader.js') }}"></script>
+		<script src="{{ url('/js/moment.js') }}"></script>
+		<script src="{{ url('/js/amcharts-core.js') }}"></script>
+		<script src="{{ url('/js/amcharts-maps.js') }}"></script>
+		<script src="{{ url('/js/amcharts-worldLow.js') }}"></script>
+		<script src="{{ url('/js/gstatic-charts-loader.js') }}"></script>
 		<script type="text/javascript">
         	var images_path = '{{ url('img-trp') }}'; //Map pins
         	var lang = '{{ App::getLocale() }}';

@@ -930,7 +930,7 @@ class VoxService {
                         'social_image' => $vox->getSocialImageUrl('survey'),
                         'js' => [
                             'taken-vox.js',
-                            'swiper.min.js'
+                            '../js/swiper.min.js'
                         ],
                         'css' => [
                             'swiper.min.css'
@@ -1002,7 +1002,7 @@ class VoxService {
                             'social_image' => $vox->getSocialImageUrl('survey'),
                             'js' => [
                                 'taken-vox.js',
-                                'swiper.min.js'
+                                '../js/swiper.min.js'
                             ],
                             'css' => [
                                 'swiper.min.css'
@@ -1283,8 +1283,8 @@ class VoxService {
                         '../js/lightbox.js',
                         '../js/jquery-ui.min.js',
                         '../js/jquery-ui-touch.min.js',
-                        'flickity.pkgd.min.js',
-                        'swiper.min.js'
+                        '../js/flickity.pkgd.min.js',
+                        '../js/swiper.min.js'
                     ],
                     'css' => [
                         'vox-questionnaries.css',

@@ -189,6 +189,6 @@
 
 @if($layout == 'carousel')
 	<script src="https://reviews.dentacoin.com/js/jquery-3.4.1.min.js"></script>
-	<script src="https://reviews.dentacoin.com/js-trp/flickity.min.js"></script>
+	<script src="https://reviews.dentacoin.com/js/flickity.min.js"></script>
 	<script src="https://reviews.dentacoin.com/js-trp/widget.js"></script>
 @endif
