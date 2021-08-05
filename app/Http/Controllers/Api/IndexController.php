@@ -338,4 +338,34 @@ class IndexController extends ApiController {
         ] );
     }
 
+	public function apiLogUser() {
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POST => 1,
+            CURLOPT_URL => 'https://api.dentacoin.com/api/log-user/',
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_POSTFIELDS => array(
+                'slug' => Request::input('slug')
+            )
+        ));
+
+        $resp = json_decode(curl_exec($curl));
+        curl_close($curl);
+
+        if(!empty($resp))   {
+			if($resp->success) {
+				return Response::json( [
+                    'success' => true,
+					'user_token' => $resp->token,
+                ] );
+			}
+        }else {
+            return Response::json( [
+				'success' => false,
+			] );
+        }
+    }
+
 }

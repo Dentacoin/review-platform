@@ -298,6 +298,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::get('is-dentacoin-down', 			    'IndexController@isDentacoinDown');
     Route::get('is-online', 			            'IndexController@isOnline');
 	Route::post('save-user-device',					'IndexController@saveUserDevice');
+	Route::post('api-log-user',						'IndexController@apiLogUser');
 
 	Route::get('all-voxes', 						'PaidDentalSurveysController@allVoxes');
 	Route::get('get-voxes', 						'PaidDentalSurveysController@getVoxes');
