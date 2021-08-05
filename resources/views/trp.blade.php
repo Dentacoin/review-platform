@@ -23,7 +23,7 @@
         <meta property="og:title" content="{{ $social_title }}"/>
         <meta property="og:description" content="{{ $social_description }}"/>
         <meta property="og:image" content="{{ $social_image }}"/>
-        <meta property="og:site_name" content="{{ trans('front.social.site-name') }}" />
+        <meta property="og:site_name" content="{{ trans('trp.social.site-name') }}" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@trustedreviews">

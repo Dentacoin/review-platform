@@ -15,6 +15,7 @@ use App\Models\DcnTransaction;
 use App\Models\SupportContact;
 use App\Models\BanAppeal;
 use App\Models\Review;
+use App\Models\Order;
 use App\Models\Admin;
 
 use Auth;
@@ -143,6 +144,7 @@ class AdminController extends BaseController {
 
         $params['counters']['support'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
         $params['counters']['contact'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
+        $params['counters']['orders'] = Order::whereNull('is_send')->count();
         
         $params['cache_version'] = '20210706';
 

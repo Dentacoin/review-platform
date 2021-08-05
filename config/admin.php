@@ -81,6 +81,9 @@ return [
                 'old_emails' => 'old_emails',
             ),
         ),
+        'orders' => array(
+            'icon' => 'shopping-cart',
+        ),
         'trp' => array(
             'icon' => 'list-alt',
             'subpages' => array(
@@ -113,12 +116,14 @@ return [
                 'polls-monthly-description' => 'polls-monthly-description',
                 'polls-explorer' => 'polls-explorer',
                 'recommendations' => 'recommendations',
+                'paid-reports' => 'paid-reports',
                 'tests' => 'tests',
             ),
             'js' => array(
                 'vox.js',
                 'faq.js',
                 'polls.js',
+                'paid-reports.js',
                 'jquery.multisortable.js',
                 '../jquery.multi-select.min.js',
             ),
@@ -150,7 +155,7 @@ return [
             ),
             'subpages' => array(
                 'admin' => 'admin',
-                //'front' => 'front',
+                'front' => 'front',
                 'trp' => 'trp',
                 'vox' => 'vox',
                 'vox-ios' => 'vox-ios',
