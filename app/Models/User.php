@@ -1939,7 +1939,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
                     $new_blacklist_block->email = $email;
                     $new_blacklist_block->save();
 
-                    return trans('front.page.login.blocked-name');
+                    return trans('trp.page.login.blocked-name');
                 }
             } else {
                 if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($email)) == true) {
@@ -1950,7 +1950,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
                     $new_blacklist_block->email = $email;
                     $new_blacklist_block->save();
                     
-                    return trans('front.page.login.blocked-email');
+                    return trans('trp.page.login.blocked-email');
                 }
             }
         }

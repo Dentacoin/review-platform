@@ -4,7 +4,7 @@
 
 	<div class="container all-stats-wrapper">
 
-		@include('front.errors')
+		@include('vox.errors')
 		<a class="back-home" href="{{ getLangUrl('/') }}">
 			{!! trans('vox.page.stats.go-back-surveys') !!}
 		</a> 

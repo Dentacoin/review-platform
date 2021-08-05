@@ -171,7 +171,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <div id="trp-widget">
 	<h2>
-		{!! trans('front.page.widget.title', [
+		{!! trans('trp.page.widget.title', [
 			'user' => $user->getNames(),
 			'link' => '<a target="_top" href="'.getLangUrl('/').'">',
 			'endlink' => '</a>',
@@ -180,7 +180,7 @@
 	<div class="review-list">
 		@if($reviews->isEmpty())
 			<div class="alert alert-info">
-				{!! trans('front.page.widget.no-reviews', [
+				{!! trans('trp.page.widget.no-reviews', [
 					'user' => $user->getNames(),
 					'link' => '<a target="_top" href="'.$user->getLink().'">',
 					'endlink' => '</a>',
@@ -194,8 +194,8 @@
 							<div class="media-left">
 								<img src="{{ $review->user->getImageUrl(true) }}" />
 								@if($review->verified)
-									<a target="_top" href="javascript:;" class="label label-success label-trusted" title="{{ trans('front.common.trusted-review') }}">
-										{{ trans('front.common.trusted-review') }}
+									<a target="_top" href="javascript:;" class="label label-success label-trusted" title="{{ trans('trp.common.trusted-review') }}">
+										{{ trans('trp.common.trusted-review') }}
 									</a>
 								@endif
 							</div>
@@ -214,13 +214,13 @@
 								@endif
 								<p>
 									<i class="fa fa-calendar fa-fw"></i> 
-									{{ $review->created_at ? trans('front.common.date-on', ['date' => $review->created_at->toFormattedDateString() ]) : '-' }}
+									{{ $review->created_at ? trans('trp.common.date-on', ['date' => $review->created_at->toFormattedDateString() ]) : '-' }}
 								</p>
 
 								@if($review->upvotes)
 									<p class="upvote-wrpapper">
 										<i class="fa fa-heart fa-fw"></i> 
-										{!! trans('front.page.dentist.people-find-useful', [ 'count' => '<span class="upvote-count">'.intval($review->upvotes).'</span>' ]) !!}
+										{!! trans('trp.page.dentist.people-find-useful', [ 'count' => '<span class="upvote-count">'.intval($review->upvotes).'</span>' ]) !!}
 									</p>
 								@endif
 							</div>
@@ -235,7 +235,7 @@
 							</div>
 							<div class="rating">
 								<b>
-									{{ trans('front.page.dentist.review-comment', ['name' => $review->user->getNames()]) }}:
+									{{ trans('trp.page.dentist.review-comment', ['name' => $review->user->getNames()]) }}:
 								</b> 
 								{!! nl2br($review->answer) !!}
 							</div>
@@ -247,7 +247,7 @@
 								<div class="rating">
 									<div class="the-reply" {!! !$review->reply ? 'style="display: none;"' : '' !!} >
 										<b>
-											{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getNames() : $review->clinic->getNames() ]) }}:
+											{{ trans('trp.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getNames() : $review->clinic->getNames() ]) }}:
 										</b> 
 										<span class="reply-content">
 											{!! nl2br($review->reply) !!}
@@ -259,7 +259,7 @@
 					@endif
 					<div class="panel-body review" >
 						<a target="_top" href="{{ $user->getLink() }}" class="btn btn-primary btn-block btn-show-review">
-							{{ trans('front.page.dentist.review-show-all') }}
+							{{ trans('trp.page.dentist.review-show-all') }}
 						</a>
 					</div>
 				</div>

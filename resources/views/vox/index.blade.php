@@ -2,7 +2,7 @@
 
 @section('content')
 
-	@include('front.errors')
+	@include('vox.errors')
 	<div class="full">
 		<div class="first-absolute">
 			<h1 class="index-h1">{!! $title !!}</h1>

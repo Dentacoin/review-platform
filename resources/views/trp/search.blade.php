@@ -257,7 +257,7 @@
 							@foreach($orders as $order)
 								<a {!! $sort==$order ? 'class="active"' : '' !!} sort="{{ $order }}">
 									<i class="fas fa-sort"></i>
-									{{ trans('front.page.'.$current_page.'.order-'.$order) }}
+									{{ trans('trp.page.'.$current_page.'.order-'.$order) }}
 								</a>
 							@endforeach
 							<input type="hidden" name="sort" value="{{ $sort }}" />
@@ -407,7 +407,7 @@
 				@foreach($orders as $order)
 					<a {!! $sort==$order ? 'class="active"' : '' !!} sort="{{ $order }}">
 						<i class="fas fa-sort"></i>
-						{{ trans('front.page.dentists.order-'.$order) }}
+						{{ trans('trp.page.dentists.order-'.$order) }}
 					</a>
 				@endforeach
 				<input type="hidden" name="sort" value="{{ $sort }}" />

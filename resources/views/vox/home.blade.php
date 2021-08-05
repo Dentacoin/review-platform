@@ -142,7 +142,7 @@
 			@endif
 			
 			<form  method="get" class="another-questions">
-	  			@include('front.errors')
+	  			@include('vox.errors')
 	  			
 				<h1 class="bold">
 					{{ trans('vox.page.home.title') }}

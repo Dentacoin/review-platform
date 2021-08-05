@@ -38,7 +38,7 @@ class CitiesController extends BaseController {
 			$user_list[] = [
 				'name' => $user->getNames().( $user->name_alternative && mb_strtolower($user->name)!=mb_strtolower($user->name_alternative) ? ' / '.$user->name_alternative : '' ) ,
 				'link' => $user->status=='dentist_no_email' ? User::find($user->invited_by)->getLink() : (!empty($user->slug) ? $user->getLink() : ''),
-				'type' => $user->is_clinic ? trans('front.common.clinic') : trans('front.common.dentist'),
+				'type' => $user->is_clinic ? trans('trp.common.clinic') : trans('trp.common.dentist'),
 				'is_clinic' => $user->is_clinic,
 				'rating' => $user->avg_rating,
 				'reviews' => $user->ratings,

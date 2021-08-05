@@ -219,7 +219,7 @@
 																		<tr>
 																			<td style="word-wrap:break-word;font-size:0px;" align="center">
 																				<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
-																					<a href="{{ $unsubscribe }}">{{ trans('front.page.emails.unsubscribe') }}</a>
+																					<a href="{{ $unsubscribe }}">{{ trans('trp.page.emails.unsubscribe') }}</a>
 																				</div>
 																			</td>
 																		</tr>
@@ -263,7 +263,7 @@
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
 																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
-																				{{ trans('front.page.emails.footer') }}
+																				{{ trans('trp.page.emails.footer') }}
 																			</div>
 																		</td>
 																	</tr>
@@ -306,7 +306,7 @@
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
 																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
-																				{!! nl2br(trans('front.page.emails.copyrights')) !!}
+																				{!! nl2br(trans('trp.page.emails.copyrights')) !!}
 																			</div>
 																		</td>
 																	</tr>

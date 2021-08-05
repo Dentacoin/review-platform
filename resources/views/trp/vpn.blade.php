@@ -10,7 +10,7 @@
 	<br/>
 
 	<div class="alert alert-warning">
-		{{ trans('front.page.register.register-blocked')  }}
+		{{ trans('trp.page.register.register-blocked')  }}
 	</div>
 
 	<br/>
