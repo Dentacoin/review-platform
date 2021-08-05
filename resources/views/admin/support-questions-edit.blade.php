@@ -54,6 +54,15 @@
                                     <textarea name="answer-{{ $code }}" class="form-control textarea-ckeditor" contenteditable="true" id="answer">{{ $item->{'content:'.$code} }}</textarea>
                                 </div>
                             </div>
+                            <div class="form-group clearfix">
+                                <label class="col-md-2 control-label"></label>
+                                <p class="col-md-10">
+                                    * If you want embed video from youtube video:<br/>
+                                    1. copy {{ '<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen="" frameborder="0" height="720" width="1280"></iframe></div>'}}<br/>
+                                    2. click on "Source" and paste it where you want.<br/>
+                                    3. change the video id (in this case is "tgbNymZ7vqY").<br/>
+                                </p>
+                            </div>
                         </div>
                     @endforeach
 
@@ -92,7 +101,6 @@
 	#cke_18,
 	#cke_39,
 	#cke_38,
-	#cke_26,
 	#cke_19,
 	#cke_13,
 	#cke_5,
