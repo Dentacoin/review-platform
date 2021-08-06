@@ -99,7 +99,7 @@
 		<div class="container all-qs-wrap">
 
 			@if(!empty($user) && $user->id == 37530)
-				<a href="dentavox://?slug={{ urlencode(App\Models\User::encrypt($user->id)) }}">Here</a>
+				<a href="dentavoxapp://?slug={{ urlencode(App\Models\User::encrypt($user->id)) }}">Here</a>
 			@endif
 
 			@if($user && $is_warning_message_shown && !request()->exists('daily-answer'))
