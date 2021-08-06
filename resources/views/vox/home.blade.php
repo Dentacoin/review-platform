@@ -98,10 +98,6 @@
 	@else
 		<div class="container all-qs-wrap">
 
-			@if(!empty($user) && $user->id == 37530)
-				<a href="dentavoxapp://?slug={{ urlencode(App\Models\User::encrypt($user->id)) }}">Here</a>
-			@endif
-
 			@if($user && $is_warning_message_shown && !request()->exists('daily-answer'))
 				<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
 			@endif
