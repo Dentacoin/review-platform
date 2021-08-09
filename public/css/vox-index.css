@@ -146,7 +146,8 @@
         .full .first-absolute a {
           font-size: 18px; } }
     .full .first-absolute .mobile-home-image {
-      display: none; }
+      display: none;
+      width: auto !important; }
       @media screen and (max-width: 1080px) {
         .full .first-absolute .mobile-home-image {
           display: block;
