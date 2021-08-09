@@ -566,9 +566,13 @@ $main-color: #38ace5;
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007fff', endColorstr='#75d5ff',GradientType=1 );
 	}
 
-	i {
-		color: #38a2e5;
-		font-size: 18px;
+	img {
+		max-width: 18px;
+		margin-bottom: -2px;
+
+		@media #{$phone} {
+			max-width: 13px;
+		}
 	}
 
 	input {

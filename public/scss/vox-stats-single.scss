@@ -155,6 +155,17 @@ $main-color: #38ace5;
 				z-index: 10;
 				top: 0px;
 				padding: 5px;
+
+				@media #{$phone} {
+					right: auto;
+					transform: translateX(-50%);
+					left: 50%;
+					top: -16px;
+				}
+
+				img {
+					width: 20px;
+				}
 			}
 
 			#custom-datepicker {
@@ -647,11 +658,21 @@ $main-color: #38ace5;
 		    		&.fb {
 		    			a {
 		    				background-color: #3a559f;
+
+		    				img {
+		    					width: 9px;
+   	 							margin-top: 3px;
+		    				}
 		    			}
 		    		}
 		    		&.twt {
 		    			a {
 		    				background-color: #50abf1;
+
+		    				img {
+								width: 17px;
+								margin-top: 5px;
+		    				}
 		    			}
 		    		}
 			    }
@@ -764,27 +785,24 @@ $main-color: #38ace5;
 						display: flex;
 					}
 
-					img {
+					.legend-img {
 						max-width: 20px;
+						margin-right: 6px;
 					}
 
-					i {
+					.arrow-up {
 						display: none;
-						color: white;
-
-						&:before {
-							font-size: 20px;
-						}
+						width: 15px;
 					}
 
 					&.active {
 						font-size: 0px;
 
-						img {
+						.legend-img {
 							display: none;
 						}
 
-						i {
+						.arrow-up {
 							display: block;
 						}
 					}
@@ -841,11 +859,11 @@ $main-color: #38ace5;
 							}
 
 							&.with-children {
-								&:after {
-									color: white;
+								.caret-down {
+									background-position-y: 100%;
 
 									@media #{$tablet} {
-										color: #888888;
+										background-position-y: 0%;
 									}
 								}
 							}
@@ -856,8 +874,8 @@ $main-color: #38ace5;
 							background: #64c1e0;
 
 							&.with-children {
-								&:after {
-									color: white;
+								.caret-down {
+									background-position-y: 100%;
 								}
 							}
 						}
@@ -867,15 +885,22 @@ $main-color: #38ace5;
 							padding-right: 26px;
 							padding-left: 15px;
 
-							&:after {
-								content: '\f0d7';
-								font-family: "Font Awesome 5 Free";
-    							font-weight: 900;
-    							color: #888888;
-    							position: absolute;
-    							right: 10px;
-    							top: 50%;
-    							transform: translateY(-50%);
+							.caret-down {
+								background-image: url('../new-vox-img/caret-down.png');
+							    width: 8px;
+							    height: 4px;
+							    position: absolute;
+							    right: 10px;
+							    top: 50%;
+							    transform: translateY(-50%);
+							    background-size: cover;
+							    background-position-y: 0%;
+							}
+
+							&:hover {
+								.caret-down {
+									background-position-y: 100%;
+								}
 							}
 
 							.scales-filter {
@@ -903,6 +928,13 @@ $main-color: #38ace5;
 							    	color: #333;
 							    	padding: 5px 0px;
 
+							    	&.active {
+							    		.checkbox-square {
+						    				font-size: 10px;
+											line-height: 12px;
+								    	}
+							    	}
+
 							    	&.select-all-scales-label {
 							    		color: #64c1e0;
     									font-weight: bold;
@@ -910,7 +942,7 @@ $main-color: #38ace5;
 							    		margin-bottom: 5px;
 							    		padding-bottom: 10px;
 
-							    		i {
+							    		.checkbox-square {
 							    			display: none;
 							    		}
 
@@ -919,16 +951,14 @@ $main-color: #38ace5;
 							    		}
 							    	}
 
-							    	&.active {
-							    		i {
-							    			&:before {
-							    				content: "\f14a";
-							    			}
-							    		}
-							    	}
-
-							    	i {
-							    		margin-right: 5px;
+							    	.checkbox-square {
+							    		width: 12px;
+									    height: 12px;
+									    margin-right: 3px;
+										font-size: 0px;
+										line-height: 18px;
+										border-color: black;
+										color: black;
 							    	}
 
 							    	input {
@@ -1331,11 +1361,9 @@ $main-color: #38ace5;
 							display: block;
 							padding: 0px 10px;
 
-							i {
-								&:before {
-									font-size: 25px;
-    								color: #555555;
-								}
+							img {
+								width: 8px;
+								display: block;
 							}
     					}
 					}
@@ -2140,7 +2168,7 @@ $main-color: #38ace5;
 			margin: 0 auto;
 			background: white;
 			border-radius: 10px;
-			padding: 50px 150px 40px;
+			padding: 50px 149px 40px;
 			text-align: center;
 			box-shadow: 0 0 23px 0px #a3a2a2;
 
@@ -2220,38 +2248,34 @@ $main-color: #38ace5;
 			    			background-color: #38ace5;
 			    			color: white;
 
-			    			i {
-			    				color: white;
+			    			.radio-button {
+			    				background-position-y: 100%;
 			    			}
 			    		}
 
 			    		&.active {
-			    			i {
-			    				&:before {
-			    					content: '\f192';
-			    				}
+			    			.radio-button {
+			    				background-image: url('../new-vox-img/radio-button-active.png');
 			    			}
 			    		}
 
-						i {
-							font-size: 24px;
-							color: #38ace5;
-						    margin-left: -32px;
-						    margin-right: 15px;
+			    		.radio-button {
+			    			width: 24px;
+			    			height: 24px;
+			    			background-image: url('../new-vox-img/radio-button-inactive.png');
+			    			background-size: cover;
+			    			background-position-y: 0%;
+			    			background-position-x:5 0%;
+			    			margin-left: -32px;
+    						margin-right: 15px;
 
 						    @media #{$phone} {
-						    	font-size: 16px;
+						    	width: 16px;
+			    				height: 16px;
 							    margin-left: -5px;
 	    						margin-right: 7px;
 	    					}
-
-						    &:before {
-
-		    					@media #{$phone} {
-		    						font-size: inherit;
-		    					}
-						    }
-						}
+			    		}
 
 			    		input {
 			    			display: none;
@@ -2511,9 +2535,7 @@ $main-color: #38ace5;
 			    			color: #4b607d;
 
 			    			.dem-arrow {
-							    i {
-							    	color: #4b607d;
-							    }
+								background-position-y: 100%;
 							}
 				    	}
 
@@ -2553,9 +2575,12 @@ $main-color: #38ace5;
 						    margin-left: 6px;
 						    margin-right: -8px;
 
-						    i {
-						    	color: #55b4dd;
-						    }
+						    background-image: url('../new-vox-img/caret-down-demogr.png');
+							width: 11px;
+							height: 4.7px;
+							margin-bottom: 3px;
+							background-size: cover;
+							background-position-y: 0%;
 				    	}
 
 				    	&.dem-dropdown {
@@ -2593,10 +2618,9 @@ $main-color: #38ace5;
 								    font-size: 14px;
 
 								    &.active {
-								    	i {
-									    	&:before {
-						    					content: '\f14a';
-						    				}
+								    	.checkbox-square {
+						    				font-size: 10px;
+											line-height: 12px;
 								    	}
 								    }
 
@@ -2607,14 +2631,19 @@ $main-color: #38ace5;
 									    margin-bottom: 5px;
 									    padding-bottom: 10px;
 
-									    i {
+									    .checkbox-square {
 										    display: none;
 										}
 									}
 
-									i {
-										margin-right: 5px;
-										font-size: 14px;
+									.checkbox-square {
+										width: 12px;
+									    height: 12px;
+									    margin-right: 3px;
+										font-size: 0px;
+										line-height: 18px;
+										border-color: black;
+										color: black;
 									}
 							    }
 				    		}

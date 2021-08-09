@@ -436,7 +436,7 @@ $(document).ready(function(){
         }
         //
         $('#wrong-control').hide();
-        group.find('.answers').append('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
+        group.find('.answers').append('<div class="loader"><i></i></div>');
 
         //Skip skipped :)
         if (group.attr('cross-check-correct') ) {
@@ -518,7 +518,7 @@ $(document).ready(function(){
                             wpopup.find('h2').html(data.title);
                             wpopup.find('h3 span').html( (parseInt(data.ban_duration)*24)+':00:00' );
                             wpopup.find('p').html(data.content);
-                            wpopup.find('img').attr('src', data.img);
+                            wpopup.find('img').not('.close-x-img').attr('src', data.img);
                             wpopup.addClass('active');
                             if(data.ban_duration) {
                                 hoursCountdown();                            
@@ -556,7 +556,7 @@ $(document).ready(function(){
                                 var wpopup = $('.popup.warning');
                                 wpopup.find('h2').html(data.title);
                                 wpopup.find('p').html(data.content);
-                                wpopup.find('img').attr('src', data.img);
+                                wpopup.find('img').not('.close-x-img').attr('src', data.img);
                                 wpopup.addClass('active');
                                 simpleCountDown();
                             }

@@ -23,7 +23,7 @@
 		<form class="search-stats-form" method="post" action="{{ getLangUrl('dental-survey-stats') }}">
 			{!! csrf_field() !!}
 			<div class="search-survey">
-				<i class="fas fa-search"></i>
+				<img src="{{ url('new-vox-img/blue-search.png') }}"/>
 				<input type="text" id="survey-search" name="survey-search" class="tal" value="{{ !empty($name) ? $name : '' }}">
 			</div>
 		</form>

@@ -199,7 +199,7 @@
 					</div>
 				</div>
 				<a class="closer x">
-					<i class="fas fa-times"></i>
+					<img src="{{ url('new-vox-img/close-popup.png') }}"/>
 				</a>
 			</div>
 		</div>

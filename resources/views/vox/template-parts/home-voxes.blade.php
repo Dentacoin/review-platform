@@ -38,7 +38,7 @@
 							@endif
 							@if(!empty($taken) && in_array($vox->id, $taken))
 								<a class="gray-button secondary" href="javascript:;">
-									<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
+									✓ </i>{{ trans('vox.common.taken') }}
 								</a>
 							@else
 								<a class="opinion blue-button {!! $vox->has_stats ? 'secondary' : '' !!}" href="{{ $vox->getLink() }}">
@@ -48,7 +48,7 @@
 						@else
 							@if(!empty($taken) && in_array($vox->id, $taken))
 								<a class="gray-button" href="javascript:;">
-									<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
+									✓ </i>{{ trans('vox.common.taken') }}
 								</a>
 							@else
 								<a class="opinion blue-button" href="{{ $vox->getLink() }}">

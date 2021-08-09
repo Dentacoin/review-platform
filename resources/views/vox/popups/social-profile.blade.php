@@ -23,7 +23,7 @@
 					    		</p>
 							</div>
 				    		<div class="loader">
-				    			<i class="fas fa-circle-notch fa-spin"></i>
+				    			<i></i>
 				    		</div>
 							<input type="file" name="image" id="add-avatar-patient" upload-url="{{ getLangUrl('profile/info/upload') }}" accept="image/png,image/jpeg,image/jpg">
 						</label>

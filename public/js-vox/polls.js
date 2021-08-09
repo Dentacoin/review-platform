@@ -105,7 +105,7 @@ $(document).ready(function(){
                 			}
 
                             if (ret.daily_polls[i].scheduled) {
-                                $('#calendar').find('.fc-bg td[data-date="'+ret.daily_polls[i].date+'"] .poll-day').append('<i class="fas fa-clock"></i>');
+                                $('#calendar').find('.fc-bg td[data-date="'+ret.daily_polls[i].date+'"] .poll-day').append('<img class="clock" src="'+all_images_path+'/clock.png"/>');
                                 $('#calendar').find('.fc-bg td[data-date="'+ret.daily_polls[i].date+'"]').addClass('admin');
                             }
 
@@ -238,7 +238,7 @@ $(document).ready(function(){
                             }
 
                             if (ret.daily_polls[i].scheduled) {
-                                $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').append('<i class="fas fa-clock"></i>');
+                                $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').append('<img class="clock" src="'+all_images_path+'/clock.png"/>');
                                 $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('admin');
                             }
                 		}

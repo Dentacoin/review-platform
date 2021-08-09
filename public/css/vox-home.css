@@ -1,7 +1,7 @@
 .level-wrapper {
   background-color: #42b0e7;
   padding: 25px 0px;
-  margin-bottom: 70px; }
+  margin-bottom: 20px; }
   @media screen and (max-width: 768px) {
     .level-wrapper {
       padding: 15px 0px;
@@ -56,12 +56,9 @@
             max-width: 62px;
             height: auto; } }
       .level-wrapper .container .col p {
-        font-size: 20px;
+        font-size: 19px;
         color: white;
         font-weight: 300; }
-        @media screen and (max-width: 1200px) {
-          .level-wrapper .container .col p {
-            font-size: 19px; } }
         @media screen and (max-width: 992px) and (min-width: 769px) {
           .level-wrapper .container .col p {
             font-size: 17px; } }
@@ -303,6 +300,12 @@
   .search-survey i {
     color: #38a2e5;
     font-size: 18px; }
+  .search-survey img {
+    max-width: 18px;
+    margin-bottom: -2px; }
+    @media screen and (max-width: 768px) {
+      .search-survey img {
+        max-width: 13px; } }
   .search-survey input {
     border: none;
     height: 28px;

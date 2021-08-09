@@ -287,7 +287,7 @@
 				</h3>
 			</div>
 			<a class="closer-pop x">
-				<i class="fas fa-times"></i>
+				<img class="close-x-img" src="{{ url('new-vox-img/close-popup.png') }}"/>
 			</a>
 		</div>
 	</div>
@@ -317,11 +317,12 @@
 				
 			</p>
 			<a class="btn back-btn btn-start-over">
-				<i class="fas fa-redo"></i>
+				<img src="{{ url('img/redo-arrow.png') }}"/> 
 				{!! nl2br(trans('vox.popup.warning-popup.start-over')) !!}
 			</a>
 			<a class="btn back-btn btn-roll-back">
-				<i class="far fa-arrow-alt-circle-left"></i> {!! nl2br(trans('vox.popup.warning-popup.roll-back')) !!}
+				<img src="{{ url('img/arrow-circle-left.png') }}"/> 
+				{!! nl2br(trans('vox.popup.warning-popup.roll-back')) !!}
 			</a>
 		</div>
 	</div>
@@ -339,7 +340,7 @@
 				</small>
 			</div>
 			<a class="closer-pop x">
-				<i class="fas fa-times"></i>
+				<img class="close-x-img" src="{{ url('new-vox-img/close-popup.png') }}"/>
 			</a>
 		</div>
 	</div>
@@ -389,7 +390,7 @@
 						<div class="checkbox">
 							<label class="checkbox-label agree-label" for="agree-faq" style="text-align: left; margin-bottom: 30px; margin-top: -20px;">
 								<input type="checkbox" class="special-checkbox" id="agree-faq" name="agree-faq" value="1">
-								<i class="far fa-square"></i>
+								<div class="checkbox-square">✓</div>
 								{!! trans('vox.page.bans.agree-faq', [
 									'link' => '<a href="'.getLangUrl('faq').'" target="_blank">',
 									'endlink' => '</a>',

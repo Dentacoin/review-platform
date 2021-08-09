@@ -407,9 +407,12 @@
     background: linear-gradient(to right, #007fff 0%, #75d5ff 100%);
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007fff', endColorstr='#75d5ff',GradientType=1 ); }
-  .search-survey i {
-    color: #38a2e5;
-    font-size: 18px; }
+  .search-survey img {
+    max-width: 18px;
+    margin-bottom: -2px; }
+    @media screen and (max-width: 768px) {
+      .search-survey img {
+        max-width: 13px; } }
   .search-survey input {
     border: none;
     height: 28px;

@@ -41,8 +41,8 @@
 				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
             @endforeach
         @endif
-		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-brands-400.woff2') }}" as="font" crossorigin>
-		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-solid-900.woff2') }}" as="font" crossorigin>
+		{{-- <link rel="preload" href="{{ url('font-awesome/webfonts/fa-brands-400.woff2') }}" as="font" crossorigin>
+		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-solid-900.woff2') }}" as="font" crossorigin> --}}
 
 		<style type="text/css">
 			body {
@@ -267,8 +267,12 @@
 							</small>
 						</div>
 						<div class="socials flex-3">
-							<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-							<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+							<a class="social" href="https://t.me/dentacoin" target="_blank">
+								<img class="tg" src="{{ url('img/tg-footer.png') }}"/>
+							</a>
+							<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank">
+								<img class="fb" src="{{ url('img/fb-footer.png') }}"/>
+							</a>
 						</div>
 						<a class="privacy-item-mobile" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
 					@endif
@@ -351,7 +355,7 @@
             @endforeach
         @endif
         
-		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
+		{{-- <link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" /> --}}
 		<!-- end css -->
 
 		<!-- js -->
@@ -459,7 +463,8 @@
             @endforeach
         @endif
         <script type="text/javascript">
-        	var images_path = '{{ url('img-trp') }}'; //Map pins
+        	var images_path = '{{ url('new-vox-img') }}'; //Map pins
+        	var all_images_path = '{{ url('img') }}'; //Map pins
         	var lang = '{{ App::getLocale() }}';
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         	var user_type = '{{ !empty($user) ? ($user->is_dentist ? 'dentist' : 'patient') : 'null' }}';

@@ -117,7 +117,7 @@
 							{!! $excluded_answers && isset($excluded_answers[$k+1]) ? 'excluded-group="'.$excluded_answers[$k+1].'"' : '' !!}
 						>
 
-							<i class="far fa-square"></i>
+						<div class="checkbox-square">✓</div>
 							<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="checkbox" name="answer" class="answer{!! mb_substr($answer, 0, 1)=='!' ? ' disabler' : '' !!} input-checkbox" value="{{ $loop->index+1 }}">
 
 							@if($question->allAnswersHaveImages() && !empty($answerImage))
@@ -133,7 +133,8 @@
 							{!! nl2br(App\Models\VoxQuestion::handleAnswerTooltip( mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer))  !!}
 
 							@if(!empty($answerTooltip))
-								<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}"><i class="fas fa-question-circle"></i>
+								<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}">
+									<img class="question-mark" src="{{ url('img/question-mark.png') }}" />
 								</div>
 							@endif
 						</label>
@@ -324,7 +325,8 @@
 					</div>
 
 					@if(!empty($answerTooltip))
-						<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}"><i class="fas fa-question-circle"></i>
+						<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}">
+							<img class="question-mark" src="{{ url('img/question-mark.png') }}" />
 						</div>
 					@endif
 					{!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? '<img src="'.$answerImage.'" style="display: none !important;" />' : '' !!}
@@ -399,7 +401,8 @@
 						{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
 
 						@if(!empty($answerTooltip))
-							<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}"><i class="fas fa-question-circle"></i>
+							<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}">
+								<img class="question-mark" src="{{ url('img/question-mark.png') }}" />
 							</div>
 						@endif
 						{!! !$question->allAnswersHaveImages() && $answerTooltip && !empty($answerImage) ? '<img src="'.$answerImage.'" style="display: none !important;" />' : '' !!}

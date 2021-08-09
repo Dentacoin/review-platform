@@ -1,6 +1,8 @@
 <div class="flex box">
 	<div class="scales flex flex-center">
-		@include('vox.template-parts.stats-scale-buttons')
+		@include('vox.template-parts.stats-scale-buttons', [
+			'scale_id' => '0'
+		])
 	</div>
 
 	<div class="share-buttons flex" data-href="{{ str_replace('dentavox', 'vox', $vox->getStatsList()) }}">
@@ -9,12 +11,12 @@
 		</span>
 		<div class="share-button fb tac">
 			<a class="share" href="javascript:;">
-				<i class="fab fa-facebook-f"></i>
+				<img class="fb" src="{{ url('img/fb-footer.png') }}"/>
 			</a>
 		</div>
 		<div class="share-button twt tac">
 			<a class="share" href="javascript:;">
-				<i class="fab fa-twitter"></i>
+				<img class="fb" src="{{ url('img/twitter.png') }}"/>
 			</a>
 		</div>
 		@if(!empty($user))
@@ -51,78 +53,27 @@
 	</div>
 	@if($question->type!='multiple_choice' && $question->type!='rank')
 		<a href="javascript:;" class="mobile-button-legend">
-			<img src="{{ url('new-vox-img/stats-legend.svg') }}"><i class="fas fa-arrow-up"></i>{!! trans('vox.page.stats.check-legend') !!}
+			<img class="legend-img" src="{{ url('new-vox-img/stats-legend.svg') }}"/>
+			<img class="arrow-up" src="{{ url('img/arrow-up.png') }}"/>
+			{!! trans('vox.page.stats.check-legend') !!}
 		</a>
 	@endif
 	<div class="scales flex flex-center mobile-scales">
-		{!! trans('vox.page.stats.scale-by') !!}:
-		@if($question->used_for_stats=='dependency')
-			<a href="javascript:;" class="active" scale="dependency" scale-name="{{ trans('vox.page.stats.relation') }}">{{ trans('vox.page.stats.relation') }}</a>
-		@endif
-		@foreach( $question->stats_fields as $sk)
-			<a href="javascript:;" class="{!! $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' !!} {!! $sk == 'gender' && $question->used_for_stats=='dependency' ? '' : (array_key_exists($sk, config('vox.details_fields')) || $sk == 'age' || ($sk == 'gender' && ($question->type == 'multiple_choice' || $question->type == 'rank' )) ? 'with-children' : '') !!}" scale="{{ $sk }}"  scale-name="{{ trans('vox.page.stats.group-by-'.$sk) }}">
-				{{ trans('vox.page.stats.group-by-'.$sk) }}
-
-				@if(array_key_exists($sk, config('vox.details_fields')))
-					<div class="scales-filter">
-						<label for="scale-{{ $sk }}-all-{{ $question->id }}-1" class="select-all-scales-label active">
-							<i class="far fa-square"></i>
-							<input type="checkbox" name="scale-{{ $sk }}[]" value="all" id="scale-{{ $sk }}-all-{{ $question->id }}-1" class="select-all-scales scale-checkbox" checked="checked">
-							{{ trans('vox.page.stats.select-all') }}
-						</label>
-						@foreach(config('vox.details_fields')[$sk]['values'] as $skk => $sv)
-							<label for="scale-{{ $sk }}-{{ $skk }}-{{ $question->id }}-1" class="active">
-								<i class="far fa-square"></i>
-								<input type="checkbox" name="scale-{{ $sk }}[]" value="{{ $skk }}" id="scale-{{ $sk }}-{{ $skk }}-{{ $question->id }}-1" class="scale-checkbox" checked="checked">
-								{{ $sv }}
-							</label>
-						@endforeach
-					</div>
-				@elseif($sk == 'age')
-					<div class="scales-filter">
-						<label for="scale-age-all-{{ $question->id }}-1" class="select-all-scales-label active">
-							<i class="far fa-square"></i>
-							<input type="checkbox" name="scale-age[]" value="all" id="scale-age-all-{{ $question->id }}-1" class="select-all-scales scale-checkbox" checked="checked">
-							{{ trans('vox.page.stats.select-all') }}
-						</label>
-						@foreach(config('vox.age_groups') as $ak => $av)
-							<label for="scale-age-{{ $ak }}-{{ $question->id }}-1" class="active">
-								<i class="far fa-square"></i>
-								<input type="checkbox" name="scale-age[]" value="{{ $ak }}" id="scale-age-{{ $ak }}-{{ $question->id }}-1" class="scale-checkbox" checked="checked">
-								{{ $av }}
-							</label>
-						@endforeach
-					</div>
-				@elseif($sk == 'gender' && ($question->type == 'multiple_choice' || $question->type == 'rank' ) && $question->used_for_stats!='dependency')
-					<div class="scales-filter">
-						<label for="scale-gender-all-{{ $question->id }}-1" class="select-all-scales-label active">
-							<i class="far fa-square"></i>
-							<input type="checkbox" name="scale-gender[]" value="all" id="scale-gender-all-{{ $question->id }}-1" class="select-all-scales scale-checkbox" checked="checked">
-							{{ trans('vox.page.stats.select-all') }}
-						</label>
-						<label for="scale-gender-f-{{ $question->id }}-1" class="active">
-							<i class="far fa-square"></i>
-							<input type="checkbox" name="scale-gender[]" value="f" id="scale-gender-f-{{ $question->id }}-1" class="scale-checkbox" checked="checked">
-							{{ trans('vox.page.stats.sex.women') }}
-						</label>
-						<label for="scale-gender-m-{{ $question->id }}-1" class="active">
-							<i class="far fa-square"></i>
-							<input type="checkbox" name="scale-gender[]" value="m" id="scale-gender-m-{{ $question->id }}-1" class="scale-checkbox" checked="checked">
-							{{ trans('vox.page.stats.sex.men') }}
-						</label>
-					</div>
-				
-				@endif
-			</a>
-		@endforeach
+		@include('vox.template-parts.stats-scale-buttons', [
+			'scale_id' => '1'
+		])
 	</div>
 
 	<div class="multiple-gender-nav">
-		<a href="javascript:;" class="gender-nav-left"><i class="fas fa-caret-left"></i></a>
+		<a href="javascript:;" class="gender-nav-left">
+			<img src="{{ url('img/caret-left.png') }}"/>
+		</a>
 		<div class="multiple-gender-nav-content">
 			<span class="nav-color"></span> <span class="gender-text">Brushing teeth</span>
 		</div>
-		<a href="javascript:;" class="gender-nav-right"><i class="fas fa-caret-right"></i></a>
+		<a href="javascript:;" class="gender-nav-right">
+			<img src="{{ url('img/caret-rigth.png') }}"/>
+		</a>
 	</div>
 	<div class="chart chart-2">
 		<div class="dependency-question"></div>

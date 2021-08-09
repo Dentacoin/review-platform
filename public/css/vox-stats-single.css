@@ -107,6 +107,14 @@
         z-index: 10;
         top: 0px;
         padding: 5px; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .filters-wrapper .filters-custom .close-custom-datepicker {
+            right: auto;
+            transform: translateX(-50%);
+            left: 50%;
+            top: -16px; } }
+        .page-statistics .filters-wrapper .filters-custom .close-custom-datepicker img {
+          width: 20px; }
       .page-statistics .filters-wrapper .filters-custom #custom-datepicker {
         position: relative;
         display: inline-block; }
@@ -378,8 +386,14 @@
             display: inline-block; } }
         .page-statistics .stats:not(.st-download) .stat .share-buttons .share-button.fb a {
           background-color: #3a559f; }
+          .page-statistics .stats:not(.st-download) .stat .share-buttons .share-button.fb a img {
+            width: 9px;
+            margin-top: 3px; }
         .page-statistics .stats:not(.st-download) .stat .share-buttons .share-button.twt a {
           background-color: #50abf1; }
+          .page-statistics .stats:not(.st-download) .stat .share-buttons .share-button.twt a img {
+            width: 17px;
+            margin-top: 5px; }
       .page-statistics .stats:not(.st-download) .stat .share-buttons a:not(.red-button) {
         border-radius: 3px;
         display: block;
@@ -462,18 +476,17 @@
         @media screen and (max-width: 768px) {
           .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend {
             display: flex; } }
-        .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend img {
-          max-width: 20px; }
-        .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend i {
+        .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend .legend-img {
+          max-width: 20px;
+          margin-right: 6px; }
+        .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend .arrow-up {
           display: none;
-          color: white; }
-          .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend i:before {
-            font-size: 20px; }
+          width: 15px; }
         .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend.active {
           font-size: 0px; }
-          .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend.active img {
+          .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend.active .legend-img {
             display: none; }
-          .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend.active i {
+          .page-statistics .stats:not(.st-download) .stat .contents .mobile-button-legend.active .arrow-up {
             display: block; }
       .page-statistics .stats:not(.st-download) .stat .contents .scales {
         margin-bottom: 25px; }
@@ -515,29 +528,32 @@
               .page-statistics .stats:not(.st-download) .stat .contents .scales a:hover {
                 background: #f6f6f6;
                 color: #0e1f2b; } }
-            .page-statistics .stats:not(.st-download) .stat .contents .scales a:hover.with-children:after {
-              color: white; }
+            .page-statistics .stats:not(.st-download) .stat .contents .scales a:hover.with-children .caret-down {
+              background-position-y: 100%; }
               @media screen and (max-width: 1080px) {
-                .page-statistics .stats:not(.st-download) .stat .contents .scales a:hover.with-children:after {
-                  color: #888888; } }
+                .page-statistics .stats:not(.st-download) .stat .contents .scales a:hover.with-children .caret-down {
+                  background-position-y: 0%; } }
           .page-statistics .stats:not(.st-download) .stat .contents .scales a.active {
             color: #f7f9fb;
             background: #64c1e0; }
-            .page-statistics .stats:not(.st-download) .stat .contents .scales a.active.with-children:after {
-              color: white; }
+            .page-statistics .stats:not(.st-download) .stat .contents .scales a.active.with-children .caret-down {
+              background-position-y: 100%; }
           .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children {
             position: relative;
             padding-right: 26px;
             padding-left: 15px; }
-            .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children:after {
-              content: '\f0d7';
-              font-family: "Font Awesome 5 Free";
-              font-weight: 900;
-              color: #888888;
+            .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .caret-down {
+              background-image: url("../new-vox-img/caret-down.png");
+              width: 8px;
+              height: 4px;
               position: absolute;
               right: 10px;
               top: 50%;
-              transform: translateY(-50%); }
+              transform: translateY(-50%);
+              background-size: cover;
+              background-position-y: 0%; }
+            .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children:hover .caret-down {
+              background-position-y: 100%; }
             .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter {
               text-align: left;
               display: none;
@@ -560,20 +576,27 @@
                 font-weight: normal;
                 color: #333;
                 padding: 5px 0px; }
+                .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.active .checkbox-square {
+                  font-size: 10px;
+                  line-height: 12px; }
                 .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.select-all-scales-label {
                   color: #64c1e0;
                   font-weight: bold;
                   border-bottom: 1px solid #65c1e0;
                   margin-bottom: 5px;
                   padding-bottom: 10px; }
-                  .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.select-all-scales-label i {
+                  .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.select-all-scales-label .checkbox-square {
                     display: none; }
                   .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.select-all-scales-label:hover {
                     color: #43b1e7; }
-                .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label.active i:before {
-                  content: "\f14a"; }
-                .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label i {
-                  margin-right: 5px; }
+                .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label .checkbox-square {
+                  width: 12px;
+                  height: 12px;
+                  margin-right: 3px;
+                  font-size: 0px;
+                  line-height: 18px;
+                  border-color: black;
+                  color: black; }
                 .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children .scales-filter label input {
                   display: none; }
             .page-statistics .stats:not(.st-download) .stat .contents .scales a.with-children.open .scales-filter {
@@ -834,9 +857,9 @@
           .page-statistics .stats:not(.st-download) .stat .contents .graphs .multiple-gender-nav a {
             display: block;
             padding: 0px 10px; }
-            .page-statistics .stats:not(.st-download) .stat .contents .graphs .multiple-gender-nav a i:before {
-              font-size: 25px;
-              color: #555555; }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .multiple-gender-nav a img {
+              width: 8px;
+              display: block; }
         .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart {
           z-index: 10;
           position: relative;
@@ -1376,7 +1399,7 @@
     margin: 0 auto;
     background: white;
     border-radius: 10px;
-    padding: 50px 150px 40px;
+    padding: 50px 149px 40px;
     text-align: center;
     box-shadow: 0 0 23px 0px #a3a2a2; }
     @media screen and (max-width: 768px) {
@@ -1437,23 +1460,25 @@
         .popup.download-stats-popup .popup-inner .content .download-formats label:hover, .popup.download-stats-popup .popup-inner .content .download-formats label.active {
           background-color: #38ace5;
           color: white; }
-          .popup.download-stats-popup .popup-inner .content .download-formats label:hover i, .popup.download-stats-popup .popup-inner .content .download-formats label.active i {
-            color: white; }
-        .popup.download-stats-popup .popup-inner .content .download-formats label.active i:before {
-          content: '\f192'; }
-        .popup.download-stats-popup .popup-inner .content .download-formats label i {
-          font-size: 24px;
-          color: #38ace5;
+          .popup.download-stats-popup .popup-inner .content .download-formats label:hover .radio-button, .popup.download-stats-popup .popup-inner .content .download-formats label.active .radio-button {
+            background-position-y: 100%; }
+        .popup.download-stats-popup .popup-inner .content .download-formats label.active .radio-button {
+          background-image: url("../new-vox-img/radio-button-active.png"); }
+        .popup.download-stats-popup .popup-inner .content .download-formats label .radio-button {
+          width: 24px;
+          height: 24px;
+          background-image: url("../new-vox-img/radio-button-inactive.png");
+          background-size: cover;
+          background-position-y: 0%;
+          background-position-x: 5 0%;
           margin-left: -32px;
           margin-right: 15px; }
           @media screen and (max-width: 768px) {
-            .popup.download-stats-popup .popup-inner .content .download-formats label i {
-              font-size: 16px;
+            .popup.download-stats-popup .popup-inner .content .download-formats label .radio-button {
+              width: 16px;
+              height: 16px;
               margin-left: -5px;
               margin-right: 7px; } }
-          @media screen and (max-width: 768px) {
-            .popup.download-stats-popup .popup-inner .content .download-formats label i:before {
-              font-size: inherit; } }
         .popup.download-stats-popup .popup-inner .content .download-formats label input {
           display: none; }
     .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper {
@@ -1615,8 +1640,8 @@
         .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:hover, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:focus, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active {
           background-color: #e6f1ff;
           color: #4b607d; }
-          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:hover .dem-arrow i, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:focus .dem-arrow i, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active .dem-arrow i {
-            color: #4b607d; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:hover .dem-arrow, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:focus .dem-arrow, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active .dem-arrow {
+            background-position-y: 100%; }
         .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active {
           font-weight: bold;
           padding-right: 50px; }
@@ -1643,9 +1668,13 @@
         .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .dem-arrow {
           display: inline-block;
           margin-left: 6px;
-          margin-right: -8px; }
-          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .dem-arrow i {
-            color: #55b4dd; }
+          margin-right: -8px;
+          background-image: url("../new-vox-img/caret-down-demogr.png");
+          width: 11px;
+          height: 4.7px;
+          margin-bottom: 3px;
+          background-size: cover;
+          background-position-y: 0%; }
         .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options {
           display: none;
           text-align: left;
@@ -1675,19 +1704,25 @@
             color: #333;
             padding: 5px 0px;
             font-size: 14px; }
-            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.active i:before {
-              content: '\f14a'; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.active .checkbox-square {
+              font-size: 10px;
+              line-height: 12px; }
             .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.select-all-dem-label {
               color: #64c1e0;
               font-weight: bold;
               border-bottom: 1px solid #65c1e0;
               margin-bottom: 5px;
               padding-bottom: 10px; }
-              .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.select-all-dem-label i {
+              .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.select-all-dem-label .checkbox-square {
                 display: none; }
-            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label i {
-              margin-right: 5px;
-              font-size: 14px; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label .checkbox-square {
+              width: 12px;
+              height: 12px;
+              margin-right: 3px;
+              font-size: 0px;
+              line-height: 18px;
+              border-color: black;
+              color: black; }
       .popup.download-stats-popup .popup-inner .content .download-demographics input {
         display: none; }
     .popup.download-stats-popup .popup-inner .content .red-button {

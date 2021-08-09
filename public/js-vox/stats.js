@@ -629,7 +629,7 @@ $(document).ready(function(){
                         $('.datepickerContainer').after( $('#datepicker-extras') );
 
                         $('#custom-datepicker').attr('inited', '1');
-                        $('#custom-datepicker').parent().prepend('<a href="javascript:;" class="close-custom-datepicker"><i class="fas fa-times"></i></a>');
+                        $('#custom-datepicker').parent().prepend('<a href="javascript:;" class="close-custom-datepicker"><img src="'+images_path+'/close-popup.png"/></a>');
 
                         $('.close-custom-datepicker').click( function(e) {
                             e.preventDefault();
@@ -1787,7 +1787,7 @@ $(document).ready(function(){
                 $('.datepickerContainer').after( $('#datepicker-extras-download') );
 
                 $('#custom-datepicker-download').attr('inited', '1');
-                $('#custom-datepicker-download').parent().prepend('<a href="javascript:;" class="close-custom-datepicker"><i class="fas fa-times"></i></a>');
+                $('#custom-datepicker-download').parent().prepend('<a href="javascript:;" class="close-custom-datepicker"><img src="'+images_path+'/close-popup.png"/></a>');
 
                 $('.close-custom-datepicker').click( function(e) {
                     e.preventDefault();

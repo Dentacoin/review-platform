@@ -23,7 +23,9 @@
 	</div>
 	@if($question->type!='multiple_choice' && $question->type!='rank')
 		<a href="javascript:;" class="mobile-button-legend">
-			<img src="{{ url('new-vox-img/stats-legend.svg') }}"><i class="fas fa-arrow-up"></i>Check legend
+			<img class="legend-img" src="{{ url('new-vox-img/stats-legend.svg') }}"/>
+			<img class="arrow-up" src="{{ url('img/arrow-up.png') }}"/>
+			{!! trans('vox.page.stats.check-legend') !!}
 		</a>
 	@endif
 	<div class="scales flex flex-center mobile-scales">
@@ -34,11 +36,15 @@
 	</div>
 
 	<div class="multiple-gender-nav">
-		<a href="javascript:;" class="gender-nav-left"><i class="fas fa-caret-left"></i></a>
+		<a href="javascript:;" class="gender-nav-left">
+			<img src="{{ url('img/caret-left.png') }}"/>
+		</a>
 		<div class="multiple-gender-nav-content">
 			<span class="nav-color"></span> <span class="gender-text">Brushing teeth</span>
 		</div>
-		<a href="javascript:;" class="gender-nav-right"><i class="fas fa-caret-right"></i></a>
+		<a href="javascript:;" class="gender-nav-right">
+			<img src="{{ url('img/caret-rigth.png') }}"/>
+		</a>
 	</div>
 	<div class="chart chart-2">
 		<div style="display: none;" class="chart-img"></div>
@@ -64,7 +70,6 @@
 			@endif
 			<div class="map-hint">
 				{!! trans('vox.page.stats.respondents') !!}
-				
 			</div>
 		@endif
 	</div>

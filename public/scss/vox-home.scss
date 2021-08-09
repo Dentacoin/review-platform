@@ -9,7 +9,7 @@ $main-color: #38ace5;
 .level-wrapper {
 	background-color: #42b0e7;
 	padding: 25px 0px;
-    margin-bottom: 70px;
+    margin-bottom: 20px;
 
     @media #{$phone} {
     	padding: 15px 0px;
@@ -84,13 +84,9 @@ $main-color: #38ace5;
     		}
 
     		p {
-    			font-size: 20px;
+    			font-size: 19px;
     			color: white;
     			font-weight: 300;
-
-    			@media #{$pc} {
-    				font-size: 19px;
-    			}
 
     			@media screen and (max-width: 992px) and (min-width: 769px ) {
     				font-size: 17px;
@@ -430,6 +426,15 @@ $main-color: #38ace5;
 	i {
 		color: #38a2e5;
 		font-size: 18px;
+	}
+
+	img {
+		max-width: 18px;
+		margin-bottom: -2px;
+
+		@media #{$phone} {
+			max-width: 13px;
+		}
 	}
 
 	input {

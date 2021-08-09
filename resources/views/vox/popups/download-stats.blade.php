@@ -17,18 +17,18 @@
 
 					<div class="download-formats alert-after">
 						<label for="format-png">
-							<i class="far fa-circle"></i>
+							<div class="radio-button"></div>
 							<input type="radio" name="download-format" value="png" id="format-png" class="download-format-radio">
 							.PNG
 						</label>
 						<label for="format-pdf">
-							<i class="far fa-circle"></i>
+							<div class="radio-button"></div>
 							<input type="radio" name="download-format" value="pdf" id="format-pdf" class="download-format-radio">
 							.PDF
 						</label>
 						@if(empty(request('app')))
 							<label for="format-xlsx">
-								<i class="far fa-circle"></i>
+								<div class="radio-button"></div>
 								<input type="radio" name="download-format" value="xlsx" id="format-xlsx" class="download-format-radio">
 								.XLSX
 							</label>

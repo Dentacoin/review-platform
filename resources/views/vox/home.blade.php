@@ -150,7 +150,7 @@
 
 				<div class="filters-section">
 					<div class="search-survey tal">
-						<i class="fas fa-search"></i>
+						<img src="{{ url('new-vox-img/blue-search.png') }}"/>
 						<input type="text" id="survey-search" name="survey_search" value="{{ request('survey_search') ?? '' }}">
 					</div>
 					<div class="questions-menu clearfix">
@@ -160,11 +160,6 @@
 
 								@else
 									<a href="javascript:;" desktop-val="{{ $val }}" sort="{{ $key }}" class="{!! request('sortable-items') ? (explode('-', request('sortable-items'))[0] == $key ? 'active sortable' : 'sortable') : ($key == 'newest' ? 'active sortable' : 'sortable') !!} {!! request('sortable-items') && explode('-', request('sortable-items'))[1] == 'asc' ? 'order-asc' : '' !!}">
-
-										@if($key == 'featured')
-											<i class="fas fa-star"></i>
-										@endif
-
 										{{ isset(explode(' ', $val)[1]) ? explode(' ', $val)[1] : explode(' ', $val)[0] }}
 									</a>
 								@endif
