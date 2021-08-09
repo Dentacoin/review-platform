@@ -1425,91 +1425,91 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
 
 
-        $schedule->call(function () {
-            echo 'Balance over 1 000 000 Email 2 START'.PHP_EOL.PHP_EOL.PHP_EOL;
-            //users with balance over 500,000 DCN
+        // $schedule->call(function () {
+        //     echo 'Balance over 1 000 000 Email 2 START'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     //users with balance over 500,000 DCN
 
-            $query = "
-                SELECT 
-                    `rewards`.`user_id`
-                FROM
-                    (
-                        SELECT 
-                            `user_id`, 
-                            sum(reward) as `rewards_total` 
-                        FROM 
-                            dcn_rewards 
-                        GROUP BY 
-                            `user_id`
-                    ) `rewards`
-                    left OUTER JOIN
-                    (
-                        SELECT 
-                            `user_id`, 
-                            sum(reward) as `withdraws_total` 
-                        FROM 
-                            dcn_cashouts 
-                        GROUP BY 
-                            `user_id`
-                    ) `cashouts`
-                    ON
-                        `rewards`.user_id = `cashouts`.user_id  
-                    LEFT JOIN 
-                        `users` `u`
-                    ON
-                        `u`.`id` = `rewards`.`user_id`
-                    WHERE 
-                        (rewards_total - IF (withdraws_total IS NULL, 0, withdraws_total) ) >= 1000000
-                        AND `deleted_at` is null
+        //     $query = "
+        //         SELECT 
+        //             `rewards`.`user_id`
+        //         FROM
+        //             (
+        //                 SELECT 
+        //                     `user_id`, 
+        //                     sum(reward) as `rewards_total` 
+        //                 FROM 
+        //                     dcn_rewards 
+        //                 GROUP BY 
+        //                     `user_id`
+        //             ) `rewards`
+        //             left OUTER JOIN
+        //             (
+        //                 SELECT 
+        //                     `user_id`, 
+        //                     sum(reward) as `withdraws_total` 
+        //                 FROM 
+        //                     dcn_cashouts 
+        //                 GROUP BY 
+        //                     `user_id`
+        //             ) `cashouts`
+        //             ON
+        //                 `rewards`.user_id = `cashouts`.user_id  
+        //             LEFT JOIN 
+        //                 `users` `u`
+        //             ON
+        //                 `u`.`id` = `rewards`.`user_id`
+        //             WHERE 
+        //                 (rewards_total - IF (withdraws_total IS NULL, 0, withdraws_total) ) >= 1000000
+        //                 AND `deleted_at` is null
 
-            ";
+        //     ";
 
-            $users = DB::select(
-                DB::raw($query), []
-            );
+        //     $users = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            $user_links = [];
+        //     $user_links = [];
 
-            if (!empty($users)) {
-                foreach ($users as $u) {
-                    $user = User::find($u->user_id);
+        //     if (!empty($users)) {
+        //         foreach ($users as $u) {
+        //             $user = User::find($u->user_id);
 
-                    if (!empty($user)) {
-                        $user_links[] = [
-                            'link' => 'https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id,
-                            'name' => $user->name,
-                        ];
-                    }
-                }
-            }
+        //             if (!empty($user)) {
+        //                 $user_links[] = [
+        //                     'link' => 'https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id,
+        //                     'name' => $user->name,
+        //                 ];
+        //             }
+        //         }
+        //     }
 
-            if (!empty($user_links)) {
-                $mtext = 'Users with balance of 1,000,000 DCN or more.
+        //     if (!empty($user_links)) {
+        //         $mtext = 'Users with balance of 1,000,000 DCN or more.
                 
-                Link to profiles in CMS:  
+        //         Link to profiles in CMS:  
 
-                ';
+        //         ';
 
-                foreach ($user_links as $ul) {
-                    $mtext .= '<a href="'.$ul['link'].'">'.$ul['name'].'</a> , ';
-                }
+        //         foreach ($user_links as $ul) {
+        //             $mtext .= '<a href="'.$ul['link'].'">'.$ul['name'].'</a> , ';
+        //         }
 
-                Mail::send([], [], function ($message) use ($mtext) {
-                    $sender = config('mail.from.address');
-                    $sender_name = config('mail.from.name');
+        //         Mail::send([], [], function ($message) use ($mtext) {
+        //             $sender = config('mail.from.address');
+        //             $sender_name = config('mail.from.name');
 
-                    $message->from($sender, $sender_name);
-                    $message->to( 'petar.stoykov@dentacoin.com' );
-                    $message->to( 'donika.kraeva@dentacoin.com' );
-                    //$message->to( 'gergana@youpluswe.com' );
-                    //$message->to( 'dokinator@gmail.com' );
-                    $message->subject('Users with high balance');
-                    $message->setBody($mtext, 'text/html'); // for HTML rich messages
-                });
-            }
-            echo 'Balance over 1 000 000 Email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //             $message->from($sender, $sender_name);
+        //             $message->to( 'petar.stoykov@dentacoin.com' );
+        //             $message->to( 'donika.kraeva@dentacoin.com' );
+        //             //$message->to( 'gergana@youpluswe.com' );
+        //             //$message->to( 'dokinator@gmail.com' );
+        //             $message->subject('Users with high balance');
+        //             $message->setBody($mtext, 'text/html'); // for HTML rich messages
+        //         });
+        //     }
+        //     echo 'Balance over 1 000 000 Email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron("00 10 * * 1"); //05:00h
+        // })->cron("00 10 * * 1"); //05:00h
 
 
 
