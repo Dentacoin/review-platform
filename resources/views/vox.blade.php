@@ -268,10 +268,10 @@
 						</div>
 						<div class="socials flex-3">
 							<a class="social" href="https://t.me/dentacoin" target="_blank">
-								<img class="tg" src="{{ url('img/tg-footer.png') }}"/>
+								<img class="tg" src="{{ url('img/tg-footer.png') }}" width="17" height="17"/>
 							</a>
 							<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank">
-								<img class="fb" src="{{ url('img/fb-footer.png') }}"/>
+								<img class="fb" src="{{ url('img/fb-footer.png') }}" width="11" height="21"/>
 							</a>
 						</div>
 						<a class="privacy-item-mobile" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
