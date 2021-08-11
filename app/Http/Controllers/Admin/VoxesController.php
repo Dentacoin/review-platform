@@ -61,6 +61,8 @@ class VoxesController extends AdminController {
             'top_5' => 'TOP 5',
             'top_10' => 'TOP 10',
         ];
+
+        $this->scales_arr = VoxScale::orderBy('title')->get()->pluck('title', 'id')->toArray();
     }
 
     public function list( ) {
@@ -150,7 +152,7 @@ class VoxesController extends AdminController {
 
         return $this->showView('voxes-form', array(
             'types' => $this->types,
-            'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
+            'scales' => $this->scales_arr,
             'category_list' => VoxCategory::get(),
             'question_types' => $this->question_types,
             'stat_types' => $this->stat_types,
@@ -433,7 +435,7 @@ class VoxesController extends AdminController {
 
             return $this->showView('voxes-form', array(
                 'types' => $this->types,
-                'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
+                'scales' => $this->scales_arr,
                 'question_types' => $this->question_types,
                 'stat_types' => $this->stat_types,
                 'stat_top_answers' => $this->stat_top_answers,
@@ -875,7 +877,7 @@ class VoxesController extends AdminController {
                 'error_arr' => $error_arr,
                 'question' => $question,
                 'question_answers_count' => $question_answers_count,
-                'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
+                'scales' => $this->scales_arr,
                 'item' => $question->vox,
                 'question_types' => $this->question_types,
                 'stat_top_answers' => $this->stat_top_answers,
@@ -1446,7 +1448,7 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('voxes-scale-form', array(
-            'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
+            'scales' => $this->scales_arr,
         ));
     }
 
@@ -1492,7 +1494,7 @@ class VoxesController extends AdminController {
 
             return $this->showView('voxes-scale-form', array(
                 'item' => $item,
-                'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
+                'scales' => $this->scales_arr,
             ));
         }
     }

@@ -60,7 +60,7 @@
                         <div class="col-md-3 question-scale-wrapper">
                             <label class="col-md-4 control-label">{{ trans('admin.page.'.$current_page.'.question-scale') }}</label>
                             <div class="col-md-8" style="padding-right: 0px;">
-                                {{ Form::select('question_scale', ['' => '-'] + $scales, !empty($question) ? $question->vox_scale_id : '', array('class' => 'form-control question-scale-input')) }}
+                                {{ Form::select('question_scale', ['' => '-'] + $scales, !empty($question) ? $question->vox_scale_id : '', array('class' => 'form-control question-scale-input select2', 'style' => 'width: 100%')) }}
                             </div>
                         </div>
                         <div class="col-md-3 question-number-wrapper">
