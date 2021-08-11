@@ -2457,6 +2457,33 @@ class VoxesController extends AdminController {
         $questions_control_trigger_and = VoxQuestion::where('trigger_type', 'and')->orderBy('id', 'DESC')->take(3)->get();
         $questions_control_trigger_or = VoxQuestion::where('trigger_type', 'or')->orderBy('id', 'DESC')->take(3)->get();
 
+        $questions_stats_multiple = VoxQuestion::where('used_for_stats', 1)->whereHas('vox', function($query) {
+            $query->where('has_stats', 1);
+        })->where('type', 'multiple_choice')->orderBy('id', 'DESC')->take(3)->get();
+
+        $questions_stats_scale = VoxQuestion::where('used_for_stats', 1)->whereHas('vox', function($query) {
+            $query->where('has_stats', 1);
+        })->where('type', 'scale')->orderBy('id', 'DESC')->take(3)->get();
+
+        $questions_stats_number = VoxQuestion::where('used_for_stats', 1)->whereHas('vox', function($query) {
+            $query->where('has_stats', 1);
+        })->where('type', 'number')->orderBy('id', 'DESC')->take(3)->get();
+
+        $questions_stats_rank = VoxQuestion::where('used_for_stats', 1)->whereHas('vox', function($query) {
+            $query->where('has_stats', 1);
+        })->where('type', 'rank')->orderBy('id', 'DESC')->take(3)->get();
+
+        $questions_stats_dependency_single = VoxQuestion::where('used_for_stats', 1)->where('dependency_caching', 1)->whereHas('vox', function($query) {
+            $query->where('has_stats', 1);
+        })->whereHas('related', function($query) {
+            $query->where('type', 'single_choice');
+        })->orderBy('id', 'DESC')->take(3)->get();
+
+        $questions_stats_dependency_multiple = VoxQuestion::where('used_for_stats', 1)->where('dependency_caching', 1)->whereHas('vox', function($query) {
+            $query->where('has_stats', 1);
+        })->whereHas('related', function($query) {
+            $query->where('type', 'multiple_choice');
+        })->orderBy('id', 'DESC')->take(3)->get();
 
         $arr = [
             'single' => [
@@ -2515,7 +2542,32 @@ class VoxesController extends AdminController {
                 'name' => 'Questions with trigger type "or"',
                 'value' => $questions_control_trigger_or,
             ],
+            'questions_stats_multiple' => [
+                'name' => 'Stats for multiple choice question',
+                'value' => $questions_stats_multiple,
+            ],
+            'questions_stats_scale' => [
+                'name' => 'Stats for scale question',
+                'value' => $questions_stats_scale,
+            ],
+            'questions_stats_number' => [
+                'name' => 'Stats for number question',
+                'value' => $questions_stats_number,
+            ],
+            'questions_stats_rank' => [
+                'name' => 'Stats for rank question',
+                'value' => $questions_stats_rank,
+            ],
+            'questions_stats_dependency_single' => [
+                'name' => 'Dependency stats for single choice question',
+                'value' => $questions_stats_dependency_single,
+            ],
+            'questions_stats_dependency_multiple' => [
+                'name' => 'Dependency stats for multiple choice question',
+                'value' => $questions_stats_dependency_multiple,
+            ],
         ];
+
         return $this->showView('vox-test', [
             'arr' => $arr
         ]);
