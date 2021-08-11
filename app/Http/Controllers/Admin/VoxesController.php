@@ -2457,29 +2457,29 @@ class VoxesController extends AdminController {
         $questions_control_trigger_and = VoxQuestion::where('trigger_type', 'and')->orderBy('id', 'DESC')->take(3)->get();
         $questions_control_trigger_or = VoxQuestion::where('trigger_type', 'or')->orderBy('id', 'DESC')->take(3)->get();
 
-        $questions_stats_multiple = VoxQuestion::where('used_for_stats', 1)->whereHas('vox', function($query) {
+        $questions_stats_multiple = VoxQuestion::where('used_for_stats', 'standard')->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->where('type', 'multiple_choice')->orderBy('id', 'DESC')->take(3)->get();
 
-        $questions_stats_scale = VoxQuestion::where('used_for_stats', 1)->whereHas('vox', function($query) {
+        $questions_stats_scale = VoxQuestion::where('used_for_stats', 'standard')->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->where('type', 'scale')->orderBy('id', 'DESC')->take(3)->get();
 
-        $questions_stats_number = VoxQuestion::where('used_for_stats', 1)->whereHas('vox', function($query) {
+        $questions_stats_number = VoxQuestion::where('used_for_stats', 'standard')->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->where('type', 'number')->orderBy('id', 'DESC')->take(3)->get();
 
-        $questions_stats_rank = VoxQuestion::where('used_for_stats', 1)->whereHas('vox', function($query) {
+        $questions_stats_rank = VoxQuestion::where('used_for_stats', 'standard')->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->where('type', 'rank')->orderBy('id', 'DESC')->take(3)->get();
 
-        $questions_stats_dependency_single = VoxQuestion::where('used_for_stats', 1)->where('dependency_caching', 1)->whereHas('vox', function($query) {
+        $questions_stats_dependency_single = VoxQuestion::where('used_for_stats', 'dependency')->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->whereHas('related', function($query) {
             $query->where('type', 'single_choice');
         })->orderBy('id', 'DESC')->take(3)->get();
 
-        $questions_stats_dependency_multiple = VoxQuestion::where('used_for_stats', 1)->where('dependency_caching', 1)->whereHas('vox', function($query) {
+        $questions_stats_dependency_multiple = VoxQuestion::where('used_for_stats', 'dependency')->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->whereHas('related', function($query) {
             $query->where('type', 'multiple_choice');
