@@ -1956,7 +1956,8 @@ class VoxService {
                         
                         $diff = Carbon::now()->diffInSeconds( $start->created_at );
                         $normal = $ppp*2;
-                        if($normal > $diff) {
+                        
+                        if($normal > $diff && count($answered) != count($vox->questions)) {
 
                             if($for_app) {
                                 $warned_before = UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
