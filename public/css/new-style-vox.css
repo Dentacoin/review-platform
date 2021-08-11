@@ -2485,9 +2485,10 @@ body.popup-visible {
       color: #f33651; }
     .popup .alert.alert-warning:before,
     .site-content .alert.alert-warning:before {
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      content: "\f071"; }
+      content: "";
+      width: 22px;
+      height: 22px;
+      background: url("../img/alert-small-warning.png") no-repeat 0px 0px; }
   .popup .alert.alert-success,
   .site-content .alert.alert-success {
     border-color: #2b9b60;
@@ -2497,9 +2498,10 @@ body.popup-visible {
       color: #2b9b60; }
     .popup .alert.alert-success:before,
     .site-content .alert.alert-success:before {
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      content: "\f058"; }
+      content: "";
+      width: 22px;
+      height: 22px;
+      background: url("../img/alert-small-success.png") no-repeat 0px 0px; }
   .popup .alert.alert-info,
   .site-content .alert.alert-info {
     border-color: #11aee1;
@@ -2509,9 +2511,10 @@ body.popup-visible {
       color: #11aee1; }
     .popup .alert.alert-info:before,
     .site-content .alert.alert-info:before {
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      content: "\f05a"; }
+      content: "";
+      width: 22px;
+      height: 22px;
+      background: url("../img/alert-small-info.png") no-repeat 0px 0px; }
   .popup .alert a,
   .site-content .alert a {
     color: inherit;
