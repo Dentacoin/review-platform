@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 
 use App\Models\Order;
 
+use Response;
 use Request;
 use Auth;
 
@@ -13,7 +14,7 @@ class OrdersController extends AdminController {
 
     public function list() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -28,23 +29,23 @@ class OrdersController extends AdminController {
         $total_pages = ceil($total_count/$ppp);
 
         //Here we generates the range of the page numbers which will display.
-        if($total_pages <= (1+($adjacents * 2))) {
-          $start = 1;
-          $end   = $total_pages;
-        } else {
-          if(($page - $adjacents) > 1) { 
-            if(($page + $adjacents) < $total_pages) { 
-              $start = ($page - $adjacents);            
-              $end   = ($page + $adjacents);         
-            } else {             
-              $start = ($total_pages - (1+($adjacents*2)));  
-              $end   = $total_pages;               
-            }
-          } else {               
-            $start = 1;                                
-            $end   = (1+($adjacents * 2));             
-          }
-        }
+		if($total_pages <= (1+($adjacents * 2))) {
+			$start = 1;
+			$end   = $total_pages;
+		} else {
+			if(($page - $adjacents) > 1) { 
+				if(($page + $adjacents) < $total_pages) { 
+					$start = ($page - $adjacents);            
+					$end   = ($page + $adjacents);         
+				} else {             
+					$start = ($total_pages - (1+($adjacents*2)));  
+					$end   = $total_pages;               
+				}
+			} else {               
+				$start = 1;                                
+				$end   = (1+($adjacents * 2));             
+			}
+		}
 
         $orders = $orders->skip( ($page-1)*$ppp )->take($ppp)->get();
 
@@ -90,5 +91,23 @@ class OrdersController extends AdminController {
         $this->request->session()->flash('success-message', 'Order Sended' );
         return redirect('cms/orders/');
     }
+
+	public function addPaymentInfo( $id ) {
+
+		if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        if (!empty(Request::input('payment-info'))) {
+
+            $item = Order::find($id);
+            $item->payment_info = Request::input('payment-info');
+            $item->save();
+
+            // $this->request->session()->flash('success-message', "Appeal rejected" );
+            return Response::json( ['success' => true, 'payment_info' => $item->payment_info] );
+        }
+	}
 
 }

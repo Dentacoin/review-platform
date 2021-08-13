@@ -83,6 +83,9 @@ return [
         ),
         'orders' => array(
             'icon' => 'shopping-cart',
+            'js' => array(
+                'orders.js',
+            ),
         ),
         'trp' => array(
             'icon' => 'list-alt',

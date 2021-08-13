@@ -345,6 +345,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function historyFields() {
         return $this->hasMany('App\Models\UserHistory', 'user_id', 'id')->where('history', '!=', '');
     }
+    public function orders() {
+        return $this->hasMany('App\Models\Order', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
 
     public function kycEmailPhone() {
         $data = json_decode($this->kycValidation->response, true);

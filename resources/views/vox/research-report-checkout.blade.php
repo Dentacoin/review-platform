@@ -28,13 +28,14 @@
 
     <form class="checkout-form checkout-container active" method="post" action="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/checkout/') }}">
         <div class="modern-field alert-after">
-            <input type="email" name="email" id="email" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+            <input type="email" name="email" id="email" value="{{ $order ? $order->email : '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
             <label for="email">
                 <span>Add email address to receive the report:</span>
             </label>
         </div>
+
         <div class="modern-field alert-after">
-            <input type="email" name="email-confirm" id="email-confirm" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+            <input type="email" name="email-confirm" id="email-confirm" value="{{ $order ? $order->email : '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
             <label for="email-confirm">
                 <span>Confirm email address:</span>
             </label>
@@ -43,17 +44,29 @@
         <div class="modern-field alert-after">
             <select name="payment-method" id="payment-method" class="modern-input">
                 <option>Select payment method:</option>
-                <option value="crypto">Crypto</option>
-                <option value="paypal">PayPal</option>
+                @foreach(config('payment-methods') as $key => $pm)
+                    <option value="{{ $key }}" {!! $order && $order->payment_method == $key ? 'selected="selected"' : '' !!}>{{ $pm }}</option>
+                @endforeach
             </select>
         </div>
-        <div class="checkbox">
-            <label class="checkbox-label" for="agree">
-                <input type="checkbox" class="special-checkbox" id="agree" name="agree" value="1">
-                I agree with the <a href="https://dentacoin.com/privacy-policy" target="_blank">Privacy Policy</a>
+
+        <div class="modern-field alert-after">
+            <input type="text" name="name" id="name" value="{{ $order ? $order->name : '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+            <label for="name">
+                <span>Your name:</span>
             </label>
-            <div class="alert alert-warning agree-error" style="display: none;margin-top: 8px;">You must agree with the Privacy Policy</div>
         </div>
+
+        @if(empty($user))
+            <div class="checkbox">
+                <label class="checkbox-label {!! $order ? 'active' : '' !!}" for="agree">
+                    <input type="checkbox" class="special-checkbox" id="agree" name="agree" value="1" {!! $order ? 'checked="checked"' : '' !!}>
+                    I agree with the <a href="https://dentacoin.com/privacy-policy" target="_blank">Privacy Policy</a>
+                </label>
+                <div class="alert alert-warning agree-error" style="display: none;">You must agree with the Privacy Policy</div>
+            </div>
+        @endif
+
         <div class="tac">
             <button type="submit" href="javascript:;" class="blue-button new-style red-button">PROCEED TO PAYMENT</button>
         </div>

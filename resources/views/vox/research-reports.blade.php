@@ -39,6 +39,36 @@
             </div>
         </div>
     @endif
+    
+    @if($items->isNotEmpty())
+        <div class="section-recent-surveys new-style-swiper">
+            <div class="swiper-container {{ $items->count() <= 3 ? 'swiper-flex' : '' }}">
+                <div class="swiper-wrapper">
+                    @foreach($items as $report)
+                        <div class="swiper-slide">
+                            <div class="slider-inner">
+                                <div class="slide-padding">
+                                    <a href="{{ getLangUrl('dental-industry-reports/'.$report->slug) }}" class="cover" style="background-image: url('{{ $report->getImageUrl('social') }}');">
+                                        <img src="{{ $report->getImageUrl('social') }}" alt="{{ $report->main_title }} {{ $report->title }}" style="display: none !important;"> 
+                                    </a>
+                                    <div class="vox-header clearfix">
+                                        <h4 class="report-title bold">{{ $report->main_title }} {{ $report->title }}</h4>
+                                        <div class="btns">
+                                            <a class="opinion blue-button" href="{{ getLangUrl('dental-industry-reports/'.$report->slug) }}">
+                                                More info
+                                            </a>
+                                        </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+        
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    @endif
 
     <div class="about-dentavox">
         <img class="white-wave" src="{{ url('new-vox-img/white-wave-mirror.png') }}"/>
@@ -99,7 +129,7 @@
                     Accepted cryptocurrencies: DCN, BTC and ETH
                 </p>                
                 <div class="tac">
-                    <a href="javascript:;" class="blue-button new-style with-arrow white-button">MORE INFO<img src="{{ url('new-vox-img/red-arrow-right.svg') }}"></a>
+                    <a href="javascript:;" class="blue-button new-style with-arrow white-button go-to-reports">SEE REPORTS<img src="{{ url('new-vox-img/red-arrow-right.svg') }}"></a>
                 </div>
             </div>
         </div>

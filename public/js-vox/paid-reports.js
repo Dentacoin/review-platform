@@ -36,8 +36,7 @@ $(document).ready(function(){
 
                         window.location.href = data.link;
                     } else {
-                        $('.checkout-form').hide();
-                        $('.invoice').hide();
+                        $('#checkout-form-success').show();
                     }
                 } else {
                     for(var i in data.messages) {
@@ -75,11 +74,106 @@ $(document).ready(function(){
         });
 
         scrollableElement.css('width', total + parseFloat(scrollableElement.css('padding-left')) + parseFloat(scrollableElement.css('padding-right')) + 60);
-
     }
 
     if($(window).outerWidth() <= 768 && $('.sample-pages').length) {
         setTimeout(handleHorizontalScrolls , 10);
+    }
+
+    $('.go-to-reports').click( function (e) {
+        e.preventDefault();
+
+        console.log('sdfdsfsdf');
+
+        $('html, body').animate({
+            scrollTop: $('.main-section').offset().top
+        }, 500);
+    });
+
+    
+    var handleHorizontalScrollReports = function() {
+        var scrollableElement = $('.swiper-wrapper');
+        var children = scrollableElement.children();
+        var total = 0;
+
+        children.each( function() { 
+            total += $(this).outerWidth() + parseFloat($(this).css('margin-right')) + parseFloat($(this).css('margin-left'));
+        });
+
+        scrollableElement.css('width', total + parseFloat(scrollableElement.css('padding-left')) + parseFloat(scrollableElement.css('padding-right')));
+    }
+
+    if($('.swiper-slide').length ) {
+        if($('.swiper-slide').length > 3 ) {
+            $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/swiper.min.css">');
+
+            $.getScript(window.location.origin+'/js/swiper.min.js', function() {
+                
+                if (typeof Swiper !== 'undefined' ) {
+                    if (window.innerWidth > 1150) {
+
+                        var swiper_done = new Swiper('.swiper-container', {
+                            slidesPerView: 3,
+                            slidesPerGroup: 3,
+                            spaceBetween: 0,
+                            pagination: {
+                                el: '.swiper-pagination',
+                                clickable: true,
+                            },
+                            breakpoints: {
+                                900: {
+                                    slidesPerView: 2,
+                                },
+                            },
+                            autoplay: {
+                                delay: 5000,
+                            },
+                        });
+                    } else if(window.innerWidth > 768) {
+                        var swiper_done = new Swiper('.swiper-container', {
+                            slidesPerView: 2,
+                            slidesPerGroup: 2,
+                            spaceBetween: 0,
+                            pagination: {
+                                el: '.swiper-pagination',
+                                clickable: true,
+                            },
+                            breakpoints: {
+                                900: {
+                                    slidesPerView: 2,
+                                },
+                            },
+                            autoplay: {
+                                delay: 5000,
+                            },
+                        });
+                    } else {
+                        var swiper_done = new Swiper('.swiper-container', {
+                            slidesPerView: 1,
+                            spaceBetween: 0,
+                            pagination: {
+                                el: '.swiper-pagination',
+                                clickable: true,
+                            },
+                            effect: 'coverflow',
+                            grabCursor: true,
+                            centeredSlides: true,
+                            coverflowEffect: {
+                                rotate: 50,
+                                stretch: 0,
+                                depth: 100,
+                                modifier: 1,
+                                slideShadows : false,
+                            },
+                        });
+                    }
+                }
+            });
+        } else {
+            if(window.innerWidth < 768) {
+                setTimeout(handleHorizontalScrollReports , 10);
+            }
+        }
     }
 
 });

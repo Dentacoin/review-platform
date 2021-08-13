@@ -10,6 +10,47 @@
 				{{ trans('vox.page.profile.vox.title') }}
 			</h2>
 
+        	@if($orders->isNotEmpty())
+	        	<div class="bans-section">
+
+					<div class="black-line-title">
+		                <h4 class="bold">
+		                	Reports Ordered
+		                </h4>
+		            </div>
+	            	<table class="table">
+	            		<thead>
+	            			<tr>
+		            			<th style="width: 25%;">
+		            				{{ trans('vox.page.profile.vox.ban-date') }}
+		            			</th>
+	            				<th style="width: 50%;">
+		            				Name
+	            				</th>
+		            			<th style="width: 25%;">
+		            				Price
+		            			</th>
+	            			</tr>
+	            		</thead>
+	            		<tbody>
+	            			@foreach( $orders as $order )
+	            				<tr>
+	            					<td style="width: 25%;">
+	            						{{ $order->created_at ? $order->created_at->toDateTimeString() : '' }}
+	            					</td>
+	            					<td style="width: 50%;">
+	            						{{ $order->report->main_title.' '.$order->report->title  }}
+	            					</td>
+	            					<td style="width: 25%;">
+	            						{{ $order->price_with_currency }}
+	            					</td>
+	            				</tr>
+	            			@endforeach
+	        			</tbody>
+	            	</table>
+	        	</div>
+			@endif
+
 	        <div class="history-section form-horizontal">
 				<div class="black-line-title">
 	                <h4 class="bold">
@@ -19,13 +60,13 @@
             	<table class="table paging" num-paging="10">
             		<thead>
             			<tr>
-	            			<th>
+	            			<th style="width: 25%;">
 	            				{{ trans('vox.page.profile.vox.list-date') }}
 	            			</th>
-	            			<th>
+	            			<th style="width: 50%;">
 	            				{{ trans('vox.page.profile.vox.list-questionnaire') }}
 	            			</th>
-	            			<th>
+	            			<th style="width: 25%;">
 	            				DCN
 	            			</th>
             			</tr>
@@ -35,13 +76,13 @@
 							@foreach($histories as $completed)
 								@if( $completed->vox )
 		            				<tr>
-		            					<td>
+		            					<td style="width: 25%;">
 		            						{{ !empty($completed->created_at) ? ($completed->created_at->toDateString().', '.$completed->created_at->toTimeString()) : '-' }}
 		            					</td>
-		            					<td>
+		            					<td style="width: 50%;">
 											{{ $completed->vox->title }}
 		            					</td>
-		            					<td>
+		            					<td style="width: 25%;">
 		            						{{ $completed->reward ? $completed->reward : '-' }}
 		            					</td>
 		            				</tr>
@@ -116,17 +157,17 @@
 	            	<table class="table">
 	            		<thead>
 	            			<tr>
-		            			<th>
+		            			<th style="width: 25%;">
 		            				{{ trans('vox.page.profile.vox.ban-date') }}
 		            			</th>
-	            				<th>
+	            				<th style="width: 25%;">
 		            				{{ trans('vox.page.profile.vox.ban-duration') }}
 	            					
 	            				</th>
-		            			<th>
+		            			<th style="width: 25%;">
 		            				{{ trans('vox.page.profile.vox.ban-reason') }}
 		            			</th>
-		            			<th>
+		            			<th style="width: 25%;">
 		            				{{ trans('vox.page.profile.vox.ban-expires') }}
 		            			</th>
 	            			</tr>
@@ -134,16 +175,16 @@
 	            		<tbody>
 	            			@foreach( $voxBans as $ban )
 	            				<tr>
-	            					<td>
+	            					<td style="width: 25%;">
 	            						{{ $ban->created_at ? ($ban->created_at->toDateString().', '.$ban->created_at->toTimeString()) : '' }}
 	            					</td>
-	            					<td>
+	            					<td style="width: 25%;">
 	            						{{ $ban->created_at ? $ban->created_at->diffInHours($ban->expires) : 0  }}h
 	            					</td>
-	            					<td>
+	            					<td style="width: 25%;">
 	            						{{ trans('vox.page.profile.vox.ban-reason-'.$ban->type) }}
 	            					</td>
-	            					<td>
+	            					<td style="width: 25%;">
 	            						@if($ban->expires==null)
 	            							{{ trans('vox.page.profile.vox.ban-permanent') }}
 	            						@elseif($ban->expires->lt( Carbon\Carbon::now() ))

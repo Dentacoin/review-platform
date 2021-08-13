@@ -229,6 +229,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	
 	Route::get('orders', 									'OrdersController@list');
 	Route::get('orders/sended/{id}', 						'OrdersController@sended');
+	Route::post('orders/add-payment-info/{id}', 				'OrdersController@addPaymentInfo');
 
 	Route::get('emails', 									'EmailsController@list');
 	Route::get('emails/{what?}', 							'EmailsController@list');

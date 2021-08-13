@@ -198,6 +198,10 @@ img {
         padding: 10px 90px;
     }
 
+    @media screen and (max-height: 800px) and (min-width: 769px ) {
+        padding: 10px 150px;
+    }
+
     @media #{$phone} {
         padding: 10px;
     }
@@ -213,6 +217,11 @@ img {
 
         @media #{$small_tablet} {
             font-size: 40px;
+        }
+
+        @media screen and (max-height: 800px) and (min-width: 769px ) {
+            font-size: 42px;
+            margin-bottom: 5px;
         }
 
         @media #{$phone} {
@@ -233,6 +242,10 @@ img {
 
         @media #{$small_tablet} {
             font-size: 30px;
+        }
+
+        @media screen and (max-height: 800px) and (min-width: 769px ) {
+            font-size: 35px;
         }
 
         @media #{$phone} {
@@ -268,6 +281,16 @@ img {
     }
 }
 
+.back-home {
+    margin-top: 40px;
+    margin-bottom: -10px;
+
+    @media #{$phone} {
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+}
+
 .main-section {
     padding-top: 60px;
     position: relative;
@@ -275,6 +298,10 @@ img {
 
     @media #{$small_tablet} {
         flex-direction: column;
+        padding-top: 30px;
+    }
+    
+    @media screen and (max-height: 800px) and (min-width: 769px ) {
         padding-top: 30px;
     }
 
@@ -299,6 +326,10 @@ img {
 
                 @media #{$pc_small} {
                     max-width: 390px;
+                }
+
+                @media screen and (max-height: 800px) and (min-width: 769px ) {
+                    max-width: 470px;
                 }
 
                 .main-image {
@@ -393,6 +424,10 @@ img {
                 @media #{$small_tablet} {
                     max-width: 380px;
                 }
+                
+                @media screen and (max-height: 800px) and (min-width: 769px ) {
+                    max-width: 80%;
+                }
 
                 @media #{$phone} {
                     max-width: 90%;
@@ -441,6 +476,11 @@ img {
                 font-size: 25px;
                 padding: 10px 20px;
             }
+            
+            @media screen and (max-height: 800px) and (min-width: 769px ) {
+                font-size: 32px;
+                padding: 15px 50px;
+            }
 
             @media #{$phone} {
                 font-size: 20px;
@@ -473,6 +513,11 @@ img {
                     margin-right: auto;
                     margin-bottom: 20px;
                 }
+
+                @media screen and (max-height: 800px) and (min-width: 769px ) {
+                    margin-bottom: 20px;
+                    font-size: 31px;
+                }
             }
         }
 
@@ -480,6 +525,11 @@ img {
             color: #565656;
             margin-bottom: 30px;
             max-width: 610px;
+
+            @media screen and (max-height: 800px) and (min-width: 769px ) {
+                margin-bottom: 20px;
+                font-size: 18px;
+            }
 
             br {
                 @media #{$phone} {
@@ -1270,6 +1320,52 @@ img {
 
                 &:hover {
                     text-decoration: underline;
+                }
+            }
+        }
+
+        .agree-error {
+            margin-top: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            padding: 10px 20px 10px 50px;
+        }
+    }
+}
+
+.swiper-container.swiper-flex {
+    margin-top: 80px;
+
+    @media #{$phone} {
+        margin-top: 50px;
+        position: relative;
+        height: 360px;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        padding-bottom: 0px;
+        padding-top: 0px;
+    }
+
+    .swiper-wrapper {
+        display: flex;
+        justify-content: center;
+
+        @media #{$phone} {
+            position: absolute;
+            width: 690px;
+        }
+
+        .swiper-slide {
+            width: 33%;
+
+            @media #{$phone} {
+                width: 100%;
+                max-width: 340px;
+            }
+
+            .slider-inner {
+                @media screen and (max-width: 1150px) {
+                    padding: 0px 5px;
                 }
             }
         }

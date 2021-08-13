@@ -93,7 +93,7 @@
             {!! nl2br($item->short_description) !!}
         </div>
         <div class="accordions">
-            <div class="accordion active">
+            <div class="accordion">
                 <a href="javascript:;" class="accordion-title">
                     TABLE OF CONTENTS
 

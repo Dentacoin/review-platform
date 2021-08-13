@@ -35,7 +35,7 @@
                                 <div class="col-md-10" style="display: flex;"> 
                                     @foreach($langs as $code => $lang_info)
                                         <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-                                            {{ Form::text('main-title-'.$code, !empty($item) ? $item->{'main_title:'.$code} : '', array('maxlength' => 1024, 'class' => 'form-control input-title')) }}
+                                            {{ Form::text('main-title-'.$code, !empty($item) ? $item->{'main_title:'.$code} : '', array('maxlength' => 1024, 'class' => 'form-control input-title', 'id' => 'edit-main-title')) }}
                                         </div>
                                     @endforeach
                                 </div>
@@ -61,7 +61,7 @@
                                     @endforeach
                                 </div>
                                 <div class="col-md-2" style="padding: 0px;">
-                                    <a class="btn btn-success" id="generate-slug" href="javascript:;">Generate</a>
+                                    <a class="btn btn-success" id="generate-slug" href="javascript:;">auto-generate</a>
                                 </div>
                             </div>
                                 
@@ -233,7 +233,7 @@
                                     <div class="form-group answers-group-poll">
                                         <label class="col-md-2 control-label">Table of contents</label>
                                         <div class="col-md-10 contents-list contents-draggable">
-                                            @if(!empty($item) && !empty($item->{'table_contents:'.$code}) )
+                                            @if(!empty($item) && !empty(json_decode($item->{'table_contents:'.$code}, true)) )
                                                 @foreach(json_decode($item->{'table_contents:'.$code}, true) as $key => $content)
                                                     <div class="flex input-group first-group">
                                                         <input type="text" name="table_contents-{{ $code }}[]" value="{{ $content['content'] }}" maxlengt="1024" class="form-control" style="width: 70%;"/>

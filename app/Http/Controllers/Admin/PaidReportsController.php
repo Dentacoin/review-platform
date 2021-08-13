@@ -38,12 +38,21 @@ class PaidReportsController extends AdminController {
 
     public function list() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
 
         $reports = PaidReport::with('translations')->orderBy('id', 'desc');
+
+        if(request('search-title')) {
+            $s_title = request('search-title');
+            $reports = $reports->whereHas('translations', function ($query) use ($s_title) {
+                $query->where('title', 'LIKE', '%'.trim($s_title).'%');
+            })->orWhereHas('translations', function ($queryy) use ($s_title) {
+                $queryy->where('main_title', 'LIKE', '%'.trim($s_title).'%');
+            });
+        }
 
         $total_count = $reports->count();
         $page = max(1,intval(request('page')));
@@ -99,6 +108,7 @@ class PaidReportsController extends AdminController {
             'page' => $page,
             'pagination_link' => $pagination_link,
             'current_url' => $current_url,
+            'search_title' => request('search-title')
         ));
     }
 
