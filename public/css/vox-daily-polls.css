@@ -296,3 +296,336 @@
     @media screen and (max-width: 768px) {
       .monthly-description p {
         font-size: 15px; } }
+
+#poll-calendar {
+  border-top: 10px solid #38ace5;
+  padding: 20px;
+  box-shadow: 0 0 10px #c3c3c3; }
+  @media screen and (max-width: 768px) {
+    #poll-calendar {
+      padding: 13px 0px 0px;
+      border-top-width: 6px; } }
+  #poll-calendar .box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1.5em; }
+    @media screen and (max-width: 768px) {
+      #poll-calendar .box {
+        padding: 0px 10px;
+        margin-bottom: 1em; } }
+    #poll-calendar .box .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between; }
+      #poll-calendar .box .header h2 {
+        font-size: 1.75em;
+        margin: 0;
+        margin-bottom: 0px;
+        font-weight: 600; }
+        @media screen and (max-width: 768px) {
+          #poll-calendar .box .header h2 {
+            font-size: 16px; } }
+      #poll-calendar .box .header .prev-next-month {
+        display: flex; }
+        #poll-calendar .box .header .prev-next-month .prev,
+        #poll-calendar .box .header .prev-next-month .next {
+          background-color: #3eafe6;
+          color: white;
+          padding: 12px 18.5px;
+          border-radius: .25em;
+          display: inline-block; }
+          @media screen and (max-width: 768px) {
+            #poll-calendar .box .header .prev-next-month .prev,
+            #poll-calendar .box .header .prev-next-month .next {
+              padding: 10.5px 13px; } }
+          #poll-calendar .box .header .prev-next-month .prev img,
+          #poll-calendar .box .header .prev-next-month .next img {
+            width: 10px;
+            display: block; }
+            @media screen and (max-width: 768px) {
+              #poll-calendar .box .header .prev-next-month .prev img,
+              #poll-calendar .box .header .prev-next-month .next img {
+                width: 5px; } }
+        #poll-calendar .box .header .prev-next-month .prev {
+          margin-right: 1px;
+          border-top-right-radius: 0px;
+          border-bottom-right-radius: 0px; }
+        #poll-calendar .box .header .prev-next-month .next {
+          border-top-left-radius: 0px;
+          border-bottom-left-radius: 0px; }
+        #poll-calendar .box .header .prev-next-month .today-button {
+          background-color: #3eafe6;
+          border-color: #3eafe6;
+          box-shadow: none;
+          margin-left: .75em;
+          border: 1px solid transparent;
+          padding: .4em .65em;
+          font-size: 1em;
+          line-height: 1.5;
+          border-radius: .25em;
+          color: white; }
+          #poll-calendar .box .header .prev-next-month .today-button.disabled {
+            opacity: .65;
+            cursor: default; }
+        @media screen and (max-width: 768px) {
+          #poll-calendar .box .header .prev-next-month .desktop-today {
+            display: none; } }
+      #poll-calendar .box .header .style-calendar a {
+        background-color: white;
+        border: 2px solid #3eafe6;
+        color: #3eafe6;
+        margin-left: -1px;
+        border-radius: .25em;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        vertical-align: middle;
+        padding: .4em .65em;
+        font-size: 1em;
+        line-height: 1.5;
+        display: inline-block; }
+        #poll-calendar .box .header .style-calendar a.chosen-month {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border-top-left-radius: .25em;
+          border-bottom-left-radius: .25em;
+          background-color: #3eafe6;
+          color: white; }
+        #poll-calendar .box .header .style-calendar a.mobile-today {
+          display: none;
+          background-color: #3eafe6;
+          border: none;
+          padding: 4px 6px;
+          font-size: 1em;
+          border-radius: .25em;
+          color: white; }
+          @media screen and (max-width: 768px) {
+            #poll-calendar .box .header .style-calendar a.mobile-today {
+              display: inline-block; } }
+          #poll-calendar .box .header .style-calendar a.mobile-today.disabled {
+            opacity: .65;
+            cursor: default; }
+  #poll-calendar .no-events {
+    display: none;
+    background-color: #eeeeee;
+    text-align: center;
+    padding: 200px 0px; }
+  #poll-calendar .table-days-text {
+    width: 100%;
+    box-sizing: border-box;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 1em; }
+    #poll-calendar .table-days-text tr th {
+      border-style: solid;
+      border-width: 1px;
+      padding: 0;
+      vertical-align: top;
+      border-color: #ddd;
+      box-sizing: content-box;
+      border-bottom: none; }
+  #poll-calendar .table-days {
+    width: 100%;
+    box-sizing: border-box;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 1em; }
+    #poll-calendar .table-days tr {
+      height: auto; }
+      #poll-calendar .table-days tr td {
+        border: 1px solid #ddd;
+        vertical-align: top;
+        box-sizing: content-box;
+        position: relative;
+        height: 131px; }
+        #poll-calendar .table-days tr td .poll-day {
+          background-color: #d4ebfb;
+          display: block;
+          height: 100%;
+          position: relative; }
+          #poll-calendar .table-days tr td .poll-day:hover .poll-day-inner .poll-q {
+            opacity: 0; }
+          #poll-calendar .table-days tr td .poll-day:hover .poll-day-inner .butn {
+            opacity: 1; }
+          #poll-calendar .table-days tr td .poll-day .poll-day-inner {
+            padding: 4px; }
+            #poll-calendar .table-days tr td .poll-day .poll-day-inner .poll-image {
+              max-width: 28px; }
+            #poll-calendar .table-days tr td .poll-day .poll-day-inner .poll-q {
+              font-size: 16px;
+              font-weight: 300;
+              color: #060606;
+              padding-left: 4px;
+              padding-top: 3px;
+              max-height: 64px;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 3;
+              -webkit-box-orient: vertical; }
+            #poll-calendar .table-days tr td .poll-day .poll-day-inner .clock {
+              position: absolute;
+              top: 6px;
+              right: 27px;
+              width: 16px; }
+            #poll-calendar .table-days tr td .poll-day .poll-day-inner .poll-stat-image {
+              max-width: 16px;
+              position: absolute;
+              bottom: 3px;
+              right: 3px; }
+            #poll-calendar .table-days tr td .poll-day .poll-day-inner .poll-take-image {
+              max-width: 11px;
+              position: absolute;
+              bottom: 8px;
+              right: 8px; }
+            #poll-calendar .table-days tr td .poll-day .poll-day-inner .poll-taken-image {
+              max-width: 16px;
+              position: absolute;
+              right: 24px;
+              bottom: 3px; }
+            #poll-calendar .table-days tr td .poll-day .poll-day-inner .butn {
+              opacity: 0;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translateX(-50%) translateY(-50%);
+              padding: 3px 14px;
+              border: 1px solid black;
+              border-radius: 10px;
+              font-size: 20px;
+              font-weight: 300; }
+        #poll-calendar .table-days tr td .day-number {
+          position: absolute;
+          right: 0px;
+          top: 0px;
+          padding: 2px; }
+        #poll-calendar .table-days tr td .mobile-day {
+          display: none; }
+          #poll-calendar .table-days tr td .mobile-day .info-list {
+            background-color: #eeeeee;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #dfdfdf; }
+            @media screen and (max-width: 768px) {
+              #poll-calendar .table-days tr td .mobile-day .info-list {
+                flex-direction: column;
+                background: white;
+                min-width: 55px;
+                max-width: 55px;
+                padding: 10px;
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: none; } }
+            #poll-calendar .table-days tr td .mobile-day .info-list span {
+              font-weight: bold;
+              color: #060606; }
+              @media screen and (max-width: 768px) {
+                #poll-calendar .table-days tr td .mobile-day .info-list span {
+                  font-weight: 300; } }
+              #poll-calendar .table-days tr td .mobile-day .info-list span.day-word {
+                flex: 1; }
+                @media screen and (max-width: 768px) {
+                  #poll-calendar .table-days tr td .mobile-day .info-list span.day-word {
+                    flex: none; } }
+          #poll-calendar .table-days tr td .mobile-day .list-event {
+            background-color: #d4ebfb;
+            display: block;
+            padding: 10px 0px 10px 86px;
+            position: relative;
+            font-size: 16px;
+            font-weight: 300;
+            color: #060606; }
+            @media screen and (max-width: 768px) {
+              #poll-calendar .table-days tr td .mobile-day .list-event {
+                padding-left: 52px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                padding-right: 60px;
+                font-size: 14px;
+                width: 100%;
+                border-left: 1px solid #dddddd; } }
+            #poll-calendar .table-days tr td .mobile-day .list-event .poll-image {
+              max-width: 28px;
+              position: absolute;
+              left: 50px;
+              top: 50%;
+              transform: translateY(-50%); }
+              @media screen and (max-width: 768px) {
+                #poll-calendar .table-days tr td .mobile-day .list-event .poll-image {
+                  left: 12px; } }
+            #poll-calendar .table-days tr td .mobile-day .list-event .clock,
+            #poll-calendar .table-days tr td .mobile-day .list-event .poll-stat-image {
+              max-width: 20px;
+              position: absolute;
+              right: 10px;
+              top: 50%;
+              transform: translateY(-50%); }
+              @media screen and (max-width: 768px) {
+                #poll-calendar .table-days tr td .mobile-day .list-event .clock,
+                #poll-calendar .table-days tr td .mobile-day .list-event .poll-stat-image {
+                  max-width: 16px; } }
+            #poll-calendar .table-days tr td .mobile-day .list-event .poll-take-image {
+              max-width: 15px;
+              position: absolute;
+              right: 10px;
+              top: 50%;
+              transform: translateY(-50%); }
+              @media screen and (max-width: 768px) {
+                #poll-calendar .table-days tr td .mobile-day .list-event .poll-take-image {
+                  max-width: 10px;
+                  right: 13px; } }
+            #poll-calendar .table-days tr td .mobile-day .list-event .poll-taken-image {
+              max-width: 28px;
+              position: absolute;
+              left: 17px;
+              top: 50%;
+              transform: translateY(-50%); }
+              @media screen and (max-width: 768px) {
+                #poll-calendar .table-days tr td .mobile-day .list-event .poll-taken-image {
+                  max-width: 16px;
+                  left: auto;
+                  right: 32px; } }
+  @media screen and (max-width: 768px) {
+    #poll-calendar.list-calendar .box .header .style-calendar a {
+      display: none; } }
+  #poll-calendar.list-calendar .box .header .style-calendar a.chosen-month {
+    background-color: white;
+    color: #3eafe6; }
+  #poll-calendar.list-calendar .box .header .style-calendar a.chosen-list {
+    background-color: #3eafe6;
+    color: white; }
+  #poll-calendar.list-calendar .box .header .style-calendar a.mobile-today {
+    display: none; }
+    @media screen and (max-width: 768px) {
+      #poll-calendar.list-calendar .box .header .style-calendar a.mobile-today {
+        display: inline-block; } }
+  @media screen and (max-width: 768px) {
+    #poll-calendar.list-calendar .box .header .style-calendar .prev-next-month.desktop-today {
+      display: none; } }
+  #poll-calendar.list-calendar .table-days-text {
+    display: none; }
+  #poll-calendar.list-calendar .table-days tr td {
+    width: 100%;
+    display: block;
+    height: auto;
+    border-bottom: none; }
+    #poll-calendar.list-calendar .table-days tr td .desktop-day {
+      display: none; }
+    #poll-calendar.list-calendar .table-days tr td .mobile-day {
+      display: block; }
+      @media screen and (max-width: 768px) {
+        #poll-calendar.list-calendar .table-days tr td .mobile-day {
+          display: flex; } }
+    #poll-calendar.list-calendar .table-days tr td .day-number {
+      display: none; }
+  #poll-calendar.list-calendar.no-events-calendar {
+    display: block; }
+    #poll-calendar.list-calendar.no-events-calendar .table-days {
+      display: none; }
+    #poll-calendar.list-calendar.no-events-calendar .no-events {
+      display: block; }

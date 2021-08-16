@@ -128,82 +128,6 @@ class PollsController extends FrontController {
 	}
 
 	/**
-     * Get daily polls by month
-     */
-	public function get_polls($locale=null) {
-
-		$all_daily_polls = Poll::where('launched_at', '>=', Request::input('year')."-".Request::input('month')."-01 00:00:00")
-		->where('launched_at', '<', Request::input('year')."-".str_pad(Request::input('month'), 2)."-31 23:59:59");
-
-		if( empty($this->admin)) {
-			$all_daily_polls = $all_daily_polls->where('status', '!=', 'scheduled');
-		}
-
-		$all_daily_polls = $all_daily_polls->orderBy('launched_at','asc')->get();
-
-		if ($all_daily_polls->isNotEmpty()) {
-			foreach ($all_daily_polls as $poll) {
-				
-				if (!empty($this->user)) {
-					$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
-				} else {
-					if (Cookie::get('daily_poll')) {
-						$cv = json_decode(Cookie::get('daily_poll'), true);
-						foreach ($cv as $pid => $aid) {
-							if ($pid == $poll->id) {
-								$taken_daily_poll = true;
-								break;
-							} else {
-								$taken_daily_poll = false;
-							}
-						}
-						
-					} else {
-						$taken_daily_poll = false;
-					}
-				}
-
-				// if(empty($this->admin)) {
-					$to_take_poll = $poll->status=='open' && !$taken_daily_poll;
-				// } else {
-				// 	$to_take_poll = true;
-				// }
-
-				$daily_polls[] = [
-					'title' => $poll->question,
-					'category_image' => VoxCategory::find($poll->category)->getImageUrl(),
-					'id' => $poll->id,
-					'closed' => $poll->status == 'closed' ? true : false,
-					'closed_image' => url('new-vox-img/stat-poll.png'),
-					'taken' => !empty($taken_daily_poll) ? true : false,
-					'taken_image' => url('new-vox-img/taken-poll.png'),
-					'to_take' => $to_take_poll,
-					'to_take_image' => url('new-vox-img/poll-to-take.png'),
-					'date' => date('Y-m-d', $poll->launched_at->timestamp),
-					'day' => date('j', $poll->launched_at->timestamp),
-					'day_word' => date('l', $poll->launched_at->timestamp),
-					'day_mobile' => date('d', $poll->launched_at->timestamp),
-					'day_word_mobile' => date('D', $poll->launched_at->timestamp),
-					'custom_date' => date('F j, Y', $poll->launched_at->timestamp),
-					'color' => VoxCategory::find($poll->category)->color,
-					'scheduled' => $poll->status=='scheduled' && !empty($this->admin) ? true : false,
-				];
-			}
-		} else {
-			$daily_polls = null;
-		}
-
-		$monthly_descr = PollsMonthlyDescription::where('month', Request::input('month'))->where('year', Request::input('year'))->first();
-
-		$ret = [
-        	'success' => true,
-        	'daily_polls' => $daily_polls,
-        	'monthly_descr' => $monthly_descr ? $monthly_descr->description : null,
-        ];
-        return Response::json( $ret );
-	}
-
-	/**
      * Get daily poll content by id
      */
 	public function get_poll_content($locale=null, $poll_id) {
@@ -521,4 +445,16 @@ class PollsController extends FrontController {
 	        'success' => true,
 	    ] );
     }
+
+	public function getCalendarHtml() {
+		$calendar = new \App\Helpers\Calendar();
+
+		$monthly_descr = PollsMonthlyDescription::where('month', Request::input('month'))->where('year', Request::input('year'))->first();
+
+		return Response::json( [
+			'success' => true,
+			'html' => $calendar->show(),
+        	'monthly_descr' => $monthly_descr ? $monthly_descr->description : null,
+		]);
+	}
 }

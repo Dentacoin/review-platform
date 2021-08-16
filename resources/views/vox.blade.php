@@ -32,8 +32,6 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-		{!! config('langs')[App::getLocale()]['font'] !!}
-
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
 
         @if(!empty($css) && is_array($css))
@@ -43,12 +41,6 @@
         @endif
 		{{-- <link rel="preload" href="{{ url('font-awesome/webfonts/fa-brands-400.woff2') }}" as="font" crossorigin>
 		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-solid-900.woff2') }}" as="font" crossorigin> --}}
-
-		<style type="text/css">
-			body {
-				{!! config('langs')[App::getLocale()]['font_css'] !!}
-			}
-		</style>
 		
 		@if($current_page == 'questionnaire')
 			<script src='https://www.google.com/recaptcha/api.js'></script>
@@ -342,12 +334,6 @@
 		</script>
 
 		<!-- css -->
-        @if($current_page == 'daily-polls')
-        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/core/main.min.css').'?ver='.$cache_version }}" />
-        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/daygrid/main.min.css').'?ver='.$cache_version }}" />
-        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/timegrid/main.min.css').'?ver='.$cache_version }}" />
-        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/list/main.min.css').'?ver='.$cache_version }}" />
-        @endif
 
         @if(!empty($csscdn) && is_array($csscdn))
             @foreach($csscdn as $file)
@@ -449,13 +435,6 @@
             @foreach($js as $file)
                 <script src="{{ url('/js-vox/'.$file).'?ver='.$cache_version }}"></script>
             @endforeach
-        @endif
-        @if($current_page == 'daily-polls')
-        	<script src="{{ url('/calendar/core/main.min.js') }}"></script>
-        	<script src="{{ url('/calendar/interaction/main.min.js') }}"></script>
-        	<script src="{{ url('/calendar/daygrid/main.min.js') }}"></script>
-        	<script src="{{ url('/calendar/timegrid/main.min.js') }}"></script>
-        	<script src="{{ url('/calendar/list/main.min.js') }}"></script>
         @endif
         @if(!empty($jscdn) && is_array($jscdn))
             @foreach($jscdn as $file)

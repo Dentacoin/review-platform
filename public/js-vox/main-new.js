@@ -19,8 +19,6 @@ var pollsFunction;
 var pollStats;
 var pollStatsAnimate;
 var tooltipsFunction;
-var calendarEvents;
-var calendarListEvents;
 var showStats;
 var showPoll;
 var dentacoin_down = false;
@@ -613,11 +611,6 @@ $(document).ready(function(){
 						history.pushState({}, null, $('#site-url').attr('url'));
 						cur_href = null;
 					}
-
-					if($('#calendar').length) {
-						calendarEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
-						calendarListEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
-					}
 				}
 
 				if($(this).hasClass('download-stats-popup')) {
@@ -657,11 +650,6 @@ $(document).ready(function(){
 				if (cur_href) {
 					history.pushState({}, null, $('#site-url').attr('url'));
 					cur_href = null;
-				}
-
-				if($('#calendar').length) {
-					calendarEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
-					calendarListEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
 				}
 			}
 
@@ -1000,7 +988,6 @@ $(document).ready(function(){
 	pollsFunction = function() {
 
 		$('.poll-answer .answer').change( function(e) {
-			console.log('click');
 			$(this).closest('form').submit();
 		});
 

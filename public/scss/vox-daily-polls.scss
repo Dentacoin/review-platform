@@ -429,3 +429,488 @@ $main-color: #38ace5;
 		}
     }
 }
+
+
+#poll-calendar {
+	border-top: 10px solid #38ace5;
+	padding: 20px;
+	box-shadow: 0 0 10px #c3c3c3;
+
+	@media #{$phone} {
+		padding: 13px 0px 0px;
+		border-top-width: 6px;
+	}
+
+	.box {
+		position:relative;
+		width:100%;
+		margin-bottom: 1.5em;
+
+		@media #{$phone} {
+			padding: 0px 10px;
+			margin-bottom: 1em;
+		}
+
+		.header{
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			h2 {
+				font-size: 1.75em;
+				margin: 0;
+				margin-bottom: 0px;
+				font-weight: 600;
+
+				@media #{$phone} {
+					font-size: 16px;
+				}
+			}
+
+			.prev-next-month {
+				display: flex;
+
+				.prev,
+				.next {
+					background-color: #3eafe6;
+					color: white;
+					padding: 12px 18.5px;
+					border-radius: .25em;
+					display: inline-block;
+
+					@media #{$phone} {
+						padding: 10.5px 13px;
+					}
+
+					img {
+						width: 10px;
+						display: block;
+
+						@media #{$phone} {
+							width: 5px;
+						}
+					}
+				}
+
+				.prev {
+					margin-right: 1px;
+					border-top-right-radius: 0px;
+					border-bottom-right-radius: 0px;
+				}
+
+				.next {
+					border-top-left-radius: 0px;
+					border-bottom-left-radius: 0px;
+				}
+
+				.today-button {
+					background-color: #3eafe6;
+					border-color: #3eafe6;
+					box-shadow: none;
+					margin-left: .75em;
+					border: 1px solid transparent;
+					padding: .4em .65em;
+					font-size: 1em;
+					line-height: 1.5;
+					border-radius: .25em;
+					color: white;
+
+					&.disabled {
+						opacity: .65;
+						cursor: default;
+					}
+				}
+					
+				.desktop-today {
+					@media #{$phone} {
+						display: none;
+					}
+				}
+			}
+
+			.style-calendar {
+				a {
+					background-color: white;
+					border: 2px solid #3eafe6;
+					color: #3eafe6;
+					margin-left: -1px;
+					border-radius: .25em;
+					border-top-left-radius: 0;
+					border-bottom-left-radius: 0;
+					vertical-align: middle;
+					padding: .4em .65em;
+					font-size: 1em;
+					line-height: 1.5;
+					display: inline-block;
+
+					&.chosen-month {
+						border-top-right-radius: 0;
+						border-bottom-right-radius: 0;
+						border-top-left-radius: .25em;
+						border-bottom-left-radius: .25em;
+						background-color: #3eafe6;
+						color: white;
+					}
+					
+					&.mobile-today {
+						display: none;
+						background-color: #3eafe6;
+						border: none;
+						padding: 4px 6px;
+						font-size: 1em;
+						border-radius: .25em;
+						color: white;
+
+						@media #{$phone} {
+							display: inline-block;
+						}
+
+						&.disabled {
+							opacity: .65;
+							cursor: default;
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+	.no-events {
+		display: none;
+		background-color: #eeeeee;
+		text-align: center;
+		padding: 200px 0px;
+	}
+	
+	.table-days-text {
+		width: 100%;
+		box-sizing: border-box;
+		table-layout: fixed;
+		border-collapse: collapse;
+		border-spacing: 0;
+		font-size: 1em;
+
+		tr {
+			th {
+				border-style: solid;
+				border-width: 1px;
+				padding: 0;
+				vertical-align: top;
+				border-color: #ddd;
+				box-sizing: content-box;
+				border-bottom: none;
+			}
+		}
+	}
+	
+	.table-days {
+		width: 100%;
+		box-sizing: border-box;
+		table-layout: fixed;
+		border-collapse: collapse;
+		border-spacing: 0;
+		font-size: 1em;
+
+		tr {
+			height: auto;
+
+			td {
+				border: 1px solid #ddd;
+				vertical-align: top;
+				box-sizing: content-box;
+				position: relative;
+				height: 131px;
+
+				.poll-day {
+					background-color: #d4ebfb;
+					display: block;
+					height: 100%;
+					position: relative;
+
+					&:hover {
+						.poll-day-inner {
+							.poll-q {
+								opacity: 0;
+							}
+							.butn {
+								opacity: 1;
+							}
+						}
+					}
+					
+					.poll-day-inner {
+						padding: 4px;
+
+						.poll-image {
+							max-width: 28px;
+						}
+
+						.poll-q {
+							font-size: 16px;
+							font-weight: 300;
+							color: #060606;
+							padding-left: 4px;
+							padding-top: 3px;
+							max-height: 64px;
+							overflow: hidden;
+							display: -webkit-box;
+							-webkit-line-clamp: 3;
+							-webkit-box-orient: vertical;
+						}
+
+						.clock {
+							position: absolute;
+							top: 6px;
+							right: 27px;
+							width: 16px;
+						}
+
+						.poll-stat-image {
+							max-width: 16px;
+							position: absolute;
+							bottom: 3px;
+							right: 3px;
+						}
+
+						.poll-take-image {
+							max-width: 11px;
+							position: absolute;
+							bottom: 8px;
+							right: 8px;
+						}
+
+						.poll-taken-image {
+							max-width: 16px;
+							position: absolute;
+							right: 24px;
+							bottom: 3px;
+						}
+
+						.butn {
+							opacity: 0;
+							position: absolute;
+							top: 50%;
+							left: 50%;
+							transform: translateX(-50%) translateY(-50%);
+							padding: 3px 14px;
+							border: 1px solid black;
+							border-radius: 10px;
+							font-size: 20px;
+							font-weight: 300;
+						}
+					}
+				}
+
+				.day-number {
+					position: absolute;
+					right: 0px;
+					top: 0px;
+					padding: 2px;
+				}
+
+				.mobile-day {
+					display: none;
+
+					.info-list {
+						background-color: #eeeeee;
+						display: flex;
+						justify-content: end;
+						align-items: center;
+						padding: 10px 15px;
+						border-bottom: 1px solid #dfdfdf;
+
+						@media #{$phone} {
+							flex-direction: column;
+							background: white;
+							min-width: 55px;
+							max-width: 55px;
+							padding: 10px;
+							flex: 1;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							border: none;
+						}
+
+						span {
+							font-weight: bold;
+    						color: #060606;
+
+							@media #{$phone} {
+    							font-weight: 300;
+							}
+
+							&.day-word {
+								flex: 1;
+
+								@media #{$phone} {
+									flex: none;
+								}
+							}
+						}
+					}
+	
+					.list-event{
+						background-color: #d4ebfb;
+						display: block;
+						padding: 10px 0px 10px 86px;
+						position: relative;
+						font-size: 16px;
+						font-weight: 300;
+						color: #060606;
+
+						@media #{$phone} {
+							padding-left: 52px;
+							position: relative;
+							display: flex;
+							align-items: center;
+							padding-right: 60px;
+							font-size: 14px;
+							width: 100%;
+							border-left: 1px solid #dddddd;
+						}
+	
+						.poll-image {
+							max-width: 28px;
+							position: absolute;
+							left: 50px;
+							top: 50%;
+							transform: translateY(-50%);
+
+							@media #{$phone} {
+								left: 12px;
+							}
+						}
+						
+						.clock,
+						.poll-stat-image {
+							max-width: 20px;
+							position: absolute;
+							right: 10px;
+							top: 50%;
+							transform: translateY(-50%);
+
+							@media #{$phone} {
+								max-width: 16px;
+							}
+						}
+
+						.poll-take-image {
+							max-width: 15px;
+							position: absolute;
+							right: 10px;
+							top: 50%;
+							transform: translateY(-50%);
+			
+							@media #{$phone} {
+								max-width: 10px;
+								right: 13px;
+							}
+						}
+			
+						.poll-taken-image {
+							max-width: 28px;
+							position: absolute;
+							left: 17px;
+							top: 50%;
+							transform: translateY(-50%);
+			
+							@media #{$phone} {
+								max-width: 16px;
+								left: auto;
+								right: 32px;
+							}
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+	&.list-calendar {
+		
+		.box {
+			.header {
+				.style-calendar {
+					a {
+						@media #{$phone} {
+							display: none;
+						}
+	
+						&.chosen-month {
+							background-color: white;
+							color: #3eafe6;
+						}
+	
+						&.chosen-list {
+							background-color: #3eafe6;
+							color: white;
+						}
+
+						&.mobile-today {
+							display: none;
+	
+							@media #{$phone} {
+								display: inline-block;
+							}
+						}
+					}
+
+					.prev-next-month {
+						
+						&.desktop-today {
+							@media #{$phone} {
+								display: none;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.table-days-text {
+			display: none;
+		}
+		.table-days {
+			tr {
+				td {
+					width: 100%;
+					display: block;
+					height: auto;
+					border-bottom: none;
+
+					.desktop-day {
+						display: none;
+					}
+
+					.mobile-day {
+						display: block;
+
+						@media #{$phone} {
+							display: flex;
+							// align-items: center;
+						}
+					}
+
+					.day-number {
+						display: none;
+					}
+				}
+			}
+		}
+
+		&.no-events-calendar {
+			display: block;
+
+			.table-days {
+				display: none;
+			}
+
+			.no-events {
+				display: block;
+			}
+		}
+	}
+}
