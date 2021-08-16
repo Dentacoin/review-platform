@@ -32,6 +32,8 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
+		{!! config('langs')[App::getLocale()]['font'] !!}
+
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
 
         @if(!empty($css) && is_array($css))
@@ -41,6 +43,12 @@
         @endif
 		{{-- <link rel="preload" href="{{ url('font-awesome/webfonts/fa-brands-400.woff2') }}" as="font" crossorigin>
 		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-solid-900.woff2') }}" as="font" crossorigin> --}}
+
+		<style type="text/css">
+			body {
+				{!! config('langs')[App::getLocale()]['font_css'] !!}
+			}
+		</style>
 		
 		@if($current_page == 'questionnaire')
 			<script src='https://www.google.com/recaptcha/api.js'></script>
