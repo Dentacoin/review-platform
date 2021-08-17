@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\VoxCategory;
+use App\Models\PollAnswer;
 use App\Models\Poll;
 use App\Models\User;
 
