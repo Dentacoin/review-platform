@@ -108,6 +108,10 @@ jQuery(document).ready(function($){
 	            success: function(ret) {
 	            	if (!$('#to-append').hasClass('appended')) {
 	            		$('#to-append').append(ret);
+
+						if($('.to-append-image').length) {
+							$('.to-append-image').append('<img src="'+$('.to-append-image').attr('data-src')+'"/>');
+						}
 	            		$('#to-append').addClass('appended');
 
 	            		handlePopups();

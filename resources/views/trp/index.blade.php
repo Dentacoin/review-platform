@@ -102,8 +102,8 @@
 		<div class="index-invite-dentist" id="index-invite-dentist">
 			<div class="container">
 				<div class="flex flex-mobile">
-					<div class="col">
-						<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="{{ trans('trp.alt-tags.dentist-icon') }}">
+					<div class="col to-append-image" data-src="{{ url('img-trp/dentacoin-dentist-icon.png') }}">
+						{{-- <img class="lazy-load-image" alt="{{ trans('trp.alt-tags.dentist-icon') }}"> --}}
 					</div>
 					<div class="col">
 						<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
