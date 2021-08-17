@@ -2,15 +2,9 @@
 
 namespace App\Helpers;
 
-use App\Models\VoxCategory;
-use App\Models\PollAnswer;
-use App\Models\Poll;
-use App\Models\User;
-
-use \Carbon\Carbon;
+use App\Services\VoxService as ServicesVox;
 
 use Request;
-use Cookie;
 use Auth;
 
 class Calendar {
@@ -91,58 +85,7 @@ class Calendar {
         $year = Request::input('year') ?? date('Y');
         $month = Request::input('month') ?? date('m');
 
-        $all_daily_polls = Poll::where('launched_at', '>=', $year."-".$month."-01 00:00:00")
-		->where('launched_at', '<', $year."-".str_pad($month, 2)."-31 23:59:59");
-
-		if( empty(Auth::guard('admin')->user())) {
-			$all_daily_polls = $all_daily_polls->where('status', '!=', 'scheduled');
-		}
-
-		$all_daily_polls = $all_daily_polls->orderBy('launched_at','asc')->get();
-
-		if ($all_daily_polls->isNotEmpty()) {
-            $daily_polls = [];
-			foreach ($all_daily_polls as $poll) {
-				
-				if (!empty(Auth::guard('web')->user())) {
-					$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', Auth::guard('web')->user()->id)->first();
-				} else {
-					if (Cookie::get('daily_poll')) {
-						$cv = json_decode(Cookie::get('daily_poll'), true);
-						foreach ($cv as $pid => $aid) {
-							if ($pid == $poll->id) {
-								$taken_daily_poll = true;
-								break;
-							} else {
-								$taken_daily_poll = false;
-							}
-						}
-						
-					} else {
-						$taken_daily_poll = false;
-					}
-				}
-
-				$to_take_poll = $poll->status=='open' && !$taken_daily_poll;
-
-				$daily_polls[] = [
-					'title' => $poll->question,
-					'category_image' => VoxCategory::find($poll->category)->getImageUrl(),
-					'id' => $poll->id,
-					'closed' => $poll->status == 'closed' ? true : false,
-					'closed_image' => url('new-vox-img/stat-poll.png'),
-					'taken' => !empty($taken_daily_poll) ? true : false,
-					'taken_image' => url('new-vox-img/taken-poll.png'),
-					'to_take' => $to_take_poll,
-					'to_take_image' => url('new-vox-img/poll-to-take.png'),
-					'day' => date('j', $poll->launched_at->timestamp),
-					'color' => VoxCategory::find($poll->category)->color,
-					'scheduled' => $poll->status=='scheduled' && !empty(Auth::guard('admin')->user()) ? true : false,
-				];
-			}
-		} else {
-			$daily_polls = null;
-		}
+        $daily_polls = ServicesVox::getDailyPollsByMonth(Auth::guard('web')->user(), Auth::guard('admin')->user(), false);
          
         $content='<div id="poll-calendar" class="'.($phone || (isset($_GET['list']) && $_GET['list']) ? 'list-calendar' : '').' '.(!$daily_polls ? 'no-events-calendar' : '').'">'.
             '<div class="box">'.
@@ -206,7 +149,7 @@ class Calendar {
             foreach($daily_polls as $dp) {
                 if($dp['day'] == $cellContent) {
 
-                    $content .= '<a class="poll-day desktop-day '.($dp['closed'] || $dp['taken'] ? 'stats' : ($dp['to_take'] ? 'to-take' : '')).' '.($dp['scheduled'] ? 'admin' : '').'" href="javascript:;" style="background-color: '.$dp['color'].'" poll-id="'.$dp['id'].'">'.
+                    $content .= '<a class="poll-day desktop-day '.($dp['closed'] || $dp['taken'] ? 'stats' : ($dp['to_take'] ? 'to-take' : '')).' '.(isset($dp['scheduled']) ? 'admin' : '').'" href="javascript:;" style="background-color: '.$dp['color'].'" poll-id="'.$dp['id'].'">'.
                         '<div class="poll-day-inner">'.
                         '<img class="poll-image" src="'.$dp['category_image'].'">'.
                         '<p class="poll-q">'.$dp['title'].'</p>';
@@ -225,7 +168,7 @@ class Calendar {
                         }
                     }
 
-                    if ($dp['scheduled']) {
+                    if (isset($dp['scheduled'])) {
                         $content .= '<img class="clock" src="'.url('img/clock.png').'">'.
                         '<p class="butn check-stat">Check</p>';
                     }
@@ -245,7 +188,7 @@ class Calendar {
                             '</div>';
                         }
 
-                        $content .= '<a href="javascript:;" class="list-event '.($dp['closed'] || $dp['taken'] ? 'stats' : ($dp['to_take'] ? 'to-take' : '')).' '.($dp['scheduled'] ? 'admin' : '').'" poll-id="'.$dp['id'].'" data-date="2021-03-01" style="background-color: '.$dp['color'].'">'.
+                        $content .= '<a href="javascript:;" class="list-event '.($dp['closed'] || $dp['taken'] ? 'stats' : ($dp['to_take'] ? 'to-take' : '')).' '.(isset($dp['scheduled']) ? 'admin' : '').'" poll-id="'.$dp['id'].'" data-date="2021-03-01" style="background-color: '.$dp['color'].'">'.
                             '<img class="poll-image" src="'.$dp['category_image'].'"/>'.
                             $dp['title'];
 
@@ -260,7 +203,7 @@ class Calendar {
                             }
                         }
 
-                        if ($dp['scheduled']) {
+                        if (isset($dp['scheduled'])) {
                             $content .= '<img class="clock" src="'.url('img/clock.png').'">';
                         }
                             

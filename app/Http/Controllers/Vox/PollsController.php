@@ -6,6 +6,8 @@ use App\Http\Controllers\FrontController;
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
+use App\Services\VoxService as ServicesVox;
+
 use App\Models\PollsMonthlyDescription;
 use App\Models\VoxCategory;
 use App\Models\PollAnswer;
@@ -130,305 +132,22 @@ class PollsController extends FrontController {
 	/**
      * Get daily poll content by id
      */
-	public function get_poll_content($locale=null, $poll_id) {
-
-		$ret = [
-        	'success' => false,
-        ];
-		
-		$poll = Poll::find($poll_id);
-
-		if(!empty($poll)) {
-
-			if (!empty($this->user)) {
-				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
-			} else {
-				if (Cookie::get('daily_poll')) {
-					$cv = json_decode(Cookie::get('daily_poll'), true);
-					foreach ($cv as $pid => $aid) {
-						if ($pid == $poll->id) {
-							$taken_daily_poll = PollAnswer::find($aid);
-						} else {
-							$taken_daily_poll = null;
-						}
-					}				
-				} else {
-					$taken_daily_poll = null;
-				}
-			}
-
-			if (!empty($poll) && $poll->status == 'open' && empty($taken_daily_poll) || !empty($this->admin)) {
-
-				$slist = VoxScale::get();
-		        $poll_scales = [];
-		        foreach ($slist as $sitem) {
-		            $poll_scales[$sitem->id] = $sitem;
-		        }
-
-				if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
-					$json_answers = explode(',', $poll_scales[$poll->scale_id]->answers);
-				} else {
-					$json_answers = json_decode($poll->answers, true);
-				}
-
-				$answers = [];
-				foreach ($json_answers as $key => $answer) {
-					$answers[] = Poll::handleAnswerTooltip($answer);
-				}
-
-				$randomize_answers = empty($poll->dont_randomize_answers) && $poll->type != 'scale' ? true : false;
-
-				$ret = [
-		        	'success' => true,
-		        	'title' => $poll->question,
-		        	'url' => getLangUrl('poll/'.$poll->id),
-		        	'answers' => $answers,
-		        	'date_href' => date('d-m-Y',$poll->launched_at->timestamp),
-		        	'randomize_answers' => $randomize_answers,
-		        	'show_poll' => true,
-		        ];
-			}
-		}
-		
-        return Response::json( $ret );
+	public function getPollContent($locale=null, $poll_id) {
+    	return ServicesVox::getPollContent($poll_id, $this->user, $this->admin, false);
 	}
 
 	/**
      * Get daily poll stats by id
      */
-	public function get_poll_stats($locale=null, $poll_id) {
-
-		$poll = Poll::find($poll_id);
-
-		if (!empty($poll)) {
-
-			if (!empty($this->user)) {
-		        $taken_daily_polls = PollAnswer::where('user_id', $this->user->id)->pluck('poll_id')->toArray();
-		        $more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
-		    } else {
-		    	$taken_daily_polls = null;
-		    	$more_polls_to_take = null;
-		    }
-
-		    $next_stat = Poll::where('status', 'closed')->where('launched_at', '>', $poll->launched_at)->first();
-
-		    if (empty($next_stat)) {
-		    	$next_stat = Poll::where('status', 'closed')->orderBy('id', 'asc')->first();
-		    }
-
-		    $time = !empty($poll->launched_at) ? $poll->launched_at->timestamp : '';
-
-			$ret = [
-	        	'success' => true,
-	        	'title' => $poll->question,
-	        	'chart' => $this->chartData($poll),
-		        'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
-		        'closed' => $poll->status == 'closed' ? true : false,
-		        'date' => !empty($time) ? date('d/m/Y',$time) : false,
-		        'date_href' => !empty($time) ? date('d-m-Y',$time) : false,
-		        'has_user' => !empty($this->user) ? true : false,
-		        'next_stat' => $next_stat->id,
-		        'show_stats' => true,
-	        ];
-
-		} else {
-			$ret = [
-	        	'success' => false,
-	        ];
-		}
-		
-        return Response::json( $ret );
+	public function getPollStats($locale=null, $poll_id) {
+		return ServicesVox::getPollStats($poll_id, $this->user);
 	}
 
 	/**
      * Answer daily poll
      */
 	public function dopoll($locale=null, $id) {
-
-		if(Request::isMethod('post')) {
-			$poll = Poll::find($id);
-
-			if (!empty($poll)) {
-
-				if ($poll->respondentsCount() >= 100) {
-					$ret = [
-			        	'success' => false,
-			        	'closed_poll' => $poll->id,
-			        ];
-
-			        return Response::json( $ret );
-				}
-
-				$slist = VoxScale::get();
-		        $poll_scales = [];
-		        foreach ($slist as $sitem) {
-		            $poll_scales[$sitem->id] = $sitem;
-		        }
-
-				if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
-					$json_answers = explode(',', $poll_scales[$poll->scale_id]->answers);
-				} else {
-					$json_answers = json_decode($poll->answers, true);
-				}
-
-				$a = intval(Request::input('answer'));
-
-				if(!$this->user && $poll->status == 'open') {
-
-					if(!Auth::guard('admin')->user()) {
-						$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
-						$country_db = Country::where('code', 'like', $country_code)->first();
-
-						$answer = new PollAnswer;
-				        $answer->user_id = 0;
-				        $answer->country_id = !empty($country_db) ? $country_db->id : null;
-				        $answer->poll_id = $poll->id;
-				        $answer->answer = $a;
-			        	$answer->save();
-
-			        	$poll->recalculateUsersPercentage();
-
-			        	$cv = Cookie::get('daily_poll');
-			        	if(empty($cv)) {
-			        		$cv = [];
-			        	} else {
-			        		$cv = json_decode($cv, true);
-			        	}
-						
-						$cv[$poll->id] = $answer->id;
-			        	Cookie::queue('daily_poll', json_encode($cv), 1440, null, '.dentacoin.com');
-			        }
-
-		        	$this->checkStatus($poll);
-
-			        $ret = [
-			        	'success' => true,
-			        	'logged' => false,
-			        	'chart' => $this->chartData($poll),
-	        			'respondents' => trans('vox.daily-polls.popup.respondents', ['current_respondents' => $poll->respondentsCount() ]),
-	        			'has_user' => false,
-			        ];
-
-					return Response::json( $ret );
-				}
-
-
-				$taken_daily_poll = !empty($this->user) ? PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first() : null;
-
-				if( empty($taken_daily_poll) && $poll->status == 'open' ) {
-
-					if(!Auth::guard('admin')->user()) {
-
-						$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
-						$country_db = Country::where('code', 'like', $country_code)->first();
-
-						$answer = new PollAnswer;
-				        $answer->user_id = $this->user->id;
-				        $answer->country_id = !empty($this->user->country_id) ? $this->user->country_id : (!empty($country_db) ? $country_db->id : null);
-				        $answer->poll_id = $poll->id;
-				        $answer->answer = $a;
-			        	$answer->save();
-
-			        	$poll->recalculateUsersPercentage();
-
-						$reward = new DcnReward;
-				        $reward->user_id = $this->user->id;
-				        $reward->reference_id = $poll->id;
-				        $reward->platform = 'vox';
-				        $reward->type = 'daily_poll';
-				        $reward->reward = Reward::getReward('daily_polls');
-
-				        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-		                $dd = new DeviceDetector($userAgent);
-		                $dd->parse();
-
-		                if ($dd->isBot()) {
-		                    // handle bots,spiders,crawlers,...
-		                    $reward->device = $dd->getBot();
-		                } else {
-		                    $reward->device = $dd->getDeviceName();
-		                    $reward->brand = $dd->getBrandName();
-		                    $reward->model = $dd->getModel();
-	                		$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-		                }
-
-				        $reward->save();
-				    }
-
-			        $this->checkStatus($poll);
-
-			        $taken_daily_polls = PollAnswer::where('user_id', $this->user->id)->pluck('poll_id')->toArray();
-		        	$more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
-
-		        	$ret = [
-			        	'success' => true,
-			        	'chart' => $this->chartData($poll),
-			        	'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
-		        		'respondents' => trans('vox.daily-polls.popup.respondents', ['current_respondents' => $poll->respondentsCount() ]),
-		        		'has_user' => true,
-			        ];
-
-		    	} else {
-		    		$ret = [
-			        	'success' => false,
-			        ];
-		    	}
-
-		    	return Response::json( $ret );
-		    }
-		} else {
-			return redirect(getLangUrl('/'));
-		}
-	}
-
-	private function checkStatus($poll) {
-
-		$respondents = $poll->respondentsCount();
-
-		if ($respondents >= 100) {
-			$poll->status = 'closed';
-			$poll->hasimage_social = false;
-			$poll->save();
-		}
-	}
-
-	private function chartData($poll) {
-
-		$results = PollAnswer::where('poll_id', $poll->id)
-		->groupBy('answer')
-		->selectRaw('answer, COUNT(*) as cnt')
-		->get();
-
-		$chart = [];
-
-		$slist = VoxScale::get();
-        $poll_scales = [];
-        foreach ($slist as $sitem) {
-            $poll_scales[$sitem->id] = $sitem;
-        }
-
-		if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
-			$ans_array = explode(',', $poll_scales[$poll->scale_id]->answers);
-		} else {
-			$ans_array = json_decode($poll->answers);
-		}
-
-        foreach ($ans_array as $ans) {
-            $answers[] = Poll::handleAnswerTooltip(mb_substr($ans, 0, 1)=='#' ? mb_substr($ans, 1) : $ans);
-        }
-
-        foreach ($answers as $key => $value) {
-            $chart[$value] = 0;
-        }
-
-        foreach ($results as $res) {
-            if(!isset( $answers[ $res->answer-1 ] )) {
-                continue;
-            }
-            $chart[ $answers[ $res->answer-1 ] ] = $res->cnt;
-        }
-
-        return $chart;
+		return ServicesVox::doPoll($id, $this->user, $this->admin, false);
 	}
 
 	/**
