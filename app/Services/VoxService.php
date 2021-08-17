@@ -468,7 +468,7 @@ class VoxService {
                             }
                         }
                     }
-
+                    
                     $array['excluded_answers'] = $excluded_answers;
                     $array['cross_checks'] = $cross_checks;
                     $array['cross_checks_references'] = $cross_checks_references;
@@ -1598,19 +1598,20 @@ class VoxService {
                             }
                         }
                         $group = null;
+
                         foreach ($a as $k => $value) {
                             if(isset($excluded_answers[$value])) {
+                                if($group == $excluded_answers[$value]) {
+                                    $valid = false;
+                                    break;
+                                }
                                 if(empty($group)) {
                                     $group = $excluded_answers[$value];
 
                                     // echo 'group: '.$group;
                                 }
 
-                                // echo 'group: '.$group.' != '.$excluded_answers[$value];
-                                if($group != $excluded_answers[$value]) {
-                                    $valid = false;
-                                    break;
-                                }
+                                // echo 'group: '.$group.' == '.$excluded_answers[$value];
                             }
                         }
                     }

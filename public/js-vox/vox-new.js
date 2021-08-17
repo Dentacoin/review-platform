@@ -187,8 +187,8 @@ $(document).ready(function(){
             if( $(this).is(':checked') ) {
                 if($(this).closest('label').hasClass('excluded-answer')) {
                     var group = $(this).closest('label').attr('excluded-group');
-                    $('.excluded-answer').each( function() {
-                        if($(this).attr('excluded-group') != group) {
+                    $('.excluded-answer').not($(this).closest('label')).each( function() {
+                        if($(this).attr('excluded-group') == group) {
                             $(this).removeClass('active').addClass('disabled');
                             $(this).find('input').prop('checked', false).prop('disabled', 'disabled');
                         }
@@ -197,8 +197,8 @@ $(document).ready(function(){
             } else {
                 if($(this).closest('label').hasClass('excluded-answer')) {
                     var group = $(this).closest('label').attr('excluded-group');
-                    $('.excluded-answer').each( function() {
-                        if($(this).attr('excluded-group') != group) {
+                    $('.excluded-answer').not($(this).closest('label')).each( function() {
+                        if($(this).attr('excluded-group') == group) {
                             $(this).removeClass('disabled');
                             $(this).find('input').prop('disabled', false);
                         }
