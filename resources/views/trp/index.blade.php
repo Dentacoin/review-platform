@@ -53,7 +53,7 @@
 								    	<h4>{{ $dentist->getNames() }}</h4>
 								    	<div class="p">
 								    		<div class="img">
-								    			<img src="img-trp/map-pin.png">
+								    			<img src="img-trp/map-pin.png" width="10" height="14">
 								    		</div>
 											{{ $dentist->city_name ? $dentist->city_name.', ' : '' }}
 											{{ $dentist->state_name ? $dentist->state_name.', ' : '' }} 
@@ -63,7 +63,7 @@
 								    	@if( $time = $dentist->getWorkHoursText() )
 								    		<div class="p">
 								    			<div class="img">
-									    			<img src="{{ url('img-trp/open.png') }}">
+									    			<img src="{{ url('img-trp/open.png') }}" width="13" height="14">
 									    		</div>
 									    		<span>
 								    				{!! $time !!}
