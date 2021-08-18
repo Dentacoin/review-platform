@@ -67,7 +67,9 @@ class IndexController extends FrontController {
 
 					$lbp->cat_name = $category->name;
 
-					$post_image_id = DB::connection('vox_wordpress_db')->table('postmeta')->where('post_id', $lbp->ID)->where('meta_key', '_thumbnail_id')->first()->meta_value;
+					$post_image_obj = DB::connection('vox_wordpress_db')->table('postmeta')->where('post_id', $lbp->ID)->where('meta_key', '_thumbnail_id')->first();
+
+					$post_image_id = $post_image_obj ? $post_image_obj->meta_value : null;
 					$post_image_link = DB::connection('vox_wordpress_db')->table('posts')->where('id', $post_image_id)->first();
 
 					$lbp->img = $post_image_link->guid;

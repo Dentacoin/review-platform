@@ -191,6 +191,9 @@
                     @endforeach
 
                     @if($item->questions->isNotEmpty())
+                        <div class="form-group clearfix" style="margin-top: 40px;">
+                            <h3 class="col-md-3" style="margin-top: 0px;">Previous question answers</h3>
+                        </div>
                         <div class="form-group clearfix">
                             <label class="col-md-2 control-label">Show only the answers chosen <br/> in previous question </label>
                             <div class="col-md-4">
@@ -204,9 +207,19 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group clearfix">
+                            <label class="col-md-2 control-label" for="remove_answers_with_diez">Remove answers with #</label>
+                            <input type="checkbox" name="remove_answers_with_diez" value="1" id="remove_answers_with_diez" style="vertical-align: sub; margin-top: 10px;" {!! !empty($question) && $question->remove_answers_with_diez ? 'checked="checked"' : '' !!} />
+                        </div>
+                        <div class="col-md-5 hint-for-scale">
+                            * If you want to add additional answers - add them as you add normal answers
+                        </div>
                     @endif
 
                     @if(!empty($question) && $question->type == 'multiple_choice' && !empty($question->{'answers:'.$code}) )
+                        <div class="form-group clearfix" style="margin-top: 40px;">
+                            <h3 class="col-md-3" style="margin-top: 0px;">Exclude answers</h3>
+                        </div>
                         <div class="form-group clearfix">
                             <label class="col-md-2 control-label" for="exclude_answers">Exclude answers</label>
                             <input type="checkbox" name="exclude_answers_checked" value="1" id="exclude_answers" style="vertical-align: sub; margin-top: 10px;" {!! $question->excluded_answers ? 'checked="checked"' : '' !!} />

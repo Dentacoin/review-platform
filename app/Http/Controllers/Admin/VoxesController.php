@@ -739,7 +739,7 @@ class VoxesController extends AdminController {
             }
 
             if(!empty($question->prev_q_id_answers) && (VoxQuestion::find($question->prev_q_id_answers)->type != 'multiple_choice' || ($question->type!='single_choice' || $question->type!='multiple_choice'))) {
-                Request::session()->flash('error-message', 'The current question must be a single choice or a multiple choice and the previous question must be a multiple choice type' );
+                Request::session()->flash('error-message', 'The current question must be single choice or multiple choice and the previous question must be multiple choice type' );
                 $question->prev_q_id_answers=null;
                 $question->save();
                 return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
@@ -1126,9 +1126,10 @@ class VoxesController extends AdminController {
         $question->stats_scale_answers = !empty($data['stats_scale_answers']) ? json_encode($data['stats_scale_answers']) : '';
         $question->vox_scale_id = !empty($data['question_scale']) ? $data['question_scale'] : null;
         $question->dont_randomize_answers = !empty($data['dont_randomize_answers']) ? $data['dont_randomize_answers'] : null;
-        $question->image_in_tooltip = !empty($data['image_in_tooltip']) ? $data['image_in_tooltip'] : null;  
-        $question->image_in_question = !empty($data['image_in_question']) ? $data['image_in_question'] : null;  
-        $question->prev_q_id_answers = !empty($data['prev_q_id_answers']) ? $data['prev_q_id_answers'] : null;  
+        $question->image_in_tooltip = !empty($data['image_in_tooltip']) ? $data['image_in_tooltip'] : null;
+        $question->image_in_question = !empty($data['image_in_question']) ? $data['image_in_question'] : null;
+        $question->prev_q_id_answers = !empty($data['prev_q_id_answers']) ? $data['prev_q_id_answers'] : null;
+        $question->remove_answers_with_diez = !empty($data['remove_answers_with_diez']) ? $data['remove_answers_with_diez'] : null;
               
         if( !empty($data['trigger_type']) ) {
             $question->trigger_type = $data['trigger_type'];
@@ -1185,7 +1186,7 @@ class VoxesController extends AdminController {
         if(isset($data['prev_q_order'])) {
             $question->prev_q_id_answers = VoxQuestion::where('vox_id', $question->vox_id)->where('order', $data['prev_q_order'])->first()->id;
             $question->save();
-        }
+        }        
 
         if (!empty(session('brackets'))) {
             $sess = session('brackets');
