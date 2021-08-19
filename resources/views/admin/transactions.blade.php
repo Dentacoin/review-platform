@@ -77,9 +77,7 @@
                                     @foreach(config('patient-statuses') as $key => $user_status)
                                         <option value="{{ $key }}" {!! $key==$search_user_status ? 'selected="selected"' : '' !!}>Patient: {{ $user_status }}</option>
                                     @endforeach
-                                    @foreach(config('user-statuses') as $key => $user_status)
-                                        <option value="{{ $key }}" {!! $key==$search_user_status ? 'selected="selected"' : '' !!}>Dentist: {{ $user_status }}</option>
-                                    @endforeach
+                                    <option value="dentists_clinics" {!! 'dentists_clinics'==$search_user_status ? 'selected="selected"' : '' !!}>Dentists and Clinics All</option>
                                 </select>
                             </div>
                             <div class="col-md-1">

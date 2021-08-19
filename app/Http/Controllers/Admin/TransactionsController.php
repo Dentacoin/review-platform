@@ -52,10 +52,9 @@ class TransactionsController extends AdminController {
             $status = $this->request->input('search-user-status');
             $transactions = $transactions->whereHas('user', function ($query) use ($status) {
 
-                if( $status=='approved' ) {
-                    $query->where(function ($subquery) use ($status) {
-                        $subquery->where('is_dentist', 1)
-                        ->where('status', $status);
+                if( $status=='dentists_clinics' ) {
+                    $query->where(function ($subquery) {
+                        $subquery->where('is_dentist', 1);
                     });
                 } else {
                     $query->where('status', $status)
