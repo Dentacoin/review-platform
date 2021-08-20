@@ -42,7 +42,7 @@
 	            						{{ $order->report->main_title.' '.$order->report->title  }}
 	            					</td>
 	            					<td style="width: 25%;">
-	            						{{ $order->price_with_currency }}
+										{{ $ios ? str_replace("DCN","DP",$order->price_with_currency) : $order->price_with_currency }}
 	            					</td>
 	            				</tr>
 	            			@endforeach
@@ -67,7 +67,7 @@
 	            				{{ trans('vox.page.profile.vox.list-questionnaire') }}
 	            			</th>
 	            			<th style="width: 25%;">
-	            				DCN
+	            				{{ $ios ? 'DP' : 'DCN' }}
 	            			</th>
             			</tr>
             		</thead>

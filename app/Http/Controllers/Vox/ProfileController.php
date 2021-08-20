@@ -114,10 +114,16 @@ class ProfileController extends FrontController {
                 $os = current($matches);
             }
 
+            $ios = false;
+            if(Request::input('device-os') && Request::input('device-os') == 'ios') {
+                $ios = true;
+            }
+
             $params = [
                 'xframe' => true,
                 'latest_voxes' => $os ? Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('created_at', 'desc')->take(3)->get() : collect(),
                 'more_surveys' => $more_surveys,
+                'ios' => $ios,
                 'prev_bans' => $prev_bans,
                 'current_ban' => $current_ban,
                 'ban_reason' => $ban_reason,
