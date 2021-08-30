@@ -1482,9 +1482,9 @@
                         'table_id' => 'vox-unfinished',
                         'table_fields' => [
                             'taken_date'        => array('format' => 'datetime', 'width' => '20%'),
-                            'id'              => array('template' => 'admin.parts.table-vox-with-link', 'label' => 'Title', 'width' => '30%'),
-                            'device'                => array('template' => 'admin.parts.table-unfinished-device', 'width' => '100%'),
-                            'delete'              => array('template' => 'admin.parts.table-vox-unfinished-delete'),
+                            'id'                => array('template' => 'admin.parts.table-vox-with-link', 'label' => 'Title', 'width' => '30%'),
+                            'device'            => array('template' => 'admin.parts.table-unfinished-device', 'width' => '100%'),
+                            'delete'            => array('template' => 'admin.parts.table-vox-unfinished-delete'),
                         ],
                         'table_data' => $unfinished,
                         'table_subpage' => 'vox-unfinished',
