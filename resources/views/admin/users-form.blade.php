@@ -1482,7 +1482,7 @@
                         'table_id' => 'vox-unfinished',
                         'table_fields' => [
                             'taken_date'        => array('format' => 'datetime', 'width' => '20%'),
-                            'title'              => array('width' => '30%'),
+                            'id'              => array('template' => 'admin.parts.table-vox-with-link', 'label' => 'Title', 'width' => '30%'),
                             'device'                => array('template' => 'admin.parts.table-unfinished-device', 'width' => '100%'),
                             'delete'              => array('template' => 'admin.parts.table-vox-unfinished-delete'),
                         ],
