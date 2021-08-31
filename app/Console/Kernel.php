@@ -10,17 +10,13 @@ use App\Models\TransactionScammersByDay;
 use App\Models\IncompleteRegistration;
 use App\Models\DcnTransactionHistory;
 use App\Models\WithdrawalsCondition;
-use App\Models\VoxAnswersDependency;
 use App\Models\ScrapeDentistResult;
-use App\Models\CronjobSecondRun;
+use App\Models\UserSurveyWarning;
 use App\Models\CronjobThirdRun;
-use App\Models\CronjobFourRun;
 use App\Models\StopVideoReview;
+use App\Models\CronjobFourRun;
 use App\Models\DcnTransaction;
-use App\Models\EmailTemplate;
 use App\Models\ScrapeDentist;
-use App\Models\AnonymousUser;
-use App\Models\VoxQuestion;
 use App\Models\UserHistory;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
@@ -31,11 +27,9 @@ use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\BanAppeal;
 use App\Models\GasPrice;
-use App\Models\Article;
 use App\Models\Country;
 use App\Models\Review;
 use App\Models\Reward;
-use App\Models\Email;
 use App\Models\User;
 use App\Models\Poll;
 use App\Models\Dcn;
@@ -47,8 +41,7 @@ use Carbon\Carbon;
 use Mail;
 use DB;
 
-class Kernel extends ConsoleKernel
-{
+class Kernel extends ConsoleKernel {
     /**
      * The Artisan commands provided by your application.
      *
@@ -64,8 +57,8 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
-    {
+    protected function schedule(Schedule $schedule) {
+
         $schedule->call(function () {
 
             echo 'Incomplete Dentist Registrations cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -2408,6 +2401,15 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             
         })->dailyAt('10:00');
 
+
+        $schedule->call(function () {
+            echo 'Remove old survey warnings'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            UserSurveyWarning::where('created_at', '<', Carbon::now()->addDays(-1)->toDateTimeString() )->forceDelete();
+
+            echo 'Remove old survey warnings cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->dailyAt('10:00');
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;

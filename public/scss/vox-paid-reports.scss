@@ -329,7 +329,7 @@ img {
                 }
 
                 @media screen and (max-height: 800px) and (min-width: 769px ) {
-                    max-width: 470px;
+                    max-width: 580px;
                 }
 
                 .main-image {
@@ -1153,6 +1153,7 @@ img {
     display: flex;
     align-items: center;
     margin: 33px 0px 38px 100px;
+    justify-content: center;
 
     @media #{$pc_small} {
         margin: 33px 0px 38px 10px;
@@ -1499,5 +1500,12 @@ img {
     img {
         min-width: 51px;
         margin-right: 15px;
+    }
+}
+
+.footer-expander {
+    footer {
+        bottom: 0px;
+        opacity: 1;
     }
 }

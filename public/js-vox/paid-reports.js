@@ -37,6 +37,7 @@ $(document).ready(function(){
                         window.location.href = data.link;
                     } else {
                         $('#checkout-form-success').show();
+                        $('.company-form').removeClass('active');
                     }
                 } else {
                     for(var i in data.messages) {

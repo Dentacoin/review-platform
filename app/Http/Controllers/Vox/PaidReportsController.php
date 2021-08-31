@@ -179,7 +179,7 @@ class PaidReportsController extends FrontController {
 						'report_order' => $new_order->id
 					]);
 
-					$mtext = 'New order ID '.$order->id.': <br/>
+					$mtext = 'New order ID '.$new_order->id.': <br/>
 					Link in CMS: https://dentavox.dentacoin.com/cms/orders/';
 
 					Mail::send([], [], function ($message) use ($mtext) {
@@ -243,7 +243,6 @@ class PaidReportsController extends FrontController {
                 'company-number' => array('required'),
                 'company-country' =>  array('required'),
 				'address' =>  array('required'),
-				'vat' =>  array('required'),
             ]);
 
             if ($validator->fails()) {

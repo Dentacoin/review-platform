@@ -74,8 +74,8 @@
                 <button type="submit" href="javascript:;" class="blue-button new-style red-button">Submit</button>
             </div>
 
-            <div class="alert alert-success" id="checkout-form-success" style="display: none; margin-top: 20px;">Success</div>
         </form>
+        <div class="alert alert-success" id="checkout-form-success" style="display: none; margin-top: 20px;">Your invoice request has been sent.</div>
 
         @if($order->payment_method == 'paypal')
             <div class="payment-wrap paypal">

@@ -236,7 +236,7 @@ img {
       max-width: 390px; } }
   @media screen and (max-height: 800px) and (min-width: 769px) {
     .main-section.single-main-section .col.main-image-wrapper {
-      max-width: 470px; } }
+      max-width: 580px; } }
   .main-section.single-main-section .col.main-image-wrapper .main-image {
     max-width: 500px; }
     @media screen and (max-width: 1200px) {
@@ -793,7 +793,8 @@ img {
 .paid-tags {
   display: flex;
   align-items: center;
-  margin: 33px 0px 38px 100px; }
+  margin: 33px 0px 38px 100px;
+  justify-content: center; }
   @media screen and (max-width: 1200px) {
     .paid-tags {
       margin: 33px 0px 38px 10px; } }
@@ -1034,3 +1035,7 @@ img {
   .alert-crypto img {
     min-width: 51px;
     margin-right: 15px; }
+
+.footer-expander footer {
+  bottom: 0px;
+  opacity: 1; }
