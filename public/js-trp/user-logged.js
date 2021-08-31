@@ -663,7 +663,7 @@ $(document).ready(function(){
                         that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').html('');
                         for (var i in data.info) {
 
-                            that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="'+i+'"><label class="invite-radio" for="r'+unique_id+i+'"><i class="far fa-square"></i><input type="radio" name="patient-emails" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="r'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
+                            that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="'+i+'"><label class="invite-radio" for="r'+unique_id+i+'"><div class="checkbox-square">✓</div><input type="radio" name="patient-emails" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="r'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
 
                             for (var u in data.info[i]) {
                                 that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').find('.checkbox-wrapper[attr="'+i+'"]').find('.copypaste-box').append('<p>'+(data.info[i][u]? data.info[i][u] : '-')+'</p>');
@@ -730,7 +730,7 @@ $(document).ready(function(){
 
                     for (var i in data.info) {
 
-                        that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="a'+i+'"><label class="invite-radio" for="ra'+unique_id+i+'"><i class="far fa-square"></i><input type="radio" name="patient-names" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="ra'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
+                        that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="a'+i+'"><label class="invite-radio" for="ra'+unique_id+i+'"><div class="checkbox-square">✓</div><input type="radio" name="patient-names" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="ra'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
 
                         for (var u in data.info[i]) {
                             that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').find('.checkbox-wrapper[attr="a'+i+'"]').find('.copypaste-box').append('<p>'+(data.info[i][u]? data.info[i][u] : '-')+'</p>');
@@ -806,7 +806,7 @@ $(document).ready(function(){
 
         var that = $(this);
 
-        that.find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success').removeClass('alert-orange');
+        that.find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
         that.find('button').addClass('waiting');
 
         $.post( 
@@ -881,7 +881,7 @@ $(document).ready(function(){
                 that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').html('');
                 for (var i in data.info) {
 
-                    that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="'+i+'"><label class="invite-radio" for="r'+unique_id+i+'"><i class="far fa-square"></i><input type="radio" name="patient-emails" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="r'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
+                    that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="'+i+'"><label class="invite-radio" for="r'+unique_id+i+'"><div class="checkbox-square">✓</div><input type="radio" name="patient-emails" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="r'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
 
                     for (var u in data.info[i]) {
                         that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').find('.checkbox-wrapper[attr="'+i+'"]').find('.copypaste-box').append('<p>'+(data.info[i][u]? data.info[i][u] : '-')+'</p>');
@@ -973,7 +973,7 @@ $(document).ready(function(){
             var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
                 <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
                     <div class="delete-gallery delete-button" sure="'+sure_text+'">\
-                        <i class="fas fa-times"></i>\
+                        <img class="close-icon" src="'+all_images_path+'/close-icon-white.svg"/>\
                     </div>\
                 </div>\
             </a>\
@@ -1486,7 +1486,7 @@ $(document).ready(function(){
 
         var btn = $(this).find('[type="submit"]').first();
         btn.attr('data-old', btn.html());
-        btn.html('<i class="fa fa-spinner fa-pulse fa-fw"></i> '+btn.attr('data-loading'));
+        btn.html('<i></i> '+btn.attr('data-loading'));
 
         var that = $(this);
 
@@ -1739,10 +1739,10 @@ $(document).ready(function(){
     $('.social-link').click( function() {
         var el = $(this).closest('.social-wrap');
         el.find('.current-social').attr('cur-type', $(this).attr('social-type') );
-        el.find('.current-social i').removeAttr('class');
-        el.find('.current-social i').attr('class', $(this).attr('social-class'));
+        el.find('.current-social img').attr('src', el.find('.current-social img').attr('src-attr')+'/'+$(this).attr('social-class')+'.svg');
         el.find('.social-link-input').attr('name', 'socials['+$(this).attr('social-type')+']');
         el.find('.social-dropdown').removeClass('active');
+
 
         // el.closest('.address-suggester-wrapper-input').find('.social-dropdown .social-link[social-type="'+ $(this).attr('social-type') +'"]').each( function() {
         //     $(this).addClass('inactive');

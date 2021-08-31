@@ -62,18 +62,18 @@
 				{!! Form::open(array('method' => 'post', 'class' => 'edit-profile clearfix', 'style' => 'display: none;', 'url' => getLangUrl('profile/info') )) !!}
 					{!! csrf_field() !!}
 					<label for="add-avatar" class="image-label" {!! $user->hasimage ? 'style="background-image: url('.$user->getImageUrl(true).')"' : '' !!}>
-							<div class="centered-hack">
-				    			<i class="fas fa-camera"></i>
-								<p>
-			    					@if( !$user->hasimage )
-			    						{!! nl2br(trans('trp.page.user.add-photo')) !!}
-				    				@else
-			    						{!! nl2br(trans('trp.page.user.change-photo')) !!}
-									@endif
-					    		</p>
-							</div>
+						<div class="centered-hack">
+							<img src="{{ url('img/camera.svg') }}"/>
+							<p>
+								@if( !$user->hasimage )
+									{!! nl2br(trans('trp.page.user.add-photo')) !!}
+								@else
+									{!! nl2br(trans('trp.page.user.change-photo')) !!}
+								@endif
+							</p>
+						</div>
 			    		<div class="loader">
-			    			<i class="fas fa-circle-notch fa-spin"></i>
+			    			<i></i>
 			    		</div>
 						<input type="file" name="image" id="add-avatar" upload-url="{{ getLangUrl('profile/info/upload') }}" accept="image/png,image/jpeg,image/jpg">
 					</label>
@@ -138,7 +138,7 @@
 					    	<div class="flex flexed-wrap email-wrap">
 					    		<div class="col social-networks">
 					    			<a href="javascript:;" class="current-social">
-				    					<i class="fas fa-envelope"></i>
+				    					<img src="{{ url('img/envelope.svg') }}"/>
 				    				</a>
 					    		</div>
 					    		<div class="col">
@@ -147,7 +147,7 @@
 					    	</div>
 					    	<label class="checkbox-label label-public-email {!! !empty($user->email_public) ? '' : 'active' !!}" for="current-email"">
 								<input type="checkbox" class="special-checkbox" id="current-email" cur-email="{{ $user->email }}" name="current-email" value="{!! !empty($user->email_public) ? '0' : '1' !!}" {!! !empty($user->email_public) ? '' : 'checked' !!} >
-								<i class="far fa-square"></i>
+								<div class="checkbox-square">✓</div>
 								{!! nl2br(trans('trp.page.user.user-registration-email')) !!}
 							</label>			    	
 					    </div>
@@ -158,12 +158,12 @@
 								    	<div class="flex social-wrap flexed-wrap">
 								    		<div class="col social-networks">
 								    			<a href="javascript:;" class="current-social" cur-type="{{ $k }}">
-							    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+							    					<img src="{{ url('img/social-network/'.config('trp.social_network')[$k].'.svg') }}" src-attr="{{ url('img/social-network/') }}"/>
 							    				</a>
 								    			<div class="social-dropdown"> 
 									    			@foreach(config('trp.social_network') as $key => $sn)
 									    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
-									    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+															<img class="{{ $sn }}" class-attr="{{ $sn }}" src="{{ url('img/social-network/'.$sn.'.svg') }}" src-attr="{{ url('img/social-network/') }}"/>
 									    				</a>
 									    			@endforeach
 									    		</div>
@@ -177,12 +177,12 @@
 							    	<div class="flex social-wrap flexed-wrap">
 							    		<div class="col social-networks">
 							    			<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
-						    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
+												<img src="{{ url('img/social-network/'.array_values(config('trp.social_network'))[0].'.svg') }}" src-attr="{{ url('img/social-network/') }}"/>
 						    				</a>
 							    			<div class="social-dropdown"> 
 								    			@foreach(config('trp.social_network') as $key => $sn)
 								    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
-								    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+								    					<img src="{{ url('img/social-network/'.$sn.'.svg') }}" src-attr="{{ url('img/social-network/') }}"/>
 								    				</a>
 								    			@endforeach
 								    		</div>
@@ -366,19 +366,19 @@
 						<div class="p profile-socials">
 							@if(!empty($item->email))
 								<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
-									<i class="fas fa-envelope"></i>
+									<img src="{{ url('img/envelope.svg') }}"/>
 								</a>
 							@else
 								@if($item->branches->isNotEmpty())
 									<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : ($item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email) }}">
-										<i class="fas fa-envelope"></i>
+										<img src="{{ url('img/envelope.svg') }}"/>
 									</a>
 								@endif
 							@endif
 							@if( $item->socials )
 								@foreach($item->socials as $k => $v)
 									<a class="social" href="{{ $v }}" target="_blank">
-										<i class="{{ config('trp.social_network')[$k] }}"></i>
+										<img src="{{ url('img/social-network/'.$k.'.svg') }}"/>
 									</a>
 								@endforeach
 							@endif
@@ -514,7 +514,7 @@
 
 							<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}" style="{{ !$review->verified ? 'display:none;' : '' }}">
 								{!! nl2br(trans('trp.common.trusted')) !!}
-								<i class="fas fa-info-circle"></i>
+								<img src="{{ url('img/info-white.svg') }}"/>
 							</div>
 
 			    			@if($review->title)
@@ -525,7 +525,7 @@
 
 							<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}"  style="{{ !$review->verified ? 'display:none;' : '' }}">
 								{!! nl2br(trans('trp.common.trusted')) !!}
-								<i class="fas fa-info-circle"></i>
+								<img src="{{ url('img/info-white.svg') }}"/>
 							</div>
 		    			</div>
 		    			<div class="review-rating">
@@ -684,7 +684,7 @@
 								@if($review->verified)
 									<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
 					    				{!! nl2br(trans('trp.common.trusted')) !!}
-				    					<i class="fas fa-info-circle"></i>
+				    					<img src="{{ url('img/info-white.svg') }}"/>
 					    			</div>
 				    			@endif
 				    		</div>
@@ -824,7 +824,7 @@
 								@foreach($categories as $k => $v)
 									<label class="checkbox-label {!! in_array($loop->index, $user->categories->pluck('category_id')->toArray()) ? 'active' : '' !!}" for="checkbox-{{ $k }}" >
 										<input type="checkbox" class="special-checkbox" id="checkbox-{{ $k }}" name="specialization[]" value="{{ $loop->index }}" {!! in_array($loop->index, $user->categories->pluck('category_id')->toArray()) ? 'checked="checked"' : '' !!}>
-										<i class="far fa-square"></i>
+										<div class="checkbox-square">✓</div>
 										{{ $v }}
 									</label>
 	                            @endforeach
@@ -842,7 +842,7 @@
 				@endif
 				@if(!empty($item->accepted_payment) || (!empty($user) && $item->id==$user->id))
 	    			<div class="dentist-payments" role="presenter">
-						<i class="fas fa-dollar-sign img"></i>
+						<img src="{{ url('img/dollar.svg') }}"/>
 		    			<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.accepted-payment-empty')) }}">
 		    				{{ $item->accepted_payment ? $item->parseAcceptedPayment( $item->accepted_payment ) : nl2br(trans('trp.page.user.accepted-payment-empty')) }}
 	    				</span>
@@ -859,7 +859,7 @@
 								@foreach(config('trp.accepted_payment') as $ap)
 									<label class="checkbox-label {!! in_array($ap, $user->accepted_payment) ? 'active' : '' !!}" for="checkbox-{{ $ap }}" >
 										<input type="checkbox" class="special-checkbox" id="checkbox-{{ $ap }}" name="accepted_payment[]" value="{{ $ap }}" {!! in_array($ap, $user->accepted_payment) ? 'checked="checked"' : '' !!}>
-										<i class="far fa-square"></i>
+										<div class="checkbox-square">✓</div>
 										{!! trans('trp.accepted-payments.'.$ap) !!}
 									</label>
 	                            @endforeach
@@ -909,11 +909,11 @@
 									{{ Form::open(array('class' => 'gallery-add', 'method' => 'post', 'files' => true)) }}
 										<label for="add-gallery-photo" class="add-gallery-image slider-image cover image-label dont-count" guided-action="photos">
 											<div class="plus-gallery-image">
-												<i class="fas fa-plus"></i>
+												<img src="{{ url('img/plus.svg') }}"/>
 												<span>{!! nl2br(trans('trp.page.user.reviews-image')) !!}</span>
 											</div>
 								    		<div class="loader">
-								    			<i class="fas fa-circle-notch fa-spin"></i>
+								    			<i></i>
 								    		</div>
 											<input type="file" name="image" id="add-gallery-photo" upload-url="{{ getLangUrl('profile/gallery') }}" sure-trans="{!! trans('trp.page.user.gallery-sure') !!}" accept="image/png,image/jpeg,image/jpg">
 										</label>
@@ -925,7 +925,7 @@
 									<div class="slider-image cover" style="background-image: url('{{ $photo->getImageUrl(true) }}')">
 										@if( (!empty($user) && $item->id==$user->id) )
 											<div class="delete-gallery delete-button" sure="{!! trans('trp.page.user.gallery-sure') !!}">
-												<i class="fas fa-times"></i>
+												<img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
 											</div>
 										@endif
 									</div>
@@ -965,7 +965,7 @@
 										@endif
 										@if( (!empty($user) && $item->id==$user->id) )
 											<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
-												<i class="fas fa-times"></i>
+												<img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
 											</div>
 										@endif
 									</div>
@@ -1002,7 +1002,7 @@
 									<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
 										@if( (!empty($user) && $item->id==$user->id) )
 											<div class="delete-invite delete-button" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
-												<i class="fas fa-times"></i>
+												<img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
 											</div>
 										@endif
 									</div>
@@ -1168,11 +1168,11 @@
 											<td>
 												@if($ask->status=='waiting')
 													<a class="btn btn-primary compact" href="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
-														<i class="fas fa-thumbs-up"></i>
+														<img src="{{ url('img/thumbs-up.svg') }}"/>
 														{{ trans('trp.page.profile.asks.accept') }}
 													</a>
 													<a class="btn btn-inactive compact" href="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
-														<i class="fas fa-thumbs-down"></i>
+														<img src="{{ url('img/thumbs-down.svg') }}"/>
 														{{ trans('trp.page.profile.asks.deny') }}
 													</a>
 												@else

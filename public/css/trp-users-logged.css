@@ -433,9 +433,8 @@
       display: inline;
       margin-bottom: 0px;
       font-size: 14px; }
-    .profile-info .image-label .centered-hack i {
-      color: #cacaca;
-      font-size: 20px;
+    .profile-info .image-label .centered-hack img {
+      max-width: 20px;
       margin-right: 5px; }
 
 .edit-profile-wrapper .details-wrapper {
@@ -457,11 +456,14 @@
   .edit-profile-wrapper .profile-info .media-right {
     margin-top: 0px;
     float: none; } }
-@media screen and (max-width: 768px) {
-  .edit-profile-wrapper .profile-info .media-right .flexed-wrap .col input {
-    margin-bottom: 0px; } }
+.edit-profile-wrapper .profile-info .media-right .flexed-wrap {
+  align-items: center !important; }
+  @media screen and (max-width: 768px) {
+    .edit-profile-wrapper .profile-info .media-right .flexed-wrap .col input {
+      margin-bottom: 0px; } }
 .edit-profile-wrapper .profile-info .media-right .input {
-  margin-bottom: 5px; }
+  margin-bottom: 5px;
+  height: 33px; }
   @media screen and (max-width: 768px) {
     .edit-profile-wrapper .profile-info .media-right .input {
       margin-bottom: 15px; } }
@@ -525,9 +527,8 @@
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
   text-align: center; }
-  .plus-gallery-image i {
-    font-size: 30px;
-    color: #777777; }
+  .plus-gallery-image img {
+    width: 26px; }
   .plus-gallery-image span {
     font-size: 20px;
     display: block;
@@ -864,7 +865,7 @@
     margin-bottom: 20px;
     padding-right: 30px;
     display: flex;
-    align-items: baseline; }
+    align-items: center; }
     .details-wrapper .about-container .dentist-payments .img,
     .details-wrapper .about-container .specialization .img {
       text-align: center; }
@@ -873,7 +874,7 @@
     .details-wrapper .about-container .specialization .img,
     .details-wrapper .about-container .specialization img {
       width: 17px;
-      height: 13px;
+      height: auto;
       margin-right: 5px; }
     .details-wrapper .about-container .dentist-payments span,
     .details-wrapper .about-container .specialization span {
@@ -1061,12 +1062,13 @@
     text-align: center; }
     @media screen and (max-width: 998px) {
       .details-wrapper .asks-container .btn.compact {
-        font-size: 9px;
+        font-size: 12px;
         vertical-align: middle; } }
-    .details-wrapper .asks-container .btn.compact i {
-      font-size: 12px;
-      color: white;
-      font-weight: normal; }
+    .details-wrapper .asks-container .btn.compact img {
+      max-width: 11px; }
+      @media screen and (max-width: 998px) {
+        .details-wrapper .asks-container .btn.compact img {
+          display: none; } }
     .details-wrapper .asks-container .btn.compact:last-child {
       margin-bottom: 0px; }
   .details-wrapper .asks-container .btn-primary {
@@ -1179,8 +1181,8 @@ body.edit-user .information {
     font-size: 16px;
     box-shadow: -3px 3px 7px 1px #d8d8d8;
     background: white;
-    height: 32px;
-    margin-top: -4px;
+    height: 33px;
+    margin-top: -5px;
     position: relative;
     border-right: 1px solid #ededed;
     border-top-right-radius: 0px;
@@ -1192,12 +1194,12 @@ body.edit-user .information {
     .flexed-wrap .social-networks .current-social:after {
       content: '';
       position: absolute;
-      top: 13px;
+      top: 15px;
       right: 5px;
       width: 0;
       height: 0;
       border-style: solid;
-      border-width: 7px 4px 0 4px;
+      border-width: 5px 4px 0 4px;
       border-color: #9d9d9d transparent transparent transparent; }
     .flexed-wrap .social-networks .current-social,
     .flexed-wrap .social-networks a {
@@ -1205,17 +1207,14 @@ body.edit-user .information {
       height: 32px;
       margin-left: 5px;
       background-color: transparent; }
-      .flexed-wrap .social-networks .current-social i,
-      .flexed-wrap .social-networks a i {
-        width: 23px;
-        height: 20px;
-        display: block;
+      .flexed-wrap .social-networks .current-social img,
+      .flexed-wrap .social-networks a img {
         background-color: #929292;
-        color: white;
-        text-align: center;
-        padding: 2px;
+        padding: 4px;
+        max-width: 23px;
         border-radius: 3px;
-        margin-top: 6px; }
+        margin-top: 7px;
+        display: block; }
     .flexed-wrap .social-networks .social-dropdown {
       display: none;
       position: absolute;
@@ -1245,42 +1244,14 @@ body.edit-user .information {
   margin-bottom: 15px;
   margin-left: 44px;
   margin-top: 5px; }
-  .email-wrapper .checkbox-label i {
-    margin-top: 0px;
+  .email-wrapper .checkbox-label .checkbox-square {
+    background-color: white;
+    color: white;
     margin-right: 2px; }
+  .email-wrapper .checkbox-label.active .checkbox-square {
+    background-color: #126585; }
 .email-wrapper .email-wrap .social-networks .current-social:after {
   display: none; }
-
-.profile-socials {
-  margin-top: 20px; }
-  @media screen and (max-width: 768px) {
-    .profile-socials {
-      margin-top: 13px; } }
-  .profile-socials .social {
-    width: 23px;
-    height: 20px;
-    background-color: #929292;
-    color: white;
-    text-align: center;
-    padding: 2px;
-    border-radius: 3px;
-    display: inline-block;
-    margin-right: 6px;
-    transition: all 0.3s ease; }
-    @media screen and (max-width: 768px) {
-      .profile-socials .social {
-        width: 27px;
-        height: 25px;
-        padding: 4px; } }
-    .profile-socials .social:hover {
-      background-color: #126585;
-      transition: all 0.3s ease; }
-    .profile-socials .social i {
-      color: white;
-      font-size: 13px; }
-      @media screen and (max-width: 768px) {
-        .profile-socials .social i {
-          font-size: 15px; } }
 
 .alternative-name {
   font-size: 14px;
@@ -1706,6 +1677,8 @@ body.edit-user .information {
       .widget-step .select-reviews .modern-radios .radio-label label.active span {
         font-weight: bold;
         color: #126585; }
+      .widget-step .select-reviews .modern-radios .radio-label label.active .open-hidden-option img {
+        transform: rotate(180deg); }
     .widget-step .select-reviews .modern-radios .radio-label label span {
       font-size: 20px;
       font-weight: 300; }
@@ -1770,13 +1743,8 @@ body.edit-user .information {
         .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option {
           padding: 10px;
           top: 13px; } }
-      .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option i {
-        font-size: 20px;
-        color: #636363; }
-        .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option i:before {
-          content: "\f0d7"; }
-      .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option.active i:before {
-        content: "\f0d8"; }
+      .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option img {
+        max-width: 12px; }
 .widget-step .widget-code-wrap {
   background-color: #126585;
   margin: 20px -100px 50px;
@@ -1816,13 +1784,14 @@ body.edit-user .information {
   background: #f1eff1;
   color: #4e4c4e;
   display: block;
-  padding: 6px 10px;
+  padding: 8px;
   top: 29px; }
   @media screen and (max-width: 768px) {
     .widget-step .copy-widget {
       right: 24px; } }
-  .widget-step .copy-widget i {
-    color: #4e4c4e; }
+  .widget-step .copy-widget img {
+    display: block;
+    width: 14px; }
 .widget-step .facebook-tab .tab-info {
   font-size: 22px;
   margin-bottom: 30px;
@@ -2053,10 +2022,7 @@ body.reviews-guided-tour .widget-code-wrap {
     @media screen and (max-width: 768px) {
       .fixed-popup .popup-inner .invite-content .whatsapp-button {
         margin-top: 0px; } }
-    .fixed-popup .popup-inner .invite-content .whatsapp-button i {
-      font-size: 28px;
-      display: inline-block;
-      color: white;
+    .fixed-popup .popup-inner .invite-content .whatsapp-button img {
       margin-left: 8px;
       vertical-align: sub; }
   .fixed-popup .popup-inner .invite-content .modern-field .modern-input {
@@ -2073,7 +2039,17 @@ body.reviews-guided-tour .widget-code-wrap {
       left: 50%;
       transform: translateX(-50%); }
       .fixed-popup .popup-inner .invite-content .final-button .loader i {
-        font-size: 22px; }
+        border-radius: 50%;
+        display: block;
+        font-size: 15px;
+        width: 20px;
+        height: 20px;
+        text-indent: -9999em;
+        border-top: 3px solid #121212;
+        border-right: 3px solid white;
+        border-bottom: 3px solid white;
+        border-left: 3px solid white;
+        animation: load8 1.1s infinite linear; }
   .fixed-popup .popup-inner .invite-content .chosen-patient-info {
     height: 62px;
     border: 1px solid #d6d6d7;

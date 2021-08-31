@@ -73,22 +73,28 @@
         margin-right: -20px;
         margin-left: -20px; } }
   .results-popup .popup-inner .checkbox-label {
-    font-size: 16px; }
+    text-align: left;
+    font-size: 16px;
+    margin-top: 6px;
+    margin-right: 5px; }
     .results-popup .popup-inner .checkbox-label img {
-      vertical-align: middle;
-      height: 14px; }
+      vertical-align: text-top;
+      height: 16px;
+      margin-left: 5px; }
   .results-popup .popup-inner .sort-by a {
     display: block;
     font-size: 16px;
     font-weight: 300;
     margin-bottom: 12px; }
-    .results-popup .popup-inner .sort-by a i {
-      margin-right: 10px;
-      color: white; }
-    .results-popup .popup-inner .sort-by a:hover i, .results-popup .popup-inner .sort-by a.active i {
-      color: black; }
-  .results-popup .popup-inner .checkbox-label {
-    text-align: left; }
+    .results-popup .popup-inner .sort-by a img {
+      margin-right: 8px;
+      opacity: 0;
+      max-width: 13px; }
+      @media screen and (max-width: 768px) {
+        .results-popup .popup-inner .sort-by a img {
+          margin-right: 6px; } }
+    .results-popup .popup-inner .sort-by a:hover img, .results-popup .popup-inner .sort-by a.active img {
+      opacity: 1; }
   .results-popup .popup-inner .button {
     padding: 10px 110px;
     margin-top: 30px; }
@@ -116,11 +122,9 @@
     z-index: 5;
     top: 5px;
     right: 6px; }
-    #map-results-popup .popup-inner .close-map i {
-      font-size: 15px;
-      color: white;
+    #map-results-popup .popup-inner .close-map img {
       margin-left: 5px;
-      background: transparent; }
+      max-width: 10px; }
   #map-results-popup .popup-inner h2 {
     font-size: 20px;
     text-align: left; }
@@ -309,10 +313,28 @@
     background-color: #126585;
     color: white; }
   .result-container.branch .button-submit i {
-    background: transparent;
-    font-size: 15px; }
+    display: none;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 15px;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    text-indent: -9999em;
+    border-top: 3px solid #121212;
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    border-left: 3px solid white;
+    transform: translateZ(0);
+    animation: load8 1.1s infinite linear; }
   .result-container.branch .button-submit.mt {
     bottom: 38px; }
+  .result-container.branch .button-submit.loading {
+    color: transparent; }
+    .result-container.branch .button-submit.loading i {
+      display: block; }
   .result-container.branch .delete-branch {
     position: absolute;
     right: 35px;

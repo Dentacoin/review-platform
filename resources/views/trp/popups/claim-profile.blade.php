@@ -1,7 +1,7 @@
 <div class="popup fixed-popup claim-popup" id="claim-popup">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
-			<i class="fas fa-times"></i>
+			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>
 		<div class="claim-details">
 			<div class="header-claim tac">
@@ -89,7 +89,7 @@
 
 				<label class="checkbox-label agree-label" for="claim-agree" style="text-align: left; margin-bottom: 30px; margin-top: -20px;">
 					<input type="checkbox" class="special-checkbox" id="claim-agree" name="agree" value="1">
-					<i class="far fa-square"></i>
+					<div class="checkbox-square">✓</div>
 					{!! trans('trp.popup.popup-lead-magnet.privacy', [
 						'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
 						'endlink' => '</a>',

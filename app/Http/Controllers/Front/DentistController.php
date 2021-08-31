@@ -660,6 +660,9 @@ class DentistController extends FrontController {
 
         if(!empty($this->user) && $this->user->id == $item->id) {
             $view_params['js'][] = '../js/jquery-ui.min.js';
+            $view_params['js'][] = '../js/croppie.min.js';
+
+            $view_params['css'][] = 'croppie.css';
 
             $item->review_notification = false;
             $item->save();

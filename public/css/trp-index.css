@@ -299,6 +299,9 @@
       text-align: center; } }
   .flickity-dentists-form img {
     max-width: 13px; }
+  .flickity-dentists-form .caret-down {
+    width: 7px;
+    margin-bottom: 4px; }
   .flickity-dentists-form .current-city {
     font-size: 20px;
     font-weight: 500;

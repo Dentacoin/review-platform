@@ -6,7 +6,7 @@
 			@if($review->verified)
 				<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
 					{!! nl2br(trans('trp.common.trusted-review')) !!}
-				    <i class="fas fa-info-circle"></i>
+				    <img src="{{ url('img/info-white.svg') }}"/>
 				</div>
 			@endif
 			@if($review->title)
@@ -17,7 +17,7 @@
 			@if($review->verified)
 				<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
 					{!! nl2br(trans('trp.common.trusted-review')) !!}
-				    <i class="fas fa-info-circle"></i>
+				    <img src="{{ url('img/info-white.svg') }}"/>
 				</div>
 			@endif
 		</div>

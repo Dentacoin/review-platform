@@ -1,7 +1,9 @@
 <div class="popup fixed-popup" id="add-team-popup">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -30,7 +32,9 @@
 				<div class="suggest-results">
 				</div>
 				<input type="hidden" class="suggester-hidden" name="clinic_id" value="">
-				<i class="search-icon fas fa-search"></i>
+				<div class="search-wrap">
+					<img src="{{ url('img/white-search.png') }}"/>
+				</div>
 			</div>
 		</div>
 
@@ -50,13 +54,13 @@
 					<div style="margin-bottom: 20px;">
 						<label for="add-avatar-member-login" class="image-label">
 							<div class="centered-hack">
-								<i class="fas fa-plus"></i>
+								<img src="{{ url('img/plus.svg') }}"/>
 								<p>
 									{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}													
 								</p>
 							</div>
 				    		<div class="loader">
-				    			<i class="fas fa-circle-notch fa-spin"></i>
+				    			<i></i>
 				    		</div>
 							<input type="file" name="image" class="add-avatar-member" id="add-avatar-member-login" upload-url="{{ getLangUrl('register/upload') }}">
 							
@@ -109,7 +113,9 @@
 <div class="popup fixed-popup popup-existing-dentist" id="popup-existing-dentist">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">

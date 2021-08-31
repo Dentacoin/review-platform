@@ -632,10 +632,10 @@ jQuery(document).ready(function($){
 	        $temp.remove();        
 
 	        $(this).attr('alternative', $(this).text().trim());
-	        $(this).html('<i class="fas fa-check-circle"></i>');
+	        $(this).html('<img src="'+all_images_path+'/check-icon.svg"/>');
 
 	        setTimeout( (function() {
-	        	$(this).html( $(this).attr('alternative').length ? $(this).attr('alternative') : '<i class="far fa-copy"></i>' );
+	        	$(this).html( $(this).attr('alternative').length ? $(this).attr('alternative') : '<img src="'+all_images_path+'/copy-files.svg"/>' );
 	        }).bind(this), 3000 );
 	    } );
 
@@ -872,7 +872,7 @@ jQuery(document).ready(function($){
 	        $('.loader').fadeIn();
 	        $('.loader-mask').fadeIn();
 	        $('.loader-text').fadeIn();
-	        //$('#magnet-submit').append('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
+	        //$('#magnet-submit').append('<div class="loader"><i></i></div>');
 
 	        $.post( 
 	            $(this).attr('action'), 

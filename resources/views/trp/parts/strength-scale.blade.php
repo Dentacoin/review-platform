@@ -1,4 +1,7 @@
-<a href="javascript:;" class="strength-button"></a>
+<a href="javascript:;" class="strength-button">
+	<img class="down" src="{{ url('img/caret-black-down.png') }}"/>
+	<img class="up" src="{{ url('img/caret-black-up.png') }}"/>
+</a>
 <div class="strength-wrapper">
 	<p class="extra-title">{!! $user->is_dentist ? nl2br(trans('trp.strength.title-dentist')) : nl2br(trans('trp.strength.title')) !!}</p>
 	<div class="stretching-box">

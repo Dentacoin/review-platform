@@ -1,7 +1,7 @@
 <div class="popup fixed-popup failed-popup active removable" id="failed-popup">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
-			<i class="fas fa-times"></i>
+			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>
 		<div class="failed-content">
 			<h2>{!! nl2br(trans('trp.popup.failed-login-reg.title')) !!}</h2>

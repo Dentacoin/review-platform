@@ -1,7 +1,7 @@
 <div class="popup fixed-popup verification-popup active removable" id="verification-popup">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
-			<i class="fas fa-times"></i>
+			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>
 		<div class="verification-content">
 			<img src="{{ url('img-trp/verification-icon.png') }}">
@@ -51,7 +51,9 @@
 							<div class="suggest-results">
 							</div>
 							<input type="hidden" class="suggester-hidden" name="dentist_id" value="" url="{{ getLangUrl('invite-dentist') }}">
-							<i class="search-icon fas fa-search"></i>
+							<div class="search-wrap">
+								<img src="{{ url('img/white-search.png') }}"/>
+							</div>
 						</div>
 					</div>
 
@@ -78,13 +80,13 @@
 						<div style="margin: 0px 10px 10px;">
 							<label for="add-avatar-member" class="image-label">
 								<div class="centered-hack">
-									<i class="fas fa-plus"></i>
+									<img src="{{ url('img/plus.svg') }}"/>
 									<p>
 										{{ trans('trp.popup.verification-popup.add-photo') }}
 									</p>
 								</div>
 					    		<div class="loader">
-					    			<i class="fas fa-circle-notch fa-spin"></i>
+					    			<i></i>
 					    		</div>
 								<input type="file" name="image" class="add-avatar-member" id="add-avatar-member" upload-url="{{ getLangUrl('register/upload') }}">
 							</label>

@@ -91,7 +91,7 @@ $(document).ready(function(){
         var that = $(this);
 
         if(!that.hasClass('result-container')) {
-            that.html('<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>');
+            that.addClass('loading');
         }
 
         // $.ajax({

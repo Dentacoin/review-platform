@@ -2,13 +2,13 @@
 
 return [
 	'social_network' => [
-		'facebook' => 'fab fa-facebook-f',
-		'linkedin' => 'fab fa-linkedin-in',
-		'twitter' => 'fab fa-twitter',
-		'instagram' => 'fab fa-instagram',
-		'youtube' => 'fab fa-youtube',
-		'vkontakte' => 'fab fa-vk',
-		'wechat' => 'fab fa-weixin',
+		'facebook' => 'facebook',
+		'linkedin' => 'linkedin',
+		'twitter' => 'twitter',
+		'instagram' => 'instagram',
+		'youtube' => 'youtube',
+		'vkontakte' => 'vkontakte',
+		'wechat' => 'wechat',
 	],
 	'accepted_payment' => [
 		'cash',

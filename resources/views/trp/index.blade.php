@@ -23,7 +23,7 @@
 			    	<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}"> {{ !empty($city_cookie) || !empty($city_id) || (!empty($user) && !empty($user->city_name)) ? trans('trp.page.index.dentists.near') : trans('trp.page.index.dentists.in') }}: 
 			    	<a href="javascript:;" data-popup="change-dentist-popup" class="current-city">
 			    		{{ !empty($city_cookie) ? $city_cookie['city_name'] : (!empty($city_id) ? $current_city : (!empty($user) && !empty($user->city_name) ? $user->city_name : $current_country)) }}
-			    		<i class="fas fa-caret-down"></i>
+			    		<img class="caret-down" src="{{ url('img/caret-white-down.png') }}"/>
 			    	</a>
 			    </div>
 			</div>
@@ -147,7 +147,9 @@
 		<div class="popup fixed-popup" id="change-dentist-popup">
 			<div class="popup-inner inner-white">
 				<div class="popup-pc-buttons">
-					<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+					<a href="javascript:;" class="close-popup">
+						<img src="{{ url('img/close-icon.png') }}"/>
+					</a>
 				</div>
 
 				<div class="popup-mobile-buttons">
@@ -175,7 +177,7 @@
 						@if(!empty($user))
 							<label class="checkbox-label" for="change-city" >
 								<input type="checkbox" class="special-checkbox" id="change-city" name="change-city"/>
-								<i class="far fa-square"></i>
+								<div class="checkbox-square">✓</div>
 								{!! nl2br(trans('trp.popup.change-dentist-popup.save-location')) !!}
 							</label>
 						@endif

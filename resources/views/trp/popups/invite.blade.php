@@ -1,7 +1,9 @@
 <div class="popup fixed-popup popup-invite-patients" id="popup-invite">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -24,11 +26,6 @@
 			<a class="col" href="javascript:;" data-invite="file">
 				{!! nl2br(trans('trp.popup.popup-invite.file.title')) !!}
 			</a>
-			@if(false)
-				<a class="col" href="javascript:;" data-invite="link">
-					Get a referral link
-				</a>
-			@endif
 		</div>
 
 		<div id="invite-option-copypaste" class="invite-content" radio-id="copypasteid" >
@@ -101,18 +98,13 @@
 				@if($user->is_partner)
 					<label class="checkbox-label invite-hubapp manual-hubapp" for="invite-hubapp" >
 						<input type="checkbox" class="special-checkbox" id="invite-hubapp" name="invite_hubapp"/>
-						<i class="far fa-square"></i>
+						<div class="checkbox-square">✓</div>
 						Invite to Dentacoin HubApp
 					</label>
 				@endif
 
 				<div class="alert invite-alert" style="display: none; margin-top: 20px;">
 				</div>
-				@if(false)
-					<!--
-						<a href="javascript:;" class="add-patient">+ Add another patient</a>
-					-->
-				@endif
 				<div class="tac">
 					@include('trp.parts.sample-invite')
 					<input type="submit" class="button manually-send" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
@@ -132,7 +124,10 @@
 			<br/>
 
 			<div class="tac">
-				<a href="javascript:;" data-url="{!! getLangUrl('profile/invite-whatsapp') !!}" class="whatsapp-button">{!! nl2br(trans('trp.popup.popup-invite.whatsapp-send')) !!}<i class="fab fa-whatsapp"></i></a>
+				<a href="javascript:;" data-url="{!! getLangUrl('profile/invite-whatsapp') !!}" class="whatsapp-button">
+					{!! nl2br(trans('trp.popup.popup-invite.whatsapp-send')) !!}
+					<img src="{{ url('img/social-network/whatsapp.svg') }}"/>
+				</a>
 			</div>
 
 			<div class="alert invite-alert" style="display: none; margin-top: 20px;"></div>
@@ -182,36 +177,6 @@
 				'number' => 2,
 			])
 		</div>
-
-		@if(false)
-			<div id="invite-option-link" class="invite-content" style="display: none;">
-				<h4 class="popup-title">
-					{!! nl2br(trans('trp.popup.popup-invite.subtitle')) !!}
-				</h4>
-
-				<p class="popup-desc">
-					{!! nl2br(trans('trp.popup.popup-invite.hint')) !!}
-				</p>
-					
-				<br/>
-				<br/>
-				<p class="info">
-					<img src="img/info.png"/>
-					Below you’ll find your invitation link. Copy it and send it using your favorite instant messanger or social network.
-				</p>
-
-				<div class="flex">
-					<div class="flex-10">
-						<input type="text" id="invite-url" class="input select-me" name="link" value="{{ getLangUrl('invite/?info='.base64_encode(App\Models\User::encrypt(json_encode(array('user_id' => $user->id, 'hash' => $user->get_invite_token()))))) }}">
-					</div>
-					<div class="flex-2">
-						<a class="copy-link button" href="javascript:;">
-							Copy
-						</a>
-					</div>
-				</div>
-			</div>
-		@endif
 	</div>
 </div>
 

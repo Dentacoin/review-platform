@@ -33,7 +33,7 @@
 								@if($review->verified)
 					    			<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => !empty($review->review_to_id) ? $review->original_dentist->name : ($review->dentist ? $review->dentist->name : $review->clinic->name) ])) !!}">
 					    				{!! nl2br(trans('trp.common.trusted')) !!}
-				    					<i class="fas fa-info-circle"></i>
+				    					<img src="{{ url('img/info-white.svg') }}"/>
 					    			</div>
 				    			@endif
 				    			@if($review->title)
@@ -44,7 +44,7 @@
 								@if($review->verified)
 					    			<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => !empty($review->review_to_id) ? $review->original_dentist->name : ($review->dentist ? $review->dentist->name : $review->clinic->name) ])) !!}">
 					    				{!! nl2br(trans('trp.common.trusted')) !!}
-				    					<i class="fas fa-info-circle"></i>
+				    					<img src="{{ url('img/info-white.svg') }}"/>
 					    			</div>
 				    			@endif
 			    			</div>

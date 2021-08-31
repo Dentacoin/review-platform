@@ -162,6 +162,7 @@
 						</div>
 						@if(!empty($user) && $user->id == $clinic->id)
 							<div href="javascript:;" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $dentist->id }}" class="button button-submit login-as {{ $dentist->id != $dentist->mainBranchClinic->id ? 'mt' : '' }}">
+								<i></i>
 								{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
 							</div>
 

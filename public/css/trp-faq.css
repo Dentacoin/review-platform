@@ -72,22 +72,17 @@
         @media screen and (max-width: 768px) {
           .questions .question .question-title span {
             font-size: 16px; } }
-      .questions .question .question-title::after {
-        content: "\f107";
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
+      .questions .question .question-title img {
         position: absolute;
         transition: all 0.3s ease;
         top: 50%;
         transform: translateY(-50%);
         right: 30px;
         color: #000;
-        font-size: 26px; }
+        width: 16px; }
         @media screen and (max-width: 768px) {
-          .questions .question .question-title::after {
-            right: 10px;
-            color: #000;
-            font-size: 16px; } }
+          .questions .question .question-title img {
+            right: 10px; } }
     .questions .question .question-description {
       display: none;
       padding: 25px; }
@@ -105,8 +100,7 @@
             margin-bottom: 15px; } }
         .questions .question .question-description p:last-child {
           margin-bottom: 0px; }
-    .questions .question.active .question-title::after {
-      content: "\f106";
-      transition: all 0.3s ease; }
+    .questions .question.active .question-title img {
+      transform: translateY(-50%) rotate(180deg); }
     .questions .question.active .question-description {
       display: block; }

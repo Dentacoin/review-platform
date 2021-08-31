@@ -2,7 +2,9 @@
 	<div class="popup-inner inner-white">
 		
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-cur-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-cur-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -27,7 +29,7 @@
 				    		</p>
 						</div>
 			    		<div class="loader">
-			    			<i class="fas fa-circle-notch fa-spin"></i>
+			    			<i></i>
 			    		</div>
 						<input type="file" name="image" id="add-avatar-patient" upload-url="{{ getLangUrl('register/upload') }}" accept="image/png,image/jpeg,image/jpg">
 					</label>

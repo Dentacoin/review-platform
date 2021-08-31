@@ -519,21 +519,6 @@
     border: 2px dashed #777777;
     position: relative; }
 
-.plus-gallery-image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  text-align: center; }
-  .plus-gallery-image i {
-    font-size: 30px;
-    color: #777777; }
-  .plus-gallery-image span {
-    font-size: 20px;
-    display: block;
-    color: #777777;
-    font-weight: bold; }
-
 .profile-rating .rating {
   font-size: 14px;
   margin-top: 10px;
@@ -692,7 +677,8 @@
     display: none; }
     @media screen and (max-width: 768px) {
       .details-wrapper .trusted-sticker.mobile-sticker {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         margin-left: 10px; } }
   .details-wrapper .ratings {
     display: inline-block; }
@@ -864,7 +850,7 @@
     margin-bottom: 20px;
     padding-right: 30px;
     display: flex;
-    align-items: baseline; }
+    align-items: center; }
     .details-wrapper .about-container .dentist-payments .img,
     .details-wrapper .about-container .specialization .img {
       text-align: center; }
@@ -873,7 +859,7 @@
     .details-wrapper .about-container .specialization .img,
     .details-wrapper .about-container .specialization img {
       width: 17px;
-      height: 13px;
+      height: auto;
       margin-right: 5px; }
     .details-wrapper .about-container .dentist-payments span,
     .details-wrapper .about-container .specialization span {
@@ -1003,78 +989,6 @@
       display: block !important; }
       .details-wrapper .team-container.rearranging-team .flickity .slider-wrapper .deleter {
         display: none; }
-  @media screen and (max-width: 768px) {
-    .details-wrapper .asks-container {
-      overflow-x: auto; } }
-  .details-wrapper .asks-container table {
-    margin-bottom: 50px;
-    width: 100%;
-    max-width: 100%; }
-    .details-wrapper .asks-container table thead {
-      font-size: 18px;
-      background-color: #e9e9e9; }
-    .details-wrapper .asks-container table th, .details-wrapper .asks-container table td {
-      vertical-align: bottom;
-      border-bottom: 2px solid #bfbfbf;
-      padding: 8px;
-      line-height: 1.42857143;
-      text-align: left; }
-    .details-wrapper .asks-container table td {
-      vertical-align: middle; }
-      .details-wrapper .asks-container table td .invite-again {
-        font-size: 16px;
-        padding: 5px;
-        width: 100%;
-        text-align: center; }
-        @media screen and (max-width: 1200px) {
-          .details-wrapper .asks-container table td .invite-again {
-            font-size: 12px; } }
-      .details-wrapper .asks-container table td .ask-review {
-        border: 1px solid #126585;
-        font-size: 16px;
-        padding: 4px 5px;
-        background: transparent;
-        color: #126585;
-        margin-top: 2px;
-        display: block;
-        text-align: center; }
-        @media screen and (max-width: 1200px) {
-          .details-wrapper .asks-container table td .ask-review {
-            font-size: 12px; } }
-      .details-wrapper .asks-container table td .show-review {
-        color: #126585;
-        text-decoration: underline; }
-  .details-wrapper .asks-container .btn.compact {
-    height: 22px;
-    line-height: 23px;
-    margin-bottom: 5px;
-    font-size: 14px;
-    margin-right: 10px;
-    padding: 0px 8px;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    display: inline-block;
-    width: auto;
-    border: none;
-    width: 100%;
-    text-align: center; }
-    @media screen and (max-width: 998px) {
-      .details-wrapper .asks-container .btn.compact {
-        font-size: 9px;
-        vertical-align: middle; } }
-    .details-wrapper .asks-container .btn.compact i {
-      font-size: 12px;
-      color: white;
-      font-weight: normal; }
-    .details-wrapper .asks-container .btn.compact:last-child {
-      margin-bottom: 0px; }
-  .details-wrapper .asks-container .btn-primary {
-    background-color: #126585;
-    color: white; }
-  .details-wrapper .asks-container .btn-inactive {
-    background-color: #9d9d9d;
-    color: white; }
 
 .edit-short-description {
   float: left;
@@ -1241,16 +1155,6 @@ body.edit-user .information {
       .flexed-wrap .col input {
         margin-bottom: 0px; } }
 
-.email-wrapper .checkbox-label {
-  margin-bottom: 15px;
-  margin-left: 44px;
-  margin-top: 5px; }
-  .email-wrapper .checkbox-label i {
-    margin-top: 0px;
-    margin-right: 2px; }
-.email-wrapper .email-wrap .social-networks .current-social:after {
-  display: none; }
-
 .profile-socials {
   margin-top: 20px; }
   @media screen and (max-width: 768px) {
@@ -1275,12 +1179,8 @@ body.edit-user .information {
     .profile-socials .social:hover {
       background-color: #126585;
       transition: all 0.3s ease; }
-    .profile-socials .social i {
-      color: white;
-      font-size: 13px; }
-      @media screen and (max-width: 768px) {
-        .profile-socials .social i {
-          font-size: 15px; } }
+    .profile-socials .social img {
+      width: 15px; }
 
 .alternative-name {
   font-size: 14px;
@@ -1582,9 +1482,8 @@ body.edit-user .information {
   display: flex;
   align-items: center;
   justify-content: center; }
-  .delete-button i {
-    background: none;
-    color: white; }
+  .delete-button img {
+    width: 54%; }
 
 @media screen and (max-width: 768px) {
   #view-review-popup .average {
@@ -1799,15 +1698,17 @@ body.edit-user .information {
       padding-right: 15px;
       background-color: #126585;
       color: white; }
-      .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active i {
-        color: white; }
-        .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active i:before {
-          content: '\f068'; }
-    .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments i {
-      color: #126585; }
+      .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active img.active {
+        display: inline; }
+      .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active img.inactive {
+        display: none; }
+    .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments img {
+      max-width: 14px; }
       @media screen and (max-width: 768px) {
-        .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments i {
-          font-size: 13px; } }
+        .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments img {
+          max-width: 11px; } }
+      .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments img.active {
+        display: none; }
   .fixed-popup .popup-inner .question .treatment-wrapper label {
     position: relative;
     display: inline-block;
@@ -1885,6 +1786,20 @@ body.edit-user .information {
     transform: translate3d(0, 100px, -100px) rotateX(-90deg); }
   100% {
     transform: none; } }
+.fixed-popup .popup-inner #review-submit-button i {
+  border-radius: 50%;
+  display: inline-block;
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+  margin: -10px 3px 0 -10px;
+  text-indent: -9999em;
+  border-top: 3px solid #121212;
+  border-right: 3px solid white;
+  border-bottom: 3px solid white;
+  border-left: 3px solid white;
+  transform: translateZ(0);
+  animation: load8 1.1s infinite linear; }
 .fixed-popup .popup-inner .reviews-wrapper {
   margin-bottom: 40px; }
   @media screen and (max-width: 768px) {

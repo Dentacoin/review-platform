@@ -1,7 +1,7 @@
 <div class="popup fixed-popup invite-new-dentist-success-popup active removable" id="invite-new-dentist-success-popup">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
-			<i class="fas fa-times"></i>
+			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>
 		<img src="{{ url('img-trp/verification-check.png') }}">
 		<h2>

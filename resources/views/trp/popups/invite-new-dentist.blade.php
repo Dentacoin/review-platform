@@ -1,7 +1,7 @@
 <div class="popup fixed-popup invite-new-dentist-popup active removable" id="invite-new-dentist-popup">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
-			<i class="fas fa-times"></i>
+			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>
 		<h2>
 			{!! trans('trp.page.invite.popup.title') !!}

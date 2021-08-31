@@ -23,15 +23,16 @@
 	    			{!! nl2br(trans('trp.page.search.results-count', [
 	    				'count' => $items->count()
 	    			])) !!}
-	    			
 	    		</div>
-	    		<div class="col">
-	    			<a href="javascript:;" class="sort-button" data-popup="sort-popup" >
-	    				<img src="{{ url('img-trp/sort.png') }}">
-						{!! nl2br(trans('trp.page.search.sort-filter')) !!}
-	    				
-	    			</a>
-	    		</div>
+				@if($current_subpage != 'all-results')
+					<div class="col">
+						<a href="javascript:;" class="sort-button" data-popup="sort-popup" >
+							<img src="{{ url('img-trp/sort.png') }}">
+							{!! nl2br(trans('trp.page.search.sort-filter')) !!}
+							
+						</a>
+					</div>
+				@endif
 	    	</div>
 	    </div>
 
@@ -207,7 +208,7 @@
 		<div class="popup-inner inner-white">
 			<a href="javascript:;" class="close-popup close-map">
 				{!! nl2br(trans('trp.page.search.close-map')) !!}
-				<i class="fas fa-times"></i>
+				<img src="{{ url('img/close-icon-white.png') }}"/>
 			</a>
 
 			<div class="flex">
@@ -233,7 +234,7 @@
 							@foreach( config('categories') as $cat_id => $cat )
 								<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-filter-{{ $cat }}">
 									<input type="checkbox" class="special-checkbox" id="checkbox-filter-{{ $cat }}" value="{{ $cat }}" {!! !empty($searchCategories) && in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
-									<i class="far fa-square"></i>
+									<div class="checkbox-square">✓</div>
 									{{ trans('trp.categories.'.$cat) }}
 								</label>
 							@endforeach
@@ -243,7 +244,7 @@
 							<h4 class="popup-title">{!! nl2br(trans('trp.page.search.partners')) !!}</h4>
 							<label class="checkbox-label{!! $partner ? ' active' : '' !!}" for="checkbox-partner">
 								<input type="checkbox" class="special-checkbox" id="checkbox-partner" name="partner" value="1" {!! $partner ? 'checked="checked"' : '' !!}>
-								<i class="far fa-square"></i>
+								<div class="checkbox-square">✓</div>
 								{!! nl2br(trans('trp.page.search.show-partners')) !!}
 								<img src="{{ url('img-trp/mini-logo-black.png') }}">
 							</label>
@@ -256,7 +257,7 @@
 
 							@foreach($orders as $order)
 								<a {!! $sort==$order ? 'class="active"' : '' !!} sort="{{ $order }}">
-									<i class="fas fa-sort"></i>
+									<img src="{{ url('img/sort-icon.svg') }}"/>
 									{{ trans('trp.page.'.$current_page.'.order-'.$order) }}
 								</a>
 							@endforeach
@@ -346,7 +347,9 @@
 	<div class="popup fixed-popup results-popup" id="sort-popup">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -380,7 +383,7 @@
 				@foreach( config('categories') as $cat_id => $cat )
 					<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-popup-{{ $cat }}">
 						<input type="checkbox" class="special-checkbox" id="checkbox-popup-{{ $cat }}" value="{{ $cat }}" {!! !empty($searchCategories) && in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
-						<i class="far fa-square"></i>
+						<div class="checkbox-square">✓</div>
 						{{ trans('trp.categories.'.$cat) }}
 					</label>
 				@endforeach
@@ -393,7 +396,7 @@
 
 				<label class="checkbox-label{!! $partner ? ' active' : '' !!}" for="checkbox-partner-popup">
 					<input type="checkbox" class="special-checkbox" id="checkbox-partner-popup" name="partner" value="1" {!! $partner ? 'checked="checked"' : '' !!}>
-					<i class="far fa-square"></i>
+					<div class="checkbox-square">✓</div>
 					{!! nl2br(trans('trp.page.search.show-partners')) !!}
 					<img src="{{ url('img-trp/mini-logo-black.png') }}">
 				</label>
@@ -406,7 +409,7 @@
 
 				@foreach($orders as $order)
 					<a {!! $sort==$order ? 'class="active"' : '' !!} sort="{{ $order }}">
-						<i class="fas fa-sort"></i>
+						<img src="{{ url('img/sort-icon.svg') }}"/>
 						{{ trans('trp.page.dentists.order-'.$order) }}
 					</a>
 				@endforeach

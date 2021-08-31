@@ -1,7 +1,9 @@
 <div class="popup fixed-popup active removable" id="popup-share">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -23,19 +25,19 @@
 			<div class="col share-buttons flex flex-mobile" data-href="" data-title="{!! $seo_title !!}">
 				<div class="col fb tac">
 					<a class="share" network="fb" href="javascript:;">
-						<i class="fab fa-facebook-f"></i>
+						<img src="{{ url('img/social-network/facebook.svg') }}" width="27"/>
 					</a>
 				</div>
 				<div class="col twt tac">
 					<a class="share" network="twt" href="javascript:;">
-						<i class="fab fa-twitter"></i>
+						<img src="{{ url('img/social-network/twitter.svg') }}" width="27"/>
 					</a>
 				</div>
 			</div>
 			<div class="col flex flex-mobile share-link">
 				<input type="text" id="share-url" class="input select-me" name="link" value="">
 				<a class="copy-link button" href="javascript:;">
-					<i class="far fa-copy"></i>
+					<img src="{{ url('img/copy-files.svg') }}" width="20"/>
 				</a>
 			</div>
 		</div>

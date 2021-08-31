@@ -1,7 +1,9 @@
 <div class="popup fixed-popup" id="popup-wokrplace">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -20,7 +22,7 @@
 		</p>
 
 		<div class="search-dentist clinic-suggester-wrapper suggester-wrapper">
-			<i class="fas fa-search"></i>
+			<img src="{{ url('img/search-gray.svg') }}"/>
 			<input type="text" class="input clinic-suggester suggester-input" name="search-clinic" placeholder="{!! nl2br(trans('trp.popup.popup-wokrplace.search')) !!}">
 			<div class="suggest-results">
 			</div>
@@ -49,7 +51,7 @@
 							</div>
 							<div class="flex-2 tar">
 								<a class="remove-dentist" href="{{ getLangUrl('profile/clinics/delete/'.$workplace->clinic->id) }}">
-									<i class="fas fa-times-circle"></i>
+									<img src="{{ url('img/close-icon.png') }}"/>
 									{!! nl2br(trans('trp.popup.popup-wokrplace.remove')) !!}
 								</a>
 							</div>

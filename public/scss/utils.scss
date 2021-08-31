@@ -431,15 +431,14 @@ h4 {
 	    margin-top: 20px;
 	    background: white;
 
-	    &:first-child {
-	    	margin-top: 0px;
-	    }
-
-
 		@media #{$phone} {
 			padding: 10px 10px 10px 40px;
 			font-size: 14px;
 		}
+
+	    &:first-child {
+	    	margin-top: 0px;
+	    }
 
 		&:before {
 		    display: inline-block;
@@ -475,18 +474,10 @@ h4 {
 				color: #7b1a23;			
 			}
 			&:before {
-	    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f071";
-			}
-		}
-
-		&.alert-orange {
-			border-color: #f59c1a;
-			color: #f59c1a;			
-			strong {
-				color: #f59c1a;			
-			}
-			&:before {
-	    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f071";
+	    		content: "";
+				width: 22px;
+				height: 22px;
+				background: url("../img/alert-small-warning.png") no-repeat 0px 0px;
 			}
 		}
 		&.alert-success {
@@ -496,7 +487,10 @@ h4 {
 				color: #2b9b60;
 			}
 			&:before {
-	    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f058";
+	    		content: "";
+				width: 22px;
+				height: 22px;
+				background: url("../img/alert-small-success.png") no-repeat 0px 0px;
 			}
 		}
 		&.alert-info {
@@ -506,7 +500,10 @@ h4 {
 				color: #11aee1;
 			}
 			&:before {
-	    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f05a";
+	    		content: "";
+				width: 22px;
+				height: 22px;
+				background: url(../img/alert-small-info.png) no-repeat 0px 0px;
 			}
 		}
 
@@ -522,6 +519,14 @@ h4 {
 
 		span {
 			display: block;
+		}
+
+		a {
+			font-size: 18px;
+
+			@media #{$phone} {
+				font-size: 14px;
+			}
 		}
 
 		&#password-validator,
@@ -786,15 +791,27 @@ textarea.input {
     }
 
     i {
-    	font-size: 30px;
-    	color: #777777;
+    	border-radius: 50%;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		font-size: 15px;
+		width: 40px;
+		height: 40px;
+		margin: -20px 0 0 -20px;
+		text-indent: -9999em;
+		border-top: 3px solid #121212;
+		border-right: 3px solid white;
+		border-bottom: 3px solid white;
+		border-left: 3px solid white;
+		transform: translateZ(0);
+		animation: load8 1.1s infinite linear;
     }
 
 	input {
 		display: none;
 	}
-
-
+	
     .loader {
         display: none;
         position: absolute;
@@ -826,6 +843,28 @@ textarea.input {
             display: none;
         }
     }
+}
+
+@-webkit-keyframes load8 {
+	0% {
+	    -webkit-transform: rotate(0deg);
+	    transform: rotate(0deg);
+	}
+  	100% {
+	    -webkit-transform: rotate(360deg);
+	    transform: rotate(360deg);
+	}
+}
+
+@keyframes load8 {
+  	0% {
+	    -webkit-transform: rotate(0deg);
+	    transform: rotate(0deg);
+	}
+  	100% {
+	    -webkit-transform: rotate(360deg);
+	    transform: rotate(360deg);
+	}
 }
 
 .radio-label {
@@ -872,27 +911,35 @@ textarea.input {
 		display: none;
 	}
 
-	i {
-		vertical-align: bottom;
-    	margin-top: 10px;
-    	margin-right: 5px;
-    	color: #126585;
-    	vertical-align: text-bottom;
-    	font-size: 20px;
+	.checkbox-square {
+		width: 17px;
+		height: 17px;
+		border: 1px solid #126585;
+		display: inline-block;
+		background-color: white;
+		color: #126585;
+		line-height: 26px;
+		text-align: center;
+		border-radius: 20%;
+		font-weight: bold;
+		margin-right: 5px;
+		font-size: 0px;
 
-    	@media #{$tablet} {
-    		vertical-align: inherit;
-    		font-size: 16px;
-    	}
+		@media #{$phone} {
+			width: 14px;
+    		height: 14px;
+			line-height: 23px;
+		
+		}
 	}
 
 	&.active {
-		i {
-			font-weight: 900;
-			color: #126585;
+		.checkbox-square {
+			font-size: 13px;
+			line-height: 18px;
 
-			&:before {
-				content: '\f14a';
+			@media #{$phone} {
+				line-height: 13px;
 			}
 		}
 	}
@@ -1090,6 +1137,33 @@ textarea.input {
 		@media #{$tablet} {
 		    height: 43px;
 		    line-height: 43px;
+		}
+	}
+
+	.search-wrap {
+		position: absolute;
+		right: 1px;
+		top: 1px;
+		height: 56px;
+		width: 45px;
+		background-color: #888888;
+		color: white;
+		text-align: center;
+		line-height: 56px;
+		border-radius: 3px;
+		padding: 11px;
+
+		@media #{$tablet} {
+		    height: 43px;
+		    line-height: 43px;
+		}
+
+		img {
+			width: 16px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateX(-50%) translateY(-50%);
 		}
 	}
 

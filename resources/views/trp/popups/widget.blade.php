@@ -1,7 +1,9 @@
 <div class="popup fixed-popup" id="popup-widget">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -140,7 +142,9 @@
 								</span>
 						    	<input class="type-radio-widget-first" type="radio" name="review-type" id="аll-reviews" value="all" checked="checked">
 						    	<span>{!! nl2br(trans('trp.popup.popup-widget.reviews.all')) !!}</span>
-						    	<a href="javascript:;" class="open-hidden-option"><i class="fas fa-caret-down"></i></a>
+						    	<a href="javascript:;" class="open-hidden-option">
+									<img src="{{ url('img/caret-down.svg') }}"/>
+								</a>
 
 						    	<div class="hidden-option active">
 						    		<p>{!! nl2br(trans('trp.popup.popup-widget.reviews.results')) !!}</p>
@@ -179,7 +183,9 @@
 						    	<input class="type-radio-widget-first" type="radio" name="review-type" id="trusted-reviews" value="trusted">
 						    	<span>{!! nl2br(trans('trp.popup.popup-widget.reviews.trusted')) !!}</span>
 						    	<img class="tooltip-text info" text="{!! nl2br(trans('trp.popup.popup-widget.reviews.trusted.hint')) !!}" src="{{ url('img-trp/info-light.png') }}">
-						    	<a href="javascript:;" class="open-hidden-option"><i class="fas fa-caret-down"></i></a>
+						    	<a href="javascript:;" class="open-hidden-option">
+									<img src="{{ url('img/caret-down.svg') }}"/>
+								</a>
 
 						    	<div class="hidden-option">
 						    		<p>{!! nl2br(trans('trp.popup.popup-widget.reviews.results')) !!}</p>
@@ -217,7 +223,9 @@
 								</span>
 						    	<input class="type-radio-widget-first" type="radio" name="review-type" id="custom-trusted" value="custom">
 						    	<span>{!! nl2br(trans('trp.popup.popup-widget.reviews.custom')) !!}</span>
-						    	<a href="javascript:;" class="open-hidden-option"><i class="fas fa-caret-down"></i></a>
+						    	<a href="javascript:;" class="open-hidden-option">
+									<img src="{{ url('img/caret-down.svg') }}"/>
+								</a>
 
 						    	<div class="hidden-option">
 						    		<p>
@@ -309,7 +317,7 @@
 								</p>
 								<div class="widget-code-wrap">
 									<a href="javascript:;" class="copy-widget">
-										<i class="far fa-copy"></i>
+										<img src="{{ url('img/copy-files.svg') }}"/>
 									</a>
 						  			<textarea class="input select-me">{{ getLangUrl('widget/'.$user->id.'/'.$user->get_widget_token().'/0') }}</textarea>
 						  		</div>
@@ -333,7 +341,7 @@
 								<br/><br/>
 								<div class="widget-code-wrap">
 									<a href="javascript:;" class="copy-widget">
-										<i class="far fa-copy"></i>
+										<img src="{{ url('img/copy-files.svg') }}"/>
 									</a>
 						  			<textarea class="input select-me">{{ getLangUrl('widget/'.$user->id.'/'.$user->get_widget_token().'/0') }}</textarea>
 						  		</div>
@@ -361,7 +369,9 @@
 <div class="popup fixed-popup" id="select-reviews-popup">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -381,7 +391,7 @@
 				<label class="checkbox-label" for="widget-review-{{ $review->id }}">
 					<div class="widget-checkbox">
 						<input type="checkbox" name="widget-custom-review" id="widget-review-{{ $review->id }}" class="special-checkbox" value="{{ $review->id }}">
-						<i class="far fa-square"></i>
+						<div class="checkbox-square">✓</div>
 					</div>
 					<div class="list-review">
 						<div class="list-review-left">
@@ -424,7 +434,9 @@
 <div class="popup fixed-popup" id="facebook-tab-success">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">

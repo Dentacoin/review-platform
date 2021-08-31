@@ -86,7 +86,7 @@
 		@if($user->is_partner)
 			<label class="checkbox-label invite-hubapp" for="invite-hubapp-{{ $number }}" >
 				<input type="checkbox" class="special-checkbox" id="invite-hubapp-{{ $number }}" name="invite_hubapp"/>
-				<i class="far fa-square"></i>
+				<div class="checkbox-square">✓</div>
 				Invite to Dentacoin HubApp
 			</label>
 		@endif
@@ -99,7 +99,7 @@
 			<a href="javascript:;" class="button button-inner-white bulk-invite-back" step="3">
 				{!! nl2br(trans('trp.popup.popup-invite.back')) !!}
 			</a>
-			<button type="submit" class="button final-button copypaste-fourth"><div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>{!! nl2br(trans('trp.popup.popup-invite.send')) !!}</button>
+			<button type="submit" class="button final-button copypaste-fourth"><div class="loader"><i></i></div>{!! nl2br(trans('trp.popup.popup-invite.send')) !!}</button>
 			<a href="javascript:;" class="button try-invite-again" style="display: none;">{!! nl2br(trans('trp.popup.popup-invite.invite-again')) !!}</a>
 		</div>
 	{!! Form::close() !!}

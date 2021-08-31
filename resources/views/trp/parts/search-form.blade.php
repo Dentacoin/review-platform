@@ -1,10 +1,7 @@
 <form class="front-form search-form">
-	<i class="fas fa-search"></i>
+	<img src="{{ url('img-trp/gray-search.png') }}" width="16" height="16.8"/>
 	<input id="search-input" type="text" name="location" value="{{ !empty($query) ? $formattedAddress : '' }}" placeholder="{!! nl2br(trans('trp.common.search-placeholder')) !!}" autocomplete="off" />
-	<input type="submit" value="">			    		
-	<div class="loader">
-		<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>
-	</div>
+	<input type="submit" value="">
 	<div class="results" style="display: none;">
 		<div class="dentists-results results-type">
 			<span class="result-title">

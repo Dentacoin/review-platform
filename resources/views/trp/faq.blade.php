@@ -19,6 +19,7 @@
 						<div class="question">
 			                <a class="question-title" href="javascript:;">
 			                	<span>{{ str_pad($loop->iteration, 2, "0", STR_PAD_LEFT) }}</span>{{ $question[0] }}
+								<img src="{{ url('img/caret-black-down.png') }}"/>
 			                </a>
 			                <div class="question-description clearfix">
 								<p>{!! nl2br($question[1]) !!}</p>

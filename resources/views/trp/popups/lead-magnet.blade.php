@@ -9,7 +9,9 @@
 		    </div>
 		</div>
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -69,7 +71,7 @@
 
 					<label class="checkbox-label agree-label" for="magnet-agree">
 						<input type="checkbox" class="special-checkbox" id="magnet-agree" name="agree" value="1">
-						<i class="far fa-square"></i>
+						<div class="checkbox-square">✓</div>
 						{!! trans('trp.popup.popup-lead-magnet.privacy', [
 							'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
 							'endlink' => '</a>',
@@ -175,22 +177,22 @@
 						<div class="buttons-list clearfix"> 
 							<p>{!! trans('trp.popup.popup-lead-magnet.select-all') !!}</p>
 							<label class="magnet-label" for="answer-3-1">
-								<i class="far fa-square"></i>
+								<div class="checkbox-square">✓</div>
 								<input id="answer-3-1" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" ans-text="Yes, in person" value="1">
 								{!! trans('trp.popup.popup-lead-magnet.question3.asnwer1') !!}
 							</label>
 							<label class="magnet-label" for="answer-3-2">
-								<i class="far fa-square"></i>
+								<div class="checkbox-square">✓</div>
 								<input id="answer-3-2" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" ans-text="Yes, by email" value="2">
 								{!! trans('trp.popup.popup-lead-magnet.question3.asnwer2') !!}
 							</label>
 							<label class="magnet-label" for="answer-3-3">
-								<i class="far fa-square"></i>
+								<div class="checkbox-square">✓</div>
 								<input id="answer-3-3" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" ans-text="Yes, by SMS" value="3">
 								{!! trans('trp.popup.popup-lead-magnet.question3.asnwer3') !!}
 							</label>
 							<label class="magnet-label disabler-label" for="answer-3-4">
-								<i class="far fa-square"></i>
+								<div class="checkbox-square">✓</div>
 								<input id="answer-3-4" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox disabler" ans-text="No" value="4">
 								{!! trans('trp.popup.popup-lead-magnet.question3.asnwer4') !!}
 							</label>
@@ -263,7 +265,9 @@
 							</label>
 						</div> 
 						<div class="tac" style="display: none;">
-							<button class="button" id="magnet-submit" type="submit">{!! trans('trp.popup.popup-lead-magnet.second-step-submit') !!}<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div></button>
+							<button class="button" id="magnet-submit" type="submit">{!! trans('trp.popup.popup-lead-magnet.second-step-submit') !!}
+								<div class="loader"><i></i></div>
+							</button>
 						</div>
 					</div>
 				</div>

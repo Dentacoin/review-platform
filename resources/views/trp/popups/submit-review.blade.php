@@ -1,7 +1,9 @@
 <div class="popup fixed-popup" id="submit-review-popup">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -145,7 +147,11 @@
 								@endforeach
 
 								<p class="treatment-category more-treatments-title">• {{ trans('trp.treatments.info') }}: </p>
-								<a href="javascript:;" class="more-treatments"><i class="fas fa-plus"></i> {{ trans('trp.treatments.all-treatments') }}</a>
+								<a href="javascript:;" class="more-treatments">
+									<img class="inactive" src="{{ url('img/plus-dark-blue.svg') }}" width="14"/>
+									<img class="active" src="{{ url('img/minus-white.svg') }}" width="14"/>
+									 {{ trans('trp.treatments.all-treatments') }}
+								</a>
 
 								<div class="treatments-hidden">
 									@foreach(config('trp.treatments') as $t => $treatment)
@@ -242,7 +248,7 @@
 
 											<label class="checkbox-label" for="video-agree">
 												<input type="checkbox" class="special-checkbox" id="video-agree" name="video-agree" value="video-agree">
-												<i class="far fa-square"></i>
+												<div class="checkbox-square">✓</div>
 												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-terms', [
 													'link' => '<a class="read-privacy" target="_blank" href="https://dentacoin.com/privacy-policy">',
 													'link_youtube' => '<a class="read-privacy" target="_blank" href="https://www.youtube.com/t/terms">',
@@ -268,17 +274,17 @@
 												</div>
 
 												<a href="javascript:;" id="init-video" class="button">
-													<i class="fas fa-video" style="color: white; margin-right: 5px;"></i>
+													<img src="{{ url('img/video-camera.svg') }}" style="margin-right: 10px; vertical-align: text-top;" width="22"/>
 													{{ trans('trp.popup.submit-review-popup.video-allow') }}
 												</a>
 												
 												<a href="javascript:;" id="start-video" class="button" style="display: none;">
-													<i class="fas fa-film"></i>
+													<img src="{{ url('img/film-roll.svg') }}" style="margin-right: 5px;" width="15"/>
 													{{ trans('trp.popup.submit-review-popup.video-start') }}
 												</a>
 
 												<a href="javascript:;" id="stop-video" class="button" style="display: none;">
-													<i class="fas fa-stop-circle"></i>
+													<img src="{{ url('img/stop-video.svg') }}" style="margin-right: 5px;" width="15"/>
 													{{ trans('trp.popup.submit-review-popup.video-stop') }}
 												</a>
 												

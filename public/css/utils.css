@@ -340,14 +340,14 @@ h4 {
   word-break: break-word;
   margin-top: 20px;
   background: white; }
-  .fixed-popup .alert:first-child,
-  .site-content .alert:first-child {
-    margin-top: 0px; }
   @media screen and (max-width: 768px) {
     .fixed-popup .alert,
     .site-content .alert {
       padding: 10px 10px 10px 40px;
       font-size: 14px; } }
+  .fixed-popup .alert:first-child,
+  .site-content .alert:first-child {
+    margin-top: 0px; }
   .fixed-popup .alert:before,
   .site-content .alert:before {
     display: inline-block;
@@ -382,21 +382,10 @@ h4 {
       color: #7b1a23; }
     .fixed-popup .alert.alert-warning:before,
     .site-content .alert.alert-warning:before {
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      content: "\f071"; }
-  .fixed-popup .alert.alert-orange,
-  .site-content .alert.alert-orange {
-    border-color: #f59c1a;
-    color: #f59c1a; }
-    .fixed-popup .alert.alert-orange strong,
-    .site-content .alert.alert-orange strong {
-      color: #f59c1a; }
-    .fixed-popup .alert.alert-orange:before,
-    .site-content .alert.alert-orange:before {
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      content: "\f071"; }
+      content: "";
+      width: 22px;
+      height: 22px;
+      background: url("../img/alert-small-warning.png") no-repeat 0px 0px; }
   .fixed-popup .alert.alert-success,
   .site-content .alert.alert-success {
     border-color: #2b9b60;
@@ -406,9 +395,10 @@ h4 {
       color: #2b9b60; }
     .fixed-popup .alert.alert-success:before,
     .site-content .alert.alert-success:before {
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      content: "\f058"; }
+      content: "";
+      width: 22px;
+      height: 22px;
+      background: url("../img/alert-small-success.png") no-repeat 0px 0px; }
   .fixed-popup .alert.alert-info,
   .site-content .alert.alert-info {
     border-color: #11aee1;
@@ -418,9 +408,10 @@ h4 {
       color: #11aee1; }
     .fixed-popup .alert.alert-info:before,
     .site-content .alert.alert-info:before {
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      content: "\f05a"; }
+      content: "";
+      width: 22px;
+      height: 22px;
+      background: url(../img/alert-small-info.png) no-repeat 0px 0px; }
   .fixed-popup .alert a:not(.button),
   .site-content .alert a:not(.button) {
     color: inherit;
@@ -432,6 +423,13 @@ h4 {
   .fixed-popup .alert span,
   .site-content .alert span {
     display: block; }
+  .fixed-popup .alert a,
+  .site-content .alert a {
+    font-size: 18px; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .alert a,
+      .site-content .alert a {
+        font-size: 14px; } }
   .fixed-popup .alert#password-validator, .fixed-popup .alert.ajax-alert,
   .site-content .alert#password-validator,
   .site-content .alert.ajax-alert {
@@ -619,8 +617,21 @@ textarea.input {
     color: #777777;
     font-weight: 300; }
   .image-label i {
-    font-size: 30px;
-    color: #777777; }
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 15px;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    text-indent: -9999em;
+    border-top: 3px solid #121212;
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    border-left: 3px solid white;
+    transform: translateZ(0);
+    animation: load8 1.1s infinite linear; }
   .image-label input {
     display: none; }
   .image-label .loader {
@@ -646,6 +657,20 @@ textarea.input {
   .image-label.loading .centered-hack {
     display: none; }
 
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 .radio-label input {
   display: none; }
 .radio-label label {
@@ -672,22 +697,30 @@ textarea.input {
     color: rgba(255, 0, 0, 0.6); }
   .checkbox-label input {
     display: none; }
-  .checkbox-label i {
-    vertical-align: bottom;
-    margin-top: 10px;
-    margin-right: 5px;
+  .checkbox-label .checkbox-square {
+    width: 17px;
+    height: 17px;
+    border: 1px solid #126585;
+    display: inline-block;
+    background-color: white;
     color: #126585;
-    vertical-align: text-bottom;
-    font-size: 20px; }
-    @media screen and (max-width: 998px) {
-      .checkbox-label i {
-        vertical-align: inherit;
-        font-size: 16px; } }
-  .checkbox-label.active i {
-    font-weight: 900;
-    color: #126585; }
-    .checkbox-label.active i:before {
-      content: '\f14a'; }
+    line-height: 26px;
+    text-align: center;
+    border-radius: 20%;
+    font-weight: bold;
+    margin-right: 5px;
+    font-size: 0px; }
+    @media screen and (max-width: 768px) {
+      .checkbox-label .checkbox-square {
+        width: 14px;
+        height: 14px;
+        line-height: 23px; } }
+  .checkbox-label.active .checkbox-square {
+    font-size: 13px;
+    line-height: 18px; }
+    @media screen and (max-width: 768px) {
+      .checkbox-label.active .checkbox-square {
+        line-height: 13px; } }
   .checkbox-label a {
     color: #38a2e5;
     font-size: 14px; }
@@ -821,6 +854,28 @@ textarea.input {
       .modern-field .search-icon {
         height: 43px;
         line-height: 43px; } }
+  .modern-field .search-wrap {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    height: 56px;
+    width: 45px;
+    background-color: #888888;
+    color: white;
+    text-align: center;
+    line-height: 56px;
+    border-radius: 3px;
+    padding: 11px; }
+    @media screen and (max-width: 998px) {
+      .modern-field .search-wrap {
+        height: 43px;
+        line-height: 43px; } }
+    .modern-field .search-wrap img {
+      width: 16px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%); }
   .modern-field.modern-file label {
     padding-left: 20px;
     font-size: 17px;

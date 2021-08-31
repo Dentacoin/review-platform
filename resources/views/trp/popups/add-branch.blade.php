@@ -1,7 +1,9 @@
 <div class="popup fixed-popup" id="popup-branch">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+			<a href="javascript:;" class="close-popup">
+				<img src="{{ url('img/close-icon.png') }}"/>
+			</a>
 		</div>
 
 		<div class="popup-mobile-buttons">
@@ -117,13 +119,13 @@
 					<div class="col">
 						<label for="add-avatar-clinic-branch" class="image-label">
 							<div class="centered-hack">
-								<i class="fas fa-plus"></i>
+								<img src="{{ url('img/plus.svg') }}"/>
 								<p>
 									{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}													
 								</p>
 							</div>
 				    		<div class="loader">
-				    			<i class="fas fa-circle-notch fa-spin"></i>
+				    			<i></i>
 				    		</div>
 							<input type="file" name="clinic_image" class="add-avatar-clinic-branch" id="add-avatar-clinic-branch" upload-url="{{ getLangUrl('register/upload') }}">
 							
@@ -152,7 +154,7 @@
 										name="clinic_specialization[]" 
 										value="{{ $loop->index }}"
 									>
-									<i class="far fa-square"></i>
+									<div class="checkbox-square">✓</div>
 									{{ $v }}
 								</label>
                             @endforeach

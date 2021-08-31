@@ -38,8 +38,6 @@
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
 		
-		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-brands-400.woff2') }}" as="font" crossorigin>
-		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-solid-900.woff2') }}" as="font" crossorigin>
 		<link rel="preload" href="{{ url('fonts/Calibri-Light.woff2') }}" as="font" crossorigin>
 		<link rel="preload" href="{{ url('fonts/Calibri-Bold.woff2') }}" as="font" crossorigin>
 		<link rel="preload" href="{{ url('fonts/Calibri.woff2') }}" as="font" crossorigin>
@@ -115,7 +113,7 @@
 						<a class="logo" href="{{ getLangUrl('/') }}"></a>
 						<div class="header-info">								
 							@if($current_page=='dentist')
-								<i class="fas fa-search"></i>
+								<img class="fa-search" src="{{ url('img/white-search.png') }}" width="24" height="24"/>
 							@endif
 
 	                        @if(!empty($user))
@@ -149,7 +147,7 @@
 	                        @endif
 	                        @if(!empty($admin) && count(config('langs')) > 1 && $current_page != 'dentists')
 		                        <div class="lang-wrapper">
-		                        	<a href="javascript:;">({{ strtoupper(App::getLocale()) }} <i class="fas fa-angle-down"></i>)</a>
+		                        	<a href="javascript:;">({{ strtoupper(App::getLocale()) }} )</a>
 			                        <div class="lang-menu">
 			                        	@foreach( config('langs') as $key => $lang)
 			                        		@if($key != App::getLocale())
@@ -199,8 +197,8 @@
 				</div>
 				<div class="socials col-md-3">
 					{!! trans('trp.footer.stay') !!}: &nbsp;
-					<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-					<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+					<a class="social" href="https://t.me/dentacoin" target="_blank"><img src="{{ url('img/social-network/telegram.svg') }}"/></a>
+					<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank"><img src="{{ url('img/social-network/facebook.svg') }}"/></a>
 				</div>
 			</div>
 		</footer>
@@ -219,8 +217,6 @@
 		@endif
 
 		<div class="tooltip-window" style="display: none;"></div>
-
-		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
 
         @if(!empty($csscdn) && is_array($csscdn))
             @foreach($csscdn as $file)
@@ -388,6 +384,7 @@
         	var lang = '{{ App::getLocale() }}';
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         	var images_path = '{{ url('img-trp') }}';
+        	var all_images_path = '{{ url('img') }}';
         </script>
     </body>
 </html>
