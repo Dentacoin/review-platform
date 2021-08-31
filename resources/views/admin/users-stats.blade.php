@@ -14,6 +14,72 @@
                 <div class="panel-heading-btn">
                     <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                 </div>
+                <h4 class="panel-title"> Answered questions filter</h4>
+            </div>
+            <div class="panel-body users-filters">
+                <form method="get" action="{{ url('cms/users/users_stats') }}" id="users-filter-form">
+                    <div class="row custom-row">
+                        <div class="col-md-2">
+                            <input type="text" class="form-control datepicker" name="search-from" value="{{ $search_from }}" placeholder="Search from" autocomplete="off">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control datepicker" name="search-to" value="{{ $search_to }}" placeholder="Search to" autocomplete="off">
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if($answered_questions_count || $answered_questions_count === 0)
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-inverse">
+				<div class="panel-heading">
+					<div class="panel-heading-btn">
+						<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+					</div>
+					<h4 class="panel-title">Answered questions</h4>
+				</div>
+				<div class="panel-body">
+					<div class="dataTables_wrapper">
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th style="width: 33%;">
+												Count
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>{{ $answered_questions_count }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+@endif
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                </div>
                 <h4 class="panel-title">User Types</h4>
             </div>
             <div class="panel-body">

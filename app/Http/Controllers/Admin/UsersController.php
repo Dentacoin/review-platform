@@ -2387,12 +2387,30 @@ class UsersController extends AdminController {
         $user_genders = User::groupBy('gender')->select('gender', DB::raw('count(*) as total'))->get();
 
         $users_country = User::groupBy('country_id')->select('country_id', DB::raw('count(*) as total'))->orderBy('total', 'DESC')->get();
+        
+        $answered_questions_count = null;
+        
+        if(!empty(request('search-from'))) {
+            
+            $firstday = new Carbon(request('search-from'));
+            $answered_questions_count = VoxAnswer::where('created_at', '>=', $firstday);
+            
+            if(!empty(request('search-to'))) {
+                $firstday = new Carbon(request('search-to'));
+                $answered_questions_count = $answered_questions_count->where('created_at', '<=', $firstday->addDays(1));
+            }
+
+            $answered_questions_count = $answered_questions_count->groupBy('question_id')->count();
+        }
 
         return $this->showView('users-stats', array(
+            'answered_questions_count' => $answered_questions_count,
             'user_types' => $user_types,
             'dentist_partners' => $dentist_partners,
             'user_genders' => $user_genders,
             'users_country' => $users_country,
+            'search_from' => request('search-from'),
+            'search_to' => request('search-to'),
         ));
     }
 
