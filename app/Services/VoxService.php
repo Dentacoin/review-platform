@@ -275,27 +275,27 @@ class VoxService {
                     $array['user'] = $user;
                     $array['country_id'] = $country_id;
 
-                    if(isset($array['question']) && ($array['question']->is_control == -1 || (empty($array['question']->dont_randomize_answers) && empty($array['question']->vox_scale_id) && empty($array['scales'][$array['question']->vox_scale_id])))) {
+                    // if(isset($array['question']) && ($array['question']->is_control == -1 || (empty($array['question']->dont_randomize_answers) && empty($array['question']->vox_scale_id) && empty($array['scales'][$array['question']->vox_scale_id]))) {
 
-                        $question_answers = json_decode($array['question']->answers, true);
+                    //     $question_answers = json_decode($array['question']->answers, true);
 
-                        $question_answers_reordered = [];
-                        foreach ($question_answers as $v) {
-                            if(mb_strpos($v, '#')!==0 && mb_strpos($v, '!')!==0) {
-                                $question_answers_reordered[] = $v;
-                            }
-                        }
+                    //     $question_answers_reordered = [];
+                    //     foreach ($question_answers as $v) {
+                    //         if(mb_strpos($v, '#')!==0 && mb_strpos($v, '!')!==0) {
+                    //             $question_answers_reordered[] = $v;
+                    //         }
+                    //     }
 
-                        shuffle($question_answers_reordered);
+                    //     shuffle($question_answers_reordered);
 
-                        foreach ($question_answers as $v) {
-                            if(mb_strpos($v, '#')===0 || mb_strpos($v, '!')===0) {
-                                $question_answers_reordered[] = $v;
-                            }
-                        }
+                    //     foreach ($question_answers as $v) {
+                    //         if(mb_strpos($v, '#')===0 || mb_strpos($v, '!')===0) {
+                    //             $question_answers_reordered[] = $v;
+                    //         }
+                    //     }
 
-                        $array['question_answers_reordered'] = $question_answers_reordered;
-                    }
+                    //     $array['question_answers_reordered'] = $question_answers_reordered;
+                    // }
 
                     return response()->view('vox.template-parts.vox-question', $array, 200)->header('X-Frame-Options', 'DENY');
                 }
