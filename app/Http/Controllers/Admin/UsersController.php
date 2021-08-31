@@ -2394,7 +2394,7 @@ class UsersController extends AdminController {
         if(!empty(request('search-from')) && !empty(request('search-to'))) {
             $answered_questions_count = 0;
 
-            $all_questions = VoxQuestion::has('vox')->select('id')->get();
+            $all_questions = VoxQuestion::select('id')->get();
 
             foreach($all_questions as $q) {
                 $firstday_from = new Carbon(request('search-from'));
