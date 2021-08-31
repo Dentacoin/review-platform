@@ -2405,7 +2405,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Remove old survey warnings'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            UserSurveyWarning::where('created_at', '<', Carbon::now()->addDays(-1)->toDateTimeString() )->forceDelete();
+            UserSurveyWarning::withTrashed()->where('created_at', '<', Carbon::now()->addDays(-1)->toDateTimeString() )->forceDelete();
 
             echo 'Remove old survey warnings cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
