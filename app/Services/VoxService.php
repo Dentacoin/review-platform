@@ -275,7 +275,7 @@ class VoxService {
                     $array['user'] = $user;
                     $array['country_id'] = $country_id;
 
-                    if(isset($array['question']) && $array['question']->is_control == -1 || (empty($array['question']->dont_randomize_answers) && empty($array['question']->vox_scale_id) && empty($array['scales'][$array['question']->vox_scale_id]))) {
+                    if(isset($array['question']) && ($array['question']->is_control == -1 || (empty($array['question']->dont_randomize_answers) && empty($array['question']->vox_scale_id) && empty($array['scales'][$array['question']->vox_scale_id])))) {
 
                         $question_answers = json_decode($array['question']->answers, true);
 
