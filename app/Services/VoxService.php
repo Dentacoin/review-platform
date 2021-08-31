@@ -1733,22 +1733,14 @@ class VoxService {
                     }
 
                     if($is_scam && !$testmode && !$user->is_partner) {
-                        
-                        if($for_app) {
-                            $wrongs = UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
-                            $wrongs++;
+                    
+                        $wrongs = UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
+                        $wrongs++;
 
-                            $new_wrong = new UserSurveyWarning;
-                            $new_wrong->user_id = $user->id;
-                            $new_wrong->action = 'wrong';
-                            $new_wrong->save();
-                        } else {
-                            $wrongs = intval(session('wrongs'));
-                            $wrongs++;
-                            session([
-                                'wrongs' => $wrongs
-                            ]);
-                        }
+                        $new_wrong = new UserSurveyWarning;
+                        $new_wrong->user_id = $user->id;
+                        $new_wrong->action = 'wrong';
+                        $new_wrong->save();
 
                         $ret['wrong'] = true;
                         $prev_bans = $user->getPrevBansCount('vox', 'mistakes');
@@ -1789,13 +1781,8 @@ class VoxService {
                                 ->delete();
                             }
                         } else {
-                            if($for_app) {
-                                UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->delete();
-                            } else {                                
-                                session([
-                                    'wrongs' => null
-                                ]);
-                            }
+                            UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->delete();
+                                
                             $ban = $user->banUser('vox', 'mistakes', $vox->id);
                             $ret['ban'] = true;
                             $ret['ban_duration'] = $ban['days'];
@@ -1823,6 +1810,8 @@ class VoxService {
                             ->where('user_id', $user->id)
                             ->delete();
                         }
+                        
+                        return Response::json( $ret );
                     } else {
 
                         if($type == 'skip') {
@@ -2042,28 +2031,15 @@ class VoxService {
                         
                         if($normal > $diff && count($answered) != count($vox->questions)) {
 
-                            if($for_app) {
-                                $warned_before = UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
-                                if(!$warned_before) {
-                                    $new_too_fast = new UserSurveyWarning;
-                                    $new_too_fast->user_id = $user->id;
-                                    $new_too_fast->action = 'too_fast';
-                                    $new_too_fast->save();
-                                } else {
-                                    UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->delete();
-                                }
+                            $warned_before = UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
+                            
+                            if(!$warned_before) {
+                                $new_too_fast = new UserSurveyWarning;
+                                $new_too_fast->user_id = $user->id;
+                                $new_too_fast->action = 'too_fast';
+                                $new_too_fast->save();
                             } else {
-
-                                $warned_before = session('too-fast');
-                                if(!$warned_before) {
-                                    session([
-                                        'too-fast' => true
-                                    ]);
-                                } else {
-                                    session([
-                                        'too-fast' => null
-                                    ]);
-                                }
+                                UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->delete();
                             }
 
                             $prev_bans = $user->getPrevBansCount('vox', 'too-fast');
