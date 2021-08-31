@@ -2388,19 +2388,24 @@ class UsersController extends AdminController {
 
         $users_country = User::groupBy('country_id')->select('country_id', DB::raw('count(*) as total'))->orderBy('total', 'DESC')->get();
         
-        $answered_questions_count = null;
-        
-        if(!empty(request('search-from'))) {
-            
-            $firstday = new Carbon(request('search-from'));
-            $answered_questions_count = VoxAnswer::where('created_at', '>=', $firstday);
-            
-            if(!empty(request('search-to'))) {
-                $firstday = new Carbon(request('search-to'));
-                $answered_questions_count = $answered_questions_count->where('created_at', '<=', $firstday->addDays(1));
-            }
 
-            $answered_questions_count = $answered_questions_count->groupBy('question_id')->count();
+        $answered_questions_count = null;
+
+        if(!empty(request('search-from')) && !empty(request('search-to'))) {
+            $answered_questions_count = 0;
+
+            $all_questions = VoxQuestion::has('vox')->select('id')->get();
+
+            foreach($all_questions as $q) {
+                $firstday_from = new Carbon(request('search-from'));
+                $firstday_to = new Carbon(request('search-to'));
+
+                $is_answered_question = VoxAnswer::where('question_id', $q->id)->where('created_at', '>=', $firstday_from)->where('created_at', '<=', $firstday_to->addDays(1))->first();
+                
+                if($is_answered_question) {
+                    $answered_questions_count++;
+                }
+            }
         }
 
         return $this->showView('users-stats', array(
