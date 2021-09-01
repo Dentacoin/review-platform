@@ -1,3 +1,51 @@
+<div class="section-dentist-info-wrap">
+	<div class="container section-dentist-info">
+		<div class="flex">
+			<div class="col tac">
+				<img src="{{ url('img-trp/dentacoin-attract-new-patients-icon.png') }}" alt="{{ trans('trp.alt-tags.attract-new-patients') }}">
+				<div class="info-padding">
+					<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-title')) !!}</h3>
+					<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-description')) !!}</p>
+				</div>
+			</div>
+			<div class="col tac">
+				<img src="{{ url('img-trp/dentacoin-get-more-reviews-icon.png') }}" alt="{{ trans('trp.alt-tags.more-reviews') }}">   
+				<div class="info-padding"> 			
+					<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-2-title')) !!}</h3>
+					<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-2-description')) !!}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex">
+			<div class="col tac">
+				<img src="{{ url('img-trp/dentacoin-better-google-ranking-icon.png') }}" alt="{{ trans('trp.alt-tags.better-google-ranking') }}">
+				<div class="info-padding">
+					<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-3-title')) !!}</h3>
+					<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-3-description')) !!}</p>
+				</div>
+			</div>
+			<div class="col tac">
+				<img src="{{ url('img-trp/dentacoin-better-online-reputation-icon.png') }}" alt="{{ trans('trp.alt-tags.better-online-reputation') }}">
+				<div class="info-padding">
+					<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-4-title')) !!}</h3>
+					<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-4-description')) !!}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="tac button-wrap">
+			<a href="javascript:;" class="button button-sign-up-dentist open-dentacoin-gateway dentist-register">
+				{!! nl2br(trans('trp.page.index-dentist.signup')) !!}
+			</a>
+		</div>
+
+		<div class="tac">
+			<a href="javascript:;" class="button button-yellow magnet-popup" id="open-magnet" data-url="{{ getLangUrl('lead-magnet-session') }}">{{ trans('trp.page.index-dentist.button-lead-magnet') }}</a>
+		</div>
+	</div>
+</div>
+
 <div class="testimonials-section">
 	<div class="container tac">
 		<h2>{!! nl2br(trans('trp.page.index-dentist.testimonial.title')) !!}</h2>

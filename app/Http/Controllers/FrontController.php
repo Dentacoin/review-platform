@@ -634,6 +634,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '20210831';
+        $params['cache_version'] = '20210901';
     }
 }

@@ -309,6 +309,16 @@ img {
         padding-top: 10px;
     }
 
+    .back-home {
+        margin-top: -10px;
+        margin-bottom: 20px;
+
+        @media #{$phone} {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+    }
+
     &.single-main-section {
 
         @media #{$pc_small} {

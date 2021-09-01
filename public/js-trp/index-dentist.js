@@ -78,6 +78,34 @@ jQuery(document).ready(function($){
 							});
 						}, 1000);
 
+						$('#open-magnet').click( function() {
+							gtag('event', 'Open', {
+								'event_category': 'LeadMagnet',
+								'event_label': 'Popup',
+							});
+						});
+
+						$('.magnet-popup').click( function() {
+							var that = $(this);
+				
+							$.ajax({
+								type: "GET",
+								url: that.attr('data-url'),
+								dataType: 'json',
+								success: function(ret) {
+									if(ret.session) {
+										window.location.href = ret.url;
+									} else {
+										showPopup('popup-lead-magnet');
+									}
+								},
+								error: function(ret) {
+									console.log('error');
+								}
+							});
+							
+						});
+
 						if ($(window).innerWidth() < 768) {
 							$('.mobile-flickity .left').children().appendTo('.mobile-flickity');
 							$('.mobile-flickity .left').remove();

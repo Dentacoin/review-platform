@@ -223,6 +223,13 @@ img {
   @media screen and (max-width: 768px) {
     .main-section {
       padding-top: 10px; } }
+  .main-section .back-home {
+    margin-top: -10px;
+    margin-bottom: 20px; }
+    @media screen and (max-width: 768px) {
+      .main-section .back-home {
+        margin-top: 0px;
+        margin-bottom: 0px; } }
   @media screen and (max-width: 1200px) {
     .main-section.single-main-section {
       margin-bottom: 50px; } }

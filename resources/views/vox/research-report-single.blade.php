@@ -1,10 +1,16 @@
 @extends('vox')
 
 @section('content')
-    
+
+
     <div class="main-section single-main-section">
         <img class="blue-circle" src="{{ url('new-vox-img/blue-circle-corner.png') }}"/>
-        
+        <div class="paid-container"> <!-- 800px -->
+            <a class="back-home" href="{{ getLangUrl('dental-industry-reports/') }}">
+                Back
+            </a>
+        </div>
+            
         <div class="flex paid-container">
             <div class="main-image-wrapper col">
                 <img class="main-image" src="{{ $item->getImageUrl() }}"/>
