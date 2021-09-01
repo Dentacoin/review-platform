@@ -2439,7 +2439,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             $firstday = '2021-08-01 00:00:00';
             $lastday = '2021-08-31 23:59:59';
 
-            $answered_questions_count = VoxAnswer::where('created_at', '>=', $firstday)->where('created_at', '<=', $lastday)->groupBy('question_id')->count();
+            $answered_questions_count = VoxAnswer::where('created_at', '>=', $firstday)->where('created_at', '<=', $lastday)->count();
             
             $vox_q_count = new VoxQuestionAnswered;
             $vox_q_count->month = '08';
@@ -2448,7 +2448,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             echo 'Answered questions count cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('08:30');
+        })->dailyAt('09:00');
 
 
         $schedule->call(function () {
