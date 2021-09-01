@@ -2416,39 +2416,21 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Answered questions count'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            // if(!empty(request('search-from')) && !empty(request('search-to'))) {
-            //     $answered_questions_count = 0;
+            $startDate = Carbon::now()->addMonths(-1); //returns current day
+            $firstday = $startDate->firstOfMonth();
+            $lastday = $startDate->endOfMonth();
 
-            //     $all_questions = VoxQuestion::select('id')->get();
-
-            //     foreach($all_questions as $q) {
-            //         $firstday_from = new Carbon(request('search-from'));
-            //         $firstday_to = new Carbon(request('search-to'));
-
-            //         $is_answered_question = VoxAnswer::where('question_id', $q->id)->where('created_at', '>=', $firstday_from)->where('created_at', '<=', $firstday_to->addDays(1))->first();
-                    
-            //         if($is_answered_question) {
-            //             $answered_questions_count++;
-            //         }
-            //     }
-            // }
-
-            // $firstday = date('Y').'-'.date('m').'-'.date('d').' 00:00:00';
-            // $lastday = date('Y').'-'.date('m').'-'.date('d').' 00:00:00';
-
-            $firstday = '2021-08-01 00:00:00';
-            $lastday = '2021-08-31 23:59:59';
-
-            $answered_questions_count = VoxAnswer::where('created_at', '>=', $firstday)->where('created_at', '<=', $lastday)->count();
+            $answered_questions_count = VoxAnswer::where('created_at', '>=', $firstday->toDateTimeString())->where('created_at', '<=', $lastday->toDateTimeString())->count();
             
             $vox_q_count = new VoxQuestionAnswered;
-            $vox_q_count->month = '08';
+            $vox_q_count->month = $startDate->month;
+            $vox_q_count->year = $startDate->year;
             $vox_q_count->count = $answered_questions_count;
             $vox_q_count->save();
 
             echo 'Answered questions count cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('09:20');
+        })->cron('0 0 1 * *');
 
 
         $schedule->call(function () {

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\IncompleteRegistration;
+use App\Models\VoxQuestionAnswered;
 use App\Models\UnclaimedDentist;
 use App\Models\UserGuidedTour;
 use App\Models\DcnTransaction;
@@ -2381,41 +2382,18 @@ class UsersController extends AdminController {
         }
 
         $user_types = User::groupBy('is_dentist')->select('is_dentist', DB::raw('count(*) as total'))->get();
-
         $dentist_partners = User::where('is_dentist', '1')->where('is_partner' , 1)->select('is_partner', DB::raw('count(*) as total'))->get();
-
         $user_genders = User::groupBy('gender')->select('gender', DB::raw('count(*) as total'))->get();
-
         $users_country = User::groupBy('country_id')->select('country_id', DB::raw('count(*) as total'))->orderBy('total', 'DESC')->get();
-        
-
-        $answered_questions_count = null;
-
-        if(!empty(request('search-from')) && !empty(request('search-to'))) {
-            $answered_questions_count = 0;
-
-            $all_questions = VoxQuestion::select('id')->get();
-
-            foreach($all_questions as $q) {
-                $firstday_from = new Carbon(request('search-from'));
-                $firstday_to = new Carbon(request('search-to'));
-
-                $is_answered_question = VoxAnswer::where('question_id', $q->id)->where('created_at', '>=', $firstday_from)->where('created_at', '<=', $firstday_to->addDays(1))->first();
-                
-                if($is_answered_question) {
-                    $answered_questions_count++;
-                }
-            }
-        }
 
         return $this->showView('users-stats', array(
-            'answered_questions_count' => $answered_questions_count,
             'user_types' => $user_types,
             'dentist_partners' => $dentist_partners,
             'user_genders' => $user_genders,
             'users_country' => $users_country,
             'search_from' => request('search-from'),
             'search_to' => request('search-to'),
+            'answered_questions' => VoxQuestionAnswered::get(),
         ));
     }
 
