@@ -49,6 +49,7 @@ class VoxQuestion extends Model {
         'stats_fields',
         'stats_scale_answers',
         'stats_top_answers',
+        'order_stats_answers_with_diez_as_they_are',
         'cross_check',
         'dont_randomize_answers',
         'has_image',

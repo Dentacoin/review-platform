@@ -380,8 +380,10 @@ class StatsController extends FrontController {
 
                     if(!empty($rows_diez)) {
 
-                        $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
-                        array_multisort($keys, SORT_DESC, $rows_diez);
+                        if(!$question->order_stats_answers_with_diez_as_they_are) {
+                            $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
+                            array_multisort($keys, SORT_DESC, $rows_diez);
+                        }
 
                         $rows_without_diez = [];
                         foreach ($rows_diez as $key => $value) {
@@ -582,7 +584,9 @@ class StatsController extends FrontController {
                     }
 
                     if(!empty($rows_diez)) {
-                        arsort($rows_diez);
+                        if(!$question->order_stats_answers_with_diez_as_they_are) {
+                            arsort($rows_diez);
+                        }
 
                         $rows_without_diez = [];
                         foreach ($rows_diez as $k => $v) {
@@ -799,8 +803,10 @@ class StatsController extends FrontController {
 
                     if(!empty($rows_diez)) {
 
-                        $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
-                        array_multisort($keys, SORT_DESC, $rows_diez);
+                        if(!$question->order_stats_answers_with_diez_as_they_are) {
+                            $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
+                            array_multisort($keys, SORT_DESC, $rows_diez);
+                        }
 
                         $rows_without_diez = [];
                         foreach ($rows_diez as $key => $value) {
@@ -836,7 +842,9 @@ class StatsController extends FrontController {
                         }
 
                         if(!empty($rows_diez)) {
-                            arsort($rows_diez);
+                            if(!$question->order_stats_answers_with_diez_as_they_are) {
+                                arsort($rows_diez);
+                            }
 
                             $rows_without_diez = [];
                             foreach ($rows_diez as $k => $v) {
@@ -1203,7 +1211,9 @@ class StatsController extends FrontController {
                     }
 
                     if(!empty($rows_diez)) {
-                        arsort($rows_diez);
+                        if(!$question->order_stats_answers_with_diez_as_they_are) {
+                            arsort($rows_diez);
+                        }
 
                         $rows_without_diez = [];
                         foreach ($rows_diez as $k => $v) {

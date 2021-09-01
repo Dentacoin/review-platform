@@ -507,6 +507,15 @@
                         </div>
                     </div>
 
+                    <div class="form-group clearfix">
+                        <label class="col-md-2 control-label">Order stats answers with # as they are</label>
+                        <div class="col-md-10">
+                            <label for="order_stats_answers_with_diez_as_they_are">
+                                <input type="checkbox" name="order_stats_answers_with_diez_as_they_are" class="form-control" value="1" id="order_stats_answers_with_diez_as_they_are" style="vertical-align: sub; width: 14px;" {!! !empty($question) && !empty($question->order_stats_answers_with_diez_as_they_are) ? 'checked="checked"' : '' !!} />
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="form-group clearfix" style="margin-top: 40px;">
                         <h3 class="col-md-12" style="margin-top: 0px;">Cross-checks</h3>
                     </div>

@@ -1139,7 +1139,7 @@ class VoxesController extends AdminController {
         $question->stats_relation_id = $question->used_for_stats=='dependency' ? $data['stats_relation_id'] : null;
         $question->stats_answer_id = $question->used_for_stats=='dependency' ? $data['stats_answer_id'] : null;
         $question->stats_title_question = !empty($data['stats_title_question']) ? $data['stats_title_question'] : null;
-
+        $question->order_stats_answers_with_diez_as_they_are = !empty($data['order_stats_answers_with_diez_as_they_are']) ? $data['order_stats_answers_with_diez_as_they_are'] : null;
 
         if( $justCopy ) {
             $question->question_trigger = $data['question_trigger'];
