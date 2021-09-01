@@ -25,8 +25,6 @@ Route::any('suggest-dentist/{id?}', 				'CitiesController@getDentist');
 Route::get('custom-cookie', 						'SSOController@manageCustomCookie')->name('custom-cookie');
 Route::post('get-unseen-notifications-count', 		'SSOController@getUnseenNotificationsCount');
 
-Route::post('wait', 								'CitiesController@wait');
-
 Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin'] ], function () {
 	Route::get('/', 											'HomeController@list');
 	Route::get('home', 											'HomeController@list');

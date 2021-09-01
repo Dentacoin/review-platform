@@ -163,36 +163,6 @@ class CitiesController extends BaseController {
     	return Response::json($ret);
 	}
 
-
-	public function wait() {
-        $ret = [
-        	'success' => false
-        ];
-
-
-        $validator_arr = [
-            'email' => ['required', 'email'],
-            'name' => ['required']
-        ];
-        $validator = Validator::make(Request::all(), $validator_arr);
-
-        if ($validator->fails()) {
-            $msg = $validator->getMessageBag()->toArray();
-            $ret['messages'] = [];
-            foreach ($msg as $key => $value) {
-            	$ret['messages'][] = implode(', ', $value);
-            }
-        } else {
-        	$wait = new Wait;
-        	$wait->email = Request::input('email');
-        	$wait->name = Request::input('name');
-        	$wait->save();
-        	$ret['success'] = true;
-        }
-
-        return Response::json($ret);
-	}
-
 	public function getClinic($id=null) {
 
 		$joinclinic = trim(Request::input('joinclinic'));
