@@ -2434,6 +2434,24 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Answered questions count 11'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $startDate = Carbon::now()->addMonths(-1); //returns current day
+
+            $answered_questions_count = VoxAnswer::count();
+            
+            $vox_q_count = new VoxQuestionAnswered;
+            $vox_q_count->month = $startDate->month;
+            $vox_q_count->year = $startDate->year;
+            $vox_q_count->count = $answered_questions_count;
+            $vox_q_count->save();
+
+            echo 'Answered questions count cron 11 - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->dailyAt('07:25');
+
+
+        $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *");
