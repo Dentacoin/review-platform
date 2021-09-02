@@ -93,7 +93,7 @@
 			@endif
 		</div>
 
-		@php($questionAnswers = isset($question_answers_reordered) ? $question_answers_reordered : ($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true)))
+		@php($questionAnswers = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true))
 
 		@php($isInColumns = (!$question->allAnswersHaveImages() && count($questionAnswers) >= 8))
 
@@ -302,7 +302,7 @@
 			@endif
 		</div>
 
-		@php($questionAnswers = isset($question_answers_reordered) ? $question_answers_reordered : ($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true)))
+		@php($questionAnswers = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true))
 
 		<div class="answers answers-draggable">
 			@foreach($questionAnswers as $key => $answer)
@@ -368,7 +368,7 @@
 			@endif
 		</div>
 
-		@php($questionAnswers = isset($question_answers_reordered) ? $question_answers_reordered : ($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true)))
+		@php($questionAnswers = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true))
 
 		@php($isInColumns = (empty($answers_shown) && !$question->allAnswersHaveImages() && count($questionAnswers) >= 8))
 

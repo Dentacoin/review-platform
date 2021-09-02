@@ -275,13 +275,18 @@ $(document).ready(function(){
             var parent = $('.question-group .answers');
 
             if(parent.hasClass('in-columns')) {
-                parent.find('.answers-column').each( function() {
-                    var divs = $(this).children().not(".disabler-label");
+                // parent.find('.answers-column').each( function() {
+                //     var divs = $(this).children().not(".disabler-label");
 
-                    while (divs.length) {
-                        $(this).prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
-                    }
-                });
+                //     while (divs.length) {
+                //         $(this).prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+                //     }
+                // });
+
+                // console.log(parent.find('.answers-column').children().not(".disabler-label"));
+                parent.randomize(parent.find('.answers-column').children().not(".disabler-label"), parent.find('.answers-column').children().not(".disabler-label"));
+                answerOnQuestion();
+
             } else {
                 var divs = parent.children().not(".disabler-label");
 
@@ -755,3 +760,26 @@ $(document).ready(function(){
         }
     });
 });
+
+
+                  
+                
+(function($) {
+
+    $.fn.randomize = function(tree, childElem) {
+        return this.each(function() {
+            var $this = $(this);
+            if (tree) $this = $(this).find(tree);
+            var unsortedElems = $this.children(childElem);
+            var elems = unsortedElems.clone();
+
+            elems.sort(function() {
+            return (Math.round(Math.random()) - 0.5);
+            });
+
+            for (var i = 0; i < elems.length; i++)
+            unsortedElems.eq(i).replaceWith(elems[i]);
+        });
+    };
+
+})(jQuery);
