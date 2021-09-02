@@ -139,6 +139,7 @@ $phone: "screen and (max-width: 768px)";
 		z-index: 10;
 		left: -50px;
 		width: 810px;
+		height: auto;
 
 		@media screen and (max-width: 1400px) {
 	    	width: 710px;

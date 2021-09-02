@@ -28,7 +28,7 @@
 	    </div>
 
 	    <div class="signin-form-wrapper">
-	    	<img src="{{ url('img-trp/dentacoin-trusted-reviews-dentist-front-page.png') }}" alt="{{ trans('trp.alt-tags.index') }}">
+	    	<img src="{{ url('img-trp/dentacoin-trusted-reviews-dentist-front-page.png') }}" alt="{{ trans('trp.alt-tags.index') }}" width="320" height="332">
 	    	<div class="container clearfix">
 	    		<form class="signin-form tablet-fixes">
 
