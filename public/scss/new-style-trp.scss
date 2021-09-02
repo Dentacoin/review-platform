@@ -4105,33 +4105,29 @@ body.strength-pb {
 					    }
 					}
 
-					.slider-image {
+					.slider-real-image {
 						border-radius: 50%;
+						height: auto;
+					}
 
-						@media #{$phone} {
-							padding-top: 100%;
-						}
+					.tooltip-text {
+						position: absolute;
+						top: 15px;
+						left: 14px;
+						width: 18px;
+						height: 18px;
+						z-index: 100;
+					}
 
-						img {
-							top: -4px;
-							left: -4px;
-
-							@media #{$pc} {
-								top: -9px;
-								left: -9px;
-							}
-						}
-
-						.invited-dentist {
-							position: absolute;
-						    text-align: center;
-						    left: 0;
-						    right: 0;
-						    bottom: 0;
-						    margin-bottom: 0px;
-						    padding-bottom: 18px;
-						    margin-top: 0px;
-						}
+					.invited-dentist {
+						position: absolute;
+						text-align: center;
+						left: 0;
+						right: 0;
+						bottom: 0;
+						margin-bottom: 0px;
+						padding-bottom: 18px;
+						margin-top: 0px;
 					}
 				}
 

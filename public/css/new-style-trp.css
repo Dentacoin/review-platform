@@ -3763,27 +3763,25 @@ body.strength-pb {
               .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper::before {
                 width: 190.31px;
                 height: 190.31px; } }
-          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .slider-image {
-            border-radius: 50%; }
-            @media screen and (max-width: 768px) {
-              .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .slider-image {
-                padding-top: 100%; } }
-            .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .slider-image img {
-              top: -4px;
-              left: -4px; }
-              @media screen and (max-width: 1200px) {
-                .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .slider-image img {
-                  top: -9px;
-                  left: -9px; } }
-            .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .slider-image .invited-dentist {
-              position: absolute;
-              text-align: center;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              margin-bottom: 0px;
-              padding-bottom: 18px;
-              margin-top: 0px; }
+          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .slider-real-image {
+            border-radius: 50%;
+            height: auto; }
+          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .tooltip-text {
+            position: absolute;
+            top: 15px;
+            left: 14px;
+            width: 18px;
+            height: 18px;
+            z-index: 100; }
+          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .invited-dentist {
+            position: absolute;
+            text-align: center;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin-bottom: 0px;
+            padding-bottom: 18px;
+            margin-top: 0px; }
         @media screen and (max-width: 768px) {
           .index-gradient .flickity-oval .flickity .slider-wrapper:hover .slider-container {
             transform: none;
