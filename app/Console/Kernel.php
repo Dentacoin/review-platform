@@ -2438,7 +2438,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             $startDate = Carbon::now()->addMonths(-1); //returns current day
 
-            $answered_questions_count = VoxAnswer::count();
+            $answered_questions_count = VoxAnswer::whereNull('deleted_at')->count();
             
             $vox_q_count = new VoxQuestionAnswered;
             $vox_q_count->month = $startDate->month;
@@ -2448,7 +2448,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             echo 'Answered questions count cron 11 - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('07:25');
+        })->dailyAt('07:40');
 
 
         $schedule->call(function () {
