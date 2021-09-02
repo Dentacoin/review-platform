@@ -1847,16 +1847,12 @@ p.h2-bold {
           position: relative; }
           .popup.daily-poll .popup-inner .content .blue-button.sign {
             min-width: 320px;
-            position: absolute;
-            bottom: 20px;
-            right: 60px;
-            padding-left: 45px; }
+            position: relative;
+            margin-right: 5px;
+            padding-left: 45px !important; }
             @media screen and (max-width: 1000px) {
               .popup.daily-poll .popup-inner .content .blue-button.sign {
                 min-width: auto;
-                position: relative;
-                bottom: auto;
-                right: auto;
                 margin-top: 30px;
                 padding-left: 60px;
                 font-size: 16px; } }
@@ -1866,6 +1862,9 @@ p.h2-bold {
               left: 20px;
               top: 50%;
               transform: translateY(-50%); }
+              @media screen and (max-width: 1000px) {
+                .popup.daily-poll .popup-inner .content .blue-button.sign img {
+                  left: 11px; } }
           .popup.daily-poll .popup-inner .content .blue-button.next-poll {
             min-width: 170px;
             padding-right: 40px; }
@@ -1888,7 +1887,8 @@ p.h2-bold {
                   right: 6px; } }
         .popup.daily-poll .popup-inner .content .next-stat,
         .popup.daily-poll .popup-inner .content .see-stats,
-        .popup.daily-poll .popup-inner .content .browse-polls {
+        .popup.daily-poll .popup-inner .content .browse-polls,
+        .popup.daily-poll .popup-inner .content .all-polls {
           text-transform: uppercase;
           font-size: 18px;
           border: 1px solid #38ace5;
@@ -1905,9 +1905,9 @@ p.h2-bold {
           @media screen and (max-width: 1000px) {
             .popup.daily-poll .popup-inner .content .next-stat,
             .popup.daily-poll .popup-inner .content .see-stats,
-            .popup.daily-poll .popup-inner .content .browse-polls {
+            .popup.daily-poll .popup-inner .content .browse-polls,
+            .popup.daily-poll .popup-inner .content .all-polls {
               min-width: 190px;
-              padding-left: 20px;
               padding: 12px 16px;
               font-size: 14px;
               max-width: 190px;
@@ -1917,11 +1917,14 @@ p.h2-bold {
           .popup.daily-poll .popup-inner .content .see-stats:focus,
           .popup.daily-poll .popup-inner .content .see-stats:hover,
           .popup.daily-poll .popup-inner .content .browse-polls:focus,
-          .popup.daily-poll .popup-inner .content .browse-polls:hover {
+          .popup.daily-poll .popup-inner .content .browse-polls:hover,
+          .popup.daily-poll .popup-inner .content .all-polls:focus,
+          .popup.daily-poll .popup-inner .content .all-polls:hover {
             background-color: #f3faff; }
           .popup.daily-poll .popup-inner .content .next-stat img,
           .popup.daily-poll .popup-inner .content .see-stats img,
-          .popup.daily-poll .popup-inner .content .browse-polls img {
+          .popup.daily-poll .popup-inner .content .browse-polls img,
+          .popup.daily-poll .popup-inner .content .all-polls img {
             max-width: 28px;
             position: absolute;
             left: 15px;
@@ -1930,9 +1933,12 @@ p.h2-bold {
             @media screen and (max-width: 1000px) {
               .popup.daily-poll .popup-inner .content .next-stat img,
               .popup.daily-poll .popup-inner .content .see-stats img,
-              .popup.daily-poll .popup-inner .content .browse-polls img {
+              .popup.daily-poll .popup-inner .content .browse-polls img,
+              .popup.daily-poll .popup-inner .content .all-polls img {
                 max-width: 21px;
                 left: 7px; } }
+        .popup.daily-poll .popup-inner .content .all-polls {
+          min-width: auto; }
         .popup.daily-poll .popup-inner .content .see-stats {
           padding-left: 20px;
           min-width: 180px; }

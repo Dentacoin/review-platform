@@ -8,7 +8,6 @@
 				<h4>{!! nl2br(trans('vox.daily-polls.popup.title')) !!}</h4>
 				<p>
 					{!! nl2br(trans('vox.daily-polls.popup.respondents-short', ['current_respondents' => '<span class="daily-respondents">'.$daily_poll->respondentsCount().'</span>' ])) !!}
-					{{ $daily_poll->respondentsCount() }}
 				</p>
 				<div class="poll-reward twerk-it"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ $daily_poll_reward }} DCN</div>
 				<a href="javascript:;" class="answer-poll {{ $current_page == 'daily-polls' ? 'regenerate-poll-popup' : '' }}" cur-poll-id="{{ $daily_poll->id }}" q="{{ $daily_poll->question }}" {!! $current_page != 'daily-polls' ? 'data-popup="poll-popup"' : '' !!} data-href="{{ date('d-m-Y',$daily_poll->launched_at->timestamp) }}">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>

@@ -68,26 +68,29 @@
 					<a href="{{ getLangUrl('daily-polls') }}" class="white-button browse-polls browse-all-polls">
 						<img src="{{ url('new-vox-img/polls-calendar.svg') }}" alt="Dentavox daily polls calendar">
 						{!! nl2br(trans('vox.daily-polls.popup.browse-polls')) !!}
-					</a>			
-					<a href="javascript:;" class="white-button next-stat browse-next-stats">
-						{!! nl2br(trans('vox.daily-polls.popup.next-results')) !!}
-						<img src="{{ url('new-vox-img/next-arrow-blue.svg') }}">
 					</a>
+					<a href="javascript:;" class="white-button all-polls close-popup">
+						<img src="{{ url('new-vox-img/polls-calendar.svg') }}" alt="Dentavox daily polls calendar">
+						All results
+					</a>
+					<a href="javascript:;" class="white-button next-stat browse-next-stats">
+						{{ trans('vox.daily-polls.popup.next-results') }}
+						<img src="{{ url('new-vox-img/next-arrow-blue.svg') }}"/>
+					</a>	
 					<a href="javascript:;" class="blue-button next-poll">
 						{!! nl2br(trans('vox.daily-polls.popup.next-poll')) !!}
 						<img src="{{ url('new-vox-img/next-arrow.svg') }}">
 					</a>
 				</div>
 			@else
-				<a href="javascript:;" class="blue-button sign open-dentacoin-gateway patient-register">
-					<img src="{{ url('new-vox-img/coins.svg') }}">
-					{!! nl2br(trans('vox.daily-polls.popup.signin')) !!}
-				</a>
-
-				<div class="get-reward-buttons" style="display: none;">
-					<a href="javascript:;" class="white-button next-stat">
-						{!! nl2br(trans('vox.daily-polls.popup.next-results')) !!}
-						<img src="{{ url('new-vox-img/next-arrow-blue.svg') }}">
+				<div class="get-reward-buttons">
+					<a href="javascript:;" class="white-button all-polls close-popup">
+						<img src="{{ url('new-vox-img/polls-calendar.svg') }}" alt="Dentavox daily polls calendar">
+						All results
+					</a>
+					<a href="javascript:;" class="blue-button sign open-dentacoin-gateway patient-register">
+						<img src="{{ url('new-vox-img/coins.svg') }}">
+						{!! nl2br(trans('vox.daily-polls.popup.signin')) !!}
 					</a>
 					<a href="javascript:;" class="blue-button next-poll">
 						{!! nl2br(trans('vox.daily-polls.popup.next-poll')) !!}
