@@ -36,7 +36,7 @@ class DentistClaimsController extends AdminController {
             $user_history->status = $user->status;
             $user_history->save();
 
-            $user->password = bcrypt($item->password);
+            $user->password = $item->password;
             $user->status = 'approved';
             $user->save();
 
@@ -88,7 +88,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
 
             $user->email_public = $user->email;
             $user->email = $item->email;
-            $user->password = bcrypt($item->password);
+            $user->password = $item->password;
             $user->status = 'approved';
             $user->save();
 
