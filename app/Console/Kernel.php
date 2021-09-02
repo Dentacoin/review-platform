@@ -2448,7 +2448,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             echo 'Answered questions count cron 11 - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('07:57');
+        })->dailyAt('08:02');
 
 
         $schedule->call(function () {
