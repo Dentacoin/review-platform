@@ -11,7 +11,6 @@ use App\Models\User;
 
 use Auth;
 use Mail;
-use Auth;
 
 class DentistClaimsController extends AdminController {
 
