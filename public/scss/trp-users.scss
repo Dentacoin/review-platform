@@ -275,6 +275,7 @@ $phone: "screen and (max-width: 768px)";
 	    	height: 200px;
 	    	border-radius: 50%;
 	    	margin-right: 60px;
+			padding-top: 0px;
 
 	    	@media #{$pc} {
 	    		width: 120px;
@@ -293,13 +294,12 @@ $phone: "screen and (max-width: 768px)";
 	    	}
 
 			@media #{$phone} {
-				width: 100px;
-				height: 100px;
+				width: 130px;
+				height: 130px;
 				margin-right: auto;
 				margin-left: auto;
 				position: relative;
 				margin-bottom: 10px;
-				padding-top: 0px;
 			}
 
 	    	&:before {
@@ -350,6 +350,10 @@ $phone: "screen and (max-width: 768px)";
 				}
 	    	}
 
+			img {
+				border-radius: 50%;
+			}
+
 	    	.main-clinic {
 				position: absolute;
 				bottom: 0;
@@ -375,9 +379,9 @@ $phone: "screen and (max-width: 768px)";
 	    		}
 
 				@media #{$phone} {
-					font-size: 10px;
-					padding: 1px 18px 7px;
-					line-height: 10px;
+					font-size: 11px;
+					padding: 3px 18px 18px;
+					line-height: 12px;
 				}
 	    	}
 	    }

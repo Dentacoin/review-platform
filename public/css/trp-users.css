@@ -186,7 +186,8 @@
       min-width: 200px;
       height: 200px;
       border-radius: 50%;
-      margin-right: 60px; }
+      margin-right: 60px;
+      padding-top: 0px; }
       @media screen and (max-width: 1200px) {
         .information .profile-info .avatar {
           width: 120px;
@@ -203,13 +204,12 @@
           margin-top: 0px; } }
       @media screen and (max-width: 768px) {
         .information .profile-info .avatar {
-          width: 100px;
-          height: 100px;
+          width: 130px;
+          height: 130px;
           margin-right: auto;
           margin-left: auto;
           position: relative;
-          margin-bottom: 10px;
-          padding-top: 0px; } }
+          margin-bottom: 10px; } }
       .information .profile-info .avatar:before {
         content: '';
         position: absolute;
@@ -250,6 +250,8 @@
         @media screen and (max-width: 998px) {
           .information .profile-info .avatar::after {
             display: none; } }
+      .information .profile-info .avatar img {
+        border-radius: 50%; }
       .information .profile-info .avatar .main-clinic {
         position: absolute;
         bottom: 0;
@@ -273,9 +275,9 @@
             padding: 10px 22px 30px; } }
         @media screen and (max-width: 768px) {
           .information .profile-info .avatar .main-clinic {
-            font-size: 10px;
-            padding: 1px 18px 7px;
-            line-height: 10px; } }
+            font-size: 11px;
+            padding: 3px 18px 18px;
+            line-height: 12px; } }
     .information .profile-info .type {
       color: #676767;
       font-size: 20px; }

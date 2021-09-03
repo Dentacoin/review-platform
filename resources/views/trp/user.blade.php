@@ -224,8 +224,8 @@
 			@endif
 
     		<div class="view-profile clearfix">
-				<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');">
-					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;">
+				<div class="avatar">
+					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}">
 					@if($item->is_clinic && $item->branches->isNotEmpty() && $item->id == $item->mainBranchClinic->id)
 						<div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
 					@endif 
