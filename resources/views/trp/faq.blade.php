@@ -7,9 +7,9 @@
 			<h1>
 				{!! nl2br(trans('trp.page.faq.title')) !!}
 			</h1>
-			<p style="color: white; margin-top: 20px; font-size: 20px;">
+			{{-- <p style="color: white; margin-top: 20px; font-size: 20px;">
 				Trusted Reviews is the first Blockchain-based platform for detailed, verified and incentivized dental treatment reviews, developed by the Dentacoin Foundation.
-			</p>
+			</p> --}}
 		</div>
 	</div>
 
