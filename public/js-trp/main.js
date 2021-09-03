@@ -633,7 +633,6 @@ jQuery(document).ready(function($){
 			$('.popup').removeClass('active');
 			$('body').removeClass('popup-visible');
 		}
-
 	}
 
 	handleActivePopupFunctions =  function() {

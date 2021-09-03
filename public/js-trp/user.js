@@ -170,6 +170,14 @@ $(document).ready(function(){
         }
     });
 
+	//
+	//Lazy Load
+	//
+	lazyLoadInstance = new LazyLoad({
+	    elements_selector: "[data-src]"
+	    // ... more custom settings?
+	});
+
 
     if( getUrlParameter('tab') ) {
         $('.profile-tabs a[data-tab="'+getUrlParameter('tab')+'"]').trigger('click');
