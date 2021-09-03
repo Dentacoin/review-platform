@@ -204,8 +204,8 @@
           margin-top: 0px; } }
       @media screen and (max-width: 768px) {
         .information .profile-info .avatar {
-          width: 130px;
-          height: 130px;
+          width: 150px;
+          height: 150px;
           margin-right: auto;
           margin-left: auto;
           position: relative;
