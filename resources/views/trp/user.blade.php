@@ -577,20 +577,20 @@
 								@endif
 								
 								<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-									<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}" style=height: 30px;">
+									<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}" width="24" height="30">
 									<span>
 										{{ intval($review->upvotes) }}
 									</span>
 								</a>
 								<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes)) ? 'voted' : '' !!}" href="javascript:;">
-									<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}" style=height: 30px;">
+									<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}" width="24" height="30">
 									<span>
 										{{ intval($review->downvotes) }}
 									</span>
 								</a>
 
 								<a class="share-review" href="javascript:;" data-popup="popup-share" share-href="{{ $item->getLink() }}?review_id={{ $review->id }}">
-									<img src="{{ url('img-trp/share-review.png') }}" style=height: 30px;">
+									<img src="{{ url('img-trp/share-review.png') }}" width="24" height="30">
 									<span>
 										{!! nl2br(trans('trp.common.share')) !!}
 									</span>
