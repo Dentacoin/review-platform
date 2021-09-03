@@ -46,7 +46,7 @@
 
 	<div class="information flex">
 		<a href="javascript:;" class="share-button" data-popup="popup-share">
-			<img src="{{ url('img-trp/share.svg') }}">
+			<img src="{{ url('img-trp/share.svg') }}" width="16" height="18">
 			{!! nl2br(trans('trp.common.share')) !!}
 		</a>
 		@if(!empty($user) && $user->id!=$item->id && !empty($writes_review))
@@ -294,7 +294,7 @@
 					<div class="profile-details">
 						<a href="javascript:;" class="p scroll-to-map" map-tooltip="{{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }} ">
 							<div class="img">
-								<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
+								<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}" width="11" height="14">
 							</div>
 							{{ $item->city_name ? $item->city_name.', ' : '' }}
 							{{ $item->state_name ? $item->state_name.', ' : '' }} 
@@ -304,7 +304,7 @@
 						@if( $time = $item->getWorkHoursText() )
 							<div class="p">
 								<div class="img">
-									<img class="black-filter" src="{{ url('img-trp/open.png') }}">
+									<img class="black-filter" src="{{ url('img-trp/open.png') }}" width="13" height="14">
 								</div>
 								{!! $time !!}
 							</div>
@@ -312,7 +312,7 @@
 						@if( $item->phone )
 							<a class="p" href="tel:{{ $item->getFormattedPhone(true) }}">
 								<div class="img">
-									<img class="black-filter" src="{{ url('img-trp/phone.png') }}">
+									<img class="black-filter" src="{{ url('img-trp/phone.png') }}" width="14" height="14">
 								</div>
 								{{ $item->getFormattedPhone() }}
 							</a>
@@ -320,7 +320,7 @@
 						@if( $item->website )
 							<a class="p website-p" href="{{ $item->getWebsiteUrl() }}" target="_blank">
 								<div class="img">
-									<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
+									<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}" width="14" height="14">
 								</div>
 								<span>
 									{{ $item->website }}
@@ -347,7 +347,7 @@
 						@endif
 						@if($item->top_dentist_month)
 							<div class="top-dentist">
-								<img src="{{ url('img-trp/top-dentist.png') }}">
+								<img src="{{ url('img-trp/top-dentist.png') }}" width="16" height="16">
 								<span>
 									{!! trans('trp.common.top-dentist') !!}
 								</span>
@@ -366,19 +366,19 @@
 						<div class="p profile-socials">
 							@if(!empty($item->email))
 								<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
-									<img src="{{ url('img/envelope.svg') }}"/>
+									<img src="{{ url('img/envelope.svg') }}" width="15" height="15"/>
 								</a>
 							@else
 								@if($item->branches->isNotEmpty())
 									<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : ($item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email) }}">
-										<img src="{{ url('img/envelope.svg') }}"/>
+										<img src="{{ url('img/envelope.svg') }}" width="15" height="15"/>
 									</a>
 								@endif
 							@endif
 							@if( $item->socials )
 								@foreach($item->socials as $k => $v)
 									<a class="social" href="{{ $v }}" target="_blank">
-										<img src="{{ url('img/social-network/'.$k.'.svg') }}"/>
+										<img src="{{ url('img/social-network/'.$k.'.svg') }}" width="15" height="15"/>
 									</a>
 								@endforeach
 							@endif
