@@ -129,6 +129,14 @@
         bottom: auto;
         background: url("../img-trp/behind-dentist.png") 50% 50% no-repeat;
         background-size: contain; } }
+    .signin-form-wrapper img.mobile-image {
+      display: none; }
+      @media screen and (max-width: 768px) {
+        .signin-form-wrapper img.mobile-image {
+          display: inline-block; } }
+    @media screen and (max-width: 768px) {
+      .signin-form-wrapper img.desktop-image {
+        display: none; } }
   .signin-form-wrapper form {
     position: relative;
     top: -40px;

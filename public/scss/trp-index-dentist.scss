@@ -168,6 +168,21 @@ $phone: "screen and (max-width: 768px)";
 		    background: url('../img-trp/behind-dentist.png') 50% 50% no-repeat;
 		    background-size: contain;
 		}
+
+		&.mobile-image {
+			display: none;
+
+			@media #{$phone} {
+				display: inline-block;
+			}
+		}
+
+		&.desktop-image {
+
+			@media #{$phone} {
+				display: none;
+			}
+		}
     }
 
     form {
