@@ -225,7 +225,7 @@
 
     		<div class="view-profile clearfix">
 				<div class="avatar">
-					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}">
+					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" width="130" height="130">
 					@if($item->is_clinic && $item->branches->isNotEmpty() && $item->id == $item->mainBranchClinic->id)
 						<div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
 					@endif 
@@ -514,7 +514,7 @@
 
 							<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}" style="{{ !$review->verified ? 'display:none;' : '' }}">
 								{!! nl2br(trans('trp.common.trusted')) !!}
-								<img src="{{ url('img/info-white.svg') }}"/>
+								<img src="{{ url('img/info-white.svg') }}" width="15" height="15"/>
 							</div>
 
 			    			@if($review->title)
@@ -525,7 +525,7 @@
 
 							<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}"  style="{{ !$review->verified ? 'display:none;' : '' }}">
 								{!! nl2br(trans('trp.common.trusted')) !!}
-								<img src="{{ url('img/info-white.svg') }}"/>
+								<img src="{{ url('img/info-white.svg') }}" width="15" height="15"/>
 							</div>
 		    			</div>
 		    			<div class="review-rating">

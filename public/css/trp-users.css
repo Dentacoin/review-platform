@@ -251,7 +251,9 @@
           .information .profile-info .avatar::after {
             display: none; } }
       .information .profile-info .avatar img {
-        border-radius: 50%; }
+        border-radius: 50%;
+        width: auto;
+        height: auto; }
       .information .profile-info .avatar .main-clinic {
         position: absolute;
         bottom: 0;
@@ -355,7 +357,11 @@
       .information .phone-styles .claim-button {
         display: block !important; }
       .information .phone-styles .ratings {
-        margin-top: 0px; }
+        margin-top: 0px; } }
+    @media screen and (max-width: 768px) and (max-width: 768px) {
+      .information .phone-styles .ratings {
+        margin-top: 10px; } }
+  @media screen and (max-width: 768px) {
       .information .phone-styles .rating {
         margin-top: 10px;
         margin-bottom: 20px;
@@ -670,6 +676,9 @@
       .details-wrapper .trusted-sticker.mobile-sticker {
         display: inline-block;
         margin-left: 10px; } }
+    @media screen and (max-width: 768px) {
+      .details-wrapper .trusted-sticker.mobile-sticker img {
+        vertical-align: text-top; } }
   .details-wrapper .ratings {
     display: inline-block; }
     @media screen and (max-width: 768px) {

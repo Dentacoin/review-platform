@@ -352,6 +352,8 @@ $phone: "screen and (max-width: 768px)";
 
 			img {
 				border-radius: 50%;
+				width: auto;
+				height: auto;
 			}
 
 	    	.main-clinic {
@@ -493,6 +495,10 @@ $phone: "screen and (max-width: 768px)";
 
 			.ratings {
 				margin-top: 0px;
+
+				@media #{$phone} {
+					margin-top: 10px;
+				}
 			}
 
 			.rating {
@@ -961,6 +967,12 @@ $phone: "screen and (max-width: 768px)";
 			@media #{$phone} {
 				display: inline-block;
 				margin-left: 10px;
+			}
+
+			img {
+				@media #{$phone} {
+					vertical-align: text-top;
+				}
 			}
 		}
 	}
