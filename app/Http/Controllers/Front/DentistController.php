@@ -639,7 +639,6 @@ class DentistController extends FrontController {
             'js' => [
                 'user.js',
                 'search.js',
-                '../js/lazyload.min.js'
             ],
             'css' => [
                 'trp-users.css',
