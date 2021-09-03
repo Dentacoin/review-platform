@@ -115,8 +115,8 @@ $(document).ready(function(){
                         $('#loader-survey').hide();
                         $('#questions-box').html('');
                         $('#questions-box').prepend(data);
-                        answerOnQuestion();
                         hangleQuestionStructure();
+                        answerOnQuestion();
                         
                         $('html, body').animate({
                             scrollTop: $('body').offset().top
@@ -275,17 +275,7 @@ $(document).ready(function(){
             var parent = $('.question-group .answers');
 
             if(parent.hasClass('in-columns')) {
-                // parent.find('.answers-column').each( function() {
-                //     var divs = $(this).children().not(".disabler-label");
-
-                //     while (divs.length) {
-                //         $(this).prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
-                //     }
-                // });
-
-                // console.log(parent.find('.answers-column').children().not(".disabler-label"));
                 parent.randomize(parent.find('.answers-column').children().not(".disabler-label"), parent.find('.answers-column').children().not(".disabler-label"));
-                answerOnQuestion();
 
             } else {
                 var divs = parent.children().not(".disabler-label");
