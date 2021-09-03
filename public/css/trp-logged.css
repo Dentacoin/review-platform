@@ -1,0 +1,311 @@
+.strength-parent {
+  position: relative;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  z-index: 123; }
+  @media screen and (max-width: 992px) {
+    .strength-parent {
+      width: calc(100% - 16px); } }
+  .strength-parent .strength-button {
+    box-shadow: 0px 0 4px 0px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    background-color: white;
+    width: 66px;
+    height: 66px;
+    top: -33px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    cursor: pointer; }
+    .strength-parent .strength-button .down {
+      display: none; }
+    .strength-parent .strength-button img {
+      width: 16px;
+      position: absolute;
+      left: 50%;
+      top: 15px;
+      transform: translateX(-50%); }
+  .strength-parent.active .strength-button .up {
+    display: none; }
+  .strength-parent.active .strength-button .down {
+    display: block; }
+  .strength-parent.active .extra-title {
+    display: none; }
+  .strength-parent.active .stretching-box {
+    transition: all 0.3s ease;
+    opacity: 1;
+    z-index: 1; }
+  .strength-parent.in-profile {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 50px; }
+    @media screen and (max-width: 992px) {
+      .strength-parent.in-profile {
+        margin-bottom: 30px;
+        margin-top: 10px; } }
+    .strength-parent.in-profile .strength-wrapper {
+      border-radius: 0px;
+      box-shadow: 0px 0px 10px 2px #f3f3f3; }
+    .strength-parent.in-profile .strength-button {
+      display: none; }
+    .strength-parent.in-profile .stretching-box {
+      height: auto;
+      opacity: 1;
+      z-index: 0; }
+    .strength-parent.in-profile .extra-title {
+      display: none; }
+    .strength-parent.in-profile .stretching-box,
+    .strength-parent.in-profile .strength-flickity,
+    .strength-parent.in-profile .flickity-slider,
+    .strength-parent.in-profile .flickity-viewport {
+      border-radius: 0px; }
+  .strength-parent.fixed {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0px; }
+    @media screen and (max-width: 992px) {
+      .strength-parent.fixed {
+        width: calc(100% - 16px);
+        bottom: 3px; } }
+
+.strength-wrapper {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 0px 0 4px 0px rgba(0, 0, 0, 0.2);
+  position: relative;
+  padding-bottom: 40px;
+  border-radius: 10px;
+  background: white;
+  transition: all 0.3s ease;
+  position: relative; }
+  @media screen and (max-width: 992px) {
+    .strength-wrapper {
+      padding-bottom: 30px; } }
+  .strength-wrapper .extra-title {
+    font-size: 18px;
+    text-align: center;
+    font-weight: 300;
+    color: #333;
+    padding-top: 15px;
+    padding-bottom: 3px;
+    background: white; }
+    @media screen and (max-width: 992px) {
+      .strength-wrapper .extra-title {
+        font-size: 16px;
+        padding-bottom: 5px; } }
+  .strength-wrapper .stretching-box {
+    position: relative;
+    opacity: 0;
+    height: 0px;
+    transition: all 0.3s ease; }
+  .strength-wrapper .extra-title,
+  .strength-wrapper .stretching-box,
+  .strength-wrapper .strength-flickity,
+  .strength-wrapper .flickity-slider,
+  .strength-wrapper .flickity-viewport {
+    border-radius: 10px; }
+  .strength-wrapper .strength-flickity-slide {
+    width: 100%;
+    padding: 0px 50px;
+    border-radius: 10px; }
+    @media screen and (max-width: 992px) {
+      .strength-wrapper .strength-flickity-slide {
+        padding: 0px 25px; } }
+  .strength-wrapper h2 {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 20px;
+    text-transform: inherit; }
+    @media screen and (max-width: 992px) {
+      .strength-wrapper h2 {
+        font-size: 16px; } }
+    .strength-wrapper h2 a {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      text-transform: inherit; }
+      @media screen and (max-width: 992px) {
+        .strength-wrapper h2 a {
+          font-size: 16px; } }
+  .strength-wrapper .strength-box {
+    display: flex;
+    border: 1px solid #d3d3d3;
+    align-items: center; }
+    .strength-wrapper .strength-box .strength-image {
+      flex: 1;
+      max-width: 57px;
+      min-width: 57px;
+      padding: 8px 11px 8px 6px; }
+      .strength-wrapper .strength-box .strength-image img {
+        display: block; }
+    .strength-wrapper .strength-box .strength-desc {
+      flex: 1;
+      padding-right: 40px; }
+      @media screen and (max-width: 992px) {
+        .strength-wrapper .strength-box .strength-desc {
+          padding: 10px;
+          padding-left: 0px;
+          font-size: 14px; } }
+      .strength-wrapper .strength-box .strength-desc span {
+        color: #126585;
+        text-decoration: underline;
+        font-size: inherit; }
+        .strength-wrapper .strength-box .strength-desc span:hover {
+          color: #268db5; }
+  .strength-wrapper .strength-urls {
+    text-align: right;
+    margin: 15px 0px; }
+  .strength-wrapper .strength-scale-wrapper {
+    background-color: #e1e9ee;
+    margin: 0px 50px;
+    position: relative;
+    height: 13px;
+    margin-top: 15px; }
+    @media screen and (max-width: 992px) {
+      .strength-wrapper .strength-scale-wrapper {
+        margin-right: 30px;
+        margin-left: 30px;
+        height: 7px; } }
+    .strength-wrapper .strength-scale-wrapper .strength-divider {
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      background-color: white;
+      z-index: 1; }
+    .strength-wrapper .strength-scale-wrapper .strength-tick {
+      position: absolute;
+      width: 40px;
+      height: 44px;
+      top: 50%;
+      left: 0px;
+      transform: translateY(-50%);
+      margin-left: -20px;
+      background: url("../img-strength/tick.png") 50% 50% no-repeat;
+      background-size: contain;
+      z-index: 2; }
+      @media screen and (max-width: 992px) {
+        .strength-wrapper .strength-scale-wrapper .strength-tick {
+          width: 30px;
+          height: 34px;
+          margin-left: -15px; } }
+      .strength-wrapper .strength-scale-wrapper .strength-tick.zero {
+        background-image: url("../img-strength/tick-zero.png"); }
+    .strength-wrapper .strength-scale-wrapper .strength-star {
+      position: absolute;
+      width: 40px;
+      height: 44px;
+      top: 50%;
+      right: 0px;
+      transform: translateY(-50%);
+      margin-right: -20px;
+      background: url("../img-strength/star.png") 50% 50% no-repeat;
+      background-size: contain;
+      z-index: 1; }
+      @media screen and (max-width: 992px) {
+        .strength-wrapper .strength-scale-wrapper .strength-star {
+          width: 30px;
+          height: 34px;
+          margin-right: -15px; } }
+      .strength-wrapper .strength-scale-wrapper .strength-star.full {
+        background-image: url("../img-strength/star-full.png"); }
+    .strength-wrapper .strength-scale-wrapper .strength-scale {
+      width: 100%;
+      height: 13px;
+      overflow: hidden;
+      width: 100%;
+      height: 13px;
+      overflow: hidden;
+      position: absolute;
+      top: 0; }
+      @media screen and (max-width: 992px) {
+        .strength-wrapper .strength-scale-wrapper .strength-scale {
+          height: 7px; } }
+      .strength-wrapper .strength-scale-wrapper .strength-scale .strength-scale-inner {
+        background: url("../img-strength/gradient.jpg") 0% 50% no-repeat;
+        background-size: cover;
+        height: 13px;
+        width: 100%; }
+        @media screen and (max-width: 992px) {
+          .strength-wrapper .strength-scale-wrapper .strength-scale .strength-scale-inner {
+            height: 7px; } }
+  .strength-wrapper .button {
+    font-size: 16px;
+    padding: 6px 20px;
+    color: white !important; }
+    .strength-wrapper .button.completed {
+      background-color: #bebebe;
+      position: relative;
+      padding-left: 36px; }
+      .strength-wrapper .button.completed:after {
+        content: '';
+        position: absolute;
+        background-image: url("../img-strength/button-tick.png");
+        background-size: contain;
+        width: 17px;
+        height: 17px;
+        left: 10px; }
+    .strength-wrapper .button.app-store {
+      width: 102px;
+      height: 30px;
+      padding: 0px;
+      display: inline-block;
+      background-position: 50%;
+      border-radius: 3px;
+      background-size: contain; }
+      @media screen and (max-width: 374px) {
+        .strength-wrapper .button.app-store {
+          width: 72px;
+          height: 22px; } }
+      .strength-wrapper .button.app-store.android {
+        background-image: url("../img-strength/google-play.png"); }
+      .strength-wrapper .button.app-store.ios {
+        background-image: url("../img-strength/ios-app-store.png"); }
+  .strength-wrapper .strenght-progress {
+    position: absolute;
+    bottom: 20px;
+    left: 50px; }
+    @media screen and (max-width: 992px) {
+      .strength-wrapper .strenght-progress {
+        left: 25px; } }
+    @media screen and (max-width: 992px) {
+      .strength-wrapper .strenght-progress p {
+        font-size: 12px; } }
+    .strength-wrapper .strenght-progress span {
+      font-weight: bold;
+      font-size: 18px; }
+      @media screen and (max-width: 992px) {
+        .strength-wrapper .strenght-progress span {
+          font-size: 14px; } }
+  .strength-wrapper .flickity-prev-next-button {
+    width: 19px !important;
+    height: 24px !important;
+    top: 48% !important;
+    background-size: 13px !important; }
+    .strength-wrapper .flickity-prev-next-button .flickity-button-icon {
+      display: none; }
+    .strength-wrapper .flickity-prev-next-button.previous {
+      background: url("../img-strength/arrow-left.png") 50% 100% no-repeat;
+      left: 25px !important; }
+      @media screen and (max-width: 992px) {
+        .strength-wrapper .flickity-prev-next-button.previous {
+          left: 7px !important; } }
+    .strength-wrapper .flickity-prev-next-button.next {
+      background: url("../img-strength/arrow-right.png") 50% 0% no-repeat;
+      right: 25px !important; }
+      @media screen and (max-width: 992px) {
+        .strength-wrapper .flickity-prev-next-button.next {
+          right: 7px !important; } }
+    .strength-wrapper .flickity-prev-next-button:hover.previous {
+      background-position: 50% 0%;
+      outline: none; }
+    .strength-wrapper .flickity-prev-next-button:hover.next {
+      background-position: 50% 100%;
+      outline: none; }

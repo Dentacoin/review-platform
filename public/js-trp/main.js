@@ -97,6 +97,36 @@ jQuery(document).ready(function($){
 
     });
 
+	handlePopups = function(id) {
+		var dataPopupClick = function(e) {
+			showPopup( $(this).attr('data-popup'), null, e );
+		}
+
+		var dataPopupClickLogged = function(e) {
+			if( user_id ) {
+				showPopup( $(this).attr('data-popup-logged'), null, e );				
+			} else {
+				if(dentacoin_down) {
+		    		showPopup('failed-popup');
+		    	} else {
+					$.event.trigger({type: 'openPatientRegister'});
+
+					$(document).on('dentacoinLoginGatewayLoaded', function (event) {
+						var cta = $('.dentacoin-login-gateway-container .cta');
+						cta.show();
+						for(i=0;i<3;i++) {
+							cta.fadeTo('slow', 0).fadeTo('slow', 1);
+						}
+			        });
+			    }
+			}
+		}
+
+		$('[data-popup]').off('click').click( dataPopupClick );
+		$('[data-popup-logged]').off('click').click( dataPopupClickLogged );
+	}
+	handlePopups();
+
     modernFieldsUpdate = function() {
 	    $('.modern-input').focus( function() {
 	    	$(this).closest('.modern-field').addClass('active');
@@ -288,6 +318,16 @@ jQuery(document).ready(function($){
 						        $(this).val($(this).val().toLowerCase());
 						    });
 						}
+
+						if ($('.popup.active').length) {
+				
+							var scss_to_load = $('.popup.active').attr('scss-load');
+							console.log(scss_to_load);
+							
+							if (typeof scss_to_load !== 'undefined' && scss_to_load !== false && !$('#'+scss_to_load+'-scss').length) {
+								$('head').append('<link rel="stylesheet" id="'+scss_to_load+'-scss" type="text/css" href="'+window.location.origin+'/css/'+scss_to_load+'.css">');
+							}
+						}
 	                }
 	            },
 	            error: function(data) {
@@ -438,7 +478,6 @@ jQuery(document).ready(function($){
 
 					} );
 
-
 					if(!$('#search-map').attr('worldwide')) {
 						if( $('#map-results-popup .result-container[lat]').length ) {
 							search_map.fitBounds(bounds);
@@ -463,8 +502,8 @@ jQuery(document).ready(function($){
 					if(search_map.getZoom() > 16) {
 						search_map.setZoom(16);
 					}
+				});
 
-				} );
 			} else if($('.popup.active').attr('id')=='popup-wokring-time') {
 
 				if($('.popup-wokring-time').length && $('#popup-wokring-time').is('[empty-hours]')) {
@@ -506,6 +545,16 @@ jQuery(document).ready(function($){
 				$('body').addClass('popup-visible');
 			}
 		}
+
+		if ($('.popup.active').length) {
+
+			var scss_to_load = $('.popup.active').attr('scss-load');
+			console.log(scss_to_load);
+			
+			if (typeof scss_to_load !== 'undefined' && scss_to_load !== false && !$('#'+scss_to_load+'-scss').length) {
+				$('head').append('<link rel="stylesheet" id="'+scss_to_load+'-scss" type="text/css" href="'+window.location.origin+'/css/'+scss_to_load+'.css">');
+			}
+		}
 	}
 
 	closePopup = function() {
@@ -513,7 +562,6 @@ jQuery(document).ready(function($){
 		var custom_widget_popup = false;
 		var existing_dentist = false;
 		var invite_popup = false;
-		var verification_working_time = false;
 
 		if($('#select-reviews-popup').hasClass('active')) {
 			custom_widget_popup = true;
@@ -587,36 +635,6 @@ jQuery(document).ready(function($){
 		}
 
 	}
-
-	handlePopups = function(id) {
-		var dataPopupClick = function(e) {
-			showPopup( $(this).attr('data-popup'), null, e );
-		}
-
-		var dataPopupClickLogged = function(e) {
-			if( user_id ) {
-				showPopup( $(this).attr('data-popup-logged'), null, e );				
-			} else {
-				if(dentacoin_down) {
-		    		showPopup('failed-popup');
-		    	} else {
-					$.event.trigger({type: 'openPatientRegister'});
-
-					$(document).on('dentacoinLoginGatewayLoaded', function (event) {
-						var cta = $('.dentacoin-login-gateway-container .cta');
-						cta.show();
-						for(i=0;i<3;i++) {
-							cta.fadeTo('slow', 0).fadeTo('slow', 1);
-						}
-			        });
-			    }
-			}
-		}
-
-		$('[data-popup]').off('click').click( dataPopupClick );
-		$('[data-popup-logged]').off('click').click( dataPopupClickLogged );
-	}
-	handlePopups();
 
 	handleActivePopupFunctions =  function() {
 		modernFieldsUpdate();

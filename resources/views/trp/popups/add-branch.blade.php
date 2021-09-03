@@ -1,4 +1,4 @@
-<div class="popup fixed-popup" id="popup-branch">
+<div class="popup fixed-popup" id="popup-branch" scss-load="trp-popup-branch">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">

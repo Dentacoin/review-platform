@@ -1,4 +1,4 @@
-<div class="popup fixed-popup active removable" id="popup-share">
+<div class="popup fixed-popup active removable" id="popup-share" scss-load="trp-popup-share">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">

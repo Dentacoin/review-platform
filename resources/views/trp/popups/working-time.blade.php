@@ -1,6 +1,6 @@
 <!-- if change this, also change in Waiting for approval popup -->
 
-<div class="popup fixed-popup popup-wokring-time" id="popup-wokring-time" {!! empty(strip_tags($user->getWorkHoursText())) ? 'empty-hours' : '' !!}>
+<div class="popup fixed-popup popup-wokring-time" id="popup-wokring-time" {!! empty(strip_tags($user->getWorkHoursText())) ? 'empty-hours' : '' !!} scss-load="trp-popup-working-time">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">

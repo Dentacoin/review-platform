@@ -1,3 +1,179 @@
+.index-gradient {
+  padding-bottom: 1px; }
+  .index-gradient .main-top {
+    background: none;
+    padding-bottom: 0px;
+    margin-bottom: 7px; }
+    @media screen and (max-width: 345px) {
+      .index-gradient .main-top {
+        margin-bottom: 27px; } }
+  .index-gradient .home-search-form {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    background: transparent;
+    margin: 0 auto;
+    padding-top: 100px; }
+    @media screen and (max-width: 768px) {
+      .index-gradient .home-search-form {
+        padding-top: 70px;
+        top: auto !important; } }
+    @media screen and (max-width: 768px) {
+      .index-gradient .home-search-form form {
+        margin-bottom: 0px; } }
+  .index-gradient .flickity-oval {
+    background: none; }
+    .index-gradient .flickity-oval::after {
+      display: none; }
+    @media screen and (max-width: 768px) {
+      .index-gradient .flickity-oval .container {
+        padding: 0px; } }
+    .index-gradient .flickity-oval .container .slider-right {
+      position: absolute;
+      right: 18px;
+      background: url(../img-trp/slider-new-arrow-right.png) 50% 50% no-repeat;
+      width: 41px;
+      height: 112px;
+      top: 50%;
+      transform: translateY(-50%); }
+      @media screen and (max-width: 998px) {
+        .index-gradient .flickity-oval .container .slider-right {
+          right: -4px; } }
+      @media screen and (max-width: 768px) {
+        .index-gradient .flickity-oval .container .slider-right {
+          display: none; } }
+    .index-gradient .flickity-oval .container .slider-left {
+      position: absolute;
+      left: 18px;
+      background: url(../img-trp/slider-new-arrow-left.png) 50% 50% no-repeat;
+      width: 41px;
+      height: 112px;
+      top: 50%;
+      transform: translateY(-50%); }
+      @media screen and (max-width: 998px) {
+        .index-gradient .flickity-oval .container .slider-left {
+          left: -4px; } }
+      @media screen and (max-width: 768px) {
+        .index-gradient .flickity-oval .container .slider-left {
+          display: none; } }
+    .index-gradient .flickity-oval .flickity {
+      position: relative;
+      height: 492px;
+      overflow-y: hidden;
+      overflow-x: scroll;
+      padding-bottom: 30px;
+      padding-top: 30px;
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */ }
+      @media screen and (max-width: 768px) {
+        .index-gradient .flickity-oval .flickity {
+          height: 432px; } }
+      .index-gradient .flickity-oval .flickity::-webkit-scrollbar {
+        display: none; }
+      .index-gradient .flickity-oval .flickity .index-slider {
+        position: absolute;
+        width: 3120px;
+        height: 100%; }
+      .index-gradient .flickity-oval .flickity .flickity-prev-next-button {
+        width: 41px !important;
+        height: 112px !important; }
+      .index-gradient .flickity-oval .flickity .slider-wrapper {
+        max-width: 220px;
+        padding: 0px;
+        margin: 0px 20px;
+        float: left; }
+        @media screen and (max-width: 1200px) {
+          .index-gradient .flickity-oval .flickity .slider-wrapper {
+            max-width: 178px; } }
+        @media screen and (max-width: 998px) {
+          .index-gradient .flickity-oval .flickity .slider-wrapper {
+            max-width: 298px; } }
+        @media screen and (max-width: 768px) {
+          .index-gradient .flickity-oval .flickity .slider-wrapper {
+            max-width: 220px; } }
+        .index-gradient .flickity-oval .flickity .slider-wrapper .slider-inner {
+          position: relative;
+          border-radius: 5px;
+          height: 100%;
+          display: flex;
+          flex-direction: column; }
+        .index-gradient .flickity-oval .flickity .slider-wrapper .slider-container {
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px; }
+        .index-gradient .flickity-oval .flickity .slider-wrapper:hover .slider-container {
+          border-bottom-left-radius: 0px;
+          border-bottom-right-radius: 0px; }
+        .index-gradient .flickity-oval .flickity .slider-wrapper:hover .slider-inner {
+          box-shadow: 0px 0px 33px -2px rgba(0, 0, 0, 0.4); }
+        .index-gradient .flickity-oval .flickity .slider-wrapper .has-review-image {
+          position: absolute;
+          width: 70px;
+          z-index: 10;
+          right: -13px;
+          top: -13px; }
+        .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper {
+          position: relative; }
+          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            width: 190.31px;
+            height: 190.31px;
+            background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%;
+            z-index: 1; }
+            @media screen and (max-width: 1200px) {
+              .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper::before {
+                width: 147.05px;
+                height: 148.05px; } }
+            @media screen and (max-width: 998px) {
+              .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper::before {
+                width: 267.19px;
+                height: 268.19px; } }
+            @media screen and (max-width: 768px) {
+              .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper::before {
+                width: 190.31px;
+                height: 190.31px; } }
+          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .slider-real-image {
+            border-radius: 50%;
+            height: auto; }
+          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .tooltip-text {
+            position: absolute;
+            top: 15px;
+            left: 14px;
+            width: 18px;
+            height: 18px;
+            z-index: 100; }
+          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .invited-dentist {
+            position: absolute;
+            text-align: center;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin-bottom: 0px;
+            padding-bottom: 18px;
+            margin-top: 0px; }
+        @media screen and (max-width: 768px) {
+          .index-gradient .flickity-oval .flickity .slider-wrapper:hover .slider-container {
+            transform: none;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px; } }
+        .index-gradient .flickity-oval .flickity .slider-wrapper .ratings {
+          display: flex;
+          align-items: center; }
+          @media screen and (max-width: 1200px) {
+            .index-gradient .flickity-oval .flickity .slider-wrapper .ratings {
+              flex-direction: column; } }
+          @media screen and (max-width: 998px) {
+            .index-gradient .flickity-oval .flickity .slider-wrapper .ratings {
+              flex-direction: unset; } }
+          .index-gradient .flickity-oval .flickity .slider-wrapper .ratings .rating {
+            margin-left: 3px; }
+
 @media screen and (max-width: 620px) {
   .main-box {
     top: 70px !important; } }
@@ -318,3 +494,25 @@
       font-size: 10px;
       position: relative;
       top: -2px; }
+
+#change-dentist-popup .popup-inner {
+  padding-bottom: 40px; }
+#change-dentist-popup h2 {
+  font-size: 42px;
+  margin-bottom: 25px; }
+  @media screen and (max-width: 768px) {
+    #change-dentist-popup h2 {
+      font-size: 32px; } }
+  #change-dentist-popup h2 img {
+    width: 25px; }
+    @media screen and (max-width: 768px) {
+      #change-dentist-popup h2 img {
+        max-width: 15px; } }
+#change-dentist-popup .checkbox-label {
+  text-align: left; }
+#change-dentist-popup .modern-field {
+  margin-bottom: 10px; }
+#change-dentist-popup button {
+  margin-top: 45px;
+  background-color: #46afda;
+  padding: 13px 65px; }

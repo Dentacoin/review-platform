@@ -2,7 +2,7 @@ $pc: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 998px)";
 $phone: "screen and (max-width: 768px)";
 
-
+@import 'trp-index-flickity';
 
 .main-box {
 
@@ -452,5 +452,43 @@ $phone: "screen and (max-width: 768px)";
 			position: relative;
 			top: -2px;
 		}
+	}
+}
+
+#change-dentist-popup {
+
+	.popup-inner {
+		padding-bottom: 40px;
+	}
+
+	h2 {
+		font-size: 42px;
+		margin-bottom: 25px;
+
+		@media #{$phone} {
+			font-size: 32px;
+		}
+
+		img {
+			width: 25px;
+
+			@media #{$phone} {
+				max-width: 15px;
+			}
+		}
+	}
+
+	.checkbox-label {
+		text-align: left;
+	}
+
+	.modern-field {
+		margin-bottom: 10px;
+	}
+
+	button {
+		margin-top: 45px;
+	    background-color: #46afda;
+	    padding: 13px 65px;
 	}
 }

@@ -971,3 +971,12 @@ textarea.input {
     color: #888888; }
   .modern-radios.has-error .radio-label label {
     border-color: #ffd7d7; }
+
+.green-text {
+  color: #14cab8; }
+
+.gray-text {
+  color: #777777; }
+
+.blue-text {
+  color: #14cab8; }

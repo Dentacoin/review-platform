@@ -1,0 +1,126 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+#popup-branch {
+	z-index: 999;
+
+	.popup-inner {
+		width: 770px;
+		margin-left: auto;
+		margin-right: auto;
+
+		@media #{$tablet} {
+			width: 100%;
+		}
+
+		.bottom-gray-border {
+			height: 1px;
+			border-bottom: 3px solid #eeeeee;
+			margin-bottom: 35px;
+		}
+
+		.branch-content {
+			padding: 0px 20px;
+
+			@media #{$phone} {
+				padding: 0px; 
+			}
+
+			.last-step-flex {
+				margin-bottom: 35px;
+
+				.col {
+					margin-right: 20px;
+				}
+			}
+
+			.submit-branch-button,
+			.next-branch-button {
+				width: 100%;
+				display: block;
+				max-width: 214px;
+				margin-left: auto;
+				text-align: center;
+				background-color: #0cafd4;
+				padding: 8px 20px;
+				font-size: 23px;
+
+				@media #{$phone} {
+					font-size: 18px;
+				}
+			}
+
+			.prev-branch-button {
+				display: block;
+				max-width: 214px;
+				margin-right: auto;
+				text-align: center;
+				background-color: #e9e9e9;
+				padding: 8px 20px;
+				font-size: 23px;
+				color: #333;
+
+				@media #{$phone} {
+					font-size: 18px;
+				}
+			}
+
+			.image-label {
+				width: 170px;
+    			height: 170px;
+    			margin-left: auto;
+
+    			@media #{$phone} {
+    				width: 110px;
+				    height: 110px;
+    			}
+			}
+
+			.phone-code-holder {
+				margin-top: 20px;
+			    display: block;
+			    margin-right: 5px;
+
+			    @media #{$tablet} {
+    				margin-top: 13px;
+    			}
+			}
+
+			.max-size-label {
+				max-width: 170px;
+				margin-left: auto;
+				margin-top: 10px;
+
+				@media #{$phone} {
+					font-size: 14px;
+					max-width: 110px;
+				}
+
+				svg {
+					max-width: 30px;
+				    margin-right: 10px;
+				    vertical-align: sub;
+
+				    @media #{$phone} {
+				    	max-width: 15px;
+    					margin-right: 5px;
+				    }
+				}
+			}
+
+			.checkbox-question {
+				max-width: 200px;
+				margin-bottom: 7px;
+			}
+
+			.checkbox-label {
+				text-align: left;
+
+				.checkbox-square {
+					margin-top: 4px;
+				}
+			}
+		}
+	}
+}

@@ -1,4 +1,4 @@
-<div class="popup fixed-popup popup-with-background social-profile-popup close-on-shield" id="social-profile-popup">
+<div class="popup fixed-popup popup-with-background social-profile-popup close-on-shield" id="social-profile-popup" scss-load="trp-popup-social-profile">
 	<div class="popup-inner inner-white">
 		
 		<div class="popup-pc-buttons">

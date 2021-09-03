@@ -1,0 +1,106 @@
+.verification-popup.fixed-popup .popup-inner {
+  padding: 40px 60px;
+  box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8); }
+  @media screen and (max-width: 768px) {
+    .verification-popup.fixed-popup .popup-inner {
+      padding: 20px 30px; } }
+  .verification-popup.fixed-popup .popup-inner .close-popup {
+    position: absolute;
+    right: 15px;
+    top: 15px; }
+    .verification-popup.fixed-popup .popup-inner .close-popup i {
+      font-size: 25px;
+      color: #424242; }
+  .verification-popup.fixed-popup .popup-inner .alert {
+    margin-bottom: 20px; }
+  .verification-popup.fixed-popup .popup-inner .verification-content {
+    text-align: center;
+    padding: 20px 80px 0px; }
+    @media screen and (max-width: 998px) {
+      .verification-popup.fixed-popup .popup-inner .verification-content {
+        padding: 20px 20px 0px; } }
+    @media screen and (max-width: 768px) {
+      .verification-popup.fixed-popup .popup-inner .verification-content {
+        padding: 0px; } }
+    .verification-popup.fixed-popup .popup-inner .verification-content img {
+      max-height: 80px;
+      margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .verification-popup.fixed-popup .popup-inner .verification-content img {
+          max-height: 50px; } }
+    .verification-popup.fixed-popup .popup-inner .verification-content h2 {
+      font-weight: bold;
+      text-transform: uppercase;
+      color: black;
+      margin-bottom: 25px; }
+      @media screen and (max-width: 768px) {
+        .verification-popup.fixed-popup .popup-inner .verification-content h2 {
+          margin-top: 0px; } }
+    .verification-popup.fixed-popup .popup-inner .verification-content h4 {
+      color: #333333; }
+      @media screen and (max-width: 768px) {
+        .verification-popup.fixed-popup .popup-inner .verification-content h4 {
+          font-size: 16px;
+          margin-bottom: 25px; } }
+  .verification-popup.fixed-popup .popup-inner #clinic-add-team .popup-title {
+    margin-right: -125px;
+    margin-left: -125px; }
+    @media screen and (max-width: 998px) {
+      .verification-popup.fixed-popup .popup-inner #clinic-add-team .popup-title {
+        margin-right: -80px;
+        margin-left: -80px; } }
+  .verification-popup.fixed-popup .popup-inner #clinic-add-team form {
+    margin-bottom: 30px; }
+    .verification-popup.fixed-popup .popup-inner #clinic-add-team form .flex {
+      margin: 0px -10px; }
+    .verification-popup.fixed-popup .popup-inner #clinic-add-team form .col {
+      margin: 0px 10px; }
+  .verification-popup.fixed-popup .popup-inner .info {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center; }
+    .verification-popup.fixed-popup .popup-inner .info img {
+      margin-right: 5px; }
+  .verification-popup.fixed-popup .popup-inner .verification-info {
+    border-top: 1px solid black;
+    padding: 30px 65px 0px; }
+    @media screen and (max-width: 998px) {
+      .verification-popup.fixed-popup .popup-inner .verification-info {
+        padding: 30px 20px 0px; } }
+    @media screen and (max-width: 768px) {
+      .verification-popup.fixed-popup .popup-inner .verification-info {
+        padding: 20px 0px 0px; } }
+    .verification-popup.fixed-popup .popup-inner .verification-info h2 {
+      color: black;
+      font-weight: bold;
+      margin-bottom: 40px; }
+      @media screen and (max-width: 768px) {
+        .verification-popup.fixed-popup .popup-inner .verification-info h2 {
+          margin-top: 0px;
+          margin-bottom: 20px; } }
+  .verification-popup.fixed-popup .popup-inner form .big-button {
+    padding: 15px 90px; }
+    @media screen and (max-width: 998px) {
+      .verification-popup.fixed-popup .popup-inner form .big-button {
+        padding: 9px 70px; } }
+  .verification-popup.fixed-popup .popup-inner form .button-white {
+    text-align: center; }
+  .verification-popup.fixed-popup .popup-inner form .invite-clinic-buttons {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-bottom: 25px;
+    border-bottom: 1px solid black;
+    margin-bottom: 30px;
+    display: flex; }
+    .verification-popup.fixed-popup .popup-inner form .invite-clinic-buttons .col {
+      flex: 1; }
+      .verification-popup.fixed-popup .popup-inner form .invite-clinic-buttons .col:first-child {
+        margin-right: 5px; }
+    .verification-popup.fixed-popup .popup-inner form .invite-clinic-buttons .button {
+      padding: 15px;
+      width: 100%;
+      display: block;
+      border: 2px solid #126585; }
+      @media screen and (max-width: 998px) {
+        .verification-popup.fixed-popup .popup-inner form .invite-clinic-buttons .button {
+          padding: 7px; } }

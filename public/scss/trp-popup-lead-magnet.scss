@@ -1,0 +1,322 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+#popup-lead-magnet {
+    .popup-inner {
+        width: 850px;
+        padding: 30px 130px;
+
+        @media #{$tablet} {
+            width: 100%;
+        }
+
+        @media #{$phone} {
+            padding: 20px;
+        }
+
+        h2 {
+            padding: 0px 20px;
+        }
+
+        .button {
+            padding: 12px 49px;
+            background-color: #0cafd4;
+            -webkit-appearance: none;
+        }
+
+        .first-form {
+            border-top: 3px solid;
+            border-color: #eeeeee;
+            padding-top: 30px;
+
+            @media #{$phone} {
+                padding-top: 20px;
+            }
+
+            .modern-field {
+                padding: 0px 20px;
+
+                @media #{$phone} {
+                    padding: 0px;
+                }
+            }
+
+            .ajax-alert {
+                margin-right: 20px;
+                margin-left: 20px;
+
+                @media #{$phone} {
+                    margin-left: 0px;
+                    margin-right: 0px;
+                }
+            }
+
+            .checkbox-label {
+                text-align: left;
+                padding: 0px 20px;
+                margin-top: -20px;
+                margin-bottom: 30px;
+
+                @media #{$phone} {
+                    margin-top: -10px;
+                    padding: 0px;
+                }
+            }
+        }
+
+        .popup-tabs.colorful-tabs {
+            @media #{$phone} {
+                display: flex;
+            }
+        }
+
+        .modern-field {
+            .modern-input {
+                border-width: 1px;
+                border-radius: 8px;
+            }
+        }
+
+        .flickity-magnet {
+            margin: 0px -130px;
+
+            @media #{$phone} {
+                   margin: 0px -20px;
+               }
+
+            .flickity-viewport {
+
+                .answer-radios-magnet {
+                    width: 100%;
+                    text-align: center;
+
+                    p {
+                        font-size: 18px;
+                        font-weight: 300;
+                        margin-bottom: 19px;	
+                    }
+
+                    label {
+                        text-align: left;
+                        display: block;
+                        padding: 10px 14px;
+                        padding-right: 23px;
+                        margin: 1px auto;
+                        border: 1px solid #d6d6d7;
+                        border-radius: 8px;
+                        font-size: 18px;
+                        color: #333;
+                        cursor: pointer;
+                        margin-bottom: 15px;
+                        position: relative;
+
+                        &.disabled-label {
+                            background-color: #f7f7f7;
+                        }
+
+                        @media #{$phone} {
+                            font-size: 16px;
+                            padding: 10px;
+                        }
+
+                        input {
+                            display: none;
+                        }
+
+                        .checkbox-square {
+                            width: 17px;
+                            height: 17px;
+                            border: 1px solid #dddddd;
+                            display: inline-block;
+                            background-color: white;
+                            color: #126585;
+                            line-height: 26px;
+                            text-align: center;
+                            border-radius: 20%;
+                            font-weight: bold;
+                            margin-right: 5px;
+                            font-size: 0px;
+                    
+                            @media #{$phone} {
+                                width: 14px;
+                                height: 14px;
+                                line-height: 23px;
+                            
+                            }
+                        }
+
+                        i {
+                            font-size: 23px;
+                            vertical-align: middle;
+                            margin-right: 6px;
+                            color: #dddddd;
+
+                            @media #{$phone} {
+                                font-size: 19px;
+                            }
+                        }
+
+                        .modern-radio {
+                            min-width: 26px;
+                            width: 26px;
+                            height: 26px;
+                            border-color: #979797;
+                            background-color: #ebebeb;
+                            margin-right: 9px;
+                            border-radius: 50%;
+                            border: 1px solid #ccc;
+                            display: inline-block;
+                            position: relative;
+                            vertical-align: middle;
+
+                            @media #{$phone} {
+                                min-width: 20px;
+                                width: 20px;
+                                height: 20px;
+                                margin-right: 5px;
+                            }
+
+                            span {
+                                position: absolute;
+                                border-radius: 50%;
+                                top: 50%;
+                                left: 50%;
+                                transform: translateX(-50%) translateY(-50%);
+                                width: 14px;
+                                height: 14px;
+
+                                @media #{$phone} {
+                                    width: 11px;
+                                    height: 11px;
+                                }
+                            }
+                        }
+
+                        &.active {
+                            .modern-radio {
+                                span {
+                                    background-color: #126585;
+                                }
+                            }
+                            
+                            .checkbox-square {
+                                border-color: #126585;
+                                font-size: 13px;
+                                line-height: 18px;
+                    
+                                @media #{$phone} {
+                                    line-height: 13px;
+                                }
+                            }
+
+                            i {
+                                color: #126585;
+
+                                &:before {
+                                    content: '\f14a';
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .answer-question {
+                    padding: 20px 130px;
+                    background-color: #eeeeee;
+
+                    @media #{$phone} {
+                        padding: 10px 20px;
+                        min-height: 103px;
+                    }
+
+                    h4 {
+                        font-weight: bold;
+                        text-align: center;
+
+                        @media #{$phone} {
+                            font-size: 19px;
+                        }
+                    }
+                }
+
+                .buttons-list {
+                    margin-top: 20px;
+                    padding: 0px 130px;
+                    display: inline-block;
+                    position: relative;
+                    width: auto;
+
+                    @media #{$phone} {
+                        padding: 0px 20px;
+                    }
+                }
+
+                .button {
+                    margin-top: 20px;
+                }
+            }
+
+            #magnet-submit {
+                // .loader {
+                // 	display: inline-block;
+
+                // 	i {
+                // 		font-size: 20px;
+                // 		color: white;
+                // 		margin-left: 10px;
+                // 	}
+                // }
+            }
+
+            .alert {
+                margin: 0px 130px;
+
+                @media #{$phone} {
+                    margin: 0px 20px;
+                }
+            }
+
+            .flickity-page-dots {
+                bottom: auto;
+                top: 60px;
+                background: transparent;
+
+                @media #{$phone} {
+                    top: 80px;
+                }
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    height: 20px;
+                    top: 0px;
+                    bottom: 0px;
+                    left: 0px;
+                    right: 0px;
+                    z-index: 100;
+                }
+
+                .dot {
+                    margin: 0px 3px;
+                    border: 1px solid #979797;
+                    opacity: 1;
+                    width: 12px;
+                    height: 12px;
+                    background: transparent;
+
+                    &.is-selected {
+                        background-color: #126585;
+                    }
+                }
+            }
+
+            .flickity-prev-next-button {
+                display: none !important;
+                top: 50px;
+                background: transparent;
+            }
+        }
+    }
+}

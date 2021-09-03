@@ -1,4 +1,4 @@
-<div class="popup fixed-popup" id="view-review-popup">
+<div class="popup fixed-popup" id="view-review-popup" scss-load="trp-popup-detailed-review">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">

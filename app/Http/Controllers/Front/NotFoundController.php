@@ -68,6 +68,9 @@ class NotFoundController extends FrontController {
 			'js' => [
 				'index.js',
 			],
+            'css' => [
+                'trp-404.css',
+            ],
 			'gray_footer' => true,
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,

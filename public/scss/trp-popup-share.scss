@@ -1,0 +1,121 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+
+#popup-share {
+	.popup-inner {
+
+        h4 {
+            margin-bottom: 35px;
+        }
+        
+        .copy-wrapper {
+            margin-top: 30px;
+            margin-bottom: 30px;
+
+            .input {
+                height: 40px;
+            }
+
+            .button {
+                text-transform: unset;
+                padding: 9px 30px;
+                width: 100%;
+                text-align: center;
+
+                i {
+                    color: white;
+                }
+            }
+
+            p {
+                margin-bottom: 10px;
+            }
+        }
+
+        .share-buttons {
+            border-radius: 5px;
+            overflow: hidden;
+
+            .col {
+                transition: all 0.3s ease;
+
+                &:hover {
+                    opacity: 0.8;
+                }
+
+                &:first-child {
+                    border-top-left-radius: 3px;
+                    border-bottom-left-radius: 3px;					
+                }
+                &:last-child {
+                    border-top-right-radius: 3px;
+                    border-bottom-right-radius: 3px;			
+                }
+
+                &.fb {
+                    background-color: #3a559f;
+                }
+
+                &.twt {
+                    background-color: #50abf1;
+                }
+
+                a {
+                    display: flex;
+                    height: 40px;
+                    justify-content: center;
+                    align-items: center;
+
+                    i {
+                        font-size: 26px;
+                        color: white;
+                    }
+                }
+            }
+        }
+
+        .share-link {
+            margin-left: 15px;
+            box-shadow: -3px 3px 7px 1px #d8d8d8;
+            border-radius: 5px;
+            overflow: hidden;
+
+            @media #{$tablet} {
+                margin-left: 0px;
+                margin-top: 10px;
+            }
+
+            input {
+                margin-bottom: 0px;
+                border-top-right-radius: 0px;
+                border-bottom-right-radius: 0px;
+            }
+
+            .button {
+                position: relative;
+                width: 50px;
+                padding: 0px;
+                background: #eeeeee;
+                line-height: 40px;
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;
+
+                img {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-50%);
+                    max-width: 20px;
+                }
+            }
+        }
+
+        .small-info {
+            font-size: 12px;
+            font-weight: 300;
+            color: #999999;
+        }
+    }
+}

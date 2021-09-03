@@ -1,4 +1,4 @@
-<div class="popup fixed-popup popup-wokring-time active removable" id="popup-wokring-time-waiting" empty-hours>
+<div class="popup fixed-popup popup-wokring-time active removable" id="popup-wokring-time-waiting" empty-hours scss-load="trp-popup-working-time">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">

@@ -37,6 +37,9 @@
         <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
+		@if($user && $user->is_dentist)
+			<link rel="stylesheet" type="text/css" href="{{ url('/css/trp-logged.css').'?ver='.$cache_version }}" />
+		@endif
 		
 		<link rel="preload" href="{{ url('fonts/Calibri-Light.woff2') }}" as="font" crossorigin>
 		<link rel="preload" href="{{ url('fonts/Calibri-Bold.woff2') }}" as="font" crossorigin>

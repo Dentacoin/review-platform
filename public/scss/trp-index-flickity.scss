@@ -1,0 +1,257 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+.index-gradient {
+	padding-bottom: 1px;
+
+	.main-top {
+		background: none;
+		padding-bottom: 0px;
+		margin-bottom: 7px;
+
+		@media screen and (max-width: 345px) {
+			margin-bottom: 27px;
+		}
+	}
+
+	.home-search-form {
+		position: relative;
+	    top: auto;
+	    left: auto;
+	    transform: none;
+	    background: transparent;
+	    margin: 0 auto;
+	    padding-top: 100px;
+
+	    @media #{$phone} {
+			padding-top: 70px;
+			top: auto !important;
+		}
+
+		form {
+			@media #{$phone} {
+				margin-bottom: 0px;
+			}
+		}
+	}
+
+	.flickity-oval {
+		background: none;
+
+		&::after {
+			display: none;
+		}
+
+
+		.container {
+
+			@media #{$phone} {
+				padding: 0px;
+			}
+
+			.slider-right {
+				position: absolute;
+			    right: 18px;
+			    background: url(../img-trp/slider-new-arrow-right.png) 50% 50% no-repeat;
+			    width: 41px;
+			    height: 112px;
+			    top: 50%;
+			    transform: translateY(-50%);
+
+			    @media #{$tablet} {
+			    	right: -4px;
+			    }
+
+			    @media #{$phone} {
+			    	display: none;
+			    }
+			}
+			.slider-left {
+				position: absolute;
+			    left: 18px;
+			    background: url(../img-trp/slider-new-arrow-left.png) 50% 50% no-repeat;
+			    width: 41px;
+			    height: 112px;
+			    top: 50%;
+			    transform: translateY(-50%);
+
+			    @media #{$tablet} {
+			    	left: -4px;
+			    }
+
+			    @media #{$phone} {
+			    	display: none;
+			    }
+			}
+		}
+
+		.flickity {
+			position: relative;
+		    height: 492px;
+		    overflow-y: hidden;
+		    overflow-x: scroll;
+		    padding-bottom: 30px;
+		    padding-top: 30px;
+
+			-ms-overflow-style: none;  /* IE and Edge */
+			scrollbar-width: none;  /* Firefox */
+
+			@media #{$phone} {
+				height: 432px;
+			}
+
+			&::-webkit-scrollbar {
+			  display: none;
+			}
+
+			.index-slider {
+			    position: absolute;
+    			width: 3120px;
+    		    height: 100%;
+    		 //    display: flex;
+    			// flex-flow: row wrap;
+			}
+
+
+			.flickity-prev-next-button {
+			    width: 41px !important;
+			    height: 112px !important;
+			}
+
+			.slider-wrapper {
+				max-width: 220px;
+			    padding: 0px;
+			    margin: 0px 20px;
+			    float: left;
+
+				@media #{$pc} {
+					max-width: 178px;
+				}
+
+				@media #{$tablet} {
+					max-width: 298px;
+				}
+
+				@media #{$phone} {
+					max-width: 220px;
+				}
+
+				.slider-inner {
+					position: relative;
+    				border-radius: 5px;
+    				height: 100%;
+    				display: flex;
+    				flex-direction: column;
+				}
+				.slider-container {
+				    border-bottom-left-radius: 5px;
+				    border-bottom-right-radius: 5px;
+				}
+
+				&:hover {
+					.slider-container {
+						border-bottom-left-radius: 0px;
+					    border-bottom-right-radius: 0px;
+					}
+
+					.slider-inner {
+						box-shadow: 0px 0px 33px -2px rgba(0, 0, 0, 0.4);
+					}
+				}
+
+				.has-review-image {
+					position: absolute;
+					width: 70px;
+					z-index: 10;
+					right: -13px;
+					top: -13px;
+				}
+
+				.slider-image-wrapper {
+					position: relative;
+
+					&::before {
+						content: '';
+					    position: absolute;
+					    left: 50%;
+					    top: 50%;
+					    transform: translateX(-50%) translateY(-50%);
+					    width: 190.31px;
+					    height: 190.31px;
+					    background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%;
+					    z-index: 1;
+
+					    @media #{$pc} {
+							width: 147.05px;
+							height: 148.05px;
+					    }
+
+					    @media #{$tablet} {
+							width: 267.19px;
+							height: 268.19px;
+					    }
+
+					    @media #{$phone} {
+					    	width: 190.31px;
+					    	height: 190.31px;
+					    }
+					}
+
+					.slider-real-image {
+						border-radius: 50%;
+						height: auto;
+					}
+
+					.tooltip-text {
+						position: absolute;
+						top: 15px;
+						left: 14px;
+						width: 18px;
+						height: 18px;
+						z-index: 100;
+					}
+
+					.invited-dentist {
+						position: absolute;
+						text-align: center;
+						left: 0;
+						right: 0;
+						bottom: 0;
+						margin-bottom: 0px;
+						padding-bottom: 18px;
+						margin-top: 0px;
+					}
+				}
+
+				&:hover {
+
+					.slider-container {
+						@media #{$phone} {
+							transform: none;
+							border-bottom-left-radius: 5px;
+							border-bottom-right-radius: 5px;
+						}
+					}
+				}
+
+				.ratings {
+					display: flex;
+					align-items: center;
+
+					@media #{$pc} {
+						flex-direction: column;
+					}
+
+					@media #{$tablet} {
+						flex-direction: unset;
+					}
+
+					.rating {
+						margin-left: 3px;
+					}
+				}
+			}
+		}
+	}
+}

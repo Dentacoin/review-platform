@@ -1,0 +1,47 @@
+.details-wrapper .review {
+  margin-left: 0px;
+  margin-bottom: 0px; }
+.details-wrapper .ratings .stars {
+  width: 132px; }
+.details-wrapper .rating {
+  font-size: 20px;
+  font-weight: normal;
+  vertical-align: super; }
+.details-wrapper .review-date {
+  vertical-align: super; }
+
+.overview-wrapper {
+  margin-top: 30px; }
+
+.review-container {
+  width: 630px;
+  margin: 0 auto; }
+  @media screen and (max-width: 768px) {
+    .review-container {
+      width: 100%; } }
+  .review-container .ratings {
+    margin-top: 0px; }
+    .review-container .ratings .stars {
+      background: url("../img-trp/stars-gray.png") 50% 50% no-repeat;
+      background-size: contain; }
+      .review-container .ratings .stars .bar {
+        background: url("../img-trp/stars-black.png") 0% 50% no-repeat;
+        background-size: cover; }
+    .review-container .ratings .rating {
+      vertical-align: top;
+      font-size: 14px;
+      font-weight: normal; }
+  .review-container .overview-column {
+    float: left;
+    width: 210px;
+    margin-bottom: 30px; }
+    @media screen and (max-width: 768px) {
+      .review-container .overview-column {
+        float: none;
+        width: 100%;
+        text-align: center; } }
+    .review-container .overview-column:nth-child(3n), .review-container .overview-column:nth-child(3n + 2) {
+      padding-left: 50px; }
+      @media screen and (max-width: 768px) {
+        .review-container .overview-column:nth-child(3n), .review-container .overview-column:nth-child(3n + 2) {
+          padding-left: 0px; } }

@@ -1,4 +1,4 @@
-<div class="popup fixed-popup" id="popup-wokrplace">
+<div class="popup fixed-popup" id="popup-wokrplace" scss-load="trp-popup-workplace">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">

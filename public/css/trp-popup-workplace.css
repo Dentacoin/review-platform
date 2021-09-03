@@ -1,0 +1,32 @@
+#popup-wokrplace .popup-inner h4 {
+  margin-bottom: 35px; }
+#popup-wokrplace .popup-inner .invited-dentists {
+  margin-bottom: 50px; }
+  #popup-wokrplace .popup-inner .invited-dentists .flex {
+    position: relative;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #bfbfbf; }
+    #popup-wokrplace .popup-inner .invited-dentists .flex .flex-7 {
+      padding: 0px 10px; }
+      @media screen and (max-width: 768px) {
+        #popup-wokrplace .popup-inner .invited-dentists .flex .flex-7 {
+          padding: 0px; } }
+    @media screen and (max-width: 768px) {
+      #popup-wokrplace .popup-inner .invited-dentists .flex .flex-2 {
+        position: absolute;
+        top: -3px;
+        right: 0px; } }
+    @media screen and (max-width: 768px) {
+      #popup-wokrplace .popup-inner .invited-dentists .flex .flex-3 {
+        padding-right: 40px;
+        padding-bottom: 10px; } }
+    #popup-wokrplace .popup-inner .invited-dentists .flex:last-child {
+      border-bottom: none; }
+  #popup-wokrplace .popup-inner .invited-dentists .remove-dentist {
+    color: #126585; }
+    @media screen and (max-width: 768px) {
+      #popup-wokrplace .popup-inner .invited-dentists .remove-dentist {
+        font-size: 0px; } }
+    #popup-wokrplace .popup-inner .invited-dentists .remove-dentist img {
+      max-width: 10px; }

@@ -1,4 +1,4 @@
-<div class="popup fixed-popup active removable" id="popup-lead-magnet">
+<div class="popup fixed-popup active removable" id="popup-lead-magnet" scss-load="trp-popup-lead-magnet">
 	<div class="popup-inner inner-white">
 		<div class="loader-mask">
 		    <div class="loader">
