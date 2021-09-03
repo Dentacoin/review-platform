@@ -12,6 +12,12 @@
 
 	<div class="faq-wrapper">
 		<div class="container">
+			<div>
+				Trusted Reviews is the first Blockchain-based platform for detailed, verified and incentivized dental treatment reviews, developed by the Dentacoin Foundation.
+				<br/>
+				<br/>
+				Patients are invited by their dentists, verified through Blockchain-based identity system and rewarded for providing valuable feedback. Dentists have the chance to improve upon the feedback received and are incentivized for willing to do so.
+			</div>
 			@foreach($content as $block)
 				<h2>{{ $block['title'] }}</h2>
 				<div class="questions">
@@ -28,17 +34,6 @@
 					@endforeach
 				</div>
 			@endforeach
-		</div>
-	</div>
-
-	<div class="faq-wrapper">
-		<div class="container">
-			<div>
-				Trusted Reviews is the first Blockchain-based platform for detailed, verified and incentivized dental treatment reviews, developed by the Dentacoin Foundation.
-				<br/>
-				<br/>
-				Patients are invited by their dentists, verified through Blockchain-based identity system and rewarded for providing valuable feedback. Dentists have the chance to improve upon the feedback received and are incentivized for willing to do so.
-			</div>
 		</div>
 	</div>
 
