@@ -2748,9 +2748,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
         if($invitor_approved) {
 
+            $platform_inverse = $platform == 'trp' ? 'vox' : 'trp';
+
             $inv = UserInvite::where('user_id', $this->invited_by)
-            ->where(function ($query) use ($platform) {
-                $query->where('platform', '!=', $platform)
+            ->where(function ($query) use ($platform_inverse) {
+                //if is trp - give reward to every tool except vox and vise versa
+                $query->where('platform', '!=', $platform_inverse)
                 ->orWhere('platform', null);
             })
             ->where('invited_id', $this->id)
