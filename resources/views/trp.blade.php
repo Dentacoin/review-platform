@@ -301,14 +301,14 @@
 						'platform' : 'urgent.reviews',
 						'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=trusted-reviews',
 						'environment' : 'staging',
-					});	
+					});
 				</script>
 			@else
 				<script type="text/javascript">
 					dcnGateway.init({
 						'platform' : 'trusted-reviews',
 						'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=trusted-reviews',
-					});	
+					});
 				</script>
 			@endif
 		@else

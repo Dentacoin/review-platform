@@ -41,6 +41,7 @@ use App\Models\UserHistory;
 use App\Models\UserBranch;
 use App\Models\UserAction;
 use App\Models\DcnCashout;
+use App\Models\UserInvite;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\Blacklist;
@@ -48,6 +49,7 @@ use App\Models\UserTeam;
 use App\Models\GasPrice;
 use App\Models\UserBan;
 use App\Models\UserAsk;
+use App\Models\Reward;
 use App\Models\Review;
 use App\Models\Email;
 use App\Models\Vox;
@@ -2734,5 +2736,74 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         }
 
         return $info !== '' ? $info : 'Nothing wrong with this user';
+    }
+    
+    public function giveInvitationReward($platform) {
+
+        if($platform == 'trp') {
+            $invitor_approved = $this->invited_by && !empty($this->invitor) && !$this->invitor->is_dentist;
+        } else {
+            $invitor_approved = $this->invited_by && !empty($this->invitor);
+        }
+
+        if($invitor_approved) {
+
+            $inv = UserInvite::where('user_id', $this->invited_by)
+            ->where(function ($query) use ($platform) {
+                $query->where('platform', '!=', $platform)
+                ->orWhere('platform', null);
+            })
+            ->where('invited_id', $this->id)
+            ->whereNull('rewarded')
+            ->first();
+
+            if(!empty($inv) && !$inv->dont_rewarded) {
+
+                $reward = new DcnReward();
+                $reward->user_id = $this->invited_by;
+                $reward->platform = $platform;
+                $reward->reward = Reward::getReward('reward_invite');
+                $reward->type = 'invitation';
+                $reward->reference_id = $inv->id;
+
+                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                $dd = new DeviceDetector($userAgent);
+                $dd->parse();
+
+                if ($dd->isBot()) {
+                    // handle bots,spiders,crawlers,...
+                    $reward->device = $dd->getBot();
+                } else {
+                    $reward->device = $dd->getDeviceName();
+                    $reward->brand = $dd->getBrandName();
+                    $reward->model = $dd->getModel();
+                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                }
+
+                $reward->save();
+
+                $inv->rewarded = true;
+                $inv->save();
+                
+                if($platform == 'trp') {
+
+                    $this->invitor->sendTemplate( 22, [
+                        'who_joined_name' => $this->getNames()
+                    ], 'trp' );
+
+                } else if($platform == 'vox') {
+
+                    if($this->invitor->is_dentist) {
+                        $this->invitor->sendGridTemplate( 82, [
+                            'who_joined_name' => $this->getNames()
+                        ], 'vox' );
+                    } else {
+                        $this->invitor->sendGridTemplate( 113, [
+                            'who_joined_name' => $this->getNames()
+                        ], 'vox' );
+                    }
+                }
+            }
+        }
     }
 }

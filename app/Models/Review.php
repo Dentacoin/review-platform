@@ -76,19 +76,11 @@ class Review extends Model {
     }
 
     public function afterSubmitActions() {
-
-        if( $this->dentist) {
-            $this->dentist->sendTemplate( $this->verified ? 21 : 6, [
-                'review_id' => $this->id,
-                'dentist_id' => $this->dentist->id,
-            ], 'trp');            
-        }
-        if( $this->clinic) {
-            $this->clinic->sendTemplate( $this->verified ? 21 : 6, [
-                'review_id' => $this->id,
-                'dentist_id' => $this->clinic->id,
-            ], 'trp');            
-        }
+        //sent email to the dentist/clinic
+        $this->original_dentist->sendTemplate( $this->verified ? 21 : 6, [
+            'review_id' => $this->id,
+            'dentist_id' => $this->review_to_id,
+        ], 'trp');            
 
         if($this->verified) {
             $reward = new DcnReward();
@@ -114,7 +106,6 @@ class Review extends Model {
 
             $reward->save();
 
-
             $dent_id = $this->review_to_id;
             $reviews = self::where(function($query) use ($dent_id) {
                 $query->where( 'dentist_id', $dent_id)->orWhere('clinic_id', $dent_id);
@@ -124,8 +115,8 @@ class Review extends Model {
             if ($reviews->count()) {
                 
                 foreach ($reviews as $review) {
+                    //give reward to the patient for trusted reviews
                     if(empty($review->verified)) {
-                        
                         $review->verified = true;
                         $review->save();
 
@@ -135,65 +126,15 @@ class Review extends Model {
                         $reward->reward = Reward::getReward('review_trusted');
                         $reward->type = 'review_trusted';
                         $reward->reference_id = $this->id;
-
                         $reward->save();
                     }
                 }
             }
         }
 
+        $this->user->giveInvitationReward('trp');
 
-        if($this->user->invited_by && !empty($this->user->invitor) && !$this->user->invitor->is_dentist) {
-
-            $inv = UserInvite::where('user_id', $this->user->invited_by)
-            ->where(function ($query) {
-                $query->where('platform', '!=', 'vox')
-                ->orWhere('platform', null);
-            })
-            ->where('invited_id', $this->user->id)
-            ->whereNull('rewarded')
-            ->first();
-
-            if(!empty($inv) && !$inv->dont_rewarded) {
-
-                $reward = new DcnReward();
-                $reward->user_id = $this->user->invited_by;
-                $reward->platform = 'trp';
-                $reward->reward = Reward::getReward('reward_invite');
-                $reward->type = 'invitation';
-                $reward->reference_id = $inv->id;
-
-                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                $dd = new DeviceDetector($userAgent);
-                $dd->parse();
-
-                if ($dd->isBot()) {
-                    // handle bots,spiders,crawlers,...
-                    $reward->device = $dd->getBot();
-                } else {
-                    $reward->device = $dd->getDeviceName();
-                    $reward->brand = $dd->getBrandName();
-                    $reward->model = $dd->getModel();
-                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                }
-
-                $reward->save();
-
-                $inv->rewarded = true;
-                $inv->save();
-                
-                $this->user->invitor->sendTemplate( 22, [
-                    'who_joined_name' => $this->user->getNames()
-                ], 'trp' );
-            }
-        }
-
-        if( $this->dentist ) {
-            $this->dentist->recalculateRating();
-        }
-        if( $this->clinic ) {
-            $this->clinic->recalculateRating();
-        }
+        $this->original_dentist->recalculateRating();
     }
 
     public function generateSocialCover($d_id) {

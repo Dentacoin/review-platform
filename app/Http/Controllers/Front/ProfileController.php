@@ -139,7 +139,7 @@ class ProfileController extends FrontController {
                     $invitation->save();
 
                     // sendgridEmailValidation
-                    return Response::json(['success' => false, 'message' => 'Not sent - suspicious email address.' ] );
+                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite-dentist.suspicious-email') ] );
                 }
 
                 $is_dentist = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 1)->first();
@@ -1003,7 +1003,7 @@ class ProfileController extends FrontController {
                         $valid_email = $this->user->sendgridEmailValidation(92, Request::input('email'));
 
                         if(!$valid_email) {
-                            return Response::json(['success' => false, 'message' => 'Not sent - suspicious email address.' ] );
+                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite-dentist.suspicious-email') ] );
                         }
 
                         $existing_dentist = User::where('email', 'LIKE', Request::input('email'))->withTrashed()->first();
