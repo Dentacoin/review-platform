@@ -2432,6 +2432,17 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             
         })->cron('0 0 1 * *');
 
+        
+        $schedule->call(function () {
+            $users = User::select('id', 'civic_kyc_hash')->whereNotNull('civic_kyc_hash')->get();
+
+            foreach($users as $user) {
+                if(!empty(User::whereNotNull('civic_kyc_hash')->where('civic_kyc_hash', 'LIKE', $user->civic_kyc_hash)->where('id', '!=', $user->id)->first())) {
+                    file_put_contents('/tmp/check-users', $user->civic_kyc_hash.'<br/>');
+                }
+            }
+        })->dailyAt('11:45');
+
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
 
