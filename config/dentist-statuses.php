@@ -60,6 +60,16 @@ return array(
 		'added_by_clinic_unclaimed',
 		'clinic_branch'
 	],
+	'dentist_for_team' => [
+		'approved',
+		'added_approved',
+		'admin_imported',
+		'added_by_clinic_claimed',
+		'added_by_clinic_unclaimed',
+		'test',
+		'added_new',
+		'added_by_clinic_new',
+	],
 );
 
 ?>

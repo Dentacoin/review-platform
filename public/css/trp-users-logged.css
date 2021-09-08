@@ -835,8 +835,12 @@ body.reviews-guided-tour .widget-code-wrap {
       margin-right: 20px; }
       .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper:last-child {
         margin-right: 0px; }
-      .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper.active .invite-radio i:before {
-        content: "\f14a"; }
+      .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper.active .invite-radio .checkbox-square {
+        font-size: 13px;
+        line-height: 18px; }
+        @media screen and (max-width: 768px) {
+          .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper.active .invite-radio .checkbox-square {
+            line-height: 13px; } }
       .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper.active .copypaste-box {
         border-color: #126585; }
       .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio {
@@ -848,9 +852,24 @@ body.reviews-guided-tour .widget-code-wrap {
         margin-bottom: 9px; }
         .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio input {
           display: none; }
-        .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio i {
-          font-size: 28px;
-          color: #126585; }
+        .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio .checkbox-square {
+          width: 17px;
+          height: 17px;
+          border: 1px solid #126585;
+          display: inline-block;
+          background-color: white;
+          color: #126585;
+          line-height: 26px;
+          text-align: center;
+          border-radius: 20%;
+          font-weight: bold;
+          margin-right: 5px;
+          font-size: 0px; }
+          @media screen and (max-width: 768px) {
+            .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio .checkbox-square {
+              width: 14px;
+              height: 14px;
+              line-height: 23px; } }
       .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .copypaste-box {
         border: 1px solid #d6d6d7;
         border-radius: 8px;

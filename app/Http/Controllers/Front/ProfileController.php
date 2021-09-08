@@ -123,219 +123,54 @@ class ProfileController extends FrontController {
             ]);
 
             if ($validator->fails()) {
-                return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
+                return Response::json([
+                    'success' => false, 
+                    'message' => trans('trp.page.profile.invite.failure') 
+                ]);
             } else {
+                $email = Request::Input('email');
+                $name = Request::Input('name');
 
-                $valid_email = $this->user->sendgridEmailValidation(68, Request::Input('email'));
+                $valid_email = $this->user->sendgridEmailValidation(68, $email);
 
                 if(!$valid_email) {
                     $invitation = new UserInvite;
                     $invitation->user_id = $this->user->id;
-                    $invitation->invited_email = Request::Input('email');
-                    $invitation->invited_name = Request::Input('name');
+                    $invitation->invited_email = $email;
+                    $invitation->invited_name = $name;
                     $invitation->platform = 'trp';
                     $invitation->review = true;
                     $invitation->suspicious_email = true;
                     $invitation->save();
 
                     // sendgridEmailValidation
-                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite-dentist.suspicious-email') ] );
+                    return Response::json([
+                        'success' => false, 
+                        'message' => trans('trp.page.profile.invite-dentist.suspicious-email') 
+                    ]);
                 }
 
-                $is_dentist = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 1)->first();
+                $is_dentist = User::where('email', 'LIKE', $email )->where('is_dentist', 1)->first();
 
                 if (!empty($is_dentist)) {
-                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite-dentist.failure')] );
+                    return Response::json([
+                        'success' => false, 
+                        'message' => trans('trp.page.profile.invite-dentist.failure')
+                    ]);
                 }
 
-                $invitation = UserInvite::where([
-                    ['user_id', $this->user->id],
-                    ['invited_email', 'LIKE', Request::Input('email')],
-                ])->first();
+                $ret = $this->sendInvite($email, $name, false);
 
-                $existing_patient = User::withTrashed()->where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 0)->first();
-                $existing_anonymous = AnonymousUser::where('email', 'LIKE', Request::Input('email'))->first();
-
-                if(!empty($existing_patient) && !empty($existing_patient->deleted_at)) {
-                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.patient-deleted', ['email' => Request::Input('email') ])] );
+                if($ret) {
+                    return Response::json($ret);
                 }
-
-                if($invitation) {
-
-                    if(!empty($existing_patient)) {
-                        $d_id = $this->user->id;
-
-                        $patient_review = Review::where('user_id', $existing_patient->id )->where(function($query) use ($d_id) {
-                            $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
-                        })->orderBy('id', 'desc')->first();
-                        
-                        if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month') ] );
-                        }
-
-                        $invitation->invited_id = $existing_patient->id;
-                    }
-
-                    if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                        return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month')] );
-                    }
-
-                    $invitation->invited_name = Request::Input('name');
-                    $invitation->created_at = Carbon::now();
-
-                    if (empty($invitation->unsubscribed)) {
-                        $invitation->review = true;
-                        $invitation->completed = null;
-                        $invitation->notified1 = null;
-                        $invitation->notified2 = null;
-                        $invitation->notified3 = null;
-                    }
-
-                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
-                        $invitation->for_dentist_patients = true;
-                    }
-                    $invitation->save();
-
-                    if(!empty($existing_patient)) {
-                        $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
-                        if(!empty($last_ask)) {
-                            $last_ask->created_at = Carbon::now();
-                            $last_ask->on_review = true;
-                            $last_ask->save();
-                        } else {
-                            $ask = new UserAsk;
-                            $ask->user_id = $existing_patient->id;
-                            $ask->dentist_id = $this->user->id;
-                            $ask->status = 'yes';
-                            $ask->on_review = true;
-                            $ask->save();
-                        }
-                    }
-                } else {
-                    $invitation = new UserInvite;
-                    $invitation->user_id = $this->user->id;
-                    $invitation->invited_email = Request::Input('email');
-                    $invitation->invited_name = Request::Input('name');
-                    $invitation->platform = 'trp';
-                    $invitation->review = true;
-                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
-                        $invitation->for_dentist_patients = true;
-                    }
-                    if(!empty($existing_patient)) {
-                        $invitation->invited_id = $existing_patient->id;
-                    }
-                    $invitation->save();
-                }
-
-                if(!empty($existing_patient)) {
-
-                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
-                        $existing_patient->patient_of = $this->user->id;
-                        $existing_patient->save();
-                    }
-
-                    $substitutions = [
-                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
-                        'invited_user_name' => Request::Input('name'),
-                        "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
-                    ];
-
-                    $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
-
-                } else {
-
-                    $inviter_email = $this->user->email ? $this->user->email : $this->user->mainBranchEmail();
-
-                    if(Request::Input('email') != $inviter_email) {
-
-                        if ( $this->user->is_dentist) {
-
-                            $dentist_name = $this->user->name;
-                            $dentist_email = $inviter_email;
-
-                            $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', Request::Input('email'));
-
-                            if(!empty($existing_anonymous)) {
-
-                                if(!$unsubscribed) {
-                                    $subscribe_cats = $existing_anonymous->website_notifications;
-
-                                    if(!isset($subscribe_cats['trp'])) {
-
-                                        $subscribe_cats[] = 'trp';
-                                        $existing_anonymous->website_notifications = $subscribe_cats;
-                                        $existing_anonymous->save();
-                                    }
-                                }
-
-                            } else {
-                                $new_anonymous_user = new AnonymousUser;
-                                $new_anonymous_user->email = Request::Input('email');
-                                $new_anonymous_user->website_notifications = ['trp'];
-                                $new_anonymous_user->save();
-                            }
-
-                            $substitutions = [
-                                'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                                'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
-                                'invited_user_name' => Request::Input('name'),
-                                "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
-                            ];
-
-                            $mail = User::unregisteredSendGridTemplate($this->user, Request::Input('email'), Request::Input('name'),  106, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
-                        } else {
-
-                            $unsubscribed = User::isUnsubscribedAnonymous(17, 'trp', Request::Input('email'));
-
-                            if(!empty($existing_anonymous)) {
-
-                                if(!$unsubscribed) {
-                                    $subscribe_cats = $existing_anonymous->website_notifications;
-
-                                    if(!isset($subscribe_cats['trp'])) {
-
-                                        $subscribe_cats[] = 'trp';
-                                        $existing_anonymous->website_notifications = $subscribe_cats;
-                                        $existing_anonymous->save();
-                                    }
-                                }
-
-                            } else {
-                                $new_anonymous_user = new AnonymousUser;
-                                $new_anonymous_user->email = Request::Input('email');
-                                $new_anonymous_user->website_notifications = ['trp'];
-                                $new_anonymous_user->save();
-                            }
-
-                            $user = User::find(113928);
-                            $dentist_name = $user->name;
-                            $dentist_email = $user->email;
-                            $user->name = Request::Input('name');
-                            $user->email = Request::Input('email');
-                            $user->save();
-
-                            $mail = $user->sendTemplate( 17 , [
-                                'friend_name' => $dentist_name,
-                                'invitation_id' => $invitation->id
-                            ], 'trp', $unsubscribed, Request::Input('email'));
-
-                            $user->name = $dentist_name;
-                            $user->email = $dentist_email;
-                            $user->save();
-                        }
-
-                        $mail->delete();
-
-                    } else {
-                        return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.yourself') ] );
-                    }
-                }
-                return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
             }
         }
 
-        return null;
+        return Response::json([
+            'success' => false, 
+            'message' => 'Error'
+        ]);
     }
 
     /**
@@ -351,7 +186,13 @@ class ProfileController extends FrontController {
             $invitation->platform = 'trp';
             $invitation->save();
 
-            $text = trans('trp.page.profile.invite.whatsapp', ['name' => $this->user->getNames() ]).rawurlencode($this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]));
+            $text = trans('trp.page.profile.invite.whatsapp', [
+                'name' => $this->user->getNames() 
+            ]).rawurlencode($this->user->getLink().'?'. http_build_query([
+                'dcn-gateway-type'=>'patient-register', 
+                'inviter' => User::encrypt($this->user->id), 
+                'inviteid' => User::encrypt($invitation->id) 
+            ]));
 
             return Response::json([
                 'success' => true,
@@ -421,7 +262,6 @@ class ProfileController extends FrontController {
                     'success' => true,
                     'info' => $reversedRows,
                 ] );
-
             }
         }
     }
@@ -490,7 +330,7 @@ class ProfileController extends FrontController {
      */
     public function invite_copypaste_final($locale=null) {
 
-        if(!empty($this->user) && $this->user->canInvite('trp') ) {
+        if(!empty($this->user) && $this->user->canInvite('trp') && $this->user->is_dentist ) {
 
             if(session('bulk_names') && session('bulk_emails')) {
                 $emails = session('bulk_emails');
@@ -502,16 +342,15 @@ class ProfileController extends FrontController {
                 $already_invited_emails = [];
 
                 foreach ($emails as $key => $email) {
-                    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        $invalid++;
-                    }
 
+                    $is_dentist = User::where('email', 'LIKE', $email )->where('is_dentist', 1)->first();
                     $valid_email = $this->user->sendgridEmailValidation(68, $email);
 
-                    if(!$valid_email) {
+                    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !empty($is_dentist) || !$valid_email) {
                         $invalid++;
 
                         $invalid_emails[] = $email;
+                        continue;
                     }
 
                     $invitation = UserInvite::where([
@@ -523,6 +362,7 @@ class ProfileController extends FrontController {
                         $already_invited++;
 
                         $already_invited_emails[] = $email;
+                        continue;
                     }
                 }
 
@@ -557,175 +397,7 @@ class ProfileController extends FrontController {
                 foreach ($emails as $key => $email) {
                     $inviter_email = $this->user->email ? $this->user->email : $this->user->mainBranchEmail();
                     if(!empty($names[$key]) && ($email != $inviter_email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-                        $send_mail = false;
-
-                        $invitation = UserInvite::where([
-                            ['user_id', $this->user->id],
-                            ['invited_email', 'LIKE', $email],
-                        ])->first();
-
-                        $existing_patient = User::withTrashed()->where('email', 'LIKE', $email )->where('is_dentist', 0)->first();
-                        $existing_anonymous = AnonymousUser::where('email', 'LIKE', $email)->first();
-
-                        if(empty($existing_patient) || empty($existing_patient->deleted_at)) { ///da proveeq
-
-                            if($invitation) {
-
-                                if ($invitation->created_at->timestamp < Carbon::now()->subMonths(1)->timestamp) {
-
-                                    $invitation->invited_name = $names[$key];
-                                    $invitation->created_at = Carbon::now();
-
-                                    if (empty($invitation->unsubscribed)) {
-                                        $invitation->review = true;
-                                        $invitation->completed = null;
-                                        $invitation->notified1 = null;
-                                        $invitation->notified2 = null;
-                                        $invitation->notified3 = null;
-                                    }
-                                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
-                                        $invitation->for_dentist_patients = true;
-                                    }
-                                    $invitation->save();
-                                    $send_mail = true;
-
-                                    if(!empty($existing_patient)) {
-                                        $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
-                                        if(!empty($last_ask)) {
-                                            $last_ask->created_at = Carbon::now();
-                                            $last_ask->on_review = true;
-                                            $last_ask->save();
-                                        } else {
-                                            $ask = new UserAsk;
-                                            $ask->user_id = $existing_patient->id;
-                                            $ask->dentist_id = $this->user->id;
-                                            $ask->status = 'yes';
-                                            $ask->on_review = true;
-                                            $ask->save();
-                                        }
-                                    }
-                                }
-                            } else {
-
-                                $valid_email = $this->user->sendgridEmailValidation(68, $email);
-
-                                $invitation = new UserInvite;
-                                $invitation->user_id = $this->user->id;
-                                $invitation->invited_email = $email;
-                                $invitation->invited_name = $names[$key];
-                                $invitation->platform = 'trp';
-                                $invitation->review = true;
-                                if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
-                                    $invitation->for_dentist_patients = true;
-                                }
-
-                                if(!$valid_email) {
-                                    $invitation->suspicious_email = true;
-                                } else {
-                                    $send_mail = true;
-                                    
-                                    if(!empty($existing_patient)) {
-                                        $invitation->invited_id = $existing_patient->id;
-                                    }
-                                }
-
-                                $invitation->save();
-
-                            }
-
-                            if ($send_mail) {
-                                if(!empty($existing_patient)) {
-
-                                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
-                                        $existing_patient->patient_of = $this->user->id;
-                                        $existing_patient->save();
-                                    }
-
-                                    $substitutions = [
-                                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
-                                        'invited_user_name' => $names[$key],
-                                        "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
-                                    ];
-
-                                    $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
-
-                                } else {
-                                    $dentist_name = $this->user->name;
-
-                                    if ( $this->user->is_dentist) {
-                                        $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', $email);
-
-                                        if(!empty($existing_anonymous)) {
-
-                                            if(!$unsubscribed) {
-                                                $subscribe_cats = $existing_anonymous->website_notifications;
-
-                                                if(!isset($subscribe_cats['trp'])) {
-
-                                                    $subscribe_cats[] = 'trp';
-                                                    $existing_anonymous->website_notifications = $subscribe_cats;
-                                                    $existing_anonymous->save();
-                                                }
-                                            }
-
-                                        } else {
-                                            $new_anonymous_user = new AnonymousUser;
-                                            $new_anonymous_user->email = $email;
-                                            $new_anonymous_user->website_notifications = ['trp'];
-                                            $new_anonymous_user->save();
-                                        }
-
-                                        $substitutions = [
-                                            'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                                            'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
-                                            'invited_user_name' => $names[$key],
-                                            "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
-                                        ];
-
-                                        User::unregisteredSendGridTemplate($this->user, $email, $names[$key], 106, $substitutions, 'trp', $unsubscribed, $email);
-                                    } else {
-
-                                        $unsubscribed = User::isUnsubscribedAnonymous(17, 'trp', $email);
-
-                                        if(!empty($existing_anonymous)) {
-
-                                            if(!$unsubscribed) {
-                                                $subscribe_cats = $existing_anonymous->website_notifications;
-
-                                                if(!isset($subscribe_cats['trp'])) {
-
-                                                    $subscribe_cats[] = 'trp';
-                                                    $existing_anonymous->website_notifications = $subscribe_cats;
-                                                    $existing_anonymous->save();
-                                                }
-                                            }
-
-                                        } else {
-                                            $new_anonymous_user = new AnonymousUser;
-                                            $new_anonymous_user->email = $email;
-                                            $new_anonymous_user->website_notifications = ['trp'];
-                                            $new_anonymous_user->save();
-                                        }
-
-                                        $user = User::find(113928);
-                                        $temp_email = $user->email;
-                                        $user->email = $email;
-                                        $user->save();
-
-                                        $user->sendTemplate( 17 , [
-                                            'friend_name' => $dentist_name,
-                                            'invitation_id' => $invitation->id
-                                        ], 'trp', $unsubscribed, $email);
-
-                                        //Back to original
-                                        $user->email = $temp_email;
-                                        $user->save();
-                                    }
-                                }
-                            }
-                        }
+                        $this->sendInvite($email, $names[$key], true);
                     }
                 }
 
@@ -862,7 +534,7 @@ class ProfileController extends FrontController {
     public function invite_patient_again($locale=null) {
         $id = Request::input('id');
 
-        if (!empty($this->user) && !empty($id)) {
+        if (!empty($this->user) && $this->user->is_dentist && !empty($id)) {
 
             if(Request::isMethod('post') && $this->user->canInvite('trp') ) {
 
@@ -874,33 +546,29 @@ class ProfileController extends FrontController {
                     $last_invite->created_at = Carbon::now();
                     $last_invite->save();
                     
-                    $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
-                    if(!empty($last_ask)) {
-                        $last_ask->created_at = Carbon::now();
-                        $last_ask->on_review = true;
-                        $last_ask->save();
-                    } else {
-                        $ask = new UserAsk;
-                        $ask->user_id = $existing_patient->id;
-                        $ask->dentist_id = $this->user->id;
-                        $ask->status = 'yes';
-                        $ask->on_review = true;
-                        $ask->save();
-                    }
+                    $this->askDentistToBeHisPatient($existing_patient);
 
                     $substitutions = [
-                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
+                        'type' => $this->user->is_clinic ? 'dental clinic' : 'your dentist',
+                        'inviting_user_name' => $this->user->getNames(),
                         'invited_user_name' => $last_invite->invited_name,
-                        "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]),
+                        "invitation_link" => $this->user->getLink().'?'. http_build_query([
+                            'dcn-gateway-type'=>'patient-login', 
+                            'inviter' => User::encrypt($this->user->id) 
+                        ]),
                     ];
 
                     $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
 
-                    return Response::json(['success' => true, 'url' => getLangUrl('/').'?tab=asks' ] );
-                } else {
-                    return Response::json(['success' => false ] );
+                    return Response::json([
+                        'success' => true, 
+                        'url' => getLangUrl('/').'?tab=asks' 
+                    ]);
                 }
+
+                return Response::json([
+                    'success' => false 
+                ]);
             }
 
             return redirect(getLangUrl('/'));
@@ -912,196 +580,165 @@ class ProfileController extends FrontController {
      */
     public function invite_team_member($locale=null) {
         
-        if( (!empty($this->user) && $this->user->canInvite('trp')) || (empty($this->user) && !empty(request('last_user_id')) && !empty(User::find(request('last_user_id'))) && !empty(request('last_user_hash')) && request('last_user_hash') == User::find(request('last_user_id'))->get_token() )) {
+        $current_user = null;
 
-            if (!empty($this->user)) {
-                $current_user = $this->user;
-            } else if(!empty(request('last_user_id'))) {
+        if (!empty($this->user) && $this->user->canInvite('trp')) {
+            $current_user = $this->user;
+        } else {
+            if(!empty(request('last_user_id'))) {
                 $current_user = User::find(request('last_user_id'));
-
-                if(empty($current_user)) {
-                    return Response::json(['success' => false, 'message' => trans('trp.common.something-wrong') ] );
-                }
-            } else {
-                return Response::json(['success' => false, 'message' => trans('trp.common.something-wrong') ] );
-            }
-
-            $validator = Validator::make(Request::all(), [
-                'name' => ['required', 'string'],
-                'team-job' => ['required'],
-            ]);
-
-            if ($validator->fails()) {
-                return Response::json(['success' => false, 'message' => trans('trp.popup.verification-popup.clinic.team-name-error') ] );
-            } else {
-                if (Request::input('team-job') != 'dentist') {
-                    $invitation = new UserInvite;
-                    $invitation->user_id = $current_user->id;
-                    $invitation->invited_email = ' ';
-                    $invitation->invited_name = Request::Input('name');
-                    $invitation->job = Request::Input('team-job');
-                    $invitation->join_clinic = true;
-                    $invitation->for_team = true;
-                    $invitation->platform = 'trp';
-                    $invitation->save();
-
-                    if( Request::input('photo') ) {
-                        $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
-                        $invitation->addImage($img);
-                    }
-
-                    return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.clinic.no-email-success', ['name' => Request::Input('name') ]) ] );
+    
+                if(!empty($current_user) && request('last_user_hash') == $current_user->get_token()) {
                 } else {
+                    $current_user = null;
+                }
+            }
+        }
 
-                    if(empty(Request::input('check-for-same'))) {
-                        $username = Request::Input('name');
-                        $team_ids = [];
+        if(empty($current_user)) {
+            return Response::json([
+                'success' => false, 
+                'message' => trans('trp.common.something-wrong') 
+            ]);
+        }
 
-                        if( $current_user->team->isNotEmpty()) {
+        $validator = Validator::make(Request::all(), [
+            'name' => ['required', 'string'],
+            'team-job' => ['required'],
+        ]);
 
-                            foreach ($current_user->team as $t) {
-                                $team_ids[] = $t->dentist_id;
-                            }
-                        }
+        if ($validator->fails()) {
+            return Response::json([
+                'success' => false, 
+                'message' => trans('trp.popup.verification-popup.clinic.team-name-error') 
+            ]);
+        } else {
+            if (Request::input('team-job') != 'dentist') {
+                $invitation = new UserInvite;
+                $invitation->user_id = $current_user->id;
+                $invitation->invited_email = ' ';
+                $invitation->invited_name = Request::Input('name');
+                $invitation->job = Request::Input('team-job');
+                $invitation->join_clinic = true;
+                $invitation->for_team = true;
+                $invitation->platform = 'trp';
+                $invitation->save();
 
-                        $dentists_with_same_name = User::where('is_dentist', true)->where('is_clinic', '!=', 1)->where(function($query) use ($username) {
-                            $query->where('name', 'LIKE', $username)
-                            ->orWhere('name_alternative', 'LIKE', $username);
-                        })->whereIn('status', config('dentist-statuses.dentist_approved'))
-                        ->whereNull('self_deleted');
+                if( Request::input('photo') ) {
+                    $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
+                    $invitation->addImage($img);
+                }
 
-                        if (!empty($team_ids)) {
-                            $dentists_with_same_name = $dentists_with_same_name->whereNotIn('id', $team_ids)->get();
-                        } else {
-                            $dentists_with_same_name = $dentists_with_same_name->get();
-                        }
+                return Response::json([
+                    'success' => true, 
+                    'message' => trans('trp.popup.verification-popup.clinic.no-email-success', [
+                        'name' => Request::Input('name') 
+                    ])
+                ]);
+            } else {
 
-                        if($dentists_with_same_name->isNotEmpty()) {
-                            
-                            foreach ($dentists_with_same_name as $same_dentist) {
-                                $user_list[] = [
-                                    'name' => $same_dentist->getNames().( $same_dentist->name_alternative && mb_strtolower($same_dentist->name)!=mb_strtolower($same_dentist->name_alternative) ? ' / '.$same_dentist->name_alternative : '' ),
-                                    'id' => $same_dentist->id,
-                                    'avatar' => $same_dentist->getImageUrl(),
-                                    'location' => !empty($same_dentist->country) ? $same_dentist->city_name.', '.$same_dentist->country->name : '',
-                                ];
-                            }
+                if(empty(Request::input('check-for-same'))) {
+                    $username = Request::Input('name');
+                    $team_ids = [];
 
-                            return Response::json( [
-                                'success' => true,
-                                'dentists' => $user_list
-                            ] );
+                    if( $current_user->team->isNotEmpty()) {
+                        foreach ($current_user->team as $t) {
+                            $team_ids[] = $t->dentist_id;
                         }
                     }
 
-                    if(!empty(Request::input('email'))) {
+                    $dentists_with_same_name = User::where('is_dentist', true)->where('is_clinic', '!=', 1)->where(function($query) use ($username) {
+                        $query->where('name', 'LIKE', $username)
+                        ->orWhere('name_alternative', 'LIKE', $username);
+                    })->whereIn('status', config('dentist-statuses.dentist_approved'))
+                    ->whereNull('self_deleted');
 
-                        if (!filter_var(Request::input('email'), FILTER_VALIDATE_EMAIL)) {
-                            return Response::json(['success' => false, 'message' => trans('trp.popup.verification-popup.clinic.invalid-email-error') ] );
+                    if (!empty($team_ids)) {
+                        $dentists_with_same_name = $dentists_with_same_name->whereNotIn('id', $team_ids)->get();
+                    } else {
+                        $dentists_with_same_name = $dentists_with_same_name->get();
+                    }
+
+                    if($dentists_with_same_name->isNotEmpty()) {
+                        foreach ($dentists_with_same_name as $same_dentist) {
+                            $user_list[] = [
+                                'name' => $same_dentist->getNames().( $same_dentist->name_alternative && mb_strtolower($same_dentist->name)!=mb_strtolower($same_dentist->name_alternative) ? ' / '.$same_dentist->name_alternative : '' ),
+                                'id' => $same_dentist->id,
+                                'avatar' => $same_dentist->getImageUrl(),
+                                'location' => !empty($same_dentist->country) ? $same_dentist->city_name.', '.$same_dentist->country->name : '',
+                            ];
                         }
 
-                        $valid_email = $this->user->sendgridEmailValidation(92, Request::input('email'));
+                        return Response::json( [
+                            'success' => true,
+                            'dentists' => $user_list
+                        ] );
+                    }
+                }
 
-                        if(!$valid_email) {
-                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite-dentist.suspicious-email') ] );
+                if(!empty(Request::input('email'))) {
+
+                    if (!filter_var(Request::input('email'), FILTER_VALIDATE_EMAIL)) {
+                        return Response::json([
+                            'success' => false,
+                            'message' => trans('trp.popup.verification-popup.clinic.invalid-email-error')
+                        ]);
+                    }
+
+                    $valid_email = $this->user->sendgridEmailValidation(92, Request::input('email'));
+
+                    if(!$valid_email) {
+                        return Response::json([
+                            'success' => false,
+                            'message' => trans('trp.page.profile.invite-dentist.suspicious-email')
+                        ]);
+                    }
+
+                    $existing_dentist = User::where('email', 'LIKE', Request::input('email'))->withTrashed()->first();
+
+                    if( !empty($existing_dentist)) {
+
+                        if(!$existing_dentist->is_dentist) {
+                            return Response::json([
+                                'success' => false, 
+                                'message' => trans('trp.popup.verification-popup.clinic.invite-patient-error') 
+                            ]);
                         }
 
-                        $existing_dentist = User::where('email', 'LIKE', Request::input('email'))->withTrashed()->first();
+                        if($existing_dentist->is_clinic) {
+                            return Response::json([
+                                'success' => false, 
+                                'message' => trans('trp.popup.verification-popup.clinic.invite-clinic-error') 
+                            ]);
+                        }
 
-                        if( !empty($existing_dentist)) {
+                        $existing_team = UserTeam::where('user_id', $current_user->id)->where('dentist_id', $existing_dentist->id )->first();
 
-                            if(!$existing_dentist->is_dentist) {
-                                return Response::json(['success' => false, 'message' => trans('trp.popup.verification-popup.clinic.invite-patient-error') ] );
+                        if(!empty($existing_team)) {
+                            return Response::json([
+                                'success' => false, 
+                                'message' => trans('trp.popup.verification-popup.clinic.existing-team-error') 
+                            ]);
+
+                        } else if(empty($existing_dentist->self_deleted) && empty($existing_dentist->deleted_at) && in_array($existing_dentist->status, config('dentist-statuses.dentist_for_team')) ) {
+
+                            $newteam = new UserTeam;
+                            $newteam->dentist_id = $existing_dentist->id;
+                            $newteam->user_id = $current_user->id;
+                            $newteam->approved = 1;
+                            $newteam->save();
+
+                            if(!empty($this->user) && in_array($existing_dentist->status, ['approved', 'added_by_clinic_claimed', 'test'])) {
+
+                                $existing_dentist->sendTemplate(33, [
+                                    'clinic-name' => $this->user->getNames(),
+                                    'clinic-link' => $this->user->getLink()
+                                ], 'trp');
                             }
 
-                            if($existing_dentist->is_clinic) {
-                                return Response::json(['success' => false, 'message' => trans('trp.popup.verification-popup.clinic.invite-clinic-error') ] );
-                            }
-
-                            $existing_team = UserTeam::where('user_id', $current_user->id)->where('dentist_id', $existing_dentist->id )->first();
-
-                            if(!empty($existing_team)) {
-                                return Response::json(['success' => false, 'message' => trans('trp.popup.verification-popup.clinic.existing-team-error') ] );
-
-                            } else if(empty($existing_dentist->self_deleted) && empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'added_by_clinic_unclaimed' || $existing_dentist->status == 'test' || $existing_dentist->status == 'added_approved' || $existing_dentist->status == 'added_new' || $existing_dentist->status == 'admin_imported' || $existing_dentist->status == 'added_by_clinic_new') ) {
-
-                                $newteam = new UserTeam;
-                                $newteam->dentist_id = $existing_dentist->id;
-                                $newteam->user_id = $current_user->id;
-                                $newteam->approved = 1;
-                                $newteam->save();
-
-                                if(!empty($this->user) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'test')) {
-
-                                    $existing_dentist->sendTemplate(33, [
-                                        'clinic-name' => $this->user->getNames(),
-                                        'clinic-link' => $this->user->getLink()
-                                    ], 'trp');
-                                }
-
-                                if($existing_dentist->status == 'test') {
-                                    $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is with status Test.
-                                    Link to dentist\'s profile:
-                                    '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$existing_dentist->id).'
-                                    Link to clinic\'s profile: 
-                                    '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$current_user->id).'
-                                    '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-                                    ';
-
-                                    Mail::raw($mtext, function ($message) use ($current_user) {
-
-                                        $sender = config('mail.from.address');
-                                        $sender_name = config('mail.from.name');
-
-                                        $message->from($sender, $sender_name);
-                                        $message->to( 'petya.ivanova@dentacoin.com' );
-                                        $message->to( 'donika.kraeva@dentacoin.com' );
-                                        $message->to( 'betina.bogdanova@dentacoin.com' );
-                                        $message->subject('Clinic '.$current_user->getNames().' added a new team member that is with status Test');
-                                    });
-                                }
-
-                                return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.clinic.success') ] );
-                            } else if(empty($existing_dentist->self_deleted) && empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'new') ) {
-
-                                if (!empty($this->user)) {
-                                    $user_history = new UserHistory;
-                                    $user_history->user_id = $existing_dentist->id;
-                                    $user_history->status = $existing_dentist->status;
-                                    $user_history->save();
-
-                                    $existing_dentist->status = 'added_by_clinic_claimed';
-                                    $existing_dentist->slug = $existing_dentist->makeSlug();
-                                    $existing_dentist->save();
-
-                                    $existing_dentist->sendGridTemplate(26, [], 'trp');
-
-                                    $newteam = new UserTeam;
-                                    $newteam->dentist_id = $existing_dentist->id;
-                                    $newteam->user_id = $current_user->id;
-                                    $newteam->approved = 1;
-                                    $newteam->save();
-
-                                    $existing_dentist->sendTemplate(33, [
-                                        'clinic-name' => $this->user->getNames(),
-                                        'clinic-link' => $this->user->getLink()
-                                    ], 'trp');
-                                } else {
-
-                                    $newteam = new UserTeam;
-                                    $newteam->dentist_id = $existing_dentist->id;
-                                    $newteam->user_id = $current_user->id;
-                                    $newteam->approved = 0;
-                                    $newteam->new_clinic = 1;
-                                    
-                                    $newteam->save();
-                                }
-
-                                return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.clinic.success') ] );
-
-                            } else if(!empty($existing_dentist->self_deleted) || !empty($existing_dentist->deleted_at) || $existing_dentist->status == 'rejected' || $existing_dentist->status == 'added_by_clinic_rejected' || $existing_dentist->status == 'added_rejected' || $existing_dentist->status == 'pending') {
-
-                                $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
+                            if($existing_dentist->status == 'test') {
+                                $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is with status Test.
+                                Link to dentist\'s profile:
                                 '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$existing_dentist->id).'
                                 Link to clinic\'s profile: 
                                 '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$current_user->id).'
@@ -1117,80 +754,148 @@ class ProfileController extends FrontController {
                                     $message->to( 'petya.ivanova@dentacoin.com' );
                                     $message->to( 'donika.kraeva@dentacoin.com' );
                                     $message->to( 'betina.bogdanova@dentacoin.com' );
-                                    $message->subject('Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious');
+                                    $message->subject('Clinic '.$current_user->getNames().' added a new team member that is with status Test');
                                 });
-
-                                return Response::json(['success' => false, 'message' => trans('trp.popup.verification-popup.clinic.suspicious-email-error') ] );
                             }
+
+                            return Response::json([
+                                'success' => true, 
+                                'message' => trans('trp.popup.verification-popup.clinic.success') 
+                            ]);
+                        } else if(empty($existing_dentist->self_deleted) && empty($existing_dentist->deleted_at) && $existing_dentist->status == 'new' ) {
+
+                            if (!empty($this->user)) {
+                                $user_history = new UserHistory;
+                                $user_history->user_id = $existing_dentist->id;
+                                $user_history->status = $existing_dentist->status;
+                                $user_history->save();
+
+                                $existing_dentist->status = 'added_by_clinic_claimed';
+                                $existing_dentist->slug = $existing_dentist->makeSlug();
+                                $existing_dentist->save();
+
+                                $existing_dentist->sendGridTemplate(26, [], 'trp');
+
+                                $newteam = new UserTeam;
+                                $newteam->dentist_id = $existing_dentist->id;
+                                $newteam->user_id = $current_user->id;
+                                $newteam->approved = 1;
+                                $newteam->save();
+
+                                $existing_dentist->sendTemplate(33, [
+                                    'clinic-name' => $this->user->getNames(),
+                                    'clinic-link' => $this->user->getLink()
+                                ], 'trp');
+                            } else {
+
+                                $newteam = new UserTeam;
+                                $newteam->dentist_id = $existing_dentist->id;
+                                $newteam->user_id = $current_user->id;
+                                $newteam->approved = 0;
+                                $newteam->new_clinic = 1;
+                                $newteam->save();
+                            }
+
+                            return Response::json([
+                                'success' => true, 
+                                'message' => trans('trp.popup.verification-popup.clinic.success') 
+                            ]);
+
+                            
+
+                        } else if(!empty($existing_dentist->self_deleted) || !empty($existing_dentist->deleted_at) || in_array($existing_dentist->status, ['rejected', 'added_by_clinic_rejected', 'added_rejected', 'pending'])) {
+
+                            $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
+                            '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$existing_dentist->id).'
+                            Link to clinic\'s profile: 
+                            '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$current_user->id).'
+                            '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                            ';
+
+                            Mail::raw($mtext, function ($message) use ($current_user) {
+                                $sender = config('mail.from.address');
+                                $sender_name = config('mail.from.name');
+
+                                $message->from($sender, $sender_name);
+                                $message->to( 'petya.ivanova@dentacoin.com' );
+                                $message->to( 'donika.kraeva@dentacoin.com' );
+                                $message->to( 'betina.bogdanova@dentacoin.com' );
+                                $message->subject('Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious');
+                            });
+
+                            return Response::json([
+                                'success' => false, 
+                                'message' => trans('trp.popup.verification-popup.clinic.suspicious-email-error') 
+                            ]);
                         }
-
-                        $newuser = new User;
-                        $newuser->name = Request::input('name');
-                        $newuser->email = Request::input('email');
-                        $newuser->status = !empty($this->user) ? 'added_by_clinic_unclaimed' : 'added_by_clinic_new';
-                        $newuser->country_id = $current_user->country_id;
-                        $newuser->address = $current_user->address;
-
-                    } else {
-                        $newuser = new User;
-                        $newuser->name = Request::input('name');
-                        $newuser->status = 'dentist_no_email';
                     }
 
-                    $newuser->platform = 'trp';                    
-                    $newuser->gdpr_privacy = true;
-                    $newuser->is_dentist = 1;
-                    $newuser->invited_by = $current_user->id;
-                    $newuser->save();
+                    $newuser = new User;
+                    $newuser->name = Request::input('name');
+                    $newuser->email = Request::input('email');
+                    $newuser->status = !empty($this->user) ? 'added_by_clinic_unclaimed' : 'added_by_clinic_new';
+                    $newuser->country_id = $current_user->country_id;
+                    $newuser->address = $current_user->address;
+                } else {
+                    $newuser = new User;
+                    $newuser->name = Request::input('name');
+                    $newuser->status = 'dentist_no_email';
+                }
 
-                    if( Request::input('photo') ) {
-                        $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
-                        $newuser->addImage($img);
+                $newuser->platform = 'trp';                    
+                $newuser->gdpr_privacy = true;
+                $newuser->is_dentist = 1;
+                $newuser->invited_by = $current_user->id;
+                $newuser->save();
+
+                if( Request::input('photo') ) {
+                    $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
+                    $newuser->addImage($img);
+                }
+                
+                $newteam = new UserTeam;
+                $newteam->dentist_id = $newuser->id;
+                $newteam->user_id = $current_user->id;
+                $newteam->approved = 1;
+                $newteam->new_clinic = 1;
+                $newteam->save();
+
+                if(!empty(Request::input('email'))) {
+
+                    if(!empty($this->user)) {
+                        $newuser->slug = $newuser->makeSlug();
+                        $newuser->save();
+
+                        $newuser->sendGridTemplate( 92 , [
+                            'clinic_name' => $current_user->getNames(),
+                            "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id).'?'. http_build_query([
+                                'popup'=>'claim-popup'
+                            ]).'&without-info=true',
+                        ], 'trp');
                     }
-                    
-                    $newteam = new UserTeam;
-                    $newteam->dentist_id = $newuser->id;
-                    $newteam->user_id = $current_user->id;
-                    $newteam->approved = 1;
-                    $newteam->new_clinic = 1;
-                    $newteam->save();
 
-                    if(!empty(Request::input('email'))) {
+                    $mtext = 'Clinic '.$current_user->getNames().' added a new team member. Link to profile:
+                    '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                    '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$newuser->id);
 
-                        if(!empty($this->user)) {
+                    Mail::raw($mtext, function ($message) use ( $current_user) {
 
-                            $newuser->slug = $newuser->makeSlug();
-                            $newuser->save();
+                        $sender = config('mail.from.address');
+                        $sender_name = config('mail.from.name');
 
-                            $newuser->sendGridTemplate( 92 , [
-                                'clinic_name' => $current_user->getNames(),
-                                "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
-                            ], 'trp');
-                        }
-
-                        $mtext = 'Clinic '.$current_user->getNames().' added a new team member. Link to profile:
-                        '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-                        '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$newuser->id).'
-
-                        ';
-
-                        Mail::raw($mtext, function ($message) use ( $current_user) {
-
-                            $sender = config('mail.from.address');
-                            $sender_name = config('mail.from.name');
-
-                            $message->from($sender, $sender_name);
-                            $message->to( 'betina.bogdanova@dentacoin.com' );
-                            $message->subject('Clinic '.$current_user->getNames().' added a new team member');
-                        });
-                    }
+                        $message->from($sender, $sender_name);
+                        $message->to( 'betina.bogdanova@dentacoin.com' );
+                        $message->subject('Clinic '.$current_user->getNames().' added a new team member');
+                    });
                 }
             }
-
-            return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.clinic.success'), 'with_email' => ($newuser->status == 'dentist_no_email' ? false : true) ] );
         }
-        
-        return Response::json(['success' => false, 'message' => trans('trp.common.something-wrong') ] );
+
+        return Response::json([
+            'success' => true, 
+            'message' => trans('trp.popup.verification-popup.clinic.success'), 
+            'with_email' => ($newuser->status == 'dentist_no_email' ? false : true) 
+        ]);
     }
 
     /**
@@ -1220,10 +925,18 @@ class ProfileController extends FrontController {
                 ], 'trp');
             }
 
-            return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.dentist-invite.success', ['dentist-name' => $dentist->getNames()])] );
+            return Response::json([
+                'success' => true, 
+                'message' => trans('trp.popup.verification-popup.dentist-invite.success', [
+                    'dentist-name' => $dentist->getNames()
+                ])
+            ]);
         }
         
-        return Response::json(['success' => false, 'message' => trans('trp.common.something-wrong') ] );
+        return Response::json([
+            'success' => false, 
+            'message' => trans('trp.common.something-wrong') 
+        ]);
     }
 
     /**
@@ -1231,7 +944,9 @@ class ProfileController extends FrontController {
      */
     public function upload($locale=null) {
         if(empty($this->user) || !$this->user->is_dentist || ($this->user->is_dentist && !in_array($this->user->status, config('dentist-statuses.approved_test')))) {
-            return Response::json(['success' => false ]);
+            return Response::json([
+                'success' => false 
+            ]);
         }
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
@@ -1256,11 +971,14 @@ class ProfileController extends FrontController {
                 $review_in_clinic->save();
             }
 
-            return Response::json(['success' => true, 'thumb' => $this->user->getImageUrl(true), 'name' => '' ]);
+            return Response::json([
+                'success' => true, 
+                'thumb' => $this->user->getImageUrl(true), 
+                'name' => '' 
+            ]);
         }
     }
     
-
     /**
      * dentist profile edit
      */
@@ -1575,7 +1293,6 @@ class ProfileController extends FrontController {
 
                         $reward->save();
 
-
                         $reward = new DcnReward();
                         $reward->user_id = $ask->dentist_id;
                         $reward->platform = 'trp';
@@ -1665,11 +1382,13 @@ class ProfileController extends FrontController {
      */
     public function gallery($locale=null, $position=null) {
         if( Request::file('image') && Request::file('image')->isValid() ) {
+
             $dapic = new UserPhoto;
             $dapic->user_id = $this->user->id;
             $dapic->save();
             $img = Image::make( Input::file('image') )->orientate();
             $dapic->addImage($img);
+
             return Response::json([
                 'success' => true,
                 'url' => $dapic->getImageUrl(true),
@@ -1712,7 +1431,7 @@ class ProfileController extends FrontController {
             User::destroy( $dentist->id );
         }
 
-        $res = UserTeam::where('user_id', $this->user->id)->where('dentist_id', $id)->delete();
+        UserTeam::where('user_id', $this->user->id)->where('dentist_id', $id)->delete();
         
         return Response::json( [
             'success' => true,
@@ -1747,12 +1466,10 @@ class ProfileController extends FrontController {
         $item = UserTeam::where('dentist_id', $id)->where('user_id', $this->user->id)->first();
 
         if ($item) {
-            
             $item->approved = 1;
             $item->save();
 
             $dentist = User::find( $id );
-
             $dentist->sendTemplate(35, [
                 'clinic-name' => $this->user->getNames()
             ], 'trp');
@@ -2191,6 +1908,213 @@ class ProfileController extends FrontController {
                     'success' => true,
                 ] );
             }
+        }
+    }
+
+    private function sendInvite($email, $name, $for_bulk_invites) {
+        $ret = null;
+        $send_mail = false;
+
+        $invitation = UserInvite::where([
+            ['user_id', $this->user->id],
+            ['invited_email', 'LIKE', $email],
+        ])->first();
+
+        $existing_patient = User::withTrashed()->where('email', 'LIKE', $email )->where('is_dentist', 0)->first();
+        $existing_anonymous = AnonymousUser::where('email', 'LIKE', $email)->first();
+
+        if(!$for_bulk_invites) {
+            if(!empty($existing_patient) && (!empty($existing_patient->deleted_at) || $existing_patient->self_deleted )) {
+                $ret = [
+                    'success' => false, 
+                    'message' => trans('trp.page.profile.invite.patient-deleted', [
+                        'email' => $email
+                    ])
+                ];
+
+                return $ret;
+            }
+        }
+        
+        if(empty($existing_patient) || empty($existing_patient->deleted_at)) { ///da proveeq
+
+            if($invitation) {
+                if(!$for_bulk_invites) {
+                    if(!empty($existing_patient)) {                        
+                        if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
+                            $ret = [
+                                'success' => false, 
+                                'message' => trans('trp.page.profile.invite.already-invited-month') 
+                            ];
+                            return $ret;
+                        }
+                        $invitation->invited_id = $existing_patient->id;
+                    }
+                }
+
+                if ($invitation->created_at->timestamp < Carbon::now()->subMonths(1)->timestamp) {
+
+                    $invitation->invited_name = $name;
+                    $invitation->created_at = Carbon::now();
+
+                    if (empty($invitation->unsubscribed)) {
+                        $invitation->review = true;
+                        $invitation->completed = null;
+                        $invitation->notified1 = null;
+                        $invitation->notified2 = null;
+                        $invitation->notified3 = null;
+                    }
+                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
+                        $invitation->for_dentist_patients = true;
+                    }
+                    $invitation->save();
+                    $send_mail = true;
+
+                    if(!empty($existing_patient)) {
+                        $this->askDentistToBeHisPatient($existing_patient);
+                    }
+                }
+            } else {
+
+                $valid_email = $this->user->sendgridEmailValidation(68, $email);
+
+                $invitation = new UserInvite;
+                $invitation->user_id = $this->user->id;
+                $invitation->invited_email = $email;
+                $invitation->invited_name = $name;
+                $invitation->platform = 'trp';
+                $invitation->review = true;
+                if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
+                    $invitation->for_dentist_patients = true;
+                }
+
+                if(!$valid_email) {
+                    $invitation->suspicious_email = true;
+                } else {
+                    $send_mail = true;
+                    
+                    if(!empty($existing_patient)) {
+                        $invitation->invited_id = $existing_patient->id;
+                    }
+                }
+
+                $invitation->save();
+            }
+
+            if ($send_mail) {
+                if(!empty($existing_patient)) {
+
+                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
+                        $existing_patient->patient_of = $this->user->id;
+                        $existing_patient->save();
+                    }
+
+                    $substitutions = [
+                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                        'inviting_user_name' => $this->user->getNames(),
+                        'invited_user_name' => $name,
+                        "invitation_link" => $this->user->getLink().'?'. http_build_query([
+                            'dcn-gateway-type'=>'patient-login', 
+                            'inviter' => User::encrypt($this->user->id), 
+                            'inviteid' => User::encrypt($invitation->id) 
+                        ]),
+                    ];
+
+                    $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
+
+                } else {
+
+                    $inviter_email = $this->user->email ? $this->user->email : $this->user->mainBranchEmail();
+
+                    if($email != $inviter_email) {
+                        $dentist_name = $this->user->name;
+
+                        $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', $email);
+
+                        if(!empty($existing_anonymous)) {
+
+                            if(!$unsubscribed) {
+                                $subscribe_cats = $existing_anonymous->website_notifications;
+
+                                if(!isset($subscribe_cats['trp'])) {
+
+                                    $subscribe_cats[] = 'trp';
+                                    $existing_anonymous->website_notifications = $subscribe_cats;
+                                    $existing_anonymous->save();
+                                }
+                            }
+                        } else {
+                            $new_anonymous_user = new AnonymousUser;
+                            $new_anonymous_user->email = $email;
+                            $new_anonymous_user->website_notifications = ['trp'];
+                            $new_anonymous_user->save();
+                        }
+
+                        $substitutions = [
+                            'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                            'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
+                            'invited_user_name' => $name,
+                            "invitation_link" => $this->user->getLink().'?'. http_build_query([
+                                'dcn-gateway-type'=>'patient-register', 
+                                'inviter' => User::encrypt($this->user->id), 
+                                'inviteid' => User::encrypt($invitation->id) 
+                            ]),
+                        ];
+
+                        User::unregisteredSendGridTemplate(
+                            $this->user, 
+                            $email, 
+                            $name, 
+                            106, 
+                            $substitutions, 
+                            'trp', 
+                            $unsubscribed, 
+                            $email
+                        );
+                    } else {
+                        if(!$for_bulk_invites) {
+                            $ret = [
+                                'success' => false, 
+                                'message' => trans('trp.page.profile.invite.yourself') 
+                            ];
+                            return $ret;
+                        }
+                    }
+                }
+
+                if(!$for_bulk_invites) {
+                    $ret = [
+                        'success' => true, 
+                        'message' => trans('trp.page.profile.invite.success') 
+                    ];
+                    return $ret;
+                }
+            }
+        }
+
+        if(!$for_bulk_invites) {
+            $ret = [
+                'success' => false, 
+                'message' => 'Error'
+            ];
+            return $ret;
+        }
+    }
+
+    private function askDentistToBeHisPatient($existing_patient) {
+
+        $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
+        if(!empty($last_ask)) {
+            $last_ask->created_at = Carbon::now();
+            $last_ask->on_review = true;
+            $last_ask->save();
+        } else {
+            $ask = new UserAsk;
+            $ask->user_id = $existing_patient->id;
+            $ask->dentist_id = $this->user->id;
+            $ask->status = 'yes';
+            $ask->on_review = true;
+            $ask->save();
         }
     }
 }

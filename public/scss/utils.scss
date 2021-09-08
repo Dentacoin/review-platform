@@ -480,6 +480,19 @@ h4 {
 				background: url("../img/alert-small-warning.png") no-repeat 0px 0px;
 			}
 		}
+		&.alert-orange {
+			border-color: #f59c1a;
+			color: #f59c1a;			
+			strong {
+				color: #f59c1a;			
+			}
+			&:before {
+	    		content: "";
+				width: 22px;
+				height: 22px;
+				background: url("../img/alert-small-warning.png") no-repeat 0px 0px;
+			}
+		}
 		&.alert-success {
 			border-color: #2b9b60;
 			color: #2b9b60;
@@ -929,7 +942,6 @@ textarea.input {
 			width: 14px;
     		height: 14px;
 			line-height: 23px;
-		
 		}
 	}
 

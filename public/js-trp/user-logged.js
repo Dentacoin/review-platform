@@ -973,7 +973,7 @@ $(document).ready(function(){
             var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
                 <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
                     <div class="delete-gallery delete-button" sure="'+sure_text+'">\
-                        <img class="close-icon" src="'+all_images_path+'/close-icon-white.svg"/>\
+                        <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
                     </div>\
                 </div>\
             </a>\

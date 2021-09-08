@@ -1297,9 +1297,12 @@ body.reviews-guided-tour {
 
 				    &.active {
 				    	.invite-radio {
-				    		i {
-								&:before {
-									content: "\f14a";
+							.checkbox-square {
+								font-size: 13px;
+								line-height: 18px;
+
+								@media #{$phone} {
+									line-height: 13px;
 								}
 							}
 				    	}
@@ -1321,9 +1324,25 @@ body.reviews-guided-tour {
 				    		display: none;
 				    	}
 
-				    	i {
-				    		font-size: 28px;
-    						color: #126585;
+				    	.checkbox-square {
+				    		width: 17px;
+							height: 17px;
+							border: 1px solid #126585;
+							display: inline-block;
+							background-color: white;
+							color: #126585;
+							line-height: 26px;
+							text-align: center;
+							border-radius: 20%;
+							font-weight: bold;
+							margin-right: 5px;
+							font-size: 0px;
+
+							@media #{$phone} {
+								width: 14px;
+								height: 14px;
+								line-height: 23px;
+							}
 				    	}
 				    }
 

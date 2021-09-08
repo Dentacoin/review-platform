@@ -386,6 +386,19 @@ h4 {
       width: 22px;
       height: 22px;
       background: url("../img/alert-small-warning.png") no-repeat 0px 0px; }
+  .fixed-popup .alert.alert-orange,
+  .site-content .alert.alert-orange {
+    border-color: #f59c1a;
+    color: #f59c1a; }
+    .fixed-popup .alert.alert-orange strong,
+    .site-content .alert.alert-orange strong {
+      color: #f59c1a; }
+    .fixed-popup .alert.alert-orange:before,
+    .site-content .alert.alert-orange:before {
+      content: "";
+      width: 22px;
+      height: 22px;
+      background: url("../img/alert-small-warning.png") no-repeat 0px 0px; }
   .fixed-popup .alert.alert-success,
   .site-content .alert.alert-success {
     border-color: #2b9b60;

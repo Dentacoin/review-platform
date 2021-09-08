@@ -225,6 +225,7 @@ class DentistController extends FrontController {
                     if( !$this->user->is_dentist) {
 
                         $old_review = $this->user->hasReviewTo($item->id);
+
                         if( $this->user->loggedFromBadIp() ) {
                             $ul = new UserLogin;
                             $ul->user_id = $this->user->id;
@@ -315,11 +316,9 @@ class DentistController extends FrontController {
                             $item->review_notification = true;
                             $item->save();
 
-                            $total = 0;
                             $answer_rates = [];
                             $answer_three_qs_rates = [];
-                            $crypto_data = [];
-                            $crypto_data['answer'] = strip_tags(Request::input( 'answer' ));
+
                             foreach ($questions as $question) {
 
                                 if ($question->id == 4 || $question->id == 6 || $question->id == 7) {
@@ -334,7 +333,6 @@ class DentistController extends FrontController {
                                     $answer_three_qs_rates[$question->id] /= count($options_three);
                                 }
 
-                                $crypto_data['question-'.$question->id] = [];
                                 $answer_rates[$question->id] = 0;
                                 $option_answers = [];
                                 $options = json_decode($question['options'], true);
@@ -358,14 +356,13 @@ class DentistController extends FrontController {
                                 $answer->review_id = $review->id;
                                 $answer->question_id = $question->id;
                                 $answer->options = json_encode($option_answers);
-                                $crypto_data['question-'.$question->id] = $option_answers;
                                 $answer->save();
                             }
 
                             $review->rating = array_sum($answer_rates) / (!empty(Request::input( 'dentist_clinics' )) && Request::input( 'dentist_clinics' ) == 'own' ? 3 : count($answer_rates));
                             $review->team_doctor_rating = !empty(Request::input( 'dentist_clinics' )) || !empty(Request::input( 'clinic_dentists' )) ? array_sum($answer_three_qs_rates) / 3 : null;
                             $review->save();
-
+                            
                             if (!empty($review->dentist_id)) {
                                 $the_dentist = User::find($review->dentist_id);
                                 $the_dentist->recalculateRating();
