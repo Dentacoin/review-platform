@@ -41,7 +41,7 @@
 		<link rel="preload" href="{{ url('fonts/Calibri.woff2') }}" as="font" crossorigin>
 		
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
-		@if($user && $user->is_dentist)
+		@if($user)
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/trp-logged.css').'?ver='.$cache_version }}" />
 		@endif
 		

@@ -2,11 +2,11 @@ $pc: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 998px)";
 $phone: "screen and (max-width: 768px)";
 
-
-
 $popup_padding: 100px;
 $popup_padding_mobile: 20px;
 $sort_popup_padding: 70px;
+
+@import 'trp-search-form';
 
 .main-top {
 	background: rgb(31,191,242); /* Old browsers */

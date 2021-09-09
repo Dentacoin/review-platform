@@ -1,0 +1,199 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+.list-reviews {
+
+	label {
+		display: flex;
+	    padding-top: 30px;
+	    border-bottom: 1px solid #ccc;
+	    align-items: center;
+
+	    @media #{$phone} {
+	    	flex-direction: column;
+	    	padding-top: 10px;
+	    	border-bottom: none;
+	    }
+
+	    &:last-child {
+	    	border-bottom: 0px;
+	    }
+
+	    & * {
+	    	background-color: transparent;
+	    }
+
+	    &.active,
+	    &:hover {
+	    	background-color: rgba(3, 169, 244, 0.03);
+
+	    	@media #{$tablet} {
+	    		background-color: transparent;
+	    	}
+	    }
+
+	    .widget-checkbox {
+			margin-top: -50px;
+			margin-right: 20px;
+			margin-left: 20px;
+
+			@media #{$phone} {
+				margin-top: 0px;
+				margin-bottom: 20px;
+			}
+
+			i {
+				@media #{$phone} {
+					font-size: 21px;
+				}
+			}
+	    }
+	}
+
+	.list-review {
+		display: flex;
+	    padding-bottom: 30px;
+	    border-bottom: 1px solid #ccc;
+	    padding-bottom: 30px;
+
+	    @media #{$phone} {
+	    	flex-direction: column;
+	    	border-bottom: none;
+	    	position: relative;
+	    }
+
+	    &:after {
+	    	@media #{$phone} {
+	    		content: '';
+	    		position: absolute;
+	    		bottom: 0px;
+	    		width: 213px;
+	    		height: 2px;
+	    		left: 50%;
+	    		transform: translateX(-50%);
+	    		background-color: #eeeeee;
+	    	}
+	    }
+
+	    &:last-child {
+	    	margin-bottom: 0px;
+	    	border-bottom: none;
+	    }
+
+		.review-avatar {
+			width: 84px;
+		    height: 84px;
+		    background-size: cover;
+		    border-radius: 50%;
+		    margin-bottom: 28px;
+		    position: relative;
+
+		    @media #{$phone} {
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 14px;
+		    }
+
+		    &:before {
+		    	content: '';
+			    position: absolute;
+			    left: 0px;
+			    right: 0;
+			    top: 0px;
+			    bottom: 0;
+			    width: 100%;
+			    background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%;
+		    }
+		}
+
+		.list-review-left {
+			margin-right: 30px;
+
+			@media #{$phone} {
+				margin-right: 0px;
+			}
+		}
+
+		.list-review-right {
+			text-align: left;
+
+			@media #{$phone} {
+				text-align: center;
+			}
+		}
+
+		.review-date {
+			color: #888888;
+			text-align: center;
+
+			@media #{$phone} {
+				display: none;
+			}
+		}
+
+		.review-title {
+			font-size: 20px;
+			font-weight: bold;
+			font-style: italic;
+			text-transform: uppercase;
+		}
+
+		.ratings {
+		    margin-top: 6px;
+
+		    @media #{$phone} {
+		    	margin-top: 14px;
+		    }
+
+		    .stars {
+		        width: 117px;
+		        height: 20px;
+		        background: url('../img-trp/new-stars-gray.png') 50% 50% no-repeat;
+
+		        .bar {
+		            background: url('../img-trp/new-stars-blue.png') 0% 50% no-repeat;
+		            height: 20px;
+		        }
+		    }
+		}
+
+		.review-content {
+			font-weight: 300;
+		    margin-top: 3px;
+		    overflow: hidden;
+		    display: -webkit-box;
+		    -webkit-line-clamp: 2;
+		    -webkit-box-orient: vertical;
+		    font-size: 18px;
+
+		    @media #{$phone} {
+		    	-webkit-line-clamp: 4;
+		    	margin-top: 12px;
+		    }
+		}
+
+		.review-name {
+			font-weight: bold;
+		    font-size: 18px;
+		    margin-top: 10px;
+		    display: block;
+		    color: #333;
+
+		    @media #{$phone} {
+		    	font-size: 16px;
+		    	margin-bottom: 15px;
+		    }
+		}
+
+		.mobile-review-date {
+			display: none;
+			text-align: center;
+			color: #888888;
+
+			@media #{$phone} {
+				display: block;
+			}
+		}
+	}
+}

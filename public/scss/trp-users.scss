@@ -3,6 +3,7 @@ $tablet: "screen and (max-width: 998px)";
 $phone: "screen and (max-width: 768px)";
 
 @import 'trp-parts-reviews';
+@import 'trp-search-form';
 
 .profile-info {
     padding: 15px;
@@ -890,6 +891,11 @@ $phone: "screen and (max-width: 768px)";
 
 .details-wrapper {
 	margin-top: 35px;
+	margin-bottom: 100px;
+
+	@media #{$phone} {
+		margin-bottom: 10px;
+	}
 
 	.tab-container {
 		display: none;

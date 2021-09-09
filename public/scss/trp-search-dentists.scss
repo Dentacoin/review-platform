@@ -2,6 +2,8 @@ $pc: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 998px)";
 $phone: "screen and (max-width: 768px)";
 
+@import 'trp-search-form';
+
 .site-content {
 	min-height: calc(100vh - 147px);
 

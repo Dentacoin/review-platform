@@ -994,74 +994,6 @@ textarea.input {
 .blue-text {
   color: #14cab8; }
 
-.home-search-form {
-  position: absolute;
-  z-index: 102;
-  width: 830px;
-  top: 140px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: transparent; }
-  @media screen and (max-width: 998px) {
-    .home-search-form {
-      width: 100%;
-      padding: 0px 20px; } }
-  @media screen and (max-width: 768px) {
-    .home-search-form {
-      top: 100px; } }
-  .home-search-form h1 {
-    color: white;
-    padding-top: 0px;
-    font-weight: bold;
-    text-transform: uppercase; }
-  .home-search-form h2 {
-    color: white; }
-  .home-search-form form {
-    height: 54px;
-    background-color: white;
-    margin-bottom: 40px;
-    display: block;
-    border-radius: 5px;
-    padding-left: 18px;
-    padding-right: 18px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0px 3px 4px 0px #0c779c;
-    position: relative; }
-    @media screen and (max-width: 768px) {
-      .home-search-form form {
-        height: 35px;
-        padding-left: 8px;
-        padding-right: 8px; } }
-    .home-search-form form input[type="text"] {
-      flex: 1;
-      font-size: 16px;
-      border: none;
-      padding-left: 10px; }
-      @media screen and (max-width: 768px) {
-        .home-search-form form input[type="text"] {
-          font-size: 14px; } }
-      .home-search-form form input[type="text"]:focus {
-        outline: none; }
-      .home-search-form form input[type="text"]::placeholder {
-        color: #8c8c8c; }
-    .home-search-form form input[type="submit"] {
-      background: url("../img-trp/submit.png") no-repeat 50% 50%;
-      width: 27px;
-      height: 27px;
-      border: none;
-      cursor: pointer;
-      border-radius: 50%;
-      transition: all 0.3s ease; }
-      @media screen and (max-width: 768px) {
-        .home-search-form form input[type="submit"] {
-          background-size: 21px; } }
-      .home-search-form form input[type="submit"]:focus {
-        outline: none; }
-      .home-search-form form input[type="submit"]:hover {
-        background-color: #d7e4ff;
-        transition: all 0.3s ease; }
-
 header {
   position: fixed;
   left: 0px;
@@ -1232,56 +1164,6 @@ body.strength-pb {
 
 .loader {
   display: none; }
-
-.results {
-  position: absolute;
-  top: 101%;
-  right: 0px;
-  left: 0px;
-  padding: 20px;
-  z-index: 10000;
-  background-color: white;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px; }
-  @media screen and (max-width: 768px) {
-    .results {
-      text-align: left; } }
-  .results .result-title {
-    color: #777777;
-    border-bottom: 1px solid #9dcbe5;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
-    display: inline-block; }
-  .results a {
-    display: block;
-    padding: 3px 12px;
-    margin-bottom: 4px;
-    font-size: 14px; }
-    @media screen and (max-width: 768px) {
-      .results a {
-        padding-left: 0px; } }
-    .results a.special {
-      color: #126585; }
-    .results a.active, .results a:hover {
-      background-color: #d8eaf5; }
-  .results .results-type {
-    margin-bottom: 25px; }
-    .results .results-type:last-child {
-      margin-bottom: 0px; }
-  .results .ratings {
-    margin-top: 0px;
-    float: right; }
-    @media screen and (max-width: 768px) {
-      .results .ratings {
-        display: none; } }
-    .results .ratings .stars {
-      background: url("../img-trp/stars-gray.png") 50% 50% no-repeat;
-      background-size: contain; }
-      .results .ratings .stars .bar {
-        background: url("../img-trp/stars-black.png") 0% 50% no-repeat;
-        background-size: cover; }
-    .results .ratings .rating {
-      vertical-align: top; }
 
 .flickity {
   width: 89%;
@@ -1462,21 +1344,6 @@ body.strength-pb {
     background: url("../img-trp/slider-arrow-right.png") 50% 50% no-repeat; }
     .flickity .flickity-prev-next-button.next svg {
       display: none; }
-
-.flickity-oval {
-  position: relative;
-  background-color: #f7f7f7; }
-  .flickity-oval::after {
-    content: '';
-    position: absolute;
-    top: 0px;
-    background: url("../img-trp/oval-blue.png") no-repeat 50% 50%;
-    background-size: 100% 100%;
-    width: 100%;
-    height: 81px; }
-  .flickity-oval .slider-wrapper {
-    display: flex;
-    flex-direction: column; }
 
 .gbb {
   position: relative;
@@ -2062,12 +1929,6 @@ footer {
   .blue-background.extended {
     height: 147px; }
 
-.profile-reviews-space {
-  margin-bottom: 100px; }
-  @media screen and (max-width: 768px) {
-    .profile-reviews-space {
-      margin-bottom: 10px; } }
-
 .trusted-sticker {
   display: inline-flex;
   align-items: center;
@@ -2085,34 +1946,6 @@ footer {
 .cover {
   background-position: 50%;
   background-size: cover; }
-
-.page-profile .site-content {
-  min-height: 700px; }
-  @media screen and (max-width: 768px) {
-    .page-profile .site-content {
-      min-height: auto; } }
-  @media screen and (max-width: 992px) {
-    .page-profile .site-content > .container {
-      position: relative;
-      z-index: 100; } }
-.page-profile .blue-background {
-  height: 75px;
-  margin-bottom: 25px; }
-  @media screen and (max-width: 992px) {
-    .page-profile .blue-background {
-      background: transparent;
-      height: 45px;
-      margin-bottom: 10px; } }
-  .page-profile .blue-background::after {
-    display: none; }
-@media screen and (max-width: 992px) {
-  .page-profile header.fixed-header {
-    background: white; }
-  .page-profile header .logo {
-    background-image: url(../img-trp/logo-blue-mobile.png);
-    background-size: contain; }
-  .page-profile header .header-info > :not(.profile-menu-mobile) {
-    display: none; } }
 
 .suggester-wrapper {
   position: relative; }
@@ -2415,143 +2248,6 @@ footer {
   .mobile-alert:before,
   #alert-name-dentist:before {
     font-size: 20px; }
-
-.list-reviews label {
-  display: flex;
-  padding-top: 30px;
-  border-bottom: 1px solid #ccc;
-  align-items: center; }
-  @media screen and (max-width: 768px) {
-    .list-reviews label {
-      flex-direction: column;
-      padding-top: 10px;
-      border-bottom: none; } }
-  .list-reviews label:last-child {
-    border-bottom: 0px; }
-  .list-reviews label * {
-    background-color: transparent; }
-  .list-reviews label.active, .list-reviews label:hover {
-    background-color: rgba(3, 169, 244, 0.03); }
-    @media screen and (max-width: 998px) {
-      .list-reviews label.active, .list-reviews label:hover {
-        background-color: transparent; } }
-  .list-reviews label .widget-checkbox {
-    margin-top: -50px;
-    margin-right: 20px;
-    margin-left: 20px; }
-    @media screen and (max-width: 768px) {
-      .list-reviews label .widget-checkbox {
-        margin-top: 0px;
-        margin-bottom: 20px; } }
-    @media screen and (max-width: 768px) {
-      .list-reviews label .widget-checkbox i {
-        font-size: 21px; } }
-.list-reviews .list-review {
-  display: flex;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 30px; }
-  @media screen and (max-width: 768px) {
-    .list-reviews .list-review {
-      flex-direction: column;
-      border-bottom: none;
-      position: relative; } }
-  @media screen and (max-width: 768px) {
-    .list-reviews .list-review:after {
-      content: '';
-      position: absolute;
-      bottom: 0px;
-      width: 213px;
-      height: 2px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #eeeeee; } }
-  .list-reviews .list-review:last-child {
-    margin-bottom: 0px;
-    border-bottom: none; }
-  .list-reviews .list-review .review-avatar {
-    width: 84px;
-    height: 84px;
-    background-size: cover;
-    border-radius: 50%;
-    margin-bottom: 28px;
-    position: relative; }
-    @media screen and (max-width: 768px) {
-      .list-reviews .list-review .review-avatar {
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 14px; } }
-    .list-reviews .list-review .review-avatar:before {
-      content: '';
-      position: absolute;
-      left: 0px;
-      right: 0;
-      top: 0px;
-      bottom: 0;
-      width: 100%;
-      background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%; }
-  .list-reviews .list-review .list-review-left {
-    margin-right: 30px; }
-    @media screen and (max-width: 768px) {
-      .list-reviews .list-review .list-review-left {
-        margin-right: 0px; } }
-  .list-reviews .list-review .list-review-right {
-    text-align: left; }
-    @media screen and (max-width: 768px) {
-      .list-reviews .list-review .list-review-right {
-        text-align: center; } }
-  .list-reviews .list-review .review-date {
-    color: #888888;
-    text-align: center; }
-    @media screen and (max-width: 768px) {
-      .list-reviews .list-review .review-date {
-        display: none; } }
-  .list-reviews .list-review .review-title {
-    font-size: 20px;
-    font-weight: bold;
-    font-style: italic;
-    text-transform: uppercase; }
-  .list-reviews .list-review .ratings {
-    margin-top: 6px; }
-    @media screen and (max-width: 768px) {
-      .list-reviews .list-review .ratings {
-        margin-top: 14px; } }
-    .list-reviews .list-review .ratings .stars {
-      width: 117px;
-      height: 20px;
-      background: url("../img-trp/new-stars-gray.png") 50% 50% no-repeat; }
-      .list-reviews .list-review .ratings .stars .bar {
-        background: url("../img-trp/new-stars-blue.png") 0% 50% no-repeat;
-        height: 20px; }
-  .list-reviews .list-review .review-content {
-    font-weight: 300;
-    margin-top: 3px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    font-size: 18px; }
-    @media screen and (max-width: 768px) {
-      .list-reviews .list-review .review-content {
-        -webkit-line-clamp: 4;
-        margin-top: 12px; } }
-  .list-reviews .list-review .review-name {
-    font-weight: bold;
-    font-size: 18px;
-    margin-top: 10px;
-    display: block;
-    color: #333; }
-    @media screen and (max-width: 768px) {
-      .list-reviews .list-review .review-name {
-        font-size: 16px;
-        margin-bottom: 15px; } }
-  .list-reviews .list-review .mobile-review-date {
-    display: none;
-    text-align: center;
-    color: #888888; }
-    @media screen and (max-width: 768px) {
-      .list-reviews .list-review .mobile-review-date {
-        display: block; } }
 
 .loader-mask {
   display: none;
