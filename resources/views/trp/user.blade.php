@@ -470,41 +470,39 @@
 
 <div class="details-wrapper profile-reviews-space">
 	@if($item->reviews_in_standard()->isNotEmpty() )
-		<div class="tab-container" id="reviews">
-			@if(false)
-				<div class="container">
-					<h2 class="black-left-line section-title">
-						{!! nl2br(trans('trp.page.user.overview')) !!}
-					</h2>
-				</div>
-				<div class="review-chart {{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'with-three-columns' : '' }}">
-					<div class="chart-stars">
-						<img src="{{ url('img-trp/five-stars.png') }}">
-						<img src="{{ url('img-trp/four-stars.png') }}">
-						<img src="{{ url('img-trp/three-stars.png') }}">
-						<img src="{{ url('img-trp/two-stars.png') }}">
-						<img src="{{ url('img-trp/one-star.png') }}">
-					</div>
-					<div class="review-charts-wrapper">
-						<div id="reviews-chart" class="{{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'three-columns' : '' }}">
-							<div class="chart-outher">
-								@for($i=0;$i<=5;$i++)
-									<div class="chart-line"></div>
-								@endfor 
-								@foreach($aggregated as $lab => $rat)
-									<div class="chart-parent">
-										<div class="chart tooltip-text" text="{{ number_format($rat,2) }}" to-height="{{ number_format($rat,2) }}"
-										{{-- style="transition-delay: {{ $loop->iteration == 1 ? 0.5 : 0.5+ ($loop->iteration / 10) }}s;" --}}
-										style="height: {{ ($phone ? 40 : 50) * number_format($rat,2) }}px;"
-										></div>
-										<div class="chart-label">{{ $lab }}</div>
-									</div>
-								@endforeach
-							</div>
-						</div>
-					</div>
-				</div>
-			@endif
+    	<div class="tab-container" id="reviews">
+    		<div class="container">
+	    		<h2 class="black-left-line section-title">
+	    			{!! nl2br(trans('trp.page.user.overview')) !!}
+	    		</h2>
+	    	</div>
+	    	<div class="review-chart {{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'with-three-columns' : '' }}">
+	    		<div class="chart-stars">
+		    		<img src="{{ url('img-trp/five-stars.png') }}">
+		    		<img src="{{ url('img-trp/four-stars.png') }}">
+		    		<img src="{{ url('img-trp/three-stars.png') }}">
+		    		<img src="{{ url('img-trp/two-stars.png') }}">
+		    		<img src="{{ url('img-trp/one-star.png') }}">
+		    	</div>
+		    	<div class="review-charts-wrapper">
+	    			<div id="reviews-chart" class="{{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'three-columns' : '' }}">
+	    				<div class="chart-outher">
+	    					@for($i=0;$i<=5;$i++)
+	    						<div class="chart-line"></div>
+	    					@endfor 
+	    					@foreach($aggregated as $lab => $rat)
+	    						<div class="chart-parent">
+	    							<div class="chart tooltip-text" text="{{ number_format($rat,2) }}" to-height="{{ number_format($rat,2) }}"
+									 {{-- style="transition-delay: {{ $loop->iteration == 1 ? 0.5 : 0.5+ ($loop->iteration / 10) }}s;" --}}
+									 style="height: {{ ($phone ? 40 : 50) * number_format($rat,2) }}px;"
+									></div>
+	    							<div class="chart-label">{{ $lab }}</div>
+	    						</div>
+	    					@endforeach
+		    			</div>
+	    			</div>
+	    		</div>
+	    	</div>
 
     		<div class="container">
 	    		<h2 class="black-left-line section-title">
