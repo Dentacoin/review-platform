@@ -2,8 +2,7 @@
 
 @section('content')
 
-	<div class="black-overflow" style="display: none;">
-	</div>
+	<div class="black-overflow" style="display: none;"></div>
 
 	@if(($items->count() == 0 && !empty($user) && !$user->is_dentist) || (empty($user) && $items->count() == 0))
 		<div class="green-gradient">
@@ -14,8 +13,7 @@
 		    @include('trp.parts.search-form')
 		</div>
 
-		<div class="main-top">
-	    </div>
+		<div class="main-top"></div>
 
 	    <div class="sort-wrapper">
 	    	<div class="flex">
@@ -76,7 +74,6 @@
 	    	@endif
 
 	    	@foreach($items as $dentist)
-
 				<a href="{{ $dentist->getLink() }}" class="result-container dentist clearfix" full-dentist-id="{{ $dentist->id }}">
 					<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}"  style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
 						@if($dentist->hasimage)
@@ -90,7 +87,7 @@
 						@if($dentist->is_partner)
 							<span class="type">
 								<div class="img">
-									<img src="{{ url('img-trp/mini-logo.png') }}">
+									<img src="{{ url('img-trp/mini-logo.png') }}" width="14" height="14">
 								</div>
 								<span>{!! nl2br(trans('trp.page.search.partner')) !!}</span> 
 								{{ $dentist->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
@@ -98,7 +95,7 @@
 						@endif
 						<div class="p">
 							<div class="img">
-								<img src="{{ url('img-trp/map-pin.png') }}">
+								<img src="{{ url('img-trp/map-pin.png') }}" width="11" height="14">
 							</div>
 							{{ $dentist->city_name ? $dentist->city_name.', ' : '' }}
 							{{ $dentist->state_name ? $dentist->state_name.', ' : '' }} 
@@ -109,7 +106,7 @@
 				    	@if( $time = $dentist->getWorkHoursText() )
 				    		<div class="p">
 				    			<div class="img">
-				    				<img src="{{ url('img-trp/open.png') }}">
+				    				<img src="{{ url('img-trp/open.png') }}" width="13" height="14">
 				    			</div>
 				    			{!! $time !!}
 				    		</div>
@@ -117,7 +114,7 @@
 				    	@if( $dentist->website )
 				    		<div class="p dentist-website" href="{{ $dentist->getWebsiteUrl() }}" target="_blank">
 				    			<div class="img">
-					    			<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
+					    			<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}" width="14" height="14">
 					    		</div>
 					    		<span>
 						    		{{ $dentist->website }}
@@ -126,7 +123,7 @@
 				    	@endif
 				    	@if($dentist->top_dentist_month)
 							<div class="top-dentist">
-								<img src="{{ url('img-trp/top-dentist.png') }}">
+								<img src="{{ url('img-trp/top-dentist.png') }}" width="15" height="15">
 				    			<span>
 				    				{!! trans('trp.common.top-dentist') !!}
 			    				</span>
@@ -345,88 +342,88 @@
 	</div>
 
 	<div class="popup fixed-popup results-popup" id="sort-popup">
-	<div class="popup-inner inner-white">
-		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup">
-				<img src="{{ url('img/close-icon.png') }}"/>
-			</a>
-		</div>
-
-		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< back</a>
-		</div>
-		<h2><img src="{{ url('img-trp/sort-gray.png') }}">
-			{!! nl2br(trans('trp.page.search.sort-filter')) !!}
-		</h2>
-
-		<form class="search-get-form" method="get" base-href="{{ getLangUrl($query) }}">
-
-			<div class="sort-stars">
-				<h4 class="popup-title">
-					{!! nl2br(trans('trp.page.search.stars')) !!}
-				</h4>
-
-				<div class="ratings average">
-					<div class="stars">
-						<div class="bar" style="width: {{ intval($stars)/5*100 }}%;">
-						</div>
-						<input type="hidden" name="stars" value="{{ $stars }}" />
-					</div>
-				</div>
-			</div>
-
-			<div class="sort-category">
-				<h4 class="popup-title">
-					{!! nl2br(trans('trp.page.search.category')) !!}
-				</h4>
-
-				@foreach( config('categories') as $cat_id => $cat )
-					<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-popup-{{ $cat }}">
-						<input type="checkbox" class="special-checkbox" id="checkbox-popup-{{ $cat }}" value="{{ $cat }}" {!! !empty($searchCategories) && in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
-						<div class="checkbox-square">✓</div>
-						{{ trans('trp.categories.'.$cat) }}
-					</label>
-				@endforeach
-			</div>
-
-			<div class="sort-partners">
-				<h4 class="popup-title">
-					{!! nl2br(trans('trp.page.search.partners')) !!}
-				</h4>
-
-				<label class="checkbox-label{!! $partner ? ' active' : '' !!}" for="checkbox-partner-popup">
-					<input type="checkbox" class="special-checkbox" id="checkbox-partner-popup" name="partner" value="1" {!! $partner ? 'checked="checked"' : '' !!}>
-					<div class="checkbox-square">✓</div>
-					{!! nl2br(trans('trp.page.search.show-partners')) !!}
-					<img src="{{ url('img-trp/mini-logo-black.png') }}">
-				</label>
-			</div>
-
-			<div class="sort-by">
-				<h4 class="popup-title">
-					{!! nl2br(trans('trp.page.search.sort-by')) !!}
-				</h4>
-
-				@foreach($orders as $order)
-					<a {!! $sort==$order ? 'class="active"' : '' !!} sort="{{ $order }}">
-						<img src="{{ url('img/sort-icon.svg') }}"/>
-						{{ trans('trp.page.dentists.order-'.$order) }}
-					</a>
-				@endforeach
-				<input type="hidden" name="sort" value="{{ $sort }}" />
-			</div>
-
-			<div class="tac">
-				<button type="submit" href="javascript:;" class="button">
-					{!! nl2br(trans('trp.page.search.apply')) !!}
-				</button>
-				
-				<a class="clear-filters" href="javascript:;">
-					{!! nl2br(trans('trp.page.search.reset')) !!}
+		<div class="popup-inner inner-white">
+			<div class="popup-pc-buttons">
+				<a href="javascript:;" class="close-popup">
+					<img src="{{ url('img/close-icon.png') }}"/>
 				</a>
 			</div>
-		</form>
+
+			<div class="popup-mobile-buttons">
+				<a href="javascript:;" class="close-popup">< back</a>
+			</div>
+			<h2><img src="{{ url('img-trp/sort-gray.png') }}">
+				{!! nl2br(trans('trp.page.search.sort-filter')) !!}
+			</h2>
+
+			<form class="search-get-form" method="get" base-href="{{ getLangUrl($query) }}">
+
+				<div class="sort-stars">
+					<h4 class="popup-title">
+						{!! nl2br(trans('trp.page.search.stars')) !!}
+					</h4>
+
+					<div class="ratings average">
+						<div class="stars">
+							<div class="bar" style="width: {{ intval($stars)/5*100 }}%;">
+							</div>
+							<input type="hidden" name="stars" value="{{ $stars }}" />
+						</div>
+					</div>
+				</div>
+
+				<div class="sort-category">
+					<h4 class="popup-title">
+						{!! nl2br(trans('trp.page.search.category')) !!}
+					</h4>
+
+					@foreach( config('categories') as $cat_id => $cat )
+						<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-popup-{{ $cat }}">
+							<input type="checkbox" class="special-checkbox" id="checkbox-popup-{{ $cat }}" value="{{ $cat }}" {!! !empty($searchCategories) && in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
+							<div class="checkbox-square">✓</div>
+							{{ trans('trp.categories.'.$cat) }}
+						</label>
+					@endforeach
+				</div>
+
+				<div class="sort-partners">
+					<h4 class="popup-title">
+						{!! nl2br(trans('trp.page.search.partners')) !!}
+					</h4>
+
+					<label class="checkbox-label{!! $partner ? ' active' : '' !!}" for="checkbox-partner-popup">
+						<input type="checkbox" class="special-checkbox" id="checkbox-partner-popup" name="partner" value="1" {!! $partner ? 'checked="checked"' : '' !!}>
+						<div class="checkbox-square">✓</div>
+						{!! nl2br(trans('trp.page.search.show-partners')) !!}
+						<img src="{{ url('img-trp/mini-logo-black.png') }}">
+					</label>
+				</div>
+
+				<div class="sort-by">
+					<h4 class="popup-title">
+						{!! nl2br(trans('trp.page.search.sort-by')) !!}
+					</h4>
+
+					@foreach($orders as $order)
+						<a {!! $sort==$order ? 'class="active"' : '' !!} sort="{{ $order }}">
+							<img src="{{ url('img/sort-icon.svg') }}"/>
+							{{ trans('trp.page.dentists.order-'.$order) }}
+						</a>
+					@endforeach
+					<input type="hidden" name="sort" value="{{ $sort }}" />
+				</div>
+
+				<div class="tac">
+					<button type="submit" href="javascript:;" class="button">
+						{!! nl2br(trans('trp.page.search.apply')) !!}
+					</button>
+					
+					<a class="clear-filters" href="javascript:;">
+						{!! nl2br(trans('trp.page.search.reset')) !!}
+					</a>
+				</div>
+			</form>
+		</div>
 	</div>
-</div>
 
 @endsection
