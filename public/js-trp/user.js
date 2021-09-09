@@ -306,10 +306,6 @@ $(document).ready(function(){
         //         $(this).css('height', $(this).attr('to-height') * ( $(window).outerWidth() <= 768 ? 40 : 50) );
         //     });
         // }, 200);
-        
-        $('.chart').each( function() {
-            $(this).css('height', $(this).attr('to-height') * ( $(window).outerWidth() <= 768 ? 40 : 50) );
-        });
 
         if ($(window).outerWidth() < 980) {
 
