@@ -275,16 +275,16 @@ $(document).ready(function(){
 
         } );
         
+        $('.more').click( function(e) {
+    
+            if (!$(e.target).closest('.review-replied-wrapper').length && !$(e.target).closest('.review-footer').length) {
+                var id = $(this).closest('.review-wrapper').attr('review-id');
+                showFullReview(id, $('#cur_dent_id').val());
+            }
+        } );
     }
     handleReviewEvents();
 
-    $('.more').click( function(e) {
-
-        if (!$(e.target).closest('.review-replied-wrapper').length && !$(e.target).closest('.review-footer').length) {
-            var id = $(this).closest('.review-wrapper').attr('review-id');
-            showFullReview(id, $('#cur_dent_id').val());
-        }
-    } );
 
     $('.show-review').click( function(e) {
         var id = $(this).attr('review-id');
@@ -326,6 +326,34 @@ $(document).ready(function(){
 
     if (window.location.hash.length && $('.tab[data-tab="'+window.location.hash.substring(1)+'"]').length) {
         $('.tab[data-tab="'+window.location.hash.substring(1)+'"]').trigger( "click" );
+    }
+
+    if ($('#append-section-reviews').length) {
+        $(window).scroll( function() {
+            if (!$('#append-section-reviews').hasClass('appended')) {
+                $.ajax({
+                    type: "POST",
+                    url: lang + '/dentist-down/',
+                    data: {
+                        slug: window.location.pathname.split('/')[3],
+                    },
+                    success: function(ret) {
+                        if(ret) {
+                            if (!$('#append-section-reviews').hasClass('appended')) {
+                                $('#append-section-reviews').append(ret);
+                                $('#append-section-reviews').addClass('appended');
+
+                                handleReviewEvents();
+                                handlePopups();
+                            }
+                        }
+                    },
+                    error: function(ret) {
+                        console.log('error');
+                    }
+                });
+            }
+        });
     }
 
 });

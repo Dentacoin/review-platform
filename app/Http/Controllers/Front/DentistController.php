@@ -1881,4 +1881,38 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
             'review_id' => request('review-id'),
         ] );
     }
+
+	/**
+     * bottom content of the dentist page
+     */
+	public function dentist_down($locale=null) {
+
+        $slug = request('slug');
+
+        if (!empty($this->admin)) {
+            $item = User::where('slug', 'LIKE', $slug)->first();
+        } else {
+            $item = User::where('slug', 'LIKE', $slug)->whereNull('self_deleted')->first();
+        }
+
+        if(empty($item)) {
+            $old_slug = OldSlug::where('slug', 'LIKE', $slug)->first();
+
+            if (!empty($old_slug)) {
+                $item = User::find($old_slug->user_id);
+            }
+        }
+
+        if(empty($item) || !$item->is_dentist) {
+            return '';
+        }
+
+		$params = array(
+            'item' => $item,
+            'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
+            'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,
+        );
+
+		return $this->ShowView('user-down', $params);	
+	}
 } ?>
