@@ -22,7 +22,7 @@
   @media screen and (max-width: 768px) {
     .signin-top {
       width: 100%;
-      margin-top: -124px;
+      margin-top: -84px;
       z-index: 10;
       border-radius: 0px;
       margin-left: 0px;
@@ -126,8 +126,7 @@
         position: static;
         width: 320px;
         left: auto;
-        bottom: auto;
-        background-size: contain; } }
+        bottom: auto; } }
     .signin-form-wrapper img.mobile-image {
       display: none; }
       @media screen and (max-width: 768px) {
