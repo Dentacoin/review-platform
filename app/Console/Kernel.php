@@ -2438,10 +2438,10 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             foreach($users as $user) {
                 if(!empty(User::whereNotNull('civic_kyc_hash')->where('civic_kyc_hash', 'LIKE', $user->civic_kyc_hash)->where('id', '!=', $user->id)->first())) {
-                    file_put_contents('/tmp/check-users', $user->civic_kyc_hash.'<br/>');
+                    file_put_contents('/tmp/check-users', file_get_contents('/tmp/check-users').$user->civic_kyc_hash.'<br/>');
                 }
             }
-        })->cron('*/5 * * * *');
+        })->dailyAt('10:20');
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
