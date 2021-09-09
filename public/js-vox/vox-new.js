@@ -284,7 +284,7 @@ $(document).ready(function(){
                 // });
 
                 // console.log(parent.find('.answers-column').children().not(".disabler-label"));
-                parent.randomize(parent.find('.answers-column').children().not(".disabler-label").not(".tooltip-text"), parent.find('.answers-column').children().not(".disabler-label").not(".tooltip-text"));
+                parent.randomize(parent.find('.answers-column').children().not(".disabler-label"));
                 // answerOnQuestion();
 
             } else {
@@ -766,11 +766,11 @@ $(document).ready(function(){
                 
 (function($) {
 
-    $.fn.randomize = function(tree, childElem) {
+    $.fn.randomize = function(tree) {
         return this.each(function() {
             var $this = $(this);
             if (tree) $this = $(this).find(tree);
-            var unsortedElems = $this.children(childElem);
+            var unsortedElems = $this;
             var elems = unsortedElems.clone();
 
             elems.sort(function() {
