@@ -301,12 +301,16 @@ $(document).ready(function(){
 
     if ($('#reviews-chart').length) {
 
-        setTimeout( function() {
-            $('.chart').each( function() {
-                $(this).css('height', $(this).attr('to-height') * ( $(window).outerWidth() <= 768 ? 40 : 50) );
-            });
-        }, 200);
+        // setTimeout( function() {
+        //     $('.chart').each( function() {
+        //         $(this).css('height', $(this).attr('to-height') * ( $(window).outerWidth() <= 768 ? 40 : 50) );
+        //     });
+        // }, 200);
         
+        $('.chart').each( function() {
+            $(this).css('height', $(this).attr('to-height') * ( $(window).outerWidth() <= 768 ? 40 : 50) );
+        });
+
         if ($(window).outerWidth() < 980) {
 
             var prepended = false;

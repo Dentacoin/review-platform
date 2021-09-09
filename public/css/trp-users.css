@@ -1444,7 +1444,6 @@
         position: relative; }
         .review-chart .review-charts-wrapper .chart-outher .chart-parent .chart {
           height: 0px;
-          transition: all 0.7s ease;
           cursor: pointer;
           position: absolute;
           bottom: 0;

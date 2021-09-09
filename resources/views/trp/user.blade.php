@@ -492,7 +492,9 @@
 	    					@endfor 
 	    					@foreach($aggregated as $lab => $rat)
 	    						<div class="chart-parent">
-	    							<div class="chart tooltip-text" text="{{ number_format($rat,2) }}" to-height="{{ number_format($rat,2) }}" style="transition-delay: {{ $loop->iteration == 1 ? 0.5 : 0.5+ ($loop->iteration / 10) }}s;"></div>
+	    							<div class="chart tooltip-text" text="{{ number_format($rat,2) }}" to-height="{{ number_format($rat,2) }}"
+									 {{-- style="transition-delay: {{ $loop->iteration == 1 ? 0.5 : 0.5+ ($loop->iteration / 10) }}s;" --}}
+									></div>
 	    							<div class="chart-label">{{ $lab }}</div>
 	    						</div>
 	    					@endforeach
