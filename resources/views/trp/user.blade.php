@@ -551,7 +551,7 @@
 									@if($review->verified)
 										<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
 											{!! nl2br(trans('trp.common.trusted')) !!}
-											<img src="{{ url('img/info-white.svg') }}"/>
+											<img src="{{ url('img/info-white.svg') }}" width="15" height="15"/>
 										</div>
 									@endif
 								</div>
