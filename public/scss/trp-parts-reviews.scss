@@ -1,0 +1,221 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+.details-wrapper {
+	.review {
+		margin-left: 30px;
+		margin-bottom: 60px;
+
+		@media #{$phone} {
+			margin-left: 10px;
+		}
+
+		.recommend-button {
+			color: #46afda;
+			font-size: 18px;
+			margin-top: 5px;
+			display: block;
+
+			img {
+				max-width: 16px;
+				margin-right: 2px;
+			}
+	    }
+	}
+
+	.review-avatar {
+		width: 20px;
+		height: 20px;
+		background-size: cover;
+		background-position: 50%;
+		display: inline-block;
+		vertical-align: text-bottom;
+		border-radius: 50%;
+	}
+
+	.review-name {
+		color: #545454;
+		font-size: 20px;
+
+		@media #{$phone} {
+			font-size: 16px;
+		}
+	}
+
+	.review-title {
+		font-size: 20px;
+    	font-style: italic;
+    	margin-right: 7px;
+
+    	@media #{$phone} {
+    	    display: block;
+		    margin-right: 0px;
+		    margin-top: 15px;
+		    margin-bottom: 5px;
+		}
+	}
+
+	.trusted-sticker {
+		@media #{$phone} {
+			display: none;
+		}
+
+		&.mobile-sticker {
+			display: none;
+
+			@media #{$phone} {
+				display: inline-block;
+				margin-left: 10px;
+			}
+
+			img {
+				@media #{$phone} {
+					vertical-align: text-top;
+				}
+			}
+		}
+	}
+
+	.ratings {
+		display: inline-block;
+
+		@media #{$phone} {
+			margin-top: 15px;
+		}
+
+		.rating {
+			font-size: 16px;
+			font-weight: normal;
+		    vertical-align: text-top;
+
+			@media #{$phone} {
+				font-size: 14px;
+			}
+		}
+	}
+
+    .review-date {
+    	color: #bababa;
+    	font-size: 16px;
+    	margin-left: 12px;
+
+		@media #{$phone} {
+			font-size: 14px;
+		}
+    }
+
+	.treatment {
+		color: #bababa;
+	    font-size: 16px;
+	    margin-left: 12px;
+
+		@media #{$phone} {
+			font-size: 14px;
+		}
+
+	    span {
+	    	color: #bababa;
+	    	font-size: 16px;
+
+			@media #{$phone} {
+				font-size: 14px;
+			}
+	    }
+	}
+
+    .review-content {
+    	margin-top: 10px;
+    	font-weight: 300;
+    	font-size: 18px;
+
+		@media #{$phone} {
+			font-size: 16px;
+		}
+
+    	.more {
+    		font-weight: bold;
+    		color: #126585;
+    		font-size: 18px;
+
+			@media #{$phone} {
+				font-size: 16px;
+			}
+
+    		&:hover {
+    			text-decoration: underline;
+    		}
+    	}
+
+    	textarea.input {
+    		box-shadow: 0px 0px 14px 2px #d8d8d8;
+    		height: 100px;
+    	}
+    }
+
+    .review-footer {
+    	margin-top: 15px;
+    	
+    	.col {
+		    display: flex;
+		    justify-content: flex-end;
+    	}
+    	
+
+    	a {
+    		transition: all 0.3s ease;
+    		margin-right: 15px;
+		    line-height: 30px;
+		    display: inline-flex;
+
+		    span {
+	    		font-size: 16px;
+		    	line-height: 30px;
+
+				@media #{$phone} {
+					font-size: 14px;
+				}
+		    }
+
+    		img {
+    			transition: all 0.3s ease;
+    		    vertical-align: middle;
+    		    margin-right: 5px;
+    		}
+
+    		&.voted {
+    			span {
+    				color: #2196f3;
+    			}
+    		}
+
+    		&:hover:not(.voted) {
+    			opacity: 0.7;
+    			span,
+    			img {
+    				opacity: 0.7;
+    			}
+    		}
+    	}
+
+    	.reply-button {
+    		color: #a1a1a1;
+
+    		@media #{$phone} {
+				order: 2;
+				margin-right: 0px;
+			    margin-top: 15px;
+	    	}
+    	}
+
+    	.col {
+    		@media #{$phone} {
+				text-align: left;
+	    	}
+    	}
+    }
+
+    .review-replied-wrapper {
+    	margin-top: 15px;
+    }
+}

@@ -1227,53 +1227,6 @@ body.blur footer,
 body.blur .site-content {
   filter: blur(8px);
   -webkit-filter: blur(8px); }
-body.sp-trp-iframe header,
-body.sp-trp-iframe footer,
-body.sp-trp-iframe .blue-background,
-body.sp-trp-iframe .strength-wrapper {
-  display: none; }
-body.sp-trp-iframe .flex-3 {
-  flex: 1; }
-body.sp-trp-iframe .col {
-  flex: none; }
-body.sp-trp-iframe .container {
-  width: 100%; }
-body.sp-trp-iframe .site-content {
-  min-height: auto !important; }
-body.sp-trp-iframe .profile-reviews-space {
-  margin-bottom: 0px !important; }
-  body.sp-trp-iframe .profile-reviews-space .review-wrapper:last-child {
-    margin-bottom: 0px !important; }
-@media screen and (max-width: 998px) {
-  body.sp-trp-iframe #banned-popup:after {
-    display: none; } }
-@media screen and (max-width: 998px) {
-  body.sp-trp-iframe #banned-popup .popup-inner {
-    height: 660px;
-    background-position: 50% 100%; } }
-@media screen and (max-width: 768px) {
-  body.sp-trp-iframe #banned-popup .popup-inner {
-    height: 460px; } }
-@media screen and (max-width: 998px) {
-  body.sp-trp-iframe #banned-popup .popup-inner > div {
-    height: 660px;
-    justify-content: center; } }
-@media screen and (max-width: 768px) {
-  body.sp-trp-iframe #banned-popup .popup-inner > div {
-    height: 460px; } }
-@media screen and (max-width: 998px) {
-  body.sp-trp-iframe #banned-popup .popup-inner .icon {
-    position: static;
-    order: 2;
-    max-width: 150px;
-    margin-top: 160px; } }
-@media screen and (max-width: 768px) {
-  body.sp-trp-iframe #banned-popup .popup-inner .icon {
-    max-width: 90px;
-    margin-top: 30px; } }
-@media screen and (max-width: 998px) {
-  body.sp-trp-iframe #banned-popup .popup-inner:after {
-    display: none; } }
 body.strength-pb {
   padding-bottom: 130px; }
 

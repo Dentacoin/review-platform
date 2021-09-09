@@ -75,6 +75,14 @@ class Review extends Model {
         return $this->hasMany('App\Models\ReviewDownvote', 'review_id', 'id');
     }
 
+    public function getDentist($current_dentist = null) {
+        if($current_dentist) {
+            return $current_dentist;
+        } else {
+            return !empty($this->review_to_id) ? $this->original_dentist : ($this->dentist ? $review->dentist : $this->clinic);
+        }
+    }
+
     public function afterSubmitActions() {
         //sent email to the dentist/clinic
         $this->original_dentist->sendTemplate( $this->verified ? 21 : 6, [

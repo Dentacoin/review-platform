@@ -1353,8 +1353,7 @@ class ProfileController extends FrontController {
                 'xframe' => true,
                 'reviews' => $this->user->is_dentist ? $this->user->reviews_in() : $this->user->reviews_out,
                 'css' => [
-                    'common-profile.css',
-                    'trp-users.css'
+                    'trp-profile.css',
                 ],
                 'js' => [
                     'profile.js',
