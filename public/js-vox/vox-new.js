@@ -284,7 +284,7 @@ $(document).ready(function(){
                 // });
 
                 // console.log(parent.find('.answers-column').children().not(".disabler-label"));
-                parent.randomize(parent.find('.answers-column').children().not(".disabler-label"), parent.find('.answers-column').children().not(".disabler-label"));
+                parent.randomize(parent.find('.answers-column').children().not(".disabler-label").not(".tooltip-text"), parent.find('.answers-column').children().not(".disabler-label").not(".tooltip-text"));
                 // answerOnQuestion();
 
             } else {

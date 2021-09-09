@@ -342,6 +342,11 @@ class UsersController extends AdminController {
                 $query->where('dcn_address', 'like', $dcn_address);
             });
         }
+
+        if(!empty(request('civic-kyc-hash'))) {
+            $users = $users->where('civic_kyc_hash', 'LIKE', '%'.trim(request('civic-kyc-hash')).'%');
+        }
+
         if(!empty(request('search-id'))) {
             $users = $users->where('id', request('search-id') );
         }
@@ -799,6 +804,7 @@ class UsersController extends AdminController {
             'exclude_countries' => request('exclude-countries'),
             'exclude_permaban' => request('exclude-permaban'),
             'exclude_unsubscribed' => request('exclude-unsubscribed'),
+            'civic_kyc_hash' => request('civic-kyc-hash'),
             'fb_tab' => request('fb-tab'),
             'user_platforms' => $user_platforms,
             'countries' => Country::with('translations')->get(),
