@@ -170,6 +170,7 @@ $phone: "screen and (max-width: 768px)";
 
 				.slider-image-wrapper {
 					position: relative;
+					text-align: center;
 
 					&::before {
 						content: '';
@@ -188,19 +189,15 @@ $phone: "screen and (max-width: 768px)";
 					    }
 
 					    @media #{$tablet} {
-							width: 267.19px;
-							height: 268.19px;
-					    }
-
-					    @media #{$phone} {
-					    	width: 190.31px;
-					    	height: 190.31px;
+							width: 190.31px;
+							height: 190.31px;
 					    }
 					}
 
 					.slider-real-image {
 						border-radius: 50%;
 						height: auto;
+						display: block;
 					}
 
 					.tooltip-text {
