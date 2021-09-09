@@ -2441,7 +2441,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     file_put_contents('/tmp/check-users', file_get_contents('/tmp/check-users').$user->civic_kyc_hash.'<br/>');
                 }
             }
-        })->dailyAt('11:40');
+        })->dailyAt('13:25');
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
