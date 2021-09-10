@@ -476,8 +476,8 @@
     @media screen and (max-width: 768px) {
       .result-container .avatar {
         border-radius: 5px;
-        width: 100px;
-        height: 100px;
+        width: 130px;
+        height: 130px;
         padding-top: 0px;
         margin-left: auto;
         margin-right: auto; } }
