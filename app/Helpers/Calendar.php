@@ -239,8 +239,8 @@ class Calendar {
         return
             '<div class="header">'.
                 '<div class="prev-next-month">'.
-                    '<a class="prev ajax-url" href="'.$this->naviHref.'?month='.sprintf('%02d',$preMonth).'&year='.$preYear.'"><img src="'.url('img/prev-arrow.png').'"/></a>'.
-                    '<a class="next ajax-url" href="'.$this->naviHref.'?month='.sprintf("%02d", $nextMonth).'&year='.$nextYear.'"><img src="'.url('img/next-arrow.png').'"/></a>'.
+                    '<a class="prev ajax-url" href="'.$this->naviHref.'?month='.sprintf('%02d',$preMonth).'&year='.$preYear.'"><img src="'.url('img/prev-arrow.png').'" width="10" height="17"/></a>'.
+                    '<a class="next ajax-url" href="'.$this->naviHref.'?month='.sprintf("%02d", $nextMonth).'&year='.$nextYear.'"><img src="'.url('img/next-arrow.png').'" width="10" height="17"/></a>'.
                     '<a class="today-button desktop-today '.($is_this_month ? 'disabled' : 'ajax-url').'" href="'.($is_this_month ? 'javascript:;' : $this->naviHref.'?month='.date('m').'&year='.date('Y')).'">today</a>'.
                 '</div>'.
                 '<h2>'.date('F Y',strtotime($this->currentYear.'-'.$this->currentMonth.'-1')).'</h2>'.

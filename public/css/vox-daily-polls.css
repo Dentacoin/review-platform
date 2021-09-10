@@ -93,7 +93,8 @@
           #poll-calendar .box .header .prev-next-month .prev img,
           #poll-calendar .box .header .prev-next-month .next img {
             width: 10px;
-            display: block; }
+            display: block;
+            height: auto; }
             @media screen and (max-width: 768px) {
               #poll-calendar .box .header .prev-next-month .prev img,
               #poll-calendar .box .header .prev-next-month .next img {

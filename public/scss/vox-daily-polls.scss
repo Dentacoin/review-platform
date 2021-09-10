@@ -128,6 +128,7 @@ $main-color: #38ace5;
 					img {
 						width: 10px;
 						display: block;
+						height: auto;
 
 						@media #{$phone} {
 							width: 5px;
