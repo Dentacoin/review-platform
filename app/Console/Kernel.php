@@ -2434,14 +2434,14 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
         
         $schedule->call(function () {
-            $users = User::select('id', 'email')->get();
+            $users = User::select('id', 'email')->whereNull('self_deleted')->get();
 
             foreach($users as $user) {
-                if(!empty(User::where('email', 'LIKE', $user->email)->where('id', '!=', $user->id)->first())) {
+                if(!empty(User::where('email', 'LIKE', $user->email)->where('id', '!=', $user->id)->whereNull('self_deleted')->first())) {
                     file_put_contents('/tmp/check-users', file_get_contents('/tmp/check-users').$user->email.'<br/>');
                 }
             }
-        })->dailyAt('14:08');
+        })->dailyAt('08:03');
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
