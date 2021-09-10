@@ -151,7 +151,7 @@ class Calendar {
 
                     $content .= '<a class="poll-day desktop-day '.($dp['closed'] || $dp['taken'] ? 'stats' : ($dp['to_take'] ? 'to-take' : '')).' '.(isset($dp['scheduled']) ? 'admin' : '').'" href="javascript:;" style="background-color: '.$dp['color'].'" poll-id="'.$dp['id'].'">'.
                         '<div class="poll-day-inner">'.
-                        '<img class="poll-image" src="'.$dp['category_image'].'">'.
+                        '<img class="poll-image" src="'.$dp['category_image'].'" width="28" heigth="28">'.
                         '<p class="poll-q">'.$dp['title'].'</p>';
                     
                     if($dp['closed']) {
@@ -189,7 +189,7 @@ class Calendar {
                         }
 
                         $content .= '<a href="javascript:;" class="list-event '.($dp['closed'] || $dp['taken'] ? 'stats' : ($dp['to_take'] ? 'to-take' : '')).' '.(isset($dp['scheduled']) ? 'admin' : '').'" poll-id="'.$dp['id'].'" data-date="2021-03-01" style="background-color: '.$dp['color'].'">'.
-                            '<img class="poll-image" src="'.$dp['category_image'].'"/>'.
+                            '<img class="poll-image" src="'.$dp['category_image'].'" width="28" heigth="28">'.
                             $dp['title'];
 
                         if($dp['closed']) {
