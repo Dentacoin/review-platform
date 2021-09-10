@@ -10,7 +10,7 @@
 		</a>
 		<h1>{!! nl2br(trans('vox.daily-polls.title')) !!}</h1>
 
-		<div class="monthly-description tac" style="margin-top: 0px; {!! !empty($monthly_descr) ? '' : 'display:none;' !!}">
+		{{-- <div class="monthly-description tac" style="margin-top: 0px; {!! !empty($monthly_descr) ? '' : 'display:none;' !!}">
 			<div class="container">
 				<p>
 					@if(!empty($monthly_descr))
@@ -18,7 +18,7 @@
 					@endif
 				</p>
 			</div>
-		</div>
+		</div> --}}
 
 		@php
 			$calendar = new App\Helpers\Calendar();
