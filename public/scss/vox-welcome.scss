@@ -104,3 +104,18 @@ $main-color: #38ace5;
 .finish-test {
 	display: none;
 }
+
+.questions {
+	h3 {
+		@media #{$phone} {
+			font-size: 19px;
+    		font-weight: bold;
+		}
+	}
+
+	.questionnaire-description {
+		@media #{$phone} {
+			font-size: 18px;
+		}
+	}
+}
