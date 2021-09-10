@@ -440,7 +440,7 @@
     </div>
 
 	@if($item->id == 37530)
-		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries</p>
+		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuriesLorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries</p>
 	@endif
 
     <div class="profile-tabs {!! $item->reviews_in_standard()->count() && $item->reviews_in_video()->count() && (!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty())) ? 'full-tabs' : '' !!}">
