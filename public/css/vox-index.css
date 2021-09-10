@@ -147,7 +147,8 @@
           font-size: 18px; } }
     .full .first-absolute .mobile-home-image {
       display: none;
-      width: auto !important; }
+      width: auto !important;
+      height: auto !important; }
       @media screen and (max-width: 1080px) {
         .full .first-absolute .mobile-home-image {
           display: block;
