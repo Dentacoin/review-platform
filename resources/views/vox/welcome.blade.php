@@ -16,7 +16,10 @@
 						{{ $vox->title }}
 					</h3>
 					<p class="questionnaire-description" {!! !empty($answered) && count($answered)>1 ? 'style="display: none;"' : '' !!} >
-						{{ $vox->description }}
+						{{-- {{ $vox->description }} --}}
+						
+						Earn your first Dentacoin tokens by answering some simple questions about your dental care habits! Go take you first survey!
+					
 					</p>
 					<p class="demographic-questionnaire-description" style="display: none;" >
 						{!! nl2br(trans('vox.welcome-survey.description')) !!}

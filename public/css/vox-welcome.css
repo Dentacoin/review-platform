@@ -73,11 +73,3 @@
 
 .finish-test {
   display: none; }
-
-@media screen and (max-width: 768px) {
-  .questions h3 {
-    font-size: 19px;
-    font-weight: bold; } }
-@media screen and (max-width: 768px) {
-  .questions .questionnaire-description {
-    font-size: 18px; } }

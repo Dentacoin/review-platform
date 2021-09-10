@@ -105,17 +105,17 @@ $main-color: #38ace5;
 	display: none;
 }
 
-.questions {
-	h3 {
-		@media #{$phone} {
-			font-size: 19px;
-    		font-weight: bold;
-		}
-	}
+// .questions {
+// 	h3 {
+// 		@media #{$phone} {
+// 			font-size: 19px;
+//     		font-weight: bold;
+// 		}
+// 	}
 
-	.questionnaire-description {
-		@media #{$phone} {
-			font-size: 18px;
-		}
-	}
-}
+// 	.questionnaire-description {
+// 		@media #{$phone} {
+// 			font-size: 18px;
+// 		}
+// 	}
+// }
