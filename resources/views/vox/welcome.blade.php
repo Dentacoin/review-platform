@@ -18,7 +18,7 @@
 					<p class="questionnaire-description" {!! !empty($answered) && count($answered)>1 ? 'style="display: none;"' : '' !!} >
 						{{-- {{ $vox->description }} --}}
 						
-						Earn your first Dentacoin tokens by answering some simple questions about your dental care habits! Go take you first survey!
+						Earn your first Dentacoin tokens by answering some simple questions about your dental care habits! Go take you first survey and earn dentacoins!
 					
 					</p>
 					<p class="demographic-questionnaire-description" style="display: none;" >
