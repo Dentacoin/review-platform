@@ -690,6 +690,11 @@ class VoxService {
             } while ( $lastest_key->answer == 0);
         }
 
+        if(empty($lastest_key)) {
+            $lastkey = VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first();
+            $lastkey = $lastkey->id;
+        }
+
         return $lastkey;
     }
 
@@ -1176,9 +1181,15 @@ class VoxService {
                     $quest_id = $q_id;
                 }
 
-                return [
-                    'url' => $vox->getLink().'?testmode=1&q-id='.$quest_id
-                ];
+                if($quest_id == VoxQuestion::where('vox_id', $vox->id)->where('order', '1')->first()->id) {
+                    return [
+                        'url' => $vox->getLink().'?testmode=1'
+                    ];
+                } else {
+                    return [
+                        'url' => $vox->getLink().'?testmode=1&q-id='.$quest_id
+                    ];
+                }
             }
 
             if(Request::input('start-from')) {
