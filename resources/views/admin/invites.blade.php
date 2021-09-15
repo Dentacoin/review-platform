@@ -69,6 +69,13 @@
                                 <option value="no" {!! 'no'==$search_for_verification ? 'selected="selected"' : '' !!}>No</option>
                             </select>
                         </div>
+
+                        <div class="col-md-2">
+                            <label for="exclude-test" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                <input id="exclude-test" type="checkbox" name="exclude-test" value="1" {!! !empty($exclude_test) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                Exclude Test
+                            </label>
+                        </div>
                         
                         <div class="col-md-2">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">

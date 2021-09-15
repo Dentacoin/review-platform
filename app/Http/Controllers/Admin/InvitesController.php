@@ -25,6 +25,12 @@ class InvitesController extends AdminController {
             $items = $items->where('user_id', request('search-user-id'));
         }
 
+        if(!empty(request('exclude-test'))) {
+            $items = $items->whereHas('user', function($query) {
+                $query->where('status', '!=', 'test');
+            });
+        }
+
         if(!empty(request('search-email'))) {
             $items = $items->whereHas('user', function($query) {
                 $query->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
@@ -139,6 +145,7 @@ class InvitesController extends AdminController {
             'search_for_verification' => request('search-for-verification'),
             'search_from' => request('search-from'),
             'search_to' => request('search-to'),
+            'exclude_test' => request('exclude-test'),
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
