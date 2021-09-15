@@ -1,4 +1,4 @@
-<div class="popup fixed-popup popup-with-background social-profile-popup close-on-shield active" id="social-profile-popup">
+<div class="popup fixed-popup popup-with-background social-profile-popup close-on-shield active" id="social-profile-popup" scss-load="vox-popup-social-profile">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="closer">
 			<img src="{{ url('new-vox-img/close-popup.png') }}"/>

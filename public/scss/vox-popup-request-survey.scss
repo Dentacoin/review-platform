@@ -1,0 +1,229 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+
+.request-survey-popup {
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.24);
+
+    @media screen and (max-width: 1000px) {
+        background-color: white;
+    }
+
+    .popup-inner {
+        width: 730px;
+        position: relative;
+        top: 100px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        padding: 50px 70px 40px;
+        text-align: center;
+
+        @media screen and (max-width: 1000px) {
+            width: 100%;
+            top: 0px;
+        }
+
+        @media #{$tablet} {
+            padding: 50px 20px 40px;
+        }
+
+        @media #{$phone} {
+            padding: 50px 14px 40px;
+        }
+
+        .closer {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            z-index: 100;
+
+            @media screen and (max-width: 1000px) {
+                right: auto;
+                left: 0px;
+            }
+
+            .back-home {
+                display: none;
+                background-image: url('../new-vox-img/back-arrow.png');
+                text-transform: lowercase;
+                background-size: 25px;
+                color: #333;
+                padding-left: 30px;
+
+                @media screen and (max-width: 1000px) {
+                    display: block;
+                }
+            }
+
+            img {
+                @media screen and (max-width: 1000px) {
+                    display: none;
+                }
+            }
+        }
+
+        .content {
+            @media #{$tablet} {
+                width: 100%;
+            }
+
+            .h1 {
+                font-size: 25px;
+                font-weight: bold;
+                margin-top: 0px;
+                margin-bottom: 20px;
+
+                @media #{$tablet} {
+                    font-size: 22px;
+                }
+            }
+
+            h4 {
+                font-size: 18px;
+                margin-bottom: 40px;
+
+                @media #{$tablet} {
+                    font-size: 16px;
+                    margin-bottom: 20px;
+                }
+            }
+
+            .radios-row {
+                display: flex;
+                align-items: center;
+                margin-bottom: 25px;
+
+                @media #{$phone} {
+                    display: block;
+                }
+
+                .target-label {
+                    margin-right: 14px;
+                    font-size: 16px;
+                    color: #888888;
+
+                    @media #{$tablet} {
+                        font-size: 14px;
+                    }
+
+                    @media #{$phone} {
+                        text-align: left;
+                        margin-bottom: 10px;
+                    }
+                }
+
+                .modern-radios {
+                    flex: 1;
+                    margin-bottom: 0px;
+
+                    .radio-label {
+                        &:first-child {
+                            margin-right: 10px;
+
+                            @media #{$phone} {
+                                margin-right: 4px;
+                            }
+                        }
+
+                        label {
+                            @media #{$phone} {
+                                padding: 11px 3px;
+                            }
+
+                            .modern-radio {
+                                @media #{$phone} {
+                                    margin-right: 0px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .target-row {
+                display: flex;
+                align-items: center;
+                margin-bottom: 25px;
+
+                @media #{$phone} {
+                    display: block;
+                }
+
+                .target-countries-label {
+                    margin-right: 14px;
+                    font-size: 16px;
+                    color: #888888;
+
+                    @media #{$tablet} {
+                        font-size: 14px;
+                    }
+
+                    @media #{$phone} {
+                        text-align: left;
+                        margin-bottom: 10px;
+                    }
+                }
+
+                .col {
+                    padding: 0px;
+                }
+
+                .modern-field {
+                    margin-bottom: 0px;
+
+                    select {
+                        height: 42px;
+                    }
+                }
+            }
+
+            .modern-field.active {
+                textarea.modern-input + label > span {
+                    top: -205px;
+                }
+            }
+
+            .modern-field {
+                textarea.modern-input {
+                    height: 190px;
+                }
+            }
+
+            .modern-field {
+                textarea.modern-input + label > span {
+                    top: -183px;
+
+                    @media #{$phone} {
+                        white-space: normal;
+                        text-align: left;
+                        right: 10px;
+                    }
+                }
+            }
+
+            .select2 {
+                display: block;
+                width: 100% !important;
+            }
+
+            .select2-container--default .select2-selection--multiple,
+            .select2-container--default.select2-container--focus .select2-selection--multiple {
+                border: solid #cccccc 2px !important;
+            }
+
+            .blue-button {
+                padding: 11px 59px;
+                border-radius: 7px;
+            }
+
+            .ajax-alert {
+                margin-top: -20px;
+            }
+
+            .alert {
+                margin-top: 20px;
+            }
+        }
+    }
+}

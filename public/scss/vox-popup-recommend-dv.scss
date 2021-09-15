@@ -1,0 +1,185 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+
+.recommend-popup {
+    overflow-y: auto;
+
+    @media #{$phone} {
+        padding: 0px 10px;
+    }
+
+    .popup-inner {
+        width: 730px;
+        position: relative;
+        top: 100px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        padding: 50px 70px 40px;
+        text-align: center;
+        box-shadow: 0 0 23px 0px #a3a2a2;
+
+        @media #{$phone} {
+            width: 100%;
+            padding: 30px 10px 18px;
+            top: 80px;
+        }
+
+        .closer {
+            position: absolute;
+            right: -14px;
+            top: -14px;
+            z-index: 100;
+            box-shadow: 0 0 7px 0px #a3a2a2;
+            border-radius: 50%;
+            display: block;
+
+            @media #{$phone} {
+                right: auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            img {
+                display: block;
+            }
+        }
+
+        .content {
+            @media #{$phone} {
+                width: 100%;
+            }
+
+            .h1 {
+                font-size: 35px;
+                font-weight: 900;
+                margin-top: 0px;
+                margin-bottom: 30px;
+
+                @media #{$phone} {
+                    font-size: 22px;
+                    max-width: 300px;
+                    margin-right: auto;
+                    margin-left: auto;
+                    margin-bottom: 20px;
+                }
+            }
+
+            .recommend-icons {
+                padding: 0px 10px;
+
+                @media #{$phone} {
+                    padding: 0px;
+                }
+
+                label {
+                    display: block;
+                    flex: 1;
+                    margin: 0px 10px;
+                    border-radius: 50%;
+                    border: 5px solid transparent;
+                    cursor: pointer;
+
+                    @media #{$phone} {
+                        margin: 0px 7px 0px 0px;
+                    }
+
+                    &:last-child {
+                        @media #{$phone} {
+                            margin-right: 0px;
+                        }
+                    }
+
+                    &:hover,
+                    &.active {
+                        border-color: #38a2e5;
+                    }
+
+                    img {
+                        display: block;
+                    }
+
+                    input {
+                        display: none;
+                    }
+                }
+            }
+
+            .modern-field {
+                margin-top: 40px;
+
+                @media screen and (min-width: 769px) {
+                    textarea {
+                        height: 190px;
+                    }
+
+                    textarea.modern-input + label > span {
+                        top: -186px;
+                    }
+
+                    &.active {
+                        textarea.modern-input + label > span {
+                            top: -206px;
+                        }
+                    }
+                }
+            }
+
+            .blue-button {
+                font-size: 23px;
+                padding: 6px 77px;
+                border-radius: 7px;
+            }
+
+            h4 {
+                font-size: 30px;
+                margin-top: -10px;
+                margin-bottom: 30px;
+
+                @media #{$phone} {
+                    font-size: 20px;
+                    max-width: 150px;
+                    margin-right: auto;
+                    margin-left: auto;
+                    margin-bottom: 18px;
+                }
+            }
+
+            .recommend-fb {
+
+                .blue-button {
+                    padding: 6px 37px;
+
+                    @media #{$phone} {
+                        padding: 6px 10px;
+                        font-size: 20px;
+                    }
+                }
+
+                video {
+                    margin-bottom: -45px;
+                    margin-top: 30px;
+                    width: 100%;
+                    pointer-events: none;
+
+                    @media #{$phone} {
+                        margin-bottom: -23px;
+                    }
+
+                    &:focus {
+                        outline: none;
+                        border: none;
+                    }
+                }
+
+                video::-webkit-media-controls {
+                      display: none !important;
+                }
+
+                video::-webkit-media-controls-enclosure {
+                      display:none !important;
+                }
+            }
+        }
+    }
+}

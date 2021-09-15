@@ -1,0 +1,254 @@
+.taken-survey-wrapper {
+  padding-bottom: 40px;
+  padding-top: 90px; }
+  @media screen and (max-width: 768px) {
+    .taken-survey-wrapper {
+      padding-top: 0px; } }
+  @media screen and (max-width: 768px) {
+    .taken-survey-wrapper > .container .flex {
+      flex-direction: column; } }
+  .taken-survey-wrapper .taken-survey-image {
+    display: block;
+    margin-top: -70px;
+    height: auto; }
+    @media screen and (max-width: 992px) {
+      .taken-survey-wrapper .taken-survey-image {
+        margin-top: 0px; } }
+    @media screen and (max-height: 750px) and (min-width: 769px) {
+      .taken-survey-wrapper .taken-survey-image {
+        max-width: 300px;
+        margin-right: auto;
+        margin-left: auto; } }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .taken-survey-image {
+        max-width: 190px;
+        margin: 0 auto;
+        margin-top: 10px; } }
+  .taken-survey-wrapper img {
+    max-width: 100%; }
+  .taken-survey-wrapper .taken-survey-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .taken-survey-description {
+        order: -1;
+        text-align: center; } }
+    .taken-survey-wrapper .taken-survey-description h3 {
+      margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .taken-survey-description h3 {
+          font-size: 26px;
+          margin-bottom: 10px; } }
+    .taken-survey-wrapper .taken-survey-description p {
+      font-size: 22px;
+      margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .taken-survey-description p {
+          font-size: 16px; } }
+      .taken-survey-wrapper .taken-survey-description p span, .taken-survey-wrapper .taken-survey-description p a {
+        font-size: 22px;
+        color: #46afda;
+        font-weight: bold;
+        text-transform: uppercase; }
+        @media screen and (max-width: 768px) {
+          .taken-survey-wrapper .taken-survey-description p span, .taken-survey-wrapper .taken-survey-description p a {
+            font-size: 16px; } }
+      .taken-survey-wrapper .taken-survey-description p .coins-test {
+        color: black;
+        font-weight: normal; }
+      .taken-survey-wrapper .taken-survey-description p a {
+        text-decoration: none;
+        text-transform: none; }
+  .taken-survey-wrapper .related-wrap {
+    background-color: #d3ebfb;
+    padding-top: 40px;
+    padding-bottom: 30px; }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .related-wrap {
+        padding-top: 25px;
+        padding-bottom: 10px; } }
+    .taken-survey-wrapper .related-wrap .more-surveys {
+      margin-top: 45px; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .related-wrap .more-surveys {
+          margin-top: 5px; } }
+  .taken-survey-wrapper .section-recent-surveys .swiper-slide .vox-header {
+    text-align: center;
+    padding-top: 25px; }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .section-recent-surveys .swiper-slide .vox-header {
+        padding-top: 15px; } }
+    .taken-survey-wrapper .section-recent-surveys .swiper-slide .vox-header .survey-title {
+      text-transform: uppercase;
+      margin-bottom: 5px; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .section-recent-surveys .swiper-slide .vox-header .survey-title {
+          font-size: 22px;
+          margin-bottom: 25px; } }
+  .taken-survey-wrapper .section-recent-surveys .swiper-slide .survey-cats {
+    margin-bottom: 20px; }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .section-recent-surveys .swiper-slide .survey-cats {
+        display: none; } }
+  .taken-survey-wrapper .survey-time {
+    text-align: left; }
+    .taken-survey-wrapper .survey-time .col {
+      display: flex;
+      align-items: center;
+      justify-content: end; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .survey-time .col {
+          flex: auto; } }
+      .taken-survey-wrapper .survey-time .col:first-child {
+        text-align: right;
+        justify-content: flex-end;
+        margin-right: 28px;
+        position: relative; }
+        @media screen and (max-width: 992px) and (min-width: 769px) {
+          .taken-survey-wrapper .survey-time .col:first-child {
+            margin-right: 19px; } }
+        .taken-survey-wrapper .survey-time .col:first-child::after {
+          content: '';
+          width: 2px;
+          height: 15px;
+          background-color: black;
+          position: absolute;
+          top: 50%;
+          right: -15px;
+          transform: translateY(-50%); }
+          @media screen and (max-width: 992px) and (min-width: 769px) {
+            .taken-survey-wrapper .survey-time .col:first-child::after {
+              right: -11px; } }
+    .taken-survey-wrapper .survey-time p {
+      display: inline-block; }
+      @media screen and (max-width: 1300px) {
+        .taken-survey-wrapper .survey-time p {
+          font-size: 13px; } }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .survey-time p {
+          font-size: 16px; } }
+      @media screen and (max-width: 1220px) {
+        .taken-survey-wrapper .survey-time p .hide-mobile {
+          font-size: 13px; } }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .survey-time p .hide-mobile {
+          display: none; } }
+    .taken-survey-wrapper .survey-time img {
+      max-height: 22px;
+      margin-right: 7px; }
+  .taken-survey-wrapper .white-button,
+  .taken-survey-wrapper .blue-button {
+    padding: 10px 40px;
+    display: inline-block; }
+    @media screen and (max-width: 1490px) {
+      .taken-survey-wrapper .white-button,
+      .taken-survey-wrapper .blue-button {
+        padding: 10px 20px; } }
+    @media screen and (max-width: 1240px) {
+      .taken-survey-wrapper .white-button,
+      .taken-survey-wrapper .blue-button {
+        padding: 10px; } }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .white-button,
+      .taken-survey-wrapper .blue-button {
+        font-size: 16px;
+        width: auto; } }
+  .taken-survey-wrapper .btns {
+    margin-top: 24px; }
+    .taken-survey-wrapper .btns a:first-child {
+      margin-right: 15px; }
+    .taken-survey-wrapper .btns a.white-button {
+      background-color: transparent;
+      color: #38ace5;
+      border-color: #38ace5; }
+  .taken-survey-wrapper .taken-title {
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px; }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .taken-title {
+        font-size: 26px;
+        margin-bottom: 0px; } }
+  .taken-survey-wrapper .taken-vox-stats {
+    padding-top: 70px;
+    padding-bottom: 70px;
+    position: relative; }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .taken-vox-stats {
+        padding-top: 45px;
+        padding-bottom: 45px; } }
+    .taken-survey-wrapper .taken-vox-stats:after {
+      content: '';
+      position: absolute;
+      bottom: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 1px;
+      background-color: black; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .taken-vox-stats:after {
+          width: 155px; } }
+    .taken-survey-wrapper .taken-vox-stats.without-line {
+      padding-bottom: 0px; }
+      .taken-survey-wrapper .taken-vox-stats.without-line:after {
+        display: none; }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .taken-vox-stats .taken-title {
+        margin-bottom: 34px;
+        padding: 0px 10px; } }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .taken-vox-stats .blue-button {
+        padding: 10px 50px; } }
+    .taken-survey-wrapper .taken-vox-stats .vox-stats-subtitle {
+      text-align: center;
+      font-size: 30px;
+      margin-top: -20px;
+      margin-bottom: 40px; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .taken-vox-stats .vox-stats-subtitle {
+          font-size: 26px; } }
+  .taken-survey-wrapper .suggested-wrap {
+    padding-top: 60px; }
+    @media screen and (max-width: 768px) {
+      .taken-survey-wrapper .suggested-wrap {
+        padding-top: 40px; } }
+    .taken-survey-wrapper .suggested-wrap h3 {
+      margin-bottom: 30px; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .suggested-wrap h3 {
+          padding: 0px 10px;
+          margin-bottom: 0px; } }
+    .taken-survey-wrapper .suggested-wrap .more-surveys {
+      margin-top: 45px; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .suggested-wrap .more-surveys {
+          margin-top: 5px; } }
+
+.video-parent {
+  display: block; }
+  @media screen and (max-width: 768px) {
+    .video-parent {
+      display: none; } }
+
+.video-parent-mobile {
+  display: none; }
+  @media screen and (max-width: 768px) {
+    .video-parent-mobile {
+      display: block; } }
+
+.video-stats {
+  width: 100%;
+  margin-bottom: 25px;
+  pointer-events: none; }
+  .video-stats:focus {
+    outline: none;
+    border: none; }
+
+.video-stats::-webkit-media-controls {
+  display: none !important; }
+
+.video-stats::-webkit-media-controls-enclosure {
+  display: none !important; }

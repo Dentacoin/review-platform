@@ -41,8 +41,10 @@
 				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
             @endforeach
         @endif
-		{{-- <link rel="preload" href="{{ url('font-awesome/webfonts/fa-brands-400.woff2') }}" as="font" crossorigin>
-		<link rel="preload" href="{{ url('font-awesome/webfonts/fa-solid-900.woff2') }}" as="font" crossorigin> --}}
+
+		@if(!empty($unbanned))
+			<link rel="stylesheet" type="text/css" href="{{ url('/css/vox-popup-unbanned.css').'?ver='.$cache_version }}" />
+		@endif
 
 		<style type="text/css">
 			body {
@@ -233,7 +235,7 @@
 						</div>
 					</div>
 					<a class="closer x">
-						<i class="fas fa-times"></i>
+						<img src="{{ url('new-vox-img/close-popup.png') }}">
 					</a>
 				</div>
 			</div>

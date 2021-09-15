@@ -1,4 +1,4 @@
-<div class="popup fixed-popup popup-with-background daily-poll close-on-shield active" id="poll-popup">
+<div class="popup fixed-popup popup-with-background daily-poll close-on-shield active" id="poll-popup" scss-load="vox-popup-daily-poll">
 	<div class="popup-inner">
 		<a href="javascript:;" class="closer">
 			<img src="{{ url('new-vox-img/close-popup.png') }}">

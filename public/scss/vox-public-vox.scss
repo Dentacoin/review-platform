@@ -5,6 +5,8 @@ $phone_up: "screen and (min-width: 769px)";
 
 $main-color: #38ace5;
 
+@import 'vox-index-part';
+
 body.vox-public {
 	.site-content {
 		@media screen and (max-height: 800px) and (min-width: 769px ) {

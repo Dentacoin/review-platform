@@ -1,4 +1,4 @@
-<div class="popup fixed-popup popup-with-background failed-popup close-on-shield active" id="failed-popup">
+<div class="popup fixed-popup popup-with-background failed-popup close-on-shield active" id="failed-popup" scss-load="vox-popup-failed">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
 			<img src="{{ url('new-vox-img/close-popup.png') }}"/>

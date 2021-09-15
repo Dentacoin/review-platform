@@ -1,0 +1,145 @@
+.request-survey-popup {
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.24); }
+  @media screen and (max-width: 1000px) {
+    .request-survey-popup {
+      background-color: white; } }
+  .request-survey-popup .popup-inner {
+    width: 730px;
+    position: relative;
+    top: 100px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    padding: 50px 70px 40px;
+    text-align: center; }
+    @media screen and (max-width: 1000px) {
+      .request-survey-popup .popup-inner {
+        width: 100%;
+        top: 0px; } }
+    @media screen and (max-width: 1080px) {
+      .request-survey-popup .popup-inner {
+        padding: 50px 20px 40px; } }
+    @media screen and (max-width: 768px) {
+      .request-survey-popup .popup-inner {
+        padding: 50px 14px 40px; } }
+    .request-survey-popup .popup-inner .closer {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      z-index: 100; }
+      @media screen and (max-width: 1000px) {
+        .request-survey-popup .popup-inner .closer {
+          right: auto;
+          left: 0px; } }
+      .request-survey-popup .popup-inner .closer .back-home {
+        display: none;
+        background-image: url("../new-vox-img/back-arrow.png");
+        text-transform: lowercase;
+        background-size: 25px;
+        color: #333;
+        padding-left: 30px; }
+        @media screen and (max-width: 1000px) {
+          .request-survey-popup .popup-inner .closer .back-home {
+            display: block; } }
+      @media screen and (max-width: 1000px) {
+        .request-survey-popup .popup-inner .closer img {
+          display: none; } }
+    @media screen and (max-width: 1080px) {
+      .request-survey-popup .popup-inner .content {
+        width: 100%; } }
+    .request-survey-popup .popup-inner .content .h1 {
+      font-size: 25px;
+      font-weight: bold;
+      margin-top: 0px;
+      margin-bottom: 20px; }
+      @media screen and (max-width: 1080px) {
+        .request-survey-popup .popup-inner .content .h1 {
+          font-size: 22px; } }
+    .request-survey-popup .popup-inner .content h4 {
+      font-size: 18px;
+      margin-bottom: 40px; }
+      @media screen and (max-width: 1080px) {
+        .request-survey-popup .popup-inner .content h4 {
+          font-size: 16px;
+          margin-bottom: 20px; } }
+    .request-survey-popup .popup-inner .content .radios-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px; }
+      @media screen and (max-width: 768px) {
+        .request-survey-popup .popup-inner .content .radios-row {
+          display: block; } }
+      .request-survey-popup .popup-inner .content .radios-row .target-label {
+        margin-right: 14px;
+        font-size: 16px;
+        color: #888888; }
+        @media screen and (max-width: 1080px) {
+          .request-survey-popup .popup-inner .content .radios-row .target-label {
+            font-size: 14px; } }
+        @media screen and (max-width: 768px) {
+          .request-survey-popup .popup-inner .content .radios-row .target-label {
+            text-align: left;
+            margin-bottom: 10px; } }
+      .request-survey-popup .popup-inner .content .radios-row .modern-radios {
+        flex: 1;
+        margin-bottom: 0px; }
+        .request-survey-popup .popup-inner .content .radios-row .modern-radios .radio-label:first-child {
+          margin-right: 10px; }
+          @media screen and (max-width: 768px) {
+            .request-survey-popup .popup-inner .content .radios-row .modern-radios .radio-label:first-child {
+              margin-right: 4px; } }
+        @media screen and (max-width: 768px) {
+          .request-survey-popup .popup-inner .content .radios-row .modern-radios .radio-label label {
+            padding: 11px 3px; } }
+        @media screen and (max-width: 768px) {
+          .request-survey-popup .popup-inner .content .radios-row .modern-radios .radio-label label .modern-radio {
+            margin-right: 0px; } }
+    .request-survey-popup .popup-inner .content .target-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px; }
+      @media screen and (max-width: 768px) {
+        .request-survey-popup .popup-inner .content .target-row {
+          display: block; } }
+      .request-survey-popup .popup-inner .content .target-row .target-countries-label {
+        margin-right: 14px;
+        font-size: 16px;
+        color: #888888; }
+        @media screen and (max-width: 1080px) {
+          .request-survey-popup .popup-inner .content .target-row .target-countries-label {
+            font-size: 14px; } }
+        @media screen and (max-width: 768px) {
+          .request-survey-popup .popup-inner .content .target-row .target-countries-label {
+            text-align: left;
+            margin-bottom: 10px; } }
+      .request-survey-popup .popup-inner .content .target-row .col {
+        padding: 0px; }
+      .request-survey-popup .popup-inner .content .target-row .modern-field {
+        margin-bottom: 0px; }
+        .request-survey-popup .popup-inner .content .target-row .modern-field select {
+          height: 42px; }
+    .request-survey-popup .popup-inner .content .modern-field.active textarea.modern-input + label > span {
+      top: -205px; }
+    .request-survey-popup .popup-inner .content .modern-field textarea.modern-input {
+      height: 190px; }
+    .request-survey-popup .popup-inner .content .modern-field textarea.modern-input + label > span {
+      top: -183px; }
+      @media screen and (max-width: 768px) {
+        .request-survey-popup .popup-inner .content .modern-field textarea.modern-input + label > span {
+          white-space: normal;
+          text-align: left;
+          right: 10px; } }
+    .request-survey-popup .popup-inner .content .select2 {
+      display: block;
+      width: 100% !important; }
+    .request-survey-popup .popup-inner .content .select2-container--default .select2-selection--multiple,
+    .request-survey-popup .popup-inner .content .select2-container--default.select2-container--focus .select2-selection--multiple {
+      border: solid #cccccc 2px !important; }
+    .request-survey-popup .popup-inner .content .blue-button {
+      padding: 11px 59px;
+      border-radius: 7px; }
+    .request-survey-popup .popup-inner .content .ajax-alert {
+      margin-top: -20px; }
+    .request-survey-popup .popup-inner .content .alert {
+      margin-top: 20px; }

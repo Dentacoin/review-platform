@@ -1,0 +1,98 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+
+.failed-popup.fixed-popup {
+	.popup-inner {
+		width: 800px;
+	    top: 70px;
+	    transform: translateX(-50%);
+	    border-radius: 10px;
+	    padding: 0px;
+	    background: white;
+	    left: 50%;
+	    position: absolute;
+	    box-shadow: 0px 0 12px black;
+
+	    @media #{$tablet} {
+	    	width: 760px;
+	    	height: auto;
+			left: 50%;
+	    }
+
+		@media #{$phone} {
+    		width: 90%;
+    		padding: 30px;
+		}
+
+		h2 {
+			margin-bottom: 0px;
+		    font-size: 40px;
+		    font-weight: bold;
+		    color: black;
+		    text-transform: uppercase;
+		    margin-top: 30px;
+	    	text-align: center;
+
+	    	@media #{$phone} {
+	    	    margin-top: 0px;
+	    	    font-size: 30px;
+	    	}
+		}
+
+		.col {
+			padding: 0px;
+		}
+
+		.close-popup {
+			position: absolute;
+		    top: 10px;
+		    right: 10px;
+
+		    img {
+				width: auto;
+				margin-right: 0px;
+
+				@media #{$phone} {
+				    margin: 0px;
+				    margin-top: -6px;
+				}
+		    }
+		}
+
+		p {
+			font-size: 20px;
+			padding-right: 60px;
+
+			@media #{$phone} {
+				padding-right: 0px;
+   				text-align: center;
+			}
+		}
+
+		img {
+			max-width: 420px;
+		    display: block;
+		    margin-right: 50px;
+		    border-bottom-left-radius: 10px;
+
+		    @media #{$phone} {
+			    max-width: 200px;
+	    		margin: 20px auto;
+	    	}
+		}
+
+		@media #{$phone} {
+
+			.flex {
+				display: block;
+			}
+			.close-popup:not(.button) {
+				top: 10px;
+
+				i {
+					font-size: 20px;
+				}
+			}
+		}
+	}
+}

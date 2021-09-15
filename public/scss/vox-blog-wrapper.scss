@@ -1,0 +1,84 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+
+.blog-wrapper {
+	background: url('../new-vox-img/b.jpg') 50% 57% no-repeat;
+	background-size: cover;
+	padding: 70px 0px;
+
+	@media #{$tablet} {
+		background-image: url('../new-vox-img/b-mobile.jpg');
+	}
+
+	@media #{$phone} {
+		padding-top: 40px;
+		padding-bottom: 25px;
+	}
+
+	.container {
+		@media #{$tablet} {
+			flex-direction: column;
+			text-align: center;
+		}
+	}
+
+	h2 {
+		font-weight: 900 !important;
+	    color: white !important;
+	    font-size: 30px !important;
+	    text-align: left !important;
+	    margin-bottom: 5px !important;
+
+	    @media #{$tablet} {
+	    	text-align: center !important;
+	    }
+
+	    @media #{$phone} {
+	    	font-size: 26px !important;
+	    	max-width: 100% !important;
+	    	margin-bottom: 15px !important;
+	    }
+	}
+
+	p {
+		font-size: 30px;
+	    color: white;
+	    line-height: 36px;
+	    margin-bottom: 35px;
+
+	    @media #{$phone} {
+	    	font-size: 26px;
+	    	line-height: normal;
+	    	margin-bottom: 15px;
+	    }
+	}
+
+	img {
+		max-width: 100%;
+		display: none;
+
+		@media #{$tablet} {
+			height: auto;
+			display: inline-block;
+		}
+	}
+
+	.white-button {
+		display: inline-block;
+		border-color: white;
+		color: #38ace5;
+		padding: 10px 37px;
+		font-size: 18px;
+
+		@media #{$tablet} {
+			max-width: 200px;
+			margin-bottom: 20px;
+		}
+
+		&:focus,
+		&:hover {
+			color: white;
+			background-color: #00dac8;
+		}
+	}
+}

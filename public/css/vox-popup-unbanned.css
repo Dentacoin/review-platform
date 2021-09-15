@@ -1,0 +1,74 @@
+.unbanned .wrapper .inner {
+  margin: 60px 0 30px auto; }
+  @media screen and (max-width: 768px) {
+    .unbanned .wrapper .inner {
+      margin: 10px 0 0px auto; } }
+  .unbanned .wrapper .inner h2 {
+    text-transform: none; }
+  .unbanned .wrapper .inner p {
+    margin-top: 35px;
+    margin-bottom: 55px;
+    font-size: 20px;
+    color: #060606; }
+    @media screen and (max-width: 1100px) {
+      .unbanned .wrapper .inner p {
+        font-size: 16px; } }
+    @media screen and (max-width: 768px) {
+      .unbanned .wrapper .inner p {
+        font-size: 12px;
+        text-align: center;
+        margin-top: 15px;
+        margin-bottom: 25px; } }
+  .unbanned .wrapper .inner .btn-unban {
+    margin-left: 60px;
+    height: 57px;
+    line-height: 57px;
+    font-weight: 900;
+    font-size: 20px; }
+    @media screen and (max-width: 1100px) {
+      .unbanned .wrapper .inner .btn-unban {
+        margin-left: 40px;
+        font-size: 18px; } }
+    @media screen and (max-width: 768px) {
+      .unbanned .wrapper .inner .btn-unban {
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 16px;
+        order: -1;
+        margin-bottom: 15px; } }
+    .unbanned .wrapper .inner .btn-unban.btn-unban-1 {
+      /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#69d3be+0,4ab19d+100 */
+      background: #69d3be;
+      /* Old browsers */
+      background: -moz-linear-gradient(top, #69d3be 0%, #4ab19d 100%);
+      /* FF3.6-15 */
+      background: -webkit-linear-gradient(top, #69d3be 0%, #4ab19d 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to bottom, #69d3be 0%, #4ab19d 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#69d3be', endColorstr='#4ab19d',GradientType=0 );
+      /* IE6-9 */ }
+    .unbanned .wrapper .inner .btn-unban.btn-unban-2 {
+      /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeb8b+0,b4af1f+100 */
+      background: #eeeb8b;
+      /* Old browsers */
+      background: -moz-linear-gradient(top, #eeeb8b 0%, #b4af1f 100%);
+      /* FF3.6-15 */
+      background: -webkit-linear-gradient(top, #eeeb8b 0%, #b4af1f 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to bottom, #eeeb8b 0%, #b4af1f 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeb8b', endColorstr='#b4af1f',GradientType=0 );
+      /* IE6-9 */ }
+    .unbanned .wrapper .inner .btn-unban.btn-unban-3 {
+      /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffc1a7+0,f37039+100 */
+      background: #ffc1a7;
+      /* Old browsers */
+      background: -moz-linear-gradient(top, #ffc1a7 0%, #f37039 100%);
+      /* FF3.6-15 */
+      background: -webkit-linear-gradient(top, #ffc1a7 0%, #f37039 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to bottom, #ffc1a7 0%, #f37039 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc1a7', endColorstr='#f37039',GradientType=0 );
+      /* IE6-9 */ }

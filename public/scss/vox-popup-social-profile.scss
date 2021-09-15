@@ -1,0 +1,316 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+
+.social-profile-popup {
+    overflow-y: auto;
+
+    @media #{$phone} {
+        padding: 0px 10px;
+    }
+
+    .popup-inner {
+        width: 930px;
+        position: relative;
+        top: 100px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        padding: 30px 150px 40px;
+        text-align: center;
+        box-shadow: 0 0 23px 0px #a3a2a2;
+
+        @media #{$tablet} {
+            width: 95%;
+            top: 80px;
+        }
+
+        @media #{$phone} {
+            padding: 30px 10px 18px;
+            width: 100%;
+        }
+
+        .closer {
+            position: absolute;
+            right: -14px;
+            top: -14px;
+            z-index: 100;
+            box-shadow: 0 0 7px 0px #a3a2a2;
+            border-radius: 50%;
+            display: block;
+
+            @media #{$phone} {
+                right: auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            img {
+                display: block;
+            }
+        }
+
+        .image-label {
+            cursor: pointer;
+            width: 180px;
+            height: 180px;
+            display: block;
+            border: 2px dashed #777777;
+            padding: 40px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            background-size: cover;
+            background-position: 50% 50%;
+
+            // @media #{$phone} {
+            // 	width: 120px;
+            // 	height: 120px;
+            // }
+
+            p {
+                background-color: #38ace5;
+                position: absolute;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                font-size: 16px;
+                font-weight: bold;
+                color: white;
+                padding: 5px 0px;
+            }
+
+            i {
+                font-size: 30px;
+                color: #777777;
+            }
+
+            input {
+                display: none;
+            }
+
+            .loader {
+                display: none;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translateY(-50%) translateX(-50%);
+                text-align: center;
+                padding: 20px;
+                border-radius: 50%;
+                background: rgba(0,0,0,0.3);
+                color: white;
+                width: 100px;
+                height: 100px;
+                line-height: 80px;
+
+                i {
+                    border-radius: 50%;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    font-size: 15px;
+                    width: 40px;
+                    height: 40px;
+                    margin: -20px 0 0 -20px;
+                    text-indent: -9999em;
+                    border-top: 3px solid #121212;
+                    border-right: 3px solid white;
+                    border-bottom: 3px solid white;
+                    border-left: 3px solid white;
+                    transform: translateZ(0);
+                    animation: load8 1.1s infinite linear;
+                }
+            }
+
+            &.loading {
+                .loader {
+                    display: block;
+                }
+
+                .centered-hack {
+                    display: none;
+                }
+            }
+        }
+
+        .content {
+            @media #{$phone} {
+                width: 100%;
+            }
+
+            .h1 {
+                font-size: 30px;
+                font-weight: bold;
+                margin-top: 0px;
+                margin-bottom: 10px;
+
+                @media #{$phone} {
+                    font-size: 22px;
+                    max-width: 300px;
+                    margin-right: auto;
+                    margin-left: auto;
+                    margin-bottom: 20px;
+                }
+            }
+
+            > p {
+                font-size: 18px;
+                margin-bottom: 30px;
+                max-width: 560px;
+                margin-left: auto;
+                margin-right: auto;
+
+                @media #{$phone} {
+                    font-size: 15px;
+                }
+            }
+
+            .max-size {
+                margin-top: 10px;
+
+                span {
+                    font-style: italic;
+                    font-size: 14px;
+                }
+            }
+
+            .modern-field {
+                margin-top: 20px;
+            }
+
+            .blue-button {
+                padding: 13px 46px;
+                font-size: 20px;
+                font-weight: bold;
+                border: 2px solid #41afff;
+                cursor: pointer;
+                border-radius: 7px;
+
+                @media #{$tablet} {
+                    font-size: 17px;
+                }
+            }
+
+            .cancel {
+                padding: 11px 46px;
+                border-radius: 7px;
+                font-size: 20px;
+                font-weight: bold;
+                color: #41afff;
+                margin-right: 10px;
+
+                @media #{$tablet} {
+                    font-size: 17px;
+                }
+
+                @media #{$phone} {
+                    display: none;
+                }
+
+                &:focus,
+                &:hover {
+                    color: white;
+                }
+            }
+
+            .alert-warning {
+                &.mobile {
+                    padding: 10px 10px 10px 40px;
+                    font-size: 14px;
+                    &:before {
+                        left: 10px;
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+.max-size-label {
+	max-width: 170px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+
+	@media #{$phone} {
+		font-size: 14px;
+		max-width: 100%;
+		text-align: center;
+	}
+
+	svg {
+		max-width: 30px;
+		margin-right: 10px;
+		vertical-align: sub;
+
+		@media #{$phone} {
+			max-width: 15px;
+			margin-right: 5px;
+		}
+	}
+}
+
+.avatar-name-wrapper {
+	margin-top: 50px;
+	max-width: 180px;
+    margin-left: auto;
+    margin-right: auto;
+	display: none;
+
+	.avatar-name {
+		font-size: 14px;
+		display: inline-block;
+		vertical-align: middle;
+		width: calc(100% - 30px);
+		color: #888888;
+	}
+
+	.destroy-croppie {
+		color: red;
+		font-size: 36px;
+		width: 23px;
+		display: inline-block;
+		vertical-align: middle;
+		text-align: right;
+		cursor: pointer;
+		margin: 0;
+		padding: 0;
+		line-height: 22px;
+		border: 0;
+		background: transparent;
+	}
+}
+
+.image-big-error {
+	margin-top: 20px !important;
+    max-width: 180px !important;
+    padding: 10px !important;
+    font-size: 14px !important;
+	margin-left: auto;
+    margin-right: auto;
+
+	&:before {
+		display: none !important;
+	}
+}
+
+.cropper-container {
+	width: 180px !important;
+	height: 180px !important;
+	margin-left: auto;
+    margin-right: auto;
+	display: none;
+
+	.cr-viewport {
+		border: 2px dashed #777777 !important;
+		background: transparent !important;
+	}
+
+	.cr-overlay {
+		background: transparent !important;
+	}
+}

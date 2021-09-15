@@ -1,0 +1,499 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+
+.daily-poll {
+    overflow-y: auto;
+
+    @media screen and (max-width: 1000px) {
+        background-color: white;
+        padding: 10px;
+    }
+
+    .popup-inner {
+        display: flex;
+        width: 1280px;
+        align-items: center;
+        position: relative;
+        top: 100px;
+        margin: 0 auto;
+
+        @media screen and (max-width: 1300px) {
+            width: 1000px;
+        }
+
+        @media screen and (max-width: 1000px) {
+            width: 100%;
+            display: block;
+            top: 0px;
+            background-color: white;
+            padding: 1px;
+        }
+
+        .closer {
+            position: absolute;
+            right: 50px;
+            top: 10px;
+            z-index: 100;
+
+            @media screen and (max-width: 1000px) {
+                right: auto;
+                left: 0px;
+            }
+
+            .back-home {
+                display: none;
+                background-image: url('../new-vox-img/back-arrow.png');
+                text-transform: lowercase;
+                background-size: 25px;
+                color: #333;
+                padding-left: 30px;
+
+                @media screen and (max-width: 1000px) {
+                    display: block;
+                }
+            }
+
+            img {
+                @media screen and (max-width: 1000px) {
+                    display: none;
+                }
+            }
+        }
+
+        .daily-image {
+            position: absolute;
+            left: -50px;
+
+            @media screen and (max-width: 1000px) {
+                left: 50%;
+                transform: translateX(-50%);
+                top: 20px;
+                width: 100%;
+            }
+
+            img {
+                @media screen and (max-width: 1300px) {
+                    max-width: 400px;
+                }
+
+                @media screen and (max-width: 1000px) {
+                    width: 100%;
+                    margin: 0 auto;
+                    display: block;
+                }
+            }
+        }
+
+        .content {
+            min-height: 570px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 21px -4px #7b7b7b;
+            margin-left: 280px;
+            width: 100%;
+            text-align: center;
+            padding-left: 140px;
+            margin-right: 40px;
+            padding-bottom: 80px;
+            padding-top: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            @media screen and (max-width: 1300px) {
+                min-height: 490px;
+                margin-left: 0px;
+                padding-left: 310px;
+            }
+
+            @media screen and (max-width: 1000px) {
+                margin-top: 190px;
+                position: relative;
+                height: 100%;
+                min-height: auto;
+                padding-left: 0px;
+                align-items: normal;
+                padding: 20px;
+                display: block;
+            }
+
+            &.poll-stats-wrapper {
+                p {
+                    font-size: 18px;
+                    color: #888;
+                    margin-bottom: 20px;
+
+                    @media screen and (max-width: 1000px) {
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            &.poll-taken-all-wrapper,
+            &.poll-closed-wrapper {
+                flex-direction: column;
+
+                h2 {
+                    font-size: 28px;
+                    font-weight: 600;
+                    max-width: 500px;
+                    margin: 0 auto;
+                    margin-top: 50px;
+
+                    @media screen and (max-width: 1300px) {
+                        font-size: 22px;
+                        margin-bottom: 50px;
+                    }
+
+                    @media #{$phone} {
+                        font-size: 20px;
+                    }
+
+                    b {
+                        color: #3daee6;
+                        font-weight: bold;
+
+                        @media screen and (max-width: 1300px) {
+                            font-size: 22px;
+                        }
+
+                        @media #{$phone} {
+                            font-size: 20px;
+                        }
+                    }
+                }
+
+                .get-reward-buttons {
+                    text-align: center;
+                }
+            }
+
+            h3 {
+                text-transform: uppercase;
+                color: #41afff;
+                padding-bottom: 19px;
+                margin-bottom: 25px;
+                position: relative;
+
+                @media screen and (max-width: 1000px) {
+                    font-size: 21px !important;
+                    margin-bottom: 15px;
+                }
+
+                b {
+                    text-transform: uppercase;
+                    color: #41afff;
+                    font-weight: 900;
+
+                    @media screen and (max-width: 1000px) {
+                        font-size: 21px !important;
+                    }
+                }
+
+                &:after {
+                    content: '';
+                    display: block;
+                    height: 2px;
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    bottom: 0px;
+                    width: 200px;
+                    background: #007fff; /* Old browsers */
+                    background: -moz-linear-gradient(left, #007fff 0%, #78d6ff 100%); /* FF3.6-15 */
+                    background: -webkit-linear-gradient(left, #007fff 0%,#78d6ff 100%); /* Chrome10-25,Safari5.1-6 */
+                    background: linear-gradient(to right, #007fff 0%,#78d6ff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007fff', endColorstr='#78d6ff',GradientType=1 );
+                }
+            }
+
+            .poll-question {
+                font-size: 21px;
+                font-weight: 600;
+                margin-bottom: 35px;
+                max-width: 500px;
+
+                @media screen and (max-width: 1000px) {
+                    font-size: 18px;
+                    margin-bottom: 15px;
+                    max-width: none;
+                }
+            }
+
+            .poll-answers {
+                display: inline-block;
+                position: relative;
+                width: auto;
+                min-width: 260px;
+                max-width: 460px;
+
+                @media screen and (max-width: 1000px) {
+                    min-width: 220px;
+                }
+
+                .poll-answer {
+                    display: block;
+                    padding: 7px 30px;
+                    margin: 1px auto;
+                    border: 2px solid #bdbdbd;
+                    text-align: center;
+                    border-radius: 10px;
+                    font-size: 18px;
+                    color: #333;
+                    cursor: pointer;
+                    font-weight: 600;
+                    margin-bottom: 15px;
+                    position: relative;
+
+                    @media screen and (max-width: 1000px) {
+                        font-size: 16px;
+                        margin-bottom: 10px;
+                        padding: 7px 20px;
+                    }
+
+                    span {
+                        font-size: 18px;
+                        color: #333;
+                    }
+
+                    &:hover {
+                        border-color: #3daee6;
+                        color: white;
+                        background: #3daee6;
+
+                        span {
+                            color: white;
+                        }
+                    }
+
+                    input {
+                        display: none;
+                    }
+                }
+            }
+
+            .poll-group {
+                position: relative;
+                min-width: 500px;
+
+                @media screen and (max-width: 1000px) {
+                    min-width: auto;
+                }
+            }
+
+            .poll-reward {
+                position: absolute;
+                right: 60px;
+                bottom: 20px;
+                display: flex;
+                align-items: center;
+                font-size: 25px;
+                font-weight: 900;
+
+                @media screen and (max-width: 1000px) {
+                    right: 0px;
+                    top: -190px;
+                    font-size: 18px;
+                    height: 30px;
+                }
+
+                img {
+                    max-width: 30px;
+                    margin-right: 5px;
+
+                    @media screen and (max-width: 1000px) {
+                        max-width: 20px;
+                    }
+                }
+            }
+
+            .get-reward-buttons {
+                position: absolute;
+                bottom: 20px;
+                right: 60px;
+
+                @media screen and (max-width: 1000px) {
+                    position: static;
+                    margin-top: 20px;
+                    text-align: right;
+                }
+            }
+
+            .blue-button {
+                font-weight: normal;
+                font-size: 18px;
+                border-radius: 5px;
+                border-width: 1px;
+                position: relative;
+
+                &.sign {
+                    min-width: 320px;
+                    position: relative;
+                    margin-right: 5px;
+                    padding-left: 45px !important;
+
+                    @media screen and (max-width: 1000px) {
+                        min-width: auto;
+                        margin-top: 30px;
+                        padding-left: 60px;
+                        font-size: 16px;
+                    }
+
+                    img {
+                        max-width: 24px;
+                        position: absolute;
+                        left: 20px;
+                        top: 50%;
+                        transform: translateY(-50%);
+
+                        @media screen and (max-width: 1000px) {
+                            left: 11px;
+                        }
+                    }
+                }
+
+                &.next-poll {
+                    min-width: 170px;
+                    padding-right: 40px;
+
+                    @media screen and (max-width: 1000px) {
+                        min-width: 110px;
+                        font-size: 14px;
+                        padding-right: 26px;
+                        padding-left: 4px;
+                        display: inline-block;
+                    }
+                    
+                    img {
+                        max-width: 22px;
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        right: 18px;
+
+                        @media screen and (max-width: 1000px) {
+                            max-width: 17px;
+                            right: 6px;
+                        }
+                    }
+                }
+            }
+
+            .next-stat,
+            .see-stats,
+            .browse-polls,
+            .all-polls {
+                text-transform: uppercase;
+                font-size: 18px;
+                border: 1px solid #38ace5;
+                color: #38ace5;
+                padding: 12px 20px;
+                padding-left: 50px;
+                border-radius: 5px;
+                font-weight: bold;
+                display: inline-block;
+                min-width: 260px;
+                font-weight: normal;
+                margin-right: 5px;
+                position: relative;
+
+                @media screen and (max-width: 1000px) {
+                    min-width: 190px;
+                    padding: 12px 16px;
+                    font-size: 14px;
+                    max-width: 190px;
+                    display: inline-block;
+                    margin-right: 0px;
+                }
+
+                &:focus,
+                &:hover {
+                    background-color: #f3faff;
+                }
+
+                img {
+                    max-width: 28px;
+                    position: absolute;
+                    left: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+
+                    @media screen and (max-width: 1000px) {
+                        max-width: 21px;
+                        left: 7px;
+                    }
+                }
+            }
+
+            .all-polls {
+                min-width: auto;
+            }
+
+            .see-stats {
+                padding-left: 20px;
+                min-width: 180px;
+
+                @media screen and (max-width: 1000px) {
+                    text-align: center;
+                    min-width: 120px;
+                }
+            }
+
+            .next-stat {
+                padding-left: 20px;
+                padding-right: 45px;
+                min-width: 170px;
+
+                @media screen and (max-width: 1000px) {
+                    min-width: 110px;
+                    max-width: 132px;
+                    padding-right: 26px;
+                    padding-left: 4px;
+                }
+
+                img {
+                    left: auto;
+                    right: 18px;
+                    max-width: 22px;
+
+                    @media screen and (max-width: 1000px) {
+                        max-width: 17px;
+                        left: auto;
+                        right: 6px;
+                    }
+                }
+            }
+
+            #chart-poll {
+                text-align: left;
+
+                .custombar {
+                    display: flex;
+                    width: 100%;
+                    font-size: 12px;
+                    line-height: 20px;
+
+                    span {
+                        width: 0%;
+                        display: block;
+                        height: 10px;
+                        margin-right: 10px;
+                        transform: translateY(50%);
+                        background-color: #1ebfd8;
+                        transition: all 0.5s ease;
+                    }
+                }
+
+                .group-heading {
+                    display: block;
+                    margin-top: 5px;
+                    font-weight: 600;
+
+                    span {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+}

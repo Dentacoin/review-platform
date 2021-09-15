@@ -1000,7 +1000,8 @@ class VoxService {
                             '../js/swiper.min.js'
                         ],
                         'css' => [
-                            'swiper.min.css'
+                            'swiper.min.css',
+                            'vox-taken-survey-wrapper.css',
                         ],
                     ),
                 ];
@@ -1072,7 +1073,8 @@ class VoxService {
                                 '../js/swiper.min.js'
                             ],
                             'css' => [
-                                'swiper.min.css'
+                                'swiper.min.css',
+                                'vox-taken-survey-wrapper.css',
                             ],
                         ),
                     ];
@@ -1116,6 +1118,9 @@ class VoxService {
                             'seo_description' => $seo_description,
                             'social_title' => $social_title,
                             'social_description' => $social_description,
+                            'css' => [
+                                'vox-limit-realched.css'
+                            ],
                         ),
                     ];
                 }
@@ -1363,7 +1368,8 @@ class VoxService {
                         'vox-questionnaries.css',
                         'lightbox.css',
                         'flickity.min.css',
-                        'swiper.min.css'
+                        'swiper.min.css',
+                        'vox-taken-survey-wrapper.css',
                     ],
                     'canonical' => $vox->getLink(),
                     'social_image' => $vox->getSocialImageUrl('survey'),
