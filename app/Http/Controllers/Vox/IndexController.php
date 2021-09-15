@@ -99,7 +99,6 @@ class IndexController extends FrontController {
         		'home.js',
         	],
         	'css' => [
-	        	'vox-index-home.css',
         		'vox-home.css',
         	],
 		);
@@ -183,7 +182,6 @@ class IndexController extends FrontController {
 	        	],
 	        	'css' => [
 	        		'vox-index.css',
-	        		'vox-index-home.css',
 	        	],
 	        ));
 		}
