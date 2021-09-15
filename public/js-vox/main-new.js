@@ -77,35 +77,6 @@ $(document).ready(function(){
 		timeout: 5000
 	});
 
-    $('.country-select').change( function() {
-    	$(this).closest('form').find('input[name="address"]').val('');
-    	$(this).closest('form').find('.suggester-map-div').hide();
-    	$(this).closest('form').find('.geoip-confirmation').hide();
-        $(this).closest('form').find('.geoip-hint').hide();
-        $(this).closest('form').find('.different-country-hint').hide();
-
-    	var city_select = $(this).closest('form').find('.city-select').first();
-    	city_select.attr('disabled', 'disabled');
-		$.ajax( {
-			url: '/cities/' + $(this).val(),
-			type: 'GET',
-			dataType: 'json',
-			success: function( data ) {
-				// console.log(data);
-    			city_select.attr('disabled', false)
-			    .find('option')
-			    .remove();
-			    for(var i in data.cities) {
-			    	// console.log( fb_city_id, data.cities[i] );
-    				city_select.append('<option value="'+i+'" '+(fb_city_id && fb_city_id==data.cities[i] ? 'selected="selected"' : '' )+'>'+data.cities[i]+'</option>');
-			    }
-				//city_select
-                $('.phone-code-holder').html(data.code);
-				//$('#modal-message .modal-body').html(data);
-			}
-		});
-    } );
-
     VoxTest.handleNextQuestion = function(skip=null) {
 
 		$('#current-question-bar').css('width', ((vox.current / vox.count)*100)+'%');
@@ -113,13 +84,10 @@ $(document).ready(function(){
 		$('#current-question-num').html( mins<2 ? '<1' : '~'+mins );
 
 		if(vox.current>1) {
-
 			var answerd_q = vox.answered_without_skip_count;
 
 			var welcomeBonus = 0;
 			if( welcome_vox ) {
-
-				console.log('1');
 				var doingAsl = vox.current > ( (vox.count_real+1) + welcome_vox_q_count );
 				var doingWelcome = vox.current <= welcome_vox_q_count;
 				if(!doingWelcome && !doingAsl) {
@@ -127,23 +95,18 @@ $(document).ready(function(){
 				}
 
 			} else {
-				console.log('2');
-
 				var doingAsl = vox.current > (vox.count_real+1);
 				var doingWelcome = false;
 			}
 
 			if( doingAsl ) {
-				console.log('doingAsl');
-
+				// console.log('doingAsl');
 			} else if( welcome_vox_now || welcome_vox) {
-
-				console.log('doingWelcome');
+				// console.log('doingWelcome');
 				$('#current-question-reward').html( (vox.current / welcome_vox_q_count) * 100 );
 				$('#dcn-test-reward-before').html('DCN: 100');
 			} else { //Нормални
-				
-				console.log('normal');
+				// console.log('normal');
 				if(!skip) {
 					var reward = 0;
 				}
@@ -288,13 +251,11 @@ $(document).ready(function(){
 	showPopup = function(id, ret, e) {
 
 		if(id=='download-stats-popup') {
-
 			$('.popup:not(.download-stats-popup)').remove();
 			$('#download-stats-popup').addClass('active');
         	$('body').addClass('popup-visible');
         	$('.loader-mask').hide();
 		} else {
-			
 			$.ajax({
 	            type: "POST",
 	            url: window.location.origin+'/get-popup/',
@@ -481,7 +442,6 @@ $(document).ready(function(){
 	}
 
 	var handleActivePopupFunctions =  function() {
-
 		handlePopups();
 	    modernFieldsUpdate();
 
@@ -705,9 +665,9 @@ $(document).ready(function(){
 
 				var attr = $(this).closest('.popup').find('.demogr-inner').attr('scale');
 				if (typeof attr !== typeof undefined && attr !== false) {
-					$('.scale-stat-q[question-id="'+$(this).closest('.popup').find('.demogr-inner').attr('inner')+'"][scale-answer-id="'+$(this).closest('.popup').find('.demogr-inner').attr('scale')+'"]').after($(this).closest('.popup').find('.demogr-inner'));
+					$('.scale-stat-q[question-id="'+id+'"][scale-answer-id="'+$(this).closest('.popup').find('.demogr-inner').attr('scale')+'"]').after($(this).closest('.popup').find('.demogr-inner'));
 				} else {
-					$('.stat[question-id="'+$(this).closest('.popup').find('.demogr-inner').attr('inner')+'"]').after($(this).closest('.popup').find('.demogr-inner'));
+					$('.stat[question-id="'+id+'"]').after($(this).closest('.popup').find('.demogr-inner'));
 				}
 
 				$('.demogr-inner').hide();
