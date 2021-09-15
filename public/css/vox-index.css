@@ -145,16 +145,22 @@
       @media screen and (max-width: 768px) {
         .full .first-absolute a {
           font-size: 18px; } }
-    .full .first-absolute .mobile-home-image {
-      display: none;
-      height: auto !important; }
+    .full .first-absolute .tablet-home-image {
+      display: none; }
       @media screen and (max-width: 1080px) {
-        .full .first-absolute .mobile-home-image {
+        .full .first-absolute .tablet-home-image {
           display: block;
           max-width: 100%;
           order: 4; } }
       @media screen and (max-width: 768px) {
+        .full .first-absolute .tablet-home-image {
+          display: none; } }
+    .full .first-absolute .mobile-home-image {
+      display: none;
+      height: auto !important; }
+      @media screen and (max-width: 768px) {
         .full .first-absolute .mobile-home-image {
+          display: block;
           order: initial; } }
 
 .section-recent-surveys {

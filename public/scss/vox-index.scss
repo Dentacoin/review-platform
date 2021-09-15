@@ -196,9 +196,8 @@ $main-color: #38ace5;
 			}
 	    }
 
-	    .mobile-home-image {
+	    .tablet-home-image {
 	    	display: none;
-			height: auto !important;
 
 	    	@media #{$tablet} {
 	    		display: block;
@@ -208,6 +207,16 @@ $main-color: #38ace5;
 	    	}
 
 	    	@media #{$phone} {
+	    		display: none;
+	    	}
+	    }
+
+	    .mobile-home-image {
+	    	display: none;
+			height: auto !important;
+
+	    	@media #{$phone} {
+	    		display: block;
 	    		order: initial;
 	    		// margin-top: 0px;
 	    	}
