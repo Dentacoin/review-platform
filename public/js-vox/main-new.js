@@ -11,6 +11,8 @@ var flickityScales;
 var checkFilledDots;
 
 var mapsLoaded = false;
+var upload_loaded = false;
+var croppie_loaded = false;
 var mapsWaiting = [];
 var modernFieldsUpdate;
 var welcome_vox;
@@ -421,22 +423,33 @@ $(document).ready(function(){
 	                		});
 	                	} else if($('.popup.active').attr('id') == 'social-profile-popup') {
 
-	                		$.getScript(window.location.origin+'/js/upload.js', function() {
-	                			handleActivePopupFunctions();
+							if (!upload_loaded) {
+								$.getScript(window.location.origin+'/js/upload.js', function() {
+									upload_loaded = true;
+								});
+							}
 
-	                			$('.popup .closer-pop').click( function() {
+							if (!croppie_loaded) {
+								$.getScript(window.location.origin+'/js/croppie.min.js', function() {
+									croppie_loaded = true;
+									$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/croppie.css">');
+								});
+							}
+							
+							handleActivePopupFunctions();
 
-							        if($(this).hasClass('inactive')) {
-							            return;
-							        }
-							        if($(this).closest('.popup').hasClass('ban')) {
-							            window.location.reload();
-							        }
+							$('.popup .closer-pop').click( function() {
 
-							        $(this).closest('.popup').removeClass('active');
-							        $('body').removeClass('popup-visible');
-							    } );
-	                		});
+								if($(this).hasClass('inactive')) {
+									return;
+								}
+								if($(this).closest('.popup').hasClass('ban')) {
+									window.location.reload();
+								}
+
+								$(this).closest('.popup').removeClass('active');
+								$('body').removeClass('popup-visible');
+							} );
 	                	}
 	                }
 	            },

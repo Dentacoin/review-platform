@@ -42,13 +42,7 @@ $phone: "screen and (max-width: 768px)";
 		background-size: cover;
 		background-position: 50%;
 
-		@media #{$pc} {
-			width: 120px;
-			height: 120px;			
-		}
-
 		@media #{$tablet} {
-			width: 100%;
 			padding-top: 100%;
 			margin-right: 0px;
 	    	border-radius: 5px;
@@ -56,8 +50,9 @@ $phone: "screen and (max-width: 768px)";
     }
 
     .image-label {
-    	border: none;
-    	overflow: hidden;
+    	overflow: visible;
+		background-color: transparent;
+		padding: 0px;
 
     	.centered-hack {
     		top: auto;
@@ -82,6 +77,10 @@ $phone: "screen and (max-width: 768px)";
 				margin-right: 5px;
 		    }
     	}
+
+		.cr-slider {
+			display: inline-block;
+		}
     }
 
     .media-right {
@@ -672,7 +671,7 @@ $phone: "screen and (max-width: 768px)";
 				height: 33px;
 
 				@media #{$phone} {
-					margin-bottom: 15px;
+					margin-bottom: 7px;
 				}
 				
 				&.dentist-name {
@@ -703,6 +702,11 @@ $phone: "screen and (max-width: 768px)";
     			span {
     				padding-right: 20px;
     				text-align: right;
+
+					@media #{$phone} {
+						padding-right: 10px;
+						margin-bottom: 5px;
+					}
     			}
 			}
 

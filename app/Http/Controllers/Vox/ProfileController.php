@@ -10,6 +10,7 @@ use App\Models\DcnReward;
 use App\Models\User;
 use App\Models\Vox;
 
+use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Validator;
@@ -184,6 +185,11 @@ class ProfileController extends FrontController {
                 ]);
             }
 
+            if( Request::input('avatar') ) {
+                $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
+                $this->user->addImage($img);
+            }
+
             $validator = Validator::make(Request::all(), [
                 'link' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
             ]);
@@ -203,7 +209,7 @@ class ProfileController extends FrontController {
                 return Response::json( $ret );
             } else {
 
-                if(Request::has('photo') && empty(Request::input('photo'))) {
+                if(Request::has('avatar') && empty(Request::input('avatar'))) {
                     return Response::json( [
                         'success' => false,
                         'without_image' => true,
@@ -212,11 +218,6 @@ class ProfileController extends FrontController {
 
                 $this->user->website = Request::input('link');
                 $this->user->save();
-
-                if( Request::input('photo') ) {
-                    $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
-                    $this->user->addImage($img);
-                }
 
                 return Response::json( [
                     'success' => true,

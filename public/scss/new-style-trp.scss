@@ -2041,3 +2041,98 @@ footer {
     	display: block;
     }
 }
+
+.cropper-container {
+	width: 180px !important;
+	height: 180px !important;
+	display: none;
+
+	.cr-viewport {
+		border: 2px dashed #777777 !important;
+		background: transparent !important;
+	}
+
+	.cr-overlay {
+		background: transparent !important;
+	}
+}
+
+.team-label-image {
+	@media #{$phone} {
+		width: 180px;
+    	height: 180px;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 10px;
+	}
+}
+
+.add-team-cropper {
+	@media #{$phone} {
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 60px;
+	}
+}
+
+.avatar-name-wrapper {
+	margin-top: 50px;
+	display: none;
+
+	.avatar-name {
+		font-size: 14px;
+		display: inline-block;
+		vertical-align: middle;
+		width: calc(100% - 30px);
+		color: #888888;
+	}
+
+	.destroy-croppie {
+		color: red;
+		font-size: 36px;
+		width: 23px;
+		display: inline-block;
+		vertical-align: middle;
+		text-align: right;
+		cursor: pointer;
+		margin: 0;
+		padding: 0;
+		line-height: 22px;
+		border: 0;
+		background: transparent;
+	}
+}
+
+.max-size-label {
+	max-width: 170px;
+	margin-left: auto;
+	margin-top: 10px;
+
+	@media #{$phone} {
+		font-size: 14px;
+		max-width: 100%;
+		text-align: center;
+	}
+
+	svg {
+		max-width: 30px;
+		margin-right: 10px;
+		vertical-align: sub;
+
+		@media #{$phone} {
+			max-width: 15px;
+			margin-right: 5px;
+		}
+	}
+}
+
+.image-big-error {
+	margin-top: 20px !important;
+    max-width: 180px !important;
+    padding: 10px !important;
+    font-size: 14px !important;
+
+	&:before {
+		display: none !important;
+	}
+}

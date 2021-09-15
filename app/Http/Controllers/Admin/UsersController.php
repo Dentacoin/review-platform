@@ -38,6 +38,7 @@ use App\Models\Email;
 use App\Models\User;
 use App\Models\Vox;
 
+use App\Helpers\GeneralHelper;
 use App\Exports\Export;
 use App\Imports\Import;
 use Carbon\Carbon;
@@ -1456,6 +1457,11 @@ class UsersController extends AdminController {
 
                 $newuser->save();
 
+                if( Request::input('avatar') ) {
+                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
+                    $newuser->addImage($img);
+                }
+
                 $newuser->slug = $newuser->makeSlug();
                 $newuser->save();
 
@@ -1556,6 +1562,11 @@ class UsersController extends AdminController {
                         $new_address->selected_wallet_address = 1;
                         $new_address->save();
                     }
+                }
+
+                if( Request::input('avatar') ) {
+                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
+                    $item->addImage($img);
                 }
 
                 foreach ($this->fields as $key => $value) {

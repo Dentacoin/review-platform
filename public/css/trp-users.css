@@ -285,21 +285,16 @@
     margin-right: 30px;
     background-size: cover;
     background-position: 50%; }
-    @media screen and (max-width: 1200px) {
-      .profile-info .image-label,
-      .profile-info .avatar {
-        width: 120px;
-        height: 120px; } }
     @media screen and (max-width: 998px) {
       .profile-info .image-label,
       .profile-info .avatar {
-        width: 100%;
         padding-top: 100%;
         margin-right: 0px;
         border-radius: 5px; } }
   .profile-info .image-label {
-    border: none;
-    overflow: hidden; }
+    overflow: visible;
+    background-color: transparent;
+    padding: 0px; }
     .profile-info .image-label .centered-hack {
       top: auto;
       bottom: 0px;
@@ -318,6 +313,8 @@
       .profile-info .image-label .centered-hack img {
         max-width: 20px;
         margin-right: 5px; }
+    .profile-info .image-label .cr-slider {
+      display: inline-block; }
   @media screen and (max-width: 998px) {
     .profile-info .media-right {
       max-width: 370px;
@@ -732,7 +729,7 @@
   height: 33px; }
   @media screen and (max-width: 768px) {
     .edit-profile-wrapper .profile-info .media-right .input {
-      margin-bottom: 15px; } }
+      margin-bottom: 7px; } }
   .edit-profile-wrapper .profile-info .media-right .input.dentist-name {
     font-weight: bold; }
     .edit-profile-wrapper .profile-info .media-right .input.dentist-name::placeholder {
@@ -748,6 +745,10 @@
   .edit-profile-wrapper .profile-info .media-right .flex span {
     padding-right: 20px;
     text-align: right; }
+    @media screen and (max-width: 768px) {
+      .edit-profile-wrapper .profile-info .media-right .flex span {
+        padding-right: 10px;
+        margin-bottom: 5px; } }
 .edit-profile-wrapper .edit-buttons {
   margin-top: 15px;
   display: flex;

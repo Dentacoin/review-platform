@@ -13,6 +13,8 @@ var fixFlickty;
 var suggestTO;
 var refreshOnClosePopup = false;
 var map_loaded = false;
+var upload_loaded = false;
+var croppie_loaded = false;
 
 var handleTooltip;
 var attachTooltips;
@@ -56,7 +58,6 @@ jQuery(document).ready(function($){
 
 	//To be deleted
 	$('.country-select').change( function() {
-
     	$(this).closest('form').find('input[name="address"]').val('');
     	$(this).closest('form').find('.suggester-map-div').hide();
     	$(this).closest('form').find('.geoip-confirmation').hide();
@@ -71,14 +72,13 @@ jQuery(document).ready(function($){
     	var city_select = $(this).closest('form').find('.city-select').first();
     	city_select.attr('disabled', 'disabled');
     	var that = this;
+
 		$.ajax( {
 			url: '/cities/' + $(this).val(),
 			type: 'GET',
 			dataType: 'json',
 			success: function( data ) {
-				city_select.attr('disabled', false)
-			    .find('option')
-			    .remove();
+				city_select.attr('disabled', false).find('option').remove();
     			city_select.append('<option value="">-</option>');
 			    for(var i in data.cities) {
     				city_select.append('<option value="'+i+'">'+data.cities[i]+'</option>');
@@ -165,6 +165,23 @@ jQuery(document).ready(function($){
     	}
     }
 
+	var loadCroppie = function() {
+		if (!croppie_loaded) {
+			$.getScript(window.location.origin+'/js/croppie.min.js', function() {
+				croppie_loaded = true;
+				$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/croppie.css">');
+			});
+		}
+	}
+
+	var loadUploadAvatarScript = function() {
+		if (!upload_loaded) {
+			$.getScript(window.location.origin+'/js/upload.js', function() {
+				upload_loaded = true;
+			});
+		}
+	}
+
 	showPopup = function(id, res=null, e) {
 		var event_res = res;
 		
@@ -249,8 +266,9 @@ jQuery(document).ready(function($){
 	                	} else if($('.popup.active').attr('id') == 'verification-popup') {
 	                		$.getScript(window.location.origin+'/js-trp/login.js', function() {
 							});
-					        $.getScript(window.location.origin+'/js/upload.js', function() {
-							});
+
+							loadUploadAvatarScript();
+							loadCroppie();
 
 							if(event_res) {
 								if (event_res.token_user) {
@@ -522,22 +540,26 @@ jQuery(document).ready(function($){
 	                $('.all-days-equal').hide();
 		        }
 		    } else if(id =='social-profile-popup') {
-		    	$.getScript(window.location.origin+'/js/upload.js', function() {
 
-        			$('.popup .closer-pop').click( function() {
+				loadUploadAvatarScript();
+				loadCroppie();
 
-				        if($(this).hasClass('inactive')) {
-				            return;
-				        }
-				        if($(this).closest('.popup').hasClass('ban')) {
-				            window.location.reload();
-				        }
+				$('.popup .closer-pop').click( function() {
+					if($(this).hasClass('inactive')) {
+						return;
+					}
+					if($(this).closest('.popup').hasClass('ban')) {
+						window.location.reload();
+					}
 
-				        $(this).closest('.popup').removeClass('active');
-				        $('body').removeClass('popup-visible');
-				    } );
-        		});
-		    }
+					$(this).closest('.popup').removeClass('active');
+					$('body').removeClass('popup-visible');
+				} );
+		    } else if(id == 'popup-branch') {
+
+				loadUploadAvatarScript();
+				loadCroppie();
+			}
 
 			$('#'+id+'.popup').addClass('active');
 			handlePopups();

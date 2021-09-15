@@ -82,7 +82,7 @@
         font-size: 14px; }
     .social-profile-popup.fixed-popup .popup-inner .content .modern-field {
       margin-top: 20px; }
-    .social-profile-popup.fixed-popup .popup-inner .content button {
+    .social-profile-popup.fixed-popup .popup-inner .content button:not(.destroy-croppie) {
       padding: 11px 46px;
       font-size: 20px;
       font-weight: bold;
@@ -91,11 +91,16 @@
       border-radius: 7px;
       background-color: #41afff; }
       @media screen and (max-width: 998px) {
-        .social-profile-popup.fixed-popup .popup-inner .content button {
+        .social-profile-popup.fixed-popup .popup-inner .content button:not(.destroy-croppie) {
           font-size: 17px; } }
-      .social-profile-popup.fixed-popup .popup-inner .content button:focus, .social-profile-popup.fixed-popup .popup-inner .content button:hover {
+      .social-profile-popup.fixed-popup .popup-inner .content button:not(.destroy-croppie):focus, .social-profile-popup.fixed-popup .popup-inner .content button:not(.destroy-croppie):hover {
         opacity: 0.9;
         transition: all 0.3s ease; }
+    .social-profile-popup.fixed-popup .popup-inner .content .croppie-container {
+      display: none;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 50px; }
     .social-profile-popup.fixed-popup .popup-inner .content .cancel {
       border: 2px solid #41afff;
       padding: 11px 46px;
@@ -121,8 +126,6 @@
         font-size: 20px; }
     .social-profile-popup.fixed-popup .popup-inner .content .image-label {
       cursor: pointer;
-      width: 180px;
-      height: 180px;
       display: block;
       border: 2px dashed #777777;
       padding: 40px;
@@ -192,3 +195,22 @@
         display: block; }
       .social-profile-popup.fixed-popup .popup-inner .content .image-label.loading .centered-hack {
         display: none; }
+    .social-profile-popup.fixed-popup .popup-inner .content .avatar-name-wrapper,
+    .social-profile-popup.fixed-popup .popup-inner .content .image-big-error {
+      margin-left: auto;
+      max-width: 180px; }
+      @media screen and (max-width: 768px) {
+        .social-profile-popup.fixed-popup .popup-inner .content .avatar-name-wrapper,
+        .social-profile-popup.fixed-popup .popup-inner .content .image-big-error {
+          margin-right: auto; } }
+    .social-profile-popup.fixed-popup .popup-inner .content .avatar-name-wrapper {
+      margin-right: auto; }
+    .social-profile-popup.fixed-popup .popup-inner .content .max-size-label {
+      text-align: center;
+      margin-right: auto; }
+      @media screen and (max-width: 768px) {
+        .social-profile-popup.fixed-popup .popup-inner .content .max-size-label {
+          max-width: 180px;
+          margin-left: auto; } }
+    .social-profile-popup.fixed-popup .popup-inner .content .image-big-error {
+      margin-right: auto; }

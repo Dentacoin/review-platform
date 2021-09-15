@@ -716,9 +716,79 @@ input[type="number"]::-webkit-inner-spin-button {
     margin-bottom: 2px;
 }
 
+.cropper-container {
+	width: 180px !important;
+	height: 180px !important;
+	display: none;
+}
+
+.cropper-container .cr-viewport {
+    border: 2px dashed #777777 !important;
+}
+
+.avatar-name-wrapper {
+	margin-top: 50px;
+	max-width: 180px;
+    margin-right: auto;
+	display: none;
+}
+
+.avatar-name-wrapper .avatar-name {
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(100% - 30px);
+    color: #888888;
+}
+
+.avatar-name-wrapper .destroy-croppie {
+    color: red;
+    font-size: 36px;
+    width: 23px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: right;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    line-height: 22px;
+    border: 0;
+    background: transparent;
+}
+
+.image-big-error {
+	text-align: left;
+}
+
+.image-big-error::before {
+    display: none !important;
+}
+
+.max-size-label {
+	margin-top: 10px;
+    text-align: left;
+}
+
+.max-size-label svg {
+    max-width: 30px;
+    margin-right: 10px;
+    vertical-align: sub;
+}
+
 @media screen and (max-width: 767px) {
     .col-60 {
         max-width: 30px;
+    }
+
+    .max-size-label {
+        font-size: 14px;
+		max-width: 100%;
+		text-align: center;
+    }
+
+    .max-size-label svg {
+        max-width: 15px;
+        margin-right: 5px;
     }
 }
 

@@ -76,29 +76,52 @@ body.edit-user {
 			box-shadow: none;
 		}
 
-		.image-label {
+		.upload-image-wrapper {
 			float: left;
 
-			@media #{$pc} {
-				margin-right: 0px;
-			}
+			.image-label {
 
-			@media #{$phone} {
-				width: 100px;
-				height: 100px;
-				margin-right: auto;
-				margin-left: auto;
-				position: relative;
-				margin-bottom: 10px;
-				padding-top: 0px;
-    			float: none;
-			}
+				@media #{$pc} {
+					margin-right: 0px;
+				}
 
-			.centered-hack {
-				p {
-					@media #{$phone} {
-						font-size: 12px;
+				@media #{$phone} {
+					margin-right: auto;
+					margin-left: auto;
+					position: relative;
+					margin-bottom: 10px;
+					padding-top: 0px;
+					float: none;
+				}
+
+				.centered-hack {
+					p {
+						@media #{$phone} {
+							font-size: 12px;
+						}
 					}
+				}
+			}
+
+			.max-size-label {
+				margin-left: 0px;
+
+				@media #{$phone} {
+					text-align: left;
+					margin-bottom: 20px;
+				}
+			}
+
+			.cropper-container {
+
+				@media #{$tablet} {
+					margin-left: auto;
+					margin-right: auto;
+					margin-bottom: 30px;
+				}
+
+				@media #{$phone} {
+					margin-bottom: 50px;
 				}
 			}
 		}
@@ -107,6 +130,10 @@ body.edit-user {
 			float: right;
 			position: relative;
 		    width: 340px;
+
+			@media #{$pc} {
+				width: 280px;
+			}
 
 		    @media #{$tablet} {
 		    	width: 100%;
@@ -186,7 +213,7 @@ body.edit-user {
 
 	@media #{$phone} {
     	display: flex;
-    	margin-top: 10px;
+    	margin-top: 7px;
     }
 
 	.social-networks {
@@ -1975,5 +2002,26 @@ body.guided-tour {
 		padding: 12px 73px;
 		margin-top: 30px;
 		margin-bottom: 20px;
+	}
+}
+
+.image-team-wrapper {
+	
+	.avatar-name-wrapper,
+	.image-big-error {
+		margin-left: auto;
+		max-width: 180px;
+
+		@media #{$phone} {
+			margin-right: auto;
+		}
+	}
+
+	.max-size-label {
+		@media #{$phone} {
+			max-width: 180px;
+			margin-left: auto;
+			margin-right: auto;
+		}
 	}
 }

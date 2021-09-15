@@ -380,12 +380,21 @@
 
 				<script type="text/javascript">
 					if(typeof dcnHub !== 'undefined') {
-						var miniHubParams = {
-							'notifications_counter' : true,
-							'element_id_to_bind' : 'header-avatar',
-							'platform' : 'dentavox',
-							'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}.dentacoin.com/user-logout'
-						};
+
+						@if(strpos($_SERVER['HTTP_HOST'], 'urgent') !== false) 
+							var miniHubParams = {
+								'element_id_to_bind' : 'header-avatar',
+								'platform' : 'dentavox',
+								'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}.dentacoin.com/user-logout'
+							};
+						@else
+							var miniHubParams = {
+								'notifications_counter' : true,
+								'element_id_to_bind' : 'header-avatar',
+								'platform' : 'dentavox',
+								'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}.dentacoin.com/user-logout'
+							};
+						@endif
 
 						miniHubParams.type_hub = '{{ $user->is_dentist ? 'mini-hub-dentists' : 'mini-hub-patients' }}';
 						dcnHub.initMiniHub(miniHubParams);

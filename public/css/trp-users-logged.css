@@ -185,15 +185,13 @@ body.edit-user .profile-info {
     body.edit-user .profile-info {
       padding: 0px;
       box-shadow: none; } }
-  body.edit-user .profile-info .image-label {
+  body.edit-user .profile-info .upload-image-wrapper {
     float: left; }
     @media screen and (max-width: 1200px) {
-      body.edit-user .profile-info .image-label {
+      body.edit-user .profile-info .upload-image-wrapper .image-label {
         margin-right: 0px; } }
     @media screen and (max-width: 768px) {
-      body.edit-user .profile-info .image-label {
-        width: 100px;
-        height: 100px;
+      body.edit-user .profile-info .upload-image-wrapper .image-label {
         margin-right: auto;
         margin-left: auto;
         position: relative;
@@ -201,12 +199,29 @@ body.edit-user .profile-info {
         padding-top: 0px;
         float: none; } }
     @media screen and (max-width: 768px) {
-      body.edit-user .profile-info .image-label .centered-hack p {
+      body.edit-user .profile-info .upload-image-wrapper .image-label .centered-hack p {
         font-size: 12px; } }
+    body.edit-user .profile-info .upload-image-wrapper .max-size-label {
+      margin-left: 0px; }
+      @media screen and (max-width: 768px) {
+        body.edit-user .profile-info .upload-image-wrapper .max-size-label {
+          text-align: left;
+          margin-bottom: 20px; } }
+    @media screen and (max-width: 998px) {
+      body.edit-user .profile-info .upload-image-wrapper .cropper-container {
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 30px; } }
+    @media screen and (max-width: 768px) {
+      body.edit-user .profile-info .upload-image-wrapper .cropper-container {
+        margin-bottom: 50px; } }
   body.edit-user .profile-info .media-right {
     float: right;
     position: relative;
     width: 340px; }
+    @media screen and (max-width: 1200px) {
+      body.edit-user .profile-info .media-right {
+        width: 280px; } }
     @media screen and (max-width: 998px) {
       body.edit-user .profile-info .media-right {
         width: 100%; } }
@@ -256,7 +271,7 @@ body.edit-user .information {
   @media screen and (max-width: 768px) {
     .flexed-wrap {
       display: flex;
-      margin-top: 10px; } }
+      margin-top: 7px; } }
   .flexed-wrap .social-networks {
     max-width: 44px;
     border-radius: 5px;
@@ -1456,3 +1471,17 @@ body.guided-tour {
   padding: 12px 73px;
   margin-top: 30px;
   margin-bottom: 20px; }
+
+.image-team-wrapper .avatar-name-wrapper,
+.image-team-wrapper .image-big-error {
+  margin-left: auto;
+  max-width: 180px; }
+  @media screen and (max-width: 768px) {
+    .image-team-wrapper .avatar-name-wrapper,
+    .image-team-wrapper .image-big-error {
+      margin-right: auto; } }
+@media screen and (max-width: 768px) {
+  .image-team-wrapper .max-size-label {
+    max-width: 180px;
+    margin-left: auto;
+    margin-right: auto; } }

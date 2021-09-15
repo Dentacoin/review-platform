@@ -126,9 +126,7 @@ $(document).ready(function(){
         if (!load_maps && typeof google === 'undefined' ) {
             $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
                 load_maps = true;
-
                 loadMap();
-                
             } );
         } else {
             loadMap();
@@ -142,9 +140,7 @@ $(document).ready(function(){
                 if(typeof google === 'undefined' ) {
                     $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
                         click_on_map = true;
-
                         loadMap();
-                        
                     } );
                 } else {
                     loadMap();

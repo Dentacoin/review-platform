@@ -780,8 +780,8 @@ textarea.input {
 
 .image-label {
 	cursor: pointer;
-	width: 150px;
-    height: 150px;
+	width: 180px;
+    height: 180px;
     display: block;
     background-color: #e3e3e3;
     border: 2px dashed #777777;
@@ -792,10 +792,10 @@ textarea.input {
     background-size: cover;
     background-position: 50% 50%;
 
-    @media #{$phone} {
-    	width: 120px;
-    	height: 120px;
-    }
+    // @media #{$phone} {
+    // 	width: 120px;
+    // 	height: 120px;
+    // }
 
     p {
     	font-size: 18px;

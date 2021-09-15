@@ -126,6 +126,15 @@ $phone: "screen and (max-width: 768px)";
         	}
         }
 
+		.avatar-name-wrapper,
+		.image-big-error {
+			@media #{$phone} {
+				max-width: 180px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+
         form {
 
         	.big-button {

@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        {!! Form::open(array('url' => url('cms/testimonial-slider/edit/'.$item->id), 'method' => 'post', 'class' => 'form-horizontal','files' => true)) !!}
+        {!! Form::open(array('url' => url('cms/trp/testimonials/edit/'.$item->id), 'method' => 'post', 'class' => 'form-horizontal','files' => true)) !!}
             {!! csrf_field() !!}
             <!-- begin panel -->
 
@@ -55,12 +55,12 @@
                     @endforeach
                     <div class="form-group">
                         <label class="col-md-2 control-label" style="max-width: 200px;">Image</label>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <label for="add-avatar" class="image-label" style="background-image: url('{{ $item->getImageUrl()}}');">
                                 <div class="loader">
                                     <i class="fas fa-circle-notch fa-spin"></i>
                                 </div>
-                                <input type="file" name="image" id="add-avatar" upload-url="{{ url('cms/testimonial-slider/edit/'.$item->id.'/addavatar') }}">
+                                <input type="file" name="image" id="add-avatar" class="no-cropper" upload-url="{{ url('cms/trp/testimonials/edit/'.$item->id.'/addavatar') }}">
                             </label>
                         </div>
                     </div>
@@ -70,7 +70,6 @@
                         </div>
                         <div class="col-md-6"></div>
                     </div>
-                    
                 </div>
             </div>
         <!-- end panel -->

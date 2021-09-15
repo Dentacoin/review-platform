@@ -119,7 +119,7 @@ $phone: "screen and (max-width: 768px)";
 	    		margin-top: 20px;
 			}
 
-	    	button {
+	    	button:not(.destroy-croppie) {
 	    		padding: 11px 46px;
 	    		font-size: 20px;
 			    font-weight: bold;
@@ -138,6 +138,13 @@ $phone: "screen and (max-width: 768px)";
 					transition: all 0.3s ease;
 			    }
 	    	}
+
+			.croppie-container {
+				display: none;
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 50px;
+			}
 
 	    	.cancel {
 			    border: 2px solid #41afff;
@@ -176,8 +183,6 @@ $phone: "screen and (max-width: 768px)";
 
 	    	.image-label {
 				cursor: pointer;
-				width: 180px;
-			    height: 180px;
 			    display: block;
 			    border: 2px dashed #777777;
 			    padding: 40px;
@@ -272,6 +277,34 @@ $phone: "screen and (max-width: 768px)";
 			            display: none;
 			        }
 			    }
+			}
+
+			.avatar-name-wrapper,
+			.image-big-error {
+				margin-left: auto;
+				max-width: 180px;
+
+				@media #{$phone} {
+					margin-right: auto;
+				}
+			}
+
+			.avatar-name-wrapper {
+				margin-right: auto;
+			}
+
+			.max-size-label {
+				text-align: center;
+   				margin-right: auto;
+
+				@media #{$phone} {
+					max-width: 180px;
+					margin-left: auto;
+				}
+			}
+
+			.image-big-error {
+				margin-right: auto;
 			}
 	    }
 	}

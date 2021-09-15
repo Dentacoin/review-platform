@@ -610,8 +610,8 @@ textarea.input {
 
 .image-label {
   cursor: pointer;
-  width: 150px;
-  height: 150px;
+  width: 180px;
+  height: 180px;
   display: block;
   background-color: #e3e3e3;
   border: 2px dashed #777777;
@@ -621,10 +621,6 @@ textarea.input {
   position: relative;
   background-size: cover;
   background-position: 50% 50%; }
-  @media screen and (max-width: 768px) {
-    .image-label {
-      width: 120px;
-      height: 120px; } }
   .image-label p {
     font-size: 18px;
     color: #777777;

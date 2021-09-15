@@ -11,6 +11,7 @@ use App\Models\PageSeo;
 use App\Models\Country;
 use App\Models\User;
 
+use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Validator;
@@ -55,7 +56,6 @@ class BranchesController extends FrontController {
                 'js' => [
                     'search.js',
                     'branch.js',
-                    '../js/upload.js',
                     'address.js',
                 ],
             ]);
@@ -65,16 +65,14 @@ class BranchesController extends FrontController {
     }
 
     public function addNewBranch($locale=null, $step=null) {
+
         if(!empty($step)) {
-
-
             if($step == 1) {
                 $validator = Validator::make(Request::all(), [
                     'clinic_name' => array('required', 'min:3'),
                 ]);
 
                 if ($validator->fails()) {
-
                     $msg = $validator->getMessageBag()->toArray();
                     $ret = array(
                         'success' => false,
@@ -84,10 +82,7 @@ class BranchesController extends FrontController {
                     foreach ($msg as $field => $errors) {
                         $ret['messages'][$field] = implode(', ', $errors);
                     }
-
                 } else {
-
-
                     if(User::validateLatin(Request::input('clinic_name')) == false) {
                         return Response::json( [
                             'success' => false, 
@@ -208,7 +203,7 @@ class BranchesController extends FrontController {
                 'clinic_website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
                 'clinic_phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
                 'clinic_country_id' => array('required', 'exists:countries,id'),
-                'photo' =>  array('required'),
+                'avatar' =>  array('required'),
                 'clinic_specialization' =>  array('required', 'array'),
             ]);
 
@@ -287,8 +282,8 @@ class BranchesController extends FrontController {
                 $newuser->slug = $newuser->makeSlug();
                 $newuser->save();
 
-                if( Request::input('photo') ) {
-                    $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
+                if( Request::input('avatar') ) {
+                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
                     $newuser->addImage($img);
                 }
                 

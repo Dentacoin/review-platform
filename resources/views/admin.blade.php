@@ -47,6 +47,7 @@
 
 
         <link href="admin/css/custom.css?ver={{ $cache_version }}" rel="stylesheet" />
+        <link href="css/croppie.css" rel="stylesheet" />
         
         <!-- ================== BEGIN BASE JS ================== -->
         <script src="admin/plugins/pace/pace.min.js"></script>
@@ -269,6 +270,9 @@
         <!-- ================== CUSTOM JS ================== -->
         <script src="admin/js/ckeditor/ckeditor.js"></script>
         <script src="admin/js/custom/all.js?ver={{ $cache_version }}"></script>
+        <script src="js/upload.js"></script>
+        <script src="js/croppie.min.js"></script>
+
         @if( !empty( config('admin.pages.'.$current_page.'.js') ) )
             @foreach ( config('admin.pages.'.$current_page.'.js') as $file )
                 <script src="admin/js/custom/{{ $file }}?ver={{ $cache_version }}"></script>

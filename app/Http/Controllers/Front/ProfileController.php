@@ -23,6 +23,7 @@ use App\Models\Reward;
 use App\Models\Review;
 use App\Models\User;
 
+use App\Helpers\GeneralHelper;
 use App\Imports\Import;
 use Carbon\Carbon;
 
@@ -624,8 +625,8 @@ class ProfileController extends FrontController {
                 $invitation->platform = 'trp';
                 $invitation->save();
 
-                if( Request::input('photo') ) {
-                    $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
+                if( Request::input('avatar') ) {
+                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
                     $invitation->addImage($img);
                 }
 
@@ -801,8 +802,6 @@ class ProfileController extends FrontController {
                                 'message' => trans('trp.popup.verification-popup.clinic.success') 
                             ]);
 
-                            
-
                         } else if(!empty($existing_dentist->self_deleted) || !empty($existing_dentist->deleted_at) || in_array($existing_dentist->status, ['rejected', 'added_by_clinic_rejected', 'added_rejected', 'pending'])) {
 
                             $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
@@ -848,8 +847,8 @@ class ProfileController extends FrontController {
                 $newuser->invited_by = $current_user->id;
                 $newuser->save();
 
-                if( Request::input('photo') ) {
-                    $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
+                if( Request::input('avatar') ) {
+                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
                     $newuser->addImage($img);
                 }
                 
@@ -992,6 +991,11 @@ class ProfileController extends FrontController {
                 return Response::json($ret);
             }
             return redirect(getLangUrl('/'));
+        }
+
+        if( Request::input('avatar') ) {
+            $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
+            $this->user->addImage($img);
         }
 
         $validator_arr = [];
@@ -1869,6 +1873,11 @@ class ProfileController extends FrontController {
                 ]);
             }
 
+            if( Request::input('avatar') ) {
+                $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
+                $this->user->addImage($img);
+            }
+
             $validator = Validator::make(Request::all(), [
                 'link' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
             ]);
@@ -1888,7 +1897,7 @@ class ProfileController extends FrontController {
                 return Response::json( $ret );
             } else {
 
-                if(Request::has('photo') && empty(Request::input('photo'))) {
+                if(Request::has('avatar') && empty(Request::input('avatar'))) {
                     return Response::json( [
                         'success' => false,
                         'without_image' => true,
@@ -1897,11 +1906,6 @@ class ProfileController extends FrontController {
 
                 $this->user->website = Request::input('link');
                 $this->user->save();
-
-                if( Request::input('photo') ) {
-                    $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
-                    $this->user->addImage($img);
-                }
 
                 return Response::json( [
                     'success' => true,
