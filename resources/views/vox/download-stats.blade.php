@@ -13,6 +13,7 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,900&amp;subset=latin-ext" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="{{ url('css/new-style-vox.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ url('css/vox-stats-single.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url('css/vox-stats-single-loaded.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url('css/vox-download-stats.css') }}">
 
         <style type="text/css">

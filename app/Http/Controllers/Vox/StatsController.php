@@ -1601,6 +1601,8 @@ class StatsController extends FrontController {
                 $items_array['js'][] = '../js/amcharts-maps.js';
                 $items_array['js'][] = '../js/amcharts-worldLow.js';
                 $items_array['js'][] = '../js/gstatic-charts-loader.js';
+
+                $items_array['css'][] = 'vox-stats-single-loaded.css';
             }
 
             return $this->ShowVoxView('stats-survey', $items_array);

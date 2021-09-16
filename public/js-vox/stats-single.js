@@ -26,6 +26,8 @@ $(document).ready(function(){
                                 });
                                 google.charts.setOnLoadCallback(function() {
                                     gc_loaded = true;
+                                    
+                                    $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/vox-stats-single-loaded.css">');
 
                                     $('#main-loader').fadeOut();
                                     $('#main-loader').find('.loader-mask').delay(350).fadeOut('slow');
@@ -97,6 +99,8 @@ $(document).ready(function(){
                     $.getScript(window.location.origin+'/js/amcharts-maps.js', function() {
                         $.getScript(window.location.origin+'/js/amcharts-worldLow.js', function() {
                             $.getScript(window.location.origin+'/js/gstatic-charts-loader.js', function() {
+
+                                $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/vox-stats-single-loaded.css">');
 
                                 google.charts.load('current', {
                                     packages: ['corechart', 'bar'],
