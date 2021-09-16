@@ -58,7 +58,10 @@
 		</div>
 	</div>
 
-	@include('vox.template-parts.index-part')
+	<div class="make-money-wrapper index-container tac" id="to-remove-public">
+		<p class="h2-bold">{!! nl2br(trans('vox.page.index.make-money.title')) !!}</p>
+		<h2>{!! nl2br(trans('vox.page.index.make-money.subtitle')) !!}</h2>
+	</div>
 
 	<div id="to-append-public"></div>
 

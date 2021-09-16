@@ -78,6 +78,7 @@ $(document).ready(function(){
     if($('#to-append-public').length) {
         $(window).scroll( function() {
             if (!$('#to-append-public').hasClass('appended')) {
+                $('#to-remove-public').remove();
                 $.ajax({
                     type: "POST",
                     url: lang + '/vox-public-down/',
