@@ -243,7 +243,8 @@
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js/dom-to-image.min.js') }}"></script>
 		<script src="{{ url('/js-vox/main-new.js').'?ver='.$cache_version }}"></script>
-		<script src="{{ url('/js-vox/stats.js').'?ver='.$cache_version }}"></script>
+		<script src="{{ url('/js-vox/stats-single.js').'?ver='.$cache_version }}"></script>
+		<script src="{{ url('/js-vox/stats-single-loaded.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js/moment.js') }}"></script>
 		<script src="{{ url('/js/amcharts-core.js') }}"></script>
 		<script src="{{ url('/js/amcharts-maps.js') }}"></script>

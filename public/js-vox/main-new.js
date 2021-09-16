@@ -433,9 +433,7 @@ $(document).ready(function(){
 		}
 
 		if ($('#'+id+'.active').length) {
-
 			var scss_to_load = $('#'+id+'.active').attr('scss-load');
-			console.log(scss_to_load);
 			
 			if (typeof scss_to_load !== 'undefined' && scss_to_load !== false && !$('#'+scss_to_load+'-scss').length) {
 				$('head').append('<link rel="stylesheet" id="'+scss_to_load+'-scss" type="text/css" href="'+window.location.origin+'/css/'+scss_to_load+'.css">');
