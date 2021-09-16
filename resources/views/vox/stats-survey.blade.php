@@ -167,7 +167,7 @@
 			<div class="container">
 				<div class="blurred-stat">
 					<img class="pc-blurred" src="{{ url('new-vox-img/blurred-stats-1.jpg') }}" width="1140" height="516">
-					<img class="mobile-blurred" src="{{ url('new-vox-img/blurred-stats-mobile.jpg') }}">
+					<img class="mobile-blurred" src="{{ url('new-vox-img/blurred-stats-mobile.jpg') }}" width="320" height="498">
 					<div class="blurred-text">
 						<div class="free-text">{{ trans('vox.page.stats.blurred.title.1') }}</div>
 						<h2>{{ trans('vox.page.stats.blurred.title.2') }}</h2>

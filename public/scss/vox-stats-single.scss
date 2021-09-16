@@ -1907,6 +1907,11 @@ $main-color: #38ace5;
 	.blurred-stat {
 		position: relative;
 
+		@media #{$phone} {
+			width: 320px;
+    		margin: 0 auto;
+		}
+
 		img {
 			display: block;
 			max-width: 100%;

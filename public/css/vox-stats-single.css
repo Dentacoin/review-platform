@@ -1214,6 +1214,10 @@
       color: #41afff; }
 .stats-blurred .blurred-stat {
   position: relative; }
+  @media screen and (max-width: 768px) {
+    .stats-blurred .blurred-stat {
+      width: 320px;
+      margin: 0 auto; } }
   .stats-blurred .blurred-stat img {
     display: block;
     max-width: 100%; }
