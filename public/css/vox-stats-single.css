@@ -1,5 +1,3 @@
-.page-stats .fb_chb {
-  display: none !important; }
 .page-stats h2 {
   font-size: 18px;
   color: #333;
@@ -32,17 +30,6 @@
         font-size: 18px;
         margin-bottom: 35px;
         padding: 0px 20px; } }
-  .page-statistics .take-test {
-    margin-top: -10px;
-    margin-bottom: 35px; }
-    @media screen and (max-width: 768px) {
-      .page-statistics .take-test {
-        margin-bottom: 20px; } }
-    .page-statistics .take-test .red-button {
-      padding: 11px 20px;
-      margin-left: 15px; }
-      .page-statistics .take-test .red-button img {
-        margin-right: 10px; }
   .page-statistics .filters-wrapper {
     margin-bottom: 25px;
     text-align: center; }
@@ -1325,72 +1312,6 @@
           .stats-blurred .blurred-stat .blurred-text span a {
             font-size: 18px; } }
 
-@media screen and (max-width: 768px) {
-  .popup.login-register .wrapper {
-    overflow-y: auto; } }
-.popup.login-register .wrapper .vox-not-logged {
-  max-width: calc(100%);
-  padding: 20px;
-  border-radius: 8px;
-  clear: both;
-  text-align: center; }
-  .popup.login-register .wrapper .vox-not-logged h2 {
-    margin-bottom: 55px;
-    font-size: 30px;
-    font-weight: bold;
-    color: black; }
-    @media screen and (max-width: 768px) {
-      .popup.login-register .wrapper .vox-not-logged h2 {
-        margin-bottom: 30px;
-        font-size: 24px; } }
-  .popup.login-register .wrapper .vox-not-logged img {
-    margin-right: 23px;
-    min-width: 78px;
-    height: 64px; }
-    @media screen and (max-width: 768px) {
-      .popup.login-register .wrapper .vox-not-logged img {
-        margin: 0 auto 20px auto;
-        display: block; } }
-  .popup.login-register .wrapper .vox-not-logged h3 {
-    margin-bottom: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #090909; }
-    @media screen and (max-width: 768px) {
-      .popup.login-register .wrapper .vox-not-logged h3 {
-        margin-bottom: 10px;
-        font-size: 18px; } }
-  .popup.login-register .wrapper .vox-not-logged p {
-    font-size: 18px;
-    color: #090909; }
-    @media screen and (max-width: 768px) {
-      .popup.login-register .wrapper .vox-not-logged p {
-        font-size: 14px; } }
-  .popup.login-register .wrapper .vox-not-logged .flex .col {
-    padding: 0px 15px;
-    display: flex;
-    text-align: left; }
-    @media screen and (max-width: 768px) {
-      .popup.login-register .wrapper .vox-not-logged .flex .col {
-        padding: 20px 0px;
-        display: block;
-        text-align: center; } }
-  .popup.login-register .wrapper .vox-not-logged a.btn {
-    height: 45px;
-    line-height: 45px;
-    background: #3daee6;
-    color: white;
-    min-width: 180px;
-    padding: 0px 20px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: 400;
-    text-transform: uppercase;
-    display: inline-block;
-    margin-top: 40px; }
-    @media screen and (max-width: 768px) {
-      .popup.login-register .wrapper .vox-not-logged a.btn {
-        margin-top: 10px; } }
 .popup.download-stats-popup {
   overflow-y: auto; }
   @media screen and (max-width: 768px) {

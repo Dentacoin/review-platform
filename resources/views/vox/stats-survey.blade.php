@@ -25,14 +25,6 @@
 				]) }}
 			</h1>
 
-			<div class="tac take-test">
-				@if(false && !empty($user))
-					<a href="javascript:;" class="red-button download-stats-popup-btn" for-stat="all">
-						<img src="{{ url('new-vox-img/download.png') }}"/>Download All Stats
-					</a>
-				@endif
-			</div>
-
 			<div class="filters-wrapper" style="{{ !$user ? 'display: none;' : '' }}">
 				<div class="filters">
 					<b>
@@ -182,7 +174,7 @@
 						<a href="javascript:;" class="blue-button blurred-button">{{ trans('vox.page.stats.blurred.sign-in') }}</a>
 						<span>
 							{!! trans('vox.page.stats.blurred.login', [
-								'link' => '<a class="blurred-button log" href="javascript:;">',
+								'link' => '<a class="blurred-button log-btn" href="javascript:;">',
 								'endlink' => '</a>'
 							]) !!}
 						</span>
@@ -203,7 +195,7 @@
 				<div class="flex flex-text-center">
 					<a href="{{ getLangUrl('dental-survey-stats') }}" class="white-button">Back to all stats</a>
 					@if(!in_array($vox->id, $taken) && $vox->type != 'hidden')
-						<a class="blue-button" href="{!! !empty($user) ? $vox->getLink() : "javascript:showPopup('login-register-popup')" !!}">
+						<a class="blue-button" href="{{ $vox->getLink() }}">
 							{{ trans('vox.common.take-the-test') }}
 						</a>
 					@endif

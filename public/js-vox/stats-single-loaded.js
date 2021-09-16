@@ -1639,7 +1639,7 @@ $(document).ready(function(){
             e.stopImmediatePropagation();
             showPopup('failed-popup');
         } else {
-            if($(this).hasClass('log')) {
+            if($(this).hasClass('log-btn')) {
                 $.event.trigger({type: 'openPatientLogin'});
             } else {
                 $.event.trigger({type: 'openPatientRegister'});

@@ -365,10 +365,6 @@ Survey topics and the questions: '.request('topics');
 			
 			return $this->ShowVoxView('popups/failed-reg-login');
 
-		} else if(request('id') == 'login-register-popup' && empty($this->user)) {
-			
-			return $this->ShowVoxView('popups/login-register');
-
 		} else if(request('id') == 'poll-popup') {
 
 			return $this->ShowVoxView('popups/daily-poll-popup');
