@@ -472,7 +472,8 @@
     margin-bottom: -2px; }
     @media screen and (max-width: 768px) {
       .search-survey img {
-        max-width: 13px; } }
+        max-width: 13px;
+        height: auto; } }
   .search-survey input {
     border: none;
     height: 28px;

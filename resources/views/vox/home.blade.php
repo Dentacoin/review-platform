@@ -150,7 +150,7 @@
 
 				<div class="filters-section">
 					<div class="search-survey tal">
-						<img src="{{ url('new-vox-img/blue-search.png') }}"/>
+						<img src="{{ url('new-vox-img/blue-search.png') }}" width="18" height="19"/>
 						<input type="text" id="survey-search" name="survey_search" value="{{ request('survey_search') ?? '' }}">
 					</div>
 					<div class="questions-menu clearfix">
