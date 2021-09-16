@@ -13,7 +13,6 @@ $(document).ready(function(){
     }
 
     if($('#to-append').length) {
-
         $(window).scroll( function() {
             if (!$('#to-append').hasClass('appended')) {
                 $.ajax({
@@ -24,7 +23,7 @@ $(document).ready(function(){
                             $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/swiper.min.css">');
                             $('#to-append').append(ret);
                             $('#to-append').addClass('appended');
-
+                            
                             $.getScript(window.location.origin+'/js/swiper.min.js', function() {
                                 
                                 if ($('.swiper-container').length && typeof Swiper !== 'undefined' ) {
@@ -86,6 +85,8 @@ $(document).ready(function(){
                                         });
                                     }
                                 }
+
+                                doubleCoinTooltip();
                             });
                             handleIndexLoad();
                         }

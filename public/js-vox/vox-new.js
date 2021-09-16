@@ -37,6 +37,10 @@ $(document).ready(function(){
             }
         }
     }
+
+    if(typeof(vox)!='undefined') {
+        VoxTest.handleNextQuestion();
+    }
     
     sendValidation = function() {
         if(recaptchaCode) { // && $('#iagree').is(':checked')
@@ -759,6 +763,17 @@ $(document).ready(function(){
             $('.rules-error').show();
         }
     });
+
+    if ($('.mobile-bubble-effect').length && $('.mobile-person-effect').length && window.innerWidth < 768) {
+        preloadImages([
+            $('.mobile-bubble-effect').attr('src'),
+            $('.mobile-person-effect').attr('src'),
+        ], function(){
+            $('.mobile-welcome-images img').each (function() {
+                $(this).addClass('effect-loaded');
+            });
+        });
+    }
 });
 
 

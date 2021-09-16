@@ -56,8 +56,4 @@ $(document).ready(function(){
     }
 
     initCalendar();
-
-    
-    
-
 });

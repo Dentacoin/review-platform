@@ -80,7 +80,6 @@ $(document).ready(function(){
 
         ajax_is_running = true;
 
-		var that = $(this);
 		var formData = new FormData(this);
 		formData.append("slice", 1);
 		
@@ -129,10 +128,8 @@ $(document).ready(function(){
         }
 
         ajax_is_running = true;
-
 	    slice++;
 
-	    var that = $('.another-questions');
 		var formData = new FormData($('.another-questions')[0]);
 		formData.append("slice", slice);
 

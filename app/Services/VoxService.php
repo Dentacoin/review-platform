@@ -829,7 +829,7 @@ class VoxService {
                         'vox' => $vox,
                         'custom_body_class' => 'vox-public',
                         'js' => [
-                            'all-surveys.js',
+                            'vox-public.js',
                         ],
                         'css' => [
                             'vox-public-vox.css',
@@ -1356,7 +1356,6 @@ class VoxService {
                     'first_question_num' => $first_question_num,
                     'answered_without_skip_count' => $answered_without_skip_count,
                     'js' => [
-                        'all-surveys.js',
                         'vox-new.js',
                         '../js/lightbox.js',
                         '../js/jquery-ui.min.js',

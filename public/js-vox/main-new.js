@@ -26,6 +26,8 @@ var showPoll;
 var dentacoin_down = false;
 var welcome_vox_now;
 var cur_href = null;
+var doubleCoinTooltip;
+var handleSwiper;
 
 var preloadImages = function(urls, allImagesLoadedCallback){
     var loadedCounter = 0;
@@ -841,49 +843,54 @@ $(document).ready(function(){
 
 	tooltipsFunction();
 
-    var handleCoinTooltip = function(e) {
-    	var that = $(this);
+	doubleCoinTooltip = function() {
 
-        $('body').append('<div class="doublecoin-tooltip">\
-			'+featured_coin_text+'\
-			<span></span>\
-		</div>');
+		var handleCoinTooltip = function(e) {
+			var that = $(this);
 
-    	var y = that.offset().top + that.outerHeight() - 100;
-    	var x = that.offset().left;
+			$('body').append('<div class="doublecoin-tooltip">\
+				'+featured_coin_text+'\
+				<span></span>\
+			</div>');
 
-        $('.doublecoin-tooltip').css('left', x );
-        $('.doublecoin-tooltip').css('top', y );
+			var y = that.offset().top + that.outerHeight() - 100;
+			var x = that.offset().left;
 
-        if ( window.innerWidth - $('.doublecoin-tooltip').innerWidth() - 20 < e.pageX ) {
+			$('.doublecoin-tooltip').css('left', x );
+			$('.doublecoin-tooltip').css('top', y );
 
-    		$('.doublecoin-tooltip span').css('left', $('.doublecoin-tooltip').offset().left - $(window).innerWidth() + $('.doublecoin-tooltip').innerWidth() + 30 );
-        	$('.doublecoin-tooltip').css('left', $(window).innerWidth() - $('.doublecoin-tooltip').innerWidth() - 20 );
-    	
-        } else {        	
-        	$('.doublecoin-tooltip span').css('left', '20px' );
-        }
+			if ( window.innerWidth - $('.doublecoin-tooltip').innerWidth() - 20 < e.pageX ) {
 
-        e.stopPropagation();
+				$('.doublecoin-tooltip span').css('left', $('.doublecoin-tooltip').offset().left - $(window).innerWidth() + $('.doublecoin-tooltip').innerWidth() + 30 );
+				$('.doublecoin-tooltip').css('left', $(window).innerWidth() - $('.doublecoin-tooltip').innerWidth() - 20 );
+			
+			} else {        	
+				$('.doublecoin-tooltip span').css('left', '20px' );
+			}
 
-    }
+			e.stopPropagation();
 
-    if($('.doublecoin').length) {
-        $('.doublecoin').on('mouseover mousemove', function(e) {
-            if (window.innerWidth > 768) {
-                handleCoinTooltip.bind(this)(e);
-            }
-        });
-        $('.doublecoin').on('click', function(e) {
-        	e.preventDefault();
-            if (window.innerWidth < 768) {
-                handleCoinTooltip.bind(this)(e);
-            }
-        });
-        $('.doublecoin').on('mouseout', function(e) {
-            $('.doublecoin-tooltip').remove();
-        });
-    }
+		}
+
+		if($('.doublecoin').length) {
+			$('.doublecoin').on('mouseover mousemove', function(e) {
+				if (window.innerWidth > 768) {
+					handleCoinTooltip.bind(this)(e);
+				}
+			});
+			$('.doublecoin').on('click', function(e) {
+				e.preventDefault();
+				if (window.innerWidth < 768) {
+					handleCoinTooltip.bind(this)(e);
+				}
+			});
+			$('.doublecoin').on('mouseout', function(e) {
+				$('.doublecoin-tooltip').remove();
+			});
+		}
+	}
+
+	doubleCoinTooltip();
 
 	if ($('body').hasClass('page-profile-redirect')) {
 
@@ -1269,6 +1276,52 @@ $(document).ready(function(){
 
     if(typeof FB !== 'undefined') {
 	    FB.CustomerChat.hideDialog();
+    }
+
+	handleSwiper = function() {
+        if (window.innerWidth > 768) {
+
+            var swiper_done = new Swiper('.swiper-container', {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 0,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    1130: {
+                        slidesPerView: 2,
+                    },
+                    768: {
+                        slidesPerView: 1,
+                    },
+                },
+                autoplay: {
+                    delay: 5000,
+                },
+            });
+        } else {
+            var swiper_done = new Swiper('.swiper-container', {
+                slidesPerView: 1,
+                slidesPerGroup: 1,
+                spaceBetween: 0,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows : false,
+                },
+            });
+        }
     }
 
 });

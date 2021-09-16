@@ -33,7 +33,7 @@
 				@endif
 			</div>
 
-			<div class="filters-wrapper">
+			<div class="filters-wrapper" style="{{ !$user ? 'display: none;' : '' }}">
 				<div class="filters">
 					<b>
 						{!! trans('vox.page.stats.period') !!}:

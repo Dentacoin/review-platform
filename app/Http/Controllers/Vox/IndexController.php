@@ -177,7 +177,6 @@ class IndexController extends FrontController {
 	            'social_title' => $seos->social_title,
 	            'social_description' => $seos->social_description,
 	        	'js' => [
-					'all-surveys.js',
 	        		'index-new.js',
 	        	],
 	        	'css' => [

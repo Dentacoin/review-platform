@@ -1582,7 +1582,7 @@ class StatsController extends FrontController {
                 'scales' => config('vox.stats_scales'),
                 'blurred_stats' => $blurred_stats,
                 'js' => [
-                    'stats.js',
+                    'stats-single.js',
                 ],
                 'css' => [
                     'vox-stats-single.css'
@@ -1596,6 +1596,7 @@ class StatsController extends FrontController {
             ];
 
             if(!empty($this->user)) {
+                $items_array['js'][] = '../js-vox/stats-single-loaded.js';
                 $items_array['js'][] = '../js/amcharts-core.js';
                 $items_array['js'][] = '../js/amcharts-maps.js';
                 $items_array['js'][] = '../js/amcharts-worldLow.js';
