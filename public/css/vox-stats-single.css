@@ -1780,6 +1780,9 @@
       @media screen and (max-width: 768px) {
         .stats-image-wrapper .col img.mobile-stat-img {
           display: inline-block; } }
+    @media screen and (max-width: 1200px) {
+      .stats-image-wrapper .col img.pc-stat-img {
+        width: 92%; } }
     @media screen and (max-width: 768px) {
       .stats-image-wrapper .col img.pc-stat-img {
         display: none; } }

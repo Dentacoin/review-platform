@@ -86,14 +86,17 @@
 			<div class="stats-image-wrapper">
 				<div class="container flex flex-center">
 					<div class="col">
-						<img src="{{ url('new-vox-img/dv-stats-banner-left-img.svg') }}" class="pc-stat-img">
-						<img src="{{ url('new-vox-img/mobile-dv-stats-banner-left-img.svg') }}" class="mobile-stat-img" />
+						<img src="{{ url('new-vox-img/dv-stats-banner-left-img.svg') }}" class="pc-stat-img" width="360" height="282">
+						<img src="{{ url('new-vox-img/mobile-dv-stats-banner-left-img.svg') }}" class="mobile-stat-img" width="250" height="134"/>
 					</div>
 					<div class="col">
-						<a href="javascript::" id="load-stats" class="red-button"><img src="{{ url('new-vox-img/chart-icon.svg') }}"/>{!! trans('vox.page.stats.show-stats') !!}</a>
+						<a href="javascript::" id="load-stats" class="red-button">
+							<img src="{{ url('new-vox-img/chart-icon.svg') }}" width="30" height="30"/>
+							{!! trans('vox.page.stats.show-stats') !!}
+						</a>
 					</div>
 					<div class="col">
-						<img src="{{ url('new-vox-img/dv-stats-banner-right-img.svg') }}" class="pc-stat-img" style="width: 92%;">
+						<img src="{{ url('new-vox-img/dv-stats-banner-right-img.svg') }}" class="pc-stat-img" width="331" height="281">
 					</div>
 				</div>
 			</div>

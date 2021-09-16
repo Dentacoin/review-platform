@@ -2734,6 +2734,11 @@ $main-color: #38ace5;
 		}
 
 		img.pc-stat-img {
+			
+			@media #{$pc} {
+				width: 92%;
+			}
+			
 			@media #{$phone} {
 				display: none;
 			}
