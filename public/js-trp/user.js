@@ -351,6 +351,7 @@ $(document).ready(function(){
 
                                 handleReviewEvents();
                                 handlePopups();
+                                attachTooltips();
                             }
                         }
                     },
