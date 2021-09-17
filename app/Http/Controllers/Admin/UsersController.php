@@ -2334,7 +2334,8 @@ class UsersController extends AdminController {
                 SUM( IF(  `platform` = 'dentacare' , 1, 0 ) ) AS `dentacare`,
                 SUM( IF(  `platform` = 'assurance' , 1, 0 ) ) AS `assurance`,
                 SUM( IF(  `platform` = 'dentacoin' , 1, 0 ) ) AS `dentacoin`,
-                SUM( IF(  `platform` = 'dentists' , 1, 0 ) ) AS `dentists`
+                SUM( IF(  `platform` = 'dentists' , 1, 0 ) ) AS `dentists`,
+                SUM( IF(  `platform` = 'external' , 1, 0 ) ) AS `external`
             FROM  `users` 
             GROUP BY `week` 
             ORDER BY `id` DESC
