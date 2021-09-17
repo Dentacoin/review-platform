@@ -443,6 +443,8 @@
           padding-top: 45%; } }
       @media screen and (max-width: 768px) {
         .section-vox-not-login .swiper-wrapper .swiper-slide .cover {
+          width: 290px;
+          height: 196.3px;
           padding-top: 0px;
           background-image: none; } }
       .section-vox-not-login .swiper-wrapper .swiper-slide .cover img {

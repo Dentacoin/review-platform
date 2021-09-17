@@ -329,6 +329,8 @@ body.vox-public {
 				}
 
 				@media #{$phone} {
+					width: 290px;
+    				height: 196.3px;
 					padding-top: 0px;
 					background-image: none;
 				}
