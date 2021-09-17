@@ -144,7 +144,7 @@
         .page-stats .stats-list .stats-holder .vox-stat {
           margin-bottom: 37px;
           padding: 6px 9px 16px;
-          max-width: 100%;
+          max-width: 320px;
           display: block;
           border-width: 1px;
           border-color: #ccc; } }
