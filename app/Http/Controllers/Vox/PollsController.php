@@ -57,22 +57,31 @@ class PollsController extends FrontController {
 	public function show_popup_poll($locale=null, $date) {
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
-		$month = date('m',$time);
-		$year = date('Y',$time);
+		$poll_stats = 0;
+		$poll_open = 0;
 
 		$seos = PageSeo::find(14);
 
 		$poll = Poll::where('launched_at', $newformat )->first();
 		if (!empty($poll)) {
 			$social_image = $poll->getSocialCover();
+
+			if($poll->status != 'scheduled') {
+				if($poll->status == 'open') {
+					$poll_open = true;
+				} else {
+					$poll_stats = true;
+				}
+			}
 		} else {
 			$social_image = $seos->getImageUrl();
 		}
 		
 		return $this->ShowVoxView('daily-polls', array(
-			'date_poll' => $newformat,
-			'poll_month' => $month,
-			'poll_year' => $year,
+			'show_poll' => true,
+			'poll' => $poll,
+			'poll_open' => $poll_open,
+			'poll_stats' => $poll_stats,
 			'js' => [
         		'polls.js'
         	],
@@ -96,23 +105,25 @@ class PollsController extends FrontController {
 
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
-		$month = date('m',$time);
-		$year = date('Y',$time);
+		$poll_stats = 0;
 
 		$seos = PageSeo::find(14);
 
 		$poll = Poll::where('launched_at', $newformat )->first();
 		if (!empty($poll)) {
 			$social_image = $poll->getSocialCover();
+
+			if($poll->status != 'scheduled' && $poll->status != 'open') {
+				$poll_stats = true;
+			}
 		} else {
 			$social_image = $seos->getImageUrl();
 		}
 		
 		return $this->ShowVoxView('daily-polls', array(
 			'date_poll' => $newformat,
-			'poll_month' => $month,
-			'poll_year' => $year,
-			'poll_stats' => true,
+			'poll' => $poll,
+			'poll_stats' => $poll_stats,
 			'js' => [
         		'polls.js'
         	],

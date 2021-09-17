@@ -125,7 +125,7 @@ class StatsController extends FrontController {
         
         $this->current_page = 'stats';
 
-        $vox = Vox::whereTranslationLike('slug', $slug)->first();
+        $vox = Vox::with('stats_questions.translations')->whereTranslationLike('slug', $slug)->first();
 
         if(empty($vox)) {
             return redirect( getLangUrl('page-not-found') );

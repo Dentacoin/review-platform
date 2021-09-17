@@ -15,7 +15,6 @@ use App\Models\VoxQuestionAnswered;
 use App\Models\UnclaimedDentist;
 use App\Models\UserGuidedTour;
 use App\Models\DcnTransaction;
-use App\Models\AnonymousUser;
 use App\Models\VoxCrossCheck;
 use App\Models\WalletAddress;
 use App\Models\ReviewAnswer;
@@ -343,11 +342,9 @@ class UsersController extends AdminController {
                 $query->where('dcn_address', 'like', $dcn_address);
             });
         }
-
         if(!empty(request('civic-kyc-hash'))) {
             $users = $users->where('civic_kyc_hash', 'LIKE', '%'.trim(request('civic-kyc-hash')).'%');
         }
-
         if(!empty(request('search-id'))) {
             $users = $users->where('id', request('search-id') );
         }
@@ -371,7 +368,6 @@ class UsersController extends AdminController {
                 $query->where('reference_id', '!=', 11);
             }, '>=', request('search-surveys-taken'));
         }
-
         if(!empty(request('search-dentist-claims'))) {
             $users = $users->whereHas('claims', function ($query) {
                 $query->where('status', request('search-dentist-claims'));
@@ -394,12 +390,10 @@ class UsersController extends AdminController {
             }, '>=', $minLogins);
         }
 
-
         if(!empty(request('search-type'))) {
 
             $users = $users->where(function ($query) {
                 foreach (request('search-type') as $stype) {
-
                     $tmp = explode('.', $stype);
                     $type = $tmp[0];
                     $status = isset($tmp[1]) && isset( config('user-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
@@ -445,7 +439,6 @@ class UsersController extends AdminController {
 
                 }
             });
-
         }
 
         if(!empty(request('search-status'))) {
@@ -560,8 +553,6 @@ class UsersController extends AdminController {
                 $fn = str_replace(["'", '"'], '', $fn);
                 $ln = str_replace(["'", '"'], '', $ln);
 
-
-
                 $info = [
                     'user_id' => $u->id,
                     'email' => $u->email,
@@ -602,7 +593,6 @@ class UsersController extends AdminController {
             $csv = [
                 array_keys($export_fb[0])
             ];
-
 
             foreach ($export_fb as $row) {
                 $tmp = array_values($row);
@@ -720,7 +710,6 @@ class UsersController extends AdminController {
                 array_keys($export_fb[0])
             ];
 
-
             foreach ($export_fb as $row) {
                 $tmp = array_values($row);
                 foreach ($tmp as $key => $value) {
@@ -743,9 +732,7 @@ class UsersController extends AdminController {
 ';
             }
             exit;
-
         }
-
 
         $table_fields = [
             'selector' => array('format' => 'selector'),
@@ -758,7 +745,6 @@ class UsersController extends AdminController {
             'status' => array('template' => 'admin.parts.table-users-status', 'label' => 'Status'),
             'is_partner' => array('template' => 'admin.parts.table-users-partner', 'label' => 'Partner'),
         ];
-
 
         if(request('search-platform') == 'trp') {
             $table_fields['ratings'] = array('template' => 'admin.parts.table-users-ratings');
@@ -813,68 +799,6 @@ class UsersController extends AdminController {
             'current_url' => $current_url,
         ));
     }
-
-    public function anonymous_list() {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        if( Auth::guard('admin')->user()->role!='admin' ) {
-            return redirect('cms/users/users/edit/'.Auth::guard('admin')->user()->user_id);            
-        }
-
-        $users = AnonymousUser::orderBy('id', 'DESC');
-
-        if(!empty(request('search-email'))) {
-            $users = $users->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
-        }
-
-        $total_count = $users->count();
-
-        $page = max(1,intval(request('page')));
-        
-        $ppp = 100;
-        $adjacents = 2;
-        $total_pages = ceil($total_count/$ppp);
-
-        //Here we generates the range of the page numbers which will display.
-        if($total_pages <= (1+($adjacents * 2))) {
-          $start = 1;
-          $end   = $total_pages;
-        } else {
-          if(($page - $adjacents) > 1) { 
-            if(($page + $adjacents) < $total_pages) { 
-              $start = ($page - $adjacents);            
-              $end   = ($page + $adjacents);         
-            } else {             
-              $start = ($total_pages - (1+($adjacents*2)));  
-              $end   = $total_pages;               
-            }
-          } else {               
-            $start = 1;                                
-            $end   = (1+($adjacents * 2));             
-          }
-        }
-
-        $users = $users->skip( ($page-1)*$ppp )->take($ppp)->get();
-
-        $pagination_link = (!empty($this->request->input('search-email')) ? '&search-email='.$this->request->input( 'search-email' ) : '');
-
-        return $this->showView('anonymous-users', array(
-            'users' => $users,
-            'search_email' => request('search-email'),
-            'total_count' => $total_count,
-            'count' =>($page - 1)*$ppp ,
-            'start' => $start,
-            'end' => $end,
-            'total_pages' => $total_pages,
-            'page' => $page,
-            'pagination_link' => $pagination_link,
-        ));
-    }
-
 
     public function delete( $id ) {
 
@@ -1369,7 +1293,6 @@ class UsersController extends AdminController {
 
         return redirect('cms/users/users/');
     }
-
 
     public function loginas( $id, $platform=null ) {
 
@@ -2222,10 +2145,8 @@ class UsersController extends AdminController {
                             } else {
                                 $not_imported[] = $row[0] ? $row[0] : ($row[2] ? $row[2] : 'without name and mail');
                             }
-
                         }
                     }
-
                 }
 
                 unlink($newName);
@@ -2275,22 +2196,6 @@ class UsersController extends AdminController {
         }
 
         return redirect('cms/users/users/edit/'.$id);
-    }
-
-    public function anonymousDelete($id) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = AnonymousUser::find($id);
-
-        if(!empty($item)) {
-            $item->delete();
-        }
-
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/anonymous_users');
     }
 
     public function convertToPatient($id) {
@@ -2360,7 +2265,6 @@ class UsersController extends AdminController {
             $item->user_patient_type = null;
             $item->is_clinic = 0;
             $item->patient_status = null;
-
             $item->product_news = null;
             $item->save();
             $item->removeFromSendgridSubscribes();
@@ -2481,7 +2385,6 @@ class UsersController extends AdminController {
             'name' => 'registrations',
             'table' => $table,
         ));
-
     }
 
     public function incompleteRegs() {
@@ -2530,7 +2433,6 @@ class UsersController extends AdminController {
             $csv = [
                 ['email','fn','ln','country','phone']
             ];
-
 
             foreach ($export as $row) {
                 $tmp = array_values($row);
@@ -2587,7 +2489,6 @@ class UsersController extends AdminController {
 
         $total_count = $incompletes->count();
 
-
         $page = max(1,intval(request('page')));
         
         $ppp = 25;
@@ -2596,21 +2497,21 @@ class UsersController extends AdminController {
 
         //Here we generates the range of the page numbers which will display.
         if($total_pages <= (1+($adjacents * 2))) {
-          $start = 1;
-          $end   = $total_pages;
+            $start = 1;
+            $end   = $total_pages;
         } else {
-          if(($page - $adjacents) > 1) { 
-            if(($page + $adjacents) < $total_pages) { 
-              $start = ($page - $adjacents);            
-              $end   = ($page + $adjacents);         
-            } else {             
-              $start = ($total_pages - (1+($adjacents*2)));  
-              $end   = $total_pages;               
+            if(($page - $adjacents) > 1) { 
+                if(($page + $adjacents) < $total_pages) { 
+                    $start = ($page - $adjacents);            
+                    $end   = ($page + $adjacents);         
+                } else {             
+                    $start = ($total_pages - (1+($adjacents*2)));  
+                    $end   = $total_pages;               
+                }
+            } else {               
+                $start = 1;                                
+                $end   = (1+($adjacents * 2));             
             }
-          } else {               
-            $start = 1;                                
-            $end   = (1+($adjacents * 2));             
-          }
         }
 
         $incompletes = $incompletes->skip( ($page-1)*$ppp )->take($ppp)->get();
@@ -2702,7 +2603,6 @@ class UsersController extends AdminController {
                 ['recent_conversion_date','firstname','email', 'website', 'country', 'priority', 'reviews_tool', 'ask_reviews', 'frequently_reviews', 'reviews_reply', 'reviews_score']
             ];
 
-
             foreach ($export as $row) {
                 $tmp = array_values($row);
                 foreach ($tmp as $key => $value) {
@@ -2725,7 +2625,6 @@ class UsersController extends AdminController {
     ';
             }
             exit;
-
         }
 
 

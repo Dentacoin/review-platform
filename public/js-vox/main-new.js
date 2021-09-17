@@ -28,6 +28,9 @@ var welcome_vox_now;
 var cur_href = null;
 var doubleCoinTooltip;
 var handleSwiper;
+var poll_date_id;
+var poll_stats;
+var poll_open;
 
 var preloadImages = function(urls, allImagesLoadedCallback){
     var loadedCounter = 0;
@@ -1321,6 +1324,14 @@ $(document).ready(function(){
             });
         }
     }
+
+	if(poll_date_id) {
+		if(poll_open) {
+			showPoll(poll_date_id);
+		} else if(poll_stats) {
+			showStats(poll_date_id);
+		}
+	}
 
 });
 

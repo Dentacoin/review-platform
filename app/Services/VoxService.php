@@ -2956,10 +2956,11 @@ class VoxService {
 				}
 
 				$to_take_poll = $poll->status=='open' && !$taken_daily_poll;
+                $vox_category = VoxCategory::find($poll->category);
 
 				$daily_polls[] = [
                     'title' => $poll->question,
-					'category_image' => VoxCategory::find($poll->category)->getImageUrl(),
+					'category_image' => $vox_category->getImageUrl(),
 					'id' => $poll->id,
 					'closed' => $poll->status == 'closed' ? true : false,
 					'closed_image' => url('new-vox-img/stat-poll.png'),
@@ -2972,7 +2973,7 @@ class VoxService {
 					'day' => date('d', $poll->launched_at->timestamp),
 					'day_word' => date('D', $poll->launched_at->timestamp),
 					'custom_date' => date('F j, Y', $poll->launched_at->timestamp),
-					'color' => VoxCategory::find($poll->category)->color,
+					'color' => $vox_category->color,
 				];
 			}
 		} else {

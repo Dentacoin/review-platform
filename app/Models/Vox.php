@@ -191,12 +191,13 @@ class Vox extends Model {
         $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
 
         if ($diff >= 1 || empty($this->rewards_count)) {
+            $rewards_count = $this->rewards()->count();
 
             $this->last_count_at = Carbon::now();
-            $this->rewards_count = $this->rewards()->count();
+            $this->rewards_count = $rewards_count;
             $this->save();
 
-            return $this->rewards()->count();
+            return $rewards_count;
 
         } else {
             return $this->rewards_count;

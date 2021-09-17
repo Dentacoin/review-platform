@@ -82,9 +82,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('users/users/convert-to-patient/{id}',				'UsersController@convertToPatient');
 	Route::get('users/users/info/{id}',								'UsersController@userInfo');
 
-	Route::get('users/anonymous_users', 							'UsersController@anonymous_list');
-	Route::get('users/anonymous_users/delete/{id}',					'UsersController@anonymousDelete');
-
 	Route::get('users/users_stats', 								'UsersController@usersStats');
 
 	Route::any('users/registrations', 								'UsersController@registrations');
@@ -92,6 +89,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/incomplete-registrations', 					'UsersController@incompleteRegs');
 	Route::any('users/lead-magnet', 								'UsersController@leadMagnet');
 
+	Route::get('users/anonymous_users', 							'AnonymousUsersController@anonymous_list');
+	Route::get('users/anonymous_users/delete/{id}',					'AnonymousUsersController@anonymousDelete');
 
 
 	Route::get('invites',									'InvitesController@list');

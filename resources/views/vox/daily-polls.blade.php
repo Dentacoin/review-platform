@@ -39,5 +39,11 @@
 			</div>
 		</div>
 	</div>
+	
+	<script type="text/javascript">
+		var poll_date_id = {{ isset($poll) && !empty($poll) ? $poll->id : 0 }};
+		var poll_stats = {!! isset($poll_stats) ? $poll_stats : 0 !!};
+		var poll_open = {!! isset($poll_open) ? $poll_open : 0 !!};
+	</script>
     	
 @endsection
