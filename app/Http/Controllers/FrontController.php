@@ -106,7 +106,6 @@ class FrontController extends BaseController {
         //$this->user = Auth::guard('web')->user();
         $this->middleware(function ($request, $next) {
 
-
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
@@ -252,7 +251,6 @@ class FrontController extends BaseController {
                                 session(['reviews_guided_tour' => true]);
                             }
                         }
-
                     } else {
 
                         $gt = new UserGuidedTour;
@@ -266,9 +264,7 @@ class FrontController extends BaseController {
 
                         $gt->save();
                     }
-
                 }
-
 
                 if(!session('login-logged')) {
 
@@ -296,7 +292,6 @@ class FrontController extends BaseController {
                     }
                 }
             }
-
 
             $this->country_id = !empty($this->user->country_id) ? $this->user->country_id : session('country_id');
             $this->city_id = !empty($this->user->city_id) ? $this->user->city_id : session('city_id');
@@ -401,7 +396,6 @@ class FrontController extends BaseController {
         $params['years'] = range( date('Y'), date('Y')-90 );
         $params['header_questions'] = VoxAnswer::getCount();
         $params['users_count'] = User::getCount('vox');
-        //dd($params['header_questions']);
 
         if( session('unbanned') ) {
             session(['unbanned' => null]);
@@ -594,7 +588,6 @@ class FrontController extends BaseController {
 
         $params['canonical'] = !empty($params['canonical']) ? $params['canonical'] : getLangUrl($this->current_page);
         $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='trp' ? '/img-trp/socials-cover.jpg' : '/img-vox/logo-text.png'  );
-        //dd($params['pages_header']);
         
         if(isset($_SERVER['HTTP_USER_AGENT'])) {
 
@@ -612,12 +605,9 @@ class FrontController extends BaseController {
         //
         //Global
         //
-        $platfrom = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
 
         $params['trackEvents'] = [];
         if( session('mark-login') && empty($params['skipSSO']) ) {
-            //dd(session('mark-login'));
-            $ep = session('mark-login');
             session([
                 'mark-login' => false
             ]);
@@ -625,7 +615,6 @@ class FrontController extends BaseController {
             $params['markLogin'] = true;
         }
         if( session('login-logged-out') && empty($params['skipSSO']) ) {
-            //dd(session('login-logged-out'));
             $params['markLogout'] = session('login-logged-out');
             session([
                 'login-logged-out' => false
