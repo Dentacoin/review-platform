@@ -180,41 +180,51 @@ $(document).ready(function(){
     }
 
     handleReviewEvents = function() {
-
         $('.thumbs-up, .thumbs-down').off('click').click( function() {
-            
-            var type = $(this).hasClass('thumbs-up') ? 'useful' : 'unuseful';
-            var that = this;
-            $.ajax( {
-                url: '/'+lang+'/'+type+'/' + $(this).closest('.review-wrapper').attr('review-id'),
-                type: 'GET',
-                dataType: 'json',
-                success: (function( data ) {
-                    if(data.success) {
-
-                        $(that).closest('.review-footer').find('.thumbs-up span').html( data.upvotes );
-                        $(that).closest('.review-footer').find('.thumbs-down span').html( data.downvotes );
-
-                        var icon_up = $(that).closest('.review-footer').find('.thumbs-up');
-                        var icon_down = $(that).closest('.review-footer').find('.thumbs-down');
-
-                        if (data.upvote_status) {
-                            icon_up.addClass('voted');
-                        } else {
-                            icon_up.removeClass('voted');
+            if(user_id) {
+                var type = $(this).hasClass('thumbs-up') ? 'useful' : 'unuseful';
+                var that = this;
+                $.ajax( {
+                    url: '/'+lang+'/'+type+'/' + $(this).closest('.review-wrapper').attr('review-id'),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: (function( data ) {
+                        if(data.success) {
+    
+                            $(that).closest('.review-footer').find('.thumbs-up span').html( data.upvotes );
+                            $(that).closest('.review-footer').find('.thumbs-down span').html( data.downvotes );
+    
+                            var icon_up = $(that).closest('.review-footer').find('.thumbs-up');
+                            var icon_down = $(that).closest('.review-footer').find('.thumbs-down');
+    
+                            if (data.upvote_status) {
+                                icon_up.addClass('voted');
+                            } else {
+                                icon_up.removeClass('voted');
+                            }
+    
+                            if (data.downvote_status) {
+                                icon_down.addClass('voted');
+                            } else {
+                                icon_down.removeClass('voted');
+                            }
+    
+                            icon_up.find('img').attr('src', data.upvote_image);
+                            icon_down.find('img').attr('src', data.downvote_image);
                         }
+                    }).bind(that)
+                }); 
+            } else {
+                $.event.trigger({type: 'openPatientRegister'});
 
-                        if (data.downvote_status) {
-                            icon_down.addClass('voted');
-                        } else {
-                            icon_down.removeClass('voted');
-                        }
-
-                        icon_up.find('img').attr('src', data.upvote_image);
-                        icon_down.find('img').attr('src', data.downvote_image);
+                $(document).on('dentacoinLoginGatewayLoaded', function (event) {
+                    var cta = $('.dentacoin-login-gateway-container .cta');
+                    cta.show();
+                    for(i=0;i<3;i++) {
+                        cta.fadeTo('slow', 0).fadeTo('slow', 1);
                     }
-                }).bind(that)
-            }); 
+                });
+            }
         } );
 
         $('.reply-button.show-hide').off('click').click( function() {
