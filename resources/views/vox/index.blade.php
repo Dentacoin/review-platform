@@ -8,10 +8,13 @@
 			<h1 class="index-h1">{!! $title !!}</h1>
 			<h2>{!! $subtitle !!}</h2>
 			<br/>
-			<img width="572" height="414" class="tablet-home-image" src="{{ url('new-vox-img/dv-home-tablet.png') }}">
-			<img width="300" height="414" class="mobile-home-image" src="{{ url('new-vox-img/dv-home-mobile.png') }}">
+			<div class="index-images">
+				<img width="572" height="414" class="tablet-home-image" src="{{ url('new-vox-img/dv-home-tablet.png') }}"/>
+				<img width="300" height="217" class="mobile-home-image" src="{{ url('new-vox-img/dv-home-mobile.png') }}"/>
+			</div>
 			<a class="blue-button new-style with-arrow" href="{{ getLangUrl('welcome-survey') }}">
-				{!! nl2br(trans('vox.page.index.start')) !!} <img src="{{ url('new-vox-img/white-arrow-right.svg') }}">
+				{!! nl2br(trans('vox.page.index.start')) !!} 
+				<img src="{{ url('new-vox-img/white-arrow-right.svg') }}"/>
 			</a>
 		</div>
 		<img class="blue-circle" src="{{ url('new-vox-img/blue-circle-corner.png') }}"/>

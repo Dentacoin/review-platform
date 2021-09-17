@@ -573,6 +573,10 @@
       @media screen and (max-width: 768px) {
         .full .first-absolute a {
           font-size: 18px; } }
+    @media screen and (max-width: 768px) {
+      .full .first-absolute .index-images {
+        width: 300px;
+        height: 217px; } }
     .full .first-absolute .tablet-home-image {
       display: none; }
       @media screen and (max-width: 1080px) {

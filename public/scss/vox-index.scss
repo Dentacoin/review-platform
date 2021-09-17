@@ -199,6 +199,13 @@ $main-color: #38ace5;
 			}
 	    }
 
+		.index-images {
+			@media #{$phone} {
+				width: 300px;
+    			height: 217px;
+			}
+		}
+
 	    .tablet-home-image {
 	    	display: none;
 
