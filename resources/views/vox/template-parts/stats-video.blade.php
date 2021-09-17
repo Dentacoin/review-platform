@@ -1,4 +1,4 @@
-<div class="taken-vox-stats {!! empty($related_voxes) || $suggested_voxes->isEmpty() ? 'without-line' : '' !!}">
+<div class="taken-vox-stats {!! empty($related_voxes) || empty($suggested_voxes) ? 'without-line' : '' !!}">
     <div class="container">
         <h3 class="taken-title">{!! trans('vox.page.vox-daily-limit-reached.stats.title') !!}</h3>
         <p class="vox-stats-subtitle">{!! trans('vox.page.vox-daily-limit-reached.stats.description') !!}</p>
