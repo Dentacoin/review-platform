@@ -446,7 +446,7 @@
           width: 290px;
           height: 196.3px;
           padding-top: 0px;
-          background-image: none; } }
+          background-image: none !important; } }
       .section-vox-not-login .swiper-wrapper .swiper-slide .cover img {
         display: none; }
         @media screen and (max-width: 768px) {
