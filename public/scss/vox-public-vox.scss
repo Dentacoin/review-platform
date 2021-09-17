@@ -327,6 +327,20 @@ body.vox-public {
 				@media #{$tablet} {
 					padding-top: 45%;
 				}
+
+				@media #{$phone} {
+					padding-top: 0px;
+					background-image: none;
+				}
+
+				img {
+					@media #{$phone} {
+						display: block !important;
+						max-width: 100%;
+						height: auto;
+						border-radius: 7px;
+					}
+				}
 	
 				// @media screen and (max-height: 800px) and (min-width: 769px ) {
 				// 	padding-top: 34%;

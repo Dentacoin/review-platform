@@ -441,6 +441,16 @@
       @media screen and (max-width: 1080px) {
         .section-vox-not-login .swiper-wrapper .swiper-slide .cover {
           padding-top: 45%; } }
+      @media screen and (max-width: 768px) {
+        .section-vox-not-login .swiper-wrapper .swiper-slide .cover {
+          padding-top: 0px;
+          background-image: none; } }
+      @media screen and (max-width: 768px) {
+        .section-vox-not-login .swiper-wrapper .swiper-slide .cover img {
+          display: block !important;
+          max-width: 100%;
+          height: auto;
+          border-radius: 7px; } }
     .section-vox-not-login .swiper-wrapper .swiper-slide .survey-cats span {
       font-size: 16px;
       margin-top: 5px; }
