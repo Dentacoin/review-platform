@@ -183,190 +183,199 @@ body.vox-public {
 		}
 	}
 
-    .swiper-slide {
-        max-width: 730px;
-    	margin: 0 auto;
-    	position: relative;
-
-    	@media #{$pc} {
-    		max-width: 640px;
-    	}
-
-    	@media #{$tablet} {
-			max-width: 460px;
-		}
+	.swiper-wrapper {
 
 		@media #{$phone} {
-			max-width: 100%;
-			display: flex;
-			flex-flow: row wrap;
+			max-width: 320px;
+			margin: 0 auto;
 		}
 
-    	.slider-inner {
-    		padding: 0px;
-    	}
-
-    	.survey-cats {
-    		margin-bottom: 15px;
-
-    		@media screen and (max-height: 800px) and (min-width: 769px ) {
-	    		display: none;
-	    	}
-    	}
-
-    	.wing {
-    		width: 205px;
-    		height: 170px;
-    		background-color: #d3ebfb;
-    		border-radius: 7px;
-    		position: absolute;
-    		top: 55px;
-    		text-align: center;
-
-    		@media screen and (max-height: 800px) and (min-width: 769px ) {
-    			width: 155px;
-    		}
-
-    		@media screen and (max-width: 920px ) {
-    			width: 125px;
-    		}
-
-    		@media #{$phone} {
-    			position: static;
-    			flex: 1;
-    			margin-bottom: 10px;
-    			height: auto;
-    		    padding: 10px 0px;
-    		    min-width: 40%;
-    		}
-
-    		&.left-wing {
-    			left: -205px;
-    			border-top-right-radius: 0px;
-    			border-bottom-right-radius: 0px;
-
-    			@media screen and (max-height: 800px) and (min-width: 769px ) {
-    				left: -155px;
-    			}
-
-	    		@media screen and (max-width: 920px ) {
-	    			left: -125px;
-	    		}
-
-    			@media #{$phone} {
-    				margin-right: 10px;
-    		    	border-radius: 7px;
-    			}
-    		}
-
-    		&.right-wing {
-    			right: -205px;
-    			border-top-left-radius: 0px;
-    			border-bottom-left-radius: 0px;
-
-    			@media screen and (max-height: 800px) and (min-width: 769px ) {
-    				right: -155px;
-    			}
-
-	    		@media screen and (max-width: 920px ) {
-	    			right: -125px;
-	    		}
-
-    			@media #{$phone} {
-    		    	border-radius: 7px;
-    			}
-    		}
-
-    		.wing-box {
-    			position: relative;
-			    top: 50%;
-			    transform: translateY(-50%);
-    		}
-
-    		img {
-    			max-width: 42px;
-
-    			@media #{$phone} {
-    				max-width: 30px;
-    				height: auto;
-    			}
-    		}
-
-    		p {
-    			font-size: 30px;
-    			font-weight: bold;
-
-    			@media screen and (max-height: 800px) and (min-width: 769px ) {
-		    		font-size: 23px;
-		    	}
-
-		    	@media screen and (max-width: 920px ) {
-		    		font-size: 20px;
-		    	}
-
-		    	@media #{$phone} {
-		    		font-size: 14px;
-		    	}
-
-    			&:last-child {
-    				font-weight: 900;
-    			}
-    		}
-    	}
-
-    	.cover {
-		    border-radius: 7px;
-
-		    @media #{$tablet} {
-		    	padding-top: 45%;
-		    }
-
-		    // @media screen and (max-height: 800px) and (min-width: 769px ) {
-		    // 	padding-top: 34%;
-		    // }
-		}
-
-		.survey-cats {
-			span {
-			    font-size: 16px;
-			    margin-top: 5px;
-
-			    @media screen and (max-height: 800px) and (min-width: 769px ) {
-			    	font-size: 14px;
-			    }
-
-			    @media #{$phone} {
-			    	font-size: 11px;
-			    }
+		.swiper-slide {
+			max-width: 730px;
+			margin: 0 auto;
+			position: relative;
+	
+			@media #{$pc} {
+				max-width: 640px;
 			}
-		}
-
-		.vox-header {
-
-			@media screen and (max-height: 800px) and (min-width: 769px ) {
-				padding: 10px;
+	
+			@media #{$tablet} {
+				max-width: 460px;
 			}
-
+	
 			@media #{$phone} {
-		    	padding: 10px 0px 0px;
-		    }
-
-			.left {
-				.vox-description {
-				    font-size: 18px;
-				    max-height: none;
-
-				    @media screen and (max-height: 800px) and (min-width: 769px ) {
-				    	font-size: 16px;
-				    }
-
-				    @media #{$phone} {
-				    	font-size: 14px;
-				    }
+				max-width: 100%;
+				display: flex;
+				flex-flow: row wrap;
+			}
+	
+			.slider-inner {
+				padding: 0px;
+			}
+	
+			.survey-cats {
+				margin-bottom: 15px;
+	
+				@media screen and (max-height: 800px) and (min-width: 769px ) {
+					display: none;
+				}
+			}
+	
+			.wing {
+				width: 205px;
+				height: 170px;
+				background-color: #d3ebfb;
+				border-radius: 7px;
+				position: absolute;
+				top: 55px;
+				text-align: center;
+	
+				@media screen and (max-height: 800px) and (min-width: 769px ) {
+					width: 155px;
+				}
+	
+				@media screen and (max-width: 920px ) {
+					width: 125px;
+				}
+	
+				@media #{$phone} {
+					position: static;
+					flex: 1;
+					margin-bottom: 10px;
+					height: auto;
+					padding: 10px 0px;
+					min-width: 40%;
+				}
+	
+				&.left-wing {
+					left: -205px;
+					border-top-right-radius: 0px;
+					border-bottom-right-radius: 0px;
+	
+					@media screen and (max-height: 800px) and (min-width: 769px ) {
+						left: -155px;
+					}
+	
+					@media screen and (max-width: 920px ) {
+						left: -125px;
+					}
+	
+					@media #{$phone} {
+						margin-right: 10px;
+						border-radius: 7px;
+					}
+				}
+	
+				&.right-wing {
+					right: -205px;
+					border-top-left-radius: 0px;
+					border-bottom-left-radius: 0px;
+	
+					@media screen and (max-height: 800px) and (min-width: 769px ) {
+						right: -155px;
+					}
+	
+					@media screen and (max-width: 920px ) {
+						right: -125px;
+					}
+	
+					@media #{$phone} {
+						border-radius: 7px;
+					}
+				}
+	
+				.wing-box {
+					position: relative;
+					top: 50%;
+					transform: translateY(-50%);
+				}
+	
+				img {
+					max-width: 42px;
+	
+					@media #{$phone} {
+						max-width: 30px;
+						height: auto;
+					}
+				}
+	
+				p {
+					font-size: 30px;
+					font-weight: bold;
+	
+					@media screen and (max-height: 800px) and (min-width: 769px ) {
+						font-size: 23px;
+					}
+	
+					@media screen and (max-width: 920px ) {
+						font-size: 20px;
+					}
+	
+					@media #{$phone} {
+						font-size: 14px;
+					}
+	
+					&:last-child {
+						font-weight: 900;
+					}
+				}
+			}
+	
+			.cover {
+				border-radius: 7px;
+	
+				@media #{$tablet} {
+					padding-top: 45%;
+				}
+	
+				// @media screen and (max-height: 800px) and (min-width: 769px ) {
+				// 	padding-top: 34%;
+				// }
+			}
+	
+			.survey-cats {
+				span {
+					font-size: 16px;
+					margin-top: 5px;
+	
+					@media screen and (max-height: 800px) and (min-width: 769px ) {
+						font-size: 14px;
+					}
+	
+					@media #{$phone} {
+						font-size: 11px;
+					}
+				}
+			}
+	
+			.vox-header {
+	
+				@media screen and (max-height: 800px) and (min-width: 769px ) {
+					padding: 10px;
+				}
+	
+				@media #{$phone} {
+					padding: 10px 0px 0px;
+				}
+	
+				.left {
+					.vox-description {
+						font-size: 18px;
+						max-height: none;
+	
+						@media screen and (max-height: 800px) and (min-width: 769px ) {
+							font-size: 16px;
+						}
+	
+						@media #{$phone} {
+							font-size: 14px;
+						}
+					}
 				}
 			}
 		}
 	}
+
 
 	.slide-padding {
 	    padding: 15px;
