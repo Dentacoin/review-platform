@@ -14,7 +14,7 @@
 					@endif
 					<div class="flex">
 						@foreach( $block['questions'] as $question )
-							<div class="col">
+							<div class="col {{ $loop->first ? 'active' : '' }}">
 								<h3> <span>&bull;</span> {{ $question[0] }}</h3>
 								<p>{!! nl2br($question[1]) !!}</p>
 							</div>
