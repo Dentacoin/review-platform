@@ -2379,6 +2379,10 @@ class UsersController extends AdminController {
                     'value' => $w->dentists,
                     'label' => 'Dentists',
                 ],
+                'external' => [
+                    'value' => $w->external,
+                    'label' => 'External',
+                ],
             ];
         }
 
