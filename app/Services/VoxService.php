@@ -1119,7 +1119,7 @@ class VoxService {
                             'social_title' => $social_title,
                             'social_description' => $social_description,
                             'css' => [
-                                'vox-limit-realched.css'
+                                'vox-limit-reached.css'
                             ],
                         ),
                     ];

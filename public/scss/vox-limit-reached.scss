@@ -3,6 +3,7 @@ $tablet: "screen and (max-width: 1080px)";
 $phone: "screen and (max-width: 768px)";
 
 @import 'vox-taken-survey-wrapper';
+@import 'vox-blog-wrapper';
 
 .daily-limit-reached {
 	margin-bottom: -80px;

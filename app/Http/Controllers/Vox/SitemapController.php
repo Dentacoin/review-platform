@@ -19,6 +19,7 @@ class SitemapController extends FrontController {
 			getLangUrl('/'),
 			getLangUrl('welcome-survey'),
 			getLangUrl('dental-survey-stats'),
+			getLangUrl('paid-dental-surveys'),
 			getLangUrl('daily-polls'),
 			getLangUrl('faq'),
 		];
