@@ -68,7 +68,7 @@
 					@if($vox->stats_featured)
 						<img class="featured" src="{{ url('new-vox-img/star.svg') }}" alt="Dentavox featured statistic" width="50" height="48">
 					@endif
-					<a href="{{ $vox->getStatsList() }}">
+					<a class="stat-image-wrapper" href="{{ $vox->getStatsList() }}">
 						<img class="cover" src="{{ $vox->getImageUrl(true) }}" alt="{{ $vox->title }} - Survey Statistics" width="260" height="176" />
 					</a>
 					<div class="stats-info flex">

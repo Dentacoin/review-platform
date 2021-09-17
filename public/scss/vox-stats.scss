@@ -136,6 +136,14 @@ $main-color: #38ace5;
     				border-color: #ccc;
 				}
 
+				.stat-image-wrapper {
+					@media #{$phone} {
+						display: block;
+						width: 300px;
+						height: 203px;
+					}
+				}
+
 				img.featured {
 					position: absolute;
 					top: -23px;
@@ -160,7 +168,8 @@ $main-color: #38ace5;
 					}
 					@media #{$phone} {
 						order: 2;
-					    width: 100%;
+						width: 300px;
+						height: 203px;
 					    height: auto;
 					    border-top-right-radius: 10px;
 					    border-top-left-radius: 10px;
