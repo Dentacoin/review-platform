@@ -11,6 +11,7 @@ return [
                 'registrations' => 'registrations',
                 'incomplete-registrations' => 'incomplete-registrations',
                 'lead-magnet' => 'lead-magnet',
+                'rewards' => 'rewards'
             ),
             'js' => array(
                 'users.js',

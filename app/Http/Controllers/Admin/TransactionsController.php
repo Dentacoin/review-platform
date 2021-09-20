@@ -192,7 +192,7 @@ class TransactionsController extends AdminController {
             'start' => $start,
             'end' => $end,
             'total_pages' => $total_pages,
-            'total_dcn_price' => $total_dcn_price,
+            'total_dcn_price' => number_format($total_dcn_price),
             'page' => $page,
             'pagination_link' => $pagination_link,
             'current_url' => $current_url,

@@ -81,6 +81,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('users/users/convert-to-dentist/{id}',				'UsersController@convertToDentist');
 	Route::get('users/users/convert-to-patient/{id}',				'UsersController@convertToPatient');
 	Route::get('users/users/info/{id}',								'UsersController@userInfo');
+	
+	Route::get('users/rewards',										'UsersController@rewards');
 
 	Route::get('users/users_stats', 								'UsersController@usersStats');
 

@@ -2638,4 +2638,87 @@ class UsersController extends AdminController {
             'leads' => $leads,
         ));
     }
+
+    public function rewards() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $rewards = DcnReward::orderBy('id', 'desc');
+
+        if(!empty(request('search-user-id'))) {
+            $rewards = $rewards->where('user_id', request('search-user-id'));
+        }
+
+        if(!empty(request('search-email'))) {
+            $rewards = $rewards->whereHas('user', function($query) {
+                $query->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
+            });
+        }
+
+        if(!empty(request('search-type'))) {
+            $rewards = $rewards->where('type', request('search-type') );
+        }
+
+        $total_count = $rewards->count();
+        $sum_price = $rewards->sum('reward');
+
+        $page = max(1,intval(request('page')));
+        
+        $ppp = 25;
+        $adjacents = 2;
+        $total_pages = ceil($total_count/$ppp);
+
+        //Here we generates the range of the page numbers which will display.
+        if($total_pages <= (1+($adjacents * 2))) {
+            $start = 1;
+            $end   = $total_pages;
+        } else {
+            if(($page - $adjacents) > 1) { 
+                if(($page + $adjacents) < $total_pages) { 
+                    $start = ($page - $adjacents);            
+                    $end   = ($page + $adjacents);         
+                } else {             
+                    $start = ($total_pages - (1+($adjacents*2)));  
+                    $end   = $total_pages;               
+                }
+            } else {               
+                $start = 1;                                
+                $end   = (1+($adjacents * 2));             
+            }
+        }
+
+        $rewards = $rewards->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        //If you want to display all page links in the pagination then
+        //uncomment the following two lines
+        //and comment out the whole if condition just above it.
+        /*$start = 1;
+        $end = $total_pages;*/
+
+        $pagination_link = '';
+
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search' && $key != 'page') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
+        }
+
+        return $this->showView('users-rewards', array(
+            'items' => $rewards,
+            'total_count' => $total_count,
+            'sum_price' => number_format($sum_price),
+            'search_user_id' =>  request('search-user-id'),
+            'search_email' =>  request('search-email'),
+            'search_type' =>  request('search-type'),
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
+            'pagination_link' => $pagination_link,
+        ));
+    }
 }
