@@ -21,6 +21,10 @@ class InvitesController extends AdminController {
 
         $items = UserInvite::orderBy('id', 'desc');
 
+        if(!empty(request('id'))) {
+            $items = $items->where('id', request('id'));
+        }
+
         if(!empty(request('search-user-id'))) {
             $items = $items->where('user_id', request('search-user-id'));
         }
@@ -134,6 +138,7 @@ class InvitesController extends AdminController {
 
         return $this->ShowView('invites', array(
             'items' => $items,
+            'id' => $id,
             'search_user_id' => request('search-user-id'),
             'search_email' => request('search-email'),
             'search_name' => request('search-name'),
