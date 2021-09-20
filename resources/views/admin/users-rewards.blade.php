@@ -116,7 +116,7 @@
 
                                                     @php($poll = App\Models\Poll::withTrashed()->find($reward->reference_id))
                                                     @if($poll)
-                                                        <a href="{{ url('cms/vox/polls/?id='.$poll->id) }}">{{ $poll->question }}</a>
+                                                        <a href="{{ url('cms/vox/polls/edit/'.$poll->id) }}">{{ $poll->question }}</a>
                                                     @endif
 
                                                 @endif
