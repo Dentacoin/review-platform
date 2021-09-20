@@ -2436,7 +2436,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Translate voxes'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $voxes = Vox::get();
+            $voxes = Vox::where('id', '>', 45)->get();
 
             foreach($voxes as $vox) {
 
@@ -2500,7 +2500,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     $server_output = curl_exec ($ch);
                     curl_close ($ch);
 
-                    $translation->question = json_decode($server_output, true)['translations'][0]['text'];
+                    $translation->question = isset(json_decode($server_output, true)['translations']) ? json_decode($server_output, true)['translations'][0]['text'] : '';
 
                     //dd($data['answers-'.$key]);
 
@@ -2541,7 +2541,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             echo 'Translate voxes cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('13:35');
+        })->dailyAt('14:36');
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
