@@ -138,7 +138,7 @@ class InvitesController extends AdminController {
 
         return $this->ShowView('invites', array(
             'items' => $items,
-            'id' => $id,
+            'id' =>request('id'),
             'search_user_id' => request('search-user-id'),
             'search_email' => request('search-email'),
             'search_name' => request('search-name'),

@@ -19,6 +19,13 @@
             </div>
             <div class="panel-body users-filters">
                 <form method="get" action="{{ url('cms/'.$current_page) }}" id="users-filter-form">
+                    @if($id)
+                        <div class="row custom-row" style="margin-bottom: 10px;">
+                            <div class="col-md-1">
+                                <input type="text" class="form-control" name="id" value="{{ $id }}" placeholder="ID">
+                            </div>
+                        </div>
+                    @endif
                     <div class="row custom-row" style="margin-bottom: 10px;">
                         <div class="col-md-1">
                             <input type="text" class="form-control" name="search-user-id" value="{{ $search_user_id }}" placeholder="Inviter ID">
