@@ -72,7 +72,7 @@
                                             {{ $reward->id }}
                                         </td>
                                         <td>
-                                            {{ date('d.m.Y, H:i:s', $reward->created_at->timestamp) }}
+                                            {{ $reward->created_at ? date('d.m.Y, H:i:s', $reward->created_at->timestamp) : '' }}
                                         </td>
                                         <td>
                                             <a href="{{ url('cms/users/users/edit/'.$reward->user_id) }}"> {{ !empty($reward->user) ? $reward->user->name : 'unknown' }}</a>
