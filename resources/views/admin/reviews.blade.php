@@ -16,6 +16,14 @@
                 <h4 class="panel-title"> Filters </h4>
             </div>
             <div class="panel-body">
+                
+                @if($id)
+                    <div class="row custom-row" style="margin-bottom: 10px;">
+                        <div class="col-md-1">
+                            <input type="text" class="form-control" name="id" value="{{ $id }}" placeholder="ID">
+                        </div>
+                    </div>
+                @endif
                 <form class="row" method="get" action="{{ url('cms/trp/'.$current_subpage) }}" >
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="search-name-dentist" value="{{ $search_name_dentist }}" placeholder="Dentist/Clinic name">
@@ -39,8 +47,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="row">
     <div class="col-md-12">

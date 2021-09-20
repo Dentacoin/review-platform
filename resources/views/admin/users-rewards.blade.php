@@ -95,7 +95,7 @@
 
                                                     @php($review = App\Models\Review::withTrashed()->find($reward->reference_id))
                                                     @if($review)
-                                                        <a href="{{ url('cms/reviews/?id='.$review->id) }}">Review</a>
+                                                        <a href="{{ url('cms/trp/reviews/?id='.$review->id) }}">Review</a>
                                                     @endif
 
                                                 @elseif($reward->type == 'invitation')

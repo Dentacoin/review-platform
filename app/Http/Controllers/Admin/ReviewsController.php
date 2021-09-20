@@ -26,6 +26,10 @@ class ReviewsController extends AdminController {
 
         $reviews = Review::orderBy('id', 'DESC');
 
+        if(!empty($this->request->input('id'))) {
+            $reviews = $reviews->where('id', $this->request->input('id'));
+        }
+
         if(!empty($this->request->input('search-name-dentist'))) {
             $name = $this->request->input('search-name-dentist');
             $reviews = $reviews->whereHas('dentist', function ($query) use ($name) {
@@ -95,6 +99,7 @@ class ReviewsController extends AdminController {
 
         return $this->showView('reviews', array(
             'reviews' => $reviews,
+            'id' => $this->request->input('id'),
             'search_name_user' => $this->request->input('search-name-user'),
             'search_name_dentist' => $this->request->input('search-name-dentist'),
             'search_reviews_from' => $this->request->input('search-reviews-from'),
