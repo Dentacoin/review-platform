@@ -60,9 +60,6 @@
                                     <th>Type</th>
                                     <th>Reward for</th>
                                     <th>DCN</th>
-                                    @if($admin->role!='support')
-                                        <th>Delete</th>
-                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -125,11 +122,6 @@
                                         <td>
                                             {!! $reward->reward !!}
                                         </td>
-                                        @if($admin->role!='support')
-                                            <td>
-                                                <a class="btn btn-sm btn-deafult" href="{{ url('cms/users/reward/delete/'.$reward->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>
-                                            </td>
-                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

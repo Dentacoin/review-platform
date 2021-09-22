@@ -109,21 +109,21 @@ class InvitesController extends AdminController {
 
         //Here we generates the range of the page numbers which will display.
         if($total_pages <= (1+($adjacents * 2))) {
-          $start = 1;
-          $end   = $total_pages;
+            $start = 1;
+            $end   = $total_pages;
         } else {
-          if(($page - $adjacents) > 1) { 
-            if(($page + $adjacents) < $total_pages) { 
-              $start = ($page - $adjacents);            
-              $end   = ($page + $adjacents);         
-            } else {             
-              $start = ($total_pages - (1+($adjacents*2)));  
-              $end   = $total_pages;               
+            if(($page - $adjacents) > 1) { 
+                if(($page + $adjacents) < $total_pages) { 
+                    $start = ($page - $adjacents);            
+                    $end   = ($page + $adjacents);         
+                } else {             
+                    $start = ($total_pages - (1+($adjacents*2)));  
+                    $end   = $total_pages;               
+                }
+            } else {               
+                $start = 1;                                
+                $end   = (1+($adjacents * 2));             
             }
-          } else {               
-            $start = 1;                                
-            $end   = (1+($adjacents * 2));             
-          }
         }
 
         $items = $items->skip( ($page-1)*$ppp )->take($ppp)->get();

@@ -1163,9 +1163,11 @@ class VoxService {
         foreach ($list as $l) {
             if(!isset( $answered_without_skip[$l->question_id] )) {
                 $answered++;
-                if($l->question && $l->answer > 0 || $l->question->type == 'number' || $l->question->cross_check == 'birthyear' || $l->question->cross_check == 'household_children') {
-                    $answered_without_skip[$l->question_id] = ['1']; //3
-                    $answered_without_skip_count++;
+                if($l->question) {
+                    if($l->question && $l->answer > 0 || $l->question->type == 'number' || $l->question->cross_check == 'birthyear' || $l->question->cross_check == 'household_children') {
+                        $answered_without_skip[$l->question_id] = ['1']; //3
+                        $answered_without_skip_count++;
+                    }
                 }
             } 
         }
