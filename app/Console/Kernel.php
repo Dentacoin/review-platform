@@ -2430,7 +2430,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             echo 'Answered questions count cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('07:45');
+        })->dailyAt('07:51');
         // })->cron('00 3 1 * *');
 
 
