@@ -1250,6 +1250,9 @@ $(document).ready(function(){
 
                     console.log('rowsm');
                     console.log(rowsm[i][j]);
+
+                    console.log('maxf');
+                    console.log(maxf);
                 } else {
                     var plf = 72*rowsf[i][j]/maxf + 1;
                     if(rowsm[i]) {
