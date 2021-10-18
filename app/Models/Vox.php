@@ -936,7 +936,8 @@ class Vox extends Model {
                     if($dem == 'gender') {
 
                         if(!empty($answ->gender)) {
-                            $row[] = $answ->gender=='m' ? 'Male '.$answ->user_id : 'Female '.$answ->user_id;
+                            $row[] = $answ->gender=='m' ? 'Male' : 'Female';
+                            // $row[] = $answ->gender=='m' ? 'Male '.$answ->user_id : 'Female '.$answ->user_id;
                         } else {
                             $row[] = '0';
                         }

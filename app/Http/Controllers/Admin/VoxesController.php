@@ -475,7 +475,7 @@ class VoxesController extends AdminController {
 
             $flist = [];
 
-            foreach(config('langs') as $code => $lang_info) {
+            foreach(config('langs')['admin'] as $code => $lang_info) {
                 $flist[$code] = [];
 
                 if($item->questions->isNotEmpty()) {
@@ -680,7 +680,6 @@ class VoxesController extends AdminController {
             
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.imported'));
             
-            
             if (!empty(session('brackets'))) {
                 if (!empty(session('brackets')['q_br'])) {
                     Request::session()->flash('warning-message', 'Missing or more than necessary question/s tooltip brackets: '.implode(' ;     ', session('brackets')['q_br'] ));
@@ -775,7 +774,6 @@ class VoxesController extends AdminController {
                 if($q->order>=$question->order) {
                     break;
                 }
-
                 
                 if ($q->question_trigger) {
                     if($q->question_trigger!='-1') {
@@ -806,7 +804,6 @@ class VoxesController extends AdminController {
                 $this->saveOrUpdateQuestion($question);
                 $question->vox->checkComplex();
 
-            
                 if(request('used_for_stats')=='standard' && !request('stats_fields')) {
                     Request::session()->flash('error-message', 'Please, select the demographic details which should be used for the statistics.');
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
@@ -991,7 +988,6 @@ class VoxesController extends AdminController {
         ini_set('memory_limit', '4095M');
 
         if ($this->request->input('type') == 'normal' && $item->type == 'hidden' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
-            
             $item->activeVox();
         }
 
@@ -1096,8 +1092,6 @@ class VoxesController extends AdminController {
             $img = Image::make( Input::file('photo-stats') )->orientate();
             $item->addSocialImage($img, 'for-stats');
         }
-
-
     }
 
     private function saveOrUpdateQuestion($question, $data = null, $justCopy = false ) {
@@ -1252,7 +1246,6 @@ class VoxesController extends AdminController {
         }
         $question->save();
 
-
         if( Input::file('answer-photos') ) {
             $image_filename = [];
 
@@ -1333,7 +1326,6 @@ class VoxesController extends AdminController {
                     $translation->save();
                 }
             }
-
 
             if( Input::file('icon') ) {
                 $img = Image::make( Input::file('icon') )->orientate();
@@ -1442,7 +1434,6 @@ class VoxesController extends AdminController {
 
             $ns = new VoxScale;
             $this->saveOrUpdateScale($ns);
-
 
             Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.'.$this->current_subpage.'.added'));
             return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/edit/'.$ns->id);
@@ -1593,7 +1584,6 @@ class VoxesController extends AdminController {
 
         Request::session()->flash('success-message', 'Badge deleted');
         return redirect('cms/'.$this->current_page.'/badges');
-
     }
 
     public function explorer($vox_id=null,$question_id=null) {
@@ -1604,7 +1594,6 @@ class VoxesController extends AdminController {
         }
 
         if($vox_id) {
-
             $show_pagination = true;
 
             $question = '';
@@ -1620,7 +1609,6 @@ class VoxesController extends AdminController {
             $ppp = request()->input( 'show_all' ) ? 1000 : 25;
             $respondents_shown = request()->input( 'show_all' ) ? '1000' : '25';
             $adjacents = 2;
-
 
             if (!empty($question_id)) {
 
@@ -1643,8 +1631,7 @@ class VoxesController extends AdminController {
                     ->where('answer', '!=', 0)
                     ->has('user')
                     ->count();
-                }
-                
+                }                
             } else {
                 if (request()->input( 'country' )) {
                     $items_count = DcnReward::where('reference_id',$vox_id )
@@ -1662,7 +1649,6 @@ class VoxesController extends AdminController {
                     ->has('user')->count();
                 }
             }
-
 
             $show_button = true;
             if (request()->input( 'show_all' ) || $items_count <= 1000) {
@@ -1767,21 +1753,21 @@ class VoxesController extends AdminController {
 
             //Here we generates the range of the page numbers which will display.
             if($total_pages <= (1+($adjacents * 2))) {
-              $start = 1;
-              $end   = $total_pages;
+                $start = 1;
+                $end   = $total_pages;
             } else {
-              if(($page - $adjacents) > 1) { 
-                if(($page + $adjacents) < $total_pages) { 
-                  $start = ($page - $adjacents);            
-                  $end   = ($page + $adjacents);         
-                } else {             
-                  $start = ($total_pages - (1+($adjacents*2)));  
-                  $end   = $total_pages;               
+                if(($page - $adjacents) > 1) { 
+                    if(($page + $adjacents) < $total_pages) { 
+                        $start = ($page - $adjacents);            
+                        $end   = ($page + $adjacents);         
+                    } else {             
+                        $start = ($total_pages - (1+($adjacents*2)));  
+                        $end   = $total_pages;               
+                    }
+                } else {               
+                    $start = 1;                                
+                    $end   = (1+($adjacents * 2));             
                 }
-              } else {               
-                $start = 1;                                
-                $end   = (1+($adjacents * 2));             
-              }
             }
 
             //If you want to display all page links in the pagination then
@@ -2057,7 +2043,6 @@ class VoxesController extends AdminController {
         }
     }
 
-
     public function getTitle() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
@@ -2274,6 +2259,11 @@ class VoxesController extends AdminController {
             return redirect('cms/home');            
         }
 
+        if( empty(request('chosen-qs'))) {
+            $this->request->session()->flash('error-message', 'Please, choose questions!' );
+            return redirect('cms/vox/edit/'.request('vox-id'));            
+        }
+
         // SELECT * FROM `vox_answers_dependencies` WHERE `question_dependency_id` = 2951 AND `question_id` = 15910
         // 823 total
 
@@ -2340,9 +2330,15 @@ class VoxesController extends AdminController {
 
         $fname = $vox->title;
 
-        $pdf_title = strtolower(str_replace(['?', ' ', ':'], [' ', '-', ' '] ,$fname)).'-dentavox'.mb_substr(microtime(true), 0, 10);
+        $pdf_title = strtolower(str_replace(['?', ' ', ':', "'"], ['', '-', '', ''] ,$fname)).'-dentavox'.mb_substr(microtime(true), 0, 10);
 
-        return (new MultipleStatSheetExport($document['flist'], $document['breakdown_rows_count']))->download($pdf_title.'.xlsx');
+        $downloaded_content = (new MultipleStatSheetExport($document['flist'], $document['breakdown_rows_count']))->download($pdf_title.'.xlsx');
+        ob_end_clean();
+
+        return $downloaded_content;
+
+        // return (new MultipleStatSheetExport($document['flist'], $document['breakdown_rows_count']))->download($pdf_title.'.xlsx');
+
     }
 
     public function getQuestionsCount($vox_id) {
@@ -2436,7 +2432,6 @@ class VoxesController extends AdminController {
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
     }
-
 
     public function test() {
 
@@ -2575,7 +2570,4 @@ class VoxesController extends AdminController {
             'arr' => $arr
         ]);
     }
-
-
-
 }

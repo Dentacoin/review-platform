@@ -97,7 +97,7 @@ class EmailsController extends AdminController {
         if($template) {
             return $this->showView('emails-edit', array(
                 'item' => $template,
-                'langs' => config('langs'),
+                'langs' => config('langs')['admin'],
             ));
         } else {
             return redirect('cms/'.$this->current_page);
@@ -113,7 +113,7 @@ class EmailsController extends AdminController {
         
         $template = EmailTemplate::find($id);
         if($template) {
-            $langs = config('langs');
+            $langs = config('langs')['admin'];
             foreach ($langs as $langkey => $lang) {
                 $translation = $template->translateOrNew($langkey);
                 $translation->email_template_id = $template->id;
@@ -161,7 +161,7 @@ class EmailsController extends AdminController {
             $template->type = $this->request->input('type');
             $template->save();
 
-            $langs = config('langs');
+            $langs = config('langs')['admin'];
 
             foreach ($langs as $langkey => $lang) {
                 $translation = $template->translateOrNew($langkey);

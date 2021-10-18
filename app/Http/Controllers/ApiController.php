@@ -26,7 +26,7 @@ class ApiController extends BaseController {
         if(empty($roter_params['locale'])) { // || $roter_params['locale']=='_debugbar'
             $locale = 'en';
         } else {
-            if(!empty( config('langs.'.$roter_params['locale']) ) ) {
+            if(!empty( config('langs.vox.'.$roter_params['locale']) ) ) {
                 if(Request::getHost() == 'reviews.dentacoin.com' || Request::getHost() == 'urgent.reviews.dentacoin.com') {
 
                     $locale = $roter_params['locale'];

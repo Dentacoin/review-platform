@@ -18,7 +18,7 @@ class WidgetController extends BaseController {
         if(empty($roter_params['locale'])) {
             $locale = 'en';
         } else {
-            if(!empty( config('langs.'.$roter_params['locale']) )) {
+            if(!empty( config('langs.trp.'.$roter_params['locale']) )) {
                 $locale = $roter_params['locale'];
             } else {
                 $locale = 'en';                

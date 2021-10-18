@@ -32,7 +32,7 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-		{{-- {!! config('langs')[App::getLocale()]['font'] !!} --}}
+		{{-- {!! config('langs.vox')[App::getLocale()]['font'] !!} --}}
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
 
@@ -48,7 +48,7 @@
 {{-- 
 		<style type="text/css">
 			body {
-				{!! config('langs')[App::getLocale()]['font_css'] !!}
+				{!! config('langs.vox')[App::getLocale()]['font_css'] !!}
 			}
 		</style> --}}
 		
@@ -110,7 +110,7 @@
 
     </head>
 
-    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($dark_mode) ? 'dark-mode' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }} {{ !empty($user) ? 'logged-in' : 'logged-out' }} {{ !empty($custom_body_class) ? $custom_body_class : '' }}">
+    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($dark_mode) ? 'dark-mode' : '' }} {{ (config('langs.vox')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }} {{ !empty($user) ? 'logged-in' : 'logged-out' }} {{ !empty($custom_body_class) ? $custom_body_class : '' }}">
 		<noscript>
 			<img height="1" width="1" src="https://www.facebook.com/tr?id=2010503399201502&ev=PageView&noscript=1"/>
 		 	<img height="1" width="1" src="https://www.facebook.com/tr?id=2366034370318681&ev=PageView&noscript=1"/>

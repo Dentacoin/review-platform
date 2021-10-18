@@ -155,6 +155,11 @@ $(document).ready(function(){
 
 		$(this).closest('.custom-tabs').find('.tab-pane').removeClass('active in');
 		$(this).closest('.custom-tabs').find('.tab-pane.lang-'+$(this).attr('lang')).addClass('active in');
+
+		if($('#questions-vox').length) {
+			$('#questions-vox').find('.tab-pane').removeClass('active in');
+			$('#questions-vox').find('.tab-pane.lang-'+$(this).attr('lang')).addClass('active in');
+		}
 	});
 	
 	$('.with-dropdown .toggle-button').click( function() {

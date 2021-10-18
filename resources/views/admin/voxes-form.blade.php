@@ -23,26 +23,22 @@
     <div class="col-md-12 ui-sortable">
         {{ Form::open(array('id' => 'page-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true)) }}
 
-            <div class="panel panel-inverse panel-with-tabs" data-sortable-id="ui-unlimited-tabs-1">
+            <div class="panel panel-inverse panel-with-tabs custom-tabs">
                 <div class="panel-heading p-0">
-                    <div class="panel-heading-btn m-r-10 m-t-10">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-expand" data-original-title="" title=""><i class="fa fa-expand"></i></a>
-                    </div>
                     <!-- begin nav-tabs -->
                     <div class="tab-overflow overflow-right">
                         <ul class="nav nav-tabs nav-tabs-inverse">
-                            <li class="prev-button"><a href="javascript:;" data-click="prev-tab" class="text-success"><i class="fa fa-arrow-left"></i></a></li>
                             @foreach($langs as $code => $lang_info)
-                                <li class="{{ $loop->first ? 'active' : '' }}"><a href="#nav-tab-{{ $code }}" data-toggle="tab" aria-expanded="false">{{ $lang_info['name'] }}</a></li>
+                                <li class="{{ $loop->first ? 'active' : '' }}">
+                                    <a href="javascript:;" lang="{{ $code }}" data-toggle="tab" aria-expanded="false">{{ $lang_info['name'] }}</a>
+                                </li>
                             @endforeach
-
-                            <li class="next-button"><a href="javascript:;" data-click="next-tab" class="text-success"><i class="fa fa-arrow-right"></i></a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="tab-content">
                     @foreach($langs as $code => $lang_info)
-                        <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }}" id="nav-tab-{{ $code }}">
+                        <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}">
                             <div class="form-group">
                                 <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.lang-slug') }}</label>
                                 <div class="col-md-{{ !empty($item) ? '4' : '10' }}">
@@ -473,86 +469,92 @@
                     For bulk delete you need to check the checkboxes, then click button 'Delete selected questions'. <br/>
                     For multiple re-arrange - hold the CTRL button and click on the questions. <br/>
                 </p>
-                <div class="panel panel-inverse">
+                <div class="panel panel-inverse" id="questions-vox">
                     <div class="panel-heading">
                         <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.questions') }}</h4>
                     </div>
                     <div class="tab-content">
-                        <form method="post" action="{{ url('cms/vox-questions/mass-delete') }}" class="table-responsive-md" id="mass-delete-form">
-                            <table class="table table-striped table-question-list">
-                                <thead>
-                                    <tr>
-                                        <th><a href="javascript:;" class="table-select-all">All / None</a></th>
-                                        <th>{{ trans('admin.page.'.$current_page.'.question-num') }}</th>
-                                        <th>{{ trans('admin.page.'.$current_page.'.question-title') }}</th>
-                                        <th>{{ trans('admin.page.'.$current_page.'.question-control') }}</th>
-                                        <th>{{ trans('admin.page.'.$current_page.'.question-stats') }}</th>
-                                        <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
-                                        <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
-                                        <th>Respondents</th>
-                                        <th>Test question</th>
-                                        <th>Duplicate</th>
-                                        <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
-                                        <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="questions-draggable">
-                                    @foreach($item->questions as $question)
-                                        <tr question-id="{{ $question->id }}" {!! in_array($question->id, $linked_triggers) ? 'class="linked"' : '' !!}>
-                                            <td>
-                                                <input type="checkbox" name="ids[]" value="{{ $question->id }}" />
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control question-number" style="width: 60px;" data-qid="{{ $question->id }}" value="{{ $question->order }}" />
-                                            </td>
-                                            <td>
-                                                <textarea style="min-width: 360px;" class="form-control question-question" data-qid="{{ $question->id }}">{{ $question->question }}</textarea>
-                                            </td>
-                                            <td>
-                                                {!! $question->is_control ? '<b>'.trans( 'admin.common.yes' ).'</b>' : trans( 'admin.common.no' ) !!}
-                                            </td>
-                                            <td>
-                                                @if($question->used_for_stats=='standard')
-                                                    Yes
-                                                @elseif($question->used_for_stats=='dependency')
-                                                    Related to: {!! $question->related->question !!}
-                                                @endif
-                                            </td>
-                                            <td>{{ trans('admin.enums.question-type.'.$question->type) }}</td>
-                                            <td>{!! $triggers[$question->id] !!}</td>
-                                            <td>
-                                                <a href="{{ url('cms/vox/explorer/'.$item->id.'/'.$question->id) }}" target="_blank">
-                                                    {!! $question->respondent_count() !!}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                @if(empty($question->question_trigger) && $question->order != 1)
-                                                    <a class="btn btn-sm btn-info" href="{{ $item->getLink().'?testmode=1&start-from='.$question->id.'&q-id='.(!empty(App\Models\VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order -1)->first()) ? App\Models\VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order -1)->first()->id : $question->id) }}" target="_blank">
-                                                        Test
-                                                    </a>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-sm btn-success diplicate-q-button" href="javascript:;" q-id="{{ $question->id }}" data-toggle="modal" data-target="#duplicateModal">
-                                                    <i class="fa fa-paste"></i>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-sm btn-success" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id) }}">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-sm btn-success" onclick="return confirm('{{ trans('admin.common.sure') }}')" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question-del/'.$question->id) }}">
-                                                    <i class="fa fa-remove"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" id="mass-delete-button">Delete selected questions</button>
-                        </form>
+                        @foreach($langs as $code => $lang_info)
+                        {{ $code }}
+                            <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}">
+                                <form method="post" action="{{ url('cms/vox-questions/mass-delete') }}" class="table-responsive-md" id="mass-delete-form">
+                                    <table class="table table-striped table-question-list">
+                                        <thead>
+                                            <tr>
+                                                <th><a href="javascript:;" class="table-select-all">All / None</a></th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-num') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-title') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-control') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-stats') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
+                                                <th>Respondents</th>
+                                                <th>Test question</th>
+                                                <th>Duplicate</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="questions-draggable">
+                                            @foreach($item->questions as $question)
+                                                <tr question-id="{{ $question->id }}" {!! in_array($question->id, $linked_triggers) ? 'class="linked"' : '' !!}>
+                                                    <td>
+                                                        <input type="checkbox" name="ids[]" value="{{ $question->id }}" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control question-number" style="width: 60px;" data-qid="{{ $question->id }}" value="{{ $question->order }}" />
+                                                    </td>
+                                                    <td>
+                                                        <textarea style="min-width: 360px;" class="form-control question-question" data-qid="{{ $question->id }}">{{ $question->translateOrNew($code)->question }}</textarea>
+                                                    </td>
+                                                    <td>
+                                                        {!! $question->is_control ? '<b>'.trans( 'admin.common.yes' ).'</b>' : trans( 'admin.common.no' ) !!}
+                                                    </td>
+                                                    <td>
+                                                        @if($question->used_for_stats=='standard')
+                                                            Yes
+                                                        @elseif($question->used_for_stats=='dependency')
+                                                            Related to: {!! $question->related->question !!}
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ trans('admin.enums.question-type.'.$question->type) }}</td>
+                                                    <td>{!! $triggers[$question->id] !!}</td>
+                                                    <td>
+                                                        <a href="{{ url('cms/vox/explorer/'.$item->id.'/'.$question->id) }}" target="_blank">
+                                                            {!! $question->respondent_count() !!}
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        @if(empty($question->question_trigger) && $question->order != 1)
+                                                            <a class="btn btn-sm btn-info" href="{{ $item->getLink().'?testmode=1&start-from='.$question->id.'&q-id='.(!empty(App\Models\VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order -1)->first()) ? App\Models\VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order -1)->first()->id : $question->id) }}" target="_blank">
+                                                                Test
+                                                            </a>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-sm btn-success diplicate-q-button" href="javascript:;" q-id="{{ $question->id }}" data-toggle="modal" data-target="#duplicateModal">
+                                                            <i class="fa fa-paste"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-sm btn-success" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id) }}">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-sm btn-success" onclick="return confirm('{{ trans('admin.common.sure') }}')" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question-del/'.$question->id) }}">
+                                                            <i class="fa fa-remove"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" id="mass-delete-button">Delete selected questions</button>
+                                </form>
+                            </div>
+                        
+                        @endforeach
                     </div>
                 </div>
 

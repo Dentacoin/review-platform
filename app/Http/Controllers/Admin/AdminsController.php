@@ -18,7 +18,7 @@ class AdminsController extends AdminController {
     public function __construct(Requestt $request) {
         parent::__construct($request);
         $this->langslist = ['' => '-'];
-        foreach(config('langs') as $k=> $v) {
+        foreach(config('langs')['admin'] as $k=> $v) {
             $this->langslist[$k] = $v['name'];
         }
 
@@ -35,7 +35,7 @@ class AdminsController extends AdminController {
             $this->domainlist[$k] = trans('admin.page.translations.'.$k.'.title');
         }
 
-        foreach(config('langs') as $k=> $v) {
+        foreach(config('langs')['admin'] as $k=> $v) {
             $this->langslist[$k] = $v['name'];
         }
     }

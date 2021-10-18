@@ -392,7 +392,7 @@ class MultipleStatSecondSheet implements FromArray, WithTitle, WithEvents, WithD
     public function drawings() {
         $drawing = new Drawing();
         $drawing->setName('Logo');
-        $drawing->setDescription('This is my logo');
+        $drawing->setDescription('DentaVox');
         $drawing->setPath(public_path('/new-vox-img/logo-vox.png'));
         $drawing->setHeight(34);
         $drawing->setOffsetX(5);

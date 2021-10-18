@@ -45,7 +45,7 @@ class AdminController extends BaseController {
 		if(!isset( config('admin.pages')[$this->current_page]['subpages'][$this->current_subpage] )) {
 			$this->current_subpage = isset(config('admin.pages')[$this->current_page]['subpages']) ? key(config('admin.pages')[$this->current_page]['subpages']) : null;
 		}
-        $this->langs = config('langs');
+        $this->langs = config('langs')['admin'];
         
         //$this->user = Auth::guard('web')->user();
         $this->middleware(function ($request, $next) {

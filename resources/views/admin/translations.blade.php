@@ -11,7 +11,7 @@
 <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
 
 @foreach($translations_count_arr as $k => $v)
-    <p {!! $all_translations_count > $v ? 'style="color: red;"' : '' !!}> {{ config('langs.'.$k.'.name') }} - {{ $v }}</p>
+    <p {!! $all_translations_count > $v ? 'style="color: red;"' : '' !!}> {{ config('langs.admin.'.$k.'.name') }} - {{ $v }}</p>
 @endforeach
 <!-- end page-header -->
 

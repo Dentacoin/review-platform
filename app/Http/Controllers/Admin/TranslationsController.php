@@ -188,7 +188,7 @@ class TranslationsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        foreach (config('langs') as $lang => $bla) {
+        foreach (config('langs')['admin'] as $lang => $bla) {
             $keysarr = Lang::get($this->current_subpage, array(), $lang);
             if(isset($keysarr[$delid])) {
                 unset($keysarr[$delid]);
@@ -207,7 +207,7 @@ class TranslationsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $available_langs = config('langs');
+        $available_langs = config('langs')['admin'];
 
         if($this->user->role=='translator') {
             $source = $this->user->lang_from;

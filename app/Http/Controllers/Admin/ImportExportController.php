@@ -133,7 +133,7 @@ class ImportExportController extends AdminController {
             }
         }
 
-        $available_langs = config('langs');
+        $available_langs = config('langs')['admin'];
         $attrs = array(
             'langs' => $available_langs,
         );

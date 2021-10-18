@@ -148,11 +148,11 @@
 									{{ $current_page=='welcome-dentist' ? trans('trp.header.login') : trans('trp.header.signin') }}
 								</a>
 	                        @endif
-	                        @if(!empty($admin) && count(config('langs')) > 1 && $current_page != 'dentists')
+	                        @if(!empty($admin) && count(config('langs.trp')) > 1 && $current_page != 'dentists')
 		                        <div class="lang-wrapper">
 		                        	<a href="javascript:;">({{ strtoupper(App::getLocale()) }} )</a>
 			                        <div class="lang-menu">
-			                        	@foreach( config('langs') as $key => $lang)
+			                        	@foreach( config('langs.trp') as $key => $lang)
 			                        		@if($key != App::getLocale())
 			                        			<a href="{{ getLangUrl(substr($_SERVER['REQUEST_URI'], 4), $key) }}">{{ $lang['name'] }} ({{ strtoupper($key) }})</a>
 			                        		@endif
