@@ -1180,11 +1180,6 @@ $(document).ready(function(){
             for(var j=1; j<rows[i].length; j++) {
                 var pl = 80*rows[i][j]/max + 1;
 
-                console.log(rows[i][j]);
-                console.log(max);
-                console.log(rows[i][j]/max);
-                console.log(pl);
-
                 if( typeof(rows[0][j])!='object' ) {
                     $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+chart_colors[i]+'"></span> '+(question_type == 'rank' ? rows[i][j] : ((rows[i][j]/ totalCount)*100).toFixed(1)+'%')+'</div>');
                 }
@@ -1249,6 +1244,12 @@ $(document).ready(function(){
                     if(rowsm[i]) {
                         var plm = 80*rowsm[i][j]/maxm + 1;
                     }
+
+                    console.log('rowsf');
+                    console.log(rowsf[i][j]);
+
+                    console.log('rowsm');
+                    console.log(rowsm[i][j]);
                 } else {
                     var plf = 72*rowsf[i][j]/maxf + 1;
                     if(rowsm[i]) {
