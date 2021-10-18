@@ -1253,6 +1253,12 @@ $(document).ready(function(){
 
                     console.log('maxf');
                     console.log(maxf);
+
+                    console.log('plf');
+                    console.log(parseInt(plf));
+
+                    console.log('plm');
+                    console.log(parseInt(plm));
                 } else {
                     var plf = 72*rowsf[i][j]/maxf + 1;
                     if(rowsm[i]) {
