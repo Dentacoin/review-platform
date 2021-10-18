@@ -627,83 +627,6 @@ $(document).ready(function(){
     $('#custom-dates-save').click(handleFilterChange);
     handleFilterChange();
 
-    $('.stats .stat .title').click( function(e) {
-        e.preventDefault();
-        
-        var that = $(this);
-
-        if(!load_js && !user_id) {
-            $('#main-loader').fadeIn();
-            $('#main-loader').find('.loader-mask').fadeIn();
-
-            $.getScript(window.location.origin+'/js/amcharts-core.js', function() {
-                $.getScript(window.location.origin+'/js/amcharts-maps.js', function() {
-                    $.getScript(window.location.origin+'/js/amcharts-worldLow.js', function() {
-                        $.getScript(window.location.origin+'/js/gstatic-charts-loader.js', function() {
-                            google.charts.load('current', {
-                                packages: ['corechart', 'bar'],
-                            });
-                            google.charts.setOnLoadCallback(function() {
-                                gc_loaded = true;
-
-                                $('#main-loader').fadeOut();
-                                $('#main-loader').find('.loader-mask').delay(350).fadeOut('slow');
-
-                                $('.stats-image-wrapper').hide();
-
-                                $('.stat').each( function() {
-                                    $(this).find('.graphs .stats-mask').append('<img class="stats-loader" src="'+window.location.origin+'/new-vox-img/dentavox-statistics-loader.gif" alt="Dentavox statistics loader">');
-                                });
-
-                                var stat = that.closest('.stat');
-                                
-                                if( !stat.hasClass('active') ) {
-                                    if (stat.find('.scale-stat-q').length) {
-                                        stat.addClass('active');
-                                        stat.find('.scale-stat-q').first().addClass('active');
-                                        reloadGraph(stat.find('.scale-stat-q').first());
-                                    } else {
-                                        stat.addClass('active');
-                                        stat.find('.loader').fadeIn();
-                                        stat.find('.loader-mask').fadeIn();
-                                        $('input').prop('disabled', true);
-                                        reloadGraph( stat );
-                                    }
-                                } else {
-                                    stat.removeClass('active');
-                                }
-                            });
-                            load_js = true;
-                        } );
-                    } );
-                } );
-            } );
-        } else {
-
-            if( $( '.stat.restore-me' ).length || $('.loader-mask:visible').length) {
-                return;
-            }
-            var stat = $(this).closest('.stat');
-
-            if( !stat.hasClass('active') ) {
-                if (stat.find('.scale-stat-q').length) {
-                    stat.addClass('active');
-                    stat.find('.scale-stat-q').first().addClass('active');
-                    reloadGraph(stat.find('.scale-stat-q').first());
-                } else {
-                    stat.addClass('active');
-                    stat.find('.loader').fadeIn();
-                    stat.find('.loader-mask').fadeIn();
-                    $('input').prop('disabled', true);
-                    reloadGraph( stat );
-                }
-            } else {
-                stat.removeClass('active');
-            }
-        }
-
-    } );
-
     $('.scale-checkbox').change( function(r) {
         r.preventDefault();
         r.stopPropagation();
@@ -1046,7 +969,7 @@ $(document).ready(function(){
                 } 
             }
         }
-
+        
         for(var i=1; i<rows.length; i++) {
             if (rows[i][1]*100 == 0 && $(window).outerWidth() < 768) {
             } else {
@@ -1256,6 +1179,12 @@ $(document).ready(function(){
             }
             for(var j=1; j<rows[i].length; j++) {
                 var pl = 80*rows[i][j]/max + 1;
+
+                console.log(rows[i][j]);
+                console.log(max);
+                console.log(rows[i][j]/max);
+                console.log(pl);
+
                 if( typeof(rows[0][j])!='object' ) {
                     $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+chart_colors[i]+'"></span> '+(question_type == 'rank' ? rows[i][j] : ((rows[i][j]/ totalCount)*100).toFixed(1)+'%')+'</div>');
                 }
@@ -1545,55 +1474,7 @@ $(document).ready(function(){
 
         // Bind "fill" property to "fill" key in data
         polygonTemplate.propertyFields.fill = "fill";
-
     }
-
-    $('#load-stats').click( function(е) {
-        е.preventDefault();
-        if(!load_js && !user_id) {
-
-            $('#main-loader').fadeIn();
-            $('#main-loader').find('.loader-mask').fadeIn();
-
-            $.getScript(window.location.origin+'/js/amcharts-core.js', function() {
-                $.getScript(window.location.origin+'/js/amcharts-maps.js', function() {
-                    $.getScript(window.location.origin+'/js/amcharts-worldLow.js', function() {
-                        $.getScript(window.location.origin+'/js/gstatic-charts-loader.js', function() {
-
-                            google.charts.load('current', {
-                                packages: ['corechart', 'bar'],
-                            });
-                            google.charts.setOnLoadCallback(function() {
-                                gc_loaded = true;
-
-                                $('.stats-image-wrapper').hide();
-
-                                $('.stat').each( function() {
-                                    $(this).find('.graphs .stats-mask').append('<img class="stats-loader" src="'+window.location.origin+'/new-vox-img/dentavox-statistics-loader.gif" alt="Dentavox statistics loader">');
-                                });
-
-                                $('#main-loader').fadeOut();
-                                $('#main-loader').find('.loader-mask').delay(350).fadeOut('slow');
-
-                                $('.stats .stat:first-child').addClass('active');
-
-                                $('.stat.active').each( function() {
-                                    if($(this).find('.scale-stat-q').length) {
-                                        $(this).find('.scale-stat-q').first().addClass('active');
-                                        reloadGraph($(this).find('.scale-stat-q').first());
-                                    } else {
-                                        reloadGraph(this);
-                                    }
-                                    
-                                } );
-                            });
-                            load_js = true;
-                        } );
-                    } );
-                } );
-            } );
-        }
-    });
 
     if(user_id) {
         $('.stats .stat:first-child').addClass('active');
@@ -1622,7 +1503,6 @@ $(document).ready(function(){
     });
 
     $('.share-buttons .share').click( function() {
-        
         var href = $(this).closest('.share-buttons').attr('data-href');
         if ($(this).parent().hasClass('fb')) {
             var url = 'https://www.facebook.com/dialog/share?app_id=1906201509652855&display=popup&href=' + escape(href);
@@ -1632,19 +1512,6 @@ $(document).ready(function(){
             var url = 'https://plus.google.com/share?url=' + escape(href);
         }
         window.open( url , 'ShareWindow', 'height=450, width=550, top=' + (jQuery(window).height() / 2 - 275) + ', left=' + (jQuery(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
-    });
-
-    $('.blurred-button').click( function(e) {
-        if(dentacoin_down) {
-            e.stopImmediatePropagation();
-            showPopup('failed-popup');
-        } else {
-            if($(this).hasClass('log-btn')) {
-                $.event.trigger({type: 'openPatientLogin'});
-            } else {
-                $.event.trigger({type: 'openPatientRegister'});
-            }
-        }
     });
 
     $('.download-format-radio').change( function(e) {
@@ -1736,8 +1603,7 @@ $(document).ready(function(){
                     startDate: start_date,
                     minDays: 1,
                     singleMonth: $(window).outerWidth() > 768 ? false : true,
-                    setValue: function(s,s1,s2)
-                    {
+                    setValue: function(s,s1,s2) {
                         var day_from = new Date(s1);
                         var day_to = new Date(s2);
 
@@ -1872,7 +1738,6 @@ $(document).ready(function(){
                 } else {
 
                     setTimeout( function() {
-
                         //console.log($('#stats-imgs').outerHeight());
                         $('#hidden_heigth').val($('#stats-imgs').outerHeight());
 
@@ -1887,6 +1752,7 @@ $(document).ready(function(){
         var generatePngImage = function() {
 
             var elm = $('.echo-png').first();
+
             if(elm.length) {
                 domtoimage.toPng(elm[0])
                 .then( (function (dataUrl) {
@@ -1908,10 +1774,7 @@ $(document).ready(function(){
                 .catch(function (error) {
                     console.error('oops, something went wrong!', error);
                 });
-
-
             } else {
-
                 console.log('gotovo');
 
                 setTimeout( function() {
@@ -1930,7 +1793,6 @@ $(document).ready(function(){
             }, 100);
         }        
     });
-
 
     $('#download-form-pdf').submit( function(e) {
         e.preventDefault();
@@ -2007,12 +1869,6 @@ $(document).ready(function(){
         });
     });
 
-    $('.scroll-to-blurred').click( function() {
-        $('html, body').animate({
-            scrollTop: $(".stats-blurred").offset().top
-        }, 500);
-    });
-
     var getBase64Image = function(img) {
         var canvas = document.createElement("canvas");
         canvas.width = img.width;
@@ -2021,8 +1877,6 @@ $(document).ready(function(){
         ctx.drawImage(img, 0, 0);
         var dataURL = canvas.toDataURL("image/png");
         return dataURL.replace(/^data:image\/png;base64,/, "");
-
-        //
     }
 
     /**
@@ -2056,34 +1910,32 @@ $(document).ready(function(){
         var blob = new Blob(byteArrays, {type: contentType});
         return blob;
     }
-
-
 });
 
 function hslToRgb(h, s, l) {
-  var r, g, b;
+    var r, g, b;
 
-  if (s == 0) {
-    r = g = b = l; // achromatic
-  } else {
-    function hue2rgb(p, q, t) {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1/6) return p + (q - p) * 6 * t;
-      if (t < 1/2) return q;
-      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-      return p;
+    if (s == 0) {
+        r = g = b = l; // achromatic
+    } else {
+        function hue2rgb(p, q, t) {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        }
+
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
     }
 
-    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    var p = 2 * l - q;
-
-    r = hue2rgb(p, q, h + 1/3);
-    g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1/3);
-  }
-
-  return "#" + componentToHex(r* 255) + componentToHex(g* 255) + componentToHex(b* 255);
+    return "#" + componentToHex(r* 255) + componentToHex(g* 255) + componentToHex(b* 255);
 }
 
 function componentToHex(c) {
@@ -2093,12 +1945,12 @@ function componentToHex(c) {
 }
 
 String.prototype.hashCode = function() {
-  var hash = 0, i, chr;
-  if (this.length === 0) return hash;
-  for (i = 0; i < this.length; i++) {
-    chr   = this.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return Math.abs(hash);
+    var hash = 0, i, chr;
+    if (this.length === 0) return hash;
+    for (i = 0; i < this.length; i++) {
+        chr   = this.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return Math.abs(hash);
 };
