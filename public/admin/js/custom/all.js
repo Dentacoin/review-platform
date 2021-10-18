@@ -279,12 +279,14 @@ $(document).ready(function(){
 		var action = $('#rejectedModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
 		$('#rejectedModal form').attr('action' , action);
 		$('#rejectedModal form').attr('appeal-id' , $(this).attr('appeal-id'));
+		$('#rejectedModal form textarea').val('');
 	});
 
 	$('.approve-appeal').click( function() {
 		var action = $('#approvedModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
 		$('#approvedModal form').attr('action' , action);
 		$('#approvedModal form').attr('appeal-id' , $(this).attr('appeal-id'));
+		$('#approvedModal form textarea').val('');
 	});
 
 	$('.pending-appeal').click( function() {
@@ -292,6 +294,7 @@ $(document).ready(function(){
 		var action = $('#pendingModal form').attr('original-action') + '/' + $(this).attr('appeal-id');
 		$('#pendingModal form').attr('action' , action);
 		$('#pendingModal form').attr('appeal-id' , $(this).attr('appeal-id'));
+		$('#pendingModal form textarea').val('');
 	});
 
 	$('.ban-appeal-info').click( function() {
