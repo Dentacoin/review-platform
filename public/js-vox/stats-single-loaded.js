@@ -1240,9 +1240,10 @@ $(document).ready(function(){
             for(var j=1; j<rowsf[i].length; j++) {
 
                 if($(window).outerWidth() > 768) {
-                    var plf = 80*rowsf[i][j]/maxf + 1;
+                    var plf = question_type == 'rank' ? 80*rowsf[i][j]/maxf + 1 : ((rowsf[i][j]/ totalfCount)*100).toFixed(1);
                     if(rowsm[i]) {
-                        var plm = 80*rowsm[i][j]/maxm + 1;
+                        var plm = question_type == 'rank' ? 80*rowsm[i][j]/maxm + 1 : ((rowsm[i][j]/ totalmCount)*100).toFixed(1);
+                        // var plm = 80*rowsm[i][j]/maxm + 1;
                     }
 
                     console.log('rowsf');
