@@ -535,7 +535,9 @@ class UsersController extends AdminController {
             $fname = $dir.'export';
 
             $export = new Export($flist);
-            return Excel::download($export, 'users.xls');
+            $file_to_export = Excel::download($export, 'users.xls');
+            ob_end_clean();
+            return $file_to_export;
 
         } else if( request()->input('export-sendgrid') ) {
 
