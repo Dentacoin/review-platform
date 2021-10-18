@@ -1239,30 +1239,14 @@ $(document).ready(function(){
 
             for(var j=1; j<rowsf[i].length; j++) {
 
+                var plm = 0;
                 if($(window).outerWidth() > 768) {
                     var plf = question_type == 'rank' ? 80*rowsf[i][j]/maxf + 1 : ((rowsf[i][j]/ totalfCount)*100).toFixed(1);
+                    // var plf = 80*rowsf[i][j]/maxf + 1;
                     if(rowsm[i]) {
                         var plm = question_type == 'rank' ? 80*rowsm[i][j]/maxm + 1 : ((rowsm[i][j]/ totalmCount)*100).toFixed(1);
                         // var plm = 80*rowsm[i][j]/maxm + 1;
                     }
-
-                    console.log('rowsf');
-                    console.log(rowsf[i][j]);
-
-                    console.log('rowsm');
-                    console.log(rowsm[i][j]);
-
-                    console.log('maxf');
-                    console.log(maxf);
-
-                    console.log('maxm');
-                    console.log(maxm);
-
-                    console.log('plf');
-                    console.log(parseInt(plf));
-
-                    console.log('plm');
-                    console.log(parseInt(plm));
                 } else {
                     var plf = 72*rowsf[i][j]/maxf + 1;
                     if(rowsm[i]) {
