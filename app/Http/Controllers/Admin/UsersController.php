@@ -500,9 +500,6 @@ class UsersController extends AdminController {
         } else if(request()->input('export-fb')) {
             ini_set("memory_limit",-1);
             $users = $users->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_dentist'])->get();
-        } else if(request()->input('export-sendgrid')) {
-            ini_set("memory_limit",-1);
-            $users = $users->whereNull('unsubscribe')->select(['id','slug', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_partner', 'is_dentist', 'is_clinic', 'platform', 'working_position'])->get();
         } else if($results == 0) {
             $users = $users->take(3000)->get();
         } else {
@@ -538,86 +535,6 @@ class UsersController extends AdminController {
             $file_to_export = Excel::download($export, 'users.xls');
             ob_end_clean();
             return $file_to_export;
-
-        } else if( request()->input('export-sendgrid') ) {
-
-            $export_fb = [];
-            foreach ($users as $u) {
-                $nameArr = explode(' ', $u->name);
-                if(count($nameArr)>1) {
-                    $ln = $nameArr[ count($nameArr)-1 ];
-                    unset( $nameArr[ count($nameArr)-1 ] );
-                    $fn = implode(' ', $nameArr);
-                } else {
-                    $fn = $u->name;
-                    $ln = '';
-                }
-                $fn = str_replace(["'", '"'], '', $fn);
-                $ln = str_replace(["'", '"'], '', $ln);
-
-                $info = [
-                    'user_id' => $u->id,
-                    'email' => $u->email,
-                    'first_name' => $fn,
-                    'last_name' => $ln,
-                    'country' => '',
-                    'city' => $u->city_name,
-                    'dob' => '',
-                    'age' => $u->zip,
-                    'type' => $u->is_dentist ? ( $u->is_clinic ? 'Clinic' : 'Dentist' ) : 'Patient',
-                    'partner' => $u->is_partner ? 'partner' : '',
-                    'tool' => $u->platform,
-                    'trp_link' => $u->getLink(),
-                    'workplace' => $u->working_position ? config('trp.team_jobs')[$u->working_position] : '',
-                ];
-
-                if( $u->country_id ) {
-                    $info['country'] = mb_strtoupper($u->country->code);
-                }
-
-                if( $u->dob ) {
-                    $info['dob'] = '01/01/'.$u->birthyear;
-                    $info['age'] = date('Y') - $u->birthyear;
-                } else {
-                    $info['dob'] = '';
-                    $info['age'] = 0;
-                }
-
-                if( $u->logins->isNotEmpty() ) {
-                    $info['logins'] = $u->logins->count();
-                }
-
-                //phone
-                //country
-                $export_fb[] = $info;
-            }
-
-            $csv = [
-                array_keys($export_fb[0])
-            ];
-
-            foreach ($export_fb as $row) {
-                $tmp = array_values($row);
-                foreach ($tmp as $key => $value) {
-                    $value = preg_replace('/[ ]{2,}|[\t]/', ' ', trim($value));
-                    $tmp[$key] = str_replace(',', ' ', trim($value));
-                }
-
-
-                $csv[] = $tmp;
-            }
-
-            header("Content-type: text/csv");
-            header("Content-Disposition: attachment; filename=export.csv");
-            header("Pragma: no-cache");
-            header("Expires: 0");
-
-            foreach ($csv as $item) {
-                echo implode(',', $item);
-                echo '
-';
-            }
-            exit;
 
         } else if( request()->input('export-fb') ) {
             $export_fb = [];
@@ -691,16 +608,6 @@ class UsersController extends AdminController {
                     $info['reviews_invites'] = $u->invites->count();
                 } else {
                     $info['reviews_invites'] = 0;
-                }
-
-                if( request()->input('export-sendgrid') ) {
-                    $info['type'] = $u->is_dentist ? ( $u->is_clinic ? 'Clinic' : 'Dentist' ) : 'Patient';
-                    $info['partner'] = $u->is_partner ? 'Y' : 'N';
-                    $info['link'] = $u->getLink();
-                    $info['platform'] = $u->platform;
-                    $info['fn'] = str_replace(["'", '"'], '', $info['fn']);
-                    $info['ln'] = str_replace(["'", '"'], '', $info['ln']);
-                    unset( $info['phone'] );
                 }
 
                 //phone
