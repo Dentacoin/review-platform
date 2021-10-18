@@ -23,7 +23,7 @@
 					<h1 class="questionnaire-title tac vox-survey-title">
 						- {{ $vox->title }} -
 						@if($testmode)
-							<a href="{{ $vox->getLink() }}?testmode=1&goback=1&q-id={{ request('q-id') ?? '0' }}" class="go-back-admin">&laquo; Back</a>
+							<a href="{{ $vox->getLink() }}?testmode=1&goback=1{{ request('q-id') ?? '&q-id=0' }}" class="go-back-admin">&laquo; Back</a>
 						@endif
 						@if($isAdmin)
 							<div class="vox-mode-wrapper">
