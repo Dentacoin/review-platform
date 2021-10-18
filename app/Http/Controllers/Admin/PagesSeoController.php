@@ -200,9 +200,10 @@ class PagesSeoController extends AdminController {
             }
         }
 
-
         $export = new Export($flat);
-        return Excel::download($export, $platform.'-seo-translations.xls');
+        $file_to_export = Excel::download($export, $platform.'-seo-translations.xls');
+        ob_end_clean();
+        return $file_to_export;
     }
 
 

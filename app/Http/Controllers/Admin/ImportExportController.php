@@ -78,9 +78,11 @@ class ImportExportController extends AdminController {
 
                     }
                 }
-
+                
                 $export = new Export($flat);
-                return Excel::download($export, 'trp-review-questions-answers.xls');
+                $file_to_export = Excel::download($export, 'trp-review-questions-answers.xls');
+                ob_end_clean();
+                return $file_to_export;
             }
 
 

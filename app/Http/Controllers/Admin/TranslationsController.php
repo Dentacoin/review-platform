@@ -107,7 +107,9 @@ class TranslationsController extends AdminController {
         }
 
         $export = new Export($flist);
-        return Excel::download($export, 'translations.xls');
+        $file_to_export = Excel::download($export, 'translations.xls');
+        ob_end_clean();
+        return $file_to_export;
     }
 
     public function export_missing($subpage=null, $source=null, $target=null) {
@@ -134,7 +136,9 @@ class TranslationsController extends AdminController {
         }
 
         $export = new Export($flist);
-        return Excel::download($export, 'missing-translations.xls');
+        $file_to_export = Excel::download($export, 'missing-translations.xls');
+        ob_end_clean();
+        return $file_to_export;
     }
 
     public function import($subpage=null, $source=null, $target=null) {

@@ -142,11 +142,11 @@ class ScrapeGoogleDentistsController extends AdminController {
 	        if(!is_dir($dir)) {
 	            mkdir($dir);
 	        }
-	        $fname = $dir.'export';
 
-
-	        $export = new Export($flist);
-            return Excel::download($export, 'scrapes.xls');
+			$export = new Export($flist);
+			$file_to_export = Excel::download($export, 'scrapes.xls');
+			ob_end_clean();
+			return $file_to_export;
 	    }
     }
 

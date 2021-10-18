@@ -203,13 +203,13 @@ class TestimonialSliderController extends AdminController {
                     }
                     $flat[$title][] = ['', '' , ''];
                 }
-
             }
         }
 
-
         $export = new Export($flat);
-        return Excel::download($export, 'testimonials-translations.xls');
+        $file_to_export = Excel::download($export, 'testimonials-translations.xls');
+        ob_end_clean();
+        return $file_to_export;
     }
 
 
