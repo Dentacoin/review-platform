@@ -529,7 +529,6 @@ class UsersController extends AdminController {
             if(!is_dir($dir)) {
                 mkdir($dir);
             }
-            $fname = $dir.'export';
 
             $export = new Export($flist);
             $file_to_export = Excel::download($export, 'users.xls');

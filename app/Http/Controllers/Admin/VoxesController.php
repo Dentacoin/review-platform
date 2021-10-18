@@ -1990,7 +1990,9 @@ class VoxesController extends AdminController {
             $fname = $vox->title;
 
             $export = new Export($rows);
-            return Excel::download($export, $fname.'.xlsx');
+            $file_to_export = Excel::download($export, $fname.'.xlsx');
+            ob_end_clean();
+            return $file_to_export;
         }
 
         return $this->showView('voxes-export-survey-data', array(
