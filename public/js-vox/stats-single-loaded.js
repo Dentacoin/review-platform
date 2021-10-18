@@ -1254,6 +1254,9 @@ $(document).ready(function(){
                     console.log('maxf');
                     console.log(maxf);
 
+                    console.log('maxm');
+                    console.log(maxm);
+
                     console.log('plf');
                     console.log(parseInt(plf));
 
