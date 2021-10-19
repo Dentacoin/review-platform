@@ -2007,18 +2007,20 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'Self deleted users cron start'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $self_deleted_users = User::whereNotNull('self_deleted')->whereNotNull('self_deleted_at')->where('self_deleted_at', '<', Carbon::now()->subDays(90) )->take(100)->get();
-            $rand = 'anonymous'.mb_substr(microtime(true), 0, 10);
 
+            $i=0;
             foreach ($self_deleted_users as $sdu) {
+                $i++;
+
                 $sdu->name = 'Anonymous';
                 $sdu->slug = '';                
-                $sdu->email = $rand;
+                $sdu->email = 'anonymous'.(mb_substr(microtime(true), 0, 10)+$i);
                 $sdu->save();
             }
 
             echo 'Self deleted users cron end'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->daily();
+        })->dailyAt('10:00');
 
 
         $schedule->call(function () {
@@ -2413,26 +2415,21 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         })->dailyAt('10:00');
 
 
-        // $schedule->call(function () {
-        //     echo 'Answered questions count'.PHP_EOL.PHP_EOL.PHP_EOL;
+        $schedule->call(function () {
+            echo 'Answered questions count'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        //     $startDate = Carbon::now()->addMonths(-1); //returns current day
-        //     $firstday = $startDate->firstOfMonth();
-        //     $lastday = $startDate->endOfMonth();
-
-        //     // $answered_questions_count = VoxAnswer::where('created_at', '>=', $firstday->toDateTimeString())->where('created_at', '<=', $lastday->toDateTimeString())->count();
-        //     $answered_questions_count = VoxAnswer::where('created_at', '>=', '2021-09-01 00:00:00')->where('created_at', '<=', '2021-09-30 23:59:59')->count();
+            $answered_questions_count = VoxAnswer::where('created_at', '>=', Carbon::now()->addMonths(-1)->firstOfMonth()->toDateTimeString())->where('created_at', '<=', Carbon::now()->addMonths(-1)->endOfMonth()->toDateTimeString())->count();
+            // $answered_questions_count = VoxAnswer::where('created_at', '>=', '2021-09-01 00:00:00')->where('created_at', '<=', '2021-09-30 23:59:59')->count();
             
-        //     $vox_q_count = new VoxQuestionAnswered;
-        //     $vox_q_count->month = $startDate->month;
-        //     $vox_q_count->year = $startDate->year;
-        //     $vox_q_count->count = $answered_questions_count;
-        //     $vox_q_count->save();
+            $vox_q_count = new VoxQuestionAnswered;
+            $vox_q_count->month = Carbon::now()->addMonths(-1)->month;
+            $vox_q_count->year = Carbon::now()->addMonths(-1)->year;
+            $vox_q_count->count = $answered_questions_count;
+            $vox_q_count->save();
 
-        //     echo 'Answered questions count cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            echo 'Answered questions count cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        // })->dailyAt('11:06');
-        // })->cron('00 3 1 * *');
+        })->cron('00 3 1 * *');
 
 
         // $schedule->call(function () {
