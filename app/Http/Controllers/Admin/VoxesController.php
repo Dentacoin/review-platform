@@ -22,6 +22,7 @@ use App\Models\VoxScale;
 use App\Models\VoxBadge;
 use App\Models\Vox;
 
+use App\Helpers\VoxHelper;
 use Carbon\Carbon;
 
 use Response;
@@ -50,11 +51,13 @@ class VoxesController extends AdminController {
             'number' => 'Number',
             'rank' => 'Rank',
         ];
+        
         $this->stat_types = [
             '' => 'No',
             'standard' => 'Yes',
             'dependency' => 'Yes + Relationship',
         ];
+        
         $this->stat_top_answers = [
             '' => '-',
             'top_3' => 'TOP 3',
@@ -1245,6 +1248,20 @@ class VoxesController extends AdminController {
             }
         }
         $question->save();
+
+        // if(count($this->langs) > 1) {
+        //     foreach ($this->langs as $lang_code => $value) {
+        //         if($key != 'en') {
+
+        //             if(!empty($data['translate-answers'])) {
+        //                 VoxHelper::translateQuestionAnswers($lang_code, $question);
+        //             }
+        //             if(!empty($data['translate-question'])) {
+        //                 VoxHelper::translateQuestionInfo($lang_code, Vox::find($question->vox_id));
+        //             }
+        //         }
+        //     }
+        // }
 
         if( Input::file('answer-photos') ) {
             $image_filename = [];

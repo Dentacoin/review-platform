@@ -475,7 +475,6 @@
                     </div>
                     <div class="tab-content">
                         @foreach($langs as $code => $lang_info)
-                        {{ $code }}
                             <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}">
                                 <form method="post" action="{{ url('cms/vox-questions/mass-delete') }}" class="table-responsive-md" id="mass-delete-form">
                                     <table class="table table-striped table-question-list">
@@ -495,7 +494,7 @@
                                                 <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="questions-draggable">
+                                        <tbody class="questions-draggable" lang-code="{{ $code }}">
                                             @foreach($item->questions as $question)
                                                 <tr question-id="{{ $question->id }}" {!! in_array($question->id, $linked_triggers) ? 'class="linked"' : '' !!}>
                                                     <td>

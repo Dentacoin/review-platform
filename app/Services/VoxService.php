@@ -651,23 +651,17 @@ class VoxService {
     }
 
     public static function goBack($user_id, $answered, $list, $vox) {
+        // var_dump('$list');
+        // dd($list, $answered);
         $lastkey = null;
         if(!empty($answered)) {
             foreach ($list as $aq) {
                 if(!$aq->is_skipped) {
-                    $lastkey = $aq->question_id;
-                }
-            }
+                    $lastkey = $aq;
 
-            $found = false;
-            foreach ($vox->questions as $question) {
-                if($question->id==$lastkey) {
-                    $found = true;
-                }
-                if($found) {
                     VoxAnswer::where('vox_id', $vox->id)
                     ->where('user_id', $user_id)
-                    ->where('question_id', $question->id)
+                    ->where('question_id', $lastkey->question_id)
                     ->delete();
 
                     DcnReward::where('reference_id', $vox->id)
@@ -675,27 +669,24 @@ class VoxService {
                     ->where('type', 'survey')
                     ->where('user_id', $user_id)
                     ->delete();
+
+                    
+                    // var_dump('$ll');
+                    // dd($list, $answered, $aq);
+                    break;
                 }
             }
         }
 
-        $lastest_key = VoxAnswer::where('vox_id', $vox->id)
-        ->where('user_id', $user_id)
-        ->where('question_id', $lastkey)
-        ->first();
+        // dd($lastkey->id);
 
-        if(!empty($lastest_key) && $lastest_key->answer == 0) {
+        if(!empty($lastkey) && $lastkey->is_skipped) {
             do {
-                self::goBack($answered, $list, $vox);
-            } while ( $lastest_key->answer == 0);
+                self::goBack($user_id, $answered, $list, $vox);
+            } while ( $lastkey->is_skipped);
         }
 
-        if(empty($lastest_key)) {
-            $lastkey = VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first();
-            $lastkey = $lastkey->id;
-        }
-
-        return $lastkey;
+        return $lastkey ? $lastkey->question_id : VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first()->id;
     }
 
     public static function featuredVoxes() {
@@ -1154,7 +1145,7 @@ class VoxService {
         ->where('vox_id', $vox->id)
         ->with('question')
         ->where('user_id', $user->id)
-        ->orderBy('id', 'ASC')
+        ->orderBy('created_at', 'desc')
         ->get();
 
         $answered = 0;
@@ -1175,7 +1166,7 @@ class VoxService {
         if($testmode) {
             if(Request::input('goback')) {
                 $q_id = self::goBack($user->id, $answered, $list, $vox);
-
+                // var_dump($q_id);
                 if(!empty(VoxQuestion::find($q_id))) {
 
                     $vq = VoxQuestion::where('vox_id', $vox->id)->where('order', VoxQuestion::find($q_id)->order-1)->first();
@@ -1187,6 +1178,8 @@ class VoxService {
                 } else {
                     $quest_id = $q_id;
                 }
+
+                // dd($quest_id, VoxQuestion::where('vox_id', $vox->id)->where('order', '1')->first()->id);
 
                 if($quest_id == VoxQuestion::where('vox_id', $vox->id)->where('order', '1')->first()->id) {
                     return [
