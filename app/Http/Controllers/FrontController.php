@@ -42,31 +42,17 @@ class FrontController extends BaseController {
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
         $to_redirect_404 = false;
 
-        $platform_domain = null;
-
-        if($request->route() && isset($request->route()->action) && isset($request->route()->action['domain'])) {
-
-            $domain = $request->route()->action['domain'];
-            
-            if(str_contains($domain, 'urgent')) {
-                $platform_domain = explode('.', $domain)[1];
-            } else {
-                $platform_domain = explode('.', $domain)[0];
-            }
-
-            if($platform_domain == 'reviews') {
-                $platform_domain = 'trp';
-            } else {
-                $platform_domain = 'vox';
-            }
-        }
-
         $roter_params = $request->route()->parameters();
         if(empty($roter_params['locale'])) { // || $roter_params['locale']=='_debugbar'
             $locale = 'en';
         } else {
-            if(isset($platform_domain) && !empty( config('langs.'.$platform_domain.'.'.$roter_params['locale']) ) ) {
-                $locale = $roter_params['locale'];
+            if(!empty( config('langs.trp'.$roter_params['locale']) ) ) {
+                if(Request::getHost() == 'reviews.dentacoin.com' || Request::getHost() == 'urgent.reviews.dentacoin.com') {
+
+                    $locale = $roter_params['locale'];
+                } else {
+                    $locale = 'en';
+                }
             } else {
                 $locale = 'en';
 
