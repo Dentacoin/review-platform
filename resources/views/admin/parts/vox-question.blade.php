@@ -21,6 +21,9 @@
     <div class="col-md-12">
 
         {{ Form::open(array('id' => 'question-'.( !empty($question) ? 'edit' : 'add') , 'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 'class' => 'form-horizontal questions-form', 'method' => 'post', 'files' => true)) }}
+            
+            <input id="translate-answers" name="translate-answers" type="hidden" value=""/>
+            <input id="translate-question" name="translate-question" type="hidden" value=""/>
 
             <div class="panel panel-inverse panel-with-tabs custom-tabs">
                 <div class="panel-heading p-0">
@@ -123,15 +126,15 @@
                         <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
                             <div class="form-group answers-group">
                                 <h3 class="col-md-2" style="margin-top: 0px;">{{ trans('admin.page.'.$current_page.'.question-answers') }}</h3>
-                                <div class="col-md-10 answers-list answers-draggable">
+                                <div class="col-md-10 answers-list {!! $code == 'en' ? 'answers-draggable' : '' !!}">
                                     @if(!empty($question) && !empty($question->{'answers:'.$code}) )
                                         @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
-                                            <div class="flex input-group">
+                                            <div class="flex input-group" answer-code="{{ $code }}">
                                                 <div class="col col-60">
                                                     {{ $question_answers_count[$key+1] ?? '' }}
                                                 </div>
                                                 <div class="col" style="display: flex; align-items: center;">
-                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
+                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control answer-content', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
 
                                                     @if($question->answers_images_filename && !empty(json_decode($question->answers_images_filename, true)[$key]) )
                                                         <div class="answer-image-wrap">
@@ -216,57 +219,59 @@
                         </div>
                     @endif
 
-                    @if(!empty($question) && $question->type == 'multiple_choice' && !empty($question->{'answers:'.$code}) )
-                        <div class="form-group clearfix" style="margin-top: 40px;">
-                            <h3 class="col-md-3" style="margin-top: 0px;">Exclude answers</h3>
-                        </div>
-                        <div class="form-group clearfix">
-                            <label class="col-md-2 control-label" for="exclude_answers">Exclude answers</label>
-                            <input type="checkbox" name="exclude_answers_checked" value="1" id="exclude_answers" style="vertical-align: sub; margin-top: 10px;" {!! $question->excluded_answers ? 'checked="checked"' : '' !!} />
-                        </div>
-
-                        <div class="answer-groups-wrapper" {!! empty($question->excluded_answers) ? 'style="display:none;"' : '' !!}>
-                            <div class="form-group">
-                                <div class="col-md-2"></div>
-                                <label class="col-md-4 control-label" style="text-align: left; padding-left: 0px;">Answers</label>
-                                <label class="col-md-4 control-label" style="text-align: left;">Groups</label>
+                    @if(!empty($question) && !empty($question->{'answers:'.$code}) )
+                        <div id="exclude-answers" style="{!! $question->type != 'multiple_choice' ? 'display: none;' : '' !!}">
+                            <div class="form-group clearfix" style="margin-top: 40px;">
+                                <h3 class="col-md-3" style="margin-top: 0px;">Exclude answers</h3>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-md-2 control-label" for="exclude_answers">Exclude answers</label>
+                                <input type="checkbox" name="exclude_answers_checked" value="1" id="exclude_answers" style="vertical-align: sub; margin-top: 10px;" {!! $question->excluded_answers ? 'checked="checked"' : '' !!} />
                             </div>
 
-                            <div class="form-group clearfix">
-                                <div class="col-md-2"></div>
-                                <ul class="answer-group with-answers col-md-4">
-                                    @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
-                                        @if(empty($question->excluded_answers) || (!in_array($key+1, $excluded_answers))) 
-                                            <li class="answer-from-group" answer="{{ $key+1 }}">{{ $ans }}</li>
-                                        @endif
-                                    @endforeach
-                                </ul>
-                                <div class="answer-groups col-md-4">
-                                    <div class="groups">
-                                        @for($i = 1; $i <= 10; $i++)
-                                            <ul class="answer-group" group="{{ $i }}" {!! $question->excluded_answers ? ($i > count($question->excluded_answers) ? 'style="display:none;"' : '') : ($i>2 ? 'style="display:none;"' : '') !!}>
-                                                Group {{ $i }}
+                            <div class="answer-groups-wrapper" {!! empty($question->excluded_answers) ? 'style="display:none;"' : '' !!}>
+                                <div class="form-group">
+                                    <div class="col-md-2"></div>
+                                    <label class="col-md-4 control-label" style="text-align: left; padding-left: 0px;">Answers</label>
+                                    <label class="col-md-4 control-label" style="text-align: left;">Groups</label>
+                                </div>
+                                
+                                <div class="form-group clearfix">
+                                    <div class="col-md-2"></div>
+                                    <ul class="answer-group with-answers col-md-4">
+                                        @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
+                                            @if(empty($question->excluded_answers) || (!in_array($key+1, $excluded_answers))) 
+                                                <li class="answer-from-group" answer="{{ $key+1 }}">{{ $ans }}</li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                    <div class="answer-groups col-md-4">
+                                        <div class="groups">
+                                            @for($i = 1; $i <= 10; $i++)
+                                                <ul class="answer-group" group="{{ $i }}" {!! $question->excluded_answers ? ($i > count($question->excluded_answers) ? 'style="display:none;"' : '') : ($i>2 ? 'style="display:none;"' : '') !!}>
+                                                    Group {{ $i }}
 
-                                                @if(!empty($question->excluded_answers))
-                                                    @foreach($question->excluded_answers as $k => $excluded_answers_array)
-                                                        @if($k+1 == $i)
-                                                            @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
-                                                                @if(in_array($key+1, $excluded_answers_array))
-                                                                    <li class="answer-from-group" answer="{{ $key+1 }}">{{ $ans }}</li>
-                                                                @endif
-                                                            @endforeach
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
-                                        @endfor
-                                        <a href="javascript:;" class="btn btn-info add-answer-group">Add group</a>
-                                        <p style="font-size: 10px;">* 10 groups max</p>
+                                                    @if(!empty($question->excluded_answers))
+                                                        @foreach($question->excluded_answers as $k => $excluded_answers_array)
+                                                            @if($k+1 == $i)
+                                                                @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
+                                                                    @if(in_array($key+1, $excluded_answers_array))
+                                                                        <li class="answer-from-group" answer="{{ $key+1 }}">{{ $ans }}</li>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            @endfor
+                                            <a href="javascript:;" class="btn btn-info add-answer-group">Add group</a>
+                                            <p style="font-size: 10px;">* 10 groups max</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <input type="hidden" name="excluded-answers" value="{{ json_encode($question->excluded_answers) }}" id="excluded-answers"/>
+                                <input type="hidden" name="excluded_answers" value="{{ json_encode($question->excluded_answers) }}" id="excluded-answers"/>
+                            </div>
                         </div>
                     @endif
 
@@ -558,8 +563,12 @@
                     </div>
 
                     <div class="form-group" style="margin-top: 60px;">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <button type="submit" class="btn btn-block btn-success">{{ trans('admin.page.'.$current_page.'.question-add') }}</button>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="hidden" name="stay-on-same-page" value=""/>
+                            <a href="javascript:;" class="btn btn-block btn-success" id="stay-on-same-page">Save and stay on this page</a>
                         </div>
                     </div>
 

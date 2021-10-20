@@ -824,7 +824,12 @@ class VoxesController extends AdminController {
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
                 } else {
                     Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
-                    return redirect('cms/'.$this->current_page.'/edit/'.$id);
+
+                    if(request('stay-on-same-page')) {
+                        return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+                    } else {
+                        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+                    }
                 }
             }
 
@@ -1172,11 +1177,21 @@ class VoxesController extends AdminController {
             $question->number_limit = '';
         }
 
-        if(isset($data['exclude_answers_checked']) && isset($data['excluded-answers']) && !empty(json_decode($data['excluded-answers'], true))) {
-            $question->excluded_answers = json_decode($data['excluded-answers'], true);
+        if($justCopy) {
+            if(isset($data['excluded_answers']) && !empty($data['excluded_answers'])) {
+                $question->excluded_answers = $data['excluded_answers'];
+            } else {
+                $question->excluded_answers = null;
+            }
         } else {
-            $question->excluded_answers = null;
+
+            if(isset($data['exclude_answers_checked']) && isset($data['excluded_answers']) && !empty(json_decode($data['excluded_answers'], true))) {
+                $question->excluded_answers = json_decode($data['excluded_answers'], true);
+            } else {
+                $question->excluded_answers = null;
+            }
         }
+
         
         $question->save();
 
