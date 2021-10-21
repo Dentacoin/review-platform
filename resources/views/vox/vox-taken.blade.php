@@ -4,6 +4,9 @@
 
 	<div class="taken-survey-wrapper">
 		<div class="container">
+			@if(!empty($admin))
+				<a href="{{ $vox->getLink() }}?testmode=1&goback=1&q-id={{ request('q-id') ?? '0' }}" class="go-back-admin">&laquo; Back</a>
+			@endif
 			<div class="flex">
 				<div class="col">
 					<img class="taken-survey-image" src="{{ url('new-vox-img/dentavox-man-taken-survey.jpg') }}" alt="Dentavox man taken survey" width="550" height="507">
