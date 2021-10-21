@@ -33,6 +33,7 @@ class PageSeo extends Model {
     public function getImageUrl($thumb = false) {
         return $this->hasimage ? url('/storage/pagesseo/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : ( $this->platform == 'vox' ? url('img-vox/logo-text.png') : url('img-trp/socials-cover.jpg'));
     }
+    
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/pagesseo/'.($this->id%100);
         if(!is_dir($folder)) {

@@ -75,25 +75,45 @@ class VoxesController extends AdminController {
             return redirect('cms/home');            
         }
 
+        if(Request::isMethod('post')) {
+
+            if(!empty(request('ids'))) {
+
+                foreach(request('ids') as $vox_id) {
+                    foreach(request('languages') as $lang) {
+                        // VoxHelper::translateSurvey($lang, Vox::find($vox_id));
+                    }
+                }
+
+                $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+                return redirect('cms/vox/list');
+            }
+
+            $this->request->session()->flash('error-message', 'Please, choose surveys' );
+            return redirect('cms/vox/list');
+        }
+
         $error = false;
         $error_arr = [];
 
         $table_fields = [
+            'selector'          => array('format' => 'selector'),
             'sort_order'        => array('label' => 'Sort'),
             'id'                => array(),
             'title'             => array(),
-            'category'          => array('template' => 'admin.parts.table-voxes-category'),
+            'category'          => array('template' => 'admin.parts.table-voxes-category', 'label' => 'Cat'),
             'count'             => array('template' => 'admin.parts.table-voxes-count'),
             'reward'            => array('template' => 'admin.parts.table-voxs-reward'),
             'duration'          => array('template' => 'admin.parts.table-voxs-duration'),
             'respondents'       => array('template' => 'admin.parts.table-voxs-respondents'),
-            'featured'          => array('template' => 'admin.parts.table-voxes-featured'),
+            'featured'          => array('template' => 'admin.parts.table-voxes-featured', 'label' => 'Featured'),
             'type'              => array('template' => 'admin.parts.table-voxes-type'),
             'stats'             => array('template' => 'admin.parts.table-voxes-stats'),
             'stats_featured'    => array('template' => 'admin.parts.table-voxes-stats-featured'),
+            'langs'             => array('template' => 'admin.parts.table-voxes-langs', 'label' => 'Langs'),
             'date'              => array('template' => 'admin.parts.table-voxes-date'),
             'launched_date'     => array('template' => 'admin.parts.table-voxes-launched-date'),
-            'updated_date'      => array('template' => 'admin.parts.table-voxes-updated-date'),
+            // 'updated_date'      => array('template' => 'admin.parts.table-voxes-updated-date'),
         ];
 
         if(Auth::guard('admin')->user()->role != 'support') {
@@ -973,9 +993,10 @@ class VoxesController extends AdminController {
         }
 
         $question = VoxQuestion::find($question_id);
+        $lang = request('code');
 
         if(!empty($question) && $question->vox_id==$id) {
-            $translation = $question->translateOrNew('en');
+            $translation = $question->translateOrNew($lang);
             $translation->question = Request::input('val');
             $translation->save();
             return Response::json( ['success' => true] );
@@ -2328,12 +2349,12 @@ class VoxesController extends AdminController {
                         ->where('is_completed', 1)
                         ->where('is_skipped', 0)
                         ->has('user');
-                        $export_array[] = Vox::exportStatsXlsx($vox, $q, $demographics, $results, $key+1, $all_period, true);
+                        $export_array[] = VoxHelper::exportStatsXlsx($vox, $q, $demographics, $results, $key+1, $all_period, true);
                     }
 
                 }
             } else {
-                $export_array[] = Vox::exportStatsXlsx($vox, $q, $demographics, $results, null, $all_period, true);
+                $export_array[] = VoxHelper::exportStatsXlsx($vox, $q, $demographics, $results, null, $all_period, true);
             }
         }
 

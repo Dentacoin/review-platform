@@ -57,7 +57,7 @@
                             <div class="form-group clearfix">
                                 <label class="col-md-2 control-label"></label>
                                 <p class="col-md-10">
-                                    * If you want to add video from youtube:<br/>
+                                    * If you want to add a video from youtube:<br/>
                                     1. copy {{ '<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen="" frameborder="0" height="720" width="1280"></iframe></div>'}}<br/>
                                     2. click on "Source" and paste it where you want.<br/>
                                     3. change the video id (in this case is "tgbNymZ7vqY").<br/>

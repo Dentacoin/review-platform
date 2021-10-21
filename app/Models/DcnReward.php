@@ -28,7 +28,6 @@ class DcnReward extends Model {
         'deleted_at'
     ];
 
-
     public function vox() {
         return $this->hasOne('App\Models\Vox', 'id', 'reference_id');
     }

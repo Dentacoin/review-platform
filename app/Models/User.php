@@ -213,8 +213,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function patient_invites_dentist() {
         return $this->hasMany('App\Models\User', 'invited_by', 'id')->where('is_dentist', 1)->orderBy('id', "DESC");
     }
+    public function old_unclaimed_profile() {
+        return $this->hasOne('App\Models\UnclaimedDentist', 'user_id', 'id')->whereNull('completed');
+    }
     public function reviews_out() {
         return $this->hasMany('App\Models\Review', 'user_id', 'id')->where('status', 'accepted')->orderBy('id', "DESC");
+    }
+    public function reviews_in_dentist() {
+        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted')->with('user')->with('answers')->orderBy('id', 'desc');
+    }
+    public function reviews_in_clinic() {
+        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')->where('status', 'accepted')->with('user')->with('answers')->orderBy('id', 'desc');
     }
     public function reviews_out_standard() {
         return $this->reviews_out->reject(function($item) {
@@ -226,12 +235,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return !$item->youtube_id;
         });
     }
-    public function reviews_in_dentist() {
-        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted')->with('user')->with('answers')->orderBy('id', 'desc');
-    }
-    public function reviews_in_clinic() {
-        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')->where('status', 'accepted')->with('user')->with('answers')->orderBy('id', 'desc');
-    }
     public function reviews_in() {
         return $this->reviews_in_dentist->merge($this->reviews_in_clinic)->sortByDesc(function ($review, $key) {
             if($review->verified) {
@@ -240,9 +243,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 return $review->id;
             }
         });
-    }
-    public function old_unclaimed_profile() {
-        return $this->hasOne('App\Models\UnclaimedDentist', 'user_id', 'id')->whereNull('completed');
     }
     public function reviews_in_standard() {
         return $this->reviews_in()->reject(function($item) {
@@ -350,6 +350,27 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function orders() {
         return $this->hasMany('App\Models\Order', 'user_id', 'id')->orderBy('id', 'DESC');
     }
+    public function wasInvitedBy($user_id) {
+        return $this->hasMany('App\Models\UserInvite', 'invited_id', 'id')->where('user_id', $user_id)->first();
+    }
+    public function hasAskedDentist($dentist_id) {
+        return $this->hasMany('App\Models\UserAsk', 'user_id', 'id')->where('dentist_id', $dentist_id)->first();
+    }
+    public function dcn_cashouts() {
+        return $this->hasMany('App\Models\DcnCashout', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
+    public function vox_cashouts() {
+        return $this->hasMany('App\Models\DcnCashout', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
+    }
+    public function vox_rewards() {
+        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
+    }
+    public function surveys_rewards() {
+        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->where('type', 'survey')->orderBy('id', 'DESC');
+    }
+    public function vox_surveys_and_polls() {
+        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->whereIn('type', ['daily_poll', 'survey'])->orderBy('id', 'DESC');
+    }
 
     public function kycEmailPhone() {
         $data = json_decode($this->kycValidation->response, true);
@@ -357,7 +378,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $phone = null;
 
         if(!empty($data['userId'])) {
-
 
             if(!empty($data['data'])) {
                 foreach ($data['data'] as $dd) {
@@ -411,20 +431,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         return $ret;
     }
+
     public function getMaskedPhone() {
         return '0'.substr($this->phone, 0, 3).' **** '.substr($this->phone, mb_strlen($this->phone)-2, 2);
     }
+
     public function getMaskedEmail() {
         $mail_arr = explode('@', $this->email);
         return substr($mail_arr[0], 0, 3).'****@'.$mail_arr[1];
-    }
-
-    public function wasInvitedBy($user_id) {
-        return $this->hasMany('App\Models\UserInvite', 'invited_id', 'id')->where('user_id', $user_id)->first();
-    }
-
-    public function hasAskedDentist($dentist_id) {
-        return $this->hasMany('App\Models\UserAsk', 'user_id', 'id')->where('dentist_id', $dentist_id)->first();
     }
 
     public function canAskDentist($dentist_id) {
@@ -508,6 +522,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $ban->domain = $domain;
         $ban->ban_for_id = $ban_for_id;
         $days = 0;
+
         if($times==0) {
             $days = 1;
             $ban->expires = Carbon::now()->addDays( $days );
@@ -610,6 +625,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $query->where('user_id', $myid);
         })->get()->pluck('id')->toArray();
     }
+
     public function unusefulVotesForDenist($dentist_id) {
         $myid = $this->id;
         return Review::where([
@@ -625,6 +641,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
         return $token;
     }
+
     public function get_token() {
         //dd($this->email.$this->id);
         $email = $this->email ? $this->email : $this->mainBranchEmail();
@@ -632,6 +649,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
         return $token;
     }
+
     public function get_widget_token() {
         //dd($this->email.$this->id);
         $email = $this->email ? $this->email : $this->mainBranchEmail();
@@ -1103,7 +1121,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
-
         $state_fields = [
             'administrative_area_level_1',
             'administrative_area_level_2',
@@ -1161,7 +1178,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
-         $zip_fields = [
+        $zip_fields = [
             'postal_code',
             'zip',
         ];
@@ -1332,7 +1349,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function canIuseAddress( $address ) {
-        
         return true;
     }
 
@@ -1388,28 +1404,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         })->get()->pluck('reference_id')->toArray();
     }
 
-    public function dcn_cashouts() {
-        return $this->hasMany('App\Models\DcnCashout', 'user_id', 'id')->orderBy('id', 'DESC');
-    }
-
-    public function vox_cashouts() {
-        return $this->hasMany('App\Models\DcnCashout', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
-    }
-
-    public function vox_rewards() {
-        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
-    }
-
-    public function surveys_rewards() {
-        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->where('type', 'survey')->orderBy('id', 'DESC');
-    }
-
     public function countAllSurveysRewards() {
         return count(DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->where('reference_id', '!=', 34)->get()->pluck('reference_id')->toArray());
-    }
-
-    public function vox_surveys_and_polls() {
-        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->whereIn('type', ['daily_poll', 'survey'])->orderBy('id', 'DESC');
     }
 
     public function deleteActions() {
@@ -1717,9 +1713,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
     public static function getTempImageName() {
         return md5( microtime(false) ).'.jpg';
     }
+
     public static function getTempImageUrl($name, $thumb = false) {
         return url('/storage/tmp/'.($thumb ? 'thumb-' : '').$name);
     }
+
     public static function getTempImagePath($name, $thumb = false) {
         $folder = storage_path().'/app/public/tmp';
         if(!is_dir($folder)) {
@@ -2037,6 +2035,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         $folder = storage_path().'/app/public/avatars/'.($this->id%100);
         return $folder.'/'.$this->id.'-cover.jpg';
     }
+
     public function getSocialCover() {
         if(!$this->hasimage_social) {
             $this->generateSocialCover();
@@ -2061,7 +2060,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         } else {
             $img->insert( public_path().'/img-trp/cover-dentist-new-no-avatar.png');
         }
-
 
         if($this->avg_rating) {
             $reviews = '('.intval($this->ratings).' reviews)';
@@ -2099,7 +2097,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             $above_pushing = 25;
         }
 
-
         $names = $this->getNames();
         $names = wordwrap($names, 30); 
         $lines = count(explode("\n", $names));
@@ -2117,7 +2114,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         });
 
         $img->insert( public_path().'/img-trp/cover-pin.png' , 'top-left', 515, 365 + $above_pushing );
-
 
         $type = ($this->is_partner ? 'Partner ' : '').($this->is_clinic ? 'Clinic' : 'Dentist');
         $type_left = $this->is_partner ? 575 : 515;
@@ -2149,7 +2145,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             $font->align('left');
             $font->valign('top');
         });
-
 
         $img->save($path);
         $this->hasimage_social = true;
@@ -2229,7 +2224,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
     }
 
     public function logoutActions() {
-
         session([
             'mark-login' => false,
             'vox-welcome' => null,

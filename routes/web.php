@@ -161,7 +161,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('spending', 									'SpendingController@list');
 
 	Route::get('vox', 										'VoxesController@list');
-	Route::get('vox/list', 									'VoxesController@list');
+	Route::any('vox/list', 									'VoxesController@list');
 	Route::get('vox/list/show-all-results', 				'VoxesController@showAllResults');
 	Route::get('vox/list/show-individual-results', 			'VoxesController@showIndividualResults');
 	Route::post('vox/list/reorder', 						'VoxesController@reorderVoxes');

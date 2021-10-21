@@ -44,6 +44,7 @@ class VoxCategory extends Model {
     public function getImageUrl($thumb = false) {
         return $this->hasimage ? url('/storage/voxcategories/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.png') : url('new-vox-img/no-avatar-0.png');
     }
+    
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/voxcategories/'.($this->id%100);
         if(!is_dir($folder)) {

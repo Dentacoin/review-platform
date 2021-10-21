@@ -19,10 +19,10 @@ use App\Models\VoxScale;
 use App\Models\PageSeo;
 use App\Models\Country;
 use App\Models\User;
-use App\Models\Dcn;
 use App\Models\Vox;
 
 use App\Exports\MultipleStatSheetExport;
+use App\Helpers\VoxHelper;
 use App\Exports\Export;
 use App\Imports\Import;
 use Carbon\Carbon;
@@ -30,7 +30,6 @@ use Dompdf\Dompdf;
 
 use Validator;
 use Response;
-use Storage;
 use Request;
 use Auth;
 use App;
@@ -191,13 +190,13 @@ class StatsController extends FrontController {
                 }
                 if($dates || $question->respondent_count() < 50) {
 
-                    $results = VoxAnswer::prepareQuery($question_id, $dates,[
+                    $results = VoxHelper::prepareQuery($question_id, $dates,[
                         'dependency_answer' => $answer_id,
                         'dependency_question' => $question->stats_relation_id,
                     ]);
                 }
             } else {
-                $results = VoxAnswer::prepareQuery($question_id, $dates, [
+                $results = VoxHelper::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
                 ]);
             }
@@ -263,7 +262,7 @@ class StatsController extends FrontController {
 
             if($scale=='dependency') {
 
-                $total = VoxAnswer::prepareQuery($question_id, $dates);
+                $total = VoxHelper::prepareQuery($question_id, $dates);
                 $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
                 if($dates || $question->respondent_count() < 50) {
@@ -274,7 +273,7 @@ class StatsController extends FrontController {
                     $results = VoxAnswersDependency::where('question_id', $question_id)->where('question_dependency_id', $question->stats_relation_id)->where('answer_id', $answer_id)->get();
 
                     if($results->isEmpty()) {
-                        $results = VoxAnswer::prepareQuery($question_id, null,[
+                        $results = VoxHelper::prepareQuery($question_id, null,[
                             'dependency_answer' => $answer_id,
                             'dependency_question' => $question->stats_relation_id,
                         ]);
@@ -329,7 +328,7 @@ class StatsController extends FrontController {
                     }
                     $main_chart[$answers_related[$key]] = 0;
                 }
-                $results = VoxAnswer::prepareQuery($question->stats_relation_id, $dates);
+                $results = VoxHelper::prepareQuery($question->stats_relation_id, $dates);
                 $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
                 $results = $results->get();
                 foreach ($results as $res) {
@@ -441,7 +440,7 @@ class StatsController extends FrontController {
 
             } else if($scale=='gender') {
 
-                $total = VoxAnswer::prepareQuery($question_id, $dates, [
+                $total = VoxHelper::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
                 ])->whereNotNull('gender')->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
@@ -551,7 +550,7 @@ class StatsController extends FrontController {
                     }
 
                     $totalm = $totalf = 0;
-                    $totalQuery = VoxAnswer::prepareQuery($question_id, $dates, [
+                    $totalQuery = VoxHelper::prepareQuery($question_id, $dates, [
                         'scale_answer_id' => $scale_answer_id, 
                         'scale' => $scale, 
                         'scale_options' => $scale_options
@@ -703,7 +702,7 @@ class StatsController extends FrontController {
 
             } else if($scale=='country_id') {
                 $countries = Country::with('translations')->get()->keyBy('id');
-                $total = VoxAnswer::prepareQuery($question_id, $dates, [
+                $total = VoxHelper::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
                 ]);
                 $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
@@ -1052,7 +1051,7 @@ class StatsController extends FrontController {
 
             } else if($scale=='age') {
 
-                $total = VoxAnswer::prepareQuery($question_id, $dates, [
+                $total = VoxHelper::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id, 
                     'scale' => $scale, 
                     'scale_options' => $scale_options
@@ -1121,7 +1120,7 @@ class StatsController extends FrontController {
                 
             } else {
 
-                $total = VoxAnswer::prepareQuery($question_id, $dates, [
+                $total = VoxHelper::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id, 
                     'scale' => $scale, 
                     'scale_options' => $scale_options
@@ -1499,7 +1498,7 @@ class StatsController extends FrontController {
                         set_time_limit(0);
                         ini_set('memory_limit','1024M');
 
-                        $export_array = Vox::exportStatsXlsx($vox, $q, $demographics, $results, Request::input('scale-for'), $all_period, false);
+                        $export_array = VoxHelper::exportStatsXlsx($vox, $q, $demographics, $results, Request::input('scale-for'), $all_period, false);
 
                         $fname = $vox->title;
 

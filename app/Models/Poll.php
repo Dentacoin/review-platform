@@ -102,7 +102,6 @@ class Poll extends Model {
             $top += $lh;
         }
         
-
         if ($this->status == 'closed') {
 
             $text = 'WE ASKED 100 PEOPLE... ';

@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\VoxAnswersDependency;
-use App\Models\VoxAnswer;
 use App\Models\VoxScale;
 
 use WebPConvert\WebPConvert;
+use App\Helpers\VoxHelper;
 
 use DB;
 
@@ -197,10 +197,10 @@ class VoxQuestion extends Model {
         WebPConvert::convert(self::getAnswerImagePath(true, $answer_num), $destination_thumb, []);
     }
 
-
     public function getImageUrl($thumb = false) {
         return $this->has_image ? url('/storage/vox-questions/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : false;
     }
+
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/vox-questions/'.($this->id%100);
         if(!is_dir($folder)) {
@@ -267,7 +267,7 @@ class VoxQuestion extends Model {
         
         if(!empty($this->stats_answer_id)) {
 
-            $results = VoxAnswer::prepareQuery($this->id, null,[
+            $results = VoxHelper::prepareQuery($this->id, null,[
                 'dependency_answer' => $this->stats_answer_id,
                 'dependency_question' => $this->stats_relation_id,
             ]);
@@ -290,7 +290,7 @@ class VoxQuestion extends Model {
             foreach (json_decode($this->answers, true) as $key => $single_answ) {
                 $answer_number = $key + 1;
                 
-                $results = VoxAnswer::prepareQuery($this->id, null,[
+                $results = VoxHelper::prepareQuery($this->id, null,[
                     'dependency_answer' => $answer_number,
                     'dependency_question' => $this->stats_relation_id,
                 ]);

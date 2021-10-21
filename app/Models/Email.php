@@ -30,7 +30,6 @@ class Email extends Model {
     	"unsubscribed",
 	];
 
-
 	public static $template_types = [
 		'trp', 'vox', 'common', 'assurance', 'dentacare', 'dentacoin', 'dentists', 'support',
 	];
@@ -548,13 +547,11 @@ class Email extends Model {
 		return $content;
 	}
 
-    public function getMetaAttribute($value)
-    {
+    public function getMetaAttribute($value) {
         return $value ? json_decode($value, true) : [];
     }
 
-    public function setMetaAttribute($value)
-    {
+    public function setMetaAttribute($value) {
         $this->attributes['meta'] = json_encode($value);
     }
 

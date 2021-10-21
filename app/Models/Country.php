@@ -33,8 +33,7 @@ class Country extends Model {
         'ratings',
     ];
 
-    public function cities()
-    {
+    public function cities() {
         return $this->hasMany('App\Models\City')->orderBy('name', 'ASC');
     }
 

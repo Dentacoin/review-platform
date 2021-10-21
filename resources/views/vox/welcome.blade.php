@@ -62,7 +62,9 @@
 							</div>
 							<div class="answers tac">
 								@foreach(json_decode($question->answers, true) as $answer)
-									<label href="javascript:;" class="answer" data-num="{{ $loop->index+1 }}">{{ $answer }}</label>
+									<label href="javascript:;" class="answer" data-num="{{ $loop->index+1 }}">
+										{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
+									</label>
 								@endforeach
 							</div>
 						</div>

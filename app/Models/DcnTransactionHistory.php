@@ -31,6 +31,7 @@ class DcnTransactionHistory extends Model {
     public function admin() {
         return $this->hasOne('App\Models\Admin', 'id', 'admin_id')->withTrashed();
     }
+    
     public function transaction() {
         return $this->hasOne('App\Models\Order', 'id', 'transaction_id');
     }

@@ -528,7 +528,7 @@
                     <div class="form-group clearfix">
                         <label class="col-md-2 control-label">Welcome questions</label>
                         <div class="col-md-4">
-                            {{ Form::select('cross_check', ['' => '-'] + App\Models\Vox::getDemographicQuestions(), !empty($question) ? $question->cross_check : '', array('class' => 'form-control question-scale-input select2', 'style' => 'width: 100%', 'id' => 'select-cross')) }}
+                            {{ Form::select('cross_check', ['' => '-'] + App\Helpers\VoxHelper::getDemographicQuestions(), !empty($question) ? $question->cross_check : '', array('class' => 'form-control question-scale-input select2', 'style' => 'width: 100%', 'id' => 'select-cross')) }}
                         </div>
                     </div>
 
@@ -547,7 +547,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach(App\Models\Vox::getDemographicAnswers() as $ke => $va)
+                                        @foreach(App\Helpers\VoxHelper::getDemographicAnswers() as $ke => $va)
                                             @foreach($va as $ans)
                                                 <tr class="q-id id-{{ $ke }}" {!! !empty($question->cross_check) && $question->cross_check == $ke ? '' : 'style="display:none;"' !!}>
                                                     <td>{{ $ans }}</td>

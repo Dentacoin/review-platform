@@ -18,6 +18,7 @@ class PaidReportPhoto extends Model {
     public function getImageUrl($thumb = false) {
         return url('/storage/paid-reports-gallery/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg');
     }
+    
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/paid-reports-gallery/'.($this->id%100);
         if(!is_dir($folder)) {

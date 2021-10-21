@@ -18,6 +18,7 @@ class VoxBadge extends Model {
     public function getImageUrl() {
         return url('/storage/voxes/badge-'.$this->id.'.png').'?rev='.time();
     }
+
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/voxes';
         return $folder.'/badge-'.$this->id.'.png';
@@ -26,7 +27,8 @@ class VoxBadge extends Model {
     public function addImage($img) {
         $to = $this->getImagePath();
         $img->save($to);
-    }    
+    }  
+      
     public function delImage() {
         $to = $this->getImagePath();
         unlink($to);

@@ -20,8 +20,6 @@ class AnonymousUser extends Model {
         'deleted_at',
     ];
 
-
-
     public function setWebsiteNotificationsAttribute($value) {
         $this->attributes['website_notifications'] = null;
         if(!empty($value) && is_array($value)) {

@@ -6,7 +6,7 @@
 		<div class="answers">
 			<select class="answer" name="birthyear-answer" id="birthyear-answer">
         		<option value="">-</option>
-				{!! App\Models\Vox::getBirthyearOptions() !!}
+				{!! App\Helpers\VoxHelper::getBirthyearOptions() !!}
         	</select>
 		</div>
 

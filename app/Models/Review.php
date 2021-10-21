@@ -141,16 +141,13 @@ class Review extends Model {
         }
 
         $this->user->giveInvitationReward('trp');
-
         $this->original_dentist->recalculateRating();
     }
 
     public function generateSocialCover($d_id) {
 
         $path = $this->getSocialCoverPath($d_id);
-
         $img = Image::canvas(1200, 628, '#fff');
-
         $dentist = User::find($d_id);
 
         if ($dentist->hasimage) {
@@ -173,9 +170,11 @@ class Review extends Model {
         $dentist_name = wordwrap($dentist_name, 27); 
         $lines = count(explode("\n", $dentist_name));
         $top = 547;
+
         if($lines == 2) {
             $top -= 20;
         }
+
         $img->text($dentist_name, 225, $top, function($font) {
             $font->file(public_path().'/fonts/Calibri-Bold.ttf');
             $font->size(33);
@@ -221,7 +220,6 @@ class Review extends Model {
             $title = false;
         }
 
-
         $answer = trim(preg_replace('/\s\s+/', ' ', $this->answer));
         $answer = mb_strlen($answer)>100 ? mb_substr($answer, 0, 97).'...' : $answer;
         $answer = wordwrap('"'.$answer.'"', 38);
@@ -260,7 +258,6 @@ class Review extends Model {
             $img->insert( public_path().'/img-trp/cover-trusted.png' , 'top-left', 921, $title ? 424 : 405 );
         }
 
-
         $names = $this->user->getNames();
         $img->text($names, $left_patient_name, 516, function($font) {
             $font->file(public_path().'/fonts/Calibri.ttf');
@@ -269,7 +266,6 @@ class Review extends Model {
             $font->align('left');
             $font->valign('top');
         });
-
 
         $step = 67;
         $startX = 573;
@@ -307,6 +303,7 @@ class Review extends Model {
         }
         return $folder.'/'.$this->id.'-cover.jpg';
     }
+
     public function getSocialCover($d_id) {
         if(!$this->hasimage_social) {
             $this->generateSocialCover($d_id);
@@ -323,6 +320,7 @@ class Review extends Model {
     public function getTreatmentsAttribute() {
         return json_decode($this->attributes['treatments'], true);
     }
+
     public function setTreatmentsAttribute($value) {
         $this->attributes['treatments'] = $value ? json_encode($value) : '';
     }

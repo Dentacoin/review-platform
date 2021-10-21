@@ -23,8 +23,7 @@ class City extends Model {
         'ratings',
     ];
     
-    public function country()
-    {
+    public function country() {
         return $this->hasOne('App\Models\Country', 'id', 'country_id');
     }
 

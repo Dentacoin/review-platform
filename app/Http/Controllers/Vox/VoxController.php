@@ -68,7 +68,7 @@ class VoxController extends FrontController {
      */
 	public function start_over() {
 
-		return ServicesVox::startOver($this->user->id);
+		return ServicesVox::startOver($this->user ? $this->user->id : request('user_id'));
 	}
 
 	/**

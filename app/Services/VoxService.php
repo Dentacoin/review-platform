@@ -13,10 +13,8 @@ use App\Models\Recommendation;
 use App\Models\VoxCrossCheck;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
-use App\Models\UserInvite;
 use App\Models\UserAction;
 use App\Models\PollAnswer;
-use App\Models\VoxRelated;
 use App\Models\VoxAnswer;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
@@ -25,11 +23,11 @@ use App\Models\PageSeo;
 use App\Models\Country;
 use App\Models\Reward;
 use App\Models\VpnIp;
-use App\Models\Admin;
 use App\Models\User;
 use App\Models\Poll;
 use App\Models\Vox;
 
+use App\Helpers\VoxHelper;
 use Carbon\Carbon;
 
 use Validator;
@@ -38,7 +36,6 @@ use Request;
 use Cookie;
 use Auth;
 use Mail;
-use Log;
 use App;
 use DB;
 
@@ -1320,7 +1317,7 @@ class VoxService {
                 'total_questions' => $total_questions,
                 'first_question_num' => $first_question_num,
                 'answered_without_skip_count' => $answered_without_skip_count,
-                'birthyear_options' => Vox::getBirthyearOptions(),
+                'birthyear_options' => VoxHelper::getBirthyearOptions(),
                 'countries' => ['' => '-'] + Country::with('translations')->get()->pluck('name', 'id')->toArray(),
                 'country_id' => $user->country_id ?? self::getCountryIdByIp() ?? '',
                 'birth_years' => $birth_years,
