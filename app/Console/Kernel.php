@@ -17,6 +17,7 @@ use App\Models\CronjobThirdRun;
 use App\Models\StopVideoReview;
 use App\Models\CronjobFourRun;
 use App\Models\DcnTransaction;
+use App\Models\VoxCronjobLang;
 use App\Models\ScrapeDentist;
 use App\Models\UserHistory;
 use App\Models\LeadMagnet;
@@ -2431,6 +2432,29 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'Answered questions count cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->cron('00 3 1 * *');
+
+
+        $schedule->call(function () {
+            echo 'Translate surveys'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $voxes_for_translation = VoxCronjobLang::whereNull('is_completed')->whereNull('is_processing')->get();
+
+            if($voxes_for_translation->isNotEmpty()) {
+                foreach($voxes_for_translation as $vox_trans) {
+                    $vox_trans->is_processing = true;
+                    $vox_trans->save();
+
+                    VoxHelper::translateSurvey($vox_trans->lang_code, $vox_trans->vox);
+
+                    $vox_trans->is_completed = true;
+                    $vox_trans->is_processing = false;
+                    $vox_trans->save();
+                }
+            }
+
+            echo 'Translate surveys cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->everyMinute();
 
 
         // $schedule->call(function () {

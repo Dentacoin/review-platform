@@ -57,7 +57,7 @@
                                 <div style="display: none;">
                                     @foreach(config('langs-to-translate') as $code => $name)
                                         <label for="lang-{{ $code }}-2" style="display: block;">
-                                            <input type="checkbox" name="languages" id="lang-{{ $code }}-2" value="{{ $code }}">
+                                            <input type="checkbox" name="languages[]" id="lang-{{ $code }}-2" value="{{ $code }}">
                                             {{ strtoupper($code) }}
                                         </label>
                                     @endforeach
@@ -129,7 +129,7 @@
                     <form id="languages-form" method="post">
                         @foreach(config('langs-to-translate') as $code => $name)
                             <label for="lang-{{ $code }}" style="display: block;">
-                                <input type="checkbox" name="languages" id="lang-{{ $code }}" class="lang-checkbox" value="{{ $code }}">
+                                <input type="checkbox" name="languages[]" id="lang-{{ $code }}" class="lang-checkbox" value="{{ $code }}">
                                 {{ strtoupper($code) }}
                             </label>
                         @endforeach

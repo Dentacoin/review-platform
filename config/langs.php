@@ -37,13 +37,30 @@ return [
 			'font_css' => "font-family: 'Nunito', sans-serif;",
 			'rtl' => false,
 		],
-		// 'es' => [
-		// 	'name' => 'Español',
-		// 	'flag' => 'ES',
+		'es' => [
+			'name' => 'Spanish',
+			'flag' => 'ES',
+			'font' => '<link href="https://fonts.googleapis.com/css?family=Nunito:400,700&amp;subset=latin-ext" rel="stylesheet">',
+			'font_css' => "font-family: 'Nunito', sans-serif;",
+			'rtl' => false,
+		],
+		// 'tr' => [
+		// 	'name' => 'Turkish',
+		// 	'flag' => 'TR',
 		// 	'font' => '<link href="https://fonts.googleapis.com/css?family=Nunito:400,700&amp;subset=latin-ext" rel="stylesheet">',
 		// 	'font_css' => "font-family: 'Nunito', sans-serif;",
 		// 	'rtl' => false,
 		// ],
+		// 'pt' => [
+		// 	'name' => 'Portuguese',
+		// 	'flag' => 'PT',
+		// 	'font' => '<link href="https://fonts.googleapis.com/css?family=Nunito:400,700&amp;subset=latin-ext" rel="stylesheet">',
+		// 	'font_css' => "font-family: 'Nunito', sans-serif;",
+		// 	'rtl' => false,
+		// ],
+
+
+
 		// 'pt' => [
 		//   'name' => 'Portuguese',
 		//   'flag' => 'BR',

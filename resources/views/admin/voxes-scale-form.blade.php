@@ -61,7 +61,6 @@
                                     {{ Form::text('answers-'.$code, !empty($item) ? $item->translateOrNew($code)->answers : null, array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => trans('admin.page.'.$current_page.'.'.$current_subpage.'.ansers-placeholder') )) }}
                                 </div>
                             </div>
-
                         </div>
                     @endforeach
                 </div>

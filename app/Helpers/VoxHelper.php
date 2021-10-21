@@ -12,7 +12,7 @@ use DB;
 
 class VoxHelper {
 
-    public static function translateQuestionInfo($lang_code, $vox) {
+    public static function translateVoxInfo($lang_code, $vox) {
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
@@ -57,7 +57,7 @@ class VoxHelper {
         $translation->save();
     }
 
-    public static function translateQuestionAnswers($lang_code, $question) {
+    public static function translateQuestionWithAnswers($lang_code, $question) {
 
         $translation = $question->translateOrNew($lang_code);
         $translation->vox_question_id = $question->id;
@@ -75,8 +75,6 @@ class VoxHelper {
         curl_close ($ch);
 
         $translation->question = isset(json_decode($server_output, true)['translations']) ? json_decode($server_output, true)['translations'][0]['text'] : '';
-
-        //dd($data['answers-'.$key]);
 
         if(!$question->vox_scale_id) {
 
@@ -99,8 +97,6 @@ class VoxHelper {
                     $translated_answers[] = json_decode($server_output, true)['translations'][0]['text'];
                 }
 
-                // dd($translated_answers);
-
                 $translation->answers = json_encode( $translated_answers, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE );
             } else {
                 $translation->answers = '';                            
@@ -113,10 +109,10 @@ class VoxHelper {
     }
 
     public static function translateSurvey($lang_code, $vox) {
-        self::translateQuestionInfo($lang_code, $vox);
+        self::translateVoxInfo($lang_code, $vox);
 
         foreach($vox->questions as $question) {
-            self::translateQuestionAnswers($lang_code, $question);
+            self::translateQuestionWithAnswers($lang_code, $question);
         }
         
         if(!in_array($lang_code, $vox->translation_langs)) {

@@ -11,6 +11,7 @@ use App\Exports\MultipleStatSheetExport;
 use App\Exports\Export;
 use App\Imports\Import;
 
+use App\Models\VoxCronjobLang;
 use App\Models\VoxToCategory;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
@@ -81,11 +82,15 @@ class VoxesController extends AdminController {
 
                 foreach(request('ids') as $vox_id) {
                     foreach(request('languages') as $lang) {
-                        // VoxHelper::translateSurvey($lang, Vox::find($vox_id));
+
+                        $vox_cronjob_lang = new VoxCronjobLang;
+                        $vox_cronjob_lang->vox_id = $vox_id;
+                        $vox_cronjob_lang->lang_code = $lang;
+                        $vox_cronjob_lang->save();
                     }
                 }
 
-                $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+                $this->request->session()->flash('error-success', 'The chosen voxes are sended for translations' );
                 return redirect('cms/vox/list');
             }
 
@@ -735,6 +740,14 @@ class VoxesController extends AdminController {
             $this->saveOrUpdateQuestion($question);
             $item->checkComplex();
 
+            if(request('translate-question')) {
+                foreach (config('langs-to-translate') as $lang_code => $value) {
+                    if($key != 'en') {
+                        VoxHelper::translateQuestionWithAnswers($lang_code, $question);
+                    }
+                }
+            }
+
             if(request('used_for_stats')=='standard' && !request('stats_fields')) {
                 Request::session()->flash('error-message', 'Please, select the demographic details which should be used for the statistics.');
                 return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
@@ -1285,19 +1298,13 @@ class VoxesController extends AdminController {
         }
         $question->save();
 
-        // if(count($this->langs) > 1) {
-        //     foreach ($this->langs as $lang_code => $value) {
-        //         if($key != 'en') {
-
-        //             if(!empty($data['translate-answers'])) {
-        //                 VoxHelper::translateQuestionAnswers($lang_code, $question);
-        //             }
-        //             if(!empty($data['translate-question'])) {
-        //                 VoxHelper::translateQuestionInfo($lang_code, Vox::find($question->vox_id));
-        //             }
-        //         }
-        //     }
-        // }
+        if($data['translate-question']) {
+            foreach (config('langs-to-translate') as $lang_code => $value) {
+                if($key != 'en') {
+                    VoxHelper::translateQuestionWithAnswers($lang_code, $question);
+                }
+            }
+        }
 
         if( Input::file('answer-photos') ) {
             $image_filename = [];
@@ -2089,6 +2096,12 @@ class VoxesController extends AdminController {
             }
             $question->save();
             $item->checkComplex();
+
+            foreach (config('langs-to-translate') as $lang_code => $value) {
+                if($key != 'en') {
+                    VoxHelper::translateQuestionWithAnswers($lang_code, $question);
+                }
+            }
         
             Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
             return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
@@ -2624,5 +2637,26 @@ class VoxesController extends AdminController {
         return $this->showView('vox-test', [
             'arr' => $arr
         ]);
+    }
+
+    public function translateQuestion() {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');
+        }
+
+        if(!empty(request('q-trans-id'))) {
+
+            foreach (config('langs-to-translate') as $lang_code => $value) {
+                if($key != 'en') {
+                    VoxHelper::translateQuestionWithAnswers($lang_code, VoxQuestion::find(request('q-trans-id')));
+                }
+            }
+            $this->request->session()->flash('success-message', 'Question translated' );
+        } else {
+            $this->request->session()->flash('error-message', 'No question founded' );
+        }
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/home');
     }
 }

@@ -3,8 +3,8 @@
         <a href="{{ url('cms/vox/') }}">Surveys</a> &raquo;
         <a href="{{ url('cms/vox/edit/'.$item->id) }}"> {{ $item->title }}</a>  
         @if(!empty($question))
-        &raquo;
-        {!! $question->question !!}
+            &raquo;
+            {!! $question->question !!}
         @endif
     </div>
     @if(!empty($question) && empty($question->question_trigger) && $question->order != 1)
@@ -16,14 +16,11 @@
     @endif
 </div>
 
-
 <div class="row">
     <div class="col-md-12">
-
-        {{ Form::open(array('id' => 'question-'.( !empty($question) ? 'edit' : 'add') , 'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 'class' => 'form-horizontal questions-form', 'method' => 'post', 'files' => true)) }}
+        {{ Form::open(array('id' => 'question-'.( !empty($question) ? 'edit' : 'add') , 'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 'class' => 'form-horizontal questions-form questions-form-new', 'method' => 'post', 'files' => true)) }}
             
-            <input id="translate-answers" name="translate-answers" type="hidden" value=""/>
-            <input id="translate-question" name="translate-question" type="hidden" value=""/>
+            <input id="translate-question" name="translate-question" type="hidden" value="{{ empty($question) ? '1' : '' }}"/>
 
             <div class="panel panel-inverse panel-with-tabs custom-tabs">
                 <div class="panel-heading p-0">
@@ -564,7 +561,8 @@
 
                     <div class="form-group" style="margin-top: 60px;">
                         <div class="col-md-6">
-                            <button type="submit" class="btn btn-block btn-success">{{ trans('admin.page.'.$current_page.'.question-add') }}</button>
+                            {{-- <button type="submit" class="btn btn-block btn-success">{{ trans('admin.page.'.$current_page.'.question-add') }}</button> --}}
+                            <a href="javascript:;" class="btn btn-block btn-success" id="submit-the-form">Save</a>
                         </div>
                         <div class="col-md-6">
                             <input type="hidden" name="stay-on-same-page" value=""/>
@@ -684,7 +682,6 @@
         <input type="hidden" id="old-trigger-type" value="{{ $trigger_type }}" />
     @endif
 
-
     <div class="input-group" id="new-trigger-group-template" >
         <div class="template-box clearfix" style="width: 100%;">
             <select name="triggers[]" class="form-control" style="width: 50%; float: left;">
@@ -717,8 +714,6 @@
     </div>
 </div>
 
-
-
 <div id="legendModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -746,12 +741,29 @@
                 <h4>Gender</h4>
                 <p><b>1</b> : Male</p>
                 <p><b>2</b> : Female</p>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
+    </div>
+</div>
 
+<div id="modal-translate-question-inner" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Do you want to translate edited/added question?</h4>
+            </div>
+            <div class="modal-body">
+                <a href="javascript:;" class="btn btn-primary translate-inner-question-button">Yes</a>
+                <a href="javascript:;" class="btn btn-default dont-translate-inner-question-button">No</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
