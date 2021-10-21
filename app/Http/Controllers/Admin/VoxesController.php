@@ -742,7 +742,7 @@ class VoxesController extends AdminController {
 
             if(request('translate-question')) {
                 foreach (config('langs-to-translate') as $lang_code => $value) {
-                    if($key != 'en') {
+                    if($lang_code != 'en') {
                         VoxHelper::translateQuestionWithAnswers($lang_code, $question);
                     }
                 }
@@ -1300,7 +1300,7 @@ class VoxesController extends AdminController {
 
         if($data['translate-question']) {
             foreach (config('langs-to-translate') as $lang_code => $value) {
-                if($key != 'en') {
+                if($lang_code != 'en') {
                     VoxHelper::translateQuestionWithAnswers($lang_code, $question);
                 }
             }
@@ -1492,11 +1492,33 @@ class VoxesController extends AdminController {
 
         if(Request::isMethod('post')) {
 
-            $ns = new VoxScale;
-            $this->saveOrUpdateScale($ns);
+            $item = new VoxScale;
+            $this->saveOrUpdateScale($item);
+
+            foreach (config('langs-to-translate') as $lang_code => $value) {
+                if($lang_code != 'en') {
+                    $ch = curl_init();
+
+                    curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".env('DEEPL_AUTH_KEY')."&text=".$item->translateOrNew('en')->answers."&target_lang=".strtoupper($lang_code));
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                    $answers = curl_exec ($ch);
+                    curl_close ($ch);
+
+                    $translation = $item->translateOrNew($lang_code);
+                    $translation->vox_scale_id = $item->id;
+                    $translation->answers = json_decode($answers, true)['translations'][0]['text'];
+                    $translation->save();
+                }
+            }
+
+            $item->save();
 
             Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.'.$this->current_subpage.'.added'));
-            return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/edit/'.$ns->id);
+            return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/edit/'.$item->id);
         }
 
         return $this->showView('voxes-scale-form', array(
@@ -1523,7 +1545,6 @@ class VoxesController extends AdminController {
                 $translation->save();
             }
         }
-        $item->save();
     }
 
     public function edit_scale( $id ) {
@@ -2098,7 +2119,7 @@ class VoxesController extends AdminController {
             $item->checkComplex();
 
             foreach (config('langs-to-translate') as $lang_code => $value) {
-                if($key != 'en') {
+                if($lang_code != 'en') {
                     VoxHelper::translateQuestionWithAnswers($lang_code, $question);
                 }
             }
@@ -2648,7 +2669,7 @@ class VoxesController extends AdminController {
         if(!empty(request('q-trans-id'))) {
 
             foreach (config('langs-to-translate') as $lang_code => $value) {
-                if($key != 'en') {
+                if($lang_code != 'en') {
                     VoxHelper::translateQuestionWithAnswers($lang_code, VoxQuestion::find(request('q-trans-id')));
                 }
             }
