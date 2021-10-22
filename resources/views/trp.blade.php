@@ -186,11 +186,11 @@
 				</a>
 				<div class="footer-text col-md-6 tac">
 					<div class="footer-menu">
-						<a href="https://reviews.dentacoin.com/blog/" target="_blank">Blog</a>
-						<a href="{{ getLangUrl('faq') }}">FAQ</a>
-						<a href="https://dentacoin.com/privacy-policy/" target="_blank">Privacy Policy</a>
-						<a href="https://dentavox.dentacoin.com/" target="_blank">Dentavox</a>
-						<a href="https://dentacare.dentacoin.com/" target="_blank">Dentacare App</a>
+						<a href="https://reviews.dentacoin.com/blog/" target="_blank">{{ trans('trp.footer.blog') }}</a>
+						<a href="{{ getLangUrl('faq') }}">{{ trans('trp.footer.faq') }}</a>
+						<a href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('trp.footer.privacy-policy') }}</a>
+						<a href="https://dentavox.dentacoin.com/" target="_blank">{{ trans('trp.footer.vox') }}</a>
+						<a href="https://dentacare.dentacoin.com/" target="_blank">{{ trans('trp.footer.dentacare') }}</a>
 					</div>
 					<small>
 						{!! trans('trp.footer.copyright', [
