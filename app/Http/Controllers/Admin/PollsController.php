@@ -12,6 +12,7 @@ use App\Models\PollAnswer;
 use App\Models\VoxScale;
 use App\Models\Poll;
 
+use App\Helpers\AdminHelper;
 use App\Imports\Import;
 use Carbon\Carbon;
 
@@ -69,32 +70,11 @@ class PollsController extends AdminController {
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
 
-        //Here we generates the range of the page numbers which will display.
-        if($total_pages <= (1+($adjacents * 2))) {
-          $start = 1;
-          $end   = $total_pages;
-        } else {
-          if(($page - $adjacents) > 1) { 
-            if(($page + $adjacents) < $total_pages) { 
-              $start = ($page - $adjacents);            
-              $end   = ($page + $adjacents);         
-            } else {             
-              $start = ($total_pages - (1+($adjacents*2)));  
-              $end   = $total_pages;               
-            }
-          } else {               
-            $start = 1;                                
-            $end   = (1+($adjacents * 2));             
-          }
-        }
+        $paginations = AdminHelper::paginationsFunction($total_pages, $adjacents, $page);
+        $start = $paginations['start'];
+        $end = $paginations['end'];
 
         $polls = $polls->skip( ($page-1)*$ppp )->take($ppp)->get();
-
-        //If you want to display all page links in the pagination then
-        //uncomment the following two lines
-        //and comment out the whole if condition just above it.
-        /*$start = 1;
-        $end = $total_pages;*/
 
         $current_url = url('cms/vox/polls');
 
@@ -503,32 +483,11 @@ class PollsController extends AdminController {
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
 
-        //Here we generates the range of the page numbers which will display.
-        if($total_pages <= (1+($adjacents * 2))) {
-          $start = 1;
-          $end   = $total_pages;
-        } else {
-          if(($page - $adjacents) > 1) { 
-            if(($page + $adjacents) < $total_pages) { 
-              $start = ($page - $adjacents);            
-              $end   = ($page + $adjacents);         
-            } else {             
-              $start = ($total_pages - (1+($adjacents*2)));  
-              $end   = $total_pages;               
-            }
-          } else {               
-            $start = 1;                                
-            $end   = (1+($adjacents * 2));             
-          }
-        }
+        $paginations = AdminHelper::paginationsFunction($total_pages, $adjacents, $page);
+        $start = $paginations['start'];
+        $end = $paginations['end'];
 
         $descriptions = $descriptions->skip( ($page-1)*$ppp )->take($ppp)->get();
-
-        //If you want to display all page links in the pagination then
-        //uncomment the following two lines
-        //and comment out the whole if condition just above it.
-        /*$start = 1;
-        $end = $total_pages;*/
 
         $current_url = url('cms/vox/polls-monthly-description');
 

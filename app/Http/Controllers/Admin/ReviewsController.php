@@ -10,6 +10,7 @@ use App\Models\UserBan;
 use App\Models\Review;
 use App\Models\User;
 
+use App\Helpers\AdminHelper;
 use Carbon\Carbon;
 
 use Request;
@@ -68,24 +69,9 @@ class ReviewsController extends AdminController {
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
 
-        //Here we generates the range of the page numbers which will display.
-        if($total_pages <= (1+($adjacents * 2))) {
-          $start = 1;
-          $end   = $total_pages;
-        } else {
-          if(($page - $adjacents) > 1) { 
-            if(($page + $adjacents) < $total_pages) { 
-              $start = ($page - $adjacents);            
-              $end   = ($page + $adjacents);         
-            } else {             
-              $start = ($total_pages - (1+($adjacents*2)));  
-              $end   = $total_pages;               
-            }
-          } else {               
-            $start = 1;                                
-            $end   = (1+($adjacents * 2));             
-          }
-        }
+        $paginations = AdminHelper::paginationsFunction($total_pages, $adjacents, $page);
+        $start = $paginations['start'];
+        $end = $paginations['end'];
 
         $reviews = $reviews->skip( ($page-1)*$ppp )->take($ppp)->get();
 

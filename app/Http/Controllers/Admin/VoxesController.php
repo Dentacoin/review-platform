@@ -23,6 +23,7 @@ use App\Models\VoxScale;
 use App\Models\VoxBadge;
 use App\Models\Vox;
 
+use App\Helpers\AdminHelper;
 use App\Helpers\VoxHelper;
 use Carbon\Carbon;
 
@@ -1832,39 +1833,18 @@ class VoxesController extends AdminController {
             $total_count = $items_count;
             $total_pages = ceil($total_count/$ppp);
 
-            //Here we generates the range of the page numbers which will display.
-            if($total_pages <= (1+($adjacents * 2))) {
-                $start = 1;
-                $end   = $total_pages;
-            } else {
-                if(($page - $adjacents) > 1) { 
-                    if(($page + $adjacents) < $total_pages) { 
-                        $start = ($page - $adjacents);            
-                        $end   = ($page + $adjacents);         
-                    } else {             
-                        $start = ($total_pages - (1+($adjacents*2)));  
-                        $end   = $total_pages;               
-                    }
-                } else {               
-                    $start = 1;                                
-                    $end   = (1+($adjacents * 2));             
-                }
-            }
-
-            //If you want to display all page links in the pagination then
-            //uncomment the following two lines
-            //and comment out the whole if condition just above it.
-            /*$start = 1;
-            $end = $total_pages;*/
+            $paginations = AdminHelper::paginationsFunction($total_pages, $adjacents, $page);
+            $start = $paginations['start'];
+            $end = $paginations['end'];
 
             $current_url = url('cms/vox/explorer/'.$vox_id.($question_id ? '/'.$question_id : '') );
 
             $pagination_link = "";
-                foreach (Request::all() as $key => $value) {
-                    if($key != 'search' && $key != 'page') {
-                        $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
-                    }
+            foreach (Request::all() as $key => $value) {
+                if($key != 'search' && $key != 'page') {
+                    $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
                 }
+            }
 
             //dd( request()->input('country') );
 
