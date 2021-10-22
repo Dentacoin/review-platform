@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\FrontController;
 
+use App\Helpers\GeneralHelper;
+
 use App\Models\Country;
 use App\Models\User;
 
@@ -53,7 +55,7 @@ class AddDentistController extends FrontController {
                 return Response::json( $ret );
             } else {
 
-                if(User::validateName(Request::input('name')) == true) {
+                if(GeneralHelper::validateName(Request::input('name')) == true) {
                     $ret = array(
                         'success' => false,
                         'messages' =>[
@@ -63,7 +65,7 @@ class AddDentistController extends FrontController {
                     return Response::json( $ret );
                 }
 
-                if(User::validateLatin(Request::input('name')) == false) {
+                if(GeneralHelper::validateLatin(Request::input('name')) == false) {
                     return Response::json( [
                         'success' => false, 
                         'messages' => [
@@ -72,7 +74,7 @@ class AddDentistController extends FrontController {
                     ] );
                 }
 
-                if(User::validateEmail(Request::input('email')) == true) {
+                if(GeneralHelper::validateEmail(Request::input('email')) == true) {
                     $ret = array(
                         'success' => false,
                         'messages' =>[
@@ -82,7 +84,7 @@ class AddDentistController extends FrontController {
                     return Response::json( $ret );
                 }
 
-                $info = User::validateAddress( Country::find(request('country_id'))->name, request('address') );
+                $info = GeneralHelper::validateAddress( Country::find(request('country_id'))->name, request('address') );
                 if(empty($info)) {
                     $ret = array(
                         'success' => false,
@@ -92,7 +94,7 @@ class AddDentistController extends FrontController {
                     );
                 }
 
-                if(User::validateWebsite(Request::input('website')) == true) {
+                if(GeneralHelper::validateWebsite(Request::input('website')) == true) {
                     $ret = array(
                         'success' => false,
                         'messages' =>[

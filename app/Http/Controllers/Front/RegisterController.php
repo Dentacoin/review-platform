@@ -5,6 +5,8 @@ use App\Http\Controllers\FrontController;
 
 use Illuminate\Support\Facades\Input;
 
+use App\Helpers\GeneralHelper;
+
 use App\Models\UserTeam;
 use App\Models\User;
 
@@ -28,7 +30,7 @@ class RegisterController extends FrontController {
     public function upload($locale=null) {
         if( Request::file('image') && Request::file('image')->isValid() ) {
             $img = Image::make( Input::file('image') )->orientate();
-            list($thumb, $full, $name) = User::addTempImage($img);
+            list($thumb, $full, $name) = GeneralHelper::addTempImage($img);
             return Response::json(['success' => true, 'thumb' => $thumb, 'name' => $name ]);
         }
     }

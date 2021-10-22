@@ -28,5 +28,4 @@ class UserAction extends Model {
     }
 }
 
-
 ?>

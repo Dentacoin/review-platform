@@ -22,11 +22,9 @@ class WalletAddress extends Model {
         'deleted_at'
     ];
     
-
     public function user() {
         return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
     }
-    
 }
 
 ?>

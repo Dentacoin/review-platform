@@ -26,7 +26,6 @@ class PollAnswer extends Model {
     public function poll() {
         return $this->hasOne('App\Models\Poll', 'id', 'poll_id');
     }
-    
 }
 
 ?>

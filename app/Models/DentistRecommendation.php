@@ -19,5 +19,4 @@ class DentistRecommendation extends Model {
     ];
 }
 
-
 ?>

@@ -33,6 +33,7 @@ class UserHistory extends Model {
         'fb_id',
         'history'
 	];
+    
     protected $dates = [
         'created_at',
     	'updated_at',
@@ -46,5 +47,4 @@ class UserHistory extends Model {
     public function user() {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
-
 }

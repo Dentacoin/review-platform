@@ -27,6 +27,7 @@ use App\Models\User;
 use App\Models\Poll;
 use App\Models\Vox;
 
+use App\Helpers\GeneralHelper;
 use App\Helpers\VoxHelper;
 use Carbon\Carbon;
 
@@ -44,11 +45,6 @@ class VoxService {
     public static function getNextQuestionFunction($admin, $user, $for_app, $country_id) {
 
         if(!empty($user)) {
-
-            if(request('to-lang')) {
-                App::setLocale(request('to-lang'));
-            }
-            
             $vox_id = request('vox_id');
             $question_id = request('question_id');
             
@@ -781,10 +777,6 @@ class VoxService {
             }
         }
 
-        if(request('to-lang')) {
-            App::setLocale(request('to-lang'));
-        }
-
         ini_set('max_execution_time', 0);
         set_time_limit(0);
         ini_set('memory_limit','1024M');
@@ -906,7 +898,7 @@ class VoxService {
                 Auth::guard('web')->logout();
                 
                 return [
-                    'url' => 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id))
+                    'url' => 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(GeneralHelper::encrypt($u_id))
                 ];
             }
         }
@@ -2205,7 +2197,7 @@ class VoxService {
                                 CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
                                 CURLOPT_SSL_VERIFYPEER => 0,
                                 CURLOPT_POSTFIELDS => array(
-                                    'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
+                                    'data' => GeneralHelper::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
                                 )
                             ));
                              
@@ -2221,7 +2213,7 @@ class VoxService {
                                 CURLOPT_URL => 'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications',
                                 CURLOPT_SSL_VERIFYPEER => 0,
                                 CURLOPT_POSTFIELDS => array(
-                                    'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
+                                    'data' => GeneralHelper::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
                                 )
                             ));
                              

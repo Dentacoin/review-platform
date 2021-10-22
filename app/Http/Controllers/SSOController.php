@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
 
+use App\Helpers\GeneralHelper;
+
 use App\Models\User;
 
 use Request;
@@ -93,10 +95,10 @@ class SSOController extends BaseController {
         //     $tokenobj = $user->createToken('LoginToken');
         //     $tokenobj->token->platform = $platform;
         //     $tokenobj->token->save();
-        //     return User::encrypt($tokenobj->accessToken);
+        //     return GeneralHelper::encrypt($tokenobj->accessToken);
         // }
 
-        return User::encrypt(session('logged_user')['token']);
+        return GeneralHelper::encrypt(session('logged_user')['token']);
     }
 
     public function decrypt($encrypted_text) {

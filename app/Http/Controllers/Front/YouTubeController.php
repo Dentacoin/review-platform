@@ -30,7 +30,7 @@ use App\Models\Reward;
 use App\Models\Civic;
 use App\Models\Email;
 use App\Models\User;
-use App\Models\Poll;
+use App\Models\VoxQuestion;
 use App\Models\VoxScale;
 use App\Models\Vox;
 use App\Models\Dcn;
@@ -43,6 +43,7 @@ use Request;
 use Mail;
 use Auth;
 use Log;
+use App;
 use DB;
 
 class YouTubeController extends FrontController {

@@ -54,7 +54,7 @@ class Poll extends Model {
         return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_answer);
     }
 
-     public function getSocialCoverPath() {
+    public function getSocialCoverPath() {
         $folder = storage_path().'/app/public/dailypolls/'.($this->id%100);
         if(!is_dir($folder)) {
             mkdir($folder);
@@ -170,7 +170,6 @@ class Poll extends Model {
 
         return $is_restricted;
     }
-    
 }
 
 class PollTranslation extends Model {
@@ -180,9 +179,6 @@ class PollTranslation extends Model {
         'question',
         'answers',
     ];
-
 }
-
-
 
 ?>

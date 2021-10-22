@@ -35,5 +35,4 @@ class DcnTransactionHistory extends Model {
     public function transaction() {
         return $this->hasOne('App\Models\Order', 'id', 'transaction_id');
     }
-
 }

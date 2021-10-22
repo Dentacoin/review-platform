@@ -26,7 +26,6 @@ class Blacklist extends Model {
         $this->blacklistBlock()->delete();
         parent::delete();
     }
-    
 }
 
 ?>

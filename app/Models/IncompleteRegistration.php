@@ -39,8 +39,6 @@ class IncompleteRegistration extends Model {
         'updated_at',
         'deleted_at'
     ];
-    
 }
-
 
 ?>

@@ -49,6 +49,7 @@ class UserInvite extends Model {
     public function getImageUrl($thumb = false) {
         return $this->has_image ? url('/storage/invites/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-0.png');
     }
+    
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/invites/'.($this->id%100);
         if(!is_dir($folder)) {
@@ -106,6 +107,5 @@ class UserInvite extends Model {
         }
     }
 }
-
 
 ?>

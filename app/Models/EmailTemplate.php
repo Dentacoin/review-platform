@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class EmailTemplate extends Model
-{
+class EmailTemplate extends Model {
+    
     use SoftDeletes;
     use \Dimsav\Translatable\Translatable;
 
@@ -97,13 +97,12 @@ class EmailTemplate extends Model
             $codes[] = '[expires]';
             $codes[] = '[ban_hours]';
             $codes[] = '[ban_days]';
-        } 
-
+        }
         
         if($this->id==14 || $this->id==26 || $this->id==40) {
             $codes[] = '[welcome_link]Click here[/welcome_link]';
             $codes[] = '[become_dcn_dentist]Click here[/become_dcn_dentist]';
-        } 
+        }
 
         if($this->id==18 || $this->id==19 || $this->id==22) {
             $codes[] = '[who_joined_name]';
@@ -113,23 +112,26 @@ class EmailTemplate extends Model
             $codes[] = '[transaction_amount]';
             $codes[] = '[transaction_address]';
             $codes[] = '[transaction_link]Click here[/transaction_link]';
-        } 
+        }
 
         if($this->id==23 || $this->id==63) {
             $codes[] = '[patient_name]';
             $codes[] = '[invitation_link]Click here[/invitation_link]';
-        } 
+        }
+
         if($this->id==24) {
             $codes[] = '[dentist_name]';
             $codes[] = '[dentist_link]Click here[/dentist_link]';
-        } 
+        }
+
         if($this->id==28) {
             $codes[] = '[reward]Claim your reward[/reward]';
-        } 
+        }
+
         if($this->id==31 || $this->id==32) {
             $codes[] = '[agree] agree button text [/agree]';
             $codes[] = '[privacy] privacy link text [/privacy]';
-        } 
+        }
 
         if($this->id==33) {
             $codes[] = '[clinic-name]';
@@ -185,6 +187,7 @@ class EmailTemplate extends Model
             $codes[] = '[cur-month-rating-percent]';
             $codes[] = '[top3-dentists]';
         }
+
         if($this->id==64) {
             $codes[] = '[dentist_name]';
             $codes[] = '[rewardlink]Check Your Reward[/rewardlink]';
@@ -223,5 +226,4 @@ class EmailTemplateTranslation extends Model {
         "category",
         "sendgrid_template_id"
 	];
-
 }

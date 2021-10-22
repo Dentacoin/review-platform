@@ -13,6 +13,7 @@ use App\Models\Review;
 use App\Models\User;
 use App\Models\City;
 
+use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Validator;
@@ -107,7 +108,7 @@ class IndexController extends FrontController {
 
 			        if (!empty($ret['country_name']) && !empty($ret['city_name'])) {
 			        	
-			        	$final_info = User::validateAddress($ret['country_name'], $ret['city_name']);
+			        	$final_info = GeneralHelper::validateAddress($ret['country_name'], $ret['city_name']);
 
 				        if(!empty(Request::input('change-city'))) {
 				        	$this->user->address = $ret['city_name'].','.$ret['country_name'];

@@ -25,5 +25,4 @@ class UnclaimedDentist extends Model {
     }
 }
 
-
 ?>

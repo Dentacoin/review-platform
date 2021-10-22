@@ -12,6 +12,8 @@ use \SendGrid\Mail\Subject as Subject;
 use \SendGrid\Mail\From as From;
 use \SendGrid\Mail\To as To;
 
+use App\Helpers\GeneralHelper;
+
 use App\Models\Review;
 use App\Models\Reward;
 use App\Models\User;
@@ -43,8 +45,7 @@ class Email extends Model {
 	}
 
 	private $button_style = 'style="text-decoration:none;background:#126585;color:#FFFFFF;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-weight:normal;line-height:120%;text-transform:none;margin:0px;border:none;border-radius:5px;color:#FFFFFF;cursor:auto;padding:10px 30px;"';
-	private $text_style = 'style="text-decoration:underline; color: #38a2e5;"';
-																						
+	private $text_style = 'style="text-decoration:underline; color: #38a2e5;"';																			
 
 	public function send($anonymous_email=null) {
 
@@ -80,7 +81,7 @@ class Email extends Model {
 				'title' => $title,
 				'subtitle' => $subtitle,
 				'platform' => $platform,
-				'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $user_email),'email_category' => $this->template->subscribe_category, 'platform' => $this->platform ))))]),
+				'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(GeneralHelper::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $user_email),'email_category' => $this->template->subscribe_category, 'platform' => $this->platform ))))]),
 			])->render();
 
 	        $from = new From($sender, $sender_name);
@@ -243,11 +244,10 @@ class Email extends Model {
 				'[/invitelink]',
 			), array(
 				$this->meta['clinic_name'] ?? '',
-				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => GeneralHelper::encrypt($this->user->id) ]).'">',
 				'</a>',
 			), $content);
 		}
-		
 
 		if($this->template->id==7 || $this->template->id==17 || $this->template->id==25 || $this->template->id==27) { //Invite
 			$content = str_replace(array(
@@ -256,7 +256,7 @@ class Email extends Model {
 				'[/invitelink]',
 			), array(
 				$this->meta['friend_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => GeneralHelper::encrypt($this->user->id) ]).'">',
 				'</a>',
 			), $content);
 		}
@@ -351,7 +351,6 @@ class Email extends Model {
 			), $content);
 		}
 
-
 		if($this->template->id==33) { //Invite Dentist to Join Clinic
 			$content = str_replace(array(
 				'[clinic-name]',
@@ -363,7 +362,6 @@ class Email extends Model {
 				!empty($this->meta['clinic-link']) ? '</a>' : '',
 			), $content);
 		}
-
 
 		if($this->template->id==34) { //Dentist Wants to Join Clinic
 			$content = str_replace(array(
@@ -391,7 +389,6 @@ class Email extends Model {
 			}
 		}
 
-
 		if($this->template->id==35 || $this->template->id==36 || $this->template->id==37) { //Clinic Accepts Dentist Request
 			$content = str_replace(array(
 				'[clinic-name]',
@@ -407,8 +404,6 @@ class Email extends Model {
 				$this->meta['dentist-name'],
 			), $content);
 		}
-
-
 
 		if($this->template->id==11 || $this->template->id==39) { //New Auth
 			$content = str_replace(array(
@@ -494,7 +489,6 @@ class Email extends Model {
 			), $content);
         }
 
-
 		if($this->template->id==63) { //user asks Dentist
 			$content = str_replace(array(
 				'[patient_name]',
@@ -543,7 +537,6 @@ class Email extends Model {
 			), $content);
 		}
 
-
 		return $content;
 	}
 
@@ -554,5 +547,4 @@ class Email extends Model {
     public function setMetaAttribute($value) {
         $this->attributes['meta'] = json_encode($value);
     }
-
 }

@@ -26,12 +26,10 @@ class City extends Model {
     public function country() {
         return $this->hasOne('App\Models\Country', 'id', 'country_id');
     }
-
 }
 
 class CityTranslation extends Model {
 
 	public $timestamps = false;
 	protected $fillable = ["name"];
-
 }

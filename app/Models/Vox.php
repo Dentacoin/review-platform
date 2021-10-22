@@ -11,8 +11,8 @@ use App\Models\UserDevice;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\VoxBadge;
-use App\Models\User;
 
+use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Image;
@@ -752,7 +752,7 @@ class Vox extends Model {
                 CURLOPT_URL => $url,
                 CURLOPT_SSL_VERIFYPEER => 0,
                 CURLOPT_POSTFIELDS => array(
-                    'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
+                    'data' => GeneralHelper::encrypt(json_encode(array('type' => 'new-survey')))
                 )
             ));
              
@@ -764,7 +764,6 @@ class Vox extends Model {
             'page' => '/paid-dental-surveys/'.$this->slug,
         ]);
     }
-
 }
 
 class VoxTranslation extends Model {
@@ -776,9 +775,6 @@ class VoxTranslation extends Model {
         'stats_description',
         'slug',
     ];
-
 }
-
-
 
 ?>

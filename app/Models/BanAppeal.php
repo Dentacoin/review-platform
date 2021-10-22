@@ -40,7 +40,6 @@ class BanAppeal extends Model {
     }
 
     public function addImage($img) {
-
         $to = $this->getImagePath();
         $to_thumb = $this->getImagePath(true);
 
@@ -68,7 +67,6 @@ class BanAppeal extends Model {
         }
         return [];
     }
-    
 }
 
 ?>

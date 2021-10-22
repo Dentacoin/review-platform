@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\User;
+use App\Helpers\GeneralHelper;
 
 use Carbon\Carbon;
 
@@ -60,7 +60,7 @@ class DcnTransaction extends Model {
         $times = intval($this->retries)+1;
         $period = 7200 + (300*pow(2, $times));
         $period = min(86400, $period);
-        return !User::isGasExpensive() && Carbon::now()->diffInMinutes($this->updated_at) > $period;
+        return !GeneralHelper::isGasExpensive() && Carbon::now()->diffInMinutes($this->updated_at) > $period;
     }
 
     public function getReferenceIdAttribute($value) {

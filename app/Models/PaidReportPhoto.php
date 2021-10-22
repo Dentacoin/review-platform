@@ -45,5 +45,4 @@ class PaidReportPhoto extends Model {
     }
 }
 
-
 ?>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
+use App\Helpers\GeneralHelper;
+
 use App\Models\Country;
 use App\Models\PageSeo;
 use App\Models\User;
@@ -81,7 +83,7 @@ class DentistsController extends FrontController {
                 $geores = json_decode($geores);
                 if(!empty($geores->results[0]->geometry->location)) {
 
-                    $parsedAddress = User::parseAddress( $geores->results[0]->address_components );
+                    $parsedAddress = GeneralHelper::parseAddress( $geores->results[0]->address_components );
 
                     $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
                     $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
@@ -110,7 +112,7 @@ class DentistsController extends FrontController {
                 $geores = json_decode($geores);
                 if(!empty($geores->results[0]->geometry->location)) {
 
-                    $parsedAddress = User::parseAddress( $geores->results[0]->address_components );
+                    $parsedAddress = GeneralHelper::parseAddress( $geores->results[0]->address_components );
                     $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
                     $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
                     $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
@@ -132,7 +134,7 @@ class DentistsController extends FrontController {
                         $geores = json_decode($geores);
                         if(!empty($geores->results[0]->geometry->location)) {
 
-                            $parsedAddress = User::parseAddress( $geores->results[0]->address_components );
+                            $parsedAddress = GeneralHelper::parseAddress( $geores->results[0]->address_components );
                             $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
                             $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
                             $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';

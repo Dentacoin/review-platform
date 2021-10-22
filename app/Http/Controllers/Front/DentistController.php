@@ -32,6 +32,7 @@ use App\Models\Review;
 use App\Models\Reward;
 use App\Models\User;
 
+use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Validator;
@@ -263,9 +264,9 @@ class DentistController extends FrontController {
 
                             $ret['success'] = false;
                             $ret['valid_input'] = false;
-                            $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id));
+                            $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&on-hold-type=bad_ip&key='.urlencode(GeneralHelper::encrypt($u_id));
 
-                            $token = User::encrypt(session('login-logged-out'));
+                            $token = GeneralHelper::encrypt(session('login-logged-out'));
                             $imgs_urls = [];
                             foreach( config('platforms') as $k => $platform ) {
                                 if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
@@ -989,7 +990,7 @@ class DentistController extends FrontController {
                     return Response::json( $ret );
                 } else {
 
-                    if(User::validateLatin(Request::input('name')) == false) {
+                    if(GeneralHelper::validateLatin(Request::input('name')) == false) {
                         return Response::json( [
                             'success' => false, 
                             'messages' => [
@@ -1608,7 +1609,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                     }
                 }
 
-                $mail = User::unregisteredSendGridTemplate($this->user, Request::Input('email'), Request::Input('name'), 89, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
+                $mail = GeneralHelper::unregisteredSendGridTemplate($this->user, Request::Input('email'), Request::Input('name'), 89, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
                 $mail->delete();
 
                 return Response::json(['success' => true, 'message' => trans('trp.popup.popup-recommend-dentist.success') ] );

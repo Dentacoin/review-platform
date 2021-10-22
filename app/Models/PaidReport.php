@@ -104,7 +104,6 @@ class PaidReport extends Model {
         }
         return [];
     }
-    
 }
 
 class PaidReportTranslation extends Model {
@@ -124,9 +123,6 @@ class PaidReportTranslation extends Model {
     protected $casts = [
         'table_contents' => 'array',
     ];
-
 }
-
-
 
 ?>

@@ -191,8 +191,8 @@ class ProfileController extends FrontController {
                 'name' => $this->user->getNames() 
             ]).rawurlencode($this->user->getLink().'?'. http_build_query([
                 'dcn-gateway-type'=>'patient-register', 
-                'inviter' => User::encrypt($this->user->id), 
-                'inviteid' => User::encrypt($invitation->id) 
+                'inviter' => GeneralHelper::encrypt($this->user->id), 
+                'inviteid' => GeneralHelper::encrypt($invitation->id) 
             ]));
 
             return Response::json([
@@ -555,7 +555,7 @@ class ProfileController extends FrontController {
                         'invited_user_name' => $last_invite->invited_name,
                         "invitation_link" => $this->user->getLink().'?'. http_build_query([
                             'dcn-gateway-type'=>'patient-login', 
-                            'inviter' => User::encrypt($this->user->id) 
+                            'inviter' => GeneralHelper::encrypt($this->user->id) 
                         ]),
                     ];
 
@@ -1064,7 +1064,7 @@ class ProfileController extends FrontController {
             ->withErrors($validator);
         } else {
 
-            if(is_numeric(request('country_id')) && empty(Request::input('field')) && $this->user->is_dentist && !User::validateAddress( $this->user->country_id, request('address') ) ) {
+            if(is_numeric(request('country_id')) && empty(Request::input('field')) && $this->user->is_dentist && !GeneralHelper::validateAddress( $this->user->country_id, request('address') ) ) {
                 if( Request::input('json') ) {
                     $ret = [
                         'success' => false,
@@ -1102,7 +1102,7 @@ class ProfileController extends FrontController {
                 return Response::json($ret);
             }
 
-            if(!empty(Request::input('name')) && (User::validateLatin(Request::input('name')) == false)) {
+            if(!empty(Request::input('name')) && (GeneralHelper::validateLatin(Request::input('name')) == false)) {
                 if( Request::input('json') ) {
                     $ret = [
                         'success' => false,
@@ -2018,8 +2018,8 @@ class ProfileController extends FrontController {
                         'invited_user_name' => $name,
                         "invitation_link" => $this->user->getLink().'?'. http_build_query([
                             'dcn-gateway-type'=>'patient-login', 
-                            'inviter' => User::encrypt($this->user->id), 
-                            'inviteid' => User::encrypt($invitation->id) 
+                            'inviter' => GeneralHelper::encrypt($this->user->id), 
+                            'inviteid' => GeneralHelper::encrypt($invitation->id) 
                         ]),
                     ];
 
@@ -2059,12 +2059,12 @@ class ProfileController extends FrontController {
                             'invited_user_name' => $name,
                             "invitation_link" => $this->user->getLink().'?'. http_build_query([
                                 'dcn-gateway-type'=>'patient-register', 
-                                'inviter' => User::encrypt($this->user->id), 
-                                'inviteid' => User::encrypt($invitation->id) 
+                                'inviter' => GeneralHelper::encrypt($this->user->id), 
+                                'inviteid' => GeneralHelper::encrypt($invitation->id) 
                             ]),
                         ];
 
-                        User::unregisteredSendGridTemplate(
+                        GeneralHelper::unregisteredSendGridTemplate(
                             $this->user, 
                             $email, 
                             $name, 

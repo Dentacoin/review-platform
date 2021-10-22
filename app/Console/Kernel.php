@@ -37,6 +37,7 @@ use App\Models\Poll;
 use App\Models\Dcn;
 use App\Models\Vox;
 
+use App\Helpers\GeneralHelper;
 use WebPConvert\WebPConvert;
 use App\Helpers\VoxHelper;
 use Carbon\Carbon;
@@ -184,7 +185,7 @@ class Kernel extends ConsoleKernel {
 
                                     //$arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
 
-                                    $mail = User::unregisteredSendGridTemplate($u, $notify->email, $notify->name, $v['tempalte_id'], $arr, $key, $unsubscribed, $notify->email);
+                                    $mail = GeneralHelper::unregisteredSendGridTemplate($u, $notify->email, $notify->name, $v['tempalte_id'], $arr, $key, $unsubscribed, $notify->email);
 
                                     $notify->$field = true;
                                     $notify->save();
@@ -233,7 +234,7 @@ class Kernel extends ConsoleKernel {
                         echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
 
                         $user = User::find(113928);
-                        $mail = User::unregisteredSendGridTemplate($user, $notify->email, $notify->name, $time['tempalte_id'], null, 'trp', $unsubscribed, $notify->email);
+                        $mail = GeneralHelper::unregisteredSendGridTemplate($user, $notify->email, $notify->name, $time['tempalte_id'], null, 'trp', $unsubscribed, $notify->email);
 
                         $notify->$field = true;
                         $notify->save();
@@ -456,7 +457,7 @@ NEW & NOT SENT TRANSACTIONS
 
                     if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(30)) {
 
-                        if (!User::isGasExpensive()) {
+                        if (!GeneralHelper::isGasExpensive()) {
 
                             foreach ($transactions as $trans) {
                                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
@@ -549,7 +550,7 @@ PAID BY USER TRANSACTIONS
 
                         if ($cron_new_trans_time->cron_paid_by_user_trans < Carbon::now()->subMinutes(10)) {
 
-                            if (!User::isApprovalGasExpensive()) {
+                            if (!GeneralHelper::isApprovalGasExpensive()) {
 
                                 foreach ($transactions as $trans) {
                                     $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
@@ -709,7 +710,7 @@ UNCONFIRMED TRANSACTIONS
                         }
 
                         //after 14 days
-                        if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*336 && !User::isGasExpensive()) {  //14 days = 24 * 14 = 336
+                        if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*336 && !GeneralHelper::isGasExpensive()) {  //14 days = 24 * 14 = 336
                             $trans->status = 'not_sent';
                             $trans->message = 'Unconfirmed from more than 14 days';
                             $trans->unconfirmed_retry = true;

@@ -28,7 +28,6 @@ class Question extends Model {
         'updated_at',
         'deleted_at'
     ];
-    
 }
 
 class QuestionTranslation extends Model {
@@ -39,9 +38,6 @@ class QuestionTranslation extends Model {
         'label',
         'options',
     ];
-
 }
-
-
 
 ?>

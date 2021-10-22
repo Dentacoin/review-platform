@@ -404,7 +404,6 @@ class VoxQuestion extends Model {
         return $arr;
     }
 
-
     public function shuffleAnswers($answers) {
         $append_at_the_end = [];
         $shuffled = [];
@@ -425,7 +424,6 @@ class VoxQuestion extends Model {
 
         return $shuffled;
     }
-
 }
 
 class VoxQuestionTranslation extends Model {

@@ -36,12 +36,10 @@ class Country extends Model {
     public function cities() {
         return $this->hasMany('App\Models\City')->orderBy('name', 'ASC');
     }
-
 }
 
 class CountryTranslation extends Model {
 
 	public $timestamps = false;
 	protected $fillable = ["name"];
-
 }

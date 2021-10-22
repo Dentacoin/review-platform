@@ -33,9 +33,6 @@ class PollsMonthlyDescriptionTranslation extends Model {
     protected $fillable = [
         'description',
     ];
-
 }
-
-
 
 ?>

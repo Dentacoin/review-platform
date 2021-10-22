@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use App\Helpers\GeneralHelper;
+
 use App\Models\AnonymousUser;
 use App\Models\DentistClaim;
 use App\Models\UserHistory;
@@ -70,7 +72,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
 
                     $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $dk->email);
                     $u = User::find(113928);
-                    $mail = User::unregisteredSendGridTemplate($u, $dk->email, $dk->name, 66, null, 'trp', $unsubscribed, $dk->email);
+                    $mail = GeneralHelper::unregisteredSendGridTemplate($u, $dk->email, $dk->name, 66, null, 'trp', $unsubscribed, $dk->email);
                     $mail->delete();
                 }
             }
@@ -119,7 +121,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
         $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $item->email);
 
         $u = User::find(113928);
-        $mail = User::unregisteredSendGridTemplate($u, $item->email, $item->name, 66, null, 'trp', $unsubscribed, $item->email);
+        $mail = GeneralHelper::unregisteredSendGridTemplate($u, $item->email, $item->name, 66, null, 'trp', $unsubscribed, $item->email);
         $mail->delete();
 
 
@@ -162,7 +164,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
         $unsubscribed = User::isUnsubscribedAnonymous(67, 'trp', $item->email);
 
         $u = User::find(113928);
-        $mail = User::unregisteredSendGridTemplate($u, $item->email, $item->name, 67, null, 'trp', $unsubscribed, $item->email);
+        $mail = GeneralHelper::unregisteredSendGridTemplate($u, $item->email, $item->name, 67, null, 'trp', $unsubscribed, $item->email);
         $mail->delete();
 
 

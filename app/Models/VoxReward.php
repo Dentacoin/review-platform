@@ -39,8 +39,6 @@ class VoxReward extends Model {
     public function formatDuration() {
         return ($this->seconds>=60 ? floor($this->seconds/60).' min ' : '').( $this->seconds%60 ? ($this->seconds%60).' sec' : '' );
     }
-    
-    
 }
 
 ?>

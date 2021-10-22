@@ -18,7 +18,6 @@ class VoxScale extends Model {
     ];
 
     public $timestamps = false;
-
 }
 
 class VoxScaleTranslation extends Model {
@@ -27,9 +26,6 @@ class VoxScaleTranslation extends Model {
     protected $fillable = [
         'answers',
     ];
-
 }
-
-
 
 ?>

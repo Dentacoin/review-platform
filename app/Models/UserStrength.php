@@ -44,7 +44,6 @@ class UserStrength extends Model {
                     } 
                 }
 
-
                 if( empty($missing_info )) {
                     $ret['completed_steps']++;
                 } else {
@@ -62,7 +61,6 @@ class UserStrength extends Model {
                     $array_number_shuffle['important']++;
                 }
 
-
                 //Monthly progress
 
                 $carbon_month = Carbon::now();
@@ -74,7 +72,6 @@ class UserStrength extends Model {
                 $today = Carbon::now();
 
                 $new_user = $user->created_at > Carbon::now()->subDays(30);
-
 
                 $current_month_invitations = UserInvite::where( 'user_id', $user->id)
                 ->where('created_at', '>=', $first_day_of_month)
@@ -230,7 +227,6 @@ class UserStrength extends Model {
                             }
 
                             $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
-
                             $dentist_country = Country::find($user->country_id)->name;
 
                             $ret[] = [
@@ -245,7 +241,6 @@ class UserStrength extends Model {
                                 'event_action' => 'Invite',
                                 'event_label' => 'Country',
                             ];
-
 
                             $array_number_shuffle['important']++;
                         }

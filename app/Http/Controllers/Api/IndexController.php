@@ -13,6 +13,7 @@ use App\Models\Country;
 use App\Models\User;
 use App\Models\Poll;
 
+use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Validator;
@@ -209,7 +210,7 @@ class IndexController extends ApiController {
 
     	if(!empty(request('token'))) {
     		return Response::json( [
-    			'token' => User::encrypt(request('token')),
+    			'token' => GeneralHelper::encrypt(request('token')),
 	        	'success' => true,
 	        ] );
     	}
@@ -274,7 +275,7 @@ class IndexController extends ApiController {
 
     	if(!empty(request('userId'))) {
 
-	    	$user = User::decrypt(request('userId')) ? User::find(User::decrypt(request('userId'))) : null;
+	    	$user = GeneralHelper::decrypt(request('userId')) ? User::find(GeneralHelper::decrypt(request('userId'))) : null;
 
 	    	if(!empty($user)) {
 

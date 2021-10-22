@@ -42,9 +42,6 @@ class SupportQuestionTranslation extends Model {
         'slug',
         'content',
     ];
-
 }
-
-
 
 ?>

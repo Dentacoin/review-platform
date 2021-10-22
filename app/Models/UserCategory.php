@@ -14,5 +14,4 @@ class UserCategory extends Model {
     ];
 }
 
-
 ?>

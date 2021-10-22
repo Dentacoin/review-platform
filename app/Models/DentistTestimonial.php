@@ -55,9 +55,7 @@ class DentistTestimonial extends Model {
         $destination = self::getImagePath().'.webp';
         WebPConvert::convert(self::getImagePath(), $destination, []);
     }
-    
 }
-
 
 class DentistTestimonialTranslation extends Model {
 
@@ -68,7 +66,6 @@ class DentistTestimonialTranslation extends Model {
         'name',
         'job',
     ];
-
 }
 
 

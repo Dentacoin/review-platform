@@ -83,7 +83,7 @@ class BranchesController extends FrontController {
                         $ret['messages'][$field] = implode(', ', $errors);
                     }
                 } else {
-                    if(User::validateLatin(Request::input('clinic_name')) == false) {
+                    if(GeneralHelper::validateLatin(Request::input('clinic_name')) == false) {
                         return Response::json( [
                             'success' => false, 
                             'messages' => [
@@ -145,7 +145,7 @@ class BranchesController extends FrontController {
 
 	                if(Request::getHost() != 'urgent.reviews.dentacoin.com') {
 
-		                $info = User::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
+		                $info = GeneralHelper::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
 		                if(empty($info)) {
 		                    return Response::json( array(
 		                        'success' => false,
@@ -222,7 +222,7 @@ class BranchesController extends FrontController {
                 return Response::json( $ret );
             } else {
 
-                if(User::validateLatin(Request::input('clinic_name')) == false) {
+                if(GeneralHelper::validateLatin(Request::input('clinic_name')) == false) {
                     return Response::json( [
                         'success' => false, 
                         'messages' => [
@@ -233,7 +233,7 @@ class BranchesController extends FrontController {
 
                 if(Request::getHost() != 'urgent.reviews.dentacoin.com') {
 
-	                $info = User::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
+	                $info = GeneralHelper::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
 	                if(empty($info)) {
 	                    return Response::json( array(
 	                        'success' => false,
@@ -337,7 +337,7 @@ class BranchesController extends FrontController {
 
     // public function logoutas($locale=null) {
 
-    //     $encrypted_user_id = User::encrypt($this->user->id);
+    //     $encrypted_user_id = GeneralHelper::encrypt($this->user->id);
 
     //     // Auth::guard('web')->user()->logoutActions();
     //     // Auth::guard('web')->user()->removeTokens();
@@ -345,7 +345,7 @@ class BranchesController extends FrontController {
 
     //     $ret['success'] = true;
 
-    //     $token = User::encrypt(session('login-logged-out'));
+    //     $token = GeneralHelper::encrypt(session('login-logged-out'));
     //     $imgs_urls = [];
     //     foreach( config('platforms') as $k => $platform ) {
     //         if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
@@ -378,12 +378,12 @@ class BranchesController extends FrontController {
                 // $tokenobj->token->platform = 'trp';
                 // $tokenobj->token->save();
 
-                // $token = User::encrypt($tokenobj->accessToken);
+                // $token = GeneralHelper::encrypt($tokenobj->accessToken);
                 // $imgs_urls = [];
                 // foreach( config('platforms') as $k => $platform ) {
                 //     if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
                 //         if($k !== 'vox' && $k !== 'account') {
-                //             $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?slug='.urlencode(User::encrypt($item->id)).'&type='.urlencode(User::encrypt('dentist')).'&token='.urlencode($token);
+                //             $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?slug='.urlencode(GeneralHelper::encrypt($item->id)).'&type='.urlencode(GeneralHelper::encrypt('dentist')).'&token='.urlencode($token);
                 //         }
                 //     }
                 // }

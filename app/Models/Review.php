@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 
 use App\Models\DcnReward;
 use App\Models\Reward;

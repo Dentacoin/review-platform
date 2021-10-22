@@ -26,5 +26,4 @@ class UserSurveyWarning extends Model {
     }
 }
 
-
 ?>

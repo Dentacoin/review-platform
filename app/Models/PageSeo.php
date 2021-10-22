@@ -77,9 +77,6 @@ class PageSeoTranslation extends Model {
         'social_title',
         'social_description',
     ];
-
 }
-
-
 
 ?>

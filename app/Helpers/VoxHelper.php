@@ -76,11 +76,12 @@ class VoxHelper {
 
         $translation->question = isset(json_decode($server_output, true)['translations']) ? json_decode($server_output, true)['translations'][0]['text'] : '';
 
-        if(!$question->vox_scale_id) {
+        if(!empty($question->answers) && !empty(json_decode($question->answers, true))) {
 
             $answers = json_decode($question->answers, true);
             if($answers) {
                 $translated_answers = [];
+
                 foreach($answers as $a) {
                     $ch = curl_init();
 

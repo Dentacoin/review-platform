@@ -27,8 +27,6 @@ class LeadMagnet extends Model {
     protected $casts = [
         'answers' => 'array',
     ];
-    
 }
-
 
 ?>

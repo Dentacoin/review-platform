@@ -75,7 +75,6 @@ class AnonymousUser extends Model {
         }
         return [];
     }
-    
 }
 
 ?>

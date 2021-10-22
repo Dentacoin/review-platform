@@ -23,7 +23,6 @@ class VoxToCategory extends Model {
     public function category() {
         return $this->hasOne('App\Models\VoxCategory', 'id', 'vox_category_id');        
     }
-    
 }
 
 ?>

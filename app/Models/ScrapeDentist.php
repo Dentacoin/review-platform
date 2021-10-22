@@ -24,8 +24,6 @@ class ScrapeDentist extends Model {
         'updated_at',
         'deleted_at'
     ];
-    
 }
-
 
 ?>

@@ -41,8 +41,6 @@ class ScrapeDentistResult extends Model {
 
         return $site_mails_filtered;
     }
-    
 }
-
 
 ?>

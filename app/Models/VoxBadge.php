@@ -35,8 +35,4 @@ class VoxBadge extends Model {
     }    
 }
 
-
-
-
-
 ?>

@@ -22,6 +22,7 @@ use App\Models\User;
 use App\Models\Vox;
 
 use App\Exports\MultipleStatSheetExport;
+use App\Helpers\GeneralHelper;
 use App\Helpers\VoxHelper;
 use App\Exports\Export;
 use App\Imports\Import;
@@ -136,7 +137,7 @@ class StatsController extends FrontController {
 
         if(request('app')) {
             if(request('app-user-id')) {
-                $user_id = User::decrypt(request('app-user-id'));
+                $user_id = GeneralHelper::decrypt(request('app-user-id'));
 
                 if($user_id) {
                     $user = User::find($user_id);
