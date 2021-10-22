@@ -19,15 +19,10 @@ use Carbon\Carbon;
 
 use Response;
 use Auth;
-use App;
 
 class VoxController extends ApiController {
 
     public function doVox($slug) {
-
-        if(request('to-lang')) {
-            App::setLocale(request('to-lang'));
-        }
 
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();
         $user = Auth::guard('api')->user();
@@ -38,10 +33,6 @@ class VoxController extends ApiController {
 
     public function getNextQuestion() {
 
-        if(request('to-lang')) {
-            App::setLocale(request('to-lang'));
-        }
-        
         $user = Auth::guard('api')->user();
         // $user = User::find(37530);
     	return ServicesVox::getNextQuestionFunction(false, $user, true, false);

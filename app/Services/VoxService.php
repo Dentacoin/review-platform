@@ -44,6 +44,11 @@ class VoxService {
     public static function getNextQuestionFunction($admin, $user, $for_app, $country_id) {
 
         if(!empty($user)) {
+
+            if(request('to-lang')) {
+                App::setLocale(request('to-lang'));
+            }
+            
             $vox_id = request('vox_id');
             $question_id = request('question_id');
             
@@ -774,6 +779,10 @@ class VoxService {
                     'url' => getLangUrl('page-not-found')
                 ];
             }
+        }
+
+        if(request('to-lang')) {
+            App::setLocale(request('to-lang'));
         }
 
         ini_set('max_execution_time', 0);
