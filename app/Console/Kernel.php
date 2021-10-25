@@ -1870,20 +1870,16 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                                 }
                             }
 
-
                             if ($scrape->requests == $scrape->requests_total) {
                                 $scrape->completed = true;
                             } else {
                                 $scrape->requests++;
                             }
                             $scrape->save();
-
-
                         }
                     }
                 }
             }
-
 
             echo 'Scrape dentists scron DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
@@ -1971,7 +1967,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                             }
                         }
                     }
-
                 }
 
                 if (!empty($emails)) {
@@ -2027,6 +2022,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Find logins country cron start'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $logins = UserLogin::whereNull('country')->whereNull('test')->orderBy('id', 'desc')->take(100)->get();
 
@@ -2038,9 +2034,12 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 }
             }
 
+            echo 'Find logins country cron end'.PHP_EOL.PHP_EOL.PHP_EOL;
+
         })->everyMinute();
 
         $schedule->call(function () {
+            echo 'Convert avatar to webp cron start'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $users = User::where('hasimage', 1)->whereNull('haswebp')->take(100)->get();
 
@@ -2061,6 +2060,8 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     $user->save();
                 }
             }
+
+            echo 'Convert avatar to webp cron end'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->everyFiveMinutes();
 

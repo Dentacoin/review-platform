@@ -110,6 +110,10 @@ class Vox extends Model {
         return $this->hasMany('App\Models\DcnReward', 'reference_id', 'id')->where('platform', 'vox')->where('type', 'survey')->orderBy('id', 'DESC');
     }
 
+    public function processingForTranslations() {
+        return $this->hasMany('App\Models\VoxCronjobLang', 'vox_id', 'id')->whereNull('is_completed');
+    }
+
     public function related() {
         return $this->hasMany('App\Models\VoxRelated', 'vox_id', 'id')->orderBy('id', 'ASC');
     }

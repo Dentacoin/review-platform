@@ -143,9 +143,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
         });
 
         return redirect( 'cms/users/users/edit/'.$item->dentist_id );
-
     }
-
 
     public function suspicious($id) {
 
@@ -167,7 +165,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
         $mail = GeneralHelper::unregisteredSendGridTemplate($u, $item->email, $item->name, 67, null, 'trp', $unsubscribed, $item->email);
         $mail->delete();
 
-
         $mtext = 'Dentist claim request was suspicious<br/>
 Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id;
 
@@ -184,7 +181,5 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
         });
 
         return redirect( 'cms/users/users/edit/'.$item->dentist_id );
-
     }
-
 }

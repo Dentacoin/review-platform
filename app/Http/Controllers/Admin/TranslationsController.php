@@ -6,12 +6,10 @@ use App\Http\Controllers\AdminController;
 
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Http\Request;
 
 use App\Exports\MultipleLangSheetExport;
 use App\Exports\Export;
 use App\Imports\Import;
-use App\Http\Requests;
 
 use Validator;
 use Lang;

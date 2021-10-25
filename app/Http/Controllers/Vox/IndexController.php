@@ -134,7 +134,6 @@ class IndexController extends FrontController {
 		}
 	}
 	
-
 	/**
      * Index page for not logged users
      */

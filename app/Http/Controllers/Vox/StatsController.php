@@ -1609,7 +1609,7 @@ class StatsController extends FrontController {
         }
     }
 
-    public function processArray($arr) {
+    private function processArray($arr) {
         $newarr = [];
         foreach ($arr as $key => $value) {
             if(is_array($value)) {
@@ -1826,7 +1826,6 @@ class StatsController extends FrontController {
             $png_file = storage_path().'/app/public/png/'.$name.'/'.mb_substr($name, 0, -10).'-1.png';
             return response()->download($png_file);
         }
-        
     }
 
     private function paginate($items, $perPage = 10, $page = null, $options = []) {

@@ -15,6 +15,9 @@ use Request;
 
 class PaidReportsController extends FrontController {
     
+	/**
+     * All paid reports page
+     */
 	public function home($locale=null) {
 
 		if(empty($this->admin)) {
@@ -47,6 +50,9 @@ class PaidReportsController extends FrontController {
 		));	
 	}
     
+	/**
+     * Single report page
+     */
 	public function singleReport($locale=null, $slug) {
 
 		if(empty($this->admin)) {
@@ -83,6 +89,9 @@ class PaidReportsController extends FrontController {
 		return $this->ShowVoxView('research-report-single', $view_params);	
 	}
     
+	/**
+     * Paid report checkout page
+     */
 	public function reportCheckout($locale=null, $slug) {
 
 		if(empty($this->admin)) {
@@ -224,6 +233,9 @@ class PaidReportsController extends FrontController {
 		));	
 	}
 
+	/**
+     * Paid report payment page
+     */
     public function reportPayment($locale=null, $slug, $order_id) {
 
 		if(empty($this->admin)) {

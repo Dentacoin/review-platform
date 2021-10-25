@@ -264,7 +264,6 @@ class BanAppealsController extends AdminController {
         }
 
         // return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
-
     }
 
     public function userInfo($user_id) {
@@ -280,5 +279,4 @@ class BanAppealsController extends AdminController {
             return Response::json( ['data' => $user->banAppealInfo()] );
         }
     }
-
 }

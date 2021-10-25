@@ -162,8 +162,7 @@ class PollsController extends AdminController {
             } else {
                 Request::session()->flash('success-message', 'Daily Poll Added');
                 return redirect('cms/vox/polls');
-
-            }       
+            }
         }
 
         return $this->showView('polls-form', array(
@@ -433,7 +432,6 @@ class PollsController extends AdminController {
                         if(!empty($v)) {
                             $answers[] = $v;
                         }
-                        
                     }
                 }
 
@@ -447,7 +445,6 @@ class PollsController extends AdminController {
 
                     $translation->save();
                 }
-
             }
             
             unlink($newName);

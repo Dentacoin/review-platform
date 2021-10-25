@@ -328,7 +328,7 @@ class TransactionsController extends AdminController {
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
-    public function massbump(  ) {
+    public function massbump() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
@@ -367,7 +367,7 @@ class TransactionsController extends AdminController {
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
-    public function massstop(  ) {
+    public function massstop() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
@@ -406,7 +406,7 @@ class TransactionsController extends AdminController {
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
-    public function massPending(  ) {
+    public function massPending() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );

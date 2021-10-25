@@ -117,7 +117,6 @@ class DentistController extends FrontController {
             return Response::json( [
                 'url' => $url
             ] );
-
         }
 
         print("no user");

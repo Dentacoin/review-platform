@@ -124,5 +124,4 @@ class QuestionsController extends AdminController {
             return redirect('cms/trp/'.$this->current_subpage);
         }
     }
-
 }

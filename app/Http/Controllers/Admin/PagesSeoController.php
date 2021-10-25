@@ -145,7 +145,6 @@ class PagesSeoController extends AdminController {
         return redirect('cms');
     }
 
-
     public function export($platform) {
         
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin']) ) {

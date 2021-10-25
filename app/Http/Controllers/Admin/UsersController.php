@@ -709,544 +709,7 @@ class UsersController extends AdminController {
         ));
     }
 
-    public function delete( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::find($id);
-
-        if(!empty($item) && $item->id != 3) {
-
-            if (!empty(Request::input('deleted_reason'))) {
-                $action = new UserAction;
-                $action->user_id = $item->id;
-                $action->action = 'deleted';
-                $action->reason = Request::input('deleted_reason');
-                $action->actioned_at = Carbon::now();
-                $action->save();
-
-                $item->deleteActions();
-                User::destroy( $id );
-
-                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
-                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users/');
-
-            } else {
-                $this->request->session()->flash('error-message', "You have to write a reason why this user has to be deleted" );
-                return redirect('cms/users/users/edit/'.$item->id);
-            }
-        } else {
-            return redirect('cms/users/users/');
-        }
-    }
-
-    public function deleteDatabase( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::withTrashed()->find($id);
-
-        if($item->logins->isNotEmpty()) {
-            foreach ($item->logins as $login) {
-                $login->forceDelete();
-            }
-        }
-
-        if($item->allBanAppeals->isNotEmpty()) {
-            foreach ($item->allBanAppeals as $ba) {
-                $ba->forceDelete();
-            }
-        }
-
-        $id = $item->id;
-        $teams = UserTeam::where(function($query) use ($id) {
-            $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
-        })->get();
-
-        if (!empty($teams)) {
-            foreach ($teams as $team) {
-                $dent_id = $team->dentist_id;
-                $team->delete();
-
-                $dent = User::find($dent_id);
-                if(!empty($dent) && $dent->is_clinic) {
-
-                    if ($dent->status == 'added_by_clinic_new') {
-                        $dent->status = 'added_by_clinic_rejected';
-                        $dent->save();
-                    } else if($dent->status == 'dentist_no_email') {
-                        $action = new UserAction;
-                        $action->user_id = $dent->id;
-                        $action->action = 'deleted';
-                        $action->reason = 'his dentist was deleted/rejected';
-                        $action->actioned_at = Carbon::now();
-                        $action->save();
-
-                        $dent->deleteActions();
-                        self::destroy( $dent->id );
-                    }
-                }
-            }
-        }
-
-        $user_invites = UserInvite::where(function($query) use ($id) {
-            $query->where( 'user_id', $id)->orWhere('invited_id', $id);
-        })->get();
-
-        if (!empty($user_invites)) {
-           foreach ($user_invites as $user_invite) {
-               $user_invite->forceDelete();
-           }
-        }
-
-        if($item->claims->isNotEmpty()) {
-            foreach ($item->claims as $c) {
-                $c->forceDelete();
-            }
-        }
-
-        $transactions = DcnTransaction::where('user_id', $item->id)->whereIn('status', ['new', 'failed', 'first', 'not_sent'])->get();
-
-        if ($transactions->isNotEmpty()) {
-            foreach ($transactions as $trans) {
-                $trans->forceDelete();
-            }
-        }
-
-        $item->forceDelete();
-
-        $this->request->session()->flash('success-message', 'Deleted forever' );
-        return redirect('cms/users');
-    }
-
-    public function massdelete(  ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        if( Request::input('ids') ) {
-            $delusers = User::whereIn('id', Request::input('ids'))->get();
-            foreach ($delusers as $du) {
-                if($du->id != 3) {
-
-                    $action = new UserAction;
-                    $action->user_id = $du->id;
-                    $action->action = 'deleted';
-                    $action->reason = Request::input('mass-delete-reasons');
-                    $action->actioned_at = Carbon::now();
-                    $action->save();
-
-                    $du->deleteActions();
-                    $du->delete();
-                }
-            }
-        }
-
-        $this->request->session()->flash('success-message', 'All selected users are deleted' );
-        return redirect(url()->previous());
-    }
-
-    public function massReject(  ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        if( Request::input('ids') ) {
-            $rejectusers = User::whereIn('id', Request::input('ids'))->get();
-            foreach ($rejectusers as $ru) {
-                if($ru->is_dentist) {
-
-                    $ru->status = 'rejected';
-                    $ru->save();
-                    $ru->sendTemplate(14);
-                }
-            }
-        }
-
-        $this->request->session()->flash('success-message', 'All selected dentists are rejected' );
-        return redirect(url()->previous());
-    }
-
-    public function delete_avatar( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::withTrashed()->find($id);
-
-        if(!empty($item)) {
-            $item->hasimage = false;
-            $item->save();
-        }
-
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.avatar-deleted') );
-        return redirect('cms/users/users/edit/'.$id);
-    }
-
-    public function add_avatar( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $user = User::find($id);
-
-        if( !empty($user) && Request::file('image') && Request::file('image')->isValid() ) {
-            $img = Image::make( Input::file('image') )->orientate();
-            $user->addImage($img);
-
-            $user->hasimage_social = false;
-            $user->save();
-
-            foreach ($user->reviews_out as $review_out) {
-                $review_out->hasimage_social = false;
-                $review_out->save();
-            }
-
-            foreach ($user->reviews_in_dentist as $review_in_dentist) {
-                $review_in_dentist->hasimage_social = false;
-                $review_in_dentist->save();
-            }
-
-            foreach ($user->reviews_in_clinic as $review_in_clinic) {
-                $review_in_clinic->hasimage_social = false;
-                $review_in_clinic->save();
-            }
-
-            return Response::json(['success' => true, 'thumb' => $user->getImageUrl(true), 'name' => '' ]);
-        }
-    }
-
-    public function delete_photo( $id, $position ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::withTrashed()->find($id);
-
-        if(!empty($item)) {
-            if(!empty($item->photos[$position])) {
-                $item->photos[$position]->delete();
-            }
-        }
-
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.photo-deleted') );
-        return redirect('cms/users/users/edit/'.$id);
-    }
-
-    public function delete_ban( $id, $ban_id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::withTrashed()->find($id);
-        $ban = UserBan::find($ban_id);
-
-        if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-            $item->sendgridSubscribeToGroup($ban->domain);
-
-            UserBan::destroy( $ban_id );
-        }
-
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.ban-deleted') );
-        return redirect('cms/users/users/edit/'.$id);
-    }
-
-    public function restore_ban( $id, $ban_id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::withTrashed()->find($id);
-        $ban = UserBan::withTrashed()->find($ban_id);
-
-        if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
-
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-            $request_body = new \stdClass();
-            $request_body->recipient_emails = [$item->email];
-
-            if($ban->domain == 'trp') {
-                $group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
-            } else {
-                $group_id = config('email-preferences')['product_news']['vox']['sendgrid_group_id'];
-            }
-        
-            $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->post($request_body);
-
-            $ban->restore();
-        }
-
-        $this->request->session()->flash('success-message', 'Ban restored!' );
-        return redirect('cms/users/users/edit/'.$id);
-    }
-
-    public function delete_vox( $id, $reward_id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::withTrashed()->find($id);
-        $reward = DcnReward::find($reward_id);
-
-        if(!empty($reward) && !empty($item) && $reward->user_id == $item->id) {
-            VoxAnswer::where([
-                ['user_id', $item->id],
-                ['vox_id', $reward->reference_id],
-            ])
-            ->delete();
-            DcnReward::destroy( $reward_id );
-        }
-
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.reward-deleted') );
-        return redirect('cms/users/users/edit/'.$id);
-    }
-
-    public function delete_unfinished( $id, $vox_id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::withTrashed()->find($id);
-        
-        if(!empty($item)) {
-            VoxAnswer::where([
-                ['user_id', $item->id],
-                ['vox_id', $vox_id],
-            ])
-            ->delete();
-        }
-
-        $this->request->session()->flash('success-message', 'Survey answers deleted!' );
-        return redirect('cms/users/users/edit/'.$id);
-    }
-
-    public function delete_review( $review_id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = Review::find($review_id);
-        
-        if(!empty($item)) {
-            $uid = $item->user_id;
-            $patient = User::where('id', $uid)->withTrashed()->first();
-
-            ReviewAnswer::where([
-                ['review_id', $item->id],
-            ])
-            ->delete();
-
-            $dentist = null;
-            $clinic = null;
-
-            if($item->dentist_id) {
-                $dentist = User::find($item->dentist_id);
-            }
-
-            if($item->clinic_id) {
-                $clinic = User::find($item->clinic_id);
-            }
-
-            $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
-            if (!empty($reward_for_review)) {
-                $reward_for_review->delete();
-            }
-            
-            Review::destroy( $review_id );
-            if( !empty($dentist) ) {
-                $dentist->recalculateRating();
-                $substitutions = [
-                    'spam_author_name' => $patient->name,
-                ];
-                
-                $dentist->sendGridTemplate(87, $substitutions, 'trp');
-            }
-
-            if( !empty($clinic) ) {
-                $clinic->recalculateRating();
-                $substitutions = [
-                    'spam_author_name' => $patient->name,
-                ];
-                
-                $clinic->sendGridTemplate(87, $substitutions, 'trp');
-            }
-
-            $ban = new UserBan;
-            $ban->user_id = $patient->id;
-            $ban->domain = 'trp';
-            $ban->type = 'spam-review';
-            $ban->save();
-
-            $notifications = $patient->website_notifications;
-
-            if(!empty($notifications)) {
-
-                if (($key = array_search('trp', $notifications)) !== false) {
-                    unset($notifications[$key]);
-                }
-
-                $patient->website_notifications = $notifications;
-                $patient->save();
-            }
-
-
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-            $request_body = new \stdClass();
-            $request_body->recipient_emails = [$patient->email];
-            
-            $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
-            $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
-
-            $patient->sendGridTemplate(86, null, 'trp');
-
-            $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.review-deleted') );
-            return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : ('cms/users/users/edit/'.(!empty($item->dentist_id) ? $item->dentist_id : $item->clinic_id )));
-        }
-
-        return redirect('cms/users');
-    }
-
-    public function restore( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::onlyTrashed()->find($id);
-
-        if(!empty($item)) {
-
-            if (!empty(Request::input('restored_reason'))) {
-
-                $action = new UserAction;
-                $action->user_id = $item->id;
-                $action->action = 'restored';
-                $action->reason = Request::input('restored_reason');
-                $action->actioned_at = Carbon::now();
-                $action->save();
-
-                $item->restoreActions();
-                $item->restore();
-
-                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
-                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users');
-
-            } else {
-                $this->request->session()->flash('error-message', "You have to write a reason why this user has to be restored" );
-                return redirect('cms/users/users/edit/'.$item->id);
-            }            
-        }
-
-        return redirect('cms/users/users/');
-    }
-
-    public function restore_self_deleted( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::withTrashed()->find($id);
-
-        if(!empty($item)) {
-
-            if (!empty(Request::input('restored_reason'))) {
-                $action = new UserAction;
-                $action->user_id = $item->id;
-                $action->action = 'restored_self_deleted';
-                $action->reason = Request::input('restored_reason');
-                $action->actioned_at = Carbon::now();
-                $action->save();
-
-                $item->self_deleted = null;
-                $item->save();
-
-                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
-                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users');
-
-            } else {
-                $this->request->session()->flash('error-message', "You have to write a reason why this user has to be restored" );
-                return redirect('cms/users/users/edit/'.$item->id);
-            }            
-        }
-
-        return redirect('cms/users/users/');
-    }
-
-    public function loginas( $id, $platform=null ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::find($id);
-
-        if(!empty($item)) {
-            Auth::login($item, true);
-        }
-
-        if(!empty($platform)) {
-            $platform_urls = [
-                'vox' => 'https://dentavox.dentacoin.com/',
-                'trp' => 'https://reviews.dentacoin.com/',
-            ];
-            return redirect($platform_urls[$platform]);
-
-        } else {
-            return redirect('/');
-        }
-    }
-
-    public function personal_data( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $item = User::withTrashed()->find($id);
-
-        if(!empty($item)) {
-
-            return $this->showView('users-data', array(
-                'item' => $item,
-                'genders' => $this->genders,
-            ));
-        } else {
-            return redirect('cms/users');
-        }
-    }
+    
 
     public function add() {
 
@@ -2074,6 +1537,545 @@ class UsersController extends AdminController {
         }
 
         return $this->showView('users-import');
+    }
+
+    public function delete( $id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::find($id);
+
+        if(!empty($item) && $item->id != 3) {
+
+            if (!empty(Request::input('deleted_reason'))) {
+                $action = new UserAction;
+                $action->user_id = $item->id;
+                $action->action = 'deleted';
+                $action->reason = Request::input('deleted_reason');
+                $action->actioned_at = Carbon::now();
+                $action->save();
+
+                $item->deleteActions();
+                User::destroy( $id );
+
+                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
+                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users/');
+
+            } else {
+                $this->request->session()->flash('error-message', "You have to write a reason why this user has to be deleted" );
+                return redirect('cms/users/users/edit/'.$item->id);
+            }
+        } else {
+            return redirect('cms/users/users/');
+        }
+    }
+
+    public function deleteDatabase( $id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::withTrashed()->find($id);
+
+        if($item->logins->isNotEmpty()) {
+            foreach ($item->logins as $login) {
+                $login->forceDelete();
+            }
+        }
+
+        if($item->allBanAppeals->isNotEmpty()) {
+            foreach ($item->allBanAppeals as $ba) {
+                $ba->forceDelete();
+            }
+        }
+
+        $id = $item->id;
+        $teams = UserTeam::where(function($query) use ($id) {
+            $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
+        })->get();
+
+        if (!empty($teams)) {
+            foreach ($teams as $team) {
+                $dent_id = $team->dentist_id;
+                $team->delete();
+
+                $dent = User::find($dent_id);
+                if(!empty($dent) && $dent->is_clinic) {
+
+                    if ($dent->status == 'added_by_clinic_new') {
+                        $dent->status = 'added_by_clinic_rejected';
+                        $dent->save();
+                    } else if($dent->status == 'dentist_no_email') {
+                        $action = new UserAction;
+                        $action->user_id = $dent->id;
+                        $action->action = 'deleted';
+                        $action->reason = 'his dentist was deleted/rejected';
+                        $action->actioned_at = Carbon::now();
+                        $action->save();
+
+                        $dent->deleteActions();
+                        self::destroy( $dent->id );
+                    }
+                }
+            }
+        }
+
+        $user_invites = UserInvite::where(function($query) use ($id) {
+            $query->where( 'user_id', $id)->orWhere('invited_id', $id);
+        })->get();
+
+        if (!empty($user_invites)) {
+           foreach ($user_invites as $user_invite) {
+               $user_invite->forceDelete();
+           }
+        }
+
+        if($item->claims->isNotEmpty()) {
+            foreach ($item->claims as $c) {
+                $c->forceDelete();
+            }
+        }
+
+        $transactions = DcnTransaction::where('user_id', $item->id)->whereIn('status', ['new', 'failed', 'first', 'not_sent'])->get();
+
+        if ($transactions->isNotEmpty()) {
+            foreach ($transactions as $trans) {
+                $trans->forceDelete();
+            }
+        }
+
+        $item->forceDelete();
+
+        $this->request->session()->flash('success-message', 'Deleted forever' );
+        return redirect('cms/users');
+    }
+
+    public function massdelete() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        if( Request::input('ids') ) {
+            $delusers = User::whereIn('id', Request::input('ids'))->get();
+            foreach ($delusers as $du) {
+                if($du->id != 3) {
+
+                    $action = new UserAction;
+                    $action->user_id = $du->id;
+                    $action->action = 'deleted';
+                    $action->reason = Request::input('mass-delete-reasons');
+                    $action->actioned_at = Carbon::now();
+                    $action->save();
+
+                    $du->deleteActions();
+                    $du->delete();
+                }
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'All selected users are deleted' );
+        return redirect(url()->previous());
+    }
+
+    public function massReject() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        if( Request::input('ids') ) {
+            $rejectusers = User::whereIn('id', Request::input('ids'))->get();
+            foreach ($rejectusers as $ru) {
+                if($ru->is_dentist) {
+
+                    $ru->status = 'rejected';
+                    $ru->save();
+                    $ru->sendTemplate(14);
+                }
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'All selected dentists are rejected' );
+        return redirect(url()->previous());
+    }
+
+    public function delete_avatar( $id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::withTrashed()->find($id);
+
+        if(!empty($item)) {
+            $item->hasimage = false;
+            $item->save();
+        }
+
+        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.avatar-deleted') );
+        return redirect('cms/users/users/edit/'.$id);
+    }
+
+    public function add_avatar( $id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $user = User::find($id);
+
+        if( !empty($user) && Request::file('image') && Request::file('image')->isValid() ) {
+            $img = Image::make( Input::file('image') )->orientate();
+            $user->addImage($img);
+
+            $user->hasimage_social = false;
+            $user->save();
+
+            foreach ($user->reviews_out as $review_out) {
+                $review_out->hasimage_social = false;
+                $review_out->save();
+            }
+
+            foreach ($user->reviews_in_dentist as $review_in_dentist) {
+                $review_in_dentist->hasimage_social = false;
+                $review_in_dentist->save();
+            }
+
+            foreach ($user->reviews_in_clinic as $review_in_clinic) {
+                $review_in_clinic->hasimage_social = false;
+                $review_in_clinic->save();
+            }
+
+            return Response::json(['success' => true, 'thumb' => $user->getImageUrl(true), 'name' => '' ]);
+        }
+    }
+
+    public function delete_photo( $id, $position ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::withTrashed()->find($id);
+
+        if(!empty($item)) {
+            if(!empty($item->photos[$position])) {
+                $item->photos[$position]->delete();
+            }
+        }
+
+        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.photo-deleted') );
+        return redirect('cms/users/users/edit/'.$id);
+    }
+
+    public function delete_ban( $id, $ban_id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::withTrashed()->find($id);
+        $ban = UserBan::find($ban_id);
+
+        if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+            $item->sendgridSubscribeToGroup($ban->domain);
+
+            UserBan::destroy( $ban_id );
+        }
+
+        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.ban-deleted') );
+        return redirect('cms/users/users/edit/'.$id);
+    }
+
+    public function restore_ban( $id, $ban_id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::withTrashed()->find($id);
+        $ban = UserBan::withTrashed()->find($ban_id);
+
+        if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
+
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+            $request_body = new \stdClass();
+            $request_body->recipient_emails = [$item->email];
+
+            if($ban->domain == 'trp') {
+                $group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+            } else {
+                $group_id = config('email-preferences')['product_news']['vox']['sendgrid_group_id'];
+            }
+        
+            $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->post($request_body);
+
+            $ban->restore();
+        }
+
+        $this->request->session()->flash('success-message', 'Ban restored!' );
+        return redirect('cms/users/users/edit/'.$id);
+    }
+
+    public function delete_vox( $id, $reward_id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::withTrashed()->find($id);
+        $reward = DcnReward::find($reward_id);
+
+        if(!empty($reward) && !empty($item) && $reward->user_id == $item->id) {
+            VoxAnswer::where([
+                ['user_id', $item->id],
+                ['vox_id', $reward->reference_id],
+            ])
+            ->delete();
+            DcnReward::destroy( $reward_id );
+        }
+
+        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.reward-deleted') );
+        return redirect('cms/users/users/edit/'.$id);
+    }
+
+    public function delete_unfinished( $id, $vox_id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::withTrashed()->find($id);
+        
+        if(!empty($item)) {
+            VoxAnswer::where([
+                ['user_id', $item->id],
+                ['vox_id', $vox_id],
+            ])
+            ->delete();
+        }
+
+        $this->request->session()->flash('success-message', 'Survey answers deleted!' );
+        return redirect('cms/users/users/edit/'.$id);
+    }
+
+    public function delete_review( $review_id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = Review::find($review_id);
+        
+        if(!empty($item)) {
+            $uid = $item->user_id;
+            $patient = User::where('id', $uid)->withTrashed()->first();
+
+            ReviewAnswer::where([
+                ['review_id', $item->id],
+            ])
+            ->delete();
+
+            $dentist = null;
+            $clinic = null;
+
+            if($item->dentist_id) {
+                $dentist = User::find($item->dentist_id);
+            }
+
+            if($item->clinic_id) {
+                $clinic = User::find($item->clinic_id);
+            }
+
+            $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
+            if (!empty($reward_for_review)) {
+                $reward_for_review->delete();
+            }
+            
+            Review::destroy( $review_id );
+            if( !empty($dentist) ) {
+                $dentist->recalculateRating();
+                $substitutions = [
+                    'spam_author_name' => $patient->name,
+                ];
+                
+                $dentist->sendGridTemplate(87, $substitutions, 'trp');
+            }
+
+            if( !empty($clinic) ) {
+                $clinic->recalculateRating();
+                $substitutions = [
+                    'spam_author_name' => $patient->name,
+                ];
+                
+                $clinic->sendGridTemplate(87, $substitutions, 'trp');
+            }
+
+            $ban = new UserBan;
+            $ban->user_id = $patient->id;
+            $ban->domain = 'trp';
+            $ban->type = 'spam-review';
+            $ban->save();
+
+            $notifications = $patient->website_notifications;
+
+            if(!empty($notifications)) {
+
+                if (($key = array_search('trp', $notifications)) !== false) {
+                    unset($notifications[$key]);
+                }
+
+                $patient->website_notifications = $notifications;
+                $patient->save();
+            }
+
+
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+            $request_body = new \stdClass();
+            $request_body->recipient_emails = [$patient->email];
+            
+            $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+            $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
+
+            $patient->sendGridTemplate(86, null, 'trp');
+
+            $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.review-deleted') );
+            return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : ('cms/users/users/edit/'.(!empty($item->dentist_id) ? $item->dentist_id : $item->clinic_id )));
+        }
+
+        return redirect('cms/users');
+    }
+
+    public function restore( $id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::onlyTrashed()->find($id);
+
+        if(!empty($item)) {
+
+            if (!empty(Request::input('restored_reason'))) {
+
+                $action = new UserAction;
+                $action->user_id = $item->id;
+                $action->action = 'restored';
+                $action->reason = Request::input('restored_reason');
+                $action->actioned_at = Carbon::now();
+                $action->save();
+
+                $item->restoreActions();
+                $item->restore();
+
+                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
+                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users');
+
+            } else {
+                $this->request->session()->flash('error-message', "You have to write a reason why this user has to be restored" );
+                return redirect('cms/users/users/edit/'.$item->id);
+            }            
+        }
+
+        return redirect('cms/users/users/');
+    }
+
+    public function restore_self_deleted( $id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::withTrashed()->find($id);
+
+        if(!empty($item)) {
+
+            if (!empty(Request::input('restored_reason'))) {
+                $action = new UserAction;
+                $action->user_id = $item->id;
+                $action->action = 'restored_self_deleted';
+                $action->reason = Request::input('restored_reason');
+                $action->actioned_at = Carbon::now();
+                $action->save();
+
+                $item->self_deleted = null;
+                $item->save();
+
+                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
+                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users');
+
+            } else {
+                $this->request->session()->flash('error-message', "You have to write a reason why this user has to be restored" );
+                return redirect('cms/users/users/edit/'.$item->id);
+            }            
+        }
+
+        return redirect('cms/users/users/');
+    }
+
+    public function loginas( $id, $platform=null ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::find($id);
+
+        if(!empty($item)) {
+            Auth::login($item, true);
+        }
+
+        if(!empty($platform)) {
+            $platform_urls = [
+                'vox' => 'https://dentavox.dentacoin.com/',
+                'trp' => 'https://reviews.dentacoin.com/',
+            ];
+            return redirect($platform_urls[$platform]);
+
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function personal_data( $id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = User::withTrashed()->find($id);
+
+        if(!empty($item)) {
+
+            return $this->showView('users-data', array(
+                'item' => $item,
+                'genders' => $this->genders,
+            ));
+        } else {
+            return redirect('cms/users');
+        }
     }
 
     public function upload_temp($locale=null) {

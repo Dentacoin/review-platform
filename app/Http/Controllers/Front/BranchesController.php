@@ -330,9 +330,41 @@ class BranchesController extends FrontController {
                 return Response::json( [
                     'success' => true,
                 ] );
-
             }
         }
+    }
+
+    public function deleteBranch($locale=null) {
+
+        $ret['success'] = false;
+
+        if(!empty($this->user) && !empty(request('branch_id')) && $this->user->branches->isNotEmpty() && in_array(request('branch_id'), $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+
+            $id = request('branch_id');
+            $item = User::find($id);
+
+            if(!empty($item)) {
+
+            	UserBranch::where('clinic_id', $id)->orWhere('branch_clinic_id', $id)->delete();
+            	
+            	if(!$item->email) {
+
+		            $action = new UserAction;
+		            $action->user_id = $item->id;
+		            $action->action = 'deleted';
+		            $action->reason = 'Clinic '.$this->user->getNames().' remove from his branches this clinic';
+		            $action->actioned_at = Carbon::now();
+		            $action->save();
+
+		            $item->deleteActions();
+		            User::destroy( $item->id );
+            	}
+
+                $ret['success'] = true;
+            }
+        }
+
+        return Response::json( $ret );
     }
 
     // public function logoutas($locale=null) {
@@ -389,39 +421,6 @@ class BranchesController extends FrontController {
                 // }
 
                 // $ret['imgs_urls'] = $imgs_urls;
-                $ret['success'] = true;
-            }
-        }
-
-        return Response::json( $ret );
-    }
-
-    public function deleteBranch($locale=null) {
-
-        $ret['success'] = false;
-
-        if(!empty($this->user) && !empty(request('branch_id')) && $this->user->branches->isNotEmpty() && in_array(request('branch_id'), $this->user->branches->pluck('branch_clinic_id')->toArray())) {
-
-            $id = request('branch_id');
-            $item = User::find($id);
-
-            if(!empty($item)) {
-
-            	UserBranch::where('clinic_id', $id)->orWhere('branch_clinic_id', $id)->delete();
-            	
-            	if(!$item->email) {
-
-		            $action = new UserAction;
-		            $action->user_id = $item->id;
-		            $action->action = 'deleted';
-		            $action->reason = 'Clinic '.$this->user->getNames().' remove from his branches this clinic';
-		            $action->actioned_at = Carbon::now();
-		            $action->save();
-
-		            $item->deleteActions();
-		            User::destroy( $item->id );
-            	}
-
                 $ret['success'] = true;
             }
         }

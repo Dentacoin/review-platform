@@ -39,7 +39,6 @@ class WhitelistIpsController extends AdminController {
                 $this->request->session()->flash('success-message', 'IP added to the whitelist' );
                 return redirect('cms/whitelist/ips');
             }
-
         }
 
         $items = WhitelistIp::where(function($query) {
@@ -93,7 +92,6 @@ class WhitelistIpsController extends AdminController {
                 $this->request->session()->flash('success-message', 'VPN IP added to the whitelist' );
                 return redirect('cms/whitelist/vpn-ips');
             }
-
         }
 
         $items = WhitelistIp::where('for_vpn', 1)->get();

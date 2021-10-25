@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
+
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
-
-use App\Exports\MultipleLangSheetExport;
-use App\Exports\MultipleStatSheetExport;
-use App\Exports\Export;
-use App\Imports\Import;
 
 use App\Models\VoxCronjobLang;
 use App\Models\VoxToCategory;
@@ -23,8 +19,12 @@ use App\Models\VoxScale;
 use App\Models\VoxBadge;
 use App\Models\Vox;
 
+use App\Exports\MultipleLangSheetExport;
+use App\Exports\MultipleStatSheetExport;
 use App\Helpers\AdminHelper;
 use App\Helpers\VoxHelper;
+use App\Exports\Export;
+use App\Imports\Import;
 use Carbon\Carbon;
 
 use Response;
@@ -91,7 +91,7 @@ class VoxesController extends AdminController {
                     }
                 }
 
-                $this->request->session()->flash('error-success', 'The chosen voxes are sended for translations' );
+                $this->request->session()->flash('success-message', 'The chosen voxes are sended for translations' );
                 return redirect('cms/vox/list');
             }
 
@@ -161,8 +161,7 @@ class VoxesController extends AdminController {
         return Response::json( ['success' => true] );
     }
 
-
-    public function add( ) {
+    public function add() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
@@ -1527,7 +1526,6 @@ class VoxesController extends AdminController {
         ));
     }
 
-
     private function saveOrUpdateScale($item) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
@@ -1620,7 +1618,6 @@ class VoxesController extends AdminController {
             'content' => $content
         ));
     }
-
 
     public function badges() {
 
@@ -2313,7 +2310,6 @@ class VoxesController extends AdminController {
                 } else {
                     return '';
                 }
-
             }
 
         } else {
@@ -2330,6 +2326,11 @@ class VoxesController extends AdminController {
 
         if( empty(request('chosen-qs'))) {
             $this->request->session()->flash('error-message', 'Please, choose questions!' );
+            return redirect('cms/vox/edit/'.request('vox-id'));            
+        }
+
+        if( empty(request('demographics'))) {
+            $this->request->session()->flash('error-message', 'Please, choose demographics!' );
             return redirect('cms/vox/edit/'.request('vox-id'));            
         }
 

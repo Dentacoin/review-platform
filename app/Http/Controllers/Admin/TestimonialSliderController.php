@@ -212,7 +212,6 @@ class TestimonialSliderController extends AdminController {
         return $file_to_export;
     }
 
-
     public function import() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {

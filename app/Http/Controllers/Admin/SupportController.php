@@ -376,7 +376,6 @@ class SupportController extends AdminController {
         ));
     }
 
-
     public function sendAnswer($id) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {

@@ -103,22 +103,15 @@ class YoutubeController extends AdminController {
             } else {
                 Request::session()->flash('error-message', 'Deleted error');                
             }
-
-
         }
 
         return redirect('cms/trp/'.$this->current_subpage);
     }
 
 
-
-
-
-
     //
     //Youtube boilerplate
     //
-
 
 
     function videosDelete($videoId, $params = array('onBehalfOfContentOwner' => '')) {
