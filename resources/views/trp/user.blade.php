@@ -1159,7 +1159,9 @@
 		@if(empty($is_trusted) && !$has_asked_dentist)
 			@include('trp.popups.ask-dentist')
 		@endif
-		@include('trp.popups.social-profile')
+		@if(!$user->is_dentist)
+			@include('trp.popups.social-profile')
+		@endif
 	@endif
 @elseif(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
 	@include('trp/popups/claim-profile')
