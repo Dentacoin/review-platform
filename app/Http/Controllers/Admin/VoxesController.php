@@ -1298,7 +1298,7 @@ class VoxesController extends AdminController {
         }
         $question->save();
 
-        if($data['translate-question']) {
+        if(isset($data['translate-question'])) {
             foreach (config('langs-to-translate') as $lang_code => $value) {
                 if($lang_code != 'en') {
                     VoxHelper::translateQuestionWithAnswers($lang_code, $question);
