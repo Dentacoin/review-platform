@@ -74,8 +74,7 @@
 							{!! nl2br(trans('trp.page.index.usp-3-title')) !!}
 						</h2>
 						<p>
-							{{-- because of the none space between '-' --}}
-							{!! is_array(Lang::get('trp')['page.index.usp-3-content']) ? nl2br(json_encode(Lang::get('trp')['page.index.usp-3-content'], JSON_PRETTY_PRINT)) : nl2br(Lang::get('trp')['page.index.usp-3-content']) !!}
+							{!! nl2br(trans('trp.page.index.usp-3-content')) !!}
 						</p>
 					</div>
 				</div>
