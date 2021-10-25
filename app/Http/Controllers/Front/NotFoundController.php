@@ -39,7 +39,6 @@ class NotFoundController extends FrontController {
 				$addMore = $addMore->where('country_id', 'LIKE', $this->user->country_id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
 				$homeDentists = $homeDentists->concat($addMore);
 			}
-
 		} else {
 
 			if( $homeDentists->count() < 12 && $this->city_id ) {

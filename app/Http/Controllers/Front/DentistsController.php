@@ -334,12 +334,10 @@ class DentistsController extends FrontController {
             $seos = PageSeo::find(26);
 
             $seo_title = str_replace(':location', $formattedAddress, $seos->seo_title);
-
             $seo_description = str_replace(':location', $formattedAddress, $seos->seo_description);
             $seo_description = str_replace(':dentists_number', $items->count(), $seo_description);
 
             $social_title = str_replace(':location', $formattedAddress, $seos->social_title);
-
             $social_description = str_replace(':location', $formattedAddress, $seos->social_description);
             $social_description = str_replace(':dentists_number', $items->count(), $social_description);
 
@@ -362,12 +360,10 @@ class DentistsController extends FrontController {
                 $seos = PageSeo::find(34);
 
                 $seo_title = str_replace(':name', $formattedAddress, $seos->seo_title);
-
                 $seo_description = str_replace(':name', $formattedAddress, $seos->seo_description);
                 $seo_description = str_replace(':results_number', $items->count(), $seo_description);
 
                 $social_title = str_replace(':name', $formattedAddress, $seos->social_title);
-
                 $social_description = str_replace(':name', $formattedAddress, $seos->social_description);
                 $social_description = str_replace(':results_number', $items->count(), $social_description);
 
@@ -453,35 +449,10 @@ class DentistsController extends FrontController {
 		]);
     }
 
-
     private function getRadiusInLatLon($km, $lat) {
         $lat = ($km / 6378) * (180 / pi());
         $lon = ($km / 6378) * (180 / pi()) / cos($lat * pi()/180);
         return [$lat, $lon];        
-    }
-
-    function signMapsUrl($my_url_to_sign) {
-        //parse the url
-        $url = parse_url($my_url_to_sign);
-         
-        $secret = '0iMvsc024fwadkGXq1w4-7tCqQs=';
-         
-        $urlToSign =  $url['path'] . "?" . $url['query'];
-                  
-        // Decode the private key into its binary format
-        $decodedKey = base64_decode(str_replace(array('-', '_'), array('+', '/'), $privatekey));
-         
-        // Create a signature using the private key and the URL-encoded
-        // string using HMAC SHA1. This signature will be binary.
-        $signature = hash_hmac("sha1", $urlToSign, $decodedKey,true);
-         
-        //make encode Signature and make it URL Safe
-        $encodedSignature = str_replace(array('+', '/'), array('-', '_'), base64_encode($signature));
-         
-        $originalUrl = $url['scheme'] . "://" . $url['host'] . $url['path'] . "?" . $url['query'];
-        //print("Full URL: " . $originalUrl . "&signature=" . $encodedSignature);
-         
-        return $originalUrl.'&signature='.$encodedSignature;
     }
 
     /**
@@ -586,7 +557,6 @@ class DentistsController extends FrontController {
                 $total_rows++;
                 $letters[$letter] = true;
                 $cities_groups[$total_rows] = $letter;
-
             }
 
             $total_rows++;

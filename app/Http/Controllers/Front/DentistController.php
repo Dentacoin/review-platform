@@ -652,14 +652,12 @@ class DentistController extends FrontController {
             $view_params['js'][] = '../js/codemirror-placeholder.js';
             $view_params['js'][] = 'user-logged.js';
             $view_params['css'][] = 'codemirror.css';
-
             $view_params['css'][] = 'trp-users-logged.css';
         }
 
         if(!empty($this->user) && $this->user->id == $item->id) {
             $view_params['js'][] = '../js/jquery-ui.min.js';
             $view_params['js'][] = '../js/croppie.min.js';
-
             $view_params['css'][] = 'croppie.css';
 
             $item->review_notification = false;
@@ -823,7 +821,6 @@ class DentistController extends FrontController {
         }
 
         if(!empty($item->short_description)) {
-
             $short_description = $item->short_description;
 
         } else {
@@ -840,7 +837,6 @@ class DentistController extends FrontController {
                 if($item->categories->isNotEmpty()) {
                     $short_description.= ' '.trans('trp.page.user.short_description.categories', ['categories' => strtolower(implode(', ', $item->parseCategories($this->categories))) ]);
                 }
-
             }
         }
 
@@ -853,7 +849,6 @@ class DentistController extends FrontController {
         if (!empty($item->socials)) {
             $view_params['schema']["sameAs"] = array_values($item->socials);
         }
-
 
         if($item->reviews_in_standard()->isNotEmpty() ) {
             $view_params['schema']["aggregateRating"] = [
@@ -1227,7 +1222,6 @@ class DentistController extends FrontController {
                             'invitation_link' => $item->getLink()
                         ], 'trp' );
                     }
-
 
                     return Response::json( ['success' => true] );
                 }
@@ -1874,7 +1868,6 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                     'success' => true,
                 ] );
             }
-
         }
 
         return Response::json([
