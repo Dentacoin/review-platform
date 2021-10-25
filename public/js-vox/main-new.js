@@ -404,6 +404,45 @@ $(document).ready(function(){
 							
 							handleActivePopupFunctions();
 
+							$('#social-profile-form').submit( function(e) {
+								e.preventDefault();
+
+								$(this).find('.ajax-alert').remove();
+								$(this).find('.alert').hide();
+								$(this).find('.has-error').removeClass('has-error');
+
+								if(ajax_is_running) {
+									return;
+								}
+								ajax_is_running = true;
+
+								var that = $(this);
+								
+								$.post( 
+									$(this).attr('action'), 
+									$(this).serialize() , 
+									(function( data ) {
+										if(data.success) {
+											$('body').removeClass('popup-visible');
+											$('#social-profile-popup').remove();
+										} else {
+
+											if(data.without_image) {
+												that.find('.without-image').show();
+											} else {
+
+												for(var i in data.messages) {
+													$('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+
+													$('[name="'+i+'"]').addClass('has-error');
+												}
+											}
+										}
+										ajax_is_running = false;
+									}).bind(that), "json"
+								);  
+							} );
+
 							$('.popup .closer-pop').click( function() {
 
 								if($(this).hasClass('inactive')) {
@@ -547,45 +586,6 @@ $(document).ready(function(){
 	                		} else {
 	                			$(this).find('.hide-happy').show();
 	                		}	                	
-	                	}
-	                }
-	                ajax_is_running = false;
-	            }).bind(that), "json"
-	        );  
-		} );
-
-		$('#social-profile-form').submit( function(e) {
-	        e.preventDefault();
-
-	        $(this).find('.ajax-alert').remove();
-	        $(this).find('.alert').hide();
-	        $(this).find('.has-error').removeClass('has-error');
-
-	        if(ajax_is_running) {
-	            return;
-	        }
-	        ajax_is_running = true;
-
-	        var that = $(this);
-	        
-	        $.post( 
-	            $(this).attr('action'), 
-	            $(this).serialize() , 
-	            (function( data ) {
-	                if(data.success) {
-	                	$('body').removeClass('popup-visible');
-	                	$('#social-profile-popup').remove();
-	                } else {
-
-	                	if(data.without_image) {
-	                		that.find('.without-image').show();
-	                	} else {
-
-		                    for(var i in data.messages) {
-		                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
-
-		                        $('[name="'+i+'"]').addClass('has-error');
-		                    }
 	                	}
 	                }
 	                ajax_is_running = false;
