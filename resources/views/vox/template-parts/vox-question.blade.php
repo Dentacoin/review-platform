@@ -86,7 +86,7 @@
 				<div class="q-text"> 
 			@endif
 
-			{!! nl2br($question->questionWithTooltips()) !!}
+			{{ !empty($isAdmin) ? $question->order.'. ' : '' }}{!! nl2br($question->questionWithTooltips()) !!}
 
 			@if($imageQuestion)
 				</div>
@@ -168,7 +168,7 @@
 				<div class="q-text"> 
 			@endif
 
-			{!! nl2br($question->questionWithTooltips()) !!}
+			{{ !empty($isAdmin) ? $question->order.'. ' : '' }}{!! nl2br($question->questionWithTooltips()) !!}
 
 			@if($imageQuestion)
 				</div>
@@ -213,7 +213,6 @@
 							</div> 
 						</div>
 					@endforeach
-
 				</div>
 			</div>
 		</div>
@@ -261,7 +260,7 @@
 				<div class="q-text"> 
 			@endif
 
-			{!! nl2br($question->questionWithTooltips()) !!}
+			{{ !empty($isAdmin) ? $question->order.'. ' : '' }}{!! nl2br($question->questionWithTooltips()) !!}
 
 			@if($imageQuestion)
 				</div>
@@ -295,7 +294,7 @@
 				<div class="q-text"> 
 			@endif
 
-			{!! nl2br($question->questionWithTooltips()) !!}
+			{{ !empty($isAdmin) ? $question->order.'. ' : '' }}{!! nl2br($question->questionWithTooltips()) !!}
 			<p>{!! !empty($question->rank_explanation) ? $question->rank_explanation : trans('vox.page.questionnaire.rank-info') !!}</p>
 			@if($imageQuestion)
 				</div>
@@ -361,7 +360,7 @@
 				<div class="q-text"> 
 			@endif
 
-			{!! nl2br($question->questionWithTooltips()) !!}
+			{{ !empty($isAdmin) ? $question->order.'. ' : '' }}{!! nl2br($question->questionWithTooltips()) !!}
 
 			@if($imageQuestion)
 				</div>
