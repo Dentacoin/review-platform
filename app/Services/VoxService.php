@@ -733,6 +733,14 @@ class VoxService {
             }
         }
 
+        if(!empty($lastkey)) {
+            foreach($list as $k => $l) {
+                if($l->question_id == $lastkey->question_id) {
+                    unset($list[$k]);
+                }
+            }
+        }
+
         if(!empty($lastkey) && $lastkey->is_skipped) {
             do {
                 self::goBack($user_id, $answered, $list, $vox);
