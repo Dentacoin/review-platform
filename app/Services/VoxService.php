@@ -660,86 +660,43 @@ class VoxService {
         ];
     }
 
-    // public static function goBack($user_id, $answered, &$list, $vox) {
-    //     // var_dump('$list');
-    //     // dd($list, $answered);
-    //     $lastkey = null;
-    //     if(!empty($answered)) {
-    //         foreach ($list as $aq) {
-    //             $lastkey = $aq;
-
-    //             VoxAnswer::where('vox_id', $vox->id)
-    //             ->where('user_id', $user_id)
-    //             ->where('question_id', $lastkey->question_id)
-    //             ->delete();
-
-    //             DcnReward::where('reference_id', $vox->id)
-    //             ->where('platform', 'vox')
-    //             ->where('type', 'survey')
-    //             ->where('user_id', $user_id)
-    //             ->delete();
-
-                
-    //             // var_dump('$ll');
-    //             // dd($list, $answered, $aq);
-    //             break;
-    //         }
-    //     }
-
-    //     // var_dump($list->count());
-    //     // echo '<br/>';
-        
-    //     if($lastkey) {
-    //         foreach($list as $k => $l) {
-    //             if($l->question_id == $lastkey->question_id) {
-    //                 unset($list[$k]);
-    //             }
-    //         }
-    //     }
-
-    //     // var_dump($list->count());
-    //     // dd($list->count());
-
-    //     if(!empty($lastkey) && $lastkey->is_skipped) {
-    //         do {
-    //             self::goBack($user_id, $answered, $list, $vox);
-    //         } while ( $lastkey->is_skipped);
-    //     }
-    //     // dd($lastkey, $lastkey->question_id);
-
-    //     return !empty($lastkey) ? $lastkey->question_id : VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first()->id;
-    // }
-
     public static function goBack($user_id, $answered, $list, $vox) {
         // var_dump('$list');
         // dd($list, $answered);
         $lastkey = null;
         if(!empty($answered)) {
             foreach ($list as $aq) {
-                $lastkey = $aq;
+                if(!$aq->is_skipped) {
+                    $lastkey = $aq;
 
-                VoxAnswer::where('vox_id', $vox->id)
-                ->where('user_id', $user_id)
-                ->where('question_id', $lastkey->question_id)
-                ->delete();
+                    VoxAnswer::where('vox_id', $vox->id)
+                    ->where('user_id', $user_id)
+                    ->where('question_id', $lastkey->question_id)
+                    ->delete();
 
-                DcnReward::where('reference_id', $vox->id)
-                ->where('platform', 'vox')
-                ->where('type', 'survey')
-                ->where('user_id', $user_id)
-                ->delete();
+                    DcnReward::where('reference_id', $vox->id)
+                    ->where('platform', 'vox')
+                    ->where('type', 'survey')
+                    ->where('user_id', $user_id)
+                    ->delete();
 
-                break;
-            }
-        }
-
-        if(!empty($lastkey)) {
-            foreach($list as $k => $l) {
-                if($l->question_id == $lastkey->question_id) {
-                    unset($list[$k]);
+                    
+                    // var_dump('$ll');
+                    // dd($list, $answered, $aq);
+                    break;
                 }
+
+                // if(!empty($lastkey)) {
+                //     foreach($list as $k => $l) {
+                //         if($l->question_id == $lastkey->question_id) {
+                //             unset($list[$k]);
+                //         }
+                //     }
+                // }
             }
         }
+
+        // dd($lastkey->id);
 
         if(!empty($lastkey) && $lastkey->is_skipped) {
             do {
@@ -747,7 +704,7 @@ class VoxService {
             } while ( $lastkey->is_skipped);
         }
 
-        return !empty($lastkey) ? $lastkey->question_id : VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first()->id;
+        return $lastkey ? $lastkey->question_id : VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first()->id;
     }
 
     public static function featuredVoxes() {
