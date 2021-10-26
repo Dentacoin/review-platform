@@ -27,6 +27,7 @@ class Admin extends Model implements AuthenticatableContract, CanResetPasswordCo
     	'user_id',
     ];
     protected $dates = [
+        'password_last_updated_at',
         'created_at',
         'updated_at',
     	'deleted_at',
