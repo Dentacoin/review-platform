@@ -130,7 +130,7 @@
 								</div>
 							@endif
 
-							{!! nl2br(App\Models\VoxQuestion::handleAnswerTooltip( mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer))  !!}
+							{{ !empty($isAdmin) ? ($loop->index+1).'. ' : '' }}{!! nl2br(App\Models\VoxQuestion::handleAnswerTooltip( mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer))  !!}
 
 							@if(!empty($answerTooltip))
 								<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}">
@@ -199,7 +199,7 @@
 									<div class="tac answer-inner" style="width: {{ 100 / count($questionAnswers) }}%;">
 										<label class="answer-radio" for="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}">
 											<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}" type="radio" name="answer-{{ $k }}" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
-											{{ $ans }}											
+											{{ !empty($isAdmin) ? ($loop->index+1).'. ' : '' }}{{ $ans }}											
 										</label>
 									</div>
 									@if($isInColumns && round(count($questionAnswers) / 2) == $loop->iteration )
@@ -319,8 +319,7 @@
 						@endfor
 					</select>
 					<div class="rank-answer"> 
-
-						{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
+						{{ !empty($isAdmin) ? ($loop->index+1).'. ' : '' }}{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
 					</div>
 
 					@if(!empty($answerTooltip))
@@ -390,14 +389,13 @@
 
 						@if($question->allAnswersHaveImages() && !empty($answerImage))
 							<div class="answer-image" style="background-image: url({{ $question->getAnswerImageUrl(true, $key) }})">
-
 								<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $key }}" href="{{ $answerImage }}">
 									<img src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
 								</a>
 							</div>
 						@endif
 
-						{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
+						{{ !empty($isAdmin) ? ($loop->index+1).'. ' : '' }}{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
 
 						@if(!empty($answerTooltip))
 							<div class="answer-mobile-tooltip tooltip-text" text="{!! $answerTooltip !!}">

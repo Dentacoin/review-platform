@@ -117,6 +117,7 @@ class VoxService {
                         }
                     }
                 }
+
                 if(empty($array)) {
 
                     if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
@@ -138,9 +139,9 @@ class VoxService {
                         // }
                         
                     } else {
-                        $list = VoxAnswer::select('answer', 'question_id')->where('vox_id', $vox_id)->where('user_id', $user->id)->get();
+                        $list = VoxAnswer::select('answer', 'question_id', 'created_at')->where('vox_id', $vox_id)->where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+                        
                         $answered = [];
-
                         foreach ($list as $l) {
                             if(!isset( $answered[$l->question_id] )) {
                                 $answered[$l->question_id] = $l->answer; //3
@@ -155,13 +156,14 @@ class VoxService {
                         $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
 
                         $question = $questions_list->first();
+
                         
                         if(!isset($answered[$question->id])) {
                             //first question
                             $array['question'] = $question;
                         } else {
                             //first unanswered question
-                            $array['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_last($answered))->order)->first();
+                            $array['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
                         }
 
                         $checkQuestion = self::checkQuestion($array['question'], $vox_id, $vox, $user, $array);
