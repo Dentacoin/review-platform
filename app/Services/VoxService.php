@@ -589,7 +589,6 @@ class VoxService {
 
         VoxAnswer::where('vox_id', $vox->id)
         ->where('user_id', $user_id)
-        ->where('question_id', $q_id)
         ->delete();
 
         DcnReward::where('reference_id', $vox->id)
