@@ -23,6 +23,7 @@ use App\Models\PageSeo;
 use App\Models\Country;
 use App\Models\Reward;
 use App\Models\VpnIp;
+use App\Models\Admin;
 use App\Models\User;
 use App\Models\Poll;
 use App\Models\Vox;
@@ -54,7 +55,7 @@ class VoxService {
 
             $welcome_vox_id = 11;
 
-            $admin_ids = ['65003'];
+            $admin_ids = Admin::getAdminProfileIds();
             $isAdmin = $for_app ? ( $user->is_admin ? true : false) : ($admin || in_array($user->id, $admin_ids));
             $testmode = session('testmode') && $isAdmin;
 
@@ -563,28 +564,39 @@ class VoxService {
 
     public static function testAnswers($user_id, $answered, $q_id, $vox) {
 
-        if(!empty($answered)) {
+        // if(!empty($answered)) {
 
-            foreach ($vox->questions as $question) {
-                if($question->id==$q_id) {
-                    foreach ($vox->questions as $vq) {
-                        if($vq->order >= $question->order) {
-                            VoxAnswer::where('vox_id', $vox->id)
-                            ->where('user_id', $user_id)
-                            ->where('question_id', $vq->id)
-                            ->delete();
+        //     foreach ($vox->questions as $question) {
+        //         if($question->id==$q_id) {
+        //             foreach ($vox->questions as $vq) {
+        //                 if($vq->order >= $question->order) {
+        //                     VoxAnswer::where('vox_id', $vox->id)
+        //                     ->where('user_id', $user_id)
+        //                     ->where('question_id', $vq->id)
+        //                     ->delete();
 
-                            DcnReward::where('reference_id', $vox->id)
-                            ->where('platform', 'vox')
-                            ->where('type', 'survey')
-                            ->where('user_id', $user_id)
-                            ->delete();
-                        }
-                    }
-                    break;
-                }
-            }
-        }
+        //                     DcnReward::where('reference_id', $vox->id)
+        //                     ->where('platform', 'vox')
+        //                     ->where('type', 'survey')
+        //                     ->where('user_id', $user_id)
+        //                     ->delete();
+        //                 }
+        //             }
+        //             break;
+        //         }
+        //     }
+        // }
+
+        VoxAnswer::where('vox_id', $vox->id)
+        ->where('user_id', $user_id)
+        ->where('question_id', $q_id)
+        ->delete();
+
+        DcnReward::where('reference_id', $vox->id)
+        ->where('platform', 'vox')
+        ->where('type', 'survey')
+        ->where('user_id', $user_id)
+        ->delete();
 
         return $q_id;
     }
@@ -907,7 +919,7 @@ class VoxService {
             $isAdmin = false;
             $testmode = false;
         } else {
-            $admin_ids = ['65003']; //Dobrina
+            $admin_ids = Admin::getAdminProfileIds(); //Dobrina
             $isAdmin = Auth::guard('admin')->user() || in_array($user->id, $admin_ids);
 
             if (request()->has('testmode')) {
@@ -1387,7 +1399,7 @@ class VoxService {
         if($for_app) {
             $testmode = $user->is_admin;
         } else {
-            $admin_ids = ['65003'];
+            $admin_ids = Admin::getAdminProfileIds();
             $isAdmin = Auth::guard('admin')->user() || in_array($user->id, $admin_ids);
             $testmode = session('testmode') && $isAdmin;
         }
