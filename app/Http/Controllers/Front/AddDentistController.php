@@ -27,6 +27,22 @@ class AddDentistController extends FrontController {
                 ]);
             }
 
+            if (request('name') && (mb_strpos(mb_strtolower(request('name')), 'dr. ') === 0 || mb_strpos(mb_strtolower(request('name')), 'dr ') === 0)) {
+
+                $removed_word = mb_strpos(mb_strtolower(request('name')), 'dr. ') === 0 ? 'dr. ' : (mb_strpos(mb_strtolower(request('name')), 'dr ') === 0 ? 'dr ' : '');
+
+                $new_name = str_replace($removed_word,'',mb_strtolower(request('name')));
+
+                $final_name = [];
+                foreach(explode(' ',$new_name) as $wordd) {
+                    $final_name[] = ucfirst($wordd);
+                }
+
+                request()->merge([
+                    'name' => implode(' ', $final_name)
+                ]);
+            }
+
             $validator = Validator::make(Request::all(), [
                 'mode' => array('required', 'in:dentist,clinic'),
                 'name' => array('required', 'min:3'),
