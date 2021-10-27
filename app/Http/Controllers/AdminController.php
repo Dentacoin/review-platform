@@ -146,7 +146,7 @@ class AdminController extends BaseController {
         $params['counters']['contact'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
         $params['counters']['orders'] = Order::whereNull('is_send')->count();
         
-        $params['cache_version'] = '20211021';
+        $params['cache_version'] = '20211027';
 
         $params['dcn_warning_transaction'] = DcnTransaction::where('status', 'dont_retry')->count();
         //dd($params['counters']);

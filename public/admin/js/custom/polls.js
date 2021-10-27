@@ -9,20 +9,15 @@ $(document).ready(function(){
 		} );
 	} );
 
-	$( ".polls-draggable" ).sortable().disableSelection();
-
-	
+	$(".polls-draggable").sortable().disableSelection();
 
 	$('.poll-date, .poll-question').on('change blur', function() {
-
         setTimeout( (function() {
-
-    		console.log( $(this).attr('data-qid'), $(this).val() );
-
             if(ajax_action) {
                 return;
             }
             ajax_action = true;
+
             var urlpart;
             if( $(this).hasClass('poll-question') ) {
             	urlpart = 'question';
@@ -30,18 +25,17 @@ $(document).ready(function(){
             	urlpart = 'date';
             }
             
-
             $.ajax({
-                url     : $('#polls-actions').attr('action') + '/change-'+urlpart+'/'+$(this).attr('data-qid'),
-                type    : 'POST',
-                data 	: {
+                url: $('#polls-actions').attr('action') + '/change-'+urlpart+'/'+$(this).attr('data-qid'),
+                type: 'POST',
+                data: {
                 	val: $(this).val()
                 },
                 dataType: 'json',
-                success : (function( res ) {
+                success: (function( res ) {
                     ajax_action = false;
                 }).bind( this ),
-                error : function( data ) {
+                error: function( data ) {
                     ajax_action = false;
                 }
             });
@@ -64,28 +58,27 @@ $(document).ready(function(){
     });
 
     function catchPaste(evt, elem, callback) {
-      if (navigator.clipboard && navigator.clipboard.readText) {
-        // modern approach with Clipboard API
-        navigator.clipboard.readText().then(callback);
-      } else if (evt.originalEvent && evt.originalEvent.clipboardData) {
-        // OriginalEvent is a property from jQuery, normalizing the event object
-        callback(evt.originalEvent.clipboardData.getData('text'));
-      } else if (evt.clipboardData) {
-        // used in some browsers for clipboardData
-        callback(evt.clipboardData.getData('text/plain'));
-      } else if (window.clipboardData) {
-        // Older clipboardData version for Internet Explorer only
-        callback(window.clipboardData.getData('Text'));
-      } else {
-        // Last resort fallback, using a timer
-        setTimeout(function() {
-          callback(elem.value)
-        }, 100);
-      }
+        if (navigator.clipboard && navigator.clipboard.readText) {
+            // modern approach with Clipboard API
+            navigator.clipboard.readText().then(callback);
+        } else if (evt.originalEvent && evt.originalEvent.clipboardData) {
+            // OriginalEvent is a property from jQuery, normalizing the event object
+            callback(evt.originalEvent.clipboardData.getData('text'));
+        } else if (evt.clipboardData) {
+            // used in some browsers for clipboardData
+            callback(evt.clipboardData.getData('text/plain'));
+        } else if (window.clipboardData) {
+            // Older clipboardData version for Internet Explorer only
+            callback(window.clipboardData.getData('Text'));
+        } else {
+            // Last resort fallback, using a timer
+            setTimeout(function() {
+            callback(elem.value)
+            }, 100);
+        }
     }
 
     $('.poll-answers').first().bind("paste", function(e) {
-
         catchPaste(e, this, function(clipData) {
             var val = clipData.replace(/[\r\n]+/gm, '<br/>');
             textarea_val = val.split('<br/>');
@@ -106,7 +99,6 @@ $(document).ready(function(){
     });
 
     var handleScaleChanges = function() {
-
         if($('.scale-input').val() ) {
             $('.answers-group-poll, .answers-group-add-poll').hide();
         } else {
@@ -116,4 +108,9 @@ $(document).ready(function(){
 
     $('.scale-input').change(handleScaleChanges);
     handleScaleChanges();
+
+    $('#stay-on-same-page').click( function() {
+		$('[name="stay-on-same-page"]').val('1');
+		$(this).closest('form').submit();
+	});
 });

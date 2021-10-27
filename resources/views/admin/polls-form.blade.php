@@ -133,11 +133,15 @@
 	                        </div>
 	                    @endforeach
 
-	                    <div class="form-group" style="margin-top: 60px;">
-	                        <div class="col-md-12">
-	                            <button type="submit" class="btn btn-block btn-success">Save</button>
-	                        </div>
-	                    </div>
+						<div class="form-group" style="margin-top: 60px;">
+							<div class="col-md-6">
+								<button type="submit" class="btn btn-block btn-success">Save</button>
+							</div>
+							<div class="col-md-6">
+								<input type="hidden" name="stay-on-same-page" value=""/>
+								<a href="javascript:;" class="btn btn-block btn-success" id="stay-on-same-page">Save and stay on this page</a>
+							</div>
+						</div>
 
 	                </div>
 	            </div>

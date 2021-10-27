@@ -154,10 +154,8 @@ class VoxService {
                         }
 
                         $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
-
                         $question = $questions_list->first();
 
-                        
                         if(!isset($answered[$question->id])) {
                             //first question
                             $array['question'] = $question;

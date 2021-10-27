@@ -126,7 +126,10 @@ class PollsController extends AdminController {
 	                $translation->question = $this->request->input('question-'.$key);
                     $translation->save();
 	            }
+
+
 	            if(!empty( $this->request->input('answers-'.$key) )) {
+
                     $newAnswers = $this->request->input('answers-'.$key);
 
                     $newAnswersArr = [];
@@ -135,12 +138,15 @@ class PollsController extends AdminController {
                             $newAnswersArr[] = $va;
                        }
                     }
-                    $translation = $newpoll->translateOrNew($key);
-                    $translation->answers = json_encode( $newAnswersArr );
-                    $translation->save();
-                }
 
+                    if(!empty($newAnswersArr)) {
+                        $translation = $newpoll->translateOrNew($key);
+                        $translation->answers = json_encode( $newAnswersArr );
+                        $translation->save();
+                    }
+                }
 	        }
+            
 	        $newpoll->save();
 
             $exisiting_date = Poll::where('id', '!=', $newpoll->id)->where('launched_at', $this->request->input('launched_at'))->first();
@@ -160,8 +166,12 @@ class PollsController extends AdminController {
                 ->withInput()
                 ->withErrors($validator);
             } else {
-                Request::session()->flash('success-message', 'Daily Poll Added');
-                return redirect('cms/vox/polls');
+                Request::session()->flash('success-message', 'Daily Poll Addede');
+                if(request('stay-on-same-page')) {
+                    return redirect('cms/vox/polls/edit/'.$newpoll->id);
+                } else {
+                    return redirect('cms/vox/polls/');
+                }
             }
         }
 
@@ -227,27 +237,30 @@ class PollsController extends AdminController {
                                     $newAnswersArr[] = $va;
                                }
                             }
-    	                    $translation->answers = json_encode( $newAnswersArr );
 
-                            $translator = [];
+                            if(!empty($newAnswersArr)) {
 
-                            if(!empty($oldAnswers)) {
+                                $translation->answers = json_encode( $newAnswersArr );
 
-                                foreach ($oldAnswers as $key => $value) {
-                                    $translator[($key+1)] = array_search($value, $newAnswersArr) + 1;
+                                $translator = [];
+
+                                if(!empty($oldAnswers)) {
+
+                                    foreach ($oldAnswers as $key => $value) {
+                                        $translator[($key+1)] = array_search($value, $newAnswersArr) + 1;
+                                    }
+                                }
+
+                                PollAnswer::where('poll_id', $item->id)->update([
+                                    'editing' => 1
+                                ]);
+                                foreach ($translator as $old => $new) {
+                                    PollAnswer::where('poll_id', $item->id)->where('answer', $old)->where('editing', 1)->update([
+                                        'answer' => $new,
+                                        'editing' => null
+                                    ]);
                                 }
                             }
-
-                            PollAnswer::where('poll_id', $item->id)->update([
-                                'editing' => 1
-                            ]);
-                            foreach ($translator as $old => $new) {
-                                PollAnswer::where('poll_id', $item->id)->where('answer', $old)->where('editing', 1)->update([
-                                    'answer' => $new,
-                                    'editing' => null
-                                ]);
-                            }
-
     	                } else {
     	                    $translation->answers = '';
     	                }
@@ -256,8 +269,12 @@ class PollsController extends AdminController {
     		        }
     		        $item->save();
 
-    		        Request::session()->flash('success-message', 'Daily Poll Edited');
-                	return redirect('cms/vox/polls/');
+                    Request::session()->flash('success-message', 'Daily Poll Edited');
+                    if(request('stay-on-same-page')) {
+                        return redirect('cms/vox/polls/edit/'.$item->id);
+                    } else {
+                        return redirect('cms/vox/polls/');
+                    }
                 }
 	        }
 
@@ -368,7 +385,6 @@ class PollsController extends AdminController {
 			        
             Request::session()->flash('success-message', 'Poll duplicated');
             return redirect('cms/vox/polls');
-
         } else {
             return redirect('cms/vox/polls');
         }
@@ -417,8 +433,6 @@ class PollsController extends AdminController {
 
         if(!empty($item)) {
 
-            global $reversedRows;
-
             $newName = '/tmp/'.str_replace(' ', '-', Input::file('table')->getClientOriginalName());
             copy( Input::file('table')->path(), $newName );
 
@@ -435,14 +449,14 @@ class PollsController extends AdminController {
                     }
                 }
 
-                foreach ($this->langs as $key => $value) {
-                    $translation = $item->translateOrNew($key);
+                $translation = $item->translateOrNew('en');
 
-                    $cur_answers = !empty($translation->answers) ? (!empty(json_decode($translation->answers, true)[0]) ? json_decode($translation->answers, true) : [] ) : [];
-                    $new_answers = !empty($cur_answers) ? array_merge($cur_answers, $answers) : $answers;
+                $cur_answers = !empty($translation->answers) ? (!empty(json_decode($translation->answers, true)[0]) ? json_decode($translation->answers, true) : [] ) : [];
+                $new_answers = !empty($cur_answers) ? array_merge($cur_answers, $answers) : $answers;
 
+                if(!empty($new_answers)) {
                     $translation->answers = json_encode($new_answers);
-
+                    
                     $translation->save();
                 }
             }

@@ -629,7 +629,7 @@ footer {
 
 	.footer-menu {
 		margin-bottom: 20px;
-		margin-top: 8px;
+		margin-top: 6px;
 
 		@media #{$tablet} {
 			margin: 7px 0px 10px 0px;
@@ -639,7 +639,7 @@ footer {
 		}
 
 		a {
-			font-size: 13px;
+			font-size: 15px;
 			font-weight: 600;
 			padding-right: 20px;
 			margin-right: 18px;
@@ -647,14 +647,20 @@ footer {
 			color: black;
 			transition: all 0.3s ease;
 
+			@media #{$pc} {
+				padding-right: 12px;
+    			margin-right: 10px;
+			}
+
 			@media #{$tablet} {
 				display: block;
 				border: none;
 				padding: 3px 0px;
 				margin: 0px;
-			}				
+			}
 
 			@media #{$phone} {
+				font-size: 14px;
 				display: inline-block;
 				border-right: 1px solid black;
 				padding: 0px 9px;
@@ -662,11 +668,11 @@ footer {
 			    margin-left: -6px;
 			}
 
-
 			&:first-child {
 				padding-left: 0px;
 				margin-left: 0px;
 			}
+			
 			&:last-child {
 				border-right: none;
 				padding-right: 0px;
@@ -693,7 +699,6 @@ footer {
 	}
 
 	.socials {
-		margin-top: 4px;
 	    line-height: 30px;
 	    text-align: right;
 

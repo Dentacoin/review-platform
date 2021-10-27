@@ -122,7 +122,7 @@
 	                        @if(!empty($user))
 								<a href="javascript:;" class="profile-btn header-avatar" id="header-avatar">
 									<span class="name">
-										{{ $user->getNameShort() }}
+										{{ $user->getNames() }}
 									</span>
 									<img src="{{ $user->getImageUrl(true) }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
 									@if($user->is_clinic && $user->branches->isNotEmpty())
