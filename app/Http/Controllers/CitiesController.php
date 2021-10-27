@@ -8,9 +8,7 @@ use App\Models\VoxAnswer;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\City;
-use App\Models\Wait;
 
-use Validator;
 use Response;
 use Request;
 
@@ -125,7 +123,6 @@ class CitiesController extends BaseController {
         	}
         }
 
-
         if( !empty($country_name)) {
         	$country = Country::whereHas('translations', function ($query) use ($country_name) {
 	            $query->where('name', 'LIKE', $country_name.'%');
@@ -146,7 +143,6 @@ class CitiesController extends BaseController {
         }
 
     	return Response::json($ret);
-
 	}
 
 	public function getQuestions() {
@@ -214,5 +210,4 @@ class CitiesController extends BaseController {
 
 		return Response::json($dentist_list);
 	}
-
 }

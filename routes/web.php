@@ -13,6 +13,7 @@
 
 Route::get('cms/login', 							'Auth\AuthenticateAdmin@showLoginForm');
 Route::post('cms/login',							'Auth\AuthenticateAdmin@postLogin');
+Route::any('cms/password-expired',					'Auth\AuthenticateAdmin@passwordExpired');
 Route::get('cms/logout', 							'Auth\AuthenticateAdmin@getLogout');
 
 Route::get('cities/{id}/{empty?}', 					'CitiesController@getCities');

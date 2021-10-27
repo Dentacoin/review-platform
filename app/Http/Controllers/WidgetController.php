@@ -124,5 +124,4 @@ class WidgetController extends BaseController {
 
         return null;
     }    
-
 }

@@ -2,14 +2,14 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class AuthenticateAdmin 
-{
+use Closure;
 
-    public function handle($request, Closure $next)
-    {
+class AuthenticateAdmin {
+
+    public function handle($request, Closure $next) {
+
         if (Auth::guard('admin')->guest()) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
