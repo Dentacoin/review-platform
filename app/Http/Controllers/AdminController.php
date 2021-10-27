@@ -18,6 +18,8 @@ use App\Models\Review;
 use App\Models\Order;
 use App\Models\Admin;
 
+use Carbon\Carbon;
+
 use Auth;
 
 class AdminController extends BaseController {
@@ -50,6 +52,10 @@ class AdminController extends BaseController {
         //$this->user = Auth::guard('web')->user();
         $this->middleware(function ($request, $next) {
             $this->user= Auth::guard('admin')->user();
+            
+            if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->password_last_updated_at->toDateTimeString() < Carbon::now()->addDays(-60)->toDateTimeString()) {
+                return redirect('cms/password-expired');
+            }
 
             return $next($request);
         });
@@ -63,7 +69,6 @@ class AdminController extends BaseController {
     }
 
     public function ShowView($page, $params=array()) {
-
 
         $params['current_page'] = $this->current_page;
         $params['current_subpage'] = $this->current_subpage;
