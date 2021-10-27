@@ -817,6 +817,7 @@ $phone: "screen and (max-width: 768px)";
 		border-radius: 4px;
 	    border: 1px solid white;
 		transition: all 0.3s ease;
+		text-transform: uppercase;
 
 		@media #{$tablet} {
 			font-size: 18px;

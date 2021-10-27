@@ -827,7 +827,8 @@
     font-weight: 300;
     border-radius: 4px;
     border: 1px solid white;
-    transition: all 0.3s ease; }
+    transition: all 0.3s ease;
+    text-transform: uppercase; }
     @media screen and (max-width: 998px) {
       .profile-tabs .tab {
         font-size: 18px; } }
