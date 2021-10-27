@@ -472,9 +472,7 @@
 	    		({{ $item->reviews_in_video()->count() }})
 	    	</a>
     	@endif
-		@if( $item->reviews_in_standard()->count() || $item->reviews_in_video()->count())
-		@endif
-		<a class="tab" data-tab="about" href="javascript:;" style="z-index: 3;">
+		<a class="tab" data-tab="about" href="javascript:;" style="z-index: 3; {{ $item->reviews_in_standard()->count() || $item->reviews_in_video()->count() ? '' : 'display:none;' }}">
 			{!! nl2br(trans('trp.page.user.about')) !!}
 		</a>
 
