@@ -32,16 +32,18 @@
   .invite-new-dentist-success-popup.fixed-popup .popup-inner h2 {
     font-weight: bold;
     color: black;
-    text-transform: uppercase;
-    max-width: 400px;
-    margin: 5px auto 15px; }
+    font-size: 22px;
+    margin-top: 30px;
+    max-width: 470px;
+    margin: 35px auto 15px; }
   .invite-new-dentist-success-popup.fixed-popup .popup-inner p {
-    font-size: 20px; }
+    font-size: 20px;
+    margin-bottom: 30px; }
     .invite-new-dentist-success-popup.fixed-popup .popup-inner p span {
       color: #0fb0e5;
       font-weight: bold;
       font-size: 20px; }
   .invite-new-dentist-success-popup.fixed-popup .popup-inner .button {
-    padding: 10px 100px;
-    margin-top: 40px;
+    padding: 10px 40px;
+    margin-top: 0px;
     margin-bottom: 10px; }

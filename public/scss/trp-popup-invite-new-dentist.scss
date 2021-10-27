@@ -52,13 +52,15 @@ $phone: "screen and (max-width: 768px)";
 		h2 {
 			font-weight: bold;
 		    color: black;
-		    text-transform: uppercase;
-		    max-width: 400px;
-		    margin: 5px auto 15px;
+			font-size: 22px;
+			margin-top: 30px;
+		    max-width: 470px;
+		    margin: 35px auto 15px;
 		}
 
 		p {
 			font-size: 20px;
+			margin-bottom: 30px;
 
 			span {
 				color: #0fb0e5;
@@ -68,8 +70,8 @@ $phone: "screen and (max-width: 768px)";
 		}
 
 		.button {
-			padding: 10px 100px;
-			margin-top: 40px;
+			padding: 10px 40px;
+			margin-top: 0px;
 			margin-bottom: 10px;
 		}
 	}
