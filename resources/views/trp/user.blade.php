@@ -473,10 +473,10 @@
 	    	</a>
     	@endif
 		@if( $item->reviews_in_standard()->count() || $item->reviews_in_video()->count())
-			<a class="tab" data-tab="about" href="javascript:;" style="z-index: 3;">
-				{!! nl2br(trans('trp.page.user.about')) !!}
-    		</a>
 		@endif
+		<a class="tab" data-tab="about" href="javascript:;" style="z-index: 3;">
+			{!! nl2br(trans('trp.page.user.about')) !!}
+		</a>
 
     	@if(!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty()))
     		<a class="tab {!! $patient_asks ? 'force-active' : '' !!}" data-tab="asks" href="javascript:;" style="z-index: 2;">
