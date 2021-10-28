@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\VoxAnswersDependency;
 use App\Models\VoxQuestion;
 use App\Models\VoxAnswer;
 use App\Models\VoxScale;
