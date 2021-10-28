@@ -193,6 +193,7 @@ class TransactionsController extends AdminController {
         if($item->status == 'first' && !empty($item->user) && !$item->user->is_dentist) {
 
             $user_history = new UserHistory;
+            $user_history->admin_id = $this->user->id;
             $user_history->user_id = $item->user->id;
             $user_history->patient_status = $item->user->patient_status;
             $user_history->save();
@@ -201,18 +202,19 @@ class TransactionsController extends AdminController {
             $item->user->save();
         }
 
+        $dcn_history = new DcnTransactionHistory;
+        $dcn_history->transaction_id = $item->id;
+        $dcn_history->admin_id = $this->user->id;
+        $dcn_history->status = 'new';
+        $dcn_history->old_status = $item->status;
+        $dcn_history->history_message = 'Bumped by admin';
+        $dcn_history->save();
+
         $item->status = 'new';
         $item->processing = 0;
         $item->retries = 0;
 
         $item->save();
-
-        $dcn_history = new DcnTransactionHistory;
-        $dcn_history->transaction_id = $item->id;
-        $dcn_history->admin_id = $this->user->id;
-        $dcn_history->status = 'new';
-        $dcn_history->history_message = 'Bumped by admin';
-        $dcn_history->save();
 
         $this->request->session()->flash('success-message', 'Transaction bumped' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
@@ -227,15 +229,16 @@ class TransactionsController extends AdminController {
 
         $item = DcnTransaction::find($id);
 
-        $item->status = 'pending';
-        $item->save();
-
         $dcn_history = new DcnTransactionHistory;
         $dcn_history->transaction_id = $item->id;
         $dcn_history->admin_id = $this->user->id;
         $dcn_history->status = 'pending';
+        $dcn_history->old_status = $item->status;
         $dcn_history->history_message = 'Pending by admin';
         $dcn_history->save();
+
+        $item->status = 'pending';
+        $item->save();
 
         $this->request->session()->flash('success-message', 'Transaction pending' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
@@ -262,15 +265,16 @@ class TransactionsController extends AdminController {
             User::destroy( $item->user->id );
         }
 
-        $item->status = 'stopped';
-        $item->save();
-
         $dcn_history = new DcnTransactionHistory;
         $dcn_history->transaction_id = $item->id;
         $dcn_history->admin_id = $this->user->id;
         $dcn_history->status = 'stopped';
+        $dcn_history->old_status = $item->status;
         $dcn_history->history_message = 'Stopped by admin';
         $dcn_history->save();
+
+        $item->status = 'stopped';
+        $item->save();
 
         $this->request->session()->flash('success-message', 'Transaction stopped' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
@@ -293,6 +297,7 @@ class TransactionsController extends AdminController {
                 $dcn_history->transaction_id = $item->id;
                 $dcn_history->admin_id = $this->user->id;
                 $dcn_history->status = 'failed';
+                $dcn_history->old_status = $item->status;
                 $dcn_history->history_message = 'Deleted by admin';
                 $dcn_history->save();
 
@@ -342,6 +347,7 @@ class TransactionsController extends AdminController {
                 if($bt->status == 'first' && !empty($bt->user) && !$bt->user->is_dentist) {
 
                     $user_history = new UserHistory;
+                    $user_history->admin_id = $this->user->id;
                     $user_history->user_id = $bt->user->id;
                     $user_history->patient_status = $bt->user->patient_status;
                     $user_history->save();
@@ -349,17 +355,18 @@ class TransactionsController extends AdminController {
                     $bt->user->patient_status = 'new_verified';
                     $bt->user->save();
                 }
-                
-                $bt->status = 'new';
-                $bt->retries = 0;
-                $bt->save();
 
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $bt->id;
                 $dcn_history->admin_id = $this->user->id;
                 $dcn_history->status = 'new';
+                $dcn_history->old_status = $bt->status;
                 $dcn_history->history_message = 'Bumped by admin';
                 $dcn_history->save();
+                
+                $bt->status = 'new';
+                $bt->retries = 0;
+                $bt->save();
             }
         }
 
@@ -390,15 +397,16 @@ class TransactionsController extends AdminController {
                     User::destroy( $st->user->id );
                 }
 
-                $st->status = 'stopped';
-                $st->save();
-
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $st->id;
                 $dcn_history->admin_id = $this->user->id;
                 $dcn_history->status = 'stopped';
+                $dcn_history->old_status = $st->status;
                 $dcn_history->history_message = 'Stopped by admin';
                 $dcn_history->save();
+
+                $st->status = 'stopped';
+                $st->save();
             }
         }
 
@@ -417,15 +425,16 @@ class TransactionsController extends AdminController {
             $pending_trans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($pending_trans as $pt) {
 
-                $pt->status = 'pending';
-                $pt->save();
-
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $pt->id;
                 $dcn_history->admin_id = $this->user->id;
                 $dcn_history->status = 'pending';
+                $dcn_history->old_status = $pt->status;
                 $dcn_history->history_message = 'Pending by admin';
                 $dcn_history->save();
+
+                $pt->status = 'pending';
+                $pt->save();
             }
         }
 
@@ -443,15 +452,16 @@ class TransactionsController extends AdminController {
         $transactions = DcnTransaction::where('status', 'dont_retry')->get();
         foreach ($transactions as $transaction) {
 
-            $transaction->status = 'new';
-            $transaction->save();
-
             $dcn_history = new DcnTransactionHistory;
-            $dcn_history->transaction_id = $item->id;
+            $dcn_history->transaction_id = $transaction->id;
             $dcn_history->admin_id = $this->user->id;
             $dcn_history->status = 'new';
+            $dcn_history->old_status = $transaction->status;
             $dcn_history->history_message = 'Bumped by admin from Dont Retry button';
             $dcn_history->save();
+
+            $transaction->status = 'new';
+            $transaction->save();
         }
 
         $this->request->session()->flash('success-message', '"Dont retry" transactions are bumped' );
@@ -737,6 +747,7 @@ class TransactionsController extends AdminController {
 
                 if(!empty(request('status')) && request('status') != $item->status) {
                     $dcn_history->status = request('status');
+                    $dcn_history->old_status = $item->status;
                 }
 
                 if(!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) {
@@ -766,7 +777,6 @@ class TransactionsController extends AdminController {
                 $item->processing = 0;
             }
             $item->save();
-
 
             $this->request->session()->flash('success-message', 'Saved!' );
             return redirect('cms/transactions');

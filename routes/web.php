@@ -45,6 +45,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('admins/admins/add',								'AdminsController@add');
 	Route::any('admins/ips',										'AdminsController@listIps');
 	Route::get('admins/ips/delete/{id}',							'AdminsController@deleteIp');
+	Route::get('admins/actions-history',							'AdminsController@actionsHistory');
 
 	Route::any('blacklist', 										'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 							'BlacklistController@delete');

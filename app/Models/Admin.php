@@ -2,23 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\Authenticatable;
 
+class Admin extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-class Admin extends Model implements AuthenticatableContract, CanResetPasswordContract
-{
     use SoftDeletes, Authenticatable, CanResetPassword;
 
     protected $fillable = [
-    	'username', 
-    	'email', 
-    	'password', 
+    	'name',
+    	'username',
+    	'email',
+    	'password',
         'comments',
         'role',
         'lang_from',
@@ -38,3 +37,5 @@ class Admin extends Model implements AuthenticatableContract, CanResetPasswordCo
         return ['65003'];
     }
 }
+
+?>

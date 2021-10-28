@@ -82,52 +82,48 @@ class AuthenticateAdmin extends BaseController {
     }
 
     public function passwordExpired(Request $request) {
+
+        $admin = Auth::guard('admin')->user();
+        if(empty($admin)) {
+            return redirect('cms/login');
+        }
         
         if($request->isMethod('post')) {
-            $admin = Auth::guard('admin')->user();
-
-            if(!empty($admin)) {
-                $validator = Validator::make($request->all(), [
-                    'current-password' => array('required', function ($attribute, $value, $fail) use ($admin) {
-                        if (!\Hash::check($value, $admin->password)) {
-                            return redirect('cms/password-expired')
-                            ->withInput()
-                            ->with('error-message', 'The current password is incorrect.');
-                        }
-                    }),
-                    'new-password' => array('required','min:10','regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9]).*$/'),
-                    // 'new-password' => array('required'),
-                    'new-password-repeat' => array('required','same:new-password'),
-                ]);
-        
-                if ($validator->fails()) {
-
-                    $msg = $validator->getMessageBag()->toArray();
-
-                    foreach ($msg as $field => $errors) {
-                        if($errors[0] == 'The new-password format is invalid.') {
-                            return redirect('cms/password-expired')
-                            ->withInput()
-                            ->with('error-message', 'The password must contain an uppercase letter a lowercase letter and a number');
-                        }
+            $validator = Validator::make($request->all(), [
+                'current-password' => array('required', function ($attribute, $value, $fail) use ($admin) {
+                    if (!\Hash::check($value, $admin->password)) {
+                        return redirect('cms/password-expired')
+                        ->withInput()
+                        ->with('error-message', 'The current password is incorrect.');
                     }
+                }),
+                'new-password' => array('required','min:10','regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9]).*$/'),
+                // 'new-password' => array('required'),
+                'new-password-repeat' => array('required','same:new-password'),
+            ]);
+    
+            if ($validator->fails()) {
+                $msg = $validator->getMessageBag()->toArray();
 
-                    return redirect('cms/password-expired')
-                    ->withInput()
-                    ->withErrors($validator);
-                } else {
-                    
-                    $admin->password = bcrypt($request->input('new-password'));
-                    $admin->save();
-                    
-                    return redirect('cms/');
+                foreach ($msg as $field => $errors) {
+                    if($errors[0] == 'The new-password format is invalid.') {
+                        return redirect('cms/password-expired')
+                        ->withInput()
+                        ->with('error-message', 'The password must contain an uppercase letter a lowercase letter and a number');
+                    }
                 }
-            }
 
-            return redirect('cms/login');
+                return redirect('cms/password-expired')
+                ->withInput()
+                ->withErrors($validator);
+            } else {
+                $admin->password = bcrypt($request->input('new-password'));
+                $admin->save();
+                
+                return redirect('cms/');
+            }
         }
 
         return view('admin.password-expire');
     }
-
 }

@@ -33,6 +33,7 @@ class DentistClaimsController extends AdminController {
         //if phone is empty is old added by patient dentist
         if(empty($item->phone) && !empty($user->old_unclaimed_profile)) {
             $user_history = new UserHistory;
+            $user_history->admin_id = $this->user->id;
             $user_history->user_id = $user->id;
             $user_history->status = $user->status;
             $user_history->save();
@@ -83,6 +84,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
             }
 
             $user_history = new UserHistory;
+            $user_history->admin_id = $this->user->id;
             $user_history->user_id = $user->id;
             $user_history->status = $user->status;
             $user_history->save();

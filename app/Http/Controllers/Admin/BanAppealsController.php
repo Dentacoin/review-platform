@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use App\Models\UserHistory;
+use App\Models\AdminAction;
 use App\Models\UserAction;
 use App\Models\BanAppeal;
 use App\Models\User;
@@ -47,6 +48,10 @@ class BanAppealsController extends AdminController {
             $items = $items->whereHas('user', function($query) {
                 $query->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
             });
+        }
+
+        if(!empty(request('search-id'))) {
+            $items = $items->where('id', request('search-id'));
         }
 
         if(!empty(request('pending'))) {
@@ -166,6 +171,12 @@ class BanAppealsController extends AdminController {
             $item->pending_fields = null;
             $item->save();
 
+            $new_admin_actions = new AdminAction;
+            $new_admin_actions->admin_id = $this->user->id;
+            $new_admin_actions->ban_appeal_id = $item->id;
+            $new_admin_actions->action = 'approve';
+            $new_admin_actions->save();
+
             // $this->request->session()->flash('success-message', "Appeal approved" );
             return Response::json( ['success' => true, 'type' => 'approved'] );
         }
@@ -196,6 +207,7 @@ class BanAppealsController extends AdminController {
             $user = $item->user;
 
             $user_history = new UserHistory;
+            $user_history->admin_id = $this->user->id;
             $user_history->user_id = $user->id;
             $user_history->patient_status = $user->patient_status;
             $user_history->save();

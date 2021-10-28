@@ -17,21 +17,30 @@ class UserHistory extends Model {
         'country_id',
         'civic_email',
         'fb_id',
-        'history'
+        'history',
     ];
 
     protected $fillable = [
         'user_id',
         'admin_id',
         'status',
+        'new_status',
         'patient_status',
+        'new_patient_status',
         'gender',
+        'new_gender',
         'birthyear',
+        'new_birthyear',
         'phone',
+        'new_phone',
         'country_id',
+        'new_country_id',
         'civic_email',
+        'new_civic_email',
         'fb_id',
-        'history'
+        'new_fb_id',
+        'history',
+        'new_history',
 	];
     
     protected $dates = [
@@ -46,5 +55,13 @@ class UserHistory extends Model {
 
     public function user() {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
+
+    public function country() {
+        return $this->hasOne('App\Models\Country', 'id', 'country_id')->with('translations');
+    }
+
+    public function newCountry() {
+        return $this->hasOne('App\Models\Country', 'id', 'new_country_id')->with('translations');
     }
 }

@@ -6,6 +6,9 @@ use App\Http\Controllers\AdminController;
 
 use Illuminate\Http\Request as Requestt;
 
+use App\Models\DcnTransactionHistory;
+use App\Models\AdminAction;
+use App\Models\UserHistory;
 use App\Models\AdminIp;
 use App\Models\Admin;
 
@@ -61,6 +64,7 @@ class AdminsController extends AdminController {
         }
 
         $validator = Validator::make($this->request->all(), [
+            'name' => array('required'),
             'username' => array('required', 'unique:admins,username', 'min:3'),
             'password' => array('required', 'min:6'),
             'email' => array('required', 'email', 'unique:admins,email')
@@ -73,6 +77,7 @@ class AdminsController extends AdminController {
         } else {
             
             $newadmin = new Admin;
+            $newadmin->name = $this->request->input('name');
             $newadmin->username = $this->request->input('username');
             $newadmin->password = bcrypt($this->request->input('password'));
             $newadmin->email = $this->request->input('email');
@@ -145,6 +150,7 @@ class AdminsController extends AdminController {
                 if(!empty( $this->request->input('password') )) {
                     $item->password = bcrypt($this->request->input('password'));
                 }
+                $item->name = $this->request->input('name');
                 $item->email = $this->request->input('email');
                 $item->comments = $this->request->input('comments');
                 $item->role = $this->request->input('role');
@@ -189,7 +195,6 @@ class AdminsController extends AdminController {
                 $this->request->session()->flash('success-message', 'IP added' );
                 return redirect('cms/admins/ips');
             }
-
         }
 
         $items = AdminIp::get();
@@ -210,5 +215,26 @@ class AdminsController extends AdminController {
 
         $this->request->session()->flash('success-message', 'IP deleted' );
         return redirect('cms/admins/ips');
+    }
+
+    public function actionsHistory() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $actions = UserHistory::whereNotNull('admin_id')->get();
+
+        $admin_actions = AdminAction::whereNotNull('admin_id')->get();
+        $transaction_actions = DcnTransactionHistory::whereNotNull('admin_id')->get();
+        $actions = $actions->concat($transaction_actions);
+        $actions = $actions->concat($admin_actions);
+
+        $actions = $actions->sortByDesc('created_at');
+
+        return $this->showView('admin-actions-history', array(
+            'actions' => $actions,
+        ));
     }
 }

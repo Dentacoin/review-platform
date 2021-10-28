@@ -177,6 +177,7 @@ return [
             'subpages' => array(
                 'admins' => 'admins',
                 'ips' => 'ips',
+                'actions-history' => 'actions-history'
             ),
         ),
         'logs' => array(

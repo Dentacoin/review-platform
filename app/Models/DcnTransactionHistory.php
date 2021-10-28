@@ -17,6 +17,7 @@ class DcnTransactionHistory extends Model {
         'allowance_hash',
         'nonce',
         'status',
+        'old_status',
         'message',
         'history_message',
         'from_creating'

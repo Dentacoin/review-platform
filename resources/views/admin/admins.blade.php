@@ -5,7 +5,6 @@
 <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
 <!-- end page-header -->
 
-
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-inverse">
@@ -21,6 +20,7 @@
 						'table_id' => 'admins',
 						'table_fields' => [
 							'id'				=> array('name' => 'ID'),
+							'name'			    => array('name' => 'Name', 'label' => 'Name'),
 							'username'			=> array('name' => 'Username'),
 							'email'				=> array('name' => 'Email'),
                             'role'              => array('name' => 'Role'),
@@ -76,9 +76,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label"></label>
-                        <div class="col-md-9">
-                            <button type="submit" class="btn btn-sm btn-success">{{ trans('admin.page.'.$current_page.'.submit') }}</button>
+                        <label class="col-md-2 control-label">Name</label>
+                        <div class="col-md-4">
+                            {{ Form::text('name', '', array('class' => 'form-control')) }}
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-block btn-success">{{ trans('admin.page.'.$current_page.'.submit') }}</button>
                         </div>
                     </div>
                 </form>

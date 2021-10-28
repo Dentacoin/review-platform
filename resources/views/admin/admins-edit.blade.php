@@ -42,9 +42,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.email') }}</label>
+                        <label class="col-md-2 control-label">Name</label>
                         <div class="col-md-4">
-                            {{ Form::text('email', $item->email, array('class' => 'form-control')) }}
+                        	{{ Form::text('name', $item->name, array('class' => 'form-control')) }}
                         </div>
                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.role') }}</label>
                         <div class="col-md-4">
@@ -52,6 +52,16 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.email') }}</label>
+                        <div class="col-md-4">
+                            {{ Form::text('email', $item->email, array('class' => 'form-control')) }}
+                        </div>
+                        <label class="col-md-2 control-label">Website account ID</label>
+                        <div class="col-md-4">
+                            {{ Form::text('user_id', $item->user_id, array('class' => 'form-control')) }}
+                        </div>
+                    </div>                    
 
                     <div class="form-group">
                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.lang_from') }}</label>
@@ -74,10 +84,6 @@
                                 </label>
                                 <br/>
                             @endforeach
-                        </div>
-                        <label class="col-md-2 control-label">Website account ID</label>
-                        <div class="col-md-4">
-                            {{ Form::text('user_id', $item->user_id, array('class' => 'form-control')) }}
                         </div>
                     </div>
 

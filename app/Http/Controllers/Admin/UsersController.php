@@ -19,6 +19,7 @@ use App\Models\VoxCrossCheck;
 use App\Models\WalletAddress;
 use App\Models\ReviewAnswer;
 use App\Models\UserHistory;
+use App\Models\AdminAction;
 use App\Models\VoxQuestion;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -49,6 +50,7 @@ use Request;
 use Image;
 use Route;
 use Auth;
+use Mail;
 use DB;
 
 class UsersController extends AdminController {
@@ -472,6 +474,8 @@ class UsersController extends AdminController {
             unset($getArrNoSort['survey-count']);
         }
 
+        $current_url = url('cms/users/users/').'?'.http_build_query($getArrNoSort);
+
         if(!empty(request('exclude-countries'))) {
             $users = $users->whereNotIn('country_id', request('exclude-countries') );
         }
@@ -509,6 +513,24 @@ class UsersController extends AdminController {
         //$total_count = isset( $total_count[0]->cnt ) ? $total_count[0]->cnt : 0;
 
         if( request()->input('export') ) {
+            $mtext = 'Admin "'.$this->user->name.'" exports users. Link to the query: '.substr($current_url, 0, -9);
+
+            Mail::raw($mtext, function ($message) {
+
+                $sender = config('mail.from.address');
+                $sender_name = config('mail.from.name');
+
+                $message->from($sender, $sender_name);
+                $message->to( 'petya.ivanova@dentacoin.com' );
+                // $message->to( 'gergana@youpluswe.com' );
+                $message->subject('Admin exports users');
+            });
+
+            $new_admin_actions = new AdminAction;
+            $new_admin_actions->admin_id = $this->user->id;
+            $new_admin_actions->action = 'export';
+            $new_admin_actions->info = substr($current_url, 0, -9);
+            $new_admin_actions->save();
 
             $flist = [];
             $flist[] = [
@@ -537,6 +559,25 @@ class UsersController extends AdminController {
             return $file_to_export;
 
         } else if( request()->input('export-fb') ) {
+            $mtext = 'Admin "'.$this->user->name.'" exports users. Link to the query: '.substr($current_url, 0, -12);
+
+            Mail::raw($mtext, function ($message) {
+
+                $sender = config('mail.from.address');
+                $sender_name = config('mail.from.name');
+
+                $message->from($sender, $sender_name);
+                $message->to( 'petya.ivanova@dentacoin.com' );
+                // $message->to( 'gergana@youpluswe.com' );
+                $message->subject('Admin exports users');
+            });
+
+            $new_admin_actions = new AdminAction;
+            $new_admin_actions->admin_id = $this->user->id;
+            $new_admin_actions->action = 'export';
+            $new_admin_actions->info = substr($current_url, 0, -12);
+            $new_admin_actions->save();
+
             $export_fb = [];
             foreach ($users as $u) {
                 $nameArr = explode(' ', $u->name);
@@ -669,7 +710,6 @@ class UsersController extends AdminController {
         $table_fields['delete'] = array('template' => 'admin.parts.table-users-delete');
 
         // dd($getArrNoSort);
-        $current_url = url('cms/users/users/').'?'.http_build_query($getArrNoSort);
 
         return $this->showView('users', array(
             'users' => $users,
@@ -708,8 +748,6 @@ class UsersController extends AdminController {
             'current_url' => $current_url,
         ));
     }
-
-    
 
     public function add() {
 
@@ -795,6 +833,16 @@ class UsersController extends AdminController {
 
         if(!empty($item)) {
 
+            $already_viewed = AdminAction::where('admin_id', $this->user->id)->where('user_id', $item->id)->where('created_at', '>', Carbon::now()->addHour(-1))->first();
+
+            if(empty($already_viewed)) {
+                $new_admin_actions = new AdminAction;
+                $new_admin_actions->admin_id = $this->user->id;
+                $new_admin_actions->user_id = $item->id;
+                $new_admin_actions->action = 'view';
+                $new_admin_actions->save();
+            }
+
             $emails = Email::where('user_id', $id )->where( function($query) {
                 $query->where('sent', 1)
                 ->orWhere('invalid_email', 1);
@@ -816,6 +864,7 @@ class UsersController extends AdminController {
 
                 $dont_delete = false;
                 $other_fields = '';
+                $new_other_fields = '';
 
                 foreach ($this->fields as $key => $value) {
                     if(!in_array($key, ['slug', 'type', 'password'])) {
@@ -824,16 +873,30 @@ class UsersController extends AdminController {
                             $dont_delete = true;
 
                             if(in_array($key, UserHistory::$fields)) {
+                                $new_field = 'new_'.$key;
+                                $user_history->$new_field = $this->request->input($key);
                                 $user_history->$key = $item->$key;
                             } else {
                                 $other_fields.= 'old '.$key.' = '.$item->$key.'<br/>';
+                                $new_other_fields.= 'new '.$key.' = '.$this->request->input($key).'<br/>';
                             }
+                        }
+                    } else {
+                        if($key =='password') {
+                            $other_fields.= 'changed password<br/>';
+                        }
+                        if($key =='slug') {
+                            $other_fields.= 'changed slug<br/>';
+                        }
+                        if($key =='type') {
+                            $other_fields.= 'changed type<br/>';
                         }
                     }
                 }
                 
                 if($dont_delete) {
                     $user_history->history = $other_fields;
+                    $user_history->new_history = $new_other_fields;
                     $user_history->save();
                 }
 
