@@ -101,6 +101,17 @@ class AuthenticateAdmin extends BaseController {
                 ]);
         
                 if ($validator->fails()) {
+
+                    $msg = $validator->getMessageBag()->toArray();
+
+                    foreach ($msg as $field => $errors) {
+                        if($errors[0] == 'The new-password format is invalid.') {
+                            return redirect('cms/password-expired')
+                            ->withInput()
+                            ->with('error-message', 'The password must contain an uppercase letter a lowercase letter and a number');
+                        }
+                    }
+
                     return redirect('cms/password-expired')
                     ->withInput()
                     ->withErrors($validator);
