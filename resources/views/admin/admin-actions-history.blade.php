@@ -132,7 +132,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if(isset($action->user_id) && !$action->ban_appeal_id)
+                                            @if(isset($action->user_id) && !isset($action->ban_appeal_id))
                                                 <a href="{{ url('cms/users/users/edit/'.$action->user_id) }}">{{ $action->user ? $action->user->getNames() : $action->user_id }}</a>
                                             @elseif(isset($action->transaction_id))
                                                 <a href="{{ url('cms/transactions/?search-id='.$action->transaction_id) }}">Transaction</a>
