@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use Illuminate\Http\Request as Requestt;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 use App\Models\DcnTransactionHistory;
 use App\Models\AdminAction;
@@ -15,6 +17,7 @@ use App\Models\Admin;
 use Validator;
 use Request;
 use Auth;
+use App;
 
 class AdminsController extends AdminController {
 
@@ -224,17 +227,42 @@ class AdminsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $actions = UserHistory::whereNotNull('admin_id')->get();
+        $actions = UserHistory::whereNotNull('admin_id');
+        if(!empty(request('search-admin-id'))) {
+            $actions = $actions->where('admin_id', request('search-admin-id'));
+        }
+        $actions = $actions->get();
 
-        $admin_actions = AdminAction::whereNotNull('admin_id')->get();
-        $transaction_actions = DcnTransactionHistory::whereNotNull('admin_id')->get();
+        $admin_actions = AdminAction::whereNotNull('admin_id');
+        if(!empty(request('search-admin-id'))) {
+            $admin_actions = $admin_actions->where('admin_id', request('search-admin-id'));
+        }
+        $admin_actions = $admin_actions->get();
+
+        $transaction_actions = DcnTransactionHistory::whereNotNull('admin_id');
+        if(!empty(request('search-admin-id'))) {
+            $transaction_actions = $transaction_actions->where('admin_id', request('search-admin-id'));
+        }
+        $transaction_actions = $transaction_actions->get();
+
         $actions = $actions->concat($transaction_actions);
         $actions = $actions->concat($admin_actions);
 
         $actions = $actions->sortByDesc('created_at');
 
+        $actions = $this->paginate($actions)->withPath('cms/admins/actions-history/');
+
+        $admins = Admin::get();
+
         return $this->showView('admin-actions-history', array(
+            'admins' => $admins,
             'actions' => $actions,
+            'search_admin_id' => request('search-admin-id')
         ));
+    }
+
+    private function paginate($items, $perPage = 50, $page = null, $options = []) {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }
