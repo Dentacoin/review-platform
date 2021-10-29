@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 use App\Models\AdminIp;
 use App\Models\User as UserModel;
-use App\Models\Admin;
 use App\User;
 
 use Carbon\Carbon;

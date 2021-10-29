@@ -13,6 +13,7 @@ class CivicController extends BaseController {
 
 	public function add() {
         header('Access-Control-Allow-Origin: *');
+		
 		if( Request::input('jwtToken') && Request::input('data') ) {
 			$c = Civic::where('jwtToken', 'LIKE', Request::input('jwtToken'))->first();
 			if(empty($c)) {

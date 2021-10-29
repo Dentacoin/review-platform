@@ -14,21 +14,23 @@ use App\Models\TransactionScammersByDay;
 use App\Models\DcnTransaction;
 use App\Models\SupportContact;
 use App\Models\BanAppeal;
+use App\Models\AdminIp;
 use App\Models\Review;
 use App\Models\Order;
-use App\Models\Admin;
+use App\Models\User;
 
 use Carbon\Carbon;
 
 use Auth;
 
 class AdminController extends BaseController {
+
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
-    public $request;
-    public $current_page;
     public $current_subpage;
+    public $current_page;
     public $parameters;
+    public $request;
 
     public function __construct(Request $request) {
         
@@ -39,10 +41,12 @@ class AdminController extends BaseController {
 
     	$this->request = $request;
     	$path = explode('/', $request->path());
+
     	$this->current_page = isset($path[1]) ? $path[1] : null;
     	if(!isset( config('admin.pages')[$this->current_page] )) {
 			$this->current_page='home';
 		}
+
     	$this->current_subpage = isset($path[2]) ? $path[2] : null;
 		if(!isset( config('admin.pages')[$this->current_page]['subpages'][$this->current_subpage] )) {
 			$this->current_subpage = isset(config('admin.pages')[$this->current_page]['subpages']) ? key(config('admin.pages')[$this->current_page]['subpages']) : null;
@@ -57,9 +61,16 @@ class AdminController extends BaseController {
                 return redirect('cms/password-expired');
             }
 
+            $safeIp = AdminIp::where('ip', User::getRealIp())->first();
+
+            if(!$safeIp) {
+                return redirect('cms/login')
+                ->withInput()
+                ->with('error-message', 'This IP is not in the whitelist!');
+            }
+
             return $next($request);
         });
-
     
         $this->categories = [];
         $clist = config('categories');
@@ -144,16 +155,12 @@ class AdminController extends BaseController {
         $params['counters']['trp'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         $params['counters']['ban_appeals'] = BanAppeal::where('status', 'new')->whereNull('pending_fields')->count();
-
         $params['counters']['transactions'] = TransactionScammersByDay::where('checked', '!=', 1)->count() ? TransactionScammersByDay::where('checked', '!=', 1)->count() : TransactionScammersByBalance::where('checked', '!=', 1)->count();
-
         $params['counters']['support'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
         $params['counters']['contact'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
         $params['counters']['orders'] = Order::whereNull('is_send')->count();
-        
-        $params['cache_version'] = '20211027';
-
         $params['dcn_warning_transaction'] = DcnTransaction::where('status', 'dont_retry')->count();
+        $params['cache_version'] = '20211027';
         //dd($params['counters']);
 
         if($this->current_page!='home' && !isset($menu[$this->current_page])) {

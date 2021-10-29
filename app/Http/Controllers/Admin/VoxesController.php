@@ -1226,7 +1226,6 @@ class VoxesController extends AdminController {
             }
         }
 
-        
         $question->save();
 
         if(isset($data['prev_q_order'])) {

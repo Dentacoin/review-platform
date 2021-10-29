@@ -145,5 +145,4 @@ class SSOController extends BaseController {
 
         return response()->json(['success' => false]);
     }
-
 }

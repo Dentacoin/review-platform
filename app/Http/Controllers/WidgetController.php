@@ -25,7 +25,6 @@ class WidgetController extends BaseController {
             }
         }
         App::setLocale( $locale );
-
     }
 
     public function widget($locale,$user_id,$hash,$mode) {
@@ -38,7 +37,6 @@ class WidgetController extends BaseController {
                     $user->save();
                 }
             }
-
 
             $params['user'] = $user;
             $params['reviews'] = intval($mode) ? $user->reviews_in()->where('verified', 1) : $user->reviews_in();
@@ -97,14 +95,12 @@ class WidgetController extends BaseController {
             if(empty($reviews)) {
                 $reviews = $user->reviews_in();
             }
-
             if (!empty(request('height'))) {
                 $params['height'] = intval(request('height'));
             }
             if (!empty(request('width'))) {
                 $params['width'] = intval(request('width'));
             }
-
             if (!empty(request('slide'))) {
                 $params['slide'] = intval(request('slide'));
             }

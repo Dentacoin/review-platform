@@ -17,7 +17,6 @@ class CitiesController extends BaseController {
 	public function getUsername() {
 
 		$username = trim(Request::input('username'));
-
 		$searchValues = preg_split('/\s+/', $username, -1, PREG_SPLIT_NO_EMPTY);
 
 		$users = User::where('is_dentist', true)->where(function($query) use ($searchValues) {
@@ -52,7 +51,6 @@ class CitiesController extends BaseController {
 	}
 
 	public function getDentistLocation() {
-
 		$username = trim(Request::input('username'));
 		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
 			$query->where('name', 'LIKE', '%'.$username.'%')
@@ -73,7 +71,6 @@ class CitiesController extends BaseController {
 	}
 
 	public function getCities($id, $empty=false) {
-
 		$country = Country::find($id);
 		if(!empty($country)) {
 			
@@ -113,6 +110,7 @@ class CitiesController extends BaseController {
         $country = Country::whereHas('translations', function ($query) use ($city_name) {
             $query->where('name', 'LIKE', $city_name.'%');
         })->get();
+
         if($country->isNotEmpty()) {
         	foreach ($country as $c) {
         		$ret[$c->id] = [

@@ -42,7 +42,6 @@ class ApiController extends BaseController {
 
         date_default_timezone_set("Europe/Sofia");
 
-        
         $this->middleware(function ($request, $next) {
             $this->user = Auth::guard('api')->user();
 
@@ -58,11 +57,8 @@ class ApiController extends BaseController {
             //$response->headers->set('X-Frame-Options', 'DENY');
      
             return $response;
-
         });
 
         $this->request = $request;
-
     }
-
 }

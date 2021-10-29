@@ -482,7 +482,6 @@
                                                     <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
                                                     <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
                                                     <th>Respondents</th>
-                                                    <th>Langs</th>
                                                     <th>Test question</th>
                                                     <th>Duplicate</th>
                                                     <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
@@ -517,15 +516,6 @@
                                                             <a href="{{ url('cms/vox/explorer/'.$item->id.'/'.$question->id) }}" target="_blank">
                                                                 {!! $question->respondent_count() !!}
                                                             </a>
-                                                        </td>
-                                                        <td>
-                                                            @if($question->translations->isNotEmpty())
-                                                                @foreach($question->translations as $transl)
-                                                                    @if($transl->locale != 'en')
-                                                                        {{ strtoupper($transl->locale) }}{{ !$loop->last ? ', ' : '' }}
-                                                                    @endif
-                                                                @endforeach
-                                                            @endif
                                                         </td>
                                                         <td>
                                                             @if(empty($question->question_trigger) && $question->order != 1)

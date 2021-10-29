@@ -40,8 +40,8 @@ class FrontController extends BaseController {
     public $user;
 
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
+        
         $to_redirect_404 = false;
-
         $platform_domain = null;
 
         if($request->route() && isset($request->route()->action) && isset($request->route()->action['domain'])) {
@@ -330,7 +330,6 @@ class FrontController extends BaseController {
                             $this->city_id = $c->id;
                             session(['city_id' => $c->id]);
                         }
-
                     }
                 }                
             }
@@ -363,7 +362,6 @@ class FrontController extends BaseController {
             //$response->headers->set('X-Frame-Options', 'DENY');
      
             return $response;
-
             //return $next($request);
         });
 
@@ -378,7 +376,6 @@ class FrontController extends BaseController {
         foreach ($clist as $cat) {
             $this->categories_dentists[$cat] = trans('trp.categories-dentists.'.$cat);
         }
-
     }
 
     public function ShowVoxView($page, $params=array(), $statusCode=null) {
@@ -507,7 +504,6 @@ class FrontController extends BaseController {
         } else {
             return response()->view('vox.'.$page, $params, $statusCode ? $statusCode : 200);
         }
-        
     }
 
     public function ShowView($page, $params=array(), $statusCode=null) {
@@ -528,11 +524,12 @@ class FrontController extends BaseController {
                     'notification' => $branchClinic->review_notification ? true : false,
                 ];
             }
+
             foreach($this->user->branches as $branch) {
 
                 $branchClinic = $branch->branchClinic;
-
                 $has_ask_notification = false;
+
                 if ($branchClinic->asks->isNotEmpty()) {
                     foreach ($branchClinic->asks as $p_ask) {
                         if ($p_ask->status == 'waiting') {
