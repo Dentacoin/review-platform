@@ -3,7 +3,7 @@
 @section('content')
 
 	<div class="page-questions">
-		<div class="loader-mask">
+		<div class="loader-mask" style="display:none;">
 		    <div class="loader">
 		      	{{ trans('vox.common.loading') }}
 		    </div>
