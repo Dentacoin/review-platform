@@ -98,7 +98,7 @@ class SSOController extends BaseController {
         //     return GeneralHelper::encrypt($tokenobj->accessToken);
         // }
 
-        return GeneralHelper::encrypt(session('logged_user')['token']);
+        return User::encrypt(session('logged_user')['token']);
     }
 
     public function decrypt($encrypted_text) {
