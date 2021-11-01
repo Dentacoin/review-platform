@@ -263,9 +263,9 @@ class DentistController extends FrontController {
 
                             $ret['success'] = false;
                             $ret['valid_input'] = false;
-                            $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&on-hold-type=bad_ip&key='.urlencode(GeneralHelper::encrypt($u_id));
+                            $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id));
 
-                            $token = GeneralHelper::encrypt(session('login-logged-out'));
+                            $token = User::encrypt(session('login-logged-out'));
                             $imgs_urls = [];
                             foreach( config('platforms') as $k => $platform ) {
                                 if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {

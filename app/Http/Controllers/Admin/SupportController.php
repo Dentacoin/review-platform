@@ -16,6 +16,7 @@ use App\Models\SupportCategory;
 use App\Models\SupportContact;
 use App\Models\EmailTemplate;
 use App\Models\AnonymousUser;
+use App\Models\User;
 
 use App\Helpers\GeneralHelper;
 use App\Helpers\AdminHelper;
@@ -485,7 +486,7 @@ class SupportController extends AdminController {
             'title' => $title,
             'subtitle' => $subtitle,
             'platform' => $platform,
-            'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(GeneralHelper::encrypt(json_encode(array('email' => ($user_email),'email_category' => 'service_info', 'platform' => $platform ))))]),
+            'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($user_email),'email_category' => 'service_info', 'platform' => $platform ))))]),
         ])->render();
 
         $from = new From($sender, $sender_name);

@@ -11,6 +11,7 @@ use App\Models\UserDevice;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\VoxBadge;
+use App\Models\User;
 
 use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
@@ -756,7 +757,7 @@ class Vox extends Model {
                 CURLOPT_URL => $url,
                 CURLOPT_SSL_VERIFYPEER => 0,
                 CURLOPT_POSTFIELDS => array(
-                    'data' => GeneralHelper::encrypt(json_encode(array('type' => 'new-survey')))
+                    'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
                 )
             ));
              

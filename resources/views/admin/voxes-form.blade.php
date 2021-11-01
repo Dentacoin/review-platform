@@ -134,7 +134,8 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.type') }}</label>
                             <div class="col-md-2">
-                                {{ Form::select('type', $types, !empty($item) ? $item->type : null, array('class' => 'form-control')) }}
+                                {{ Form::select('type', $types, !empty($item) ? $item->type : null, array('class' => 'form-control vox-type-input', 'current-type' => !empty($item) ? $item->type : '')) }}
+                                <input type="hidden" name="hide-survey" id="hide-survey" value=""/>
                             </div>
                         </div>
 
@@ -143,9 +144,7 @@
                             <div class="col-md-10">
                                 @foreach($category_list as $cat)
                                     <label class="col-md-3" for="cat-{{ $cat->id }}">
-
                                         <input type="checkbox" name="categories[]" value="{{ $cat->id }}" id="cat-{{ $cat->id }}" {!! !empty($item) && $item->categories->where('vox_category_id', $cat->id)->isNotEmpty() ? 'checked="checked"' : '' !!} >
-                                        
                                         {{ $cat->name }}
                                     </label>
                                 @endforeach
@@ -279,9 +278,7 @@
                                             <div class="col-md-11">
                                                 @foreach($value['values'] as $k => $v)
                                                     <label class="col-md-3" for="{{ $k }}">
-
                                                         <input type="checkbox" name="{{ $key }}[]" value="{{ $k }}" id="{{ $k }}" {!! !empty($item) && !empty($item->$key) && in_array($k, $item->$key) ? 'checked="checked"' : '' !!}>
-                                                        
                                                         {{ $v }}
                                                     </label>
                                                 @endforeach
@@ -294,9 +291,7 @@
                                         <div class="col-md-11">
                                             @foreach(config('vox.age_groups') as $key => $value)
                                                 <label class="col-md-3" for="{{ $key }}">
-
                                                     <input type="checkbox" name="age[]" value="{{ $key }}" id="{{ $key }}" {!! !empty($item) && !empty($item->age) && in_array($key, $item->age) ? 'checked="checked"' : '' !!}>
-                                                    
                                                     {{ $value }}
                                                 </label>
                                             @endforeach
@@ -760,5 +755,29 @@
             </div>
         </div>
     @endif
+
+    <div id="hideSurveyModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Are you sure you want to hide this survey?</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="hide-survey-form" method="post">
+                        {{ Form::text('hide-survey-confirm', null, array('class' => 'form-control input-title', 'placeholder' => 'Type HIDE to confirm')) }}
+                        
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Submit</button>
+
+                        <label class="alert alert-danger" style="display: none;margin-top: 10px;">If you want to hide the survey, please type HIDE</label>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection

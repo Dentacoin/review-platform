@@ -191,8 +191,8 @@ class ProfileController extends FrontController {
                 'name' => $this->user->getNames() 
             ]).rawurlencode($this->user->getLink().'?'. http_build_query([
                 'dcn-gateway-type'=>'patient-register', 
-                'inviter' => GeneralHelper::encrypt($this->user->id), 
-                'inviteid' => GeneralHelper::encrypt($invitation->id) 
+                'inviter' => User::encrypt($this->user->id), 
+                'inviteid' => User::encrypt($invitation->id) 
             ]));
 
             return Response::json([
@@ -555,7 +555,7 @@ class ProfileController extends FrontController {
                         'invited_user_name' => $last_invite->invited_name,
                         "invitation_link" => $this->user->getLink().'?'. http_build_query([
                             'dcn-gateway-type'=>'patient-login', 
-                            'inviter' => GeneralHelper::encrypt($this->user->id) 
+                            'inviter' => User::encrypt($this->user->id) 
                         ]),
                     ];
 
@@ -2018,8 +2018,8 @@ class ProfileController extends FrontController {
                         'invited_user_name' => $name,
                         "invitation_link" => $this->user->getLink().'?'. http_build_query([
                             'dcn-gateway-type'=>'patient-login', 
-                            'inviter' => GeneralHelper::encrypt($this->user->id), 
-                            'inviteid' => GeneralHelper::encrypt($invitation->id) 
+                            'inviter' => User::encrypt($this->user->id), 
+                            'inviteid' => User::encrypt($invitation->id) 
                         ]),
                     ];
 
@@ -2059,8 +2059,8 @@ class ProfileController extends FrontController {
                             'invited_user_name' => $name,
                             "invitation_link" => $this->user->getLink().'?'. http_build_query([
                                 'dcn-gateway-type'=>'patient-register', 
-                                'inviter' => GeneralHelper::encrypt($this->user->id), 
-                                'inviteid' => GeneralHelper::encrypt($invitation->id) 
+                                'inviter' => User::encrypt($this->user->id), 
+                                'inviteid' => User::encrypt($invitation->id) 
                             ]),
                         ];
 

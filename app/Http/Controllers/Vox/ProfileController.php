@@ -27,7 +27,7 @@ class ProfileController extends FrontController {
     public function vox($locale=null) {
 
         if(empty($this->user) && !empty(request('slug'))) {
-            $user_id = GeneralHelper::decrypt(request('slug'));
+            $user_id = User::decrypt(request('slug'));
 
             if($user_id) {
                 $user = User::find($user_id);

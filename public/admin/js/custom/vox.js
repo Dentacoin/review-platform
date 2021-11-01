@@ -184,6 +184,29 @@ $(document).ready(function(){
 	$('.question-type-input, .question-scale-input, .question-stats-input').change(handleScaleChanges);
 	handleScaleChanges();
 
+	$('.vox-type-input').change( function() {
+		if($(this).val() == 'hidden' && $(this).val() != $(this).attr('current-type')) {
+			$('#hideSurveyModal').modal('show');
+		}
+	});
+
+	$('#hide-survey-form').submit( function(e) {
+		e.preventDefault();
+
+		if(!$(this).find('input').val()) {
+			$(this).find('.alert').show();
+		} else {
+			if($(this).find('input').val().toLowerCase() == 'hide') {
+				$('#hide-survey').val('1');
+				$('.vox-type-input').val('hidden');
+				// $('.vox-type-input').change();
+				$('#hideSurveyModal').modal('hide');
+			} else {
+				$(this).find('.alert').show();
+			}
+		}
+	});
+
 	$('.questions-form .btn-add-answer').click( function() {
 		$('.questions-form .questions-pane').each( function() {
 			var code = $(this).attr('lang');

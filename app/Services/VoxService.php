@@ -918,7 +918,7 @@ class VoxService {
                 Auth::guard('web')->logout();
                 
                 return [
-                    'url' => 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(GeneralHelper::encrypt($u_id))
+                    'url' => 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id))
                 ];
             }
         }
@@ -2219,7 +2219,7 @@ class VoxService {
                                 CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
                                 CURLOPT_SSL_VERIFYPEER => 0,
                                 CURLOPT_POSTFIELDS => array(
-                                    'data' => GeneralHelper::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
+                                    'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
                                 )
                             ));
                              
@@ -2235,7 +2235,7 @@ class VoxService {
                                 CURLOPT_URL => 'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications',
                                 CURLOPT_SSL_VERIFYPEER => 0,
                                 CURLOPT_POSTFIELDS => array(
-                                    'data' => GeneralHelper::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
+                                    'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
                                 )
                             ));
                              

@@ -81,7 +81,7 @@ class Email extends Model {
 				'title' => $title,
 				'subtitle' => $subtitle,
 				'platform' => $platform,
-				'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(GeneralHelper::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $user_email),'email_category' => $this->template->subscribe_category, 'platform' => $this->platform ))))]),
+				'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $user_email),'email_category' => $this->template->subscribe_category, 'platform' => $this->platform ))))]),
 			])->render();
 
 	        $from = new From($sender, $sender_name);
@@ -244,7 +244,7 @@ class Email extends Model {
 				'[/invitelink]',
 			), array(
 				$this->meta['clinic_name'] ?? '',
-				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => GeneralHelper::encrypt($this->user->id) ]).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]).'">',
 				'</a>',
 			), $content);
 		}
@@ -256,7 +256,7 @@ class Email extends Model {
 				'[/invitelink]',
 			), array(
 				$this->meta['friend_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => GeneralHelper::encrypt($this->user->id) ]).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]).'">',
 				'</a>',
 			), $content);
 		}
