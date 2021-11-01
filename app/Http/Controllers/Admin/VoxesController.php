@@ -2485,7 +2485,7 @@ class VoxesController extends AdminController {
             'vox-show-all-results' => true
         ]);
 
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/vox/list');
     }
 
     public function showIndividualResults() {
