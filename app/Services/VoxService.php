@@ -48,16 +48,17 @@ class VoxService {
         if(!empty($user)) {
             $vox_id = request('vox_id');
             $question_id = request('question_id');
+            $welcome_vox_id = 11;
             
             if(!empty($question_id)) {
                 $cur_question = VoxQuestion::find($question_id);
             }
 
-            $welcome_vox_id = 11;
-
             $admin_ids = Admin::getAdminProfileIds();
             $isAdmin = $for_app ? ( $user->is_admin ? true : false) : ($admin || in_array($user->id, $admin_ids));
             $testmode = session('testmode') && $isAdmin;
+
+            $vox = [];
 
             if(!empty($vox_id)) {
                 $vox = Vox::select('id')->where('id', $vox_id);
@@ -68,52 +69,54 @@ class VoxService {
                 $vox = $vox->first();
             }
 
-            if(!empty($vox_id) && (!empty($vox) || !empty($admin) )) {
+            if(!empty($vox) || !empty($admin) ) {
 
                 $array = [];
 
-                if($for_app) {
-                    $madeWelcomeTest = $user->madeTest($welcome_vox_id);
-                } else {
-                    if(!session('made-welcome-test')) {
-                        session([
-                            'made-welcome-test' => $user->madeTest($welcome_vox_id),
-                        ]);
-                    }
+                if(!$testmode) {
 
-                    $madeWelcomeTest = session('made-welcome-test');
-                }
-
-                if (!$madeWelcomeTest) {
-                    // welcome qs
-                    $array['welcome_vox'] = true;
-
-                    if(!empty($question_id)) {
-                        //question order
-                        $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
-                        $array['question'] = $next_question;
+                    if($for_app) {
+                        $madeWelcomeTest = $user->madeTest($welcome_vox_id);
                     } else {
-                        //first question
-                        $question = VoxQuestion::where('vox_id', $welcome_vox_id)->orderBy('order', 'ASC')->first();
-                        $array['question'] = $question;
+                        if(!session('made-welcome-test')) {
+                            session([
+                                'made-welcome-test' => $user->madeTest($welcome_vox_id),
+                            ]);
+                        }
+                        $madeWelcomeTest = session('made-welcome-test');
                     }
-                } else if(empty($user->birthyear)) {
-                    //demographic qs
-                    $array['birthyear_q'] = true;
-                } else if(empty($user->gender)) {
-                    //demographic qs
-                    $array['gender_q'] = true;
-                } else if(empty($user->country_id)) {
-                    //demographic qs
-                    $array['country_id_q'] = true;
-                }
 
-                if(empty($array)) {
-                    foreach (config('vox.details_fields') as $key => $info) {
-                        if($user->$key==null) {
-                            $array['details_question'] = $info;
-                            $array['details_question_id'] = $key;
-                            break;
+                    if (!$madeWelcomeTest) {
+                        // welcome qs
+                        $array['welcome_vox'] = true;
+
+                        if(!empty($question_id)) {
+                            //question order
+                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
+                            $array['question'] = $next_question;
+                        } else {
+                            //first question
+                            $question = VoxQuestion::where('vox_id', $welcome_vox_id)->orderBy('order', 'ASC')->first();
+                            $array['question'] = $question;
+                        }
+                    } else if(empty($user->birthyear)) {
+                        //demographic qs
+                        $array['birthyear_q'] = true;
+                    } else if(empty($user->gender)) {
+                        //demographic qs
+                        $array['gender_q'] = true;
+                    } else if(empty($user->country_id)) {
+                        //demographic qs
+                        $array['country_id_q'] = true;
+                    }
+
+                    if(empty($array)) {
+                        foreach (config('vox.details_fields') as $key => $info) {
+                            if($user->$key==null) {
+                                $array['details_question'] = $info;
+                                $array['details_question_id'] = $key;
+                                break;
+                            }
                         }
                     }
                 }
@@ -697,11 +700,10 @@ class VoxService {
         }
 
         // dd($lastkey->id);
-
         if(!empty($lastkey) && $lastkey->is_skipped) {
-            do {
-                self::goBack($user_id, $answered, $list, $vox);
-            } while ( $lastkey->is_skipped);
+            // do {
+            self::goBack($user_id, $answered, $list, $vox);
+            // } while ( $lastkey->is_skipped);
         }
 
         return $lastkey ? $lastkey->question_id : VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first()->id;
@@ -1457,7 +1459,7 @@ class VoxService {
         ->where('vox_id', $vox->id)
         // ->with('question')
         ->where('user_id', $user->id)
-        ->orderBy('id', 'ASC')
+        ->orderBy('created_at', 'desc')
         ->get();
 
         $answered = [];
