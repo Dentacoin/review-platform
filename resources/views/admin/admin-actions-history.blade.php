@@ -39,7 +39,6 @@
                         </div>
                     </form>
                 </div>
-
                 
                 <style type="text/css">
                     .trans-history-wrapper .trans-history {

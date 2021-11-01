@@ -36,5 +36,4 @@ class AdminHelper {
             'end' => $end,
         ];
     }
-
 }

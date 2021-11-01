@@ -24,6 +24,8 @@ class Admin extends Model implements AuthenticatableContract, CanResetPasswordCo
         'lang_to',
         'text_domain',
     	'user_id',
+        'logged_in',
+        'two_factor_auth',
     ];
     protected $dates = [
         'password_last_updated_at',

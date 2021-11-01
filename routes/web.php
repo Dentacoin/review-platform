@@ -15,6 +15,7 @@ Route::get('cms/login', 							'Auth\AuthenticateAdmin@showLoginForm');
 Route::post('cms/login',							'Auth\AuthenticateAdmin@postLogin');
 Route::any('cms/password-expired',					'Auth\AuthenticateAdmin@passwordExpired');
 Route::get('cms/logout', 							'Auth\AuthenticateAdmin@getLogout');
+// Route::get('cms/admin-authentication', 				'Auth\AuthenticateAdmin@authentication');
 
 Route::get('cities/{id}/{empty?}', 					'CitiesController@getCities');
 Route::post('location', 							'CitiesController@getLocation');
@@ -29,6 +30,7 @@ Route::post('get-unseen-notifications-count', 		'SSOController@getUnseenNotifica
 Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin'] ], function () {
 	Route::get('/', 											'HomeController@list');
 	Route::get('home', 											'HomeController@list');
+	Route::any('admin-authentication', 							'HomeController@authentication');
 
 	Route::post('translations/{subpage?}/add', 									'TranslationsController@add');
 	Route::post('translations/{subpage?}/update', 								'TranslationsController@update');
@@ -46,6 +48,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('admins/ips',										'AdminsController@listIps');
 	Route::get('admins/ips/delete/{id}',							'AdminsController@deleteIp');
 	Route::get('admins/actions-history',							'AdminsController@actionsHistory');
+	Route::get('admins/reset-auth/{id}',							'AdminsController@resetAuth');
 
 	Route::any('blacklist', 										'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 							'BlacklistController@delete');

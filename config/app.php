@@ -194,7 +194,8 @@ return [
         GoogleMaps\ServiceProvider\GoogleMapsServiceProvider::class,
         Collective\Remote\RemoteServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
-        // Barryvdh\Debugbar\ServiceProvider::class
+        PragmaRX\Google2FALaravel\ServiceProvider::class,
+        // Barryvdh\Debugbar\ServiceProvider::class,
 
     ],
 
@@ -228,6 +229,7 @@ return [
         'File' => Illuminate\Support\Facades\File::class,
         'Form' => Collective\Html\FormFacade::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
+        'Google2FA' => PragmaRX\Google2FALaravel\Facade::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Lang' => Illuminate\Support\Facades\Lang::class,
@@ -254,7 +256,6 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'GoogleMaps' => GoogleMaps\Facade\GoogleMapsFacade::class,
         'SSH' => Collective\Remote\RemoteFacade::class,
-
     ],
 
 ];

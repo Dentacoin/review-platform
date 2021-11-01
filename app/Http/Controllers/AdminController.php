@@ -56,10 +56,6 @@ class AdminController extends BaseController {
         //$this->user = Auth::guard('web')->user();
         $this->middleware(function ($request, $next) {
             $this->user= Auth::guard('admin')->user();
-            
-            if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->password_last_updated_at->toDateTimeString() < Carbon::now()->addDays(-60)->toDateTimeString()) {
-                return redirect('cms/password-expired');
-            }
 
             $safeIp = AdminIp::where('ip', User::getRealIp())->first();
 
@@ -67,6 +63,14 @@ class AdminController extends BaseController {
                 return redirect('cms/login')
                 ->withInput()
                 ->with('error-message', 'This IP is not in the whitelist!');
+            }
+            
+            if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->password_last_updated_at->toDateTimeString() < Carbon::now()->addDays(-60)->toDateTimeString() &&  $request->path() != 'cms/password-expired') {
+                return redirect('cms/password-expired');
+            }
+
+            if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->logged_in && $request->path() != 'cms/admin-authentication') {
+                return redirect('cms/admin-authentication');
             }
 
             return $next($request);

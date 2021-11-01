@@ -25,6 +25,7 @@
 							'email'				=> array('name' => 'Email'),
                             'role'              => array('name' => 'Role'),
                             'comments'          => array('name' => 'Comments'),
+                            'reset_auth'        => array('name' => 'Reset Two Factor Auth', 'label' => 'Two Factor Authentication', 'template' => 'admin.parts.table-admins-two-factor-auth'),
 							'update'			=> array('name' => 'Update', 'format' => 'update'),
 							'delete'			=> array('name' => 'Delete', 'format' => 'delete'),
 						],
@@ -65,9 +66,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.email') }}</label>
+                        <label class="col-md-2 control-label">Name</label>
                         <div class="col-md-4">
-                            {{ Form::text('email', '', array('class' => 'form-control')) }}
+                            {{ Form::text('name', '', array('class' => 'form-control')) }}
                         </div>
                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.role') }}</label>
                         <div class="col-md-4">
@@ -76,9 +77,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Name</label>
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.email') }}</label>
                         <div class="col-md-4">
-                            {{ Form::text('name', '', array('class' => 'form-control')) }}
+                            {{ Form::text('email', '', array('class' => 'form-control')) }}
                         </div>
                         <div class="col-md-2"></div>
                         <div class="col-md-4">

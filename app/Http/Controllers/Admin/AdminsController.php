@@ -265,4 +265,18 @@ class AdminsController extends AdminController {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
+
+    public function resetAuth( $id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $admin = Admin::find( $id );
+        $admin->two_factor_auth = false;
+        $admin->save();
+
+        return redirect('cms/admins/admins/');
+    }
 }

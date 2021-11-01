@@ -55,11 +55,16 @@ class AuthenticateAdmin extends BaseController {
 
             if (Auth::guard('admin')->attempt( ['username' => $request->input('username'), 'password' => $request->input('password') ], $request->input('remember') )) {
 
-                if(Auth::guard('admin')->user()->password_last_updated_at->toDateTimeString() < Carbon::now()->addDays(-60)->toDateTimeString()) {
-                    
-                // if(Auth::guard('admin')->user()->password_last_updated_at->toDateTimeString() > Carbon::now()->addDays(-60)->toDateTimeString()) {
+                $admin = Auth::guard('admin')->user();
+                $admin->logged_in = true;
+                $admin->save();
 
+                if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->password_last_updated_at->toDateTimeString() < Carbon::now()->addDays(-60)->toDateTimeString()) {
                     return redirect('cms/password-expired');
+                }
+
+                if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->logged_in) {
+                    return redirect('cms/admin-authentication');
                 }
 
                 return redirect()->intended('');
