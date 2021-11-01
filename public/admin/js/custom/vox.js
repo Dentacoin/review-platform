@@ -14,6 +14,10 @@ $(document).ready(function(){
 	        "pageLength": 25
 	    });
 
+		dTable.on( 'draw', function () {
+			voxTableFunctions();
+		});
+		
 	    $('#table-sort').click( function() {
 	        if(sortMode) {
 	            window.location.reload();
@@ -29,6 +33,7 @@ $(document).ready(function(){
                 update: function( event, ui ) { 
                     setTimeout( function(){
                         var ids = [];
+
                         $('.table tbody tr').each( function() {
                             ids.push( $(this).attr('item-id') );
                         });
@@ -566,7 +571,7 @@ $(document).ready(function(){
 	$('#search-questions').on('keyup keypress', function(e) {
         var query = $(this).val();
 
-		$('.search-questions-wrapper .results').show();
+		$('.search-questions-wrapper .results-wrapper').show();
 		$('.search-questions-wrapper .results').html('');
 		$('.search-questions-wrapper .results .result').remove();
 		$('.search-questions-wrapper .results .loader').remove();
@@ -608,7 +613,7 @@ $(document).ready(function(){
 						}
 					} else {
 						$('.search-questions-wrapper .results .result').remove();
-						$('.search-questions-wrapper .results .result').hide();
+						$('.search-questions-wrapper .result-wrapper').hide();
 						$('.search-questions-wrapper .results').html('<p>no results</p>');
 					}
 				},
@@ -617,8 +622,13 @@ $(document).ready(function(){
 				}
 			});
 		} else {
-			$('.search-questions-wrapper .results').hide();
+			$('.search-questions-wrapper .results-wrapper').hide();
 		}
+	});
+
+	$('.close-results').click( function() {
+		$('.search-questions-wrapper .results .result').remove();
+		$('.search-questions-wrapper .results-wrapper').hide();
 	});
 
 	$('.delete-answer-avatar').click( function(e) {
@@ -660,72 +670,77 @@ $(document).ready(function(){
 		}
     }
 
-    $('.show-questions').click( function() {
-    	var that = $(this);
-
-    	$.ajax( {
-			url: window.location.origin+'/cms/vox/get-questions-count/'+$(this).attr('vox-id'),
-			type: 'POST',
-			dataType: 'json',
-			success: function( data ) {
-				that.closest('div').html(data.q_count);
-			},
-			error: function(data) {
-				console.log('error');
-			}
+	var voxTableFunctions = function() {
+		
+		$('.show-questions').click( function() {
+			var that = $(this);
+	
+			$.ajax( {
+				url: window.location.origin+'/cms/vox/get-questions-count/'+$(this).attr('vox-id'),
+				type: 'POST',
+				dataType: 'json',
+				success: function( data ) {
+					that.closest('div').html(data.q_count);
+				},
+				error: function(data) {
+					console.log('error');
+				}
+			});
 		});
-    });
-
-    $('.show-respondents').click( function() {
-    	var that = $(this);
-
-    	$.ajax( {
-			url: window.location.origin+'/cms/vox/get-respondents-count/'+$(this).attr('vox-id'),
-			type: 'POST',
-			dataType: 'json',
-			success: function( data ) {
-				that.hide();
-				that.closest('div').find('.respondents-shown').html(data.resp_count);
-			},
-			error: function(data) {
-				console.log('error');
-			}
+	
+		$('.show-respondents').click( function() {
+			var that = $(this);
+	
+			$.ajax( {
+				url: window.location.origin+'/cms/vox/get-respondents-count/'+$(this).attr('vox-id'),
+				type: 'POST',
+				dataType: 'json',
+				success: function( data ) {
+					that.hide();
+					that.closest('div').find('.respondents-shown').html(data.resp_count);
+				},
+				error: function(data) {
+					console.log('error');
+				}
+			});
 		});
-    });
-
-    $('.show-reward').click( function() {
-    	var that = $(this);
-
-    	$.ajax( {
-			url: window.location.origin+'/cms/vox/get-reward/'+$(this).attr('vox-id'),
-			type: 'POST',
-			dataType: 'json',
-			success: function( data ) {
-				that.hide();
-				that.closest('div').html(data.reward);
-			},
-			error: function(data) {
-				console.log('error');
-			}
+	
+		$('.show-reward').click( function() {
+			var that = $(this);
+	
+			$.ajax( {
+				url: window.location.origin+'/cms/vox/get-reward/'+$(this).attr('vox-id'),
+				type: 'POST',
+				dataType: 'json',
+				success: function( data ) {
+					that.hide();
+					that.closest('div').html(data.reward);
+				},
+				error: function(data) {
+					console.log('error');
+				}
+			});
 		});
-    });
-
-    $('.show-duration').click( function() {
-    	var that = $(this);
-
-    	$.ajax( {
-			url: window.location.origin+'/cms/vox/get-duration/'+$(this).attr('vox-id'),
-			type: 'POST',
-			dataType: 'json',
-			success: function( data ) {
-				that.hide();
-				that.closest('div').html(data.duration);
-			},
-			error: function(data) {
-				console.log('error');
-			}
+	
+		$('.show-duration').click( function() {
+			var that = $(this);
+	
+			$.ajax( {
+				url: window.location.origin+'/cms/vox/get-duration/'+$(this).attr('vox-id'),
+				type: 'POST',
+				dataType: 'json',
+				success: function( data ) {
+					that.hide();
+					that.closest('div').html(data.duration);
+				},
+				error: function(data) {
+					console.log('error');
+				}
+			});
 		});
-    });
+	}
+
+	voxTableFunctions();
 
 	var excludeAnswersCheckbox = function() {
 		if($('#exclude_answers').is(":checked")) {

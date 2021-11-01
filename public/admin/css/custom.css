@@ -484,7 +484,7 @@ table .order.desc::after {
     opacity: 1 !important;
 }
 
-.search-questions-wrapper .results {
+.search-questions-wrapper .results-wrapper {
     background-color: white;
     border: 2px solid #00acac;
     position: absolute;
@@ -492,9 +492,29 @@ table .order.desc::after {
     top: 30px;
     right: 17px;
     border-radius: 4px;
+    min-width: 167px;
+}
+
+.search-questions-wrapper .results-wrapper .close-results {
+    position: absolute;
+    right: 20px;
+    top: 2px;
+    background-color: #00acac;
+    color: white;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    padding-top: 1px;
+}
+
+.search-questions-wrapper .results-wrapper .close-results:hover {
+    text-decoration: none;
+}
+
+.search-questions-wrapper .results {
     overflow-y: scroll;
     max-height: 600px;
-    min-width: 167px;
 }
 
 .search-questions-wrapper .results p {

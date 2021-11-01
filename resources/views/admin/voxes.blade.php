@@ -36,7 +36,10 @@
                                     <span style="font-weight: normal;">Search by keyword:</span>
                                     <input type="text" name="search-questions" id="search-questions" class="form-control" url="{{ url('cms/search-questions') }}" style="display: inline-block;max-width: 156px;margin-right: 17px;margin-left: 6px;height: 30px;">
                                 </label>
-                                <div class="results"  style="display: none;">
+                                <div class="results-wrapper" style="display: none;">
+                                    <a href="javascript:;" class="close-results">X</a>
+                                    <div class="results">
+                                    </div>
                                 </div>
                             </div>
                         </div>
