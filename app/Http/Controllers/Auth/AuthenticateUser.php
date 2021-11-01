@@ -20,6 +20,7 @@ use Session;
 use Cookie;
 use Auth;
 use Lang;
+use Log;
 
 class AuthenticateUser extends FrontController
 {
@@ -91,7 +92,8 @@ class AuthenticateUser extends FrontController
             if(is_object($checkToken) && property_exists($checkToken, 'success') && $checkToken->success) {
 
                 $user = User::find($request->input('id'));
-
+                Log::info($request->input('id'));
+                Log::info($user);
                 if(!empty($user)) {
 
                     Auth::login($user);
