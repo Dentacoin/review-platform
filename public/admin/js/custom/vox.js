@@ -217,6 +217,7 @@ $(document).ready(function(){
 			var code = $(this).attr('lang');
 			var newinput = $('#input-group-template').clone(true).removeAttr('id')
 			newinput.find('input.answer-name').attr('name', 'answers-'+code+'[]');
+			newinput.find('.answer-order-number').html($(this).find('.answers-list').children().length + 1);
 			$(this).find('.answers-list').append(newinput);
 
 			if ($(this).find('.answers-list').children().length > 10) {
@@ -394,11 +395,23 @@ $(document).ready(function(){
 	$( ".answers-draggable" ).sortable({
 		update: function( event, ui ) {	
 
-			if ($(ui.item[0]).attr('answer-code') == 'en') {
+			var dragged_item = $(ui.item[0]);
+
+			if (dragged_item.attr('answer-code') == 'en') {
 				$('#translate-question').val('1');
 			}
 
-		// 	var dragged_item_order = $(ui.item[0]).index();
+
+			var i=1;
+			dragged_item.closest('.answers-list').children().each( function() {
+				$(this).find('.answer-order-number').html(i);
+				i++;
+			});
+
+
+			// console.log(dragged_item);
+
+			// var dragged_item_order = $(ui.item[0]).index();
 		// 	// console.log(dragged_item_order);
 
 		// 	var other_langs_aswers = $(".answers-draggable").not($(ui.item[0]).parent());

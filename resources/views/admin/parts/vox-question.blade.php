@@ -126,45 +126,51 @@
                                 <div class="col-md-10 answers-list {!! $code == 'en' ? 'answers-draggable' : '' !!}">
                                     @if(!empty($question) && !empty($question->{'answers:'.$code}) )
                                         @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
-                                            <div class="flex input-group" answer-code="{{ $code }}">
-                                                <div class="col col-60">
-                                                    {{ $question_answers_count[$key+1] ?? '' }}
-                                                </div>
-                                                <div class="col" style="display: flex; align-items: center;">
-                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control answer-content', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
+                                            <div class="flex">
+                                                <div class="answer-order-number">{{ $key+1 }}</div>
+                                                <div class="flex input-group" answer-code="{{ $code }}" style="width: 100%;">
+                                                    <div class="col col-60">
+                                                        {{ $question_answers_count[$key+1] ?? '' }}
+                                                    </div>
+                                                    <div class="col" style="display: flex; align-items: center;">
+                                                        {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control answer-content', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
 
-                                                    @if($question->answers_images_filename && !empty(json_decode($question->answers_images_filename, true)[$key]) )
-                                                        <div class="answer-image-wrap">
-                                                            <a href="{{ $question->getAnswerImageUrl(false, $key) }}" target="_blank">
-                                                                <img src="{{ $question->getAnswerImageUrl(true, $key) }}">
-                                                            </a>
-                                                            <a class="btn btn-primary delete-answer-avatar" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id.'/delete-answer-image/'.(json_decode($question->answers_images_filename, true)[$key])) }}">
-                                                                <i class="fa fa-remove"></i>
-                                                            </a>
+                                                        @if($question->answers_images_filename && !empty(json_decode($question->answers_images_filename, true)[$key]) )
+                                                            <div class="answer-image-wrap">
+                                                                <a href="{{ $question->getAnswerImageUrl(false, $key) }}" target="_blank">
+                                                                    <img src="{{ $question->getAnswerImageUrl(true, $key) }}">
+                                                                </a>
+                                                                <a class="btn btn-primary delete-answer-avatar" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id.'/delete-answer-image/'.(json_decode($question->answers_images_filename, true)[$key])) }}">
+                                                                    <i class="fa fa-remove"></i>
+                                                                </a>
+                                                            </div>
+                                                        @endif
+                                                        <input type="hidden" name="filename[]" value="{{ !empty($question->answers_images_filename) && !empty(json_decode($question->answers_images_filename, true)[$key]) ? json_decode($question->answers_images_filename, true)[$key] : '' }}">
+                                                        <input accept="image/gif, image/jpg, image/jpeg, image/png" style="width: 100px; display: {{ $question->answers_images_filename && !empty(json_decode($question->answers_images_filename, true)[$key]) ? 'none' : 'inline-block' }};" name="answer-photos[]" type="file">
+                                                        
+                                                        <div class="input-group-btn" style="display: inline-block;width: auto;">
+                                                            <button class="btn btn-default btn-remove-answer" type="button">
+                                                                <i class="glyphicon glyphicon-remove"></i>
+                                                            </button>
                                                         </div>
-                                                    @endif
-                                                    <input type="hidden" name="filename[]" value="{{ !empty($question->answers_images_filename) && !empty(json_decode($question->answers_images_filename, true)[$key]) ? json_decode($question->answers_images_filename, true)[$key] : '' }}">
-                                                    <input accept="image/gif, image/jpg, image/jpeg, image/png" style="width: 100px; display: {{ $question->answers_images_filename && !empty(json_decode($question->answers_images_filename, true)[$key]) ? 'none' : 'inline-block' }};" name="answer-photos[]" type="file">
-                                                    
-                                                    <div class="input-group-btn" style="display: inline-block;width: auto;">
-                                                        <button class="btn btn-default btn-remove-answer" type="button">
-                                                            <i class="glyphicon glyphicon-remove"></i>
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         @endforeach
                                     @else
-                                        <div class="flex input-group">
-                                            {{ Form::text('answers-'.$code.'[]', '', array('maxlength' => 2048, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
+                                        <div class="flex">
+                                            <div class="answer-order-number"></div>
+                                            <div class="flex input-group" style="width: 100%;">
+                                                {{ Form::text('answers-'.$code.'[]', '', array('maxlength' => 2048, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
 
-                                            <input type="hidden" name="filename[]" value="">
-                                            {{ Form::file('answer-photos[]', ['accept' => 'image/gif, image/jpg, image/jpeg, image/png', 'style' => 'width: 100px;']) }}
-                                            
-                                            <div class="input-group-btn" style="display: inline-block;width: auto;">
-                                                <button class="btn btn-default btn-remove-answer" type="button">
-                                                    <i class="glyphicon glyphicon-remove"></i>
-                                                </button>
+                                                <input type="hidden" name="filename[]" value="">
+                                                {{ Form::file('answer-photos[]', ['accept' => 'image/gif, image/jpg, image/jpeg, image/png', 'style' => 'width: 100px;']) }}
+                                                
+                                                <div class="input-group-btn" style="display: inline-block;width: auto;">
+                                                    <button class="btn btn-default btn-remove-answer" type="button">
+                                                        <i class="glyphicon glyphicon-remove"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     @endif
@@ -578,20 +584,23 @@
 </div>
 
 <div style="display: none;">
-    <div class="flex input-group ui-sortable-handle" id="input-group-template">
-        <div class="col col-60">
+    <div class="flex ui-sortable-handle" id="input-group-template">
+        <div class="answer-order-number"></div>
+        <div class="flex input-group" style="width: 100%;">
+            <div class="col col-60">
 
-        </div>
-        <div class="col" style="display: flex; align-items: center;">
-            {{ Form::text('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
+            </div>
+            <div class="col" style="display: flex; align-items: center;">
+                {{ Form::text('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
 
-            <input type="hidden" name="filename[]" value="">
-            {{ Form::file('answer-photos[]', ['accept' => 'image/gif, image/jpg, image/jpeg, image/png', 'style' => 'width: 100px; display: inline-block;']) }}
-            
-            <div class="input-group-btn" style="display: inline-block;width: auto;">
-                <button class="btn btn-default btn-remove-answer" type="button">
-                    <i class="glyphicon glyphicon-remove"></i>
-                </button>
+                <input type="hidden" name="filename[]" value="">
+                {{ Form::file('answer-photos[]', ['accept' => 'image/gif, image/jpg, image/jpeg, image/png', 'style' => 'width: 100px; display: inline-block;']) }}
+                
+                <div class="input-group-btn" style="display: inline-block;width: auto;">
+                    <button class="btn btn-default btn-remove-answer" type="button">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
