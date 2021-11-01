@@ -325,8 +325,8 @@
                                                                 @endforeach
                                                             </optgroup>
                                                             <optgroup label="Welcome survey questions">
-                                                                @foreach(App\Models\Vox::find(11)->questions as $wq)
-                                                                    <option value="{{ $wq->id }}" {{ !empty($question) && explode(':', $trigger)[0] == $wq->id ? 'selected="selected"' : '' }}>{{ $wq->question }}</option>
+                                                                @foreach(App\Models\Vox::find(11)->questions as $kq => $wq)
+                                                                    <option value="{{ $wq->id }}" {{ !empty($question) && explode(':', $trigger)[0] == $wq->id ? 'selected="selected"' : '' }}>{{ $kq+1 }}. {{ $wq->question }}</option>
                                                                 @endforeach
                                                             </optgroup>
                                                             <optgroup label="Demographic questions">
@@ -697,12 +697,12 @@
                 <option value="">Select question</option>
                 <optgroup label="{{ $item->title }} survey questions">
                     @foreach($item->questions as $iq)
-                        <option value="{{ $iq->id }}" {{ !empty($question) && $question->id == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                        <option value="{{ $iq->id }}" {{ !empty($question) && $question->id == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->order }}. {{ $iq->question }}</option>
                     @endforeach
                 </optgroup>
                 <optgroup label="Welcome survey questions">
-                    @foreach(App\Models\Vox::find(11)->questions as $wq)
-                        <option value="{{ $wq->id }}">{{ $wq->question }}</option>
+                    @foreach(App\Models\Vox::find(11)->questions as $kq => $wq)
+                        <option value="{{ $wq->id }}">{{ $kq+1 }}. {{ $wq->question }}</option>
                     @endforeach
                 </optgroup>
                 <optgroup label="Demographic questions">
