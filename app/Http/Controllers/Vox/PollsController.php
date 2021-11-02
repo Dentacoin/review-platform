@@ -3,26 +3,14 @@
 namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
-use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-
 use App\Services\VoxService as ServicesVox;
 
 use App\Models\PollsMonthlyDescription;
-use App\Models\VoxCategory;
-use App\Models\PollAnswer;
-use App\Models\DcnReward;
-use App\Models\VoxScale;
-use App\Models\Country;
 use App\Models\PageSeo;
-use App\Models\Reward;
-use App\Models\User;
 use App\Models\Poll;
 
 use Response;
 use Request;
-use Cookie;
-use Auth;
 
 class PollsController extends FrontController {
 

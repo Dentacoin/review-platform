@@ -48,7 +48,6 @@ class ImportExportController extends AdminController {
                 if(!is_dir($dir)) {
                     mkdir($dir);
                 }
-                $fname = $dir.'export';
 
                 $flat = [];
 
@@ -73,7 +72,6 @@ class ImportExportController extends AdminController {
                             }
                             $flat[$title][] = ['', '' , ''];
                         }
-
                     }
                 }
                 
@@ -82,7 +80,6 @@ class ImportExportController extends AdminController {
                 ob_end_clean();
                 return $file_to_export;
             }
-
 
             if( Request::input('import') ) {
                 $source = Request::input('source');
@@ -105,7 +102,6 @@ class ImportExportController extends AdminController {
                                 $objects[$arr[0]] = [];
                             }
                             $objects[$arr[0]][$arr[1]] = $row[2];     
-
                         }
                     }
 

@@ -137,7 +137,7 @@ class StatsController extends FrontController {
 
         if(request('app')) {
             if(request('app-user-id')) {
-                $user_id = User::decrypt(request('app-user-id'));
+                $user_id = GeneralHelper::decrypt(request('app-user-id'));
 
                 if($user_id) {
                     $user = User::find($user_id);

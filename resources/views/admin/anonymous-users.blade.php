@@ -73,7 +73,7 @@
                                         {!! !empty($user->unsubscribed_blog) ? implode(',', $user->unsubscribed_blog) : '' !!}
                                     </td>
                                     <td>
-                                        <a href="javascript:;" email="{{ App\Models\User::encrypt($user->email) }}" class="btn btn-primary preferences-button-anonymous">Refresh blog preferences</a>
+                                        <a href="javascript:;" email="{{ App\Helpers\GeneralHelper::encrypt($user->email) }}" class="btn btn-primary preferences-button-anonymous">Refresh blog preferences</a>
                                     </td>
                                     <td>
                                         <a class="btn btn-sm btn-deafult" href="{{ url('cms/users/anonymous_users/delete/'.$user->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>

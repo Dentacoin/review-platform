@@ -2,9 +2,6 @@
 
 namespace App\Services;
 
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use DeviceDetector\DeviceDetector;
-
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
@@ -525,8 +522,6 @@ class VoxService {
                     }
                 }
 
-
-
                 // if($next_question->id == 19370) {
                 //  dd($triggerSuccess);
                 // }
@@ -540,7 +535,6 @@ class VoxService {
                         return 'skip-dvq:'.$next_question->id;
                     }
                 }
-
             }
         }
     }
@@ -880,21 +874,7 @@ class VoxService {
             $ul->ip = User::getRealIp();
             $ul->platform = 'vox';
             $ul->country = \GeoIP::getLocation()->country;
-
-            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-            $dd = new DeviceDetector($userAgent);
-            $dd->parse();
-
-            if ($dd->isBot()) {
-                // handle bots,spiders,crawlers,...
-                $ul->device = $dd->getBot();
-            } else {
-                $ul->device = $dd->getDeviceName();
-                $ul->brand = $dd->getBrandName();
-                $ul->model = $dd->getModel();
-                $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-            }
-            
+            GeneralHelper::deviceDetector($ul);
             $ul->save();
             
             $u_id = $user->id;
@@ -920,7 +900,7 @@ class VoxService {
                 Auth::guard('web')->logout();
                 
                 return [
-                    'url' => 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id))
+                    'url' => 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(GeneralHelper::encrypt($u_id))
                 ];
             }
         }
@@ -1138,7 +1118,6 @@ class VoxService {
             }
         }
 
-        
         if($for_app) {
             $madeWelcomeTest = $user->madeTest(11);
         } else {
@@ -1761,6 +1740,7 @@ class VoxService {
                         if($wrongs==1 || ($wrongs==2 && !$prev_bans) ) {
                             $ret['warning'] = true;
                             $ret['img'] = url('new-vox-img/mistakes'.($prev_bans+1).'.png');
+
                             $titles = [
                                 trans('vox.page.bans.warning-mistakes-title-1'),
                                 trans('vox.page.bans.warning-mistakes-title-2'),
@@ -1773,6 +1753,7 @@ class VoxService {
                                 trans('vox.page.bans.warning-mistakes-content-3'),
                                 trans('vox.page.bans.warning-mistakes-content-4'),
                             ];
+
                             if( $wrongs==2 && !$prev_bans ) {
                                 $ret['zman'] = url('new-vox-img/mistake2.png');
                                 $ret['title'] = trans('vox.page.bans.warning-mistakes-title-1-second');
@@ -1880,8 +1861,6 @@ class VoxService {
 
                             if( $found->cross_check ) {
                                 if (is_numeric($found->cross_check)) {
-                                    $v_quest = VoxQuestion::where('id', $q )->first();
-
                                     if (!empty($cross_checks) && $cross_checks[$q] != $a) {
                                         $vcc = new VoxCrossCheck;
                                         $vcc->user_id = $user->id;
@@ -1893,7 +1872,6 @@ class VoxService {
                                     VoxAnswer::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $found->cross_check )->update([
                                         'answer' => $a,
                                     ]);
-
                                 } else if($found->cross_check == 'gender') {
                                     if (!empty($cross_checks) && $cross_checks[$q] != $a) {
                                         $vcc = new VoxCrossCheck;
@@ -1904,7 +1882,6 @@ class VoxService {
                                     }
                                     // $user->gender = $a == 1 ? 'm' : 'f';
                                     // $user->save();
-
                                 } else {
                                     $cc = $found->cross_check;
 
@@ -1926,7 +1903,6 @@ class VoxService {
                                     }
                                 }
                             }
-
                         } else if(isset( config('vox.details_fields')[$type] ) || $type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
                             $answered[$q] = 1;
                             $answer = null;
@@ -1955,7 +1931,6 @@ class VoxService {
                                     $answer->answer = 0;
                                     $answer->country_id = $user->country_id;
                                     self::setupAnswerStats($user, $answer);
-
                                     if($testmode) {
                                         $answer->is_admin = true;
                                     }
@@ -1963,7 +1938,6 @@ class VoxService {
                                     $answered[$q] = 0;
                                 }
                             }
-
                         } else if($type == 'number') {
                             $answer = new VoxAnswer;
                             $answer->user_id = $user->id;
@@ -1983,7 +1957,6 @@ class VoxService {
                             $answer->save();
 
                             $answered[$q] = $a;
-
                         } else if($type == 'multiple') {
                             foreach ($a as $value) {
                                 $answer = new VoxAnswer;
@@ -2004,7 +1977,6 @@ class VoxService {
                                 $answer->save();
                             }
                             $answered[$q] = $a;
-
                         } else if($type == 'scale' || $type == 'rank') {
                             foreach ($a as $k => $value) {
                                 $answer = new VoxAnswer;
@@ -2038,7 +2010,6 @@ class VoxService {
 
                         $pagenum = $reallist->count()/$ppp;
                         $start = $reallist->forPage($pagenum, $ppp)->first();
-                        
                         $diff = Carbon::now()->diffInSeconds( $start->created_at );
                         $normal = $ppp*2;
                         
@@ -2074,7 +2045,6 @@ class VoxService {
                                     trans('vox.page.bans.warning-too-fast-content-4'),
                                 ];
                                 $ret['content'] = $contents[$prev_bans];
-
                             } else {
                                 $ban = $user->banUser('vox', 'too-fast', $vox->id);
                                 $ret['ban'] = true;
@@ -2113,23 +2083,11 @@ class VoxService {
                         $reward->type = 'survey';
                         $reward->platform = 'vox';
                         $reward->reward = 100;
-
-                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                        $dd = new DeviceDetector($userAgent);
-                        $dd->parse();
-
-                        if ($dd->isBot()) {
-                            // handle bots,spiders,crawlers,...
-                            $reward->device = $dd->getBot();
-                        } else {
-                            $reward->device = $dd->getDeviceName();
-                            $reward->brand = $dd->getBrandName();
-                            $reward->model = $dd->getModel();
-                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                        }
-
+                        GeneralHelper::deviceDetector($reward);
                         $reward->save();
                     }
+
+                    // dd($answer);
 
                     if(count($answered) == count($vox->questions)) {
 
@@ -2169,28 +2127,13 @@ class VoxService {
                         $reward->reference_id = $vox->id;
                         $reward->platform = 'vox';
                         $reward->type = 'survey';
-
                         $reward->reward = $rewardForCurVox;
                         $start = $list->first()->created_at;
-                        $diff = Carbon::now()->diffInSeconds( $start );
                         $normal = count($vox->questions)*2;
-                        $reward->seconds = $diff;
-
-                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                        $dd = new DeviceDetector($userAgent);
-                        $dd->parse();
-
-                        if ($dd->isBot()) {
-                            // handle bots,spiders,crawlers,...
-                            $reward->device = $dd->getBot();
-                        } else {
-                            $reward->device = $dd->getDeviceName();
-                            $reward->brand = $dd->getBrandName();
-                            $reward->model = $dd->getModel();
-                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                        }
-
+                        $reward->seconds = Carbon::now()->diffInSeconds( $start );
+                        GeneralHelper::deviceDetector($reward);
                         $reward->save();
+
                         $ret['balance'] = $user->getTotalBalance();
 
                         $open_recommend = false;
@@ -2210,7 +2153,6 @@ class VoxService {
                         VoxAnswer::where('user_id', $user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
                         $vox->recalculateUsersPercentage($user);
-
                         $user->giveInvitationReward('vox');
 
                         if ($user->platform == 'external') {
@@ -2221,7 +2163,7 @@ class VoxService {
                                 CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
                                 CURLOPT_SSL_VERIFYPEER => 0,
                                 CURLOPT_POSTFIELDS => array(
-                                    'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
+                                    'data' => GeneralHelper::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
                                 )
                             ));
                              
@@ -2237,14 +2179,13 @@ class VoxService {
                                 CURLOPT_URL => 'https://dcn-hub-app-api.dentacoin.com/manage-push-notifications',
                                 CURLOPT_SSL_VERIFYPEER => 0,
                                 CURLOPT_POSTFIELDS => array(
-                                    'data' => User::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
+                                    'data' => GeneralHelper::encrypt(json_encode(array('type' => 'reward-won', 'id' => $user->id, 'value' => Reward::getReward('reward_invite'))))
                                 )
                             ));
                              
                             $resp = json_decode(curl_exec($curl));
                             curl_close($curl);
                         }
-
                     }
                 } else {
                     $ret['success'] = false;
@@ -2334,8 +2275,7 @@ class VoxService {
                 Survey target group location/s: '.request('target');
 
                 if (request('target') == 'specific') {
-                    $mtext .= '
-                Survey target group countries: '.implode(',', $target_countries);
+                    $mtext .= 'Survey target group countries: '.implode(',', $target_countries);
                 }
                 
                 $mtext .= '
@@ -2357,7 +2297,6 @@ class VoxService {
                 return Response::json( [
                     'success' => true,
                 ] );
-
             }
         }
     }
@@ -2419,7 +2358,7 @@ class VoxService {
                         'success' => true,
                         'recommend' => true,
                         'description' => false,
-                    ] );
+                    ]);
                 }
 
                 if (intval(Request::input('scale')) <= 3) {
@@ -2435,7 +2374,7 @@ class VoxService {
                         'success' => true,
                         'recommend' => false,
                         'description' => true,
-                    ] );
+                    ]);
                 }
 
                 return Response::json( [
@@ -2443,19 +2382,18 @@ class VoxService {
                     'success' => true,
                     'recommend' => false,
                     'description' => false,
-                ] );
+                ]);
             }
         }
 
         return Response::json( [
             'success' => false,
-        ] );
+        ]);
     }
 
     public static function getVoxList($user, $admin, $taken) {
 
-        if( $user ) {
-
+        if($user) {
             $voxes = !empty($admin) ? User::getAllVoxes() : $user->voxesTargeting();
             if(request('filter_item')) {
                 if(request('filter_item') == 'taken') {
@@ -2486,7 +2424,6 @@ class VoxService {
         }
 
         if(request('survey_search')) {
-
             $searchTitle = trim(Request::input('survey_search'));
             $titles = preg_split('/\s+/', $searchTitle, -1, PREG_SPLIT_NO_EMPTY);
 
@@ -2596,14 +2533,6 @@ class VoxService {
         return new LengthAwarePaginator($items->forPage($page, $pageItems), $items->count(), $pageItems, $page, $options);
     }
 
-
-
-
-
-    // ---------- DailyPolls ---------
-
-
-
     public static function getPollContent($poll_id, $user, $admin, $for_app) {
 
 		$ret = [
@@ -2673,7 +2602,6 @@ class VoxService {
 
                     $answers = array_values($answers);
                 } else {
-
                     $answers = [];
                     foreach ($json_answers as $key => $answer) {
                         $answers[] = Poll::handleAnswerTooltip($answer);
@@ -2702,7 +2630,6 @@ class VoxService {
 		
         return Response::json( $ret );
 	}
-
 
     public static function getPollStats($poll_id, $user) {
 
@@ -2738,7 +2665,6 @@ class VoxService {
 		        'next_stat' => $next_stat->id,
 		        'show_stats' => true,
 	        ];
-
 		} else {
 			$ret = [
 	        	'success' => false,
@@ -2867,7 +2793,6 @@ class VoxService {
 			if( empty($taken_daily_poll) && $poll->status == 'open' ) {
 
 				if(!$admin) {
-
 					$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
 					$country_db = Country::where('code', 'like', $country_code)->first();
 
@@ -2886,21 +2811,7 @@ class VoxService {
 					$reward->platform = 'vox';
 					$reward->type = 'daily_poll';
 					$reward->reward = Reward::getReward('daily_polls');
-
-					$userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-					$dd = new DeviceDetector($userAgent);
-					$dd->parse();
-
-					if ($dd->isBot()) {
-						// handle bots,spiders,crawlers,...
-						$reward->device = $dd->getBot();
-					} else {
-						$reward->device = $dd->getDeviceName();
-						$reward->brand = $dd->getBrandName();
-						$reward->model = $dd->getModel();
-						$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-					}
-
+					GeneralHelper::deviceDetector($reward);
 					$reward->save();
 				}
 
@@ -2999,5 +2910,4 @@ class VoxService {
 
         return $daily_polls;
 	}
-    
 }

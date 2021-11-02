@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use DeviceDetector\DeviceDetector;
-
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -191,8 +188,8 @@ class ProfileController extends FrontController {
                 'name' => $this->user->getNames() 
             ]).rawurlencode($this->user->getLink().'?'. http_build_query([
                 'dcn-gateway-type'=>'patient-register', 
-                'inviter' => User::encrypt($this->user->id), 
-                'inviteid' => User::encrypt($invitation->id) 
+                'inviter' => GeneralHelper::encrypt($this->user->id), 
+                'inviteid' => GeneralHelper::encrypt($invitation->id) 
             ]));
 
             return Response::json([
@@ -555,7 +552,7 @@ class ProfileController extends FrontController {
                         'invited_user_name' => $last_invite->invited_name,
                         "invitation_link" => $this->user->getLink().'?'. http_build_query([
                             'dcn-gateway-type'=>'patient-login', 
-                            'inviter' => User::encrypt($this->user->id) 
+                            'inviter' => GeneralHelper::encrypt($this->user->id) 
                         ]),
                     ];
 
@@ -1280,21 +1277,7 @@ class ProfileController extends FrontController {
                         $reward->reward = Reward::getReward('review_trusted');
                         $reward->type = 'review_trusted';
                         $reward->reference_id = $review->id;
-
-                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                        $dd = new DeviceDetector($userAgent);
-                        $dd->parse();
-
-                        if ($dd->isBot()) {
-                            // handle bots,spiders,crawlers,...
-                            $reward->device = $dd->getBot();
-                        } else {
-                            $reward->device = $dd->getDeviceName();
-                            $reward->brand = $dd->getBrandName();
-                            $reward->model = $dd->getModel();
-                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                        }
-
+                        GeneralHelper::deviceDetector($reward);
                         $reward->save();
 
                         $reward = new DcnReward();
@@ -1303,21 +1286,7 @@ class ProfileController extends FrontController {
                         $reward->reward = Reward::getReward('reward_dentist');
                         $reward->type = 'dentist-review';
                         $reward->reference_id = $review->id;
-
-                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                        $dd = new DeviceDetector($userAgent);
-                        $dd->parse();
-
-                        if ($dd->isBot()) {
-                            // handle bots,spiders,crawlers,...
-                            $reward->device = $dd->getBot();
-                        } else {
-                            $reward->device = $dd->getDeviceName();
-                            $reward->brand = $dd->getBrandName();
-                            $reward->model = $dd->getModel();
-                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                        }
-
+                        GeneralHelper::deviceDetector($reward);
                         $reward->save();
                     }
                 }
@@ -2018,8 +1987,8 @@ class ProfileController extends FrontController {
                         'invited_user_name' => $name,
                         "invitation_link" => $this->user->getLink().'?'. http_build_query([
                             'dcn-gateway-type'=>'patient-login', 
-                            'inviter' => User::encrypt($this->user->id), 
-                            'inviteid' => User::encrypt($invitation->id) 
+                            'inviter' => GeneralHelper::encrypt($this->user->id), 
+                            'inviteid' => GeneralHelper::encrypt($invitation->id) 
                         ]),
                     ];
 
@@ -2059,8 +2028,8 @@ class ProfileController extends FrontController {
                             'invited_user_name' => $name,
                             "invitation_link" => $this->user->getLink().'?'. http_build_query([
                                 'dcn-gateway-type'=>'patient-register', 
-                                'inviter' => User::encrypt($this->user->id), 
-                                'inviteid' => User::encrypt($invitation->id) 
+                                'inviter' => GeneralHelper::encrypt($this->user->id), 
+                                'inviteid' => GeneralHelper::encrypt($invitation->id) 
                             ]),
                         ];
 

@@ -62,7 +62,6 @@ class BlacklistController extends AdminController {
                 $this->request->session()->flash('success-message', 'Item added to the blacklist' );
                 return redirect('cms/blacklist');
             }
-
         }
 
         $items = Blacklist::get();

@@ -7,9 +7,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use DeviceDetector\DeviceDetector;
-
 use App\Models\UserGuidedTour;
 use App\Models\PollAnswer;
 use App\Models\UserLogin;
@@ -22,6 +19,7 @@ use App\Models\User;
 use App\Models\City;
 use App\Models\Poll;
 
+use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Redirect;
@@ -159,21 +157,7 @@ class FrontController extends BaseController {
                         $reward->platform = 'vox';
                         $reward->type = 'daily_poll';
                         $reward->reward = Reward::getReward('daily_polls');
-
-                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                        $dd = new DeviceDetector($userAgent);
-                        $dd->parse();
-
-                        if ($dd->isBot()) {
-                            // handle bots,spiders,crawlers,...
-                            $reward->device = $dd->getBot();
-                        } else {
-                            $reward->device = $dd->getDeviceName();
-                            $reward->brand = $dd->getBrandName();
-                            $reward->model = $dd->getModel();
-                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                        }
-
+                        GeneralHelper::deviceDetector($reward);
                         $reward->save();
 
                         PollAnswer::where('id', $aid)->update([
@@ -197,27 +181,13 @@ class FrontController extends BaseController {
                     $new_dentist->save();
 
                     if($new_dentist->status == 'added_approved' || $new_dentist->status == 'approved') {
-                        $amount = Reward::getReward('patient_add_dentist');
                         $reward = new DcnReward();
                         $reward->user_id = $this->user->id;
-                        $reward->reward = $amount;
+                        $reward->reward = Reward::getReward('patient_add_dentist');
                         $reward->platform = 'trp';
                         $reward->type = 'added_dentist';
                         $reward->reference_id = $new_dentist->id;
-
-                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                        $dd = new DeviceDetector($userAgent);
-                        $dd->parse();
-
-                        if ($dd->isBot()) {
-                            // handle bots,spiders,crawlers,...
-                            $reward->device = $dd->getBot();
-                        } else {
-                            $reward->device = $dd->getDeviceName();
-                            $reward->brand = $dd->getBrandName();
-                            $reward->model = $dd->getModel();
-                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                        }
+                        GeneralHelper::deviceDetector($reward);
                         $reward->save();
 
                         $substitutions = [

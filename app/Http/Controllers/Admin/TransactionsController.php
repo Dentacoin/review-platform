@@ -189,32 +189,9 @@ class TransactionsController extends AdminController {
         }
 
         $item = DcnTransaction::find($id);
-
-        if($item->status == 'first' && !empty($item->user) && !$item->user->is_dentist) {
-
-            $user_history = new UserHistory;
-            $user_history->admin_id = $this->user->id;
-            $user_history->user_id = $item->user->id;
-            $user_history->patient_status = $item->user->patient_status;
-            $user_history->save();
-
-            $item->user->patient_status = 'new_verified';
-            $item->user->save();
+        if(!empty($item)) {
+            $this->bumpTransaction($item);
         }
-
-        $dcn_history = new DcnTransactionHistory;
-        $dcn_history->transaction_id = $item->id;
-        $dcn_history->admin_id = $this->user->id;
-        $dcn_history->status = 'new';
-        $dcn_history->old_status = $item->status;
-        $dcn_history->history_message = 'Bumped by admin';
-        $dcn_history->save();
-
-        $item->status = 'new';
-        $item->processing = 0;
-        $item->retries = 0;
-
-        $item->save();
 
         $this->request->session()->flash('success-message', 'Transaction bumped' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
@@ -228,17 +205,9 @@ class TransactionsController extends AdminController {
         }
 
         $item = DcnTransaction::find($id);
-
-        $dcn_history = new DcnTransactionHistory;
-        $dcn_history->transaction_id = $item->id;
-        $dcn_history->admin_id = $this->user->id;
-        $dcn_history->status = 'pending';
-        $dcn_history->old_status = $item->status;
-        $dcn_history->history_message = 'Pending by admin';
-        $dcn_history->save();
-
-        $item->status = 'pending';
-        $item->save();
+        if(!empty($item)) {
+            $this->pendingTransaction($item);
+        }
 
         $this->request->session()->flash('success-message', 'Transaction pending' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
@@ -252,29 +221,9 @@ class TransactionsController extends AdminController {
         }
 
         $item = DcnTransaction::find($id);
-
-        if($item->status == 'first') {
-            $action = new UserAction;
-            $action->user_id = $item->user->id;
-            $action->action = 'deleted';
-            $action->reason = 'Automatically - rejected first transaction';
-            $action->actioned_at = Carbon::now();
-            $action->save();
-
-            $item->user->deleteActions();
-            User::destroy( $item->user->id );
+        if(!empty($item)) {
+            $this->stopTransaction($item);
         }
-
-        $dcn_history = new DcnTransactionHistory;
-        $dcn_history->transaction_id = $item->id;
-        $dcn_history->admin_id = $this->user->id;
-        $dcn_history->status = 'stopped';
-        $dcn_history->old_status = $item->status;
-        $dcn_history->history_message = 'Stopped by admin';
-        $dcn_history->save();
-
-        $item->status = 'stopped';
-        $item->save();
 
         $this->request->session()->flash('success-message', 'Transaction stopped' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
@@ -318,8 +267,8 @@ class TransactionsController extends AdminController {
                 } else {
                     $item->user->withdraw_at = $item->user->created_at;
                 }
-                $item->user->save();
 
+                $item->user->save();
                 $item->user->sendGridTemplate(125);
 
                 $this->request->session()->flash('success-message', 'Transaction deleted' );
@@ -343,35 +292,39 @@ class TransactionsController extends AdminController {
         if( Request::input('ids') ) {
             $bumptrans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($bumptrans as $bt) {
-
-                if($bt->status == 'first' && !empty($bt->user) && !$bt->user->is_dentist) {
-
-                    $user_history = new UserHistory;
-                    $user_history->admin_id = $this->user->id;
-                    $user_history->user_id = $bt->user->id;
-                    $user_history->patient_status = $bt->user->patient_status;
-                    $user_history->save();
-
-                    $bt->user->patient_status = 'new_verified';
-                    $bt->user->save();
-                }
-
-                $dcn_history = new DcnTransactionHistory;
-                $dcn_history->transaction_id = $bt->id;
-                $dcn_history->admin_id = $this->user->id;
-                $dcn_history->status = 'new';
-                $dcn_history->old_status = $bt->status;
-                $dcn_history->history_message = 'Bumped by admin';
-                $dcn_history->save();
-                
-                $bt->status = 'new';
-                $bt->retries = 0;
-                $bt->save();
+                $this->bumpTransaction($bt);
             }
         }
 
         $this->request->session()->flash('success-message', 'All selected transactions are bumped' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    private function bumpTransaction($transaction) {
+
+        if($transaction->status == 'first' && !empty($transaction->user) && !$transaction->user->is_dentist) {
+            $user_history = new UserHistory;
+            $user_history->admin_id = $this->user->id;
+            $user_history->user_id = $transaction->user->id;
+            $user_history->patient_status = $transaction->user->patient_status;
+            $user_history->save();
+
+            $transaction->user->patient_status = 'new_verified';
+            $transaction->user->save();
+        }
+
+        $dcn_history = new DcnTransactionHistory;
+        $dcn_history->transaction_id = $transaction->id;
+        $dcn_history->admin_id = $this->user->id;
+        $dcn_history->status = 'new';
+        $dcn_history->old_status = $transaction->status;
+        $dcn_history->history_message = 'Bumped by admin';
+        $dcn_history->save();
+
+        $transaction->status = 'new';
+        $transaction->processing = 0;
+        $transaction->retries = 0;
+        $transaction->save();
     }
 
     public function massstop() {
@@ -384,34 +337,38 @@ class TransactionsController extends AdminController {
         if( Request::input('ids') ) {
             $stoptrans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($stoptrans as $st) {
-
-                if($st->status == 'first') {
-                    $action = new UserAction;
-                    $action->user_id = $st->user->id;
-                    $action->action = 'deleted';
-                    $action->reason = 'Automatically - rejected first transaction';
-                    $action->actioned_at = Carbon::now();
-                    $action->save();
-
-                    $st->user->deleteActions();
-                    User::destroy( $st->user->id );
-                }
-
-                $dcn_history = new DcnTransactionHistory;
-                $dcn_history->transaction_id = $st->id;
-                $dcn_history->admin_id = $this->user->id;
-                $dcn_history->status = 'stopped';
-                $dcn_history->old_status = $st->status;
-                $dcn_history->history_message = 'Stopped by admin';
-                $dcn_history->save();
-
-                $st->status = 'stopped';
-                $st->save();
+                $this->stopTransaction($st);
             }
         }
 
         $this->request->session()->flash('success-message', 'All selected transactions are stopped' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    private function stopTransaction($transaction) {
+
+        if($transaction->status == 'first') {
+            $action = new UserAction;
+            $action->user_id = $transaction->user->id;
+            $action->action = 'deleted';
+            $action->reason = 'Automatically - rejected first transaction';
+            $action->actioned_at = Carbon::now();
+            $action->save();
+
+            $transaction->user->deleteActions();
+            User::destroy( $transaction->user_id );
+        }
+
+        $dcn_history = new DcnTransactionHistory;
+        $dcn_history->transaction_id = $transaction->id;
+        $dcn_history->admin_id = $this->user->id;
+        $dcn_history->status = 'stopped';
+        $dcn_history->old_status = $transaction->status;
+        $dcn_history->history_message = 'Stopped by admin';
+        $dcn_history->save();
+
+        $transaction->status = 'stopped';
+        $transaction->save();
     }
 
     public function massPending() {
@@ -424,22 +381,26 @@ class TransactionsController extends AdminController {
         if( Request::input('ids') ) {
             $pending_trans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($pending_trans as $pt) {
-
-                $dcn_history = new DcnTransactionHistory;
-                $dcn_history->transaction_id = $pt->id;
-                $dcn_history->admin_id = $this->user->id;
-                $dcn_history->status = 'pending';
-                $dcn_history->old_status = $pt->status;
-                $dcn_history->history_message = 'Pending by admin';
-                $dcn_history->save();
-
-                $pt->status = 'pending';
-                $pt->save();
+                $this->pendingTransaction($pt);
             }
         }
 
         $this->request->session()->flash('success-message', 'All selected transactions are pending' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    private function pendingTransaction($transaction) {
+
+        $dcn_history = new DcnTransactionHistory;
+        $dcn_history->transaction_id = $transaction->id;
+        $dcn_history->admin_id = $this->user->id;
+        $dcn_history->status = 'pending';
+        $dcn_history->old_status = $transaction->status;
+        $dcn_history->history_message = 'Pending by admin';
+        $dcn_history->save();
+
+        $transaction->status = 'pending';
+        $transaction->save();
     }
 
     public function bumpDontRetry() {
@@ -832,5 +793,4 @@ class TransactionsController extends AdminController {
 
         return Response::json( ['data' => $connected_nodes] );
     }
-
 }

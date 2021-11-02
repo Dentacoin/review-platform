@@ -9,26 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Support\Str;
-
-use \SendGrid\Mail\PlainTextContent as PlainTextContent;
-use \SendGrid\Mail\HtmlContent as HtmlContent;
-use \SendGrid\Mail\Mail as SendGridMail;
-use \SendGrid\Mail\Subject as Subject;
-use \SendGrid\Mail\From as From;
-use \SendGrid\Mail\To as To;
-
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use DeviceDetector\DeviceDetector;
-
 use Laravel\Passport\HasApiTokens;
-use App\Helpers\GeneralHelper;
-use WebPConvert\WebPConvert;
-use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 use App\Models\DcnTransactionHistory;
 use App\Models\StopEmailValidation;
-use App\Models\DentistPageview;
 use App\Models\EmailValidation;
 use App\Models\BlacklistBlock;
 use App\Models\DcnTransaction;
@@ -47,13 +32,16 @@ use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\Blacklist;
 use App\Models\UserTeam;
-use App\Models\GasPrice;
 use App\Models\UserBan;
 use App\Models\UserAsk;
 use App\Models\Reward;
 use App\Models\Review;
 use App\Models\Email;
 use App\Models\Vox;
+
+use App\Helpers\GeneralHelper;
+use WebPConvert\WebPConvert;
+use Carbon\Carbon;
 
 use Request;
 use Cookie;
@@ -1487,21 +1475,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
                 $reward->type = 'survey';
                 $reward->reward = $first->getRewardTotal();
                 $reward->platform = 'vox';
-
-                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                $dd = new DeviceDetector($userAgent);
-                $dd->parse();
-
-                if ($dd->isBot()) {
-                    // handle bots,spiders,crawlers,...
-                    $reward->device = $dd->getBot();
-                } else {
-                    $reward->device = $dd->getDeviceName();
-                    $reward->brand = $dd->getBrandName();
-                    $reward->model = $dd->getModel();
-                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                }
-
+                GeneralHelper::deviceDetector($reward);
                 $reward->save();
             }
 
@@ -2310,21 +2284,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
                 $reward->reward = Reward::getReward('reward_invite');
                 $reward->type = 'invitation';
                 $reward->reference_id = $inv->id;
-
-                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                $dd = new DeviceDetector($userAgent);
-                $dd->parse();
-
-                if ($dd->isBot()) {
-                    // handle bots,spiders,crawlers,...
-                    $reward->device = $dd->getBot();
-                } else {
-                    $reward->device = $dd->getDeviceName();
-                    $reward->brand = $dd->getBrandName();
-                    $reward->model = $dd->getModel();
-                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                }
-
+                GeneralHelper::deviceDetector($reward);
                 $reward->save();
 
                 $inv->rewarded = true;
@@ -2350,32 +2310,5 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
                 }
             }
         }
-    }
-
-    public static function encrypt($raw_text) {
-        $length = openssl_cipher_iv_length(env('CRYPTO_METHOD'));
-        $iv = openssl_random_pseudo_bytes($length);
-        $encrypted = openssl_encrypt($raw_text, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), OPENSSL_RAW_DATA, $iv);
-        //here we append the $iv to the encrypted, because we will need it for the decryption
-        $encrypted_with_iv = base64_encode($encrypted) . '|' . base64_encode($iv);
-        return $encrypted_with_iv;
-    }
-
-    public static function decrypt($encrypted_text) {
-        $arr = explode('|', $encrypted_text);
-        if (count($arr)!=2) {
-            return null;
-        }
-        $data = $arr[0];
-        $iv = $arr[1];
-        $iv = base64_decode($iv);
-
-        try {
-            $raw_text = openssl_decrypt($data, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), 0, $iv);
-        } catch (\Exception $e) {
-            $raw_text = false;
-        }
-
-        return $raw_text;
     }
 }

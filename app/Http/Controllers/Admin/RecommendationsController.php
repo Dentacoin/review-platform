@@ -70,7 +70,6 @@ class RecommendationsController extends AdminController {
             'search_user_id' => $this->request->input('search-user-id'),
             'search_scale' => $this->request->input('search-scale'),
             'with_comment' => $this->request->input('with-comment'),
-
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
@@ -81,5 +80,4 @@ class RecommendationsController extends AdminController {
             'current_url' => $current_url,
         ));
     }
-
 }

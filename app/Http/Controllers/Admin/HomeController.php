@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
+
 use PragmaRX\Google2FAQRCode\Google2FA;
+
 use Request;
 use Auth;
 

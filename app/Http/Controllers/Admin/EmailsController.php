@@ -41,7 +41,6 @@ class EmailsController extends AdminController {
                     });
                 });
 
-
                 // $templates = $templates->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
                 // $templates = $templates->where('title', 'LIKE', '%'.trim(request('search-name')).'%');
                 // $templates = $templates->where('subject', 'LIKE', '%'.trim(request('search-name')).'%');
@@ -49,12 +48,14 @@ class EmailsController extends AdminController {
             if(!empty(request('search-id'))) {
                 $templates = $templates->where('id', request('search-id') );
             }
+
             if(!empty(request('search-sendgrid-id'))) {
                 $si = request('search-sendgrid-id');
                 $templates = $templates->whereHas('translations', function ($query) use ($si) {
                     $query->where('sendgrid_template_id', 'LIKE', $si);
                 });
             }
+
             if(!empty(request('search-platform'))) {
                 $templates = $templates->where('type', request('search-platform') );
             }
@@ -110,7 +111,7 @@ class EmailsController extends AdminController {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
+            return redirect('cms/home');
         }
         
         $template = EmailTemplate::find($id);
@@ -135,7 +136,7 @@ class EmailsController extends AdminController {
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.saved'));
             return redirect('cms/'.$this->current_page.'/'.$template->type);
         } else {
-            
+            return redirect('cms/home');
         }
     }
 
@@ -143,7 +144,7 @@ class EmailsController extends AdminController {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
+            return redirect('cms/home');
         }
 
         $validator = Validator::make($this->request->all(), [
@@ -277,7 +278,6 @@ class EmailsController extends AdminController {
             $change_month = 'higher than last month';
         }
 
-
         if (!empty($prev_month_reviews_num)) {
             if ($cur_month_reviews_num < $prev_month_reviews_num) {
                 $reviews_num_percent_month = intval((($cur_month_reviews_num - $prev_month_reviews_num) / $prev_month_reviews_num) * -100).'%';
@@ -294,7 +294,6 @@ class EmailsController extends AdminController {
             $reviews_num_percent_month = '100%';
             $change_month_num = 'higher than last month';
         }
-
 
         //status?
         $country_id = $user->country->id;
@@ -325,7 +324,6 @@ class EmailsController extends AdminController {
             $change_country = 'higher than the average';
         }
 
-
         // $top3_dentists_query = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $user->country_id)->orderby('avg_rating', 'desc')->take(3)->get();
 
         // $top3_dentists = [];
@@ -344,8 +342,6 @@ class EmailsController extends AdminController {
             'change_month_num' => $change_month_num,
             // 'top3-dentists' => implode('<br/>',$top3_dentists)
         ], 'trp');
-
-
 
         ///without reviews
 
@@ -477,7 +473,6 @@ class EmailsController extends AdminController {
         $item = EmailValidation::find($id);
 
         if($item) {
-
             $item->valid = true;
             $item->save();
 
@@ -600,7 +595,6 @@ class EmailsController extends AdminController {
 
                 $this->request->session()->flash('success-message', 'Email changed!' );
             }
-
         }
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations/invalid_emails');
     }

@@ -127,16 +127,15 @@ class PollsController extends AdminController {
                     $translation->save();
 	            }
 
-
 	            if(!empty( $this->request->input('answers-'.$key) )) {
 
                     $newAnswers = $this->request->input('answers-'.$key);
 
                     $newAnswersArr = [];
                     foreach ($newAnswers as $ka => $va) {
-                       if(!empty($va)) {
+                        if(!empty($va)) {
                             $newAnswersArr[] = $va;
-                       }
+                        }
                     }
 
                     if(!empty($newAnswersArr)) {
@@ -233,19 +232,17 @@ class PollsController extends AdminController {
 
                             $newAnswersArr = [];
                             foreach ($newAnswers as $ka => $va) {
-                               if(!empty($va)) {
+                                if(!empty($va)) {
                                     $newAnswersArr[] = $va;
-                               }
+                                }
                             }
 
                             if(!empty($newAnswersArr)) {
 
                                 $translation->answers = json_encode( $newAnswersArr );
-
                                 $translator = [];
 
                                 if(!empty($oldAnswers)) {
-
                                     foreach ($oldAnswers as $key => $value) {
                                         $translator[($key+1)] = array_search($value, $newAnswersArr) + 1;
                                     }
@@ -404,7 +401,6 @@ class PollsController extends AdminController {
 
             $time = $poll->launched_at->timestamp;
             $newformat = date('d-m-Y',$time);
-            //dd( request()->input('country') );
 
             $viewParams = [
                 'poll_id' => $poll_id,

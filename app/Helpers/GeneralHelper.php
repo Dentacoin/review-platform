@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
+
 use \SendGrid\Mail\Mail as SendGridMail;
 use \SendGrid\Mail\From as From;
 use \SendGrid\Mail\To as To;
@@ -102,7 +105,7 @@ class GeneralHelper {
                 "town" => $user->city_name ? $user->city_name : 'your town',
                 "country" => $user->country_id ? Country::find($user->country_id)->name : 'your country',
                 //"unsubscribe" => getLangUrl( 'unsubscription/'.$user->id.'/'.$user->get_token(), null, $domain),
-                "unsubscribe" => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $to_email),'email_category' => $item->template->subscribe_category, 'platform' => $item->platform ))))]),
+                "unsubscribe" => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(self::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $to_email),'email_category' => $item->template->subscribe_category, 'platform' => $item->platform ))))]),
                 "pageviews" => $pageviews,
                 "trp" => url('https://reviews.dentacoin.com/'),
                 "trp-dentist" => url('https://reviews.dentacoin.com/en/welcome-dentist/'),
@@ -446,6 +449,51 @@ class GeneralHelper {
         }
 
         return false;
+    }
+
+    public static function encrypt($raw_text) {
+        $length = openssl_cipher_iv_length(env('CRYPTO_METHOD'));
+        $iv = openssl_random_pseudo_bytes($length);
+        $encrypted = openssl_encrypt($raw_text, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), OPENSSL_RAW_DATA, $iv);
+        //here we append the $iv to the encrypted, because we will need it for the decryption
+        $encrypted_with_iv = base64_encode($encrypted) . '|' . base64_encode($iv);
+        return $encrypted_with_iv;
+    }
+
+    public static function decrypt($encrypted_text) {
+        $arr = explode('|', $encrypted_text);
+        if (count($arr)!=2) {
+            return null;
+        }
+        $data = $arr[0];
+        $iv = $arr[1];
+        $iv = base64_decode($iv);
+
+        try {
+            $raw_text = openssl_decrypt($data, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), 0, $iv);
+        } catch (\Exception $e) {
+            $raw_text = false;
+        }
+
+        return $raw_text;
+    }
+
+    public static function deviceDetector($item) {
+        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+        $dd = new DeviceDetector($userAgent);
+        $dd->parse();
+
+        if ($dd->isBot()) {
+            // handle bots,spiders,crawlers,...
+            $item->device = $dd->getBot();
+        } else {
+            $item->device = $dd->getDeviceName();
+            $item->brand = $dd->getBrandName();
+            $item->model = $dd->getModel();
+            $item->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+        }
+
+        $item->save();
     }
 
 }

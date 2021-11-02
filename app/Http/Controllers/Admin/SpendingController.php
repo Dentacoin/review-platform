@@ -22,25 +22,28 @@ class SpendingController extends AdminController {
             'week', 
             'month'
         ];
+
         $sql_groups = [
             'day' => 'DATE_FORMAT(`created_at`, "%d.%m.%Y") AS `period`', 
             'week' => 'DATE_FORMAT(`created_at`, "%v.%Y") AS `period`', 
             'month' => 'DATE_FORMAT(`created_at`, "%m.%Y") AS `period`'
         ];
+
         $search_from = $this->request->input('search_from');
         if(!empty($search_from)) {
             $search_from = new Carbon($this->request->input('search_from'));
         } else {
             $search_from = Carbon::now()->addDays(-31);
         }
+
         $search_to = $this->request->input('search_to');
         if(!empty($search_to)) {
             $search_to = new Carbon($this->request->input('search_to'));
         } else {
             $search_to = Carbon::now();
         }
-        $search_group = $this->request->input('search_group', 'day');
 
+        $search_group = $this->request->input('search_group', 'day');
 
         $firstday = $search_from->format('d.m.Y');
         $lastday = $search_to->format('d.m.Y');
@@ -62,6 +65,7 @@ class SpendingController extends AdminController {
         $totals = [];
         $types = [];
         $transactions = [];
+
         foreach ($weeks as $week) {
             if(!isset($transactions[$week->period])) {
                 $transactions[$week->period] = [];
@@ -84,7 +88,5 @@ class SpendingController extends AdminController {
             'search_group' => $search_group,
             'groups' => $groups,
         ));
-
     }
-
 }

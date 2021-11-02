@@ -269,5 +269,4 @@ class TestimonialSliderController extends AdminController {
             'testimonials' => $testimonials,
         ]);
     }
-
 }

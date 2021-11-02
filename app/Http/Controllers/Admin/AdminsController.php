@@ -247,9 +247,7 @@ class AdminsController extends AdminController {
 
         $actions = $actions->concat($transaction_actions);
         $actions = $actions->concat($admin_actions);
-
         $actions = $actions->sortByDesc('created_at');
-
         $actions = $this->paginate($actions)->withPath('cms/admins/actions-history/');
 
         $admins = Admin::get();

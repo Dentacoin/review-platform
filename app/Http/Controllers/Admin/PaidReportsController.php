@@ -157,7 +157,6 @@ class PaidReportsController extends AdminController {
                     $translation->table_contents = json_encode( $newContentsArr );
                     $translation->save();
                 }
-
 	        }
 	        $newreport->save();
 

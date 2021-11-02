@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use DeviceDetector\DeviceDetector;
-
 use App\Services\VoxService as ServicesVox;
 
 use App\Models\PollsMonthlyDescription;
@@ -17,6 +14,7 @@ use App\Models\Reward;
 use App\Models\User;
 use App\Models\Poll;
 
+use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Response;
@@ -135,21 +133,7 @@ class DailyPollsController extends ApiController {
 	            $reward->platform = 'vox';
 	            $reward->type = 'daily_poll';
 	            $reward->reward = Reward::getReward('daily_polls');
-
-	            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-	            $dd = new DeviceDetector($userAgent);
-	            $dd->parse();
-
-	            if ($dd->isBot()) {
-	                // handle bots,spiders,crawlers,...
-	                $reward->device = $dd->getBot();
-	            } else {
-	                $reward->device = $dd->getDeviceName();
-	                $reward->brand = $dd->getBrandName();
-	                $reward->model = $dd->getModel();
-	                $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-	            }
-
+	            GeneralHelper::deviceDetector($reward);
 	            $reward->save();
 
 	            PollAnswer::where('id', $answer->id)->update([

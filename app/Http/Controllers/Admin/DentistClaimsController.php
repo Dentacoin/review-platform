@@ -24,7 +24,6 @@ class DentistClaimsController extends AdminController {
         }
 
         $item = DentistClaim::find($id);
-
         $item->status = 'approved';
         $item->save();
 
@@ -103,7 +102,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
         }
 
         return redirect( 'cms/users/users/edit/'.$item->dentist_id );
-
     }
 
     public function reject($id) {
@@ -114,7 +112,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
         }
 
         $item = DentistClaim::find($id);
-
         $item->status = 'rejected';
         $item->save();
 
@@ -126,7 +123,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
         $mail = GeneralHelper::unregisteredSendGridTemplate($u, $item->email, $item->name, 66, null, 'trp', $unsubscribed, $item->email);
         $mail->delete();
 
-
         $mtext = 'Dentist claim request was rejected<br/>
 Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id;
 
@@ -135,10 +131,8 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
             $sender_name = config('mail.from.name');
 
             $message->from($sender, $sender_name);
-            
             $message->to( 'betina.bogdanova@dentacoin.com' );
             $message->to( 'petya.ivanova@dentacoin.com' );
-            //$message->to( 'dokinator@gmail.com' );
             $message->replyTo($user->email, $user->getNames());
             $message->subject('Dentist claim request was rejected');
             $message->setBody($mtext, 'text/html'); // for HTML rich messages
@@ -155,7 +149,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
         }
         
         $item = DentistClaim::find($id);
-
         $item->status = 'suspicious';
         $item->save();
 

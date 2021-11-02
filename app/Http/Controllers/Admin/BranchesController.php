@@ -115,7 +115,6 @@ class BranchesController extends AdminController {
     		}
 
     		return redirect(url('cms/trp/clinic-branches'));
-
     	}
 
     	return $this->showView('clinic-branches-add');

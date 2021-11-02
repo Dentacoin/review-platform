@@ -92,12 +92,10 @@ class TranslationsController extends AdminController {
 
         $list = Lang::get($this->current_subpage, array(), $source);
         $target_list = Lang::get($this->current_subpage, array(), $target);
-        //dd($list);
         $flist = [];
         foreach ($list as $key => $value) {
             $flist[] = [$key, $value, !empty($target_list[$key]) ? $target_list[$key] : ''  ];
         }
-        //dd($flist);
 
         $dir = storage_path().'/app/public/xls/';
         if(!is_dir($dir)) {
@@ -119,7 +117,6 @@ class TranslationsController extends AdminController {
 
         $list = Lang::get($this->current_subpage, array(), $source);
         $target_list = Lang::get($this->current_subpage, array(), $target);
-        //dd($list);
         $flist = [];
         foreach ($list as $key => $value) {
             if(empty($target_list[$key])) {
@@ -242,8 +239,7 @@ class TranslationsController extends AdminController {
             }
             $sa_new[$nk][$key] = $value;
         }
-
-
+        
         $translations_count_arr = [];
 
         foreach($this->langs as $key => $lang_info) {

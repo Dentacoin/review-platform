@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use DeviceDetector\DeviceDetector;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Helpers\GeneralHelper;
 
 use App\Models\DcnReward;
 use App\Models\Reward;
@@ -97,21 +96,7 @@ class Review extends Model {
             $reward->reward = Reward::getReward('reward_dentist');
             $reward->type = 'dentist-review';
             $reward->reference_id = $this->id;
-
-            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-            $dd = new DeviceDetector($userAgent);
-            $dd->parse();
-
-            if ($dd->isBot()) {
-                // handle bots,spiders,crawlers,...
-                $reward->device = $dd->getBot();
-            } else {
-                $reward->device = $dd->getDeviceName();
-                $reward->brand = $dd->getBrandName();
-                $reward->model = $dd->getModel();
-                $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-            }
-
+            GeneralHelper::deviceDetector($reward);
             $reward->save();
 
             $dent_id = $this->review_to_id;

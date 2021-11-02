@@ -333,9 +333,7 @@ class SupportController extends AdminController {
         }
 
         $total_count = $items->count();
-
         $page = max(1,intval(request('page')));
-        
         $ppp = 50;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
@@ -486,7 +484,7 @@ class SupportController extends AdminController {
             'title' => $title,
             'subtitle' => $subtitle,
             'platform' => $platform,
-            'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($user_email),'email_category' => 'service_info', 'platform' => $platform ))))]),
+            'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(GeneralHelper::encrypt(json_encode(array('email' => ($user_email),'email_category' => 'service_info', 'platform' => $platform ))))]),
         ])->render();
 
         $from = new From($sender, $sender_name);

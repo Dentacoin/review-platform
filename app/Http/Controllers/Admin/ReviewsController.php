@@ -101,7 +101,6 @@ class ReviewsController extends AdminController {
         ));
     }
 
-
     public function delete( $id ) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
@@ -112,87 +111,15 @@ class ReviewsController extends AdminController {
         $item = Review::find($id);
         
         if(!empty($item)) {
-            $uid = $item->user_id;
-            $patient = User::where('id', $uid)->withTrashed()->first();
-
-            ReviewAnswer::where([
-                ['review_id', $item->id],
-            ])
-            ->delete();
-
-            $dentist = null;
-            $clinic = null;
-
-            if($item->dentist_id) {
-                $dentist = User::find($item->dentist_id);
-            }
-
-            if($item->clinic_id) {
-                $clinic = User::find($item->clinic_id);
-            }
-
-            
-            $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
-
-            if (!empty($reward_for_review)) {
-                $reward_for_review->delete();
-            }
-
-            Review::destroy( $id );
-
-            if( !empty($dentist) ) {
-                $dentist->recalculateRating();
-                $substitutions = [
-                    'spam_author_name' => $patient->name,
-                ];
-                
-                $dentist->sendGridTemplate(87, $substitutions, 'trp');
-            }
-
-            if( !empty($clinic)) {
-                $clinic->recalculateRating();
-                $substitutions = [
-                    'spam_author_name' => $patient->name,
-                ];
-                
-                $clinic->sendGridTemplate(87, $substitutions, 'trp');
-            }
-
-            $ban = new UserBan;
-            $ban->user_id = $patient->id;
-            $ban->domain = 'trp';
-            $ban->type = 'spam-review';
-            $ban->save();
-
-            $notifications = $patient->website_notifications;
-
-            if(!empty($notifications)) {
-                
-                if (($key = array_search('trp', $notifications)) !== false) {
-                    unset($notifications[$key]);
-                }
-
-                $patient->website_notifications = $notifications;
-                $patient->save();
-            }
-
-            $request_body = new \stdClass();
-            $request_body->recipient_emails = [$patient->email];
-            
-            $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
-
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-            $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
-
-            $patient->sendGridTemplate(86, null, 'trp');
+            $this->deleteReview($item);
+            $this->request->session()->flash('success-message', 'Review deleted' );
         }
 
-        $this->request->session()->flash('success-message', 'Review deleted' );
+        $this->request->session()->flash('error-message', 'Review not found' );
         return redirect('cms/trp/'.$this->current_subpage);
     }
 
-    public function massdelete(  ) {
+    public function massdelete() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
@@ -204,88 +131,14 @@ class ReviewsController extends AdminController {
                 $item = Review::find($r_id);
                 
                 if(!empty($item)) {
-                    $uid = $item->user_id;
-                    $patient = User::where('id', $uid)->withTrashed()->first();
-
-                    ReviewAnswer::where([
-                        ['review_id', $item->id],
-                    ])
-                    ->delete();
-
-                    $dentist = null;
-                    $clinic = null;
-
-                    if($item->dentist_id) {
-                        $dentist = User::find($item->dentist_id);
-                    }
-
-                    if($item->clinic_id) {
-                        $clinic = User::find($item->clinic_id);
-                    }
-
-            
-                    $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
-
-                    if (!empty($reward_for_review)) {
-                        $reward_for_review->delete();
-                    }
-
-                    Review::destroy( $r_id );
-
-                    if( !empty($dentist) ) {
-                        $dentist->recalculateRating();
-                        $substitutions = [
-                            'spam_author_name' => $patient->name,
-                        ];
-                        
-                        $dentist->sendGridTemplate(87, $substitutions, 'trp');
-                    }
-                    if( !empty($clinic) ) {
-                        $clinic->recalculateRating();
-                        $substitutions = [
-                            'spam_author_name' => $patient->name,
-                        ];
-                        
-                        $clinic->sendGridTemplate(87, $substitutions, 'trp');
-                    }
-
-                    $ban = new UserBan;
-                    $ban->user_id = $patient->id;
-                    $ban->domain = 'trp';
-                    $ban->type = 'spam-review';
-                    $ban->save();
-
-                    $notifications = $patient->website_notifications;
-
-                    if(!empty($notifications)) {
-                        
-                        if (($key = array_search('trp', $notifications)) !== false) {
-                            unset($notifications[$key]);
-                        }
-
-                        $patient->website_notifications = $notifications;
-                        $patient->save();
-                    }
-
-                    $request_body = new \stdClass();
-                    $request_body->recipient_emails = [$patient->email];
-                    
-                    $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
-
-                    $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-                    $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
-
-                    $patient->sendGridTemplate(86, null,'trp');
+                    $this->deleteReview($item);
                 }
             }
-            //Review::whereIn('id', Request::input('ids'))->delete();            
         }
 
         $this->request->session()->flash('success-message', 'All selected reviews are now deleted' );
         return redirect('cms/trp/'.$this->current_subpage);
     }
-
 
     public function restore( $id ) {
 
@@ -327,4 +180,74 @@ class ReviewsController extends AdminController {
         return redirect('cms/trp/'.$this->current_subpage);
     }
 
+    private function deleteReview($item) {
+        $uid = $item->user_id;
+        $patient = User::where('id', $uid)->withTrashed()->first();
+
+        ReviewAnswer::where([
+            ['review_id', $item->id],
+        ])->delete();
+
+        $dentist = null;
+        $clinic = null;
+
+        if($item->dentist_id) {
+            $dentist = User::find($item->dentist_id);
+        }
+
+        if($item->clinic_id) {
+            $clinic = User::find($item->clinic_id);
+        }
+
+        $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
+
+        if (!empty($reward_for_review)) {
+            $reward_for_review->delete();
+        }
+
+        Review::destroy( $item->id );
+
+        if( !empty($dentist) ) {
+            $dentist->recalculateRating();
+            $substitutions = [
+                'spam_author_name' => $patient->name,
+            ];
+            
+            $dentist->sendGridTemplate(87, $substitutions, 'trp');
+        }
+
+        if( !empty($clinic) ) {
+            $clinic->recalculateRating();
+            $substitutions = [
+                'spam_author_name' => $patient->name,
+            ];
+            
+            $clinic->sendGridTemplate(87, $substitutions, 'trp');
+        }
+
+        $ban = new UserBan;
+        $ban->user_id = $patient->id;
+        $ban->domain = 'trp';
+        $ban->type = 'spam-review';
+        $ban->save();
+
+        $notifications = $patient->website_notifications;
+        if(!empty($notifications)) {
+            if(($key = array_search('trp', $notifications)) !== false) {
+                unset($notifications[$key]);
+            }
+
+            $patient->website_notifications = $notifications;
+            $patient->save();
+        }
+
+        $request_body = new \stdClass();
+        $request_body->recipient_emails = [$patient->email];
+        $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+
+        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+        $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
+
+        $patient->sendGridTemplate(86, null,'trp');
+    }
 }

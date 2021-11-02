@@ -195,7 +195,6 @@ class PagesSeoController extends AdminController {
                     }
                     $flat[$title][] = ['', '' , ''];
                 }
-
             }
         }
 

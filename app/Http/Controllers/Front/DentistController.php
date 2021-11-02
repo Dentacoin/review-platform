@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\FrontController;
 
-use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-
 use App\Models\DentistRecommendation;
 use App\Models\StopVideoReview;
 use App\Models\DentistPageview;
@@ -232,20 +229,7 @@ class DentistController extends FrontController {
                             $ul->ip = User::getRealIp();
                             $ul->platform = 'trp';
                             $ul->country = \GeoIP::getLocation()->country;
-
-                            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                            $dd = new DeviceDetector($userAgent);
-                            $dd->parse();
-
-                            if ($dd->isBot()) {
-                                $ul->device = $dd->getBot();
-                            } else {
-                                $ul->device = $dd->getDeviceName();
-                                $ul->brand = $dd->getBrandName();
-                                $ul->model = $dd->getModel();
-                                $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                            }
-                            
+                            GeneralHelper::deviceDetector($ul);
                             $ul->save();
                             
                             $u_id = $this->user->id;
@@ -263,9 +247,9 @@ class DentistController extends FrontController {
 
                             $ret['success'] = false;
                             $ret['valid_input'] = false;
-                            $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id));
+                            $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&on-hold-type=bad_ip&key='.urlencode(GeneralHelper::encrypt($u_id));
 
-                            $token = User::encrypt(session('login-logged-out'));
+                            $token = GeneralHelper::encrypt(session('login-logged-out'));
                             $imgs_urls = [];
                             foreach( config('platforms') as $k => $platform ) {
                                 if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
@@ -388,20 +372,7 @@ class DentistController extends FrontController {
                                 $reward->reward = $amount;
                                 $reward->type = 'review';
                                 $reward->reference_id = $review->id;
-
-                                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                                $dd = new DeviceDetector($userAgent);
-                                $dd->parse();
-
-                                if ($dd->isBot()) {
-                                    // handle bots,spiders,crawlers,...
-                                    $reward->device = $dd->getBot();
-                                } else {
-                                    $reward->device = $dd->getDeviceName();
-                                    $reward->brand = $dd->getBrandName();
-                                    $reward->model = $dd->getModel();
-                                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                                }
+                                GeneralHelper::deviceDetector($reward);
                                 $reward->save();                            
                             }
 
@@ -1822,21 +1793,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                 $reward_dentist->reward = Reward::getReward('reward_dentist');
                 $reward_dentist->type = 'dentist-review';
                 $reward_dentist->reference_id = $review->id;
-
-                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                $dd = new DeviceDetector($userAgent);
-                $dd->parse();
-
-                if ($dd->isBot()) {
-                    // handle bots,spiders,crawlers,...
-                    $reward_dentist->device = $dd->getBot();
-                } else {
-                    $reward_dentist->device = $dd->getDeviceName();
-                    $reward_dentist->brand = $dd->getBrandName();
-                    $reward_dentist->model = $dd->getModel();
-                    $reward_dentist->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                }
-
+                GeneralHelper::deviceDetector($reward_dentist);
                 $reward_dentist->save();
 
                 //patient reward
@@ -1846,21 +1803,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                 $reward->reward = Reward::getReward('review_trusted');
                 $reward->type = 'review_trusted';
                 $reward->reference_id = $review->id;
-
-                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                $dd = new DeviceDetector($userAgent);
-                $dd->parse();
-
-                if ($dd->isBot()) {
-                    // handle bots,spiders,crawlers,...
-                    $reward->device = $dd->getBot();
-                } else {
-                    $reward->device = $dd->getDeviceName();
-                    $reward->brand = $dd->getBrandName();
-                    $reward->model = $dd->getModel();
-                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                }
-
+                GeneralHelper::deviceDetector($reward);
                 $reward->save();
 
                 return Response::json([

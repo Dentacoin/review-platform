@@ -757,7 +757,7 @@ class Vox extends Model {
                 CURLOPT_URL => $url,
                 CURLOPT_SSL_VERIFYPEER => 0,
                 CURLOPT_POSTFIELDS => array(
-                    'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
+                    'data' => GeneralHelper::encrypt(json_encode(array('type' => 'new-survey')))
                 )
             ));
              

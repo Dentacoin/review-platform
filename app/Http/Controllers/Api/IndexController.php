@@ -210,7 +210,7 @@ class IndexController extends ApiController {
 
     	if(!empty(request('token'))) {
     		return Response::json( [
-    			'token' => User::encrypt(request('token')),
+    			'token' => GeneralHelper::encrypt(request('token')),
 	        	'success' => true,
 	        ] );
     	}
@@ -274,11 +274,9 @@ class IndexController extends ApiController {
     public function socialProfileImage() {
 
     	if(!empty(request('userId'))) {
-
-	    	$user = User::decrypt(request('userId')) ? User::find(User::decrypt(request('userId'))) : null;
+	    	$user = GeneralHelper::decrypt(request('userId')) ? User::find(GeneralHelper::decrypt(request('userId'))) : null;
 
 	    	if(!empty($user)) {
-
 				$user->addImage(Image::make( request()->file('avatar') )->orientate());
 
 		    	return Response::json( [

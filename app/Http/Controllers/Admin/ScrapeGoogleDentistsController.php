@@ -36,13 +36,11 @@ class ScrapeGoogleDentistsController extends AdminController {
 	            ->withErrors($validator);
 	        } else {
 	            
-		        $info = \GoogleMaps::load('geocoding')
-		        ->setParam ([
-		            'address'    => request('address'),
-		        ])
-		        ->get();
-        		$info = json_decode($info);
+		        $info = \GoogleMaps::load('geocoding')->setParam([
+		            'address' => request('address'),
+		        ])->get();
 
+        		$info = json_decode($info);
 
 	            if(empty($info)) {
 	                Request::session()->flash('error-message', trans('vox.common.invalid-address'));
@@ -75,13 +73,11 @@ class ScrapeGoogleDentistsController extends AdminController {
 	            	$scrape->requests = 0;
 	            	$scrape->requests_total = $latTotal * $lonTotal;
 	            	$scrape->save();
-
 	            }
 	        }
     	}
 
     	$scrapes = ScrapeDentist::orderBy('id', 'desc')->get();
-
     	$finding_emails = ScrapeDentistResult::whereNull('scrape_email')->count();
 
     	return $this->showView('scrape-dentists', [
@@ -90,7 +86,6 @@ class ScrapeGoogleDentistsController extends AdminController {
 			'finding_emails' => !empty($finding_emails) ? $finding_emails : null,
 		]);
     }
-
 
     public function download( $id ) {
 
@@ -117,10 +112,10 @@ class ScrapeGoogleDentistsController extends AdminController {
 	            'Avatar link',
 	            'Google Place ID (do not edit)',
 	        ];
+
 	        foreach ($dentists as $dentist) {
 	        	$place_id = $dentist['place_id'];
 	        	$emails = $dentist['emails'];
-
 	        	$dentist = json_decode($dentist->data, true);
 
 	            $flist[] = [

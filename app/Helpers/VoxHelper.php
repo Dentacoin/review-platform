@@ -226,7 +226,6 @@ class VoxHelper {
             strtoupper($vox->title).', Base: '.$results_resp.' respondents, '.$all_period
         ];
 
-
         if(!empty($is_admin)) {
             if(!empty($scale_for)) {
                 $list = json_decode($q->answers, true);
@@ -306,7 +305,6 @@ class VoxHelper {
                             $i++;
                         }
                     } else {
-
                         $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
 
                         $given_related_answer = VoxAnswer::whereNull('is_admin')->where('user_id', $answ->user_id)->where('question_id', $q->related->id)->first();

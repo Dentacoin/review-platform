@@ -113,5 +113,4 @@ class WhitelistIpsController extends AdminController {
         $this->request->session()->flash('success-message', 'Whitelist VPN IP deleted' );
         return redirect('cms/whitelist/vpn-ips');
     }
-
 }

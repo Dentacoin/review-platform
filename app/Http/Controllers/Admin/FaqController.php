@@ -26,14 +26,11 @@ class FaqController extends AdminController {
 
             return Response::json( [
                 'success' => true
-            ] );
+            ]);
         }
         
         return $this->showView('voxes-faq', array(
             'content' => $content
         ));
-
     }
-
-
 }

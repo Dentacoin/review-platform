@@ -60,8 +60,7 @@ class QuestionsController extends AdminController {
             return redirect('cms/trp/'.$this->current_subpage);
         }
 
-        return $this->showView('questions-form', array(
-        ));
+        return $this->showView('questions-form');
     }
 
     public function delete( $id ) {
@@ -93,10 +92,12 @@ class QuestionsController extends AdminController {
 
                 foreach ($this->langs as $key => $value) {
                     if(!empty($this->request->input('question-'.$key))) {
+                        
                         $translation = $item->translateOrNew($key);
                         $translation->question_id = $item->id;
                         $translation->question = $this->request->input('question-'.$key);
                         $translation->label = $this->request->input('label-'.$key);
+
                         if(!empty( $this->request->input('options-1-'.$key) )) {
                             $opts = [];
                             $o2 = $this->request->input('options-2-'.$key);

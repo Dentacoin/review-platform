@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-
 use App\Http\Controllers\AdminController;
+
+use App\Helpers\GeneralHelper;
 
 use App\Models\DcnReward;
 use App\Models\Review;
@@ -46,27 +45,13 @@ class YoutubeController extends AdminController {
             if($status) {
 
                 if( $review->verified ) {
-                    $amount = Reward::getReward('review_video_trusted');
                     $reward = new DcnReward();
                     $reward->user_id = $review->user_id;
-                    $reward->reward = $amount;
+                    $reward->reward = Reward::getReward('review_video_trusted');
                     $reward->platform = 'trp';
                     $reward->type = 'review';
                     $reward->reference_id = $review->id;
-
-                    $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                    $dd = new DeviceDetector($userAgent);
-                    $dd->parse();
-
-                    if ($dd->isBot()) {
-                        // handle bots,spiders,crawlers,...
-                        $reward->device = $dd->getBot();
-                    } else {
-                        $reward->device = $dd->getDeviceName();
-                        $reward->brand = $dd->getBrandName();
-                        $reward->model = $dd->getModel();
-                        $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                    }
+                    GeneralHelper::deviceDetector($reward);
                     $reward->save();
                 }
                 
@@ -78,9 +63,8 @@ class YoutubeController extends AdminController {
             } else {
                 Request::session()->flash('error-message', 'Review error approved');                
             }
-
-
         }
+
         return redirect('cms/trp/'.$this->current_subpage);
     }
 
@@ -124,7 +108,6 @@ class YoutubeController extends AdminController {
         );
         
         return true;
-
     }
 
     function videosUpdate($review) {
@@ -146,7 +129,6 @@ class YoutubeController extends AdminController {
         }
 
         return true;
-
     }
 
     function setupClient() {
@@ -163,7 +145,6 @@ class YoutubeController extends AdminController {
         }
 
         return [$client, $service];
-
     }
 
     function videosInsert($client, $service, $media_file, $properties, $part, $params) {
@@ -176,8 +157,6 @@ class YoutubeController extends AdminController {
         $response = $this->uploadMedia($client, $request, $media_file, 'video/*');
         return $response->id;
     }
-
-
 
     function getClient() {
         $client = new \Google_Client();
@@ -261,7 +240,6 @@ class YoutubeController extends AdminController {
         return $resource;
     }
 
-
     public function generateNewAccessToken() {
         $client = new \Google_Client();
         $client->setApplicationName('API Samples');
@@ -269,7 +247,6 @@ class YoutubeController extends AdminController {
         // Set to name/location of your client_secrets.json file.
         $client->setAuthConfig( storage_path() . '/client_secrets.json');
         $client->setAccessType('offline');
-
 
         // Load previously authorized credentials from a file.
         $credentialsPath = storage_path() . '/yt-oauth2.json';
@@ -292,7 +269,6 @@ class YoutubeController extends AdminController {
                 }
                 file_put_contents($credentialsPath, json_encode($accessToken));
             }
-
             return;
         }
         $client->setAccessToken($accessToken);
@@ -305,6 +281,4 @@ class YoutubeController extends AdminController {
 
         return $client;
     }
-
-
 }

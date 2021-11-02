@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use DeviceDetector\DeviceDetector;
-
 use App\Services\VoxService as ServicesVox;
 
 use App\Models\VoxAnswer;
@@ -15,6 +12,7 @@ use App\Models\Country;
 use App\Models\User;
 use App\Models\Vox;
 
+use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Response;
@@ -132,27 +130,14 @@ class VoxController extends ApiController {
                         $answer->save();
                     }
                 }
+
                 $reward = new DcnReward;
                 $reward->user_id = $user->id;
                 $reward->reference_id = $first->id;
                 $reward->type = 'survey';
                 $reward->reward = $first->getRewardTotal();
                 $reward->platform = 'vox';
-
-                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                $dd = new DeviceDetector($userAgent);
-                $dd->parse();
-
-                if ($dd->isBot()) {
-                    // handle bots,spiders,crawlers,...
-                    $reward->device = $dd->getBot();
-                } else {
-                    $reward->device = $dd->getDeviceName();
-                    $reward->brand = $dd->getBrandName();
-                    $reward->model = $dd->getModel();
-                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                }
-
+                GeneralHelper::deviceDetector($reward);
                 $reward->save();
 
                 $ret = [

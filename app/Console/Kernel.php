@@ -1544,7 +1544,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 foreach ($users as $u) {
                     $user = User::find($u->id);
 
-
                     if (!empty($user)) {
 
                         $found = false;

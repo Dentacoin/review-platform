@@ -19,6 +19,7 @@ class RewardsController extends AdminController {
         }
 
         if(Request::isMethod('post')) {
+            
             if(Auth::guard('admin')->user()->role == 'support') {
                 $this->request->session()->flash('error-message', 'You don\'t have permissions' );
                 return redirect('cms/home'); 
@@ -38,5 +39,4 @@ class RewardsController extends AdminController {
             'rewards' => Reward::get()
         ));
     }
-
 }

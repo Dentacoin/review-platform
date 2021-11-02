@@ -17,13 +17,13 @@ class SSOController extends BaseController {
 
         if(!empty(request('slug')) && !empty(request('type')) && !empty(request('token'))) {
             //logging
-	        $slug = $this->decrypt(request('slug'));
+	        $slug = GeneralHelper::decrypt(request('slug'));
 
             $user = User::find( $slug );
 
             if($user) {
-            	$token = $this->decrypt(request('token'));
-	            $type = $this->decrypt(request('type'));
+            	$token = GeneralHelper::decrypt(request('token'));
+	            $type = GeneralHelper::decrypt(request('type'));
                 $approved_statuses = array('approved', 'test', 'added_by_clinic_claimed','added_by_dentist_claimed', 'clinic_branch');
 
                 $external_patient = false;
@@ -65,7 +65,7 @@ class SSOController extends BaseController {
             }
         } else if(!empty(request('logout-token'))) {
             //logging out
-            $token = $this->decrypt(request('logout-token'));
+            $token = GeneralHelper::decrypt(request('logout-token'));
             if(!empty(session('logged_user')['token']) && session('logged_user')['token'] == $token) {
                 session([
                     'logged_user' => false
@@ -98,25 +98,7 @@ class SSOController extends BaseController {
         //     return GeneralHelper::encrypt($tokenobj->accessToken);
         // }
 
-        return User::encrypt(session('logged_user')['token']);
-    }
-
-    public function decrypt($encrypted_text) {
-        $arr = explode('|', $encrypted_text);
-        if (count($arr)!=2) {
-            return null;
-        }
-        $data = $arr[0];
-        $iv = $arr[1];
-        $iv = base64_decode($iv);
-
-        try {
-            $raw_text = openssl_decrypt($data, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), 0, $iv);
-        } catch (\Exception $e) {
-            $raw_text = false;
-        }
-
-        return $raw_text;
+        return GeneralHelper::encrypt(session('logged_user')['token']);
     }
 
     public function getUnseenNotificationsCount() {

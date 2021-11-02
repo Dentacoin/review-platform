@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use DeviceDetector\DeviceDetector;
-
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -1040,28 +1037,13 @@ class UsersController extends AdminController {
                                     }
                                     
                                     if (!empty($patient)) {
-
-                                        $amount = Reward::getReward('patient_add_dentist');
                                         $reward = new DcnReward();
                                         $reward->user_id = $patient->id;
-                                        $reward->reward = $amount;
+                                        $reward->reward = Reward::getReward('patient_add_dentist');
                                         $reward->platform = 'trp';
                                         $reward->type = 'added_dentist';
                                         $reward->reference_id = $item->id;
-
-                                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                                        $dd = new DeviceDetector($userAgent);
-                                        $dd->parse();
-
-                                        if ($dd->isBot()) {
-                                            // handle bots,spiders,crawlers,...
-                                            $reward->device = $dd->getBot();
-                                        } else {
-                                            $reward->device = $dd->getDeviceName();
-                                            $reward->brand = $dd->getBrandName();
-                                            $reward->model = $dd->getModel();
-                                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                                        }
+                                        GeneralHelper::deviceDetector($reward);
                                         $reward->save();
 
                                         $substitutions = [
@@ -1173,28 +1155,13 @@ class UsersController extends AdminController {
                                         ->first();
 
                                         if(!empty($inv)) {
-
                                             $reward = new DcnReward();
                                             $reward->user_id = $item->invitor;
                                             $reward->platform = 'trp';
                                             $reward->reward = Reward::getReward('reward_invite');
                                             $reward->type = 'invitation';
                                             $reward->reference_id = $inv->id;
-
-                                            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                                            $dd = new DeviceDetector($userAgent);
-                                            $dd->parse();
-
-                                            if ($dd->isBot()) {
-                                                // handle bots,spiders,crawlers,...
-                                                $reward->device = $dd->getBot();
-                                            } else {
-                                                $reward->device = $dd->getDeviceName();
-                                                $reward->brand = $dd->getBrandName();
-                                                $reward->model = $dd->getModel();
-                                                $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                                            }
-
+                                            GeneralHelper::deviceDetector($reward);
                                             $reward->save();
 
                                             $inv->rewarded = true;
@@ -1404,7 +1371,7 @@ class UsersController extends AdminController {
             foreach ($welcome_questions as $welcome_question) {
                 $welcome_answer = VoxAnswer::where('vox_id', $welcome_survey->id)->where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
                 if ($welcome_answer) {
-                     $habits_test_ans = true;
+                    $habits_test_ans = true;
                 }
 
                 $welcome_old = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
@@ -1614,15 +1581,7 @@ class UsersController extends AdminController {
         if(!empty($item) && $item->id != 3) {
 
             if (!empty(Request::input('deleted_reason'))) {
-                $action = new UserAction;
-                $action->user_id = $item->id;
-                $action->action = 'deleted';
-                $action->reason = Request::input('deleted_reason');
-                $action->actioned_at = Carbon::now();
-                $action->save();
-
-                $item->deleteActions();
-                User::destroy( $id );
+                $this->deleteUser( $item );
 
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
                 return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/users/users/');
@@ -1682,7 +1641,7 @@ class UsersController extends AdminController {
                         $action->save();
 
                         $dent->deleteActions();
-                        self::destroy( $dent->id );
+                        User::destroy( $dent->id );
                     }
                 }
             }
@@ -1729,22 +1688,25 @@ class UsersController extends AdminController {
             $delusers = User::whereIn('id', Request::input('ids'))->get();
             foreach ($delusers as $du) {
                 if($du->id != 3) {
-
-                    $action = new UserAction;
-                    $action->user_id = $du->id;
-                    $action->action = 'deleted';
-                    $action->reason = Request::input('mass-delete-reasons');
-                    $action->actioned_at = Carbon::now();
-                    $action->save();
-
-                    $du->deleteActions();
-                    $du->delete();
+                    $this->deleteUser( $user );
                 }
             }
         }
 
         $this->request->session()->flash('success-message', 'All selected users are deleted' );
         return redirect(url()->previous());
+    }
+
+    private function deleteUser( $user ) {
+        $action = new UserAction;
+        $action->user_id = $user->id;
+        $action->action = 'deleted';
+        $action->reason = Request::input('mass-delete-reasons');
+        $action->actioned_at = Carbon::now();
+        $action->save();
+
+        $user->deleteActions();
+        $user->delete();
     }
 
     public function massReject() {
