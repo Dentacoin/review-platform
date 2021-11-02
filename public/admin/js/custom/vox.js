@@ -401,13 +401,11 @@ $(document).ready(function(){
 				$('#translate-question').val('1');
 			}
 
-
 			var i=1;
 			dragged_item.closest('.answers-list').children().each( function() {
 				$(this).find('.answer-order-number').html(i);
 				i++;
 			});
-
 
 			// console.log(dragged_item);
 
@@ -797,7 +795,14 @@ $(document).ready(function(){
 	
 	$('#submit-the-form').click( function() {
 		if($('#translate-question').val()) {
-			$('#modal-translate-question-inner').modal('show');
+			console.log($('.question-type-input').val());
+			if($('#item-type').val() != 'hidden') {
+				$('#modal-translate-question-inner').modal('show');
+				$('#translate-question').val('1');
+			} else {
+				$('#translate-question').val('');
+				$(this).closest('form').submit();
+			}
 		} else {
 			$(this).closest('form').submit();
 		}
@@ -807,7 +812,13 @@ $(document).ready(function(){
 		$('[name="stay-on-same-page"]').val('1');
 
 		if($('#translate-question').val()) {
-			$('#modal-translate-question-inner').modal('show');
+			if($('#item-type').val() != 'hidden') {
+				$('#modal-translate-question-inner').modal('show');
+				$('#translate-question').val('1');
+			} else {
+				$('#translate-question').val('');
+				$(this).closest('form').submit();
+			}
 		} else {
 			$(this).closest('form').submit();
 		}

@@ -16,6 +16,8 @@
     @endif
 </div>
 
+<input type="hidden" id="item-type" value="{{ $item->type }}"/>
+
 <div class="row">
     <div class="col-md-12">
         {{ Form::open(array('id' => 'question-'.( !empty($question) ? 'edit' : 'add') , 'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 'class' => 'form-horizontal questions-form questions-form-new', 'method' => 'post', 'files' => true)) }}
