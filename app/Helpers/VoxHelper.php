@@ -1067,7 +1067,7 @@ class VoxHelper {
         ->where('question_id', $question_id)
         ->where('is_completed', 1)
         ->where('is_skipped', 0)
-        ->has('user');        
+        ->has('user');
 
         if( isset($options['dependency_question']) && isset($options['dependency_answer']) ) {
 
