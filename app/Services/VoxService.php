@@ -663,20 +663,25 @@ class VoxService {
         $lastkey = null;
         if(!empty($answered)) {
             foreach ($list as $aq) {
-                $lastkey = $aq;
-                
-                VoxAnswer::where('vox_id', $vox->id)
-                ->where('user_id', $user_id)
-                ->where('question_id', $lastkey->question_id)
-                ->delete();
+                if(!$aq->is_skipped) {
+                    $lastkey = $aq;
 
-                DcnReward::where('reference_id', $vox->id)
-                ->where('platform', 'vox')
-                ->where('type', 'survey')
-                ->where('user_id', $user_id)
-                ->delete();
+                    VoxAnswer::where('vox_id', $vox->id)
+                    ->where('user_id', $user_id)
+                    ->where('question_id', $lastkey->question_id)
+                    ->delete();
 
-                break;
+                    DcnReward::where('reference_id', $vox->id)
+                    ->where('platform', 'vox')
+                    ->where('type', 'survey')
+                    ->where('user_id', $user_id)
+                    ->delete();
+
+                    
+                    // var_dump('$ll');
+                    // dd($list, $answered, $aq);
+                    break;
+                }
 
                 // if(!empty($lastkey)) {
                 //     foreach($list as $k => $l) {
