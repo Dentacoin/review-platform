@@ -869,7 +869,6 @@ class VoxesController extends AdminController {
             $question_answers_count = DB::table('vox_answers')
             ->join('users', 'users.id', '=', 'vox_answers.user_id')
             ->whereNull('users.deleted_at')
-            ->whereNull('vox_answers.deleted_at')
             ->whereNull('vox_answers.is_admin')
             ->where('vox_id', $id )
             ->where('question_id', $question_id)
