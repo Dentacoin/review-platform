@@ -11,54 +11,54 @@ $(document).ready(function(){
 	if( $('#table-sort').length ) {
 
 	    dTable = $('.table').DataTable({
-	        "pageLength": 25
+	        "pageLength": 25,
 	    });
 
 		dTable.on( 'draw', function () {
 			voxTableFunctions();
 		});
 		
-	    $('#table-sort').click( function() {
-	        if(sortMode) {
-	            window.location.reload();
-	            return;
-	        }
+	    // $('#table-sort').click( function() {
+	    //     if(sortMode) {
+	    //         window.location.reload();
+	    //         return;
+	    //     }
 
-            dTable.destroy(); 
-            sortMode = true;
+        //     dTable.destroy(); 
+        //     sortMode = true;
 
-            $('#table-sort').text( $(this).attr('alternate') );
+        //     $('#table-sort').text( $(this).attr('alternate') );
 
-            $('.table tbody').sortable({
-                update: function( event, ui ) { 
-                    setTimeout( function(){
-                        var ids = [];
+        //     $('.table tbody').sortable({
+        //         update: function( event, ui ) { 
+        //             setTimeout( function(){
+        //                 var ids = [];
 
-                        $('.table tbody tr').each( function() {
-                            ids.push( $(this).attr('item-id') );
-                        });
+        //                 $('.table tbody tr').each( function() {
+        //                     ids.push( $(this).attr('item-id') );
+        //                 });
 
-                        $.ajax({
-                            url     : window.location.href + 'reorder',
-                            type    : 'POST',
-                            data    : {
-                                list: ids,
-                            },
-                            dataType: 'json',
-                            success : (function( res ) {
-                                var i=1;
-                                $('.table tbody tr').each( function() {
-                                    $(this).find('td:nth-child(2)').text(i);
-                                    i++;
-                                });
-                            }).bind( this ),
-                            error : function( data ) {
-                            }
-                        });
-                    }, 0);
-                },
-            }).disableSelection();
-        });
+        //                 $.ajax({
+        //                     url     : window.location.href + 'reorder',
+        //                     type    : 'POST',
+        //                     data    : {
+        //                         list: ids,
+        //                     },
+        //                     dataType: 'json',
+        //                     success : (function( res ) {
+        //                         var i=1;
+        //                         $('.table tbody tr').each( function() {
+        //                             $(this).find('td:nth-child(2)').text(i);
+        //                             i++;
+        //                         });
+        //                     }).bind( this ),
+        //                     error : function( data ) {
+        //                     }
+        //                 });
+        //             }, 0);
+        //         },
+        //     }).disableSelection();
+        // });
 	}
 
 	//
