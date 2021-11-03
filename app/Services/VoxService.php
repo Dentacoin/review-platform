@@ -278,6 +278,7 @@ class VoxService {
                     $array['user'] = $user;
                     $array['country_id'] = $country_id;
                     $array['isAdmin'] = $isAdmin;
+                    $array['current_admin_id'] = $admin ? $admin->id : '';
 
                     //don't randomize answers here// only in js
 
