@@ -139,7 +139,11 @@ class VoxService {
                         // }
                         
                     } else {
-                        $list = VoxAnswer::select('answer', 'question_id', 'created_at')->where('vox_id', $vox_id)->where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+                        $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
+                        ->where('vox_id', $vox_id)
+                        ->where('user_id', $user->id)
+                        ->orderBy('id', 'desc')
+                        ->get();
                         
                         $answered = [];
                         foreach ($list as $l) {
@@ -662,26 +666,28 @@ class VoxService {
         // dd($list, $answered);
         $lastkey = null;
         if(!empty($answered)) {
-            foreach ($list as $aq) {
-                if(!$aq->is_skipped) {
-                    $lastkey = $aq;
+            foreach ($list as $k=> $aq) {
+                $lastkey = $aq;
+                VoxAnswer::where('vox_id', $vox->id)
+                ->where('user_id', $user_id)
+                ->where('question_id', $lastkey->question_id)
+                ->delete();
 
-                    VoxAnswer::where('vox_id', $vox->id)
-                    ->where('user_id', $user_id)
-                    ->where('question_id', $lastkey->question_id)
-                    ->delete();
+                DcnReward::where('reference_id', $vox->id)
+                ->where('platform', 'vox')
+                ->where('type', 'survey')
+                ->where('user_id', $user_id)
+                ->delete();
 
-                    DcnReward::where('reference_id', $vox->id)
-                    ->where('platform', 'vox')
-                    ->where('type', 'survey')
-                    ->where('user_id', $user_id)
-                    ->delete();
+                unset($list[$k]);
+                // foreach($list as $k => $l) {
+                //     if($l->question_id == $lastkey->question_id) {
+                //     }
+                // }
 
-                    
-                    // var_dump('$ll');
-                    // dd($list, $answered, $aq);
-                    break;
-                }
+                // var_dump('$ll');
+                // dd($list, $answered, $aq);
+                break;
 
                 // if(!empty($lastkey)) {
                 //     foreach($list as $k => $l) {
@@ -695,12 +701,20 @@ class VoxService {
 
         // dd($lastkey->id);
         if(!empty($lastkey) && $lastkey->is_skipped) {
-            // do {
+            
+            // echo 'skipped: '.$lastkey->question_id.'<br/>';
             self::goBack($user_id, $answered, $list, $vox);
-            // } while ( $lastkey->is_skipped);
+            // return;
+        } else {
+            // echo 'not skipped: '.$lastkey->question_id.'<br/>';
+            // echo 'is it here?<br/>';
+            // echo 'return '.($lastkey ? $lastkey->question_id : 'null').'<br/>';
+            
+            session([
+                'last_key' => $lastkey ? $lastkey->question_id : VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first()->id
+            ]);
+            return $lastkey ? $lastkey->question_id : VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first()->id;
         }
-
-        return $lastkey ? $lastkey->question_id : VoxQuestion::where('vox_id', $vox->id)->where('order', 1)->first()->id;
     }
 
     public static function featuredVoxes() {
@@ -1140,11 +1154,11 @@ class VoxService {
         $cross_checks = $crossCheckParams['cross_checks'];
         $cross_checks_references = $crossCheckParams['cross_checks_references'];
 
-        $list = VoxAnswer::select('vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
+        $list = VoxAnswer::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
         ->where('vox_id', $vox->id)
         ->with('question')
         ->where('user_id', $user->id)
-        ->orderBy('created_at', 'desc')
+        ->orderBy('id', 'desc')
         ->get();
 
         // dd($list);
@@ -1167,7 +1181,13 @@ class VoxService {
         if($testmode) {
             if(Request::input('goback')) {
                 $q_id = self::goBack($user->id, $answered, $list, $vox);
-                // var_dump($q_id);
+
+                if(empty($q_id)) {
+                    $q_id = session('last_key');
+
+                    session()->pull('last_key');
+                }
+
                 if(!empty(VoxQuestion::find($q_id))) {
 
                     $vq = VoxQuestion::where('vox_id', $vox->id)->where('order', VoxQuestion::find($q_id)->order-1)->first();
@@ -1434,11 +1454,11 @@ class VoxService {
         $cross_checks = $crossCheckParams['cross_checks'];
         $cross_checks_references = $crossCheckParams['cross_checks_references'];
 
-        $list = VoxAnswer::select('vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
+        $list = VoxAnswer::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
         ->where('vox_id', $vox->id)
         // ->with('question')
         ->where('user_id', $user->id)
-        ->orderBy('created_at', 'desc')
+        ->orderBy('id', 'desc')
         ->get();
 
         $answered = [];
