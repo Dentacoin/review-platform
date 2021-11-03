@@ -5,7 +5,9 @@
     <h1 class="page-header">
         {{ trans('admin.page.'.$current_page.'.title') }}
         
-        <a class="btn btn-primary pull-right" id="table-sort" href="javascript:;" alternate="Done">Sort Surveys</a>
+        @if(false)
+            <a class="btn btn-primary pull-right" id="table-sort" href="javascript:;" alternate="Done">Sort Surveys</a>
+        @endif
         <a class="btn btn-info pull-right" href="{{ $are_all_results_shown ? url('cms/vox/list/show-individual-results/') : url('cms/vox/list/show-all-results/') }}" style="margin-right: 10px;">{{ $are_all_results_shown ? 'Hide' : 'Show' }} All Results</a>
     </h1>
     <!-- end page-header -->
