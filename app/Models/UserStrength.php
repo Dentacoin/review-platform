@@ -446,10 +446,10 @@ class UserStrength extends Model {
                 if(!empty($check_stats)) {
                     $ret['completed_steps']++;
                 }
-                $stats = Vox::where('has_stats', 1)->where('stats_featured', 1)->orderBy('sort_order', 'asc')->first();
+                $stats = Vox::where('has_stats', 1)->where('stats_featured', 1)->orderBy('launched_at', 'desc')->first();
 
                 if (empty($stats)) {
-                    $stats = Vox::where('has_stats', 1)->orderBy('sort_order', 'asc')->first();
+                    $stats = Vox::where('has_stats', 1)->orderBy('launched_at', 'desc')->first();
                 }
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.check-stats.title'),

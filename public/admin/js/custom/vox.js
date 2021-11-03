@@ -48,7 +48,7 @@ $(document).ready(function(){
                             success : (function( res ) {
                                 var i=1;
                                 $('.table tbody tr').each( function() {
-                                    $(this).find('td').first().text(i);
+                                    $(this).find('td:nth-child(2)').text(i);
                                     i++;
                                 });
                             }).bind( this ),

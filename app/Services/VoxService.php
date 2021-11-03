@@ -719,7 +719,7 @@ class VoxService {
     }
 
     public static function featuredVoxes() {
-        $featured_voxes = Vox::with('translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
+        $featured_voxes = Vox::with('translations')->where('type', 'normal')->where('featured', true)->orderBy('launched_at', 'desc')->take(9)->get();
 
         if( $featured_voxes->count() < 9 ) {
 
@@ -728,7 +728,7 @@ class VoxService {
                 $arr_v[] = $fv->id;
             }
 
-            $swiper_voxes = Vox::with('translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
+            $swiper_voxes = Vox::with('translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('launched_at', 'desc')->take( 9 - $featured_voxes->count() )->get();
 
             $featured_voxes = $featured_voxes->concat($swiper_voxes);
         }
@@ -764,7 +764,7 @@ class VoxService {
             }
         }
 
-        $s_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $filled_voxes)->take(9)->get();
+        $s_voxes = Vox::where('type', 'normal')->orderBy('launched_at', 'desc')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $filled_voxes)->take(9)->get();
         $s_voxes = $user->notRestrictedVoxesList($s_voxes);
 
         $suggested_voxes = [];
@@ -978,7 +978,7 @@ class VoxService {
                     }
                 }
 
-                $suggested_voxes = $user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
+                $suggested_voxes = $user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('launched_at', 'desc')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
 
                 $suggested_voxes = $user->notRestrictedVoxesList($suggested_voxes);
 
@@ -1050,7 +1050,7 @@ class VoxService {
                         }
                     }
 
-                    $suggested_voxes = $user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
+                    $suggested_voxes = $user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('launched_at', 'desc')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
 
                     $suggested_voxes = $user->notRestrictedVoxesList($suggested_voxes);
 
@@ -1311,7 +1311,7 @@ class VoxService {
                 }
             }
         }
-        $suggested_voxes = Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
+        $suggested_voxes = Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('launched_at', 'desc')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
 
         $suggested_voxes = $user->notRestrictedVoxesList($suggested_voxes);
 
@@ -2467,15 +2467,15 @@ class VoxService {
                 if($sort_type == 'desc') {
 
                     if(!empty($voxlist->featured)) {
-                        return 100000 - $voxlist->sort_order;
+                        return 100000 - $voxlist->launched_at->timestamp;
                     } else {
-                        return 10000 - $voxlist->sort_order;
+                        return 10000 - $voxlist->launched_at->timestamp;
                     }
                 } else {
                     if(!empty($voxlist->featured)) {
-                        return 100000 + $voxlist->sort_order;
+                        return 100000 + $voxlist->launched_at->timestamp;
                     } else {
-                        return 10000 + $voxlist->sort_order;
+                        return 10000 + $voxlist->launched_at->timestamp;
                     }
                 }
             } else if($sort_name == 'popular') {

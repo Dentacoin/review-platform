@@ -104,7 +104,7 @@ class VoxesController extends AdminController {
 
         $table_fields = [
             'selector'          => array('format' => 'selector'),
-            'sort_order'        => array('label' => 'Sort'),
+            // 'sort_order'        => array('label' => 'Sort'),
             'id'                => array(),
             'title'             => array(),
             'category'          => array('template' => 'admin.parts.table-voxes-category', 'label' => 'Cat'),
@@ -129,8 +129,15 @@ class VoxesController extends AdminController {
             $table_fields['update'] = array('template' => 'admin.parts.table-voxes-edit', 'label' => 'View');
         }
 
+        $voxes_with_launched = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->whereNotNull('launched_at')->orderBy('launched_at', 'desc')->get();
+        $voxes_without_launched = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->whereNull('launched_at')->orderBy('id', 'desc')->whereNotIn('id', [48,80])->get();
+
+        $voxes = collect();
+		$voxes = $voxes_without_launched->concat($voxes_with_launched);
+
     	return $this->showView('voxes', array(
-            'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
+            // 'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
+            'voxes' => $voxes,
             'active_voxes_count' => Vox::where('type', '!=', 'hidden')->count(),
             'hidden_voxes_count' => Vox::where('type', 'hidden')->count(),
             'are_all_results_shown' => session('vox-show-all-results') ? true : false,
@@ -173,7 +180,6 @@ class VoxesController extends AdminController {
             $newvox = new Vox;
             $this->saveOrUpdate($newvox);
 
-
             Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.added'));
             return redirect('cms/'.$this->current_page.'/edit/'.$newvox->id);
         }
@@ -185,7 +191,7 @@ class VoxesController extends AdminController {
             'question_types' => $this->question_types,
             'stat_types' => $this->stat_types,
             'stat_top_answers' => $this->stat_top_answers,
-            'all_voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
+            'all_voxes' => Vox::orderBy('launched_at', 'desc')->get(),
         ));
     }
 
@@ -474,7 +480,7 @@ class VoxesController extends AdminController {
                 'linked_triggers' => $linked_triggers,
                 'trigger_question_id' => $trigger_question_id,
                 'trigger_valid_answers' => $trigger_valid_answers,
-                'all_voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
+                'all_voxes' => Vox::orderBy('launched_at', 'desc')->get(),
                 'q_trigger_obj' => $q_trigger_obj,
                 'q_trigger_multiple_answ' => $q_trigger_multiple_answ,
                 'error_arr' => $error_arr,
@@ -1853,7 +1859,7 @@ class VoxesController extends AdminController {
                 'vox_id' => $vox_id,
                 'respondents' => $respondents,
                 'vox' => $vox,
-                'voxes' => Vox::orderBy('sort_order', 'asc')->get(),
+                'voxes' => Vox::orderBy('launched_at', 'desc')->get(),
                 'count' =>($page - 1)*$ppp ,
                 'start' => $start,
                 'end' => $end,
@@ -1868,7 +1874,7 @@ class VoxesController extends AdminController {
             ];
         } else {
             $viewParams = [
-                'voxes' => Vox::orderBy('sort_order', 'asc')->get(),
+                'voxes' => Vox::orderBy('launched_at', 'desc')->get(),
             ];
         }
 
@@ -2055,7 +2061,7 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('voxes-export-survey-data', array(
-            'voxes' => Vox::orderBy('sort_order', 'ASC')->get()
+            'voxes' => Vox::orderBy('launched_at', 'desc')->get()
         ));
     }
 

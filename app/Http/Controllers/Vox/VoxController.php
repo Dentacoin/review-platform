@@ -45,7 +45,7 @@ class VoxController extends FrontController {
      * bottom content of single vox page
      */
 	public function vox_public_down($locale=null) {
-		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
+		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('launched_at', 'desc')->take(9)->get();
 
 		if( $featured_voxes->count() < 9 ) {
 
@@ -54,7 +54,7 @@ class VoxController extends FrontController {
 				$arr_v[] = $fv->id;
 			}
 
-			$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
+			$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('launched_at', 'desc')->take( 9 - $featured_voxes->count() )->get();
 
 			$featured_voxes = $featured_voxes->concat($swiper_voxes);
 		}
