@@ -2467,15 +2467,15 @@ class VoxService {
                 if($sort_type == 'desc') {
 
                     if(!empty($voxlist->featured)) {
-                        return 100000 - $voxlist->launched_at->timestamp;
+                        return 1000000000000000000000 - $voxlist->launched_at->timestamp;
                     } else {
-                        return 10000 - $voxlist->launched_at->timestamp;
+                        return 1000000000000 + $voxlist->launched_at->timestamp;
                     }
                 } else {
                     if(!empty($voxlist->featured)) {
-                        return 100000 + $voxlist->launched_at->timestamp;
+                        return 1000000000000000000000 + $voxlist->launched_at->timestamp;
                     } else {
-                        return 10000 + $voxlist->launched_at->timestamp;
+                        return 1000000000000 - $voxlist->launched_at->timestamp;
                     }
                 }
             } else if($sort_name == 'popular') {
