@@ -1048,7 +1048,10 @@ class VoxesController extends AdminController {
             }
         }
 
-        $item->type = $this->request->input('type');
+        if($item->type == 'normal' && $this->request->input('type') == 'hidden' && !$this->request->input('hide-survey')) {
+        } else {
+            $item->type = $this->request->input('type');
+        }
         $item->scheduled_at = $this->request->input('scheduled_at');
         $item->featured = $this->request->input('featured');
         $item->stats_featured = $this->request->input('stats_featured');
@@ -2658,5 +2661,31 @@ class VoxesController extends AdminController {
         }
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/home');
+    }
+
+    public function hideSurvey($id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');
+        }
+
+        if(!$this->request->input('hide-survey-confirm') || strtolower($this->request->input('hide-survey-confirm')) != 'hide') {
+            $this->request->session()->flash('error-message', 'The survey is not hidden' );
+            return redirect('cms/vox/list');
+        }
+
+        $item = Vox::find($id);
+
+        if(!empty($item)) {
+            $item->type = 'hidden';
+            $item->save();
+
+            $this->request->session()->flash('success-message', 'The survey is hidden' );
+            return redirect('cms/vox/list');
+        }
+
+        $this->request->session()->flash('error-message', 'Survey not found' );
+        return redirect('cms/vox/list');
     }
 }

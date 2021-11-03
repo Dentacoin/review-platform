@@ -211,6 +211,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('vox/get-reward/{id}', 						'VoxesController@getReward');
 	Route::post('vox/get-duration/{id}', 					'VoxesController@getDuration');
 	Route::post('vox/translate-question', 					'VoxesController@translateQuestion');
+	Route::post('vox/hide-survey/{id}', 					'VoxesController@hideSurvey');
 
 	Route::get('vox/polls', 								'PollsController@list');
 	Route::any('vox/polls/add', 							'PollsController@add');

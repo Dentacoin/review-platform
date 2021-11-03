@@ -148,6 +148,30 @@
         </div>
     </div>
 
+    <div id="hideSurveyModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Are you sure you want to hide this survey?</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="hide-survey-form-voxes" method="post" action="{{ url('cms/vox/hide-survey/') }}" original-action="{{ url('cms/vox/hide-survey/') }}">
+                        {{ Form::text('hide-survey-confirm', null, array('class' => 'form-control input-title', 'placeholder' => 'Type HIDE to confirm')) }}
+                        
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Submit</button>
+
+                        <label class="alert alert-danger" style="display: none;margin-top: 10px;">If you want to hide the survey, please type HIDE</label>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style type="text/css">
         .table-select-all {
             display: none;

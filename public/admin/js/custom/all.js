@@ -47,19 +47,24 @@ $(document).ready(function(){
 		
 		var id = $(this).attr('id');
 		var field = $(this).attr('field');
-        $.ajax({
-            url     : 'cms/vox/edit-field/'+id+'/'+field+'/'+( $(this).is(':checked') ? 1 : 0 ),
-            type    : 'GET',
-            success: function( data ) {
-            	if(data.message) {
 
-	            	$('#modal-error').modal('show');
-					$('#modal-error .modal-body p').html(data.message);
-            	}
-			}
-        });
-
-	} );
+		if(field == 'type' && !$(this).is(':checked')) {
+			$('#hideSurveyModal').modal('show');
+			$('#hideSurveyModal').find('form').attr('action', $('#hideSurveyModal').find('form').attr('original-action')+'/'+id);
+		} else {
+			$.ajax({
+				url     : 'cms/vox/edit-field/'+id+'/'+field+'/'+( $(this).is(':checked') ? 1 : 0 ),
+				type    : 'GET',
+				success: function( data ) {
+					if(data.message) {
+	
+						$('#modal-error').modal('show');
+						$('#modal-error .modal-body p').html(data.message);
+					}
+				}
+			});
+		}
+	});
 
 	$('.table-select-all').click( function() {
 		
