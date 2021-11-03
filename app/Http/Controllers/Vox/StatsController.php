@@ -1877,7 +1877,7 @@ class StatsController extends FrontController {
         }
 
         //reorder answers by respondents desc if they're not from scale!!
-        return empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number';
+        return empty($question->stats_top_answers) && empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number';
     }
                     
 }
