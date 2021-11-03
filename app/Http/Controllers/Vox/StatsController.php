@@ -1863,6 +1863,11 @@ class StatsController extends FrontController {
     }
 
     private function reorderStats($main_chart, $question) {
+
+        if(!empty($question->stats_top_answers)) {
+            return true;
+        }
+
         $reorder = true;
 
         $count_diez = 0;
@@ -1877,7 +1882,7 @@ class StatsController extends FrontController {
         }
 
         //reorder answers by respondents desc if they're not from scale!!
-        return !empty($question->stats_top_answers) ? true : (empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number');
+        return empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number';
     }
                     
 }
