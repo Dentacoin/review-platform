@@ -15,6 +15,8 @@ class UserBan extends Model {
         'expires',
         'type',
         'ban_for_id',
+        'question_id',
+        'answer',
         'notified',
     ];
 
@@ -24,6 +26,14 @@ class UserBan extends Model {
         'updated_at',
         'deleted_at',
     ];
+
+    public function vox() {
+        return $this->hasOne('App\Models\Vox', 'id', 'ban_for_id');
+    }
+
+    public function question() {
+        return $this->hasOne('App\Models\VoxQuestion', 'id', 'question_id');
+    }
 }
 
 ?>

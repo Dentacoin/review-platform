@@ -1,3 +1,3 @@
 @if( $item->ban_for_id )
-	{{ App\Models\Vox::find($item->ban_for_id) ? App\Models\Vox::find($item->ban_for_id)->title : '' }}
+	<a href="{{ url('cms/vox/edit/'.$item->ban_for_id.'/') }}">{{ $item->vox ? $item->vox->title : '' }}</a>
 @endif

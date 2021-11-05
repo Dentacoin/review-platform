@@ -1799,6 +1799,10 @@ class VoxService {
                             UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->delete();
                                 
                             $ban = $user->banUser('vox', 'mistakes', $vox->id);
+                            $ban['ban']->question_id = $question->id;
+                            $ban['ban']->answer = $a;
+                            $ban['ban']->save();
+
                             $ret['ban'] = true;
                             $ret['ban_duration'] = $ban['days'];
                             $ret['ban_times'] = $ban['times'];
@@ -2068,6 +2072,10 @@ class VoxService {
                                 $ret['content'] = $contents[$prev_bans];
                             } else {
                                 $ban = $user->banUser('vox', 'too-fast', $vox->id);
+                                $ban['ban']->question_id = $question->id;
+                                $ban['ban']->answer = $a;
+                                $ban['ban']->save();
+
                                 $ret['ban'] = true;
                                 $ret['ban_duration'] = $ban['days'];
                                 $ret['ban_times'] = $ban['times'];
