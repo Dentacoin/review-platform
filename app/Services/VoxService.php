@@ -1457,7 +1457,7 @@ class VoxService {
 
         $list = VoxAnswer::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
         ->where('vox_id', $vox->id)
-        // ->with('question')
+        ->with('question')
         ->where('user_id', $user->id)
         ->orderBy('id', 'desc')
         ->get();
@@ -1720,7 +1720,6 @@ class VoxService {
 
                 if( $valid ) {
                     $is_scam = false;
-
                     if($question->is_control) {
 
                         if ($question->is_control == '-1') {
@@ -1745,8 +1744,8 @@ class VoxService {
                         }
                     }
 
-                    if($is_scam && !$testmode && !$user->is_partner) {
-                    
+                    // dd($is_scam);
+                    if($is_scam && !$testmode && !$user->is_partner) { //confirmed from Petya for is_partner 05.11.21
                         $wrongs = UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
                         $wrongs++;
 
@@ -2031,7 +2030,7 @@ class VoxService {
                     });
 
                     $ppp = 10;
-                    if( $reallist->count() && $reallist->count()%$ppp==0 && !$testmode && !$user->is_partner ) {
+                    if( $reallist->count() && $reallist->count()%$ppp==0 && !$testmode && !$user->is_partner ) { //confirmed from Petya for is_partner 05.11.21
 
                         $pagenum = $reallist->count()/$ppp;
                         $start = $reallist->forPage($pagenum, $ppp)->first();
