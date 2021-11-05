@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\IncompleteRegistration;
 use App\Models\VoxQuestionAnswered;
+use App\Models\UserSurveyWarning;
 use App\Models\UnclaimedDentist;
 use App\Models\UserGuidedTour;
 use App\Models\DcnTransaction;
@@ -1814,12 +1815,14 @@ class UsersController extends AdminController {
         $item = User::withTrashed()->find($id);
         $ban = UserBan::find($ban_id);
 
+        
         if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
             $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
+            
             $item->sendgridSubscribeToGroup($ban->domain);
-
+            
             UserBan::destroy( $ban_id );
+            UserSurveyWarning::where('user_id', $ban->user_id)->delete();
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.ban-deleted') );
