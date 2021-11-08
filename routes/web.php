@@ -296,6 +296,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::any('ips/bad', 							'IPsController@bad');
 	Route::any('ips/vpn', 							'IPsController@vpn');
+
+	Route::get('meetings',							'MeetingsController@list');
+	Route::any('meetings/edit/{id}',				'MeetingsController@edit');
 });
 
 
@@ -339,7 +342,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 	Route::get('poll-reward-price',					'DailyPollsController@pollRewardPrice');
 	Route::post('todays-poll-answer',				'DailyPollsController@todaysPollAnswer');
 	Route::post('get-daily-poll-by-date',			'DailyPollsController@getDailyPollByDate');
-
 });
 
 

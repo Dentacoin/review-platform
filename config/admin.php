@@ -145,6 +145,12 @@ return [
                 '../../plugins/html5lightbox/html5lightbox.js'
             )
         ),
+        'meetings' => array(
+            'icon' => 'headphones',
+            'js' => array(
+                'meetings.js',
+            )
+        ),
         'pages' => array(
             'icon' => 'image',
             'subpages' => array(

@@ -230,7 +230,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="server_pending_trans_check" class="col-md-2 control-label" style="text-align: left;">Allow check for server pending transactions</label>
+                            <label for="server_pending_trans_check" class="col-md-2 control-label" style="text-align: left;">Check for server pending transactions</label>
                             <div class="col-md-10">
                                 <input type="checkbox" name="server_pending_trans_check" value="1" id="server_pending_trans_check" {!! !empty($withdrawal_conditions->server_pending_trans_check) ? 'checked="checked"' : '' !!}>
                             </div>
