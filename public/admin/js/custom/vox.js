@@ -227,7 +227,7 @@ $(document).ready(function(){
 	});
 
 	$('.btn-remove-answer').click( function() {
-		var group = $(this).closest('.input-group');
+		var group = $(this).closest('.ui-sortable-handle');
 		var num = 1;
 		var iterator = group;
 
@@ -236,7 +236,7 @@ $(document).ready(function(){
 			num++;
 		}
 
-		$('.answers-list .input-group:nth-child('+num+')').remove();
+		$('.answers-list .ui-sortable-handle:nth-child('+num+')').remove();
 		$('#translate-question').val('1');
 	});
 
