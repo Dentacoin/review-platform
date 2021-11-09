@@ -1569,6 +1569,7 @@
                                 'ban_for'           => array('template' => 'admin.parts.table-bans-for'),
                                 'question_id'       => array('template' => 'admin.parts.table-user-ban-question', 'label' => 'Question'),
                                 'answer'            => array('label' => 'Answer'),
+                                'admin_description' => array('label' => 'Description'),
                                 'delete'            => array('template' => 'admin.parts.table-bans-delete'),
                             ],
                             'table_data' => $item->bansWithDeleted,
