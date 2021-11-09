@@ -1517,7 +1517,7 @@ class VoxesController extends AdminController {
 
                     $translation = $item->translateOrNew($lang_code);
                     $translation->vox_scale_id = $item->id;
-                    $translation->answers = json_decode($answers, true)['translations'][0]['text'];
+                    $translation->answers = isset(json_decode($answers, true)['translations']) ? json_decode($answers, true)['translations'][0]['text'] : '';
                     $translation->save();
                 }
             }
