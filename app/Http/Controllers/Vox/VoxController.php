@@ -28,7 +28,7 @@ class VoxController extends FrontController {
 			return ServicesVox::surveyAnswer($vox, $this->user, false);
 		} else {
 			$doVox = ServicesVox::doVox($vox, $this->user, false);
-
+			
 			if(isset($doVox['view'])) {
 				if($doVox['view'] == 'vox') {
 					$this->current_page = 'questionnaire';

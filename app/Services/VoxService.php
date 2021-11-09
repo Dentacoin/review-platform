@@ -41,7 +41,7 @@ use DB;
 class VoxService {
 
     public static function getNextQuestionFunction($admin, $user, $for_app, $country_id) {
-
+        
         if(!empty($user)) {
             $vox_id = request('vox_id');
             $question_id = request('question_id');
@@ -60,7 +60,7 @@ class VoxService {
             if(!empty($vox_id)) {
                 $vox = Vox::select('id')->where('id', $vox_id);
 
-                if(empty($testmode)) {
+                if(empty($admin)) {
                     $vox = $vox->where('type', 'normal');
                 }
                 $vox = $vox->first();
@@ -920,8 +920,7 @@ class VoxService {
 
         $taken = $user->filledVoxes();
 
-        if((!$isAdmin && $vox->type=='hidden') || !in_array($user->status, config('dentist-statuses.approved')) ) {
-
+        if((!Auth::guard('admin')->user() && $vox->type=='hidden') || !in_array($user->status, config('dentist-statuses.approved')) ) {
             if($for_app) {
                 return Response::json( array(
                     'success' => false
@@ -1392,7 +1391,7 @@ class VoxService {
             $testmode = session('testmode') && $isAdmin;
         }
 
-        if(!$testmode) {
+        if(!$isAdmin) {
             if($vox->type=='hidden' ) {
                 return Response::json( $ret );
             }
