@@ -55,7 +55,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">Single page image</label>
+                                <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">Add Social image</label>
                                 <div class="col-md-10">
                                     {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
                                 </div>
