@@ -565,30 +565,7 @@ class VoxService {
         return $agegroup;
     }
 
-    public static function testAnswers($user_id, $answered, $q_id, $vox) {
-
-        // if(!empty($answered)) {
-
-        //     foreach ($vox->questions as $question) {
-        //         if($question->id==$q_id) {
-        //             foreach ($vox->questions as $vq) {
-        //                 if($vq->order >= $question->order) {
-        //                     VoxAnswer::where('vox_id', $vox->id)
-        //                     ->where('user_id', $user_id)
-        //                     ->where('question_id', $vq->id)
-        //                     ->delete();
-
-        //                     DcnReward::where('reference_id', $vox->id)
-        //                     ->where('platform', 'vox')
-        //                     ->where('type', 'survey')
-        //                     ->where('user_id', $user_id)
-        //                     ->delete();
-        //                 }
-        //             }
-        //             break;
-        //         }
-        //     }
-        // }
+    public static function testAnswers($user_id, $q_id, $vox) {
 
         VoxAnswer::where('vox_id', $vox->id)
         ->where('user_id', $user_id)
@@ -662,12 +639,11 @@ class VoxService {
         ];
     }
 
-    public static function goBack($user_id, $answered, $list, $vox) {
+    public static function goBack($user_id, $list, $vox) {
         // var_dump('$list');
-        // dd($list, $answered);
         $lastkey = null;
-        if(!empty($answered)) {
-            foreach ($list as $k=> $aq) {
+        if($list->isNotEmpty()) {
+            foreach ($list as $k => $aq) {
                 $lastkey = $aq;
                 VoxAnswer::where('vox_id', $vox->id)
                 ->where('user_id', $user_id)
@@ -687,7 +663,7 @@ class VoxService {
                 // }
 
                 // var_dump('$ll');
-                // dd($list, $answered, $aq);
+                // dd($list, $aq);
                 break;
 
                 // if(!empty($lastkey)) {
@@ -704,7 +680,7 @@ class VoxService {
         if(!empty($lastkey) && $lastkey->is_skipped) {
             
             // echo 'skipped: '.$lastkey->question_id.'<br/>';
-            self::goBack($user_id, $answered, $list, $vox);
+            self::goBack($user_id, $list, $vox);
             // return;
         } else {
             // echo 'not skipped: '.$lastkey->question_id.'<br/>';
@@ -1181,7 +1157,7 @@ class VoxService {
 
         if($testmode) {
             if(Request::input('goback')) {
-                $q_id = self::goBack($user->id, $answered, $list, $vox);
+                $q_id = self::goBack($user->id, $list, $vox);
 
                 if(empty($q_id)) {
                     $q_id = session('last_key');
@@ -1215,7 +1191,7 @@ class VoxService {
             }
 
             if(Request::input('start-from')) {
-                $q_id = self::testAnswers($user->id, $answered, Request::input('start-from'), $vox);
+                $q_id = self::testAnswers($user->id, Request::input('start-from'), $vox);
 
                 if(!empty(VoxQuestion::find($q_id))) {
 
@@ -1721,17 +1697,16 @@ class VoxService {
                 if( $valid ) {
                     $is_scam = false;
                     if($question->is_control) {
-
                         if ($question->is_control == '-1') {
                             if($type == 'single') {
-                                $is_scam = end($answered) != $a;
+                                $is_scam = reset($answered) != $a;
                             } else if($type == 'multiple') {
                                 $end_answered = [];
 
-                                if (!is_array(end($answered))) {
-                                    $end_answered[] = end($answered);
+                                if (!is_array(reset($answered))) {
+                                    $end_answered[] = reset($answered);
                                 } else {
-                                    $end_answered = end($answered);
+                                    $end_answered = reset($answered);
                                 }
                                 $is_scam = !empty(array_diff( $end_answered, $a ));
                             }
@@ -1786,7 +1761,7 @@ class VoxService {
 
                             if( $wrongs==1 && !$prev_bans ) {
                                 $ret['action'] = 'roll-back';
-                                $ret['go_back'] = self::goBack($user->id, $answered, $list, $vox);
+                                $ret['go_back'] = self::goBack($user->id, $list, $vox);
                             } else {
                                 $ret['action'] = 'start-over';
                                 $ret['go_back'] = $vox->questions->first()->id;
