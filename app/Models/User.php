@@ -138,6 +138,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'recover_at',
         'self_deleted_at',
         'withdraw_at',
+        'vip_access_until',
         'created_at',
         'updated_at',
         'deleted_at',

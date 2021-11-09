@@ -401,7 +401,6 @@ PENDING TRANSACTIONS
         })->cron("*/30 * * * *");
 
 
-
         $schedule->call(function () {
 
             $cron_running = CronjobRun::first();
@@ -450,7 +449,6 @@ NEW & NOT SENT TRANSACTIONS
                 $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
                 $transactions = $new_transactions->concat($not_sent_transactions);
 
-
                 if($transactions->isNotEmpty()) {
 
                     $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
@@ -482,7 +480,6 @@ NEW & NOT SENT TRANSACTIONS
                     }
                 }
 
-
                 echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
                 CronjobRun::destroy($cronjob_stars->id);
@@ -491,7 +488,6 @@ NEW & NOT SENT TRANSACTIONS
             }
 
         })->cron("* * * * *");
-
 
 
         $schedule->call(function () {
@@ -543,7 +539,6 @@ PAID BY USER TRANSACTIONS
                     $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
                     $transactions = $new_transactions->concat($not_sent_transactions);
 
-
                     if($transactions->isNotEmpty()) {
 
                         $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
@@ -575,7 +570,6 @@ PAID BY USER TRANSACTIONS
                         }
                     }
                 }
-
 
                 echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
@@ -705,7 +699,6 @@ UNCONFIRMED TRANSACTIONS
                                         }
                                     }
                                 }
-
                             }
                         }
 
@@ -814,7 +807,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 ],
             ];
 
-
             foreach ($alerts as $data) {
                 echo ' DATA URL '.$data['url'];
                 $curl = file_get_contents($data['url']);
@@ -847,7 +839,8 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                                     //$message->to( 'dokinator@gmail.com' );
                                     $message->replyTo($sender, $sender_name);
                                     $message->subject($currency.' balance is running low');
-                            });
+                                }
+                            );
                         }
                     }
                 }
@@ -858,6 +851,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'DCN Low Balance Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("30 7 * * *"); //10:30h BG Time
+
 
         $schedule->call(function () {
             echo 'Suspicious Dentist Delete Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -889,7 +883,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     User::destroy( $user->id );
                 }
 
-
                 $mtext = 'We just deleted the following dentists, because they were suspicious for over a week:
 
                 '.implode(', ', $userNames ).'
@@ -911,6 +904,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'Suspicious Dentist Delete Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->cron("30 7 * * *"); //10:30h BG Time
+
 
         $schedule->call(function () {
             echo 'Suspicious Patients Delete Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -935,6 +929,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'Suspicious Patients Delete Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->dailyAt('13:00');
+
 
         $schedule->call(function () {
             echo 'Delete pending ban appeals Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -980,7 +975,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         })->cron("30 7 * * *"); //10:30h BG Time
 
 
-
         $schedule->call(function () {
             echo 'First 3 weeks engagement email 2 START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
@@ -1021,7 +1015,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             }
 
             echo 'First 3 weeks engagement email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
-        
 
             //Email 3
             $query = "
@@ -1340,8 +1333,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'No reviews last 30 days Email 3 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
 
-
-
             //Email4
 
             $query = "
@@ -1419,7 +1410,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
 
         })->cron("15 */6 * * *"); //05:00h
-
 
 
         // $schedule->call(function () {
@@ -1534,7 +1524,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             // Cron runs 1x per month
             // AND `id` NOT IN ( SELECT `user_id` FROM `emails` WHERE  `template_id` IN ( 55, 56) AND `created_at` > '".date('Y-m-d', time() - 86400*20)." 00:00:00' )
-
 
             $users = DB::select(
                 DB::raw($query), []
@@ -1704,7 +1693,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         })->monthlyOn(1, '12:30');
 
 
-
         //Daily Polls
 
         $schedule->call(function () {
@@ -1719,7 +1707,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'Daily Poll DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->dailyAt('01:00');
-
 
 
         $schedule->call(function () {
@@ -1913,7 +1900,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                                 }
                             }
                         }
-
 
                         if(!empty($href)) {
 
@@ -2130,6 +2116,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             
         })->cron("30 7 * * *"); //10:30h BG Time
 
+
         $schedule->call(function () {
             echo 'Count Unknown Countries from UserLogin Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
@@ -2188,7 +2175,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'Count Unknown Countries from UserLogin Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->cron('0 0 */14 * *'); //10:30h BG Time
-
 
 
         $schedule->call(function () {
@@ -2273,7 +2259,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 $gas->save();
             }
 
-
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_RETURNTRANSFER => 1,
@@ -2296,7 +2281,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         })->cron("*/15 * * * *");
 
 
-
         $schedule->call(function () {
             echo 'Video reviews cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
@@ -2317,7 +2301,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'Video reviews cron - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron('*/5 * * * *');
-
 
 
         $schedule->call(function () {
@@ -2358,6 +2341,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             
         })->dailyAt('04:00');
 
+
         $schedule->call(function () {
             echo 'Scheduled surveys '.PHP_EOL.PHP_EOL.PHP_EOL;
 
@@ -2370,7 +2354,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
                     $hv->type = 'normal';
                     $hv->save();
-
                     $hv->activeVox();
                 }
             }
@@ -2471,11 +2454,49 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             
         // })->dailyAt('14:36');
 
+
         $schedule->call(function () {
-            echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
+            echo 'Pending transactions on server check - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $withdrawal_conditions = WithdrawalsCondition::find(1);
+
+            if(!empty($withdrawal_conditions) && !$withdrawal_conditions->server_pending_trans_check) {
+
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_POST => 1,
+                    CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-pending-transactions',
+                    CURLOPT_SSL_VERIFYPEER => 0,
+                ));
+                
+                $resp = json_decode(curl_exec($curl));
+                curl_close($curl);
+
+                if(!empty($resp) && isset($resp->success) && $resp->success > 50) {
+                    $mtext = 'Check for pending transactions is disabled and there are '.$resp->success.' pending transactions';
+        
+                    Mail::raw($mtext, function ($message) {
+    
+                        $sender = config('mail.from.address');
+                        $sender_name = config('mail.from.name');
+    
+                        $message->from($sender, $sender_name);
+                        $message->to('petya.ivanova@dentacoin.com');
+                        $message->subject('Suspicious dentists deleted');
+                    });
+                }
+            }
+
+            echo 'Pending transactions on server check - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->dailyAt('10:00');
+
+
+        $schedule->call(function () {
+            echo 'TEST CRON END '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *");
-
     }
 
     /**
@@ -2483,8 +2504,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
      *
      * @return void
      */
-    protected function commands()
-    {
+    protected function commands() {
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');

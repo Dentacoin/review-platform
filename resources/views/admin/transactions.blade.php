@@ -240,7 +240,7 @@
                             <div class="col-md-4">
                                 <input class="form-control" type="number" id="count_pending_transactions" name="count_pending_transactions" value="{{ $withdrawal_conditions->count_pending_transactions }}" />
                             </div>
-                            <a href="javascript:;" class="col-md-2 btn btn-primary" id="check-cur-pending-tx">check current pending tx count</a>
+                            <a href="javascript:;" class="col-md-2 btn btn-primary" id="check-cur-pending-tx">check pending tx count</a>
                             <div class="col-md-4" id="cur-pending-tx">
                                 
                             </div>
