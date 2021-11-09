@@ -1382,7 +1382,8 @@ class VoxService {
         if(empty($user) || empty($vox) || !in_array($user->status, config('dentist-statuses.approved'))) {
             return Response::json( $ret );
         }
-
+        
+        $isAdmin=false;
         if($for_app) {
             $testmode = $user->is_admin;
         } else {
