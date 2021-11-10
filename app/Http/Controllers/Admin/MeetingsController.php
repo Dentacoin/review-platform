@@ -102,6 +102,7 @@ class MeetingsController extends AdminController {
                 $item->checklist_title = $this->request->input('checklist_title');
                 $item->duration = $this->request->input('duration');
                 $item->video_id = $this->request->input('video_id');
+                $item->video_title = $this->request->input('video_title');
                 $item->iframe_id = $this->request->input('iframe_id');
                 $item->save();
 

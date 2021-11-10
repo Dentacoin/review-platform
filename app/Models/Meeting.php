@@ -21,6 +21,7 @@ class Meeting extends Model {
         'after_checklist_info',
         'video_id',
         'iframe_id',
+        'video_title',
         'hasimage',
     ];
 

@@ -41,6 +41,13 @@
                             </div>
 
                             <div class="form-group">
+                                <label class="col-md-2 control-label">Video title</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="video_title" class="form-control" value="{{ $item->video_title }}" maxlength="128"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-md-2 control-label">YouTube video id</label>
                                 <div class="col-md-10">
                                     <input type="text" name="video_id" class="form-control" value="{{ $item->video_id }}" maxlength="20"/>
