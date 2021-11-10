@@ -159,13 +159,13 @@ class AdminController extends BaseController {
         $params['counters']['trp'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         $params['counters']['ban_appeals'] = BanAppeal::where('status', 'new')->whereNull('pending_fields')->count();
-        $params['counters']['transactions'] = TransactionScammersByDay::where('checked', '!=', 1)->count() ? TransactionScammersByDay::where('checked', '!=', 1)->count() : TransactionScammersByBalance::where('checked', '!=', 1)->count();
+        $params['counters']['transactions'] = DcnTransaction::where('status', 'first')->count();
         $params['counters']['support'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
         $params['counters']['contact'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
         $params['counters']['orders'] = Order::whereNull('is_send')->count();
         $params['dcn_warning_transaction'] = DcnTransaction::where('status', 'dont_retry')->count();
 
-        $params['cache_version'] = '2021110901';
+        $params['cache_version'] = '20211110';
         //dd($params['counters']);
 
         if($this->current_page!='home' && !isset($menu[$this->current_page])) {

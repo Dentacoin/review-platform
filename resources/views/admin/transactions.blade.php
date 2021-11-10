@@ -279,6 +279,27 @@
         </div>
     </div>
 
+    <div id="suspiciousUserModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Make user suspicious</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="suspicious-form" action="{{ url('cms/transactions/user-suspicious/') }}" original-action="{{ url('cms/transactions/user-suspicious/') }}" method="post">    
+                        <textarea class="form-control" name="suspicious-reason" placeholder="Reason why this user is suspicious"></textarea>
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <style type="text/css">
         .trans-history-wrapper .trans-history {

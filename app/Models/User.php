@@ -164,6 +164,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function allBanAppeals() {
         return $this->hasMany('App\Models\BanAppeal', 'user_id', 'id')->orderBy('id', 'DESC');
     }
+    public function approvedBanAppeals() {
+        return $this->hasMany('App\Models\BanAppeal', 'user_id', 'id')->where('status', 'approved')->orderBy('id', 'DESC');
+    }
     public function oldEmails() {
         return $this->hasMany('App\Models\OldEmail', 'user_id', 'id')->orderBy('id', 'DESC');
     }
@@ -2246,6 +2249,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
                     }
                 }
             }
+        }
+
+        if($this->approvedBanAppeals->isNotEmpty()) {
+            $info .= '<br/><p style="color:green">approved ban appeal</p>';
         }
 
         if(!empty($this->permanentVoxBan)) {

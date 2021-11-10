@@ -116,4 +116,8 @@ $(document).ready(function(){
 		$('#count_pending_transactions').prop('disabled', 'disabled');
 	}
 	
+	$('.make-user-suspicious').click( function() {
+		var action = $('#suspiciousUserModal form').attr('original-action') + '/' + $(this).attr('user-id');
+		$('#suspiciousUserModal form').attr('action' , action);
+	});
 });

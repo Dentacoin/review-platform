@@ -793,4 +793,42 @@ class TransactionsController extends AdminController {
 
         return Response::json( ['data' => $connected_nodes] );
     }
+
+    public function makeUserSuspicious($user_id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $user = User::find($user_id);
+
+        if($user && !$user->is_dentist) {
+
+            $user_history = new UserHistory;
+            $user_history->admin_id = $this->user->id;
+            $user_history->user_id = $user->id;
+            $user_history->patient_status = $user->patient_status;
+            $user_history->save();
+            
+            $user->patient_status = 'suspicious_admin';
+            $user->save();
+
+            if(!empty($this->request->input('suspicious-reason'))) {
+                $action = new UserAction;
+                $action->user_id = $user_id;
+                $action->action = 'suspicious_admin';
+                $action->reason = $this->request->input('suspicious-reason');
+                $action->actioned_at = Carbon::now();
+                $action->save();
+            }
+
+            $user->sendTemplate(110, null, 'dentacoin');
+            $user->removeTokens();
+            $user->logoutActions();
+        }
+
+        $this->request->session()->flash('success-message', 'The user is now suspicious' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
 }
