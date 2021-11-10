@@ -508,7 +508,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $times;
     }
 
-    public function banUser($domain, $reason='', $ban_for_id=null) {
+    public function banUser($domain, $reason='', $ban_for_id=null, $question_id=null, $answer=null) {
         $times = $this->getPrevBansCount($domain, $reason);
         $ban = new UserBan;
         $ban->user_id = $this->id;
@@ -529,6 +529,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if($reason) {
             $ban->type = $reason;
         }
+
+        if(!empty($question_id)) {
+            $ban->question_id = $question_id;
+        }
+        if(!empty($answer)) {
+            $ban->answer = $answer;
+        }
+
         $ban->save();
 
         if($times<3) {
