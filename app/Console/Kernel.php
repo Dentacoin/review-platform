@@ -2494,6 +2494,23 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Remove user\'s vip access START'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $users_with_vip_access = User::where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now())->get();
+
+            if($users_with_vip_access->isNotEmpty()) {
+                foreach($users_with_vip_access as $user) {
+                    $user->vip_access = false;
+                    $user->save();
+                }
+            }
+
+            echo 'Remove user\'s vip access - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->everyMinute();
+
+
+        $schedule->call(function () {
             echo 'TEST CRON END '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *");
