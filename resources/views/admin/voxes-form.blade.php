@@ -495,18 +495,18 @@
                                                         <td>
                                                             <textarea style="min-width: 360px;" class="form-control question-question" data-qid="{{ $question->id }}" lang-code="{{ $code }}">{{ $question->translateOrNew($code)->question }}</textarea>
                                                         </td>
-                                                        <td>
+                                                        <td class="is-control">
                                                             {!! $question->is_control ? '<b>'.trans( 'admin.common.yes' ).'</b>' : trans( 'admin.common.no' ) !!}
                                                         </td>
-                                                        <td>
+                                                        <td class="for-stats">
                                                             @if($question->used_for_stats=='standard')
                                                                 Yes
                                                             @elseif($question->used_for_stats=='dependency')
                                                                 Related to: {!! $question->related->question !!}
                                                             @endif
                                                         </td>
-                                                        <td>{{ trans('admin.enums.question-type.'.$question->type) }}</td>
-                                                        <td>{!! $triggers[$question->id] !!}</td>
+                                                        <td class="quest-type">{{ trans('admin.enums.question-type.'.$question->type) }}</td>
+                                                        <td class="q-trigger">{!! $triggers[$question->id] !!}</td>
                                                         <td>
                                                             <a href="{{ url('cms/vox/explorer/'.$item->id.'/'.$question->id) }}" target="_blank">
                                                                 {!! $question->respondent_count() !!}
@@ -525,12 +525,16 @@
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a class="btn btn-sm btn-success" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id) }}">
+                                                            {{-- <a class="btn btn-sm btn-success" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id) }}">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                                             --}}
+                                                            <a class="btn btn-sm btn-success edit-q-button" href="javascript:;" data-toggle="modal" data-target="#editQuestionModal" q-id="{{ $question->id }}" >
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a class="btn btn-sm btn-success" onclick="return confirm('{{ trans('admin.common.sure') }}')" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question-del/'.$question->id) }}">
+                                                            <a class="btn btn-sm btn-success delete-vox-question" onclick="return confirm('{{ trans('admin.common.sure') }}')" href="{{ url('cms/'.$current_page.'/edit/question-del/'.$question->id) }}">
                                                                 <i class="fa fa-remove"></i>
                                                             </a>
                                                         </td>
@@ -549,20 +553,17 @@
                         table tr td:nth-child(7) {
                             word-break: break-all;
                         }
+
+                        #addQuestionModal .modal-dialog,
+                        #editQuestionModal .modal-dialog {
+                            width: 90%;
+                        }
                     </style>
                 @endif
 
-                <a class="btn btn-primary btn-block" href="javascript: $('#add-new-question').show(); $('#add-new-question').prev().hide();">
+                <a class="btn btn-primary btn-block" href="javascript:;" data-toggle="modal" data-target="#addQuestionModal">
                     Add Question
                 </a>
-                <div id="add-new-question" style="display: none;">
-                    <h3>Add question</h3>
-                    
-                    @include('admin.parts.vox-question', [
-                        'question' => null,
-                        'next' => $item->questions->count()+1
-                    ])
-                </div>
 
                 <br/>
 
@@ -779,5 +780,47 @@
             </div>
         </div>
     </div>
+
+    @if(!empty($item) && $item->questions->isNotEmpty())
+        <div id="editQuestionModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit question</h4>
+                    </div>
+                    <div class="modal-body">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    @endif
+
+    @if(!empty($item))
+        <div id="addQuestionModal" class="modal fade" role="dialog" v-id="{{ $item->id }}">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add question</h4>
+                    </div>
+                    <div class="modal-body">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    @endif
 
 @endsection

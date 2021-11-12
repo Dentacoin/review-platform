@@ -568,15 +568,13 @@
                     </div>
 
                     <div class="form-group" style="margin-top: 60px;">
-                        <div class="col-md-6">
-                            {{-- <button type="submit" class="btn btn-block btn-success">{{ trans('admin.page.'.$current_page.'.question-add') }}</button> --}}
-                            <a href="javascript:;" class="btn btn-block btn-success" id="submit-the-form">Save</a>
-                        </div>
-                        <div class="col-md-6">
-                            <input type="hidden" name="stay-on-same-page" value=""/>
-                            <a href="javascript:;" class="btn btn-block btn-success" id="stay-on-same-page">Save and stay on this page</a>
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-block btn-success">Save</button>
                         </div>
                     </div>
+
+                    <div class="alert alert-danger" id="q-err" style="display: none;"></div>
+                    <div class="alert alert-success" id="q-succ" style="display: none;">Question Saved</div>
 
                 </div>
             </div>

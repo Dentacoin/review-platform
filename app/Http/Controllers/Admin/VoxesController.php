@@ -70,7 +70,7 @@ class VoxesController extends AdminController {
         $this->scales_arr = VoxScale::orderBy('title')->get()->pluck('title', 'id')->toArray();
     }
 
-    public function list( ) {
+    public function list() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
@@ -755,42 +755,90 @@ class VoxesController extends AdminController {
             }
 
             if(request('used_for_stats')=='standard' && !request('stats_fields')) {
-                Request::session()->flash('error-message', 'Please, select the demographic details which should be used for the statistics.');
-                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+                $question->delete();
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Please, select the demographic details which should be used for the statistics.',
+                ]);
             }
-
+            
             if ($question->type == 'scale' && request('used_for_stats')=='standard' && !request('stats_fields') && !request('stats_scale_answers')) {
-                Request::session()->flash('error-message', 'Please, select the demographic details and scale answers which should be used for the statistics.');
-                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+                $question->delete();
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Please, select the demographic details and scale answers which should be used for the statistics.',
+                ]);
             }
-
+            
             if ($question->type == 'scale' && !request('question_scale')) {
-                Request::session()->flash('error-message', 'Please, pick a scale.');
-                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+                $question->delete();
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Please, pick a scale.',
+                ]);
             }
-
+            
             if(!empty(request('used_for_stats')) && empty(request('stats_title_question')) && empty(request('stats_title-en'))) {
-                Request::session()->flash('error-message', 'Stats title required' );
-                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
-            } 
-
+                $question->delete();
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Stats title required.',
+                ]);
+            }
+            
             if($question->type == 'number' && empty($question->number_limit)) {
-                Request::session()->flash('error-message', 'Number limit requited' );
-                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+                $question->delete();
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Number limit requited.',
+                ]);
             }
 
             if(!empty($question->prev_q_id_answers) && (VoxQuestion::find($question->prev_q_id_answers)->type != 'multiple_choice' || ($question->type!='single_choice' || $question->type!='multiple_choice'))) {
-                Request::session()->flash('error-message', 'The current question must be single choice or multiple choice and the previous question must be multiple choice type' );
-                $question->prev_q_id_answers=null;
-                $question->save();
-                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+                $question->delete();
+                
+                return Response::json([
+                    'success' => false,
+                    'message' => 'The current question must be single choice or multiple choice and the previous question must be multiple choice type.',
+                ]);
+            }
+
+            $trigger = '';
+            $trigger_same_as_prev = false;
+
+            if($question->question_trigger) {
+
+                foreach (explode(';', $question->question_trigger) as $v) {
+                    $question_id = explode(':',$v)[0];
+
+                    if($question_id==-1) {
+                        $trigger .= 'Same as previous<br/>';
+                        $trigger_same_as_prev = true;
+                    } else if(!is_numeric($question_id)) {
+                        $trigger .= ($question_id == 'age_groups' ? 'Age groups' : ($question_id == 'gender' ? 'Gender' : config('vox.details_fields.'.$question_id)['label'])).' : '.explode(':',$v)[1];
+                    } else {
+                        $q = VoxQuestion::find($question_id);
+
+                        if(!empty($q)) {
+                            if (!empty(explode(':',$v)[1])) {
+                                $answ = explode(':',$v)[1];
+                                $trigger .= $q->order.'. '.$q->question.': '.$answ.'<br/>';
+                            } else {
+                                $trigger .= $q->order.'. '.$q->question.'<br/>';
+                            }                            
+                        }
+                    }
+                }
             }
             
-            Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
-            return redirect('cms/'.$this->current_page.'/edit/'.$id);
-
-        } else {
-            return redirect('cms/'.$this->current_page);
+            return Response::json([
+                'success' => true,
+                'question' => $question,
+                'realted_question' => $question->related ? $question->related->question : '',
+                'trigger' => $trigger,
+                'trigger_same_as_prev' => $trigger_same_as_prev,
+                'question_type' => $this->question_types[$question->type],
+            ]);
         }
     }
 
@@ -847,28 +895,68 @@ class VoxesController extends AdminController {
                 $question->vox->checkComplex();
 
                 if(request('used_for_stats')=='standard' && !request('stats_fields')) {
-                    Request::session()->flash('error-message', 'Please, select the demographic details which should be used for the statistics.');
-                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                    return Response::json([
+                        'success' => false,
+                        'message' => 'Please, select the demographic details which should be used for the statistics.',
+                    ]);
                 } else if ($question->type == 'scale' && request('used_for_stats')=='standard' && !request('stats_fields') && !request('stats_scale_answers')) {
-                    Request::session()->flash('error-message', 'Please, select the demographic details and scale answers which should be used for the statistics.');
-                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                    return Response::json([
+                        'success' => false,
+                        'message' => 'Please, select the demographic details and scale answers which should be used for the statistics.',
+                    ]);
                 } else if ($question->type == 'scale' && !request('question_scale')) {
-                    Request::session()->flash('error-message', 'Please, pick a scale.');
-                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                    return Response::json([
+                        'success' => false,
+                        'message' => 'Please, pick a scale.',
+                    ]);
                 } else if(!empty(request('used_for_stats')) && empty(request('stats_title_question')) && empty(request('stats_title-en'))) {
-                    Request::session()->flash('error-message', 'Stats title required' );
-                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                    return Response::json([
+                        'success' => false,
+                        'message' => 'Stats title required.',
+                    ]);
                 } else if($question->type == 'number' && empty($question->number_limit)) {
-                    Request::session()->flash('error-message', 'Number limit requited' );
-                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+                    return Response::json([
+                        'success' => false,
+                        'message' => 'Number limit requited.',
+                    ]);
                 } else {
-                    Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
 
-                    if(request('stay-on-same-page')) {
-                        return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
-                    } else {
-                        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+                    $trigger = '';
+                    $trigger_same_as_prev = false;
+
+                    if($question->question_trigger) {
+
+                        foreach (explode(';', $question->question_trigger) as $v) {
+                            $question_id = explode(':',$v)[0];
+
+                            if($question_id==-1) {
+                                $trigger .= 'Same as previous<br/>';
+                                $trigger_same_as_prev = true;
+                            } else if(!is_numeric($question_id)) {
+                                $trigger .= ($question_id == 'age_groups' ? 'Age groups' : ($question_id == 'gender' ? 'Gender' : config('vox.details_fields.'.$question_id)['label'])).' : '.explode(':',$v)[1];
+                            } else {
+                                $q = VoxQuestion::find($question_id);
+
+                                if(!empty($q)) {
+                                    if (!empty(explode(':',$v)[1])) {
+                                        $answ = explode(':',$v)[1];
+                                        $trigger .= $q->order.'. '.$q->question.': '.$answ.'<br/>';
+                                    } else {
+                                        $trigger .= $q->order.'. '.$q->question.'<br/>';
+                                    }                            
+                                }
+                            }
+                        }
                     }
+                    
+                    return Response::json([
+                        'success' => true,
+                        'question' => $question,
+                        'realted_question' => $question->related ? $question->related->question : '',
+                        'trigger' => $trigger,
+                        'trigger_same_as_prev' => $trigger_same_as_prev,
+                        'question_type' => $this->question_types[$question->type],
+                    ]);
                 }
             }
 
@@ -937,7 +1025,7 @@ class VoxesController extends AdminController {
         }
     }
 
-    public function delete_question( $id, $question_id ) {
+    public function delete_question( $question_id ) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
@@ -951,16 +1039,15 @@ class VoxesController extends AdminController {
             return redirect('cms/'.$this->current_page.'/edit/'.$id);
         }
 
-        if(!empty($question) && $question->vox_id==$id) {
+        if(!empty($question)) {
 
             $question->delete();
             $question->vox->checkComplex();
 
-            Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-deleted'));
-            return redirect('cms/'.$this->current_page.'/edit/'.$id);
+            return Response::json( ['success' => true] );
 
         } else {
-            return redirect('cms/'.$this->current_page.'/edit/'.$id);
+            return Response::json( ['success' => false] );
         }
     }
 
@@ -2693,5 +2780,157 @@ class VoxesController extends AdminController {
 
         $this->request->session()->flash('error-message', 'Survey not found' );
         return redirect('cms/vox/list');
+    }
+
+    public function getQuestionContent($q_id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $question = VoxQuestion::find($q_id);
+        $id = $question->vox_id;
+
+        if( !empty($question)) {
+
+            $trigger_question_id = null;
+            $trigger_valid_answers = null;
+
+            $triggers_ids = [];
+            $trigger_type = null;
+
+            foreach ($question->vox->questions as $q) {
+
+                if($q->order>=$question->order) {
+                    break;
+                }
+                
+                if ($q->question_trigger) {
+                    if($q->question_trigger!='-1') {
+                        $triggers_ids = [];
+                        $trigger_list = explode(';', $q->question_trigger);
+                        $first_triger = explode(':', $trigger_list[0]);
+                        $trigger_question_id = $first_triger[0];
+                        $trigger_valid_answers = !empty($first_triger[1]) ? $first_triger[1] : null;
+
+                        foreach (explode(';', $q->question_trigger) as $va) {
+                            if(!empty(explode(':', $va)[0])) {
+                                $triggers_ids[explode(':', $va)[0]] = !empty(explode(':', $va)[1]) ? explode(':', $va)[1] : '';
+                            }                            
+                        }
+                        $trigger_type = $q->trigger_type;
+                    }
+                }
+            }
+
+            if(empty( $trigger_question_id )) {
+                $prev_question = VoxQuestion::where('vox_id', $id)->where('order', '<', intVal($question->order) )->orderBy('order', 'DESC')->first();
+                $trigger_question_id = $prev_question ? $prev_question->id : '';
+                $trigger_valid_answers = null;
+            }
+
+            $question_answers_count = DB::table('vox_answers')
+            ->join('users', 'users.id', '=', 'vox_answers.user_id')
+            ->whereNull('users.deleted_at')
+            ->whereNull('vox_answers.is_admin')
+            ->where('vox_id', $id )
+            ->where('question_id', $q_id)
+            ->where('is_completed', 1)
+            ->where('is_skipped', 0)
+            ->where('answer', '!=', 0)
+            ->select('answer', DB::raw('count(*) as total'))
+            ->groupBy('answer')
+            ->get()
+            ->pluck('total', 'answer')
+            ->toArray();
+
+            $excluded_answers = [];
+            if(!empty($question->excluded_answers)) {
+                foreach($question->excluded_answers as $excluded_answers_array) {
+                    foreach($excluded_answers_array as $excluded_answ) {
+                        $excluded_answers[] = $excluded_answ;
+                    }
+                }
+            }
+
+            return response()->view('admin.parts.vox-question', array(
+                'langs' => config('langs')['admin'],
+                'current_page' => $this->current_page,
+                'question' => $question,
+                'question_answers_count' => $question_answers_count,
+                'scales' => $this->scales_arr,
+                'item' => $question->vox,
+                'question_types' => $this->question_types,
+                'stat_top_answers' => $this->stat_top_answers,
+                'stat_types' => $this->stat_types,
+                'trigger_question_id' => $trigger_question_id,
+                'trigger_valid_answers' => $trigger_valid_answers,
+                'triggers_ids' => $triggers_ids,
+                'trigger_type' => $trigger_type,
+                'excluded_answers' => $excluded_answers,
+            ), 200)->header('X-Frame-Options', 'DENY');
+        }
+    }
+
+    public function addQuestionContent($vox_id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $vox = Vox::find($vox_id);
+
+        if( !empty($vox)) {
+
+            $trigger_question_id = null;
+            $trigger_valid_answers = null;
+
+            $triggers_ids = [];
+            $trigger_type = null;
+
+            foreach ($vox->questions as $q) {
+                
+                if ($q->question_trigger) {
+                    if($q->question_trigger!='-1') {
+                        $triggers_ids = [];
+                        $trigger_list = explode(';', $q->question_trigger);
+                        $first_triger = explode(':', $trigger_list[0]);
+                        $trigger_question_id = $first_triger[0];
+                        $trigger_valid_answers = !empty($first_triger[1]) ? $first_triger[1] : null;
+
+                        foreach (explode(';', $q->question_trigger) as $va) {
+                            if(!empty(explode(':', $va)[0])) {
+                                $triggers_ids[explode(':', $va)[0]] = !empty(explode(':', $va)[1]) ? explode(':', $va)[1] : '';
+                            }                            
+                        }
+                        $trigger_type = $q->trigger_type;
+                    }
+                }
+            }
+
+            if(empty( $trigger_question_id )) {
+                $prev_question = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'DESC')->first();
+                $trigger_question_id = $prev_question ? $prev_question->id : '';
+                $trigger_valid_answers = null;
+            }
+
+            return response()->view('admin.parts.vox-question', array(
+                'langs' => config('langs')['admin'],
+                'current_page' => $this->current_page,
+                'question' => null,
+                'scales' => $this->scales_arr,
+                'item' => $vox,
+                'question_types' => $this->question_types,
+                'stat_top_answers' => $this->stat_top_answers,
+                'stat_types' => $this->stat_types,
+                'trigger_question_id' => $trigger_question_id,
+                'trigger_valid_answers' => $trigger_valid_answers,
+                'triggers_ids' => $triggers_ids,
+                'trigger_type' => $trigger_type,
+                'next' => $vox->questions->count()+1,
+            ), 200)->header('X-Frame-Options', 'DENY');
+        }
     }
 }

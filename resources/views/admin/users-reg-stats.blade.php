@@ -22,17 +22,20 @@
                                     @foreach(current($table) as $k => $v)
                                         <th>{{ $v['label'] }}</th>
                                     @endforeach
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($table as $row)
                                     <tr>
-                                    @foreach($row as $v)
-                                        <td>{{ $v['value'] }}</td>
-                                    @endforeach                                
+                                        @php($i=0)
+                                        @foreach($row as $v)
+                                            @php($i+=intval($v['value']))
+                                            <td>{{ $v['value'] }}</td>
+                                        @endforeach
+                                        <td>{{ $i }}</td>
                                     </tr>
                                 @endforeach
-                                
                             </tbody>
                         </table>
                     </div>

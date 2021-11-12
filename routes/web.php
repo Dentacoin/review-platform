@@ -183,7 +183,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/edit/{id}/question/{question_id}', 		'VoxesController@edit_question');
 	Route::any('vox/edit/{id}/question/{question_id}/delete-question-image', 'VoxesController@deleteQuestionImage');
 	Route::any('vox/edit/{id}/question/{question_id}/delete-answer-image/{answer}', 'VoxesController@deleteAnswerImage');
-	Route::get('vox/edit/{id}/question-del/{question_id}', 	'VoxesController@delete_question');
+	Route::post('vox/edit/question-del/{question_id}', 		'VoxesController@delete_question');
 	Route::any('vox/edit/{id}/change-all', 					'VoxesController@reorder');
 	Route::any('vox/edit/{id}/change-number/{question_id}', 'VoxesController@order_question');
 	Route::any('vox/edit/{id}/change-question/{question_id}', 'VoxesController@change_question_text');
@@ -213,6 +213,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('vox/get-duration/{id}', 					'VoxesController@getDuration');
 	Route::post('vox/translate-question', 					'VoxesController@translateQuestion');
 	Route::post('vox/hide-survey/{id}', 					'VoxesController@hideSurvey');
+	Route::post('vox/get-question-content/{id}', 			'VoxesController@getQuestionContent');
+	Route::post('vox/add-question-content/{id}', 			'VoxesController@addQuestionContent');
 
 	Route::get('vox/polls', 								'PollsController@list');
 	Route::any('vox/polls/add', 							'PollsController@add');

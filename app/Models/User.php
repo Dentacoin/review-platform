@@ -534,7 +534,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $ban->question_id = $question_id;
         }
         if(!empty($answer)) {
-            $ban->answer = $answer;
+            $ban->answer = is_array($answer) ? implode(',', $answer) : $answer;
         }
 
         $ban->save();
