@@ -1024,23 +1024,30 @@ $(document).ready(function(){
 		});
 	});
 
-	$('#addQuestionModal').on('hidden.bs.modal', function (e) {
-		$('.edit-q-button').click( function() {
-			$('#editQuestionModal').attr('q-id', $(this).attr('q-id'));
-		});
+	var deleteVoxQuestion = function() {
 
 		$('.delete-vox-question').click( function(e) {
 			e.preventDefault();
 	
 			var that = $(this);
-			console.log('ggggggggggggggggggg');
 	
 			$.ajax( {
 				url: $(this).attr('href'),
 				type: 'POST',
 				success: function( data ) {
 					if(data.success) {
-						that.closest('tr').remove();
+						closest_tr = that.closest('tr');
+						// next_trs = $(closest_tr).nextAll('tr');
+
+						// if(next_trs.length) {
+						// 	for(var i in next_trs) {
+						// 		console.log('in');
+						// 		$(next_trs[i]).find('.question-number').val(parseInt($(next_trs[i]).find('.question-number')) - 1);
+						// 	}
+						// }
+						//triggers change
+						
+						closest_tr.remove();
 					}
 				},
 				error: function(data) {
@@ -1048,25 +1055,15 @@ $(document).ready(function(){
 				}
 			});
 		});
-	});
+	}
 
-	$('.delete-vox-question').click( function(e) {
-		e.preventDefault();
+	deleteVoxQuestion();
 
-		var that = $(this);
-
-		$.ajax( {
-			url: $(this).attr('href'),
-			type: 'POST',
-			success: function( data ) {
-				if(data.success) {
-					that.closest('tr').remove();
-				}
-			},
-			error: function(data) {
-				console.log('error');
-			}
+	$('#addQuestionModal').on('hidden.bs.modal', function (e) {
+		$('.edit-q-button').click( function() {
+			$('#editQuestionModal').attr('q-id', $(this).attr('q-id'));
 		});
-	});
-    
+
+		deleteVoxQuestion();
+	});    
 });

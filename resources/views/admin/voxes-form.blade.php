@@ -485,7 +485,7 @@
                                             </thead>
                                             <tbody class="questions-draggable" lang-code="{{ $code }}">
                                                 @foreach($item->questions as $question)
-                                                    <tr question-id="{{ $question->id }}" {!! in_array($question->id, $linked_triggers) ? 'class="linked"' : '' !!}>
+                                                    <tr question-order="{{ $question->order }}" question-id="{{ $question->id }}" {!! in_array($question->id, $linked_triggers) ? 'class="linked"' : '' !!}>
                                                         <td>
                                                             <input type="checkbox" name="ids[]" value="{{ $question->id }}" />
                                                         </td>

@@ -1041,6 +1041,15 @@ class VoxesController extends AdminController {
 
         if(!empty($question)) {
 
+            $other_questions_vox = VoxQuestion::where('order', '>', $question->order)->get();
+
+            if($other_questions_vox->isNotEmpty()) {
+                foreach ($other_questions_vox as $oqv) {
+                    $oqv->order = ($oqv->order) - 1;
+                    $oqv->save();
+                }
+            }
+
             $question->delete();
             $question->vox->checkComplex();
 
