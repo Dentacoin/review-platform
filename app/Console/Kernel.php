@@ -2364,7 +2364,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'Scheduled surveys TIME CRON - '.Carbon::now().PHP_EOL.PHP_EOL.PHP_EOL;
 
 
-            echo 'Scheduled surveys REAL TIME NOW? - '.Carbon::now()->addHours(3).PHP_EOL.PHP_EOL.PHP_EOL;
+            echo 'Scheduled surveys REAL TIME NOW? - '.Carbon::now()->addHours(2).PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *");
 
