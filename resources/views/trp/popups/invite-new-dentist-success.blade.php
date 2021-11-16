@@ -22,7 +22,7 @@
 			@endif
 		</p>
 		@if(!empty($user))
-			<a href="javascript:;" class="button close-popup">{!! trans('trp.page.invite.popup.success.button-back') !!}</a>
+			<a href="javascript:;" class="button close-and-scroll">{!! trans('trp.page.invite.popup.success.button-back') !!}</a>
 		@else
 			<a href="javascript:;" class="button close-popup open-dentacoin-gateway patient-login">{!! trans('trp.page.invite.popup.success.sign-up') !!}</a>
 		@endif

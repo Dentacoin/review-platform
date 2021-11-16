@@ -845,6 +845,13 @@ jQuery(document).ready(function($){
 	        }
 	    });
 
+		$('.close-and-scroll').click( function() {
+			closePopup();
+			$('body, html').animate({
+				scrollTop: 0
+			}, 500);
+		});
+
 	    $('.close-popup').click( function() {
 			closePopup();
 		});
@@ -905,6 +912,8 @@ jQuery(document).ready(function($){
 								'event_category': 'InviteDentist',
 								'event_label': 'InvitedDentists',
 							});
+
+							that[0].reset();
 		                } else {
 		                    for(var i in data.messages) {
 		                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
@@ -913,7 +922,6 @@ jQuery(document).ready(function($){
 		                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
 		                        }
 		                    }
-		                    console.log($('.has-error').first());
 		                    $('.popup').animate({
 				                scrollTop: $('.has-error').first().offset().top
 				            }, 500);
