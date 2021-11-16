@@ -2345,7 +2345,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Scheduled surveys '.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now()->addHours(3) )->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
+            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now()->addHours(2) )->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
 
             if($hidden_voxes->isNotEmpty()) {
 
@@ -2359,12 +2359,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             }
 
             echo 'Scheduled surveys - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-
-            echo 'Scheduled surveys TIME CRON - '.Carbon::now().PHP_EOL.PHP_EOL.PHP_EOL;
-
-
-            echo 'Scheduled surveys REAL TIME NOW? - '.Carbon::now()->addHours(2).PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *");
 
