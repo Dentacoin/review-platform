@@ -34,34 +34,6 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-md-2 control-label">Duration</label>
-                                <div class="col-md-10">
-                                    <input type="text" name="duration" class="form-control" value="{{ $item->duration }}" maxlength="64"/>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Video title</label>
-                                <div class="col-md-10">
-                                    <input type="text" name="video_title" class="form-control" value="{{ $item->video_title }}" maxlength="128"/>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">YouTube video id</label>
-                                <div class="col-md-10">
-                                    <input type="text" name="video_id" class="form-control" value="{{ $item->video_id }}" maxlength="20"/>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Iframe id</label>
-                                <div class="col-md-10">
-                                    <input type="text" name="iframe_id" class="form-control" value="{{ $item->iframe_id }}" maxlength="64"/>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
                                 <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">Add Social image</label>
                                 <div class="col-md-10">
                                     {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
@@ -76,6 +48,62 @@
                                             Social image<br/>
                                             <a target="_blank" href="{{ $item->getImageUrl() }}">
                                                 <img src="{{ $item->getImageUrl() }}" style="width: 100%;" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Duration</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="duration" class="form-control" value="{{ $item->duration }}" maxlength="64"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Video title</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="video_title" class="form-control" value="{{ $item->video_title }}" maxlength="128"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">YouTube video ID</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="video_id" class="form-control" value="{{ $item->video_id }}" maxlength="20"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">HubSpot Iframe ID</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="iframe_id" class="form-control" value="{{ $item->iframe_id }}" maxlength="64"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Website URL</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="website_url" class="form-control" value="{{ $item->website_url }}" maxlength="128"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">Website image</label>
+                                <div class="col-md-10">
+                                    {{ Form::file('website-photo', ['id' => 'website-photo', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">&nbsp;</label>
+                                @if($item->has_website_image)
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            Website image<br/>
+                                            <a target="_blank" href="{{ $item->getWebsiteImageUrl() }}">
+                                                <img src="{{ $item->getWebsiteImageUrl() }}" style="width: 100%;" />
                                             </a>
                                         </div>
                                     </div>

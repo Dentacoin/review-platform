@@ -19,9 +19,11 @@ class Meeting extends Model {
         'checklists',
         'duration',
         'after_checklist_info',
-        'video_id',
         'iframe_id',
+        'video_id',
         'video_title',
+        'website_url',
+        'has_website_image',
         'hasimage',
     ];
 
@@ -31,7 +33,6 @@ class Meeting extends Model {
         'deleted_at'
     ];
 
-    //single, social
     public function getImageUrl() {
         return $this->hasimage ? url('/storage/meetings/'.($this->id%100).'/'.$this->id.'.png').'?rev=1'.$this->updated_at->timestamp : url('new-vox-img/stats-dummy.png');
     }
@@ -53,6 +54,30 @@ class Meeting extends Model {
         });
         $img->save($to);
         $this->hasimage = true;
+        $this->save();
+    }
+
+    public function getWebsiteImageUrl() {
+        return $this->has_website_image ? url('/storage/meetings-website/'.($this->id%100).'/'.$this->id.'.png').'?rev=1'.$this->updated_at->timestamp : url('new-vox-img/stats-dummy.png');
+    }
+
+    public function getWebsiteImagePath() {
+        $folder = storage_path().'/app/public/meetings-website/'.($this->id%100);
+        if(!is_dir($folder)) {
+            mkdir($folder);
+        }
+        return $folder.'/'.$this->id.'.png';
+    }
+
+    public function addWebsiteImage($img) {
+
+        $to = $this->getWebsiteImagePath();
+        $img->resize(610, null, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+        $img->save($to);
+        $this->has_website_image = true;
         $this->save();
     }
 }

@@ -104,11 +104,17 @@ class MeetingsController extends AdminController {
                 $item->video_id = $this->request->input('video_id');
                 $item->video_title = $this->request->input('video_title');
                 $item->iframe_id = $this->request->input('iframe_id');
+                $item->website_url = $this->request->input('website_url');
                 $item->save();
 
                 if( Input::file('photo') ) {
                     $img = Image::make( Input::file('photo') )->orientate();
                     $item->addImage($img);
+                }
+
+                if( Input::file('website-photo') ) {
+                    $img = Image::make( Input::file('website-photo') )->orientate();
+                    $item->addWebsiteImage($img);
                 }
 	        }
 
