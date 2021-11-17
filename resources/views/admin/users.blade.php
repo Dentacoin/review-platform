@@ -148,6 +148,13 @@
                             <div class="col-md-2 filter vox-filter">
                                 <input type="text" class="form-control" name="search-surveys-taken" value="{{ $search_surveys_taken }}" placeholder="Surveys taken (0 -no surveys; number)">
                             </div>
+
+                            <div class="col-md-2 filter vox-filter">
+                                <label for="vip-access" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                    <input id="vip-access" type="checkbox" name="vip-access" value="1" {!! !empty($vip_access) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                    Vip Access
+                                </label>
+                            </div>
                         </div>
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-1">

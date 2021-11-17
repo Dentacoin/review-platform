@@ -233,4 +233,23 @@ $(document).ready(function(){
     	$(this).hide();
     });
 
+	$('.scroll-to').click( function(e) {
+		e.preventDefault();
+
+		var item = $(this).attr('href');
+		$('body, html').animate({
+            scrollTop: $(item).offset().top - 50
+        }, 500);
+	});
+
+	$('[name="vip_access"]').change( function() {
+		if($(this).is(':checked')) {
+			$('[name="vip_access_until"]').closest('div').show();
+			$('[name="vip_access_until"]').closest('div').prev().show();
+		} else {
+			$('[name="vip_access_until"]').closest('div').hide();
+			$('[name="vip_access_until"]').closest('div').prev().hide();
+		}
+	});
+
 });

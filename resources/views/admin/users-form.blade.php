@@ -3,9 +3,88 @@
 @section('content')
 
 <h1 class="page-header"> 
+    @if(!empty($item->firstTransaction))
+        <a href="#first-transactions" class="btn btn-info scroll-to" style="margin-bottom: 10px;">First Transactions</a>
+    @endif
+
+    @if($item->allBanAppeals->isNotEmpty())
+        <a href="#ban-appeals" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Ban Appeals</a>
+    @endif
+
+    @if($item->photos->isNotEmpty())
+        <a href="#gallery-photos" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Gallery Photos</a>
+    @endif
+
+    @if($item->is_clinic && $item->branches->isNotEmpty())
+        <a href="#gallery-photos" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Clinic's Branches</a>
+    @endif
+
+    @if($item->is_dentist)
+        <a href="#reviews" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Reviews</a>
+
+        @if($item->is_clinic && $item->team->isNotEmpty())
+            <a href="#clinics-team" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Clinic's Team</a>
+        @endif
+
+        @if($item->my_workplace->isNotEmpty())
+            <a href="#workplace" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Workplace</a>
+        @endif
+    @else
+        <a href="#patient-reviews" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Reviews</a>
+        <a href="#added-dentists" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Added Dentists</a>
+    @endif
+
+    @if($item->vox_surveys_and_polls->isNotEmpty())
+        <a href="#surveys-taken" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Surveys Taken</a>
+    @endif
+
+    @if($unfinished)
+        <a href="#unfinished-surveys" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Unfinished surveys</a>
+    @endif
+
+    @if($item->bansWithDeleted->isNotEmpty())
+        <a href="#bans" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Bans</a>
+    @endif
+
+    @if($habits_test_ans)
+        <a href="#dem-hab" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Demographics & Habits</a>
+    @endif
+
+    @if($item->history->isNotEmpty())
+        <a href="#transactions" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Transactions</a>
+    @endif
+
+    @if($emails)
+        <a href="#emails" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Emails</a>
+    @endif
+
+    @if($item->logins->isNotEmpty())
+        <a href="#logins" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Logins</a>
+    @endif
+
+    @if($item->claims->isNotEmpty())
+        <a href="#claims" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Claims</a>
+    @endif
+
+    @if($item->recommendations->isNotEmpty())
+        <a href="#recommendations-list" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Recommendations</a>
+    @endif
+
+    @if($item->is_dentist && $item->dentist_fb_page->isNotEmpty())
+        <a href="#fb-page-tabs" class="btn btn-info scroll-to" style="margin-bottom: 10px;">FB Page Tabs</a>
+    @endif
+
+    <a href="#email-preferences" class="btn btn-info scroll-to" style="margin-bottom: 10px;">Email Preferences</a>
+
+    @if(!empty($item->kycValidation))
+        <a href="#kyc" class="btn btn-info scroll-to" style="margin-bottom: 10px;">KYC</a>
+    @endif
+</h1>
+
+<h1 class="page-header"> 
     {{ trans('admin.page.'.$current_page.'.title-edit') }}
     @if( $item->getSameIPUsers() && !$item->is_dentist )
-        <a class="label label-danger" href="{{ url('cms/users/users/edit/'.$item->id) }}#logins-list">Click for Suspicious Logins</a>
+        <a class="label label-danger scroll-to" href="#logins-list">Click for Suspicious Logins</a>
     @endif
     @if($item->permanentVoxBan)
         <div class="label label-warning">Permanent Vox Ban</div>
@@ -749,6 +828,23 @@
                             @endif
 
                             <div class="form-group">
+                                <label class="col-md-2 control-label user-l" style="padding-left: 0px; padding-top: 0px !important;">Double rewards access</label>
+                                <div class="col-md-1" style="padding-left: 0px;">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'vip_access',
+                                        'info' => $fields['vip_access'],
+                                    ])
+                                </div>
+                                <label class="col-md-offset-3 col-md-2 control-label user-l" style="padding-left: 0px; padding-top: 0px !important; {{ !$item->vip_access ? 'display: none;' : '' }}">Double rewards access Until</label>
+                                <div class="col-md-4" style="padding-left: 0px; {{ !$item->vip_access ? 'display: none;' : '' }}">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'vip_access_until',
+                                        'info' => $fields['vip_access_until'],
+                                    ])
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-md-9 control-label"></label>
                                 <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Bad IP Protected</label>
                                 <div class="col-md-1" style="padding-left: 0px;">
@@ -759,16 +855,6 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-md-9 control-label"></label>
-                                <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Double rewards access</label>
-                                <div class="col-md-1" style="padding-left: 0px;">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'vip_access',
-                                        'info' => $fields['vip_access']
-                                    ])
-                                </div>
-                            </div>
                             @if($item->is_dentist)
                                 <div class="form-group">
                                     <label class="col-md-9 control-label"></label>
@@ -1044,7 +1130,7 @@
 
 
 @if(!empty($item->firstTransaction))
-    <div class="row">
+    <div id="first-transactions" class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -1106,7 +1192,7 @@
 @endif
 
 @if($item->allBanAppeals->isNotEmpty())
-    <div class="row">
+    <div id="ban-appeals" class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -1188,7 +1274,7 @@
 @endif
 
 @if($item->photos->isNotEmpty())
-    <div class="row with-dropdown">
+    <div id="gallery-photos" class="row with-dropdown">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading toggle-button">
@@ -1224,7 +1310,7 @@
 <h4 style="margin-bottom: 20px;">TRUSTED REVIEWS</h4>
 
 @if($item->is_clinic && $item->branches->isNotEmpty())
-    <div class="row">
+    <div id="clinic-branches" class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -1259,7 +1345,7 @@
 @endif
 
 @if($item->is_dentist)
-    <div class="row">
+    <div id="reviews" class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -1292,7 +1378,7 @@
     @if($item->is_clinic)
         @if($item->team->isNotEmpty())
 
-            <div class="row">
+            <div id="clinics-team" class="row">
                 <div class="col-md-12">
                     <div class="panel panel-inverse">
                         <div class="panel-heading">
@@ -1355,7 +1441,7 @@
         @endif
     @else
         @if($item->my_workplace->isNotEmpty())
-            <div class="row">
+            <div id="workplace" class="row">
                 <div class="col-md-12">
                     <div class="panel panel-inverse">
                         <div class="panel-heading">
@@ -1386,7 +1472,7 @@
 
 @else
 
-    <div class="row">
+    <div id="reviews" class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -1418,7 +1504,7 @@
     </div>
 
     @if(!empty($item->patient_invites_dentist->isNotEmpty()))
-        <div class="row">
+        <div id="added-dentists" class="row">
             <div class="col-md-12">
                 <div class="panel panel-inverse">
                     <div class="panel-heading">
@@ -1450,14 +1536,14 @@
 
 @if($item->vox_surveys_and_polls->isNotEmpty())
     <h4 style="margin-bottom: 20px;">DENTAVOX</h4>
-    <div class="row show-hide-section">
+    <div id="surveys-taken" class="row show-hide-section">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading show-hide-button">
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-vox-rewards') }} </h4>
+                    <h4 class="panel-title">Surveys Taken</h4>
                 </div>
                 <div class="panel-body show-hide-area">
                     <span class="total-num">Total number: {{ count($item->vox_surveys_and_polls) }}</span>
@@ -1486,7 +1572,7 @@
 @endif
 
 @if($unfinished)
-    <div class="row">
+    <div id="unfinished-surveys" class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -1515,39 +1601,9 @@
     </div>
 @endif
 
-@if($habits_test_ans)
-    <div class="row" id="habits-list">
-        <div class="col-md-12">
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                    </div>
-                    <h4 class="panel-title">Demographics & Habits</h4>
-                </div>
-                <div class="panel-body">
-                    @include('admin.parts.table', [
-                        'table_id' => 'vox-habits',
-                        'table_fields' => [
-                            'question'          => array('label' => 'Question'),
-                            'old_answer'          => array('label' => 'Initial Answer'),
-                            'answer'          => array('label' => 'Updated Answer'),
-                            'last_updated'      => array('label' => 'Last Updated'),
-                            'updates_count'      => array('label' => 'Updates'),
-                        ],
-                        'table_data' => $habits_tests,
-                        'table_pagination' => false,
-                        'pagination_link' => array()
-                    ])
-                </div>
-            </div>
-        </div>
-    </div>
-@endif
-
 @if($item->bansWithDeleted->isNotEmpty())
     
-    <div class="row">
+    <div id="bans" class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -1583,11 +1639,41 @@
     </div>
 @endif
 
+@if($habits_test_ans)
+    <div id="dem-hab" class="row" id="habits-list">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">Demographics & Habits</h4>
+                </div>
+                <div class="panel-body">
+                    @include('admin.parts.table', [
+                        'table_id' => 'vox-habits',
+                        'table_fields' => [
+                            'question'          => array('label' => 'Question'),
+                            'old_answer'          => array('label' => 'Initial Answer'),
+                            'answer'          => array('label' => 'Updated Answer'),
+                            'last_updated'      => array('label' => 'Last Updated'),
+                            'updates_count'      => array('label' => 'Updates'),
+                        ],
+                        'table_data' => $habits_tests,
+                        'table_pagination' => false,
+                        'pagination_link' => array()
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 <h4 style="margin-bottom: 20px;">Activity History</h4>
 <p style="margin-bottom: 20px;">Current balance: {{ $item->getTotalBalance() }} DCN</p>
 
 @if($item->history->isNotEmpty())
-    <div class="row show-hide-section">
+    <div id="transactions" class="row show-hide-section">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading show-hide-button">
@@ -1651,7 +1737,7 @@
 @endif
 
 @if($emails)
-    <div class="row show-hide-section" id="logins-list">
+    <div class="row show-hide-section" id="emails">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading show-hide-button">
@@ -1783,7 +1869,7 @@
 @endif
 
 @if($item->is_dentist && $item->dentist_fb_page->isNotEmpty())
-    <div class="row">
+    <div class="row" id="fb-page-tabs">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -1819,7 +1905,7 @@
     </div>
 @endif
 
-<div class="row">
+<div class="row" id="email-preferences">
     <div class="col-md-12">
         <div class="panel panel-inverse">
             <div class="panel-heading">
@@ -1922,7 +2008,7 @@
 </div>
 
 @if(!empty($item->kycValidation))
-    <div class="row">
+    <div class="row" id="kyc">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
