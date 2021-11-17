@@ -22,7 +22,7 @@ class MeetingsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $meetings = Meeting::orderBy('id', 'desc');
+        $meetings = Meeting::orderBy('id', 'asc');
 
         $total_count = $meetings->count();
         $page = max(1,intval(request('page')));

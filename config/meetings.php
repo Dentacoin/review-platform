@@ -3,7 +3,7 @@ return [
 	'dcn-intro' => 'Intro: Dentacoin Currency & Apps',
 	'trp-demo' => 'Trusted Reviews | Demo',
 	'wallet-demo' => 'Dentacoin Wallet Creation | Demo',
-	'dv-demo' => 'Dentavox Surveys | Demo',
+	'dv-demo' => 'DentaVox Surveys | Demo',
 	'hubapp-demo' => 'Dentacoin HubApp | Demo',
 	'trading' => 'Trading DCN on Exchanges',
 ];
