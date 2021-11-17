@@ -18,7 +18,6 @@
 		                <table class="table table-striped table-question-list">
 		                    <thead>
 		                        <tr>
-		                            <th>Order</th>
 		                            <th>Title</th>
 		                            <th>Edit</th>
 		                        </tr>
@@ -26,9 +25,6 @@
 		                    <tbody>
 		                        @foreach($meetings as $meeting)
 		                            <tr>
-		                                <td>
-		                                    {{ $meetings->count() - $loop->index }}
-		                                </td>
 		                                <td>
 		                                    {{ config('meetings')[$meeting->slug] }}
 		                                </td>
