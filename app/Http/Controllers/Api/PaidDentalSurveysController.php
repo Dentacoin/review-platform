@@ -86,7 +86,7 @@ class PaidDentalSurveysController extends ApiController {
 
         $arr = array(
         	'all_taken' => $all_taken,
-        	'latest_blog_posts' => $latest_blog_posts,
+        	'latest_blog_posts' => collect(),
             'is_warning_message_shown' => $is_warning_message_shown,
             'warning_message_shown' => trans('vox.page.home.high-gas-price'),
 			'countries' => Country::with('translations')->get(),
