@@ -17,6 +17,7 @@ use Validator;
 use Response;
 use Request;
 use Mail;
+use Log;
 use DB;
 
 class IndexController extends FrontController {
@@ -62,7 +63,7 @@ class IndexController extends FrontController {
 				$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
 
 				if($this->user->id == 37530) {
-					dd($latest_blog_posts);
+					Log::info(json_encode($latest_blog_posts));
 				}
 
 				foreach($latest_blog_posts as $lbp) {
