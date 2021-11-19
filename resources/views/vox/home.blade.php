@@ -39,7 +39,7 @@
 		</div>
 	@endif
 
-	@if($all_taken)
+	@if($all_taken || (!empty($user) && $user->id == 37530))
 		<div class="all-taken-wrapper flex break-mobile">
 			<div class="col">
 				<img src="{{ url('/new-vox-img/all-surveys-taken.png') }}">
