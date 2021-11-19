@@ -62,11 +62,6 @@ class IndexController extends FrontController {
 				$all_taken = true;
 				$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
 
-				if($this->user->id == 37530) {
-					Log::info(json_encode($latest_blog_posts));
-					Log::info('fdadada');
-				}
-
 				foreach($latest_blog_posts as $lbp) {
 					$post_terms = DB::connection('vox_wordpress_db')->table('term_relationships')->where('object_id', $lbp->ID)->get()->pluck('term_taxonomy_id')->toArray();
 					$category = DB::connection('vox_wordpress_db')->table('terms')->whereIn('term_id', $post_terms)->first();

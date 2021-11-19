@@ -39,7 +39,7 @@
 		</div>
 	@endif
 
-	@if($all_taken || (!empty($user) && $user->id == 37530))
+	@if($all_taken || (!empty($user) && $user->id == 37530)))
 		<div class="all-taken-wrapper flex break-mobile">
 			<div class="col">
 				<img src="{{ url('/new-vox-img/all-surveys-taken.png') }}">
@@ -62,7 +62,7 @@
 			</div>
 		</div>
 
-		<div class="section-slider-posts">
+		{{-- <div class="section-slider-posts">
 			<h3 class="blog-posts-title">{{ trans('vox.page.home.all-surveys-done.blog-posts-title') }}</h3>
 			<div class="slider-posts-inner">
 	    		<div class="flickity slider-posts">
@@ -93,7 +93,7 @@
 	    	<div class="tac">
 	    		<a href="https://dentavox.dentacoin.com/blog/" target="_blank" class="gray-wp-button">{{ trans('vox.page.home.all-surveys-done.blog-posts-all') }}</a>
 	    	</div>
-	    </div>
+	    </div> --}}
 		
 	@else
 		<div class="container all-qs-wrap">
