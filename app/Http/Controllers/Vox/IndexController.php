@@ -64,6 +64,7 @@ class IndexController extends FrontController {
 
 				if($this->user->id == 37530) {
 					Log::info(json_encode($latest_blog_posts));
+					Log::info('fdadada');
 				}
 
 				foreach($latest_blog_posts as $lbp) {
