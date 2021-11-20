@@ -122,6 +122,7 @@ class TransactionsController extends AdminController {
 
         $are_transactions_stopped = StopTransaction::find(1)->stopped;
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
+        $are_transactions_hash_check_stopped = StopTransaction::find(1)->stop_check_for_hash;
 
         $is_retry_stopped = GasPrice::find(1)->cron_new_trans > Carbon::now();
         $is_retry_paid_by_the_user_stopped = GasPrice::find(1)->cron_paid_by_user_trans > Carbon::now();
@@ -154,6 +155,7 @@ class TransactionsController extends AdminController {
         return $this->showView('transactions', array(
             'are_transactions_stopped' => $are_transactions_stopped,
             'is_warning_message_shown' => $is_warning_message_shown,
+            'are_transactions_hash_check_stopped' => $are_transactions_hash_check_stopped,
             'is_retry_stopped' => $is_retry_stopped,
             'is_retry_paid_by_the_user_stopped' => $is_retry_paid_by_the_user_stopped,
             'transactions' => $transactions,
@@ -456,6 +458,36 @@ class TransactionsController extends AdminController {
         $allow->save();
 
         $this->request->session()->flash('success-message', 'Withdrawals are not allowed!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function startHashCheck() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $allow = StopTransaction::find(1);
+        $allow->stop_check_for_hash = false;
+        $allow->save();
+
+        $this->request->session()->flash('success-message', 'Hash check is enabled!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function stopHashCheck() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $allow = StopTransaction::find(1);
+        $allow->stop_check_for_hash = true;
+        $allow->save();
+
+        $this->request->session()->flash('success-message', 'Hash check is disabled!' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 

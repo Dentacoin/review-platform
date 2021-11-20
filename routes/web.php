@@ -148,6 +148,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('transactions/bump-dont-retry', 				'TransactionsController@bumpDontRetry');
 	Route::get('transactions/start', 						'TransactionsController@allowWithdraw');
 	Route::get('transactions/stop', 						'TransactionsController@disallowWithdraw');
+	Route::get('transactions/start-hash-check', 			'TransactionsController@startHashCheck');
+	Route::get('transactions/stop-hash-check', 				'TransactionsController@stopHashCheck');
 	Route::get('transactions/remove-message', 				'TransactionsController@removeMessage');
 	Route::get('transactions/add-message', 					'TransactionsController@addMessage');
 	Route::post('transactions/conditions', 					'TransactionsController@withdrawalConditions');

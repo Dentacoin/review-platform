@@ -23,6 +23,7 @@ class DcnTransaction extends Model {
         'type',
         'reference_id',
         'status',
+        'hash',
         'message',
         'retries',
         'ip',

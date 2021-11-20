@@ -11,12 +11,14 @@ class DcnTransactionHistory extends Model {
 
     protected $fillable = [
         'transaction_id',
+        'amount',
         'admin_id',
         'address',
         'tx_hash',
         'allowance_hash',
         'nonce',
         'status',
+        'hash',
         'old_status',
         'message',
         'history_message',

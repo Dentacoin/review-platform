@@ -7,6 +7,7 @@
         <div>
             <a href="{{ $is_warning_message_shown ? url('cms/transactions/remove-message') : url('cms/transactions/add-message') }}" class="btn btn-info pull-right" style="margin-left: 10px;">{{ $is_warning_message_shown ? 'Hide warning message on DV homepage' : 'Show warning message on DV homepage' }}</a>
             <a href="{{ $are_transactions_stopped ? url('cms/transactions/start') : url('cms/transactions/stop') }}" class="btn btn-{{ $are_transactions_stopped ? 'success' : 'danger' }} pull-right" style="margin-left: 10px;">{{ $are_transactions_stopped ? 'Allow users to withdraw' : 'Disallow users to withdraw' }}</a>
+            <a href="{{ $are_transactions_hash_check_stopped ? url('cms/transactions/start-hash-check') : url('cms/transactions/stop-hash-check') }}" class="btn btn-{{ $are_transactions_hash_check_stopped ? 'success' : 'info' }} pull-right" style="margin-left: 10px;">{{ $are_transactions_hash_check_stopped ? 'Enable hash check' : 'Disable hash check' }}</a>
 
             @if($admin->role!='support')
                 @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())

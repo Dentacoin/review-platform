@@ -4,15 +4,9 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use App\Models\VoxAnswersDependency;
 use App\Models\VoxQuestion;
-use App\Models\VoxAnswer;
 
-use Carbon\Carbon;
-
-
-class QuestionsCaching extends Command
-{
+class QuestionsCaching extends Command{
     /**
      * The name and signature of the console command.
      *
@@ -32,8 +26,7 @@ class QuestionsCaching extends Command
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
     }
 
@@ -42,8 +35,7 @@ class QuestionsCaching extends Command
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle() {
         echo 'Caching dependency questions - START'.PHP_EOL.PHP_EOL.PHP_EOL;
         
         $dependency_questions = VoxQuestion::has('vox')->where('used_for_stats', 'dependency')->whereNotNull('stats_relation_id')->get();
@@ -53,6 +45,5 @@ class QuestionsCaching extends Command
         }
 
         echo 'Caching dependency questions - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-
     }
 }

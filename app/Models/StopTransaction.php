@@ -9,6 +9,7 @@ class StopTransaction extends Model {
     protected $fillable = [
         "stopped",
         "show_warning_text",
+        "stop_check_for_hash",
     ];
     
     protected $dates = [
