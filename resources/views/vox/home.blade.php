@@ -37,6 +37,34 @@
 				</div>
 			</div>
 		</div>
+
+		@if($vip_access_seconds)
+			<div class="container">
+				<div class="vip-access-wrapper flex">
+					<div class="first-col flex flex-center">
+						<div>
+							<img src="{{ url('new-vox-img/vip-coin.png') }}"/>
+						</div>
+						<div class="first-info">
+							<div class="flex">
+								DentaVox VIP Pass expiring in: <img src="{{ url('new-vox-img/info.svg') }}" class="tooltip-text" text="{!! 'The VIP pass entitles you to: <br/>
+								- Double rewards for all surveys <br/>
+								- No demographic limitations' !!}"/>
+							</div>
+							<p class="hours-countdown">{{ $vip_access_seconds }}</p>
+						</div>
+					</div>
+					<div class="flex-1 second-col">
+						<div class="flex">
+							✓ Double rewards for all surveys <img src="{{ url('new-vox-img/info.svg') }}" class="tooltip-text" text="You get double amounts of ALL survey rewards you see below."/>
+						</div>
+						<div class="flex">
+							✓ No demographic limitations <img src="{{ url('new-vox-img/info.svg') }}" class="tooltip-text" text="You have access to ALL non-taken surveys - no need to wait for available spots."/>
+						</div>
+					</div>
+				</div>
+			</div>
+		@endif
 	@endif
 
 	@if($all_taken)

@@ -1,6 +1,7 @@
 var handleSorts;
 var ajax_is_running = false;
 var slice = 1;
+var daysCountdown;
 
 $(document).ready(function(){
 
@@ -229,6 +230,35 @@ $(document).ready(function(){
 		}
 		$(window).resize( fixFlickty );
 		fixFlickty();
+	}
+
+	if($('.hours-countdown').length) {
+
+		var seconds = parseInt($('.hours-countdown').text());
+		function timer() {
+			var days        = Math.floor(seconds/24/60/60);
+			var hoursLeft   = Math.floor((seconds) - (days*86400));
+			var hours       = Math.floor(hoursLeft/3600);
+			var minutesLeft = Math.floor((hoursLeft) - (hours*3600));
+			var minutes     = Math.floor(minutesLeft/60);
+			var remainingSeconds = seconds % 60;
+			function pad(n) {
+				return (n);
+				// return (n < 10 ? "0" + n : n);
+			}
+
+			console.log(days);
+			$('.hours-countdown').html((days != 0 ? (pad(days) + " DAYS ") : '') + pad(hours) + " HOURS " + pad(minutes) + " MIN " + pad(remainingSeconds) + " SEC");
+			$('.vip-access-wrapper').css('display', 'flex');
+
+			if (seconds == 0) {
+				clearInterval(daysCountdown);
+				$('.vip-access-wrapper').hide();
+			} else {
+				seconds--;
+			}
+		}
+		var daysCountdown = setInterval(timer, 1000);
 	}
 
 });

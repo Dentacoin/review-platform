@@ -222,7 +222,7 @@ $(document).ready(function(){
 			if(secs==0) {
 				secs=59;
 				if(mins==0) {
-					mins = 23;
+					mins = 59;
 					if(hours==0) {
 						clearInterval(hoursCountdownTO);
 						window.location.reload();

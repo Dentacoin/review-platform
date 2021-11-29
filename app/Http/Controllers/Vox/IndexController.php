@@ -13,6 +13,8 @@ use App\Models\Country;
 use App\Models\User;
 use App\Models\Vox;
 
+use Carbon\Carbon;
+
 use Validator;
 use Response;
 use Request;
@@ -53,6 +55,7 @@ class IndexController extends FrontController {
 
 		$all_taken = false;
 		$latest_blog_posts = null;
+		$vip_access_seconds = 0;
 
 		if(!empty($this->user)) {
 			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
@@ -76,12 +79,17 @@ class IndexController extends FrontController {
 					$lbp->img = $post_image_link->guid;
 				}
 			}
+
+			if($this->user->vip_access) {
+				$vip_access_seconds = Carbon::now()->diffInSeconds($this->user->vip_access_until);
+			}
 		}
 
 		$seos = PageSeo::find(2);
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
         $arr = array(
+			'vip_access_seconds' => $vip_access_seconds, 
         	'all_taken' => $all_taken,
         	'latest_blog_posts' => $latest_blog_posts,
             'is_warning_message_shown' => $is_warning_message_shown,
