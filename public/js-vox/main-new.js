@@ -1332,6 +1332,29 @@ $(document).ready(function(){
 			showStats(poll_date_id);
 		}
 	}
+	
+	setTimeout( function() {
+
+	    $('.poll-bubble').css('bottom', $('.christmas-banner:visible').outerHeight() + ($(window).outerWidth() <= 768 ? 10 : 20));
+	    $('.support-icon').css('bottom', $('.christmas-banner:visible').outerHeight() + ($(window).outerWidth() <= 768 ? 10 : 20));
+	    if($('.christmas-banner').length) {
+	    	$('body').addClass('with-banner');
+	    	$('.christmas-banner:visible .banner-video')[0].play();
+	    	$('.christmas-banner:visible .banner-video')[0].removeAttribute("controls");
+	    }
+
+	    $('.close-banner').click( function(e) {
+	    	e.preventDefault();
+	    	$('.poll-bubble').css('bottom', ($(window).outerWidth() <= 768 ? 10 : 20));
+	    	$('.support-icon').css('bottom', ($(window).outerWidth() <= 768 ? 10 : 20));
+	    	$('.christmas-banner').hide();
+
+	    	$.ajax( {
+				url:  window.location.origin+'/en/remove-banner/',
+				type: 'GET',
+			});
+	    });
+    }, 500);
 
 });
 

@@ -78,4 +78,10 @@ class VoxController extends FrontController {
 
         return ServicesVox::getNextQuestionFunction($this->admin, $this->user, false, $this->country_id);
     }
+	
+	public function removeBanner() {
+		session([
+			'withoutBanner' => true
+		]);
+	}
 }

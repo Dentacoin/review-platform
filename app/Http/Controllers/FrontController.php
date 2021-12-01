@@ -567,7 +567,17 @@ class FrontController extends BaseController {
         $params['social_description'] = !empty($params['social_description']) ? $params['social_description'] : trans($text_domain.'.social.'.$this->current_page.'.description');
 
         $params['canonical'] = !empty($params['canonical']) ? $params['canonical'] : getLangUrl($this->current_page);
-        $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='trp' ? '/img-trp/socials-cover.jpg' : '/img-vox/logo-text.png'  );
+        $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='trp' ? '/img-trp/socials-cover.jpg' : '/img-vox/logo-text.png');
+
+        if(Request::getHost() == 'urgent.reviews.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com') {
+            $params['without_banner'] = session('withoutBanner');
+        } else {
+            if(date('m') != 12) {
+                $params['without_banner'] = true;
+            } else {
+                $params['without_banner'] = session('withoutBanner');
+            }
+        }
         
         if(isset($_SERVER['HTTP_USER_AGENT'])) {
 
@@ -601,6 +611,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '20211129';
+        $params['cache_version'] = '2021201';
     }
 }

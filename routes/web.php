@@ -380,6 +380,7 @@ $reviewRoutes = function () {
 			Route::post('index-dentist-down', 					'IndexController@index_dentist_down');
 			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
+			Route::get('remove-banner',							'IndexController@removeBanner');
 			
 			Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
 			Route::post('lead-magnet-step2', 					'IndexController@lead_magnet_step2');
@@ -541,6 +542,7 @@ $voxRoutes = function () {
 			Route::post('get-next-question', 					'VoxController@getNextQuestion');
 			Route::post('start-over', 							'VoxController@start_over');
 			Route::post('vox-public-down', 						'VoxController@vox_public_down');
+			Route::get('remove-banner',							'VoxController@removeBanner');
 
 			Route::any('daily-polls', 							'PollsController@list');
 			Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');

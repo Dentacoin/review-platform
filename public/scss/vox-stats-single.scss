@@ -461,3 +461,9 @@ $phone: "screen and (max-width: 768px)";
 		}
     }
 }
+
+body.logged-in {
+	.christmas-banner {
+		display: none !important;
+	}
+}

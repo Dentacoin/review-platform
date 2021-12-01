@@ -696,4 +696,9 @@ class IndexController extends FrontController {
 		}
 	}
 
+	public function removeBanner() {
+		session([
+			'withoutBanner' => true
+		]);
+	}
 }
