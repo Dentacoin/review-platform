@@ -8,6 +8,7 @@ use Illuminate\Pagination\Paginator;
 use App\Models\UserSurveyWarning;
 use App\Models\Recommendation;
 use App\Models\VoxCrossCheck;
+use App\Models\VoxAnswerOld;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
 use App\Models\UserAction;
@@ -144,6 +145,14 @@ class VoxService {
                         ->where('user_id', $user->id)
                         ->orderBy('id', 'desc')
                         ->get();
+
+                        $list_old = VoxAnswerOld::select('id', 'answer', 'question_id', 'created_at')
+                        ->where('vox_id', $vox_id)
+                        ->where('user_id', $user->id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+
+                        $list = $list->concat($list_old);
                         
                         $answered = [];
                         foreach ($list as $l) {
@@ -189,6 +198,9 @@ class VoxService {
 
                             if (is_numeric($vq->cross_check)) {
                                 $va = VoxAnswer::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+                                if(empty($va)) {
+                                    $va = VoxAnswerOld::where('user_id', $user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+                                }
                                 $cross_check_answer = $va ? $va->answer : null;
                             } else if($vq->cross_check == 'gender') {
                                 $cross_check_answer = $user->gender == 'm' ? 1 : 2;
@@ -197,17 +209,13 @@ class VoxService {
                                 $cross_check_answer = $user->birthyear;
                             } else {
                                 $cc = $vq->cross_check;
-                                $i=1;
+                                $i=0;
                                 foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
+                                    $i++;
                                     if($key==$user->$cc) {
-                                        if($key == 'household_children') {
-                                            $cross_checks[$vq->id] = $i + 1;
-                                        } else {                                
-                                            $cross_checks[$vq->id] = $i;
-                                        }
+                                        $cross_check_answer = $i;
                                         break;
                                     }
-                                    $i++;
                                 }
                             }
                         }
@@ -215,7 +223,7 @@ class VoxService {
                         $array['question'] = $vq->convertForResponse();
                     }
                 } else {
-
+                    
                     $crossCheckParams = self::getCrossChecks($user, $vox->questions);
                     $cross_checks = $crossCheckParams['cross_checks'];
                     $cross_checks_references = $crossCheckParams['cross_checks_references'];
@@ -295,6 +303,10 @@ class VoxService {
             $prev_q = VoxQuestion::find($next_question->prev_q_id_answers);
 
             $prev_answers = VoxAnswer::where('vox_id', $vox_id)->where('question_id', $prev_q->id)->where('user_id', $user->id)->get();
+            $prev_answers_old = VoxAnswerOld::where('vox_id', $vox_id)->where('question_id', $prev_q->id)->where('user_id', $user->id)->get();
+
+            $prev_answers = $prev_answers->concat($prev_answers_old);
+
             if($prev_answers->count() == 1) {
 
                 if($prev_answers->first()->answer != 0) {
@@ -441,6 +453,8 @@ class VoxService {
                         $givenAnswers = [];
                         if(is_object($trigger_question)) {
                             $user_answers = VoxAnswer::where('user_id', $user->id)->where('question_id', $trigger_question->id)->get();
+                            $user_answers_old = VoxAnswerOld::where('user_id', $user->id)->where('question_id', $trigger_question->id)->get();
+                            $user_answers = $user_answers->concat($user_answers_old);
                             foreach ($user_answers as $ua) {
                                 $givenAnswers[] = $ua->answer;
                             }
@@ -571,6 +585,10 @@ class VoxService {
         ->where('user_id', $user_id)
         ->delete();
 
+        VoxAnswerOld::where('vox_id', $vox->id)
+        ->where('user_id', $user_id)
+        ->delete();
+
         DcnReward::where('reference_id', $vox->id)
         ->where('platform', 'vox')
         ->where('type', 'survey')
@@ -604,6 +622,9 @@ class VoxService {
 
                 if (is_numeric($vq->cross_check)) {
                     $va = VoxAnswer::select('answer')->where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+                    if(empty($va)) {
+                        $va = VoxAnswerOld::select('answer')->where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+                    }
                     $cross_checks[$vq->id] = $va ? $va->answer : null;
                     $cross_checks_references[$vq->id] = $vq->cross_check;
                 } else if($vq->cross_check == 'gender') {
@@ -616,18 +637,15 @@ class VoxService {
                     $cross_checks_references[$vq->id] = 'birthyear';
                 } else {
                     $cc = $vq->cross_check;
+
                     $i=0;
                     foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
-                        if($key==$user->$cc) {
-                            if($cc == 'household_children') {
-                                $cross_checks[$vq->id] = $i + 1;
-                            } else {                                
-                                $cross_checks[$vq->id] = $i;
-                            }
+                        $i++;
+                        if($key==$user->$cc) {     
+                            $cross_checks[$vq->id] = $i;
                             $cross_checks_references[$vq->id] = $cc;
                             break;
                         }
-                        $i++;
                     }
                 }
             }
@@ -646,6 +664,11 @@ class VoxService {
             foreach ($list as $k => $aq) {
                 $lastkey = $aq;
                 VoxAnswer::where('vox_id', $vox->id)
+                ->where('user_id', $user_id)
+                ->where('question_id', $lastkey->question_id)
+                ->delete();
+
+                VoxAnswerOld::where('vox_id', $vox->id)
                 ->where('user_id', $user_id)
                 ->where('question_id', $lastkey->question_id)
                 ->delete();
@@ -804,7 +827,14 @@ class VoxService {
         }
 
         //vox for not logged users
-        if(!$user) {
+        // if(!$user) {
+        if(true) {
+
+            if(!$user) {
+                $problem_with_surveys = false;
+            } else {
+                $problem_with_surveys = true;
+            }
 
             if($for_app) {
                 return Response::json( array(
@@ -836,6 +866,7 @@ class VoxService {
                         'seo_description' => $seo_description,
                         'social_title' => $social_title,
                         'social_description' => $social_description,
+                        'problem_with_surveys' => $problem_with_surveys,
                     ),
                 ];
             }
@@ -1137,7 +1168,14 @@ class VoxService {
         ->orderBy('id', 'desc')
         ->get();
 
-        // dd($list);
+        $list_old = VoxAnswerOld::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
+        ->where('vox_id', $vox->id)
+        ->with('question')
+        ->where('user_id', $user->id)
+        ->orderBy('id', 'desc')
+        ->get();
+
+        $list = $list->concat($list_old);
 
         $answered = 0;
         $answered_without_skip_count = 0;
@@ -1429,7 +1467,6 @@ class VoxService {
 
         $crossCheckParams = self::getCrossChecks($user, $vox->questions);
         $cross_checks = $crossCheckParams['cross_checks'];
-        $cross_checks_references = $crossCheckParams['cross_checks_references'];
 
         $list = VoxAnswer::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
         ->where('vox_id', $vox->id)
@@ -1437,6 +1474,15 @@ class VoxService {
         ->where('user_id', $user->id)
         ->orderBy('id', 'desc')
         ->get();
+
+        $list_old = VoxAnswerOld::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
+        ->where('vox_id', $vox->id)
+        ->with('question')
+        ->where('user_id', $user->id)
+        ->orderBy('id', 'desc')
+        ->get();
+
+        $list = $list->concat($list_old);
 
         $answered = [];
         foreach ($list as $l) {
@@ -1450,6 +1496,7 @@ class VoxService {
             }
         }
 
+        //captcha check 
         if($for_app) {
             $not_bot = true;
 
@@ -1515,13 +1562,12 @@ class VoxService {
         ];
 
         $q = Request::input('question');
+        $type = Request::input('type');
+        $answ = Request::input('answer');
+
+        $found = isset( config('vox.details_fields')[$type] ) || in_array($type, ['gender-question', 'birthyear-question', 'location-question']) ? true : false;
 
         if( !isset( $answered[$q] ) && $not_bot ) {
-
-            $type = Request::input('type');
-            $answ = Request::input('answer');
-
-            $found = isset( config('vox.details_fields')[$type] ) || in_array($type, ['gender-question', 'birthyear-question', 'location-question']) ? true : false;
 
             foreach ($vox->questions as $question) {
                 if($question->id == $q) {
@@ -1529,6 +1575,7 @@ class VoxService {
                     break;
                 }
             }
+            
             if (!empty($welcome_vox)) {
                 foreach ($welcome_vox->questions as $question) {
                     if($question->id == $q) {
@@ -1566,6 +1613,9 @@ class VoxService {
                         VoxAnswer::where('user_id', $user->id)->update([
                             $type => $answ
                         ]);
+                        VoxAnswerOld::where('user_id', $user->id)->update([
+                            $type => $answ
+                        ]);
                     }
                     $valid = true;
                     $a = $answ;
@@ -1594,6 +1644,9 @@ class VoxService {
                     VoxAnswer::where('user_id', $user->id)->update([
                         'country_id' => $country_id
                     ]);
+                    VoxAnswerOld::where('user_id', $user->id)->update([
+                        'country_id' => $country_id
+                    ]);
                     $user->save();
 
                     $a = $country_id;
@@ -1618,6 +1671,10 @@ class VoxService {
                         'age' => $agegroup
                     ]);
 
+                    VoxAnswerOld::where('user_id', $user->id)->update([
+                        'age' => $agegroup
+                    ]);
+
                     $valid = true;
                     $a = $answ;
 
@@ -1633,6 +1690,9 @@ class VoxService {
                     $user->gender = $answ;
                     $user->save();
                     VoxAnswer::where('user_id', $user->id)->update([
+                        'gender' => $answ
+                    ]);
+                    VoxAnswerOld::where('user_id', $user->id)->update([
                         'gender' => $answ
                     ]);
                     $valid = true;
@@ -1768,6 +1828,9 @@ class VoxService {
                                 VoxAnswer::where('vox_id', $vox->id)
                                 ->where('user_id', $user->id)
                                 ->delete();
+                                VoxAnswerOld::where('vox_id', $vox->id)
+                                ->where('user_id', $user->id)
+                                ->delete();
                             }
                         } else {
                             UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->delete();
@@ -1799,6 +1862,9 @@ class VoxService {
                             VoxAnswer::where('vox_id', $vox->id)
                             ->where('user_id', $user->id)
                             ->delete();
+                            VoxAnswerOld::where('vox_id', $vox->id)
+                            ->where('user_id', $user->id)
+                            ->delete();
                         }
                         
                         return Response::json( $ret );
@@ -1811,7 +1877,6 @@ class VoxService {
                             $answer->question_id = $q;
                             $answer->answer = 0;
                             $answer->is_skipped = true;
-                            $answer->country_id = $user->country_id;
                             
                             if($testmode) {
                                 $answer->is_admin = true;
@@ -1866,6 +1931,9 @@ class VoxService {
                                     }
 
                                     VoxAnswer::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $found->cross_check )->update([
+                                        'answer' => $a,
+                                    ]);
+                                    VoxAnswerOld::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $found->cross_check )->update([
                                         'answer' => $a,
                                     ]);
                                 } else if($found->cross_check == 'gender') {
@@ -2005,7 +2073,7 @@ class VoxService {
                     if( $reallist->count() && $reallist->count()%$ppp==0 && !$testmode && !$user->is_partner ) { //confirmed from Petya for is_partner 05.11.21
 
                         $pagenum = $reallist->count()/$ppp;
-                        $start = $reallist->forPage($pagenum, $ppp)->first();
+                        $start = $reallist->forPage($pagenum, $ppp)->last();
                         $diff = Carbon::now()->diffInSeconds( $start->created_at );
                         $normal = $ppp*2;
                         
@@ -2069,6 +2137,10 @@ class VoxService {
                                 VoxAnswer::where('vox_id', $vox->id)
                                 ->where('user_id', $user->id)
                                 ->delete();
+
+                                VoxAnswerOld::where('vox_id', $vox->id)
+                                ->where('user_id', $user->id)
+                                ->delete();
                             }
                         }
                     }
@@ -2125,7 +2197,7 @@ class VoxService {
                         $reward->platform = 'vox';
                         $reward->type = 'survey';
                         $reward->reward = $rewardForCurVox;
-                        $start = $list->first()->created_at;
+                        $start = $list->last()->created_at;
                         $normal = count($vox->questions)*2;
                         $reward->seconds = Carbon::now()->diffInSeconds( $start );
                         GeneralHelper::deviceDetector($reward);
@@ -2148,6 +2220,7 @@ class VoxService {
                         $ret['social_profile'] = $social_profile;
 
                         VoxAnswer::where('user_id', $user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
+                        VoxAnswerOld::where('user_id', $user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
                         $vox->recalculateUsersPercentage($user);
                         $user->giveInvitationReward('vox');
@@ -2211,6 +2284,10 @@ class VoxService {
 
         if (!empty($vox) && !empty($user_id)) {
             VoxAnswer::where('vox_id', Request::input('vox_id'))
+            ->where('user_id', $user_id)
+            ->delete();
+
+            VoxAnswerOld::where('vox_id', Request::input('vox_id'))
             ->where('user_id', $user_id)
             ->delete();
 

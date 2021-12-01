@@ -130,6 +130,12 @@
 				<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
 			@endif
 
+			<div class="alert alert-warning" style="margin-top: 10px;">
+				Dear DentaVoxers,<br/><br/>
+
+				Due to system upgrades to improve your experience on the platform, temporary the surveys are not available. Check our Holiday Calendar with daily prizes while we are working on the improvements: <a target="_blank" href="https://dentacoin.com/holiday-calendar/2021">dentacoin.com/holiday-calendar/2021</a>!
+			</div>
+
 			@if(request()->exists('daily-answer'))
 				<div class="daily-poll-welcome">
 					<div class="flex-mobile">

@@ -7,6 +7,14 @@
 			<h2 class="vox-title">"{{ $vox->title }}"</h2>
 			<h2>{{ trans('vox.page.public-questionnaire.title') }}</h2>
 
+			@if($problem_with_surveys)
+				<div class="alert alert-warning">
+					Dear DentaVoxers,<br/><br/>
+
+					Due to system upgrades to improve your experience on the platform, temporary the surveys are not available. Check our Holiday Calendar with daily prizes while we are working on the improvements: <a target="_blank" href="https://dentacoin.com/holiday-calendar/2021">dentacoin.com/holiday-calendar/2021</a>!
+				</div>
+			@endif
+
 			<div class="swiper-wrapper">
 
 		      	<div class="swiper-slide">
@@ -40,16 +48,18 @@
 										<p class="vox-description">{{ $vox->description }}</p>
 									</div>
 								</div>
-								<div class="flex login-buttons">
-									<div class="col">
-										<p>{{ trans('vox.page.questionnaire.not-logged-register-title') }}</p>
-										<a href="javascript:;" class="blue-button open-dentacoin-gateway patient-register">{{ trans('vox.page.questionnaire.not-logged-register-button') }}</a>
+								@if(!$problem_with_surveys)
+									<div class="flex login-buttons">
+										<div class="col">
+											<p>{{ trans('vox.page.questionnaire.not-logged-register-title') }}</p>
+											<a href="javascript:;" class="blue-button open-dentacoin-gateway patient-register">{{ trans('vox.page.questionnaire.not-logged-register-button') }}</a>
+										</div>
+										<div class="col">
+											<p>{{ trans('vox.page.questionnaire.not-logged-login-title') }}</p>
+											<a href="javascript:;" class="white-button open-dentacoin-gateway patient-login"><img src="{{ url('new-vox-img/log-in-icon.svg') }}" width="25" height="25">{{ trans('vox.page.questionnaire.not-logged-login-button') }}</a>
+										</div>
 									</div>
-									<div class="col">
-										<p>{{ trans('vox.page.questionnaire.not-logged-login-title') }}</p>
-										<a href="javascript:;" class="white-button open-dentacoin-gateway patient-login"><img src="{{ url('new-vox-img/log-in-icon.svg') }}" width="25" height="25">{{ trans('vox.page.questionnaire.not-logged-login-button') }}</a>
-									</div>
-								</div>
+								@endif
 							</div>
 				      	</div>
 			      	</div>
