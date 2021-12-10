@@ -1813,7 +1813,7 @@ class UsersController extends AdminController {
             }
         }
 
-        $this->request->session()->flash('success-message', 'All selected dentists are rejected' );
+        $this->request->session()->flash('success-message', 'All selected dentists are approved' );
         return redirect(url()->previous());
     }
 
