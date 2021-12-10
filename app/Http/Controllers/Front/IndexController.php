@@ -235,15 +235,15 @@ class IndexController extends FrontController {
 				} else if(!empty($this->user->city_id)) {
 					$current_city = $this->user->city->name;
 				} else {
-					if(!empty($this->user->country_id) && $this->user->country_id != $this->country_id) {
-						$current_city = $this->user->country->name;
+					if(!empty($this->user->country_id)) {
+						if($this->user->country_id != $this->country_id) {
+							$current_city = $this->user->country->name;
+						} else {
+							$current_city = \GeoIP::getLocation()->country;
+						}
 					} else {
 						$current_city = \GeoIP::getLocation()->country;
 					}
-				}
-
-				if($this->user->id == 191210) {
-					dd($this->user->country_id, $this->country_id, $current_city);
 				}
 			} else {
 				//by IP
