@@ -241,6 +241,10 @@ class IndexController extends FrontController {
 						$current_city = \GeoIP::getLocation()->country;
 					}
 				}
+
+				if($this->user->id == 191210) {
+					dd($this->user->country_id, $this->country_id, $current_city);
+				}
 			} else {
 				//by IP
 				if($city_id) {
