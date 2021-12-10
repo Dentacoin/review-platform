@@ -45,7 +45,6 @@ class DentistsController extends FrontController {
         }
         // $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
         $corrected_query = $this->getCorrectedQuery($query, $filter);
-
         if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
             return redirect( getLangUrl($corrected_query) );
         }
@@ -61,17 +60,13 @@ class DentistsController extends FrontController {
             $lon = 0;
         } else if($filter == 'all-results') {
             $items = $items->where(function($q) use ($query) {
-                $q->where('name', 'LIKE', $query.'%')
+                $q->where('name', 'LIKE', '%'.$query.'%')
                 ->orWhere(function ($queryy) use ($query) {
-                    $queryy->where('name_alternative', 'LIKE', $query.'%')
-                    ->orWhere('slug', 'LIKE', $query.'%');
+                    $queryy->where('name_alternative', 'LIKE', '%'.$query.'%')
+                    ->orWhere('slug', 'LIKE', '%'.$query.'%');
                 });
             });
             $mode = 'name';
-
-            // if(!empty($this->user) && $this->user->id == 37530) {
-            //     dd($query, $items);
-            // }
         } else {
 
             if(empty($lat) || empty($lon)) {
