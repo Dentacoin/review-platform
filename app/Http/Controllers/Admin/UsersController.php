@@ -1468,6 +1468,13 @@ class UsersController extends AdminController {
             }
         }
 
+        $user_history = new UserHistory;
+        $user_history->user_id = $item->id;
+        $user_history->admin_id = $this->user->id;
+        $user_history->status = 'new';
+        $user_history->new_status = 'approved';
+        $user_history->save();
+
         $item->status = 'approved';
         $item->save();
         $item->generateSocialCover();
@@ -1508,6 +1515,17 @@ class UsersController extends AdminController {
 
             $patient->sendGridTemplate(65, $substitutions, 'trp');
         }
+
+        $user_history = new UserHistory;
+        $user_history->user_id = $item->id;
+        $user_history->admin_id = $this->user->id;
+        $user_history->status = 'added_new';
+        $user_history->new_status = 'added_approved';
+        $user_history->save();
+
+        $item->status = 'approved';
+        $item->save();
+        $item->generateSocialCover();
     }
 
     public function import() {
