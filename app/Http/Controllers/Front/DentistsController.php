@@ -66,9 +66,14 @@ class DentistsController extends FrontController {
                     $queryy->where('name_alternative', 'LIKE', $query.'%')
                     ->orWhere('slug', 'LIKE', $query.'%');
                 });
-                
             });
             $mode = 'name';
+
+            
+
+            if(!empty($this->user) && $this->user->id == 37530) {
+                dd($query, $items);
+            }
         } else {
 
             if(empty($lat) || empty($lon)) {
