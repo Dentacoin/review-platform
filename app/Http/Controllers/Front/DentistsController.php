@@ -69,11 +69,9 @@ class DentistsController extends FrontController {
             });
             $mode = 'name';
 
-            
-
-            if(!empty($this->user) && $this->user->id == 37530) {
-                dd($query, $items);
-            }
+            // if(!empty($this->user) && $this->user->id == 37530) {
+            //     dd($query, $items);
+            // }
         } else {
 
             if(empty($lat) || empty($lon)) {

@@ -1030,39 +1030,9 @@ class UsersController extends AdminController {
                             if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
 
                                 if ($this->request->input($key)=='added_approved') {
-                                    $patient = User::find($item->invited_by);
 
-                                    if (empty($item->slug)) {
-                                        $item->slug = $item->makeSlug();
-                                        $item->save();
-                                    }
+                                    $this->addedApproveDentist($item);
 
-                                    $substitutions = [
-                                        "image_unclaimed_profile" => $item->getSocialCover(),
-                                        "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
-                                    ];
-
-                                    if(!empty($item->email)) {
-                                        $item->sendGridTemplate(43, $substitutions, 'trp');
-                                    }
-                                    
-                                    if (!empty($patient)) {
-                                        $reward = new DcnReward();
-                                        $reward->user_id = $patient->id;
-                                        $reward->reward = Reward::getReward('patient_add_dentist');
-                                        $reward->platform = 'trp';
-                                        $reward->type = 'added_dentist';
-                                        $reward->reference_id = $item->id;
-                                        GeneralHelper::deviceDetector($reward);
-                                        $reward->save();
-
-                                        $substitutions = [
-                                            'added_dentist_name' => $item->getNames(),
-                                            'trp_added_dentist_prf' => $item->getLink().'?dcn-gateway-type=patient-login',
-                                        ];
-
-                                        $patient->sendGridTemplate(65, $substitutions, 'trp');
-                                    }
                                 } else if( $this->request->input($key)=='approved' ) {
                                     
                                     $this->approveDentist($item);
@@ -1503,6 +1473,43 @@ class UsersController extends AdminController {
         $item->generateSocialCover();
     }
 
+    private function addedApproveDentist($item) {
+
+        $patient = User::find($item->invited_by);
+
+        if (empty($item->slug)) {
+            $item->slug = $item->makeSlug();
+            $item->save();
+        }
+
+        $substitutions = [
+            "image_unclaimed_profile" => $item->getSocialCover(),
+            "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+        ];
+
+        if(!empty($item->email)) {
+            $item->sendGridTemplate(43, $substitutions, 'trp');
+        }
+        
+        if (!empty($patient)) {
+            $reward = new DcnReward();
+            $reward->user_id = $patient->id;
+            $reward->reward = Reward::getReward('patient_add_dentist');
+            $reward->platform = 'trp';
+            $reward->type = 'added_dentist';
+            $reward->reference_id = $item->id;
+            GeneralHelper::deviceDetector($reward);
+            $reward->save();
+
+            $substitutions = [
+                'added_dentist_name' => $item->getNames(),
+                'trp_added_dentist_prf' => $item->getLink().'?dcn-gateway-type=patient-login',
+            ];
+
+            $patient->sendGridTemplate(65, $substitutions, 'trp');
+        }
+    }
+
     public function import() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
@@ -1778,8 +1785,12 @@ class UsersController extends AdminController {
         if( Request::input('ids') ) {
             $approvedUsers = User::whereIn('id', Request::input('ids'))->get();
             foreach ($approvedUsers as $au) {
-                if($au->is_dentist && $au->status != 'approved') {
-                    $this->approveDentist($au);
+                if($au->is_dentist) {
+                    if($au->status == 'added_new') {
+                        $this->addedApproveDentist($au);
+                    } else if($au->status == 'new') {
+                        $this->approveDentist($au);
+                    }
                 }
             }
         }
