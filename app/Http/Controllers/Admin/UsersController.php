@@ -1523,7 +1523,7 @@ class UsersController extends AdminController {
         $user_history->new_status = 'added_approved';
         $user_history->save();
 
-        $item->status = 'approved';
+        $item->status = 'added_approved';
         $item->save();
         $item->generateSocialCover();
     }
