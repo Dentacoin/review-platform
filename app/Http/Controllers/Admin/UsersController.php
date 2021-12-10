@@ -1781,7 +1781,7 @@ class UsersController extends AdminController {
         if( Request::input('ids') ) {
             $rejectusers = User::whereIn('id', Request::input('ids'))->get();
             foreach ($rejectusers as $ru) {
-                if($ru->is_dentist && $au->status != 'rejected') {
+                if($ru->is_dentist && $ru->status != 'rejected') {
                     $ru->status = 'rejected';
                     $ru->save();
                     $ru->sendTemplate(14);
