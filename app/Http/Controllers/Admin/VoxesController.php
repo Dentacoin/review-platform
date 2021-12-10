@@ -143,55 +143,55 @@ class VoxesController extends AdminController {
 
         $without_translations = [];
 
-        foreach($voxes as $survey) {
+        // foreach($voxes as $survey) {
 
-            if(empty($survey->translation_langs) && $survey->processingForTranslations->isEmpty()) {
-                $without_translations[] = $survey->id;
-            }
+        //     if(empty($survey->translation_langs) && $survey->processingForTranslations->isEmpty()) {
+        //         $without_translations[] = $survey->id;
+        //     }
 
-            // if there are duplicated questions order
-            if($survey->questions->isNotEmpty()) {
-                $count_qs = $survey->questions->count();
+        //     // if there are duplicated questions order
+        //     if($survey->questions->isNotEmpty()) {
+        //         $count_qs = $survey->questions->count();
 
-                for ($i=1; $i <= $count_qs ; $i++) { 
-                    if(!empty(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->first())) {
-                        if(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->count() > 1) {
-                            $questions_order_bug = true;
-                            $questions_order_bug_message[$survey->id][] = 'Duplicated order number - '.$i.'<br/>';  //diplicated order
-                        }
-                    } else {
-                        $questions_order_bug = true;
-                        $questions_order_bug_message[$survey->id][] = 'Missing order number - '.$i.'<br/>';  //missing order
-                    }
-                }
-            }
+        //         for ($i=1; $i <= $count_qs ; $i++) { 
+        //             if(!empty(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->first())) {
+        //                 if(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->count() > 1) {
+        //                     $questions_order_bug = true;
+        //                     $questions_order_bug_message[$survey->id][] = 'Duplicated order number - '.$i.'<br/>';  //diplicated order
+        //                 }
+        //             } else {
+        //                 $questions_order_bug = true;
+        //                 $questions_order_bug_message[$survey->id][] = 'Missing order number - '.$i.'<br/>';  //missing order
+        //             }
+        //         }
+        //     }
 
-            if($survey->has_stats) {
-                if(empty($survey->stats_description)) {
-                    $error_arr[$survey->id][] = 'Missing stats description';
-                    $error = true;
-                }
+        //     if($survey->has_stats) {
+        //         if(empty($survey->stats_description)) {
+        //             $error_arr[$survey->id][] = 'Missing stats description';
+        //             $error = true;
+        //         }
 
-                if($survey->stats_questions->isEmpty()) {
-                    $error_arr[$survey->id][] = 'Missing stats questions';
-                    $error = true;
-                } else {
+        //         if($survey->stats_questions->isEmpty()) {
+        //             $error_arr[$survey->id][] = 'Missing stats questions';
+        //             $error = true;
+        //         } else {
 
-                    foreach ($survey->stats_questions as $stat) {
-                        if(empty($stat->stats_title_question) && empty($stat->stats_title) && empty($stat->stats_title_question)) {
-                            $error_arr[$survey->id][] = [
-                                'error' => 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> title',
-                            ];
-                            $error = true;
-                        }
-                        if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
-                            $error_arr[$survey->id][] = 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> demographics';
-                            $error = true;
-                        }
-                    }
-                }
-            }
-        }
+        //             foreach ($survey->stats_questions as $stat) {
+        //                 if(empty($stat->stats_title_question) && empty($stat->stats_title) && empty($stat->stats_title_question)) {
+        //                     $error_arr[$survey->id][] = [
+        //                         'error' => 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> title',
+        //                     ];
+        //                     $error = true;
+        //                 }
+        //                 if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
+        //                     $error_arr[$survey->id][] = 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> demographics';
+        //                     $error = true;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
     	return $this->showView('voxes', array(
             // 'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
