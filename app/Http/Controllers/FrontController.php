@@ -301,7 +301,7 @@ class FrontController extends BaseController {
                             session(['city_id' => $c->id]);
                         }
                     }
-                }                
+                }
             }
 
             if( Cookie::get('first-login-recommendation') ) {

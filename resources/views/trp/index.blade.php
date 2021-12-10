@@ -22,7 +22,7 @@
 			    <div class="flickity-dentists-form">
 			    	<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}"> {{ !empty($city_cookie) || !empty($city_id) || (!empty($user) && !empty($user->city_name)) ? trans('trp.page.index.dentists.near') : trans('trp.page.index.dentists.in') }}: 
 			    	<a href="javascript:;" data-popup="change-dentist-popup" class="current-city">
-			    		{{ !empty($city_cookie) ? $city_cookie['city_name'] : (!empty($city_id) ? $current_city : (!empty($user) && !empty($user->city_name) ? $user->city_name : $current_country)) }}
+			    		{{ $current_city }}
 			    		<img class="caret-down" src="{{ url('img/caret-white-down.png') }}"/>
 			    	</a>
 			    </div>

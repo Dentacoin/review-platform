@@ -131,6 +131,12 @@ class IndexController extends FrontController {
 		$featured = User::where('is_dentist', 1)->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNull('self_deleted')->has('country')->with('country')->orderBy('avg_rating', 'DESC');
 		$homeDentists = collect();
 
+		if(!empty($this->city_id)) {
+			$city_id = City::with('translations')->find($this->city_id);
+		} else {
+			$city_id = null;
+		}
+
 		if (!empty($city_cookie)) {
 			if( $homeDentists->count() < 12 ) {
 				$addMore = clone $featured;
@@ -158,12 +164,6 @@ class IndexController extends FrontController {
 			}
 
 		} else {
-
-			if(!empty($this->city_id)) {
-				$city_id = City::with('translations')->find($this->city_id);
-			} else {
-				$city_id = null;
-			}
 
 			if( !empty($this->user) ) {
 				if( $homeDentists->count() < 12 && $this->user->city_name ) {
@@ -224,13 +224,31 @@ class IndexController extends FrontController {
 			$strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
 			$completed_strength = $this->user->getStrengthCompleted('trp');
 		}
-
-		if (!empty(Cookie::get('functionality_cookies'))) {
-			$current_city = \GeoIP::getLocation()->city;
-			$current_country = \GeoIP::getLocation()->country;
+		
+		if(!empty($city_cookie)) {
+			$current_city = $city_cookie['city_name'];
 		} else {
-			$current_city = null;
-			$current_country = null;
+			if(!empty($this->user)) {
+				//by user profile
+				if(!empty($this->user->city_name)) {
+					$current_city = $this->user->city_name;
+				} else if(!empty($this->user->city_id)) {
+					$current_city = $this->user->city->name;
+				} else {
+					if(!empty($this->user->country_id) && $this->user->country_id != $this->country_id) {
+						$current_city = $this->user->country->name;
+					} else {
+						$current_city = \GeoIP::getLocation()->country;
+					}
+				}
+			} else {
+				//by IP
+				if($city_id) {
+					$current_city = \GeoIP::getLocation()->city;
+				} else {
+					$current_city = \GeoIP::getLocation()->country;
+				}
+			}
 		}
 
 		$seos = PageSeo::find(20);		
@@ -247,7 +265,6 @@ class IndexController extends FrontController {
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
 			'current_city' => $current_city,
-			'current_country' => $current_country,
 			'js' => [
 				'index.js',
                 'search.js',
