@@ -21,6 +21,7 @@ use App\Models\VoxCronjobLang;
 use App\Models\ScrapeDentist;
 use App\Models\VoxAnswerOld;
 use App\Models\UserHistory;
+use App\Models\VoxQuestion;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -780,7 +781,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     'currency' => 'ETH',
                     'address' => '0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e',
                     'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 250000000000000000
+                    'limit' => 50000000000000000
                 ],
                 [
                     'currency' => 'DCN',
@@ -792,7 +793,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     'currency' => 'ETH',
                     'address' => '0x6052a6292873947eb547456716afcc539b172fde',
                     'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0x6052a6292873947eb547456716afcc539b172fde&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 250000000000000000
+                    'limit' => 50000000000000000
                 ],
                 [
                     'currency' => 'DCN',
@@ -804,7 +805,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     'currency' => 'ETH',
                     'address' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
                     'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0xe00b37962604344cacd1efbf0d45553cc400f53c&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 250000000000000000
+                    'limit' => 150000000000000000
                 ],
             ];
 
@@ -815,7 +816,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     echo ' CURL '.$curl;
                     $curl = json_decode($curl, true);
                     if(!empty(intval($curl['result']))) {
-                        if( intval($curl['result']) < $data['limit'] ) { //0.25
+                        if( intval($curl['result']) < $data['limit'] ) { //0.15 for VOX , 0.05 for others
                             $currency = $data['currency'];
 
                             Mail::send('emails.template', [
@@ -833,7 +834,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                                     $message->from($sender, $sender_name);
                                     $message->to( 'admin@dentacoin.com' );
                                     $message->cc( [
-                                        'donika.kraeva@dentacoin.com', 
                                         'stoyan.georgiev@dentaprime.com',
                                         'petya.ivanova@dentacoin.com'
                                     ] );
@@ -883,23 +883,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     $user->deleteActions();
                     User::destroy( $user->id );
                 }
-
-                $mtext = 'We just deleted the following dentists, because they were suspicious for over a week:
-
-                '.implode(', ', $userNames ).'
-
-                ';
-
-                Mail::raw($mtext, function ($message) {
-
-                    $sender = config('mail.from.address');
-                    $sender_name = config('mail.from.name');
-
-                    $message->from($sender, $sender_name);
-                    $message->to( 'betina.bogdanova@dentacoin.com' );
-                    //$message->to( 'dokinator@gmail.com' );
-                    $message->subject('Suspicious dentists deleted');
-                });
             }
 
             echo 'Suspicious Dentist Delete Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -1487,10 +1470,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         //             $sender_name = config('mail.from.name');
 
         //             $message->from($sender, $sender_name);
-        //             $message->to( 'petar.stoykov@dentacoin.com' );
         //             $message->to( 'donika.kraeva@dentacoin.com' );
-        //             //$message->to( 'gergana@youpluswe.com' );
-        //             //$message->to( 'dokinator@gmail.com' );
         //             $message->subject('Users with high balance');
         //             $message->setBody($mtext, 'text/html'); // for HTML rich messages
         //         });
@@ -2442,20 +2422,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         })->everyMinute();
 
 
-        // $schedule->call(function () {
-        //     echo 'Translate voxes'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-        //     $voxes = Vox::where('id', '>', 45)->get();
-
-        //     foreach($voxes as $vox) {
-        //         VoxHelper::translateSurvey('es', $vox);
-        //     }
-
-        //     echo 'Translate voxes cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-            
-        // })->dailyAt('14:36');
-
-
         $schedule->call(function () {
             echo 'Pending transactions on server check - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
@@ -2511,6 +2477,64 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             echo 'Remove user\'s vip access - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->cron("* * * * *");
+
+
+        // $schedule->call(function () {
+        //     echo 'Voxes Errors Check - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+        //     $voxes = Vox::with('questions')->where('type', 'normal')->get();
+            
+        //     $questions_order_bug_message = [];
+        //     $without_translations = [];
+        //     $error_arr = [];
+
+        //     foreach($voxes as $survey) {
+
+        //         if(empty($survey->translation_langs) && $survey->processingForTranslations->isEmpty()) {
+        //             $without_translations[] = $survey->id;
+        //         }
+
+        //         // if there are duplicated questions order
+        //         if($survey->questions->isNotEmpty()) {
+        //             $count_qs = $survey->questions->count();
+
+        //             for ($i=1; $i <= $count_qs ; $i++) { 
+        //                 if(!empty(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->first())) {
+        //                     if(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->count() > 1) {
+        //                         $questions_order_bug_message[$survey->id][] = 'Duplicated order number - '.$i.'<br/>';  //diplicated order
+        //                     }
+        //                 } else {
+        //                     $questions_order_bug_message[$survey->id][] = 'Missing order number - '.$i.'<br/>';  //missing order
+        //                 }
+        //             }
+        //         }
+
+        //         if($survey->has_stats) {
+        //             if(empty($survey->stats_description)) {
+        //                 $error_arr[$survey->id][] = 'Missing stats description';
+        //             }
+
+        //             if($survey->stats_questions->isEmpty()) {
+        //                 $error_arr[$survey->id][] = 'Missing stats questions';
+        //             } else {
+
+        //                 foreach ($survey->stats_questions as $stat) {
+        //                     if(empty($stat->stats_title_question) && empty($stat->stats_title) && empty($stat->stats_title_question)) {
+        //                         $error_arr[$survey->id][] = [
+        //                             'error' => 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> title',
+        //                         ];
+        //                     }
+        //                     if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
+        //                         $error_arr[$survey->id][] = 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> demographics';
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+
+        //     echo 'Voxes Errors Check - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        // })->dailyAt('04:00');
 
         $schedule->call(function () {
             echo 'TEST CRON END '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
