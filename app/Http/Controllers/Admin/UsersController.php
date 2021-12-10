@@ -1264,10 +1264,10 @@ class UsersController extends AdminController {
             
             foreach ($unfinishedVoxes as $v) {
                 $unfinished[$v->id] = $v;
-                $ans = VoxAnswer::where('user_id', $id)->where('vox_id', $v->id)->orderBy('id', 'asc')->first();
+                $ans = VoxAnswer::where('user_id', $id)->where('vox_id', $v->id)->orderBy('created_at', 'asc')->first();
 
                 if(empty($ans)) {
-                    $ans = VoxAnswerOld::where('user_id', $id)->where('vox_id', $v->id)->orderBy('id', 'asc')->first();
+                    $ans = VoxAnswerOld::where('user_id', $id)->where('vox_id', $v->id)->orderBy('created_at', 'asc')->first();
                 }
                 $user_log = UserLogin::where('user_id', $id)->where('created_at', '<', $ans->created_at )->orderBy('id', 'desc')->first();
 
