@@ -200,7 +200,7 @@
                 <div class="admin-message-wrapper">
                     @foreach($messages as $message)
                         <div class="message" action="{{ url('cms/read-admin-message/'.$message->id) }}">
-                            <p>{{ $message->message }}</p>
+                            <p>{!! nl2br($message->message) !!}</p>
                             <div style="margin-bottom:10px;">
                                 <a class="btn btn-success" href="javascript:;">OK</a>
                             </div>
