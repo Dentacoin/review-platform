@@ -212,7 +212,7 @@
                     <!-- <b>
                         Showing {{ $users->isNotEmpty() ? $users->count() : '0' }} out of total {{ $total_count }} profiles that match this search
                     </b> -->
-                    <form method="post" action="{{ url('cms/users/users/mass-reject') }}" id="mass-delete-form" mass-delete-action="{{ url('cms/users/users/mass-delete') }}" mass-reject-action="{{ url('cms/users/users/mass-reject') }}">
+                    <form method="post" action="{{ url('cms/users/users/mass-reject') }}" id="mass-delete-form" mass-delete-action="{{ url('cms/users/users/mass-delete') }}" mass-reject-action="{{ url('cms/users/users/mass-reject') }}" mass-approve-action="{{ url('cms/users/users/mass-approve') }}">
                         {!! csrf_field() !!}
     					@include('admin.parts.table', [
     						'table_id' => 'users',
@@ -228,6 +228,7 @@
                         <div style="display: flex">
                             <button type="submit" name="mass-delete" value="1" class="btn btn-danger" style="flex: 1" id="mass-delete-button">Delete selected users</button>
                             <button type="submit" name="mass-reject" value="1" class="btn btn-warning" style="flex: 1" id="mass-reject-button">Reject selected dentists</button>
+                            <button type="submit" name="mass-delete" value="1" class="btn btn-success" style="flex: 1" id="mass-approve-button">Approve selected dentists</button>
                         </div>
                     </form>
                 </div>

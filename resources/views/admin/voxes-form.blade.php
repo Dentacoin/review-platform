@@ -5,14 +5,19 @@
     <h1 class="page-header">
         {{ empty($item) ? trans('admin.page.'.$current_page.'.new.title') : trans('admin.page.'.$current_page.'.edit.title') }}
     </h1>
-
+    
     @if(!empty($error))
-        <i class="fa fa-exclamation-triangle err-vox" data-toggle="modal" data-target="#errorsModal"></i>
+        <div class="alert alert-danger">
+            @foreach($error_arr as $key => $value)
+                {!! $value !!} <br/>
+            @endforeach
+        </div>
     @endif
 
     @if(!empty($item) && !empty($questions_order_bug))
         <div class="alert alert-danger m-b-15">
-            Please, reorder the questions. There are duplicated or missing order numbers.
+            Please, reorder the questions. There are duplicated or missing order numbers. <br/>
+            {!! $questions_order_bug_message !!}
         </div>
     @endif
     <!-- end page-header -->
@@ -449,41 +454,41 @@
             {{ Form::close() }}
 
             @if(!empty($item))
-                @if($item->questions->isNotEmpty())
-                    <h3>Questions</h3>
-                    <p>
-                        Hints: <br/>
+                
+                <h3>Questions</h3>
+                <p>
+                    Hints: <br/>
 
-                        For bulk delete you need to check the checkboxes, then click button 'Delete selected questions'. <br/>
-                        For multiple re-arrange - hold the CTRL button and click on the questions. <br/>
-                    </p>
-                    <div class="panel panel-inverse" id="questions-vox">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.questions') }}</h4>
-                        </div>
-                        <div class="tab-content">
-                            @foreach($langs as $code => $lang_info)
-                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}">
-                                    <form method="post" action="{{ url('cms/vox-questions/mass-delete') }}" class="table-responsive-md" id="mass-delete-form">
-                                        {{-- <input id="translate-questionn" name="translate-question" type="hidden" value=""/> --}}
-                                        <table class="table table-striped table-question-list">
-                                            <thead>
-                                                <tr>
-                                                    <th><a href="javascript:;" class="table-select-all">All / None</a></th>
-                                                    <th>{{ trans('admin.page.'.$current_page.'.question-num') }}</th>
-                                                    <th>{{ trans('admin.page.'.$current_page.'.question-title') }}</th>
-                                                    <th>{{ trans('admin.page.'.$current_page.'.question-control') }}</th>
-                                                    <th>{{ trans('admin.page.'.$current_page.'.question-stats') }}</th>
-                                                    <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
-                                                    <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
-                                                    <th>Respondents</th>
-                                                    <th>Test question</th>
-                                                    <th>Duplicate</th>
-                                                    <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
-                                                    <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="questions-draggable" lang-code="{{ $code }}">
+                    For bulk delete you need to check the checkboxes, then click button 'Delete selected questions'. <br/>
+                    For multiple re-arrange - hold the CTRL button and click on the questions. <br/>
+                </p>
+                <div class="panel panel-inverse" id="questions-vox">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.questions') }}</h4>
+                    </div>
+                    <div class="tab-content">
+                        @foreach($langs as $code => $lang_info)
+                            <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}">
+                                <form method="post" action="{{ url('cms/vox-questions/mass-delete') }}" class="table-responsive-md" id="mass-delete-form">
+                                    <table class="table table-striped table-question-list">
+                                        <thead>
+                                            <tr>
+                                                <th><a href="javascript:;" class="table-select-all">All / None</a></th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-num') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-title') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-control') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-stats') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
+                                                <th>Respondents</th>
+                                                <th>Test question</th>
+                                                <th>Duplicate</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
+                                                <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="questions-draggable" lang-code="{{ $code }}">
+                                            @if($item->questions->isNotEmpty())
                                                 @foreach($item->questions as $question)
                                                     <tr question-order="{{ $question->order }}" question-id="{{ $question->id }}" {!! in_array($question->id, $linked_triggers) ? 'class="linked"' : '' !!}>
                                                         <td>
@@ -528,38 +533,27 @@
                                                             {{-- <a class="btn btn-sm btn-success" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id) }}">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
-                                                             --}}
+                                                            --}}
                                                             <a class="btn btn-sm btn-success edit-q-button" href="javascript:;" data-toggle="modal" data-target="#editQuestionModal" q-id="{{ $question->id }}" >
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a class="btn btn-sm btn-success delete-vox-question" onclick="return confirm('{{ trans('admin.common.sure') }}')" href="{{ url('cms/'.$current_page.'/edit/question-del/'.$question->id) }}">
+                                                            <a class="btn btn-sm btn-success delete-vox-question" href="{{ url('cms/'.$current_page.'/edit/question-del/'.$question->id) }}">
                                                                 <i class="fa fa-remove"></i>
                                                             </a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
-                                            </tbody>
-                                        </table>
-                                        <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" id="mass-delete-button">Delete selected questions</button>
-                                    </form>
-                                </div>
-                            @endforeach
-                        </div>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                    <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" id="mass-delete-button">Delete selected questions</button>
+                                </form>
+                            </div>
+                        @endforeach
                     </div>
-
-                    <style type="text/css">
-                        table tr td:nth-child(7) {
-                            word-break: break-all;
-                        }
-
-                        #addQuestionModal .modal-dialog,
-                        #editQuestionModal .modal-dialog {
-                            width: 90%;
-                        }
-                    </style>
-                @endif
+                </div>
 
                 <a class="btn btn-primary btn-block" href="javascript:;" data-toggle="modal" data-target="#addQuestionModal">
                     Add Question
@@ -628,29 +622,16 @@
         </div>
     </div>
 
-    @if(!empty($item) && $item->type != 'hidden')
-        <div id="modal-translate-question" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Do you want to translate edited question?</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="translate-question-form" method="post" action="{{ url('cms/vox/translate-question') }}">
-                            <input type="hidden" name="q-trans-id" value=""/>
-                            <button type="submit" class="btn btn-primary">Yes</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    <style type="text/css">
+        table tr td:nth-child(7) {
+            word-break: break-all;
+        }
+
+        #addQuestionModal .modal-dialog,
+        #editQuestionModal .modal-dialog {
+            width: 90%;
+        }
+    </style>
 
     <div id="duplicateModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -726,28 +707,6 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if(!empty($error))
-        <div id="errorsModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Errors</h4>
-                    </div>
-                    <div class="modal-body">
-                        @foreach($error_arr as $key => $value)
-                            {{ $key+1 }}. <a href="{!! isset($value['link']) ? $value['link'] : 'javascript:;'  !!}" {!! isset($value['link']) ? 'target="_blank"' : '' !!}>{{ $value['error'] }}</a><br/>
-                        @endforeach
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

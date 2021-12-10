@@ -1890,7 +1890,7 @@ svg:not(:root) {
   position: fixed;
   bottom: 0;
   right: 0;
-  z-index: 100; }
+  z-index: 10000000000; }
   @media screen and (max-width: 768px) {
     .poll-bubble {
       left: 0; } }
@@ -1907,12 +1907,11 @@ svg:not(:root) {
     float: right;
     max-width: 60px;
     margin-right: 20px;
-    margin-bottom: 25px; }
+    margin-bottom: 0px; }
     @media screen and (max-width: 768px) {
       .poll-bubble .small-bubble-image {
         max-width: 60px;
-        margin-right: 10px;
-        margin-bottom: 18pt; } }
+        margin-right: 10px; } }
   .poll-bubble .main-bubble-image {
     vertical-align: bottom;
     margin-right: -110px;
@@ -2273,4 +2272,5 @@ body.page-questionnaire.logged-in .christmas-banner {
   .christmas-banner .close-banner {
     position: absolute;
     right: 10px;
-    top: 10px; }
+    top: 10px;
+    z-index: 1000; }

@@ -19,6 +19,7 @@ use App\Models\CronjobFourRun;
 use App\Models\DcnTransaction;
 use App\Models\VoxCronjobLang;
 use App\Models\ScrapeDentist;
+use App\Models\VoxAnswerOld;
 use App\Models\UserHistory;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
@@ -2106,7 +2107,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     $message->from($sender, $sender_name);
                     $message->to( 'petya.ivanova@dentacoin.com' );
                     $message->to( 'donika.kraeva@dentacoin.com' );
-                    $message->to( 'gergana@youpluswe.com' );
                     $message->subject('Dentist with ?? symbols in address');
                     $message->setBody($mtext, 'text/html'); // for HTML rich messages
                 });
@@ -2167,7 +2167,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
                 $message->from($sender, $sender_name);
                 $message->to( 'petya.ivanova@dentacoin.com' );
-                $message->to( 'gergana@youpluswe.com' );
                 $message->subject('Unknown countries count');
                 $message->setBody($mtext, 'text/html'); // for HTML rich messages
             });
@@ -2404,13 +2403,15 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Answered questions count'.PHP_EOL.PHP_EOL.PHP_EOL;
 
+            $answered_questions_count_old = VoxAnswerOld::where('created_at', '>=', Carbon::now()->addMonths(-1)->firstOfMonth()->toDateTimeString())->where('created_at', '<=', Carbon::now()->addMonths(-1)->endOfMonth()->toDateTimeString())->count();
+
             $answered_questions_count = VoxAnswer::where('created_at', '>=', Carbon::now()->addMonths(-1)->firstOfMonth()->toDateTimeString())->where('created_at', '<=', Carbon::now()->addMonths(-1)->endOfMonth()->toDateTimeString())->count();
             // $answered_questions_count = VoxAnswer::where('created_at', '>=', '2021-09-01 00:00:00')->where('created_at', '<=', '2021-09-30 23:59:59')->count();
             
             $vox_q_count = new VoxQuestionAnswered;
             $vox_q_count->month = Carbon::now()->addMonths(-1)->month;
             $vox_q_count->year = Carbon::now()->addMonths(-1)->year;
-            $vox_q_count->count = $answered_questions_count;
+            $vox_q_count->count = $answered_questions_count_old + $answered_questions_count;
             $vox_q_count->save();
 
             echo 'Answered questions count cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -2496,19 +2497,20 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Remove user\'s vip access START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $users_with_vip_access = User::where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now())->get();
+            $users_with_vip_access = User::where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now()->addHours(2))->get();
 
             if($users_with_vip_access->isNotEmpty()) {
                 foreach($users_with_vip_access as $user) {
                     $user->vip_access = false;
                     $user->save();
+
+                    $user->sendGridTemplate(119, null, 'vox');
                 }
             }
 
             echo 'Remove user\'s vip access - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->everyMinute();
-
+        })->cron("* * * * *");
 
         $schedule->call(function () {
             echo 'TEST CRON END '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;

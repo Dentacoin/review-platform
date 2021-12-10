@@ -376,5 +376,27 @@ $(document).ready(function(){
 	    });
 
     } );
+
+	$('.admin-message-wrapper .btn').click( function() {
+
+		$.ajax({
+	        url: $(this).closest('.message').attr('action'),
+	        type: 'POST',
+			dataType: 'json',
+	    }).done( (function (data) {
+			console.log(data);
+			console.log('success');
+
+			$(this).closest('.message').remove();
+
+			if(!$('.admin-message-wrapper .message').length) {
+				$('.admin-message-wrapper').remove();
+			}
+
+	    }).bind(this) ).fail(function (data) {
+			console.log(data);
+	    });
+
+	});
 });
 

@@ -4,9 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\VoxAnswerOld;
-
-class VoxAnswer extends Model {
+class VoxAnswerOld extends Model {
     
     protected $fillable = [
         'user_id',
@@ -45,17 +43,6 @@ class VoxAnswer extends Model {
     
     public function country() {
         return $this->hasOne('App\Models\Country', 'id', 'country_id');
-    }
-
-    public static function getCount($reload=false) {
-        $fn = storage_path('vox_count');
-        $t = file_exists($fn) ? filemtime($fn) : null;
-        if($reload || !$t || $t < time()-3600) {
-            $cnt = self::count();
-            $cnt_old = VoxAnswerOld::count();
-            file_put_contents($fn, $cnt + $cnt_old);
-        }
-        return file_get_contents($fn);
     }
 }
 

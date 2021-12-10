@@ -1,9 +1,9 @@
 <?php 
 return [
-	'dcn-intro' => 'Intro: Dentacoin Currency & Apps',
-	'trp-demo' => 'Trusted Reviews | Demo',
+	'dеntacoin-intro' => 'Intro: Dentacoin Currency & Apps',
+	'trusted-reviews-demo' => 'Trusted Reviews | Demo',
 	'wallet-demo' => 'Dentacoin Wallet Creation | Demo',
-	'dv-demo' => 'DentaVox Surveys | Demo',
+	'dentavox-demo' => 'DentaVox Surveys | Demo',
 	'hubapp-demo' => 'Dentacoin HubApp | Demo',
 	'trading' => 'Trading DCN on Exchanges',
 ];

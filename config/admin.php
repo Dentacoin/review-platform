@@ -183,7 +183,8 @@ return [
             'subpages' => array(
                 'admins' => 'admins',
                 'ips' => 'ips',
-                'actions-history' => 'actions-history'
+                'actions-history' => 'actions-history',
+                'messages' => 'messages',
             ),
         ),
         'logs' => array(

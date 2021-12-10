@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\VoxAnswersDependency;
+use App\Models\VoxAnswerOld;
 use App\Models\VoxQuestion;
 use App\Models\VoxAnswer;
 use App\Models\VoxScale;
@@ -63,6 +64,7 @@ class VoxHelper {
 
         $translation = $question->translateOrNew($lang_code);
         $translation->vox_question_id = $question->id;
+        $translation->vox_id = $question->vox_id;
 
         $ch = curl_init();
 
@@ -126,7 +128,7 @@ class VoxHelper {
         }
     }
 
-    public static function exportStatsXlsx($vox, $q, $demographics, $results, $scale_for, $all_period, $is_admin) {
+    public static function exportStatsXlsx($vox, $q, $demographics, $results, $results_old, $scale_for, $all_period, $is_admin) {
 
         $cols = ['Survey Date'];
         $cols2 = [''];
@@ -203,13 +205,29 @@ class VoxHelper {
         if($q->type == 'scale') {
             $breakdown_results = clone $results;
             $breakdown_results = $breakdown_results->where('scale', $scale_for)->groupBy('user_id')->get();
+
+            $breakdown_results_old = clone $results_old;
+            $breakdown_results_old = $breakdown_results_old->where('scale', $scale_for)->groupBy('user_id')->get();
+
+            $breakdown_results = $breakdown_results->concat($breakdown_results_old);
+
             $all_results = $results->where('answer', $scale_for)->get();
+            $all_results = $all_results->concat($results_old->where('answer', $scale_for)->get());
         } else if ($q->type == 'rank' || $q->type == 'multiple_choice') {
+
             $breakdown_results = clone $results;
             $breakdown_results = $breakdown_results->groupBy('user_id')->get();
+
+            $breakdown_results_old = clone $results_old;
+            $breakdown_results_old = $breakdown_results_old->groupBy('user_id')->get();
+
+            $breakdown_results = $breakdown_results->concat($breakdown_results_old);
+
             $all_results = $results->get();
+            $all_results = $all_results->concat($results_old->get());
         } else {
             $all_results = $results->get();
+            $all_results = $all_results->concat($results_old->get());
             $breakdown_results = $all_results;
         }
 
@@ -219,6 +237,11 @@ class VoxHelper {
         // } else {
             $results_resp = clone $results;
             $results_resp = $results_resp->groupBy('user_id')->get()->count();
+
+            $results_resp_old = clone $results_old;
+            $results_resp_old = $results_resp_old->groupBy('user_id')->get()->count();
+
+            $results_resp = $results_resp + $results_resp_old;
         // }
         // dd($results_resp, $results);
 
@@ -308,6 +331,11 @@ class VoxHelper {
                         $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
 
                         $given_related_answer = VoxAnswer::whereNull('is_admin')->where('user_id', $answ->user_id)->where('question_id', $q->related->id)->first();
+
+                        if(empty($given_related_answer)) {
+                            $given_related_answer = VoxAnswerOld::whereNull('is_admin')->where('user_id', $answ->user_id)->where('question_id', $q->related->id)->first();
+                        }
+                        
                         $row[] = $given_related_answer ? $q->removeAnswerTooltip(mb_strpos($list[$given_related_answer->answer - 1], '!')===0 || mb_strpos($list[$given_related_answer->answer - 1], '#')===0 ?  mb_substr($list[$given_related_answer->answer - 1], 1) : $list[$given_related_answer->answer - 1]) : '0';
                     }
                 }
@@ -333,7 +361,12 @@ class VoxHelper {
                 $row[] = isset( $answerwords[ ($answ->scale)-1 ] ) ? $answerwords[ ($answ->scale)-1 ] : '0';
 
             } else if( $q->type == 'rank' ) {
+                
+                $vox_answers_old = VoxAnswerOld::where('user_id', $answ->user_id)->where('question_id', $q->id)->get();
                 $vox_answers = VoxAnswer::where('user_id', $answ->user_id)->where('question_id', $q->id)->get();
+
+                $vox_answers = $vox_answers->concat($vox_answers_old);
+
                 foreach ($vox_answers as $va) {
                     $row[] = $va->scale;
                 }
@@ -366,8 +399,14 @@ class VoxHelper {
 
         if($q->type == 'scale') {
             $results_total = $results->where('answer', $scale_for)->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+            $results_total_old = $results_old->where('answer', $scale_for)->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+
+            $results_total = $results_total + $results_total_old;
         } else {
             $results_total = $results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+            $results_total_old = $results_old->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+            
+            $results_total = $results_total + $results_total_old;
         }
 
         $total = $results_total; 
@@ -928,8 +967,27 @@ class VoxHelper {
                 } )->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->first();
 
                 // dd($cur_answers);
-                $m_original_chart[$key][] = $cur_answer ? $cur_answer->cnt : 0; 
-                $total_count+=$cur_answer ? $cur_answer->cnt : 0; 
+
+                if(empty($cur_answer)) {
+                    $cur_answer = VoxAnswerOld::whereNull('is_admin')
+                    ->where('question_id', $q->id)
+                    ->where('is_completed', 1)
+                    ->where('is_skipped', 0)
+                    ->where('answer', $key+1)
+                    ->has('user');        
+
+                    $quest = $q->related->id;
+                    $aaa = $answer;
+                    $cur_answer = $cur_answer->whereIn('user_id', function($query) use ($quest, $aaa) {
+                        $query->select('user_id')
+                        ->from('vox_answers')
+                        ->where('question_id', $quest)
+                        ->where('answer', $aaa);
+                    } )->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->first();
+
+                    $m_original_chart[$key][] = $cur_answer ? $cur_answer->cnt : 0; 
+                    $total_count+=$cur_answer ? $cur_answer->cnt : 0; 
+                }
             }
         }
         // dd($m_original_chart, $total_count);
@@ -1064,6 +1122,47 @@ class VoxHelper {
     public static function prepareQuery($question_id, $dates, $options = []) {
 
         $results = VoxAnswer::whereNull('is_admin')
+        ->where('question_id', $question_id)
+        ->where('is_completed', 1)
+        ->where('is_skipped', 0)
+        ->has('user');
+
+        if( isset($options['dependency_question']) && isset($options['dependency_answer']) ) {
+
+            $q = $options['dependency_question'];
+            $a = $options['dependency_answer'];
+
+            $results = $results->whereIn('user_id', function($query) use ($q, $a) {
+                $query->select('user_id')
+                ->from('vox_answers')
+                ->where('question_id', $q)
+                ->where('answer', $a);
+            });
+        }
+
+        if( isset($options['scale_answer_id']) ) {
+            $results = $results->where('answer', $options['scale_answer_id']);
+        }
+
+        if( isset($options['scale_options']) && isset( $options['scale'] ) ) {
+            $results = $results->whereIn($options['scale'], array_values($options['scale_options']));
+        }
+
+        if(is_array($dates)) {
+            $from = Carbon::parse($dates[0]);
+            $to = Carbon::parse($dates[1]);
+            $results = $results->where('created_at', '>=', $from)->where('created_at', '<=', $to);
+        } else if($dates) {
+            $from = Carbon::parse($dates);
+            $results = $results->where('created_at', '>=', $from);
+        }
+
+        return $results;
+    }    
+
+    public static function prepareQueryOld($question_id, $dates, $options = []) {
+
+        $results = VoxAnswerOld::whereNull('is_admin')
         ->where('question_id', $question_id)
         ->where('is_completed', 1)
         ->where('is_skipped', 0)

@@ -47,11 +47,11 @@
 						</div>
 						<div class="first-info">
 							<div class="flex">
-								DentaVox VIP Pass expiring in: <img src="{{ url('new-vox-img/info.svg') }}" class="tooltip-text" text="{!! 'The VIP pass entitles you to: <br/>
+								DentaVox VIP Pass expiring in: <img src="{{ url('new-vox-img/info.svg') }}" class="answer-mobile-tooltip tooltip-text" text="{!! 'The VIP pass entitles you to: <br/>
 								- Double rewards for all surveys <br/>
 								- No demographic limitations' !!}"/>
 							</div>
-							<p class="hours-countdown">{{ $vip_access_seconds }}</p>
+							<p class="hours-countdown" seconds="{{ $vip_access_seconds }}">{!! $vip_access_text !!}</p>
 						</div>
 					</div>
 					<div class="flex-1 second-col">
@@ -130,11 +130,13 @@
 				<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
 			@endif
 
-			<div class="alert alert-warning" style="margin-top: 10px;">
-				Dear DentaVoxers,<br/><br/>
+			{{-- @if($user)
+				<div class="alert alert-warning" style="margin-top: 10px;">
+					Dear DentaVoxers,<br/><br/>
 
-				Due to system upgrades to improve your experience on the platform, temporary the surveys are not available. Check our Holiday Calendar with daily prizes while we are working on the improvements: <a target="_blank" href="https://dentacoin.com/holiday-calendar/2021">dentacoin.com/holiday-calendar/2021</a>!
-			</div>
+					Due to system upgrades to improve your experience on the platform, temporary the surveys are not available. Check our Holiday Calendar with daily prizes while we are working on the improvements: <a target="_blank" href="https://dentacoin.com/holiday-calendar/2021">dentacoin.com/holiday-calendar/2021</a>!
+				</div>
+			@endif --}}
 
 			@if(request()->exists('daily-answer'))
 				<div class="daily-poll-welcome">

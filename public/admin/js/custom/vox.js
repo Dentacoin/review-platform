@@ -442,44 +442,12 @@ $(document).ready(function(){
 
 	var initVoxFunctions = function() {
 
-		$('.translate-inner-question-button').click( function() {
-			$('.questions-form-new').submit();
+		$('.legend-btn').click( function() {
+			$('#legendModal').show();
 		});
-	
-		$('.dont-translate-inner-question-button').click( function() {
-			$('#translate-question').val('');
-			$('.questions-form-new').submit();
-		});
-	
-		$('#submit-the-form').click( function() {
-			if($('#translate-question').val()) {
-				console.log($('.question-type-input').val());
-				if($('#item-type').val() != 'hidden') {
-					$('#modal-translate-question-inner').modal('show');
-					$('#translate-question').val('1');
-				} else {
-					$('#translate-question').val('');
-					$(this).closest('form').submit();
-				}
-			} else {
-				$(this).closest('form').submit();
-			}
-		});
-		
-		$('#stay-on-same-page').click( function() {
-			$('[name="stay-on-same-page"]').val('1');
-	
-			if($('#translate-question').val()) {
-				if($('#item-type').val() != 'hidden') {
-					$('#modal-translate-question-inner').modal('show');
-					$('#translate-question').val('1');
-				} else {
-					$('#translate-question').val('');
-					$(this).closest('form').submit();
-				}
-			} else {
-				$(this).closest('form').submit();
-			}
+
+		$('.close-legend').click( function() {
+			$('#legendModal').hide();
 		});
 
 		var excludeAnswersCheckbox = function() {
@@ -553,7 +521,6 @@ $(document).ready(function(){
 		}
 	
 		$('.show-trigger-controls').click( function() {
-			console.log('dsdsds');
 			$('#trigger-widgets').show();
 			$('#trigger-widgets').prev().remove();
 			$('.btn-add-trigger').trigger('click'); 
@@ -565,10 +532,6 @@ $(document).ready(function(){
 			update: function( event, ui ) {	
 	
 				var dragged_item = $(ui.item[0]);
-	
-				if (dragged_item.attr('answer-code') == 'en') {
-					$('#translate-question').val('1');
-				}
 	
 				var i=1;
 				dragged_item.closest('.answers-list').children().each( function() {
@@ -720,7 +683,6 @@ $(document).ready(function(){
 			}
 	
 			$('.answers-list .ui-sortable-handle:nth-child('+num+')').remove();
-			$('#translate-question').val('1');
 		});
 
 		$('.questions-form .btn-add-trigger').click( function() {
@@ -815,11 +777,6 @@ $(document).ready(function(){
 				$('.question-number').attr('disabled', 'disabled');	
 				urlpart = 'number';
 			}
-	
-			if($('#modal-translate-question').length && $(this).hasClass('question-question') && $(this).attr('lang-code') == 'en') {
-				$('#modal-translate-question').find('[name="q-trans-id"]').val($(this).attr('data-qid'));
-				$('#modal-translate-question').modal('show');
-			}
 			
 			$.ajax({
 				url     : $('#page-add').attr('action') + '/change-'+urlpart+'/'+$(this).attr('data-qid'),
@@ -846,14 +803,6 @@ $(document).ready(function(){
 					$('.question-number, .question-question').removeAttr('disabled');
 				}
 			});
-		});
-	
-		$('[name="answers-en[]"]').on('keypress change', function() {
-			$('#translate-question').val('1');
-		});
-	
-		$('[name="question-en"]').on('keypress change', function() {
-			$('#translate-question').val('1');
 		});
 
 		$('.custom-tabs .nav li a').click( function() {
@@ -985,6 +934,12 @@ $(document).ready(function(){
 				console.log(data);
 			});
 		});
+
+		$('#stats_title_question').change( function() {
+			if($(this).is(':checked')) {
+				$('.stats-title').val($('.question-main-title').val());
+			}
+		});
 	}
 
 	initVoxFunctions();
@@ -994,11 +949,11 @@ $(document).ready(function(){
 	});
 
 	$('#editQuestionModal').on('shown.bs.modal', function (e) {
-
 		$.ajax( {
 			url: window.location.origin+'/cms/vox/get-question-content/'+$(this).attr('q-id'),
 			type: 'POST',
 			success: function( data ) {
+				$('#addQuestionModal').find('.modal-body').html('');
 				$('#editQuestionModal').find('.modal-body').html(data);
 				initVoxFunctions();
 			},
@@ -1009,12 +964,11 @@ $(document).ready(function(){
 	});
 
 	$('#addQuestionModal').on('shown.bs.modal', function (e) {
-		console.log('sasasa');
-
 		$.ajax( {
 			url: window.location.origin+'/cms/vox/add-question-content/'+$(this).attr('v-id'),
 			type: 'POST',
 			success: function( data ) {
+				$('#editQuestionModal').find('.modal-body').html('');
 				$('#addQuestionModal').find('.modal-body').html(data);
 				initVoxFunctions();
 			},
@@ -1028,6 +982,10 @@ $(document).ready(function(){
 
 		$('.delete-vox-question').click( function(e) {
 			e.preventDefault();
+
+			if(!confirm('Are you sure you want to do this?')){         
+				return;
+			}
 	
 			var that = $(this);
 	
@@ -1065,5 +1023,5 @@ $(document).ready(function(){
 		});
 
 		deleteVoxQuestion();
-	});    
+	});
 });

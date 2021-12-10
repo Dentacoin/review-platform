@@ -123,6 +123,8 @@ $(document).ready(function(){
 						reward = vox.reward_single * answerd_q;
 					}
 				}
+
+				console.log(vox.reward_single * answerd_q, vox.reward_single, answerd_q);
 				if(!skip) {
 					reward += welcomeBonus;
 

@@ -316,7 +316,6 @@ $(document).ready(function(){
         var group = $(this).closest('.question-group');
         var qid = parseInt(group.attr('data-id'));
         var type = null;
-        var next_trigger;
 
         if(vox.current>=1) {
             $('.questionnaire-description').hide();

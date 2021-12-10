@@ -22,6 +22,7 @@ use App\Models\WalletAddress;
 use App\Models\AnonymousUser;
 use App\Models\DentistClaim;
 use App\Models\UserStrength;
+use App\Models\VoxAnswerOld;
 use App\Models\WhitelistIp;
 use App\Models\UserHistory;
 use App\Models\UserBranch;
@@ -31,6 +32,7 @@ use App\Models\UserInvite;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\Blacklist;
+use App\Models\VoxAnswer;
 use App\Models\UserTeam;
 use App\Models\UserBan;
 use App\Models\UserAsk;
@@ -132,6 +134,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'is_logout',
         'vip_access',
         'review_notification',
+        'update_vox_scales',
     ];
     protected $dates = [
         'verified_on',
@@ -2161,6 +2164,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             if($restricted_voxes->count()) {
                 foreach ($restricted_voxes as $vl) {
                     $has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->id)->first();
+
+                    if(empty($has_started_the_survey)) {
+                        $has_started_the_survey = VoxAnswerOld::where('vox_id', $vl->id)->where('user_id', $this->id)->first();
+                    }
 
                     if(empty($has_started_the_survey)) {
                         $arr[] = $vl->id;

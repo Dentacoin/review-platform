@@ -21,8 +21,6 @@
 <div class="row">
     <div class="col-md-12">
         {{ Form::open(array('id' => 'question-'.( !empty($question) ? 'edit' : 'add') , 'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 'class' => 'form-horizontal questions-form questions-form-new', 'method' => 'post', 'files' => true)) }}
-            
-            <input id="translate-question" name="translate-question" type="hidden" value="{{ empty($question) ? '1' : '' }}"/>
 
             <div class="panel panel-inverse panel-with-tabs custom-tabs">
                 <div class="panel-heading p-0">
@@ -45,7 +43,7 @@
                             {{ Form::text('order', !empty($question) ? $question->order : (!empty($next) ? $next : ''), array('maxlength' => 256, 'class' => 'form-control input-title', 'style' => 'width: 50px;' )) }}
                             @foreach($langs as $code => $lang_info)
                                 <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-                                    {{ Form::textarea('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title', 'style' => 'height: 34px;')) }}
+                                    {{ Form::textarea('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title question-main-title', 'style' => 'height: 34px;')) }}
                                 </div>
                             @endforeach
                         </div>
@@ -57,7 +55,7 @@
                     <div class="form-group clearfix">
                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.question-type') }}</label>
                         <div class="col-md-2">
-                            {{ Form::select('type', $question_types, !empty($question) ? $question->type : null, array('class' => 'form-control question-type-input')) }}
+                            {{ Form::select('type', $question_types, !empty($question) ? $question->type : 'single_choice', array('class' => 'form-control question-type-input')) }}
                         </div>
                         <div class="col-md-3 question-scale-wrapper">
                             <label class="col-md-4 control-label">{{ trans('admin.page.'.$current_page.'.question-scale') }}</label>
@@ -209,7 +207,7 @@
                                     <option value="">Select question</option>
                                     @foreach($item->questions as $iq)
                                         @if(empty($question) || ($iq->order < $question->order && $iq->type == 'multiple_choice'))
-                                            <option value="{{ $iq->id }}" {{ !empty($question) && $question->prev_q_id_answers == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                                            <option value="{{ $iq->id }}" {{ !empty($question) && $question->prev_q_id_answers == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->order }}. {{ $iq->question }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -282,22 +280,11 @@
 
                     <div class="form-group clearfix" style="margin-top: 40px;">
                         <h3 class="col-md-1" style="margin-top: 0px;">Settings</h3>
-                        @if(empty($question) || empty($question->question_trigger) )
-                            <div class="form-group clearfix col-md-11">
-                                <label class="col-md-1 control-label">Triggers</label>
-                                <div class="col-md-11">
-                                    <a class="btn btn-primary show-trigger-controls" href="javascript:;" style="margin-left: 15px;">
-                                        Show Trigger Controls
-                                    </a>
-                                </div>
-                            </div>
-                        @endif
 
-                        <div id="trigger-widgets" {!! empty($question) || empty($question->question_trigger) ? 'style="display: none;"' : '' !!} class="col-md-11" >
+                        <div id="trigger-widgets" class="col-md-11" >
                             <div class="form-group clearfix">
                                 <label class="col-md-1 control-label">
-                                    {{ trans('admin.page.'.$current_page.'.question-trigger') }} <br/><br/>
-                                    <div class="legend-btn" data-toggle="modal" data-target="#legendModal" style="background-color: #ab3bff;text-align: center;color: white;padding: 10px;border-radius: 5px;font-size: 9px;">Check Demographic's Answers</div>
+                                    {{ trans('admin.page.'.$current_page.'.question-trigger') }}
                                 </label>
                                 <div class="col-md-11 triggers-list">
                                     @if(!empty($question) && !empty($question->question_trigger) )
@@ -349,11 +336,45 @@
                                                 </div>
                                             @endif
                                         @endforeach
+                                    @else
+                                        <div class="input-group clearfix" style="display: flex;">
+                                            <div class="template-box clearfix" style="max-width: calc(100% - 40px);width: 100%;">
+                                                <select name="triggers[]" class="form-control select2 trigger-select" style="width: 50%; float: left;">
+                                                    <option value="">Select question</option>                                                            
+                                                    <optgroup label="{{ $item->title }} survey questions">
+                                                        @foreach($item->questions as $iq)
+                                                            @if(empty($question) || ($iq->order < $question->order))
+                                                                <option value="{{ $iq->id }}">{{ $iq->order }}. {{ $iq->question }}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </optgroup>
+                                                    <optgroup label="Welcome survey questions">
+                                                        @foreach(App\Models\Vox::find(11)->questions as $kq => $wq)
+                                                            <option value="{{ $wq->id }}">{{ $kq+1 }}. {{ $wq->question }}</option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                    <optgroup label="Demographic questions">
+                                                        @foreach(config('vox.details_fields') as $kdf => $dq)
+                                                            <option value="{{ $kdf }}" demographic-ans>{{ $dq['label'] }}</option>
+                                                        @endforeach
+                                                        <option value="age_groups" demographic-ans >Age Groups</option>
+                                                        <option value="gender" demographic-ans >Gender</option>
+                                                    </optgroup>
+                                                </select>
+                                                {{ Form::text('answers-number[]', null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}                                                       
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default btn-remove-trigger" type="button">
+                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     @endif
                                 </div>
                             </div>
                             <div class="form-group clearfix">
                                 <label class="col-md-1">
+                                    <div class="legend-btn" style="background-color: #ab3bff;text-align: center;color: white;padding: 10px;border-radius: 5px;font-size: 9px;">Check Demographic's Answers</div>
                                 </label>
                                 <div class="col-md-11">
                                     To enable a trigger, first select the question from the dropdown and then type the number of the answer(s) that will trigger the present question.<br/>
@@ -366,11 +387,11 @@
                             <div class="form-group clearfix">
                                 <label class="col-md-1">
                                 </label>
-                                <div class="col-md-11">
-                                    <a href="javascript:;" class="btn btn-white btn-block btn-add-new-trigger" style="margin-top: 10px;{!! !empty($question) && $question->question_trigger=='-1' ? 'display: none;' : '' !!}" >
+                                <div class="col-md-11" style="display: flex;">
+                                    <a href="javascript:;" class="btn btn-info btn-block btn-add-new-trigger" style="margin-top: 10px;{!! !empty($question) && $question->question_trigger=='-1' ? 'display: none;' : '' !!}" >
                                         Аdd another trigger
                                     </a>
-                                    <a href="javascript:;" class="btn btn-white btn-block btn-add-old-trigger" style="margin-top: 10px;{!! !empty($question) && $question->question_trigger=='-1' ? 'display: none;' : '' !!}" >
+                                    <a href="javascript:;" class="btn btn-primary btn-block btn-add-old-trigger" style="margin-top: 10px;{!! !empty($question) && $question->question_trigger=='-1' ? 'display: none;' : '' !!}" >
                                         Copy from previous question
                                     </a>
                                     <a href="javascript:;" class="btn btn-success btn-block btn-add-trigger" style="margin-top: 10px;{!! !empty($question) && $question->question_trigger=='-1' ? 'display: none;' : '' !!}" >
@@ -391,6 +412,10 @@
                                     <label for="trigger-type-no" style="display: block;">
                                         <input type="radio" id="trigger-type-no" name="trigger_type" value="and" {!! !empty($question) && $question->trigger_type=='and' ? 'checked="checked"' : '' !!} />
                                         ALL the conditions should be met (A and B and C)
+                                    </label>
+                                    <label for="trigger-type-multiple" style="display: block;">
+                                        <input type="radio" id="trigger-type-multiple" name="trigger_type" value="and_multiple" {!! !empty($question) && $question->trigger_type=='and_multiple' ? 'checked="checked"' : '' !!} />
+                                        ALL the conditions should be met (A and B and C) ( if question is multiple choice and the trigger answer is 1, it will be true if the user gives answer 1 AND other answers )
                                     </label>
                                 </div>
                             </div>
@@ -423,7 +448,7 @@
                             <div class="form-group clearfix">
                                 @foreach($langs as $code => $lang_info)
                                     <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} col-md-12">
-                                        {{ Form::text('stats_title-'.$code, !empty($question) ? $question->translateorNew($code)->stats_title : old('stats_title-'.$code), array('maxlength' => 256, 'class' => 'form-control input-title', 'placeholder' => 'Statistics title in '.$lang_info['name'])) }}
+                                        {{ Form::text('stats_title-'.$code, !empty($question) ? $question->translateorNew($code)->stats_title : old('stats_title-'.$code), array('maxlength' => 256, 'class' => 'form-control input-title stats-title', 'placeholder' => 'Statistics title in '.$lang_info['name'])) }}
                                     </div>
                                 @endforeach
                             </div>
@@ -723,12 +748,12 @@
     </div>
 </div>
 
-<div id="legendModal" class="modal fade" role="dialog">
+<div id="legendModal" style="display: none;">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <a class="close close-legend">&times;</a>
                 <h4 class="modal-title">Demographic answers</h4>
             </div>
             <div class="modal-body">
@@ -752,27 +777,25 @@
                 <p><b>2</b> : Female</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <a class="btn btn-default close-legend">Close</a>
             </div>
         </div>
     </div>
 </div>
 
-<div id="modal-translate-question-inner" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Do you want to translate edited/added question?</h4>
-            </div>
-            <div class="modal-body">
-                <a href="javascript:;" class="btn btn-primary translate-inner-question-button">Yes</a>
-                <a href="javascript:;" class="btn btn-default dont-translate-inner-question-button">No</a>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<style type="text/css">
+
+    #legendModal {
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .answer-order-number {
+        margin-right: 4px;
+        border-right: 1px solid black;
+        padding-right: 6px;
+        font-weight: bold;
+    }
+
+</style>

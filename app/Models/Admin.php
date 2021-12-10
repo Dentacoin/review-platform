@@ -38,6 +38,13 @@ class Admin extends Model implements AuthenticatableContract, CanResetPasswordCo
         // return self::whereNotNull('user_id')->pluck('user_id')->toArray();
         return ['65003'];
     }
+    
+    public function messages() {
+        return $this->hasMany('App\Models\AdminMessage', 'admin_id', 'id')->where(function($query) {
+			$query->where('is_read', '=', 0 )
+			->orWhereNull('is_read');
+		});
+    }
 }
 
 ?>

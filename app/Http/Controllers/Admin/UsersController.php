@@ -16,6 +16,7 @@ use App\Models\DcnTransaction;
 use App\Models\VoxCrossCheck;
 use App\Models\WalletAddress;
 use App\Models\ReviewAnswer;
+use App\Models\VoxAnswerOld;
 use App\Models\UserHistory;
 use App\Models\AdminAction;
 use App\Models\VoxQuestion;
@@ -227,6 +228,9 @@ class UsersController extends AdminController {
             ],
             'vip_access' => [
                 'type' => 'bool',
+            ],
+            'vip_access_until' => [
+                'type' => 'datetimepicker',
             ],
             'trusted' => [
                 'type' => 'bool',
@@ -486,6 +490,10 @@ class UsersController extends AdminController {
             $users = $users->whereNull('unsubscribe');
         }
 
+        if(!empty(request('vip-access'))) {
+            $users = $users->where('vip_access', 1);
+        }
+
         if(!empty(request('fb-tab'))) {
             $users = $users->has('dentist_fb_page');
         }
@@ -738,6 +746,7 @@ class UsersController extends AdminController {
             'exclude_countries' => request('exclude-countries'),
             'exclude_permaban' => request('exclude-permaban'),
             'exclude_unsubscribed' => request('exclude-unsubscribed'),
+            'vip_access' => request('vip-access'),
             'civic_kyc_hash' => request('civic-kyc-hash'),
             'fb_tab' => request('fb-tab'),
             'user_platforms' => $user_platforms,
@@ -823,7 +832,7 @@ class UsersController extends AdminController {
 
     public function edit( $id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support']) && Auth::guard('admin')->user()->user_id != $id) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support', 'voxer']) && Auth::guard('admin')->user()->user_id != $id) {
             return redirect('cms/users/users/edit/'.Auth::guard('admin')->user()->user_id);
         }
 
@@ -1055,122 +1064,8 @@ class UsersController extends AdminController {
                                         $patient->sendGridTemplate(65, $substitutions, 'trp');
                                     }
                                 } else if( $this->request->input($key)=='approved' ) {
-                                    if( $item->deleted_at ) {
-                                        $item->restoreActions();
-                                        $item->restore();
-                                    }
-
-                                    if (empty($item->slug)) {
-                                        $item->slug = $item->makeSlug();
-                                        $item->save();
-                                    }
-
-                                    $platformMails = [
-                                        'vox' => 84,
-                                        'trp' => 26,
-                                        'dentacare' => 83,
-                                        'assurance' => 85,
-                                        'dentacoin' => 83,
-                                        'dentists' => 83,
-                                        'wallet' => 83,
-                                    ];
-
-                                    $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
-                                    $item->verified_on = Carbon::now();
-                                    $item->save();
-
-                                    $item->product_news = ['dentacoin', 'trp'];
-                                    $item->save();
-
-                                    //add to dcn sendgrid list
-                                    $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-                                    $user_info = new \stdClass();
-                                    $user_info->email = $item->email;
-                                    $user_info->title = $item->title ? config('titles')[$item->title] : '';
-                                    $user_info->first_name = explode(' ', $item->name)[0];
-                                    $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
-                                    $user_info->type = 'dentist';
-                                    $user_info->partner = $item->is_partner ? 'yes' : 'no';
-
-                                    $request_body = [
-                                        $user_info
-                                    ];
-
-                                    $response = $sg->client->contactdb()->recipients()->post($request_body);
-                                    $recipient_id = isset(json_decode($response->body())->persisted_recipients[0]) ? json_decode($response->body())->persisted_recipients[0] : null;
-
-                                    //add to list
-                                    if($recipient_id) {
-
-                                        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-                                        $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
-                                        $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
-                                    }
-
-                                    if($item->is_clinic && $item->team_new_clinic->isNotEmpty()) {
-                                        foreach ($item->team_new_clinic as $tnc) {
-                                            $tnc->approved = true;
-                                            $tnc->new_clinic = false;
-                                            $tnc->save();
-
-                                            $dent = User::find($tnc->dentist_id);
-
-                                            if( !empty($dent)) {
-
-                                                if ($dent->status == 'added_by_clinic_new') {
-                                                    $dent->status = 'added_by_clinic_unclaimed';
-                                                    $dent->slug = $dent->makeSlug();
-                                                    $dent->save();
-
-                                                    $dent->sendGridTemplate( 92 , [
-                                                        'clinic_name' => $item->getNames(),
-                                                        "invitation_link" => getLangUrl( 'dentist/'.$dent->slug.'/claim/'.$dent->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
-                                                    ], 'trp');
-                                                } else {
-                                                    $dent->sendTemplate(33, [
-                                                        'clinic-name' => $item->getNames(),
-                                                        'clinic-link' => $item->getLink()
-                                                    ], 'trp');
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    if($item->is_dentist && !$item->is_clinic && $item->my_workplace_unapproved->isNotEmpty() ) {
-                                        foreach ($item->my_workplace_unapproved as $wp) {
-                                            if($wp->clinic->status == 'approved' || $wp->clinic->status == 'added_by_dentist_claimed') {
-                                                    
-                                                $wp->clinic->sendTemplate(34, [
-                                                    'dentist-name' => $item->getNames()
-                                                ], 'trp');
-                                            }
-                                        }
-                                    }
-
-                                    if($item->invited_by && !empty($item->invitor) && !$item->invitor->is_dentist) {
-
-                                        $inv = UserInvite::where('user_id', $item->invited_by)
-                                        ->where('invited_id', $item->id)
-                                        ->whereNull('rewarded')
-                                        ->first();
-
-                                        if(!empty($inv)) {
-                                            $reward = new DcnReward();
-                                            $reward->user_id = $item->invitor;
-                                            $reward->platform = 'trp';
-                                            $reward->reward = Reward::getReward('reward_invite');
-                                            $reward->type = 'invitation';
-                                            $reward->reference_id = $inv->id;
-                                            GeneralHelper::deviceDetector($reward);
-                                            $reward->save();
-
-                                            $inv->rewarded = true;
-                                            $inv->save();
-                                        }
-                                    }
-
-                                    $item->generateSocialCover();
+                                    
+                                    $this->approveDentist($item);
 
                                 } else if( $this->request->input($key)=='added_by_dentist_unclaimed' ) {
                                     $item->status = 'added_by_dentist_unclaimed';
@@ -1210,12 +1105,19 @@ class UsersController extends AdminController {
                         } else if($key=='vip_access') {
                             
                             if($item->$key!=$this->request->input($key)) {
-
                                 if($this->request->input($key) == 1) {
+                                    if(empty($this->request->input('vip_access_until'))) {
+                                        $this->request->session()->flash('error-message', 'Please, add vip access expiry date' );
+                                        return redirect('cms/users/users/edit/'.$item->id);
+                                    }
 
-                                    $item->sendGridTemplate(118, null, 'vox');
+                                    $substitutions = [
+                                        'valid_until' => date('F d, Y, H:i', strtotime(Carbon::parse($this->request->input('vip_access_until'))->addHours(-2)) ).' GMT',
+                                        'days' => Carbon::now()->diffInDays($this->request->input('vip_access_until')),
+                                    ];
+
+                                    $item->sendGridTemplate(118, $substitutions, 'vox');
                                 } else {
-
                                     $item->sendGridTemplate(119, null, 'vox');
                                 }
                                 $item->$key = $this->request->input($key);
@@ -1349,13 +1251,24 @@ class UsersController extends AdminController {
             ->orderBy('created_at')
             ->get();
 
+            $all_questions_answerd_old = VoxAnswerOld::where('user_id', $id)
+            ->groupBy('vox_id')
+            ->orderBy('created_at')
+            ->get();
+
+            $all_questions_answerd = $all_questions_answerd->concat($all_questions_answerd_old);
+
             $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $item->filledVoxes() );
-            $unfinishedVoxes = Vox::whereIn('id', $unanswerd_questions)->get();
+            $unfinishedVoxes = Vox::whereIn('id', $unanswerd_questions)->where('id', '!=', 11)->get();
             $unfinished = [];
             
             foreach ($unfinishedVoxes as $v) {
                 $unfinished[$v->id] = $v;
                 $ans = VoxAnswer::where('user_id', $id)->where('vox_id', $v->id)->orderBy('id', 'asc')->first();
+
+                if(empty($ans)) {
+                    $ans = VoxAnswerOld::where('user_id', $id)->where('vox_id', $v->id)->orderBy('id', 'asc')->first();
+                }
                 $user_log = UserLogin::where('user_id', $id)->where('created_at', '<', $ans->created_at )->orderBy('id', 'desc')->first();
 
                 $unfinished[$v->id]->user_id = $item->id;
@@ -1371,6 +1284,9 @@ class UsersController extends AdminController {
 
             foreach ($welcome_questions as $welcome_question) {
                 $welcome_answer = VoxAnswer::where('vox_id', $welcome_survey->id)->where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
+                if(empty($welcome_answer)) {
+                    $welcome_answer = VoxAnswerOld::where('vox_id', $welcome_survey->id)->where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
+                }
                 if ($welcome_answer) {
                     $habits_test_ans = true;
                 }
@@ -1409,13 +1325,13 @@ class UsersController extends AdminController {
             ];
 
             foreach (config('vox.details_fields') as $k => $v) {
-                if (!empty($item->$k)) {
+                if (!empty($item->$k) || $item->$k === '0') {
                     $habits_test_ans = true;
                 }
 
                 $vcc = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->first();
                 $old_an = !empty($vcc) ? $vcc->old_answer : '';
-                if ($old_an) {
+                if ($old_an || $old_an === '0') {
                     $i=1;
                     foreach ($v['values'] as $key => $value) {
                         if($i==$old_an) {
@@ -1431,8 +1347,8 @@ class UsersController extends AdminController {
 
                 $habits_tests[] = [
                     'question' => $v['label'],
-                    'old_answer' => $old_an || $old_an === 0 ? $old_an : (!empty($item->$k) || $item->$k === 0 ? $v['values'][$item->$k] : ''),
-                    'answer' => $old_an && !empty($item->$k) ? $v['values'][$item->$k] : '',
+                    'old_answer' => $old_an || $old_an === '0' ? $old_an : (!empty($item->$k) || $item->$k === '0' ? $v['values'][$item->$k] : ''),
+                    'answer' => ($old_an || $old_an === '0') && (!empty($item->$k) || $item->$k === '0') ? $v['values'][$item->$k] : '',
                     'last_updated' => !empty($habits_last) ? $habits_last->created_at : '',
                     'updates_count' => $habits_count ? $habits_count : '',
                 ];
@@ -1467,11 +1383,131 @@ class UsersController extends AdminController {
         }
     }
 
+    private function approveDentist($item) {
+
+        if( $item->deleted_at ) {
+            $item->restoreActions();
+            $item->restore();
+        }
+
+        if (empty($item->slug)) {
+            $item->slug = $item->makeSlug();
+            $item->save();
+        }
+
+        $platformMails = [
+            'vox' => 84,
+            'trp' => 26,
+            'dentacare' => 83,
+            'assurance' => 85,
+            'dentacoin' => 83,
+            'dentists' => 83,
+            'wallet' => 83,
+        ];
+
+        $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
+        $item->verified_on = Carbon::now();
+        $item->save();
+
+        $item->product_news = ['dentacoin', 'trp'];
+        $item->save();
+
+        //add to dcn sendgrid list
+        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+        $user_info = new \stdClass();
+        $user_info->email = $item->email;
+        $user_info->title = $item->title ? config('titles')[$item->title] : '';
+        $user_info->first_name = explode(' ', $item->name)[0];
+        $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
+        $user_info->type = 'dentist';
+        $user_info->partner = $item->is_partner ? 'yes' : 'no';
+
+        $request_body = [
+            $user_info
+        ];
+
+        $response = $sg->client->contactdb()->recipients()->post($request_body);
+        $recipient_id = isset(json_decode($response->body())->persisted_recipients[0]) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+        //add to list
+        if($recipient_id) {
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+            $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
+            $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+        }
+
+        if($item->is_clinic && $item->team_new_clinic->isNotEmpty()) {
+            foreach ($item->team_new_clinic as $tnc) {
+                $tnc->approved = true;
+                $tnc->new_clinic = false;
+                $tnc->save();
+
+                $dent = User::find($tnc->dentist_id);
+
+                if( !empty($dent)) {
+
+                    if ($dent->status == 'added_by_clinic_new') {
+                        $dent->status = 'added_by_clinic_unclaimed';
+                        $dent->slug = $dent->makeSlug();
+                        $dent->save();
+
+                        $dent->sendGridTemplate( 92 , [
+                            'clinic_name' => $item->getNames(),
+                            "invitation_link" => getLangUrl( 'dentist/'.$dent->slug.'/claim/'.$dent->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
+                        ], 'trp');
+                    } else {
+                        $dent->sendTemplate(33, [
+                            'clinic-name' => $item->getNames(),
+                            'clinic-link' => $item->getLink()
+                        ], 'trp');
+                    }
+                }
+            }
+        }
+
+        if($item->is_dentist && !$item->is_clinic && $item->my_workplace_unapproved->isNotEmpty() ) {
+            foreach ($item->my_workplace_unapproved as $wp) {
+                if($wp->clinic->status == 'approved' || $wp->clinic->status == 'added_by_dentist_claimed') {
+                        
+                    $wp->clinic->sendTemplate(34, [
+                        'dentist-name' => $item->getNames()
+                    ], 'trp');
+                }
+            }
+        }
+
+        if($item->invited_by && !empty($item->invitor) && !$item->invitor->is_dentist) {
+            $inv = UserInvite::where('user_id', $item->invited_by)
+            ->where('invited_id', $item->id)
+            ->whereNull('rewarded')
+            ->first();
+
+            if(!empty($inv)) {
+                $reward = new DcnReward();
+                $reward->user_id = $item->invitor;
+                $reward->platform = 'trp';
+                $reward->reward = Reward::getReward('reward_invite');
+                $reward->type = 'invitation';
+                $reward->reference_id = $inv->id;
+                GeneralHelper::deviceDetector($reward);
+                $reward->save();
+
+                $inv->rewarded = true;
+                $inv->save();
+            }
+        }
+
+        $item->status = 'approved';
+        $item->save();
+        $item->generateSocialCover();
+    }
+
     public function import() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
+            return redirect('cms/home');
         }
 
         if(Request::isMethod('post')) {
@@ -1720,11 +1756,30 @@ class UsersController extends AdminController {
         if( Request::input('ids') ) {
             $rejectusers = User::whereIn('id', Request::input('ids'))->get();
             foreach ($rejectusers as $ru) {
-                if($ru->is_dentist) {
-
+                if($ru->is_dentist && $au->status != 'rejected') {
                     $ru->status = 'rejected';
                     $ru->save();
                     $ru->sendTemplate(14);
+                }
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'All selected dentists are rejected' );
+        return redirect(url()->previous());
+    }
+
+    public function massApprove() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        if( Request::input('ids') ) {
+            $approvedUsers = User::whereIn('id', Request::input('ids'))->get();
+            foreach ($approvedUsers as $au) {
+                if($au->is_dentist && $au->status != 'approved') {
+                    $this->approveDentist($au);
                 }
             }
         }
@@ -1753,7 +1808,7 @@ class UsersController extends AdminController {
 
     public function add_avatar( $id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1807,7 +1862,7 @@ class UsersController extends AdminController {
 
     public function delete_ban( $id, $ban_id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1862,7 +1917,7 @@ class UsersController extends AdminController {
 
     public function delete_vox( $id, $reward_id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1874,8 +1929,13 @@ class UsersController extends AdminController {
             VoxAnswer::where([
                 ['user_id', $item->id],
                 ['vox_id', $reward->reference_id],
-            ])
-            ->delete();
+            ])->delete();
+
+            VoxAnswerOld::where([
+                ['user_id', $item->id],
+                ['vox_id', $reward->reference_id],
+            ])->delete();
+            
             DcnReward::destroy( $reward_id );
         }
 
@@ -1885,7 +1945,7 @@ class UsersController extends AdminController {
 
     public function delete_unfinished( $id, $vox_id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1896,8 +1956,12 @@ class UsersController extends AdminController {
             VoxAnswer::where([
                 ['user_id', $item->id],
                 ['vox_id', $vox_id],
-            ])
-            ->delete();
+            ])->delete();
+
+            VoxAnswerOld::where([
+                ['user_id', $item->id],
+                ['vox_id', $vox_id],
+            ])->delete();
         }
 
         $this->request->session()->flash('success-message', 'Survey answers deleted!' );

@@ -56,6 +56,7 @@ class IndexController extends FrontController {
 		$all_taken = false;
 		$latest_blog_posts = null;
 		$vip_access_seconds = 0;
+		$vip_access_text = '';
 
 		if(!empty($this->user)) {
 			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
@@ -76,12 +77,38 @@ class IndexController extends FrontController {
 					$post_image_id = $post_image_obj ? $post_image_obj->meta_value : null;
 					$post_image_link = DB::connection('vox_wordpress_db')->table('posts')->where('id', $post_image_id)->first();
 
-					$lbp->img = $post_image_link->guid;
+					$lbp->img = isset($post_image_link->guid) ? $post_image_link->guid : '';
 				}
 			}
 
 			if($this->user->vip_access) {
-				$vip_access_seconds = Carbon::now()->diffInSeconds($this->user->vip_access_until);
+				$days = Carbon::now()->diffInDays($this->user->vip_access_until);
+				$hours = Carbon::now()->diffInHours($this->user->vip_access_until);
+				$min = Carbon::now()->diffInMinutes($this->user->vip_access_until);
+				$sec = Carbon::now()->diffInSeconds($this->user->vip_access_until);
+				
+				if($days) {
+					$vip_access_text .= $days;
+	
+					if($days == 1 ) {
+						$vip_access_text .= ' <span>DAY</span> ';
+					} else {
+						$vip_access_text .= ' <span>DAYS</span> ';
+					}
+				}
+
+				$vip_access_text .= ($hours%24);
+
+				if($hours == 1 ) {
+					$vip_access_text .= ' <span>HOUR</span> ';
+				} else {
+					$vip_access_text .= ' <span>HOURS</span> ';
+				}
+
+				$vip_access_text .= ($min%60).' <span>MIN</span> '.
+				($sec%60).' <span>SEC</span>';
+
+				$vip_access_seconds = $sec;
 			}
 		}
 
@@ -89,7 +116,8 @@ class IndexController extends FrontController {
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
         $arr = array(
-			'vip_access_seconds' => $vip_access_seconds, 
+			'vip_access_text' => $vip_access_text,
+			'vip_access_seconds' => $vip_access_seconds,
         	'all_taken' => $all_taken,
         	'latest_blog_posts' => $latest_blog_posts,
             'is_warning_message_shown' => $is_warning_message_shown,

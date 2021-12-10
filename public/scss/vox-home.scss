@@ -181,7 +181,7 @@ $main-color: #38ace5;
 }
 
 .vip-access-wrapper {
-	display: none;
+	display: flex;
 	background-color: #ff0046;
     margin-top: -20px;
     border-bottom-left-radius: 20px;
@@ -267,14 +267,25 @@ $main-color: #38ace5;
 			}
 
 			@media #{$phone} {
+				width: 220px;
 				margin-left: 10px;
 				font-size: 16px;
 				// width: 100%;
 			}
 
-			div,
-			p {
+			div {
 				color: white;
+			}
+
+			.hours-countdown {
+				font-weight: 900;
+				color: white;
+
+				span {
+					color: white;
+					font-weight: normal;
+					// text-transform: lowercase;
+				}
 			}
 		}
 	}

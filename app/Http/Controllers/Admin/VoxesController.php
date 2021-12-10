@@ -4,21 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
-
-use App\Models\VoxCronjobLang;
-use App\Models\VoxToCategory;
-use App\Models\VoxCategory;
-use App\Models\VoxQuestion;
-use App\Models\UserDevice;
-use App\Models\VoxRelated;
-use App\Models\VoxAnswer;
-use App\Models\DcnReward;
-use App\Models\VoxScale;
-use App\Models\VoxBadge;
-use App\Models\Vox;
-
 use App\Exports\MultipleLangSheetExport;
 use App\Exports\MultipleStatSheetExport;
 use App\Helpers\AdminHelper;
@@ -26,6 +15,21 @@ use App\Helpers\VoxHelper;
 use App\Exports\Export;
 use App\Imports\Import;
 use Carbon\Carbon;
+
+use App\Models\VoxCronjobLang;
+use App\Models\VoxToCategory;
+use App\Models\VoxAnswerOld;
+use App\Models\VoxCategory;
+use App\Models\VoxQuestion;
+use App\Models\UserDevice;
+use App\Models\VoxRelated;
+use App\Models\VoxHistory;
+use App\Models\VoxAnswer;
+use App\Models\DcnReward;
+use App\Models\VoxScale;
+use App\Models\VoxBadge;
+use App\Models\User;
+use App\Models\Vox;
 
 use Response;
 use Request;
@@ -83,7 +87,6 @@ class VoxesController extends AdminController {
 
                 foreach(request('ids') as $vox_id) {
                     foreach(request('languages') as $lang) {
-
                         $vox_cronjob_lang = new VoxCronjobLang;
                         $vox_cronjob_lang->vox_id = $vox_id;
                         $vox_cronjob_lang->lang_code = $lang;
@@ -98,9 +101,6 @@ class VoxesController extends AdminController {
             $this->request->session()->flash('error-message', 'Please, choose surveys' );
             return redirect('cms/vox/list');
         }
-
-        $error = false;
-        $error_arr = [];
 
         $table_fields = [
             'selector'          => array('format' => 'selector'),
@@ -129,11 +129,69 @@ class VoxesController extends AdminController {
             $table_fields['update'] = array('template' => 'admin.parts.table-voxes-edit', 'label' => 'View');
         }
 
-        $voxes_with_launched = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->whereNotNull('launched_at')->orderBy('launched_at', 'desc')->get();
-        $voxes_without_launched = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->whereNull('launched_at')->orderBy('id', 'desc')->whereNotIn('id', [48,80])->get();
+        $voxes_with_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])->whereNotNull('launched_at')->orderBy('launched_at', 'desc')->get();
+        $voxes_without_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])->whereNull('launched_at')->orderBy('id', 'desc')->whereNotIn('id', [48,80])->get();
 
         $voxes = collect();
 		$voxes = $voxes_without_launched->concat($voxes_with_launched);
+
+        $error = false;
+        $error_arr = [];
+
+        $questions_order_bug = false;
+        $questions_order_bug_message = [];
+
+        $without_translations = [];
+
+        foreach($voxes as $survey) {
+
+            if(empty($survey->translation_langs) && $survey->processingForTranslations->isEmpty()) {
+                $without_translations[] = $survey->id;
+            }
+
+            // if there are duplicated questions order
+            if($survey->questions->isNotEmpty()) {
+                $count_qs = $survey->questions->count();
+
+                for ($i=1; $i <= $count_qs ; $i++) { 
+                    if(!empty(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->first())) {
+                        if(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->count() > 1) {
+                            $questions_order_bug = true;
+                            $questions_order_bug_message[$survey->id][] = 'Duplicated order number - '.$i.'<br/>';  //diplicated order
+                        }
+                    } else {
+                        $questions_order_bug = true;
+                        $questions_order_bug_message[$survey->id][] = 'Missing order number - '.$i.'<br/>';  //missing order
+                    }
+                }
+            }
+
+            if($survey->has_stats) {
+                if(empty($survey->stats_description)) {
+                    $error_arr[$survey->id][] = 'Missing stats description';
+                    $error = true;
+                }
+
+                if($survey->stats_questions->isEmpty()) {
+                    $error_arr[$survey->id][] = 'Missing stats questions';
+                    $error = true;
+                } else {
+
+                    foreach ($survey->stats_questions as $stat) {
+                        if(empty($stat->stats_title_question) && empty($stat->stats_title) && empty($stat->stats_title_question)) {
+                            $error_arr[$survey->id][] = [
+                                'error' => 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> title',
+                            ];
+                            $error = true;
+                        }
+                        if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
+                            $error_arr[$survey->id][] = 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> demographics';
+                            $error = true;
+                        }
+                    }
+                }
+            }
+        }
 
     	return $this->showView('voxes', array(
             // 'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
@@ -143,7 +201,10 @@ class VoxesController extends AdminController {
             'are_all_results_shown' => session('vox-show-all-results') ? true : false,
             'error_arr' => $error_arr,
             'error' => $error,
+            'questions_order_bug' => $questions_order_bug,
+            'questions_order_bug_message' => $questions_order_bug_message,
             'table_fields' => $table_fields,
+            'without_translations' => $without_translations,
         ));
     }
 
@@ -411,41 +472,26 @@ class VoxesController extends AdminController {
                 $scales[$sitem->id] = $sitem;
             }
 
-
             $error = false;
             $error_arr = [];
 
             if($item->has_stats) {
-
                 if(empty($item->stats_description)) {
-                    $error_arr[] = [
-                        'error' => 'Missing stats description',
-                    ];
-
+                    $error_arr[] = 'Missing stats description';
                     $error = true;
                 }
 
                 if($item->stats_questions->isEmpty()) {
-                    $error_arr[] = [
-                        'error' => 'Missing stats questions',
-                    ];
-
+                    $error_arr[] = 'Missing stats questions';
                     $error = true;
                 } else {
-
                     foreach ($item->stats_questions as $stat) {
                         if(empty($stat->stats_title_question) && empty($stat->stats_title) && empty($stat->stats_title_question)) {
-                            $error_arr[] = [
-                                'error' => 'Missing stats question title',
-                                'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$item->id.'/question/'.$stat->id.'/',
-                            ];
+                            $error_arr[] = 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$item->id.'/question/'.$stat->id.'/">question</a> title';
                             $error = true;
                         }
                         if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
-                            $error_arr[] = [
-                                'error' => 'Missing stats question demographics',
-                                'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$item->id.'/question/'.$stat->id.'/',
-                            ];
+                            $error_arr[] = 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$item->id.'/question/'.$stat->id.'/">question</a> demographics';
                             $error = true;
                         }
                     }
@@ -453,6 +499,7 @@ class VoxesController extends AdminController {
             }
 
             $questions_order_bug = false;
+            $questions_order_bug_message = '';
 
             //there are duplicated questions order
 
@@ -461,8 +508,14 @@ class VoxesController extends AdminController {
                 $count_qs = $item->questions->count();
 
                 for ($i=1; $i <= $count_qs ; $i++) { 
-                    if(empty(VoxQuestion::with('translations')->where('vox_id', $item->id)->where('order', $i)->first())) {
+                    if(!empty(VoxQuestion::with('translations')->where('vox_id', $item->id)->where('order', $i)->first())) {
+                        if(VoxQuestion::with('translations')->where('vox_id', $item->id)->where('order', $i)->count() > 1) {
+                            $questions_order_bug = true;
+                            $questions_order_bug_message .= 'Duplicated order number - '.$i.'<br/>';  //diplicated order
+                        }
+                    } else {
                         $questions_order_bug = true;
+                        $questions_order_bug_message .= 'Missing order number - '.$i.'<br/>';  //missing order
                     }
                 }
             }
@@ -486,6 +539,7 @@ class VoxesController extends AdminController {
                 'error_arr' => $error_arr,
                 'error' => $error,
                 'questions_order_bug' => $questions_order_bug,
+                'questions_order_bug_message' => $questions_order_bug_message,
             ));
         } else {
             return redirect('cms/'.$this->current_page);
@@ -746,7 +800,7 @@ class VoxesController extends AdminController {
             $this->saveOrUpdateQuestion($question);
             $item->checkComplex();
 
-            if(request('translate-question')) {
+            if($item->type == 'normal') {
                 foreach (config('langs-to-translate') as $lang_code => $value) {
                     if($lang_code != 'en') {
                         VoxHelper::translateQuestionWithAnswers($lang_code, $question);
@@ -981,15 +1035,11 @@ class VoxesController extends AdminController {
             if($question->used_for_stats) {
 
                 if(empty($question->stats_title_question) && empty($question->stats_title) && empty($question->stats_title_question)) {
-                    $error_arr[] = [
-                        'error' => 'Missing stats question title',
-                    ];
+                    $error_arr[] = 'Missing stats question title';
                     $error = true;
                 }
                 if(empty($question->stats_fields) && $question->used_for_stats != 'dependency') {
-                    $error_arr[] = [
-                        'error' => 'Missing stats question demographics',
-                    ];
+                    $error_arr[] = 'Missing stats question demographics';
                     $error = true;
                 }
             }
@@ -1040,16 +1090,6 @@ class VoxesController extends AdminController {
         }
 
         if(!empty($question)) {
-
-            $other_questions_vox = VoxQuestion::where('order', '>', $question->order)->get();
-
-            if($other_questions_vox->isNotEmpty()) {
-                foreach ($other_questions_vox as $oqv) {
-                    $oqv->order = ($oqv->order) - 1;
-                    $oqv->save();
-                }
-            }
-
             $question->delete();
             $question->vox->checkComplex();
 
@@ -1113,6 +1153,14 @@ class VoxesController extends AdminController {
             $translation = $question->translateOrNew($lang);
             $translation->question = Request::input('val');
             $translation->save();
+
+            if($question->vox->type == 'normal') {
+                foreach (config('langs-to-translate') as $lang_code => $value) {
+                    if($lang_code != 'en') {
+                        VoxHelper::translateQuestionWithAnswers($lang_code, $question);
+                    }
+                }
+            }
             return Response::json( ['success' => true] );
         } else {
             return Response::json( ['success' => false] );
@@ -1150,10 +1198,68 @@ class VoxesController extends AdminController {
             }
         }
 
+        $history_info = '';
+
         if($item->type == 'normal' && $this->request->input('type') == 'hidden' && !$this->request->input('hide-survey')) {
         } else {
+            if($this->request->input('type') != $item->type) {
+                $history_info.= 'Type: '.$item->type.'<br/>';
+            }
             $item->type = $this->request->input('type');
         }
+
+        if($this->request->input('scheduled_at') != $item->scheduled_at) {
+            $history_info.= 'Scheduled at: '.$this->request->input('scheduled_at').'<br/>';
+        }
+        if($this->request->input('featured') != $item->featured) {
+            $history_info.= 'Featured: '.$this->request->input('featured').'<br/>';
+        }
+        if($this->request->input('stats_featured') != $item->stats_featured) {
+            $history_info.= 'Stats featured: '.$this->request->input('stats_featured').'<br/>';
+        }
+        if($this->request->input('has_stats') != $item->has_stats) {
+            $history_info.= 'Has stats: '.$this->request->input('has_stats').'<br/>';
+        }
+        if($this->request->input('gender') != $item->gender) {
+            $history_info.= 'Gender: '.$this->request->input('gender').'<br/>';
+        }
+        if($this->request->input('marital_status') != $item->marital_status) {
+            $history_info.= 'Marital status: '.$this->request->input('marital_status').'<br/>';
+        }
+        if($this->request->input('children') != $item->children) {
+            $history_info.= 'Children: '.$this->request->input('children').'<br/>';
+        }
+        if($this->request->input('household_children') != $item->household_children) {
+            $history_info.= 'Household children: '.$this->request->input('household_children').'<br/>';
+        }
+        if($this->request->input('education') != $item->education) {
+            $history_info.= 'Education: '.$this->request->input('education').'<br/>';
+        }
+        if($this->request->input('employment') != $item->employment) {
+            $history_info.= 'Employment: '.$this->request->input('employment').'<br/>';
+        }
+        if($this->request->input('job') != $item->job) {
+            $history_info.= 'Job: '.$this->request->input('job').'<br/>';
+        }
+        if($this->request->input('job_title') != $item->job_title) {
+            $history_info.= 'Job title: '.$this->request->input('job_title').'<br/>';
+        }
+        if($this->request->input('income') != $item->income) {
+            $history_info.= 'Income: '.$this->request->input('income').'<br/>';
+        }
+        if($this->request->input('age') != $item->age) {
+            $history_info.= 'Age: '.$this->request->input('age').'<br/>';
+        }
+        if($this->request->input('country_percentage') != $item->country_percentage) {
+            $history_info.= 'Country percentage: '.$this->request->input('country_percentage').'<br/>';
+        }
+        if($this->request->input('dentists_patients') != $item->dentists_patients) {
+            $history_info.= 'Dentists patients: '.$this->request->input('dentists_patients').'<br/>';
+        }
+        if($this->request->input('manually_calc_reward') != $item->manually_calc_reward) {
+            $history_info.= 'Manually calc reward: '.$this->request->input('manually_calc_reward').'<br/>';
+        }
+
         $item->scheduled_at = $this->request->input('scheduled_at');
         $item->featured = $this->request->input('featured');
         $item->stats_featured = $this->request->input('stats_featured');
@@ -1200,7 +1306,7 @@ class VoxesController extends AdminController {
             }   
         }
 
-        $cur_related = VoxRelated::where('vox_id', $item->id)->delete();
+        VoxRelated::where('vox_id', $item->id)->delete();
         if( Request::input('related_vox_id') ) {
             foreach (Request::input('related_vox_id') as $i => $ri) {
                 if (!empty($this->request->input('related_vox_id')[$i])) {
@@ -1214,17 +1320,39 @@ class VoxesController extends AdminController {
 
         foreach ($this->langs as $key => $value) {
             if(!empty($this->request->input('title-'.$key))) {
+
                 $translation = $item->translateOrNew($key);
+
+                if($this->request->input('title-'.$key) != $item->title) {
+                    $history_info.= 'Title '.$key.': '.$this->request->input('title-'.$key).'<br/>';
+                }
+                if($this->request->input('slug-'.$key) != $item->slug) {
+                    $history_info.= 'Slug '.$key.': '.$this->request->input('slug-'.$key).'<br/>';
+                }
+                if($this->request->input('description-'.$key) != $item->description) {
+                    $history_info.= 'Description '.$key.': '.$this->request->input('description-'.$key).'<br/>';
+                }
+                if($this->request->input('stats_description-'.$key) != $item->stats_description) {
+                    $history_info.= 'Stats description '.$key.': '.$this->request->input('stats_description-'.$key).'<br/>';
+                }
+
                 $translation->vox_id = $item->id;
                 $translation->slug = $this->request->input('slug-'.$key);
                 $translation->title = $this->request->input('title-'.$key);
                 $translation->description = $this->request->input('description-'.$key);
                 $translation->stats_description = $this->request->input('stats_description-'.$key);
-                
                 $translation->save();
             }
         }
         $item->save();
+
+        if(!empty($history_info)) {
+            $vox_history = new VoxHistory;
+            $vox_history->admin_id = $this->user->id;
+            $vox_history->vox_id = $item->id;
+            $vox_history->info = $history_info;
+            $vox_history->save();
+        }
 
         if( Input::file('photo') ) {
             $img = Image::make( Input::file('photo') )->orientate();
@@ -1251,10 +1379,68 @@ class VoxesController extends AdminController {
             $data = $this->request->input();
         }
 
+        $history_info = '';
+
+        if($this->request->input('is_control_prev')) {
+            if($this->request->input('is_control_prev') != $question->is_control) {
+                $history_info.= 'Control question: '.$this->request->input('is_control_prev').'<br/>';
+            }
+        } else {
+            if($this->request->input('is_control') != $question->is_control) {
+                $history_info.= 'Control question: '.$this->request->input('is_control').'<br/>';
+            }
+        }
+
         if(!empty($data['is_control_prev'])) {
             $question->is_control = $data['is_control_prev'];
         } else {
             $question->is_control = $data['is_control'];
+        }
+
+        if($this->request->input('type') != $question->type) {
+            $history_info.= 'Type: '.$this->request->input('type').'<br/>';
+        }
+        if($this->request->input('order') != $question->order) {
+            $history_info.= 'Order: '.$this->request->input('order').'<br/>';
+        }
+        if($this->request->input('stats_featured') != $question->stats_featured) {
+            $history_info.= 'Stats featured: '.$this->request->input('stats_featured').'<br/>';
+        }
+        if($this->request->input('stats_top_answers') != $question->stats_top_answers) {
+            $history_info.= 'Stats top answers: '.$this->request->input('stats_top_answers').'<br/>';
+        }
+        if($this->request->input('vox_scale_id') != $question->vox_scale_id) {
+            $history_info.= 'Vox scale id: '.$this->request->input('vox_scale_id').'<br/>';
+        }
+        if($this->request->input('dont_randomize_answers') != $question->dont_randomize_answers) {
+            $history_info.= 'Dont randomize answers: '.$this->request->input('dont_randomize_answers').'<br/>';
+        }
+        if($this->request->input('image_in_tooltip') != $question->image_in_tooltip) {
+            $history_info.= 'Image in tooltip: '.$this->request->input('image_in_tooltip').'<br/>';
+        }
+        if($this->request->input('image_in_question') != $question->image_in_question) {
+            $history_info.= 'Image in question: '.$this->request->input('image_in_question').'<br/>';
+        }
+        if($this->request->input('prev_q_id_answers') != $question->prev_q_id_answers) {
+            $history_info.= 'Prev q id answers: '.$this->request->input('prev_q_id_answers').'<br/>';
+        }
+        if($this->request->input('trigger_type') != $question->trigger_type) {
+            $history_info.= 'Trigger type: '.$this->request->input('trigger_type').'<br/>';
+        }
+        if($this->request->input('used_for_stats') != $question->used_for_stats) {
+            $history_info.= 'Used for stats: '.$this->request->input('used_for_stats').'<br/>';
+        }
+        if($question->used_for_stats=='dependency' && $this->request->input('stats_relation_id') != $question->stats_relation_id) {
+            $history_info.= 'Stats relation id: '.$this->request->input('stats_relation_id').'<br/>';
+        }
+        if($question->used_for_stats=='dependency' && $this->request->input('stats_answer_id') != $question->stats_answer_id) {
+            $history_info.= 'Stats answer id: '.$this->request->input('stats_answer_id').'<br/>';
+        }
+        if($this->request->input('stats_title_question') != $question->stats_title_question) {
+            $history_info.= 'Stats title question: '.$this->request->input('stats_title_question').'<br/>';
+        }
+        if($this->request->input('order_stats_answers_with_diez_as_they_are') != $question->order_stats_answers_with_diez_as_they_are) {
+            $history_info.= 'Order stats answers with diez as they are: '.$this->request->input('order_stats_answers_with_diez_as_they_are').'<br/>';
         }
         
         $question->cross_check = !empty($data['cross_check']) ? $data['cross_check'] : null;
@@ -1282,6 +1468,11 @@ class VoxesController extends AdminController {
         $question->order_stats_answers_with_diez_as_they_are = !empty($data['order_stats_answers_with_diez_as_they_are']) ? $data['order_stats_answers_with_diez_as_they_are'] : null;
 
         if( $justCopy ) {
+
+            if($this->request->input('question_trigger') != $question->question_trigger) {
+                $history_info.= 'Question trigger: '.$this->request->input('question_trigger').'<br/>';
+            }
+
             $question->question_trigger = $data['question_trigger'];
         } else {
             if(!empty( $data['triggers'] )) {
@@ -1298,8 +1489,17 @@ class VoxesController extends AdminController {
                     $q_vox->manually_calc_reward = null;
                     $q_vox->save();
                 }
+                
+
+                if(implode(';', $help_array) != $question->question_trigger) {
+                    $history_info.= 'Question trigger: '.implode(';', $help_array).'<br/>';
+                }
+
                 $question->question_trigger = implode(';', $help_array);
             } else {
+                if($this->request->input('question_trigger') != $question->question_trigger) {
+                    $history_info.= 'Question trigger: null<br/>';
+                }
                 $question->question_trigger = '';
             }
         }
@@ -1310,20 +1510,36 @@ class VoxesController extends AdminController {
                 $data['number-max']
             ];
             
+            if(implode(':', $array) != $question->number_limit) {
+                $history_info.= 'Number limit: '.implode(':', $array).'<br/>';
+            }
+
             $question->number_limit = implode(':', $array);
         } else {
+            if($this->request->input('number_limit') != $question->number_limit) {
+                $history_info.= 'Number limit: null<br/>';
+            }
             $question->number_limit = '';
         }
 
         if($justCopy) {
             if(isset($data['excluded_answers']) && !empty($data['excluded_answers'])) {
+                if($this->request->input('excluded_answers') != $question->excluded_answers) {
+                    $history_info.= 'Excluded answers: '.$this->request->input('excluded_answers').'<br/>';
+                }
                 $question->excluded_answers = $data['excluded_answers'];
             } else {
+                if($this->request->input('excluded_answers') != $question->excluded_answers) {
+                    $history_info.= 'Excluded answers: null<br/>';
+                }
                 $question->excluded_answers = null;
             }
         } else {
 
             if(isset($data['exclude_answers_checked']) && isset($data['excluded_answers']) && !empty(json_decode($data['excluded_answers'], true))) {
+                if(json_decode($this->request->input('excluded_answers'), true) != $question->excluded_answers) {
+                    $history_info.= 'Exclude answers checked: '.json_decode($data['excluded_answers'], true).'<br/>';
+                }
                 $question->excluded_answers = json_decode($data['excluded_answers'], true);
             } else {
                 $question->excluded_answers = null;
@@ -1333,7 +1549,13 @@ class VoxesController extends AdminController {
         $question->save();
 
         if(isset($data['prev_q_order'])) {
-            $question->prev_q_id_answers = VoxQuestion::where('vox_id', $question->vox_id)->where('order', $data['prev_q_order'])->first()->id;
+            $prev_q = VoxQuestion::where('vox_id', $question->vox_id)->where('order', $data['prev_q_order'])->first()->id;
+
+            if($prev_q != $question->number_limit) {
+                $history_info.= 'Prev q id answers: '.$prev_q.'<br/>';
+            }
+
+            $question->prev_q_id_answers = $prev_q;
             $question->save();
         }        
 
@@ -1354,6 +1576,15 @@ class VoxesController extends AdminController {
             if(!empty($data['question-'.$key])) {
                 $translation = $question->translateOrNew($key);
                 $translation->vox_question_id = $question->id;
+                $translation->vox_id = $question->vox_id;
+
+                if($this->request->input('question-'.$key) != $translation->question) {
+                    $history_info.= 'Question '.$key.': '.$this->request->input('question-'.$key).'<br/>';
+                }
+                if($this->request->input('stats_title-'.$key) != $translation->stats_title) {
+                    $history_info.= 'Stats title '.$key.': '.$this->request->input('stats_title-'.$key).'<br/>';
+                }
+
                 if (strpos($data['question-'.$key], '[')) {
                     $first_bracket_q = substr_count($data['question-'.$key],"[");
                     $second_bracket_q = substr_count($data['question-'.$key],"]");
@@ -1391,8 +1622,17 @@ class VoxesController extends AdminController {
                         }
                     }
 
-                    $translation->answers = json_encode( $data['answers-'.$key], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE );
+                    $answrs = json_encode( $data['answers-'.$key], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE );
+
+                    if($answrs != $translation->answers) {
+                        $history_info.= 'Answers '.$key.': '.$answrs.'<br/>';
+                    }
+
+                    $translation->answers = $answrs;
                 } else {
+                    if($this->request->input('answers-'.$key) != $translation->answers) {
+                        $history_info.= 'Answers: null<br/>';
+                    }
                     $translation->answers = '';                            
                 }
 
@@ -1401,7 +1641,16 @@ class VoxesController extends AdminController {
         }
         $question->save();
 
-        if(isset($data['translate-question'])) {
+        if(!empty($history_info)) {
+            $vox_history = new VoxHistory;
+            $vox_history->admin_id = $this->user->id;
+            $vox_history->vox_id = $question->vox_id;
+            $vox_history->question_id = $question->id;
+            $vox_history->info = $history_info;
+            $vox_history->save();
+        }
+
+        if($question->vox->type == 'normal') {
             foreach (config('langs-to-translate') as $lang_code => $value) {
                 if($lang_code != 'en') {
                     VoxHelper::translateQuestionWithAnswers($lang_code, $question);
@@ -1432,7 +1681,7 @@ class VoxesController extends AdminController {
             $question->answers_images_filename = json_encode($image_filename);
             $question->save();
 
-        } else if(!empty($data['filename'])) {
+        } else if(!empty($data['filename']) && !in_array(null, $data['filename'])) {
             $imgs_arr = [];
             foreach (json_decode($question->answers, true) as $k => $v) {
                 $imgs_arr[] = !empty($data['filename'][$k]) ? $data['filename'][$k] : '';
@@ -1459,7 +1708,7 @@ class VoxesController extends AdminController {
 
     public function categories( ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1471,7 +1720,7 @@ class VoxesController extends AdminController {
 
     public function add_category( ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -1647,6 +1896,8 @@ class VoxesController extends AdminController {
                 $translation->save();
             }
         }
+
+        User::whereNull('deleted_at')->update(['update_vox_scales' => 1]);
     }
 
     public function edit_scale( $id ) {
@@ -1672,6 +1923,23 @@ class VoxesController extends AdminController {
                 'scales' => $this->scales_arr,
             ));
         }
+    }
+
+    public function delete_scale( $id ) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $item = VoxScale::find($id);
+
+        if( $item ) {
+            $item->delete();
+            Request::session()->flash('success-message', 'Scale deleted');
+        }
+
+        return redirect('cms/'.$this->current_page.'/'.$this->current_subpage);
     }
 
     public function faq() {
@@ -1805,6 +2073,19 @@ class VoxesController extends AdminController {
                     ->join('users', 'vox_answers.user_id', '=', 'users.id')
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->count();
+
+                    $items_count_old = VoxAnswerOld::whereNull('is_admin')
+                    ->where('question_id',$question_id )
+                    ->select('vox_answer_olds.*')
+                    ->where('is_completed', 1)
+                    ->where('is_skipped', 0)
+                    ->where('answer', '!=', 0)
+                    ->has('user')
+                    ->join('users', 'vox_answer_olds.user_id', '=', 'users.id')
+                    ->join('countries', 'users.country_id', '=', 'countries.id')
+                    ->count();
+
+                    $items_count = $items_count + $items_count_old;
                 } else {
                     $items_count = VoxAnswer::whereNull('is_admin')
                     ->where('question_id',$question_id )
@@ -1813,6 +2094,16 @@ class VoxesController extends AdminController {
                     ->where('answer', '!=', 0)
                     ->has('user')
                     ->count();
+
+                    $items_count_old = VoxAnswerOld::whereNull('is_admin')
+                    ->where('question_id',$question_id )
+                    ->where('is_completed', 1)
+                    ->where('is_skipped', 0)
+                    ->where('answer', '!=', 0)
+                    ->has('user')
+                    ->count();
+
+                    $items_count = $items_count + $items_count_old;
                 }                
             } else {
                 if (request()->input( 'country' )) {
@@ -1877,20 +2168,61 @@ class VoxesController extends AdminController {
                     ->orderBy('created_at', 'desc');
                 }
 
+                $question_respondents = $question_respondents->get();
+
+                $question_respondents_old = VoxAnswerOld::whereNull('is_admin')
+                ->where('question_id',$question_id )
+                ->where('is_completed', 1)
+                ->where('is_skipped', 0)
+                ->where('answer', '!=', 0)
+                ->has('user')
+                ->select('vox_answer_olds.*');
+
+                if (request()->input( 'country' )) {
+                    $order = request()->input( 'country' );
+                    $question_respondents_old = $question_respondents_old
+                    ->join('users', 'vox_answer_olds.user_id', '=', 'users.id')
+                    ->join('countries', 'users.country_id', '=', 'countries.id')
+                    ->orderBy('countries.name', $order);
+                } else if (request()->input( 'name' )) {
+                    $order = request()->input( 'name' );
+                    $question_respondents_old = $question_respondents_old
+                    ->join('users', 'vox_answer_olds.user_id', '=', 'users.id')
+                    ->orderBy('users.name', $order);
+                } else if (request()->input( 'taken' )) {
+                    $order = request()->input( 'taken' );
+                    $question_respondents_old = $question_respondents_old
+                    ->orderBy('created_at', $order);
+                } else if (request()->input( 'type' )) {
+                    $order = request()->input( 'type' );
+                    $question_respondents_old = $question_respondents_old
+                    ->join('users', 'vox_answer_olds.user_id', '=', 'users.id')
+                    ->orderBy('users.is_dentist', $order)
+                    ->orderBy('users.is_clinic', $order);
+                } else {
+                    $question_respondents_old = $question_respondents_old
+                    ->orderBy('created_at', 'desc');
+                }
+
+                $question_respondents_old = $question_respondents_old->get();
+
+                $question_respondents = $question_respondents->concat($question_respondents_old);
+
                 if (request()->input( 'show-more' )) {
-                    $question_respondents = $question_respondents->get();
+                    // $question_respondents = $question_respondents->get();
                     $show_button = false;
                     $show_all_button = false;
                     $show_pagination = false;
                     $respondents_shown = $items_count;
                 } else {
-                    $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
-                }                
+                    // $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+                    $question_respondents = $this->paginate($question_respondents, $ppp)->withPath('cms/vox/explorer/'.($vox_id ? $vox_id.($question_id ? '/'.$question_id : '') : ''));
+                }
 
                 $respondents = '';
 
             } else {
-                $respondents = DcnReward::where('reference_id',$vox_id )->where('platform', 'vox')->where('type', 'survey')->has('user')->select('dcn_rewards.*');
+                $respondents = DcnReward::with('user')->where('reference_id',$vox_id )->where('platform', 'vox')->where('type', 'survey')->has('user')->select('dcn_rewards.*');
                 if (request()->input( 'country' )) {
                     $order = request()->input( 'country' );
                     $respondents = $respondents
@@ -1917,15 +2249,16 @@ class VoxesController extends AdminController {
                     ->orderBy('created_at', 'desc');
                 }
 
+                $respondents = $respondents->get();
+
                 if (request()->input( 'show-more' )) {
-                    $respondents = $respondents->get();
                     $show_button = false;
                     $show_all_button = false;
                     $show_pagination = false;
                     $respondents_shown = $items_count;
                 } else {
-                    $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
-                }                
+                    $respondents = $this->paginate($respondents, $ppp)->withPath('cms/vox/explorer/'.($vox_id ? $vox_id.($question_id ? '/'.$question_id : '') : ''));
+                }
 
                 $question_respondents = '';
             }
@@ -1975,6 +2308,11 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('voxes-explorer', $viewParams);
+    }
+
+    private function paginate($items, $perPage = 50, $page = null, $options = []) {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
     public function export_survey_data() {
@@ -2095,6 +2433,13 @@ class VoxesController extends AdminController {
                 ->where('user_id', $user->user->id)
                 ->where('vox_id', $vox->id)
                 ->get();
+
+                $answers_old = VoxAnswerOld::whereNull('is_admin')
+                ->where('user_id', $user->user->id)
+                ->where('vox_id', $vox->id)
+                ->get();
+
+                $answers = $answers->concat($answers_old);
 
                 foreach ($vox->questions as $question) {
                     $qid = $question->id;
@@ -2424,17 +2769,17 @@ class VoxesController extends AdminController {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
+            return redirect('cms/home');
         }
 
         if( empty(request('chosen-qs'))) {
             $this->request->session()->flash('error-message', 'Please, choose questions!' );
-            return redirect('cms/vox/edit/'.request('vox-id'));            
+            return redirect('cms/vox/edit/'.request('vox-id'));
         }
 
         if( empty(request('demographics'))) {
             $this->request->session()->flash('error-message', 'Please, choose demographics!' );
-            return redirect('cms/vox/edit/'.request('vox-id'));            
+            return redirect('cms/vox/edit/'.request('vox-id'));
         }
 
         // SELECT * FROM `vox_answers_dependencies` WHERE `question_dependency_id` = 2951 AND `question_id` = 15910
@@ -2453,7 +2798,13 @@ class VoxesController extends AdminController {
         foreach(request('chosen-qs') as $q_id) {
             $q = VoxQuestion::find($q_id);
 
-            $results =  VoxAnswer::whereNull('is_admin')
+            $results_old = VoxAnswerOld::whereNull('is_admin')
+            ->where('question_id', $q_id)
+            ->where('is_completed', 1)
+            ->where('is_skipped', 0)
+            ->has('user');
+
+            $results = VoxAnswer::whereNull('is_admin')
             ->where('question_id', $q_id)
             ->where('is_completed', 1)
             ->where('is_skipped', 0)
@@ -2462,17 +2813,25 @@ class VoxesController extends AdminController {
             if($q->type == 'scale') {
                 foreach (json_decode($q->answers, true) as $key => $scale) {
                     if(empty($q->stats_scale_answers) || (!empty($q->stats_scale_answers) && in_array(($key + 1), json_decode($q->stats_scale_answers, true)))) {
-                        $results =  VoxAnswer::whereNull('is_admin')
+
+                        $results_old = VoxAnswerOld::whereNull('is_admin')
                         ->where('question_id', $q_id)
                         ->where('is_completed', 1)
                         ->where('is_skipped', 0)
                         ->has('user');
-                        $export_array[] = VoxHelper::exportStatsXlsx($vox, $q, $demographics, $results, $key+1, $all_period, true);
+
+                        $results = VoxAnswer::whereNull('is_admin')
+                        ->where('question_id', $q_id)
+                        ->where('is_completed', 1)
+                        ->where('is_skipped', 0)
+                        ->has('user');
+
+                        $export_array[] = VoxHelper::exportStatsXlsx($vox, $q, $demographics, $results, $results_old, $key+1, $all_period, true);
                     }
 
                 }
             } else {
-                $export_array[] = VoxHelper::exportStatsXlsx($vox, $q, $demographics, $results, null, $all_period, true);
+                $export_array[] = VoxHelper::exportStatsXlsx($vox, $q, $demographics, $results, $results_old, null, $all_period, true);
             }
         }
 
@@ -2744,27 +3103,6 @@ class VoxesController extends AdminController {
         ]);
     }
 
-    public function translateQuestion() {
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');
-        }
-
-        if(!empty(request('q-trans-id'))) {
-
-            foreach (config('langs-to-translate') as $lang_code => $value) {
-                if($lang_code != 'en') {
-                    VoxHelper::translateQuestionWithAnswers($lang_code, VoxQuestion::find(request('q-trans-id')));
-                }
-            }
-            $this->request->session()->flash('success-message', 'Question translated' );
-        } else {
-            $this->request->session()->flash('error-message', 'No question founded' );
-        }
-
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/home');
-    }
-
     public function hideSurvey($id) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
@@ -2942,4 +3280,66 @@ class VoxesController extends AdminController {
             ), 200)->header('X-Frame-Options', 'DENY');
         }
     }
+
+    // public function duplicateSurvey($id) {
+        
+    //     if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer', 'support'])) {
+    //         $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+    //         return redirect('cms/home');            
+    //     }
+
+    //     $vox = Vox::with(['translations', 'categories', 'related'])->find($id);
+    //     // $vox = Vox::with(['translations', 'questions', 'categories', 'related'])->find($id);
+
+    //     // dd($vox->getRelations());
+
+    //     // $vox->load('invoices');
+
+    //     $newVox = $vox->replicate();
+    //     $newVox->push();
+    //     $newVox->type = 'hidden';
+    //     $newVox->translation_langs = null;
+    //     $newVox->save();
+
+    //     // dd($vox->getRelations());
+    //     // dd($newVox);
+
+
+    // // ne zapazwa localeto
+
+    //     $relation = 'translations';
+    //     $newVox->{$relation}()->create([
+    //         "title" => "20 Questions: Dental Visits",
+    //         "locale" => "en",
+    //         "description" => "Are dental visits always painful? Should you visit the dentist only when a tooth starts hurting? Are dental X-rays really harmful? In what are orthodontic denti",
+    //         "stats_description" => "Are dental visits always painful? Should you visit the dentist only when a tooth starts hurting? Are dental X-rays really harmful? In what are orthodontic denti",
+    //         "slug" => "20-questions-myths-facts-dental-visits",
+    //         "options" => null,
+    //         "vox_id" => $newVox->id,
+    //     ]);
+
+    //     foreach($vox->getRelations() as $relation => $items){
+    //         $newRelationn = [];
+    //         foreach($items as $item){
+                
+    //             $newRelation = [];
+    //             if(!empty($item)) {
+    //                 // dd($items);
+    //                 unset($item->id);
+    //                 unset($item->vox_id);
+    //                 $newRelation = $item->toArray();
+    //                 $newRelation['vox_id'] = $newVox->id;
+
+    //                 $newRelationn[] = $newRelation;
+    //                 dd($newRelation);
+    //                 $newVox->{$relation}()->create($newRelation);
+    //             }
+    //         }
+
+    //         dd($newRelationn);
+    //     }
+
+    //     $this->request->session()->flash('error-message', 'Survey duplicated' );
+    //     return redirect('cms/vox/list/');
+    // }
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use WebPConvert\WebPConvert;
 
+use App\Models\VoxAnswerOld;
 use App\Models\UserDevice;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
@@ -236,7 +237,7 @@ class Vox extends Model {
             return 0;
         } else {
             return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * (!empty($this->manually_calc_reward) && !empty($this->dcn_questions_count) ? $this->dcn_questions_count : $this->questionsCount());
-        }        
+        }
     }
 
     public function getRewardForUser($user, $answers_count) {
@@ -718,6 +719,10 @@ class Vox extends Model {
         if(!empty($user->country_id) && empty($user->vip_access)) {
 
             $has_started_the_survey = VoxAnswer::where('vox_id', $this->id)->where('user_id', $user->id)->first();
+
+            if(empty($has_started_the_survey)) {
+                $has_started_the_survey = VoxAnswerOld::where('vox_id', $this->id)->where('user_id', $user->id)->first();
+            }
 
             return !empty($this->country_percentage) && !empty($this->users_percentage) && array_key_exists($user->country_id, $this->users_percentage) && $this->users_percentage[$user->country_id] >= $this->country_percentage && empty($has_started_the_survey) && ( (!empty($this->exclude_countries_ids) && !in_array($user->country_id, $this->exclude_countries_ids)) || empty($this->exclude_countries_ids));
         } else {

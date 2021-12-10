@@ -104,8 +104,6 @@ class VoxController extends ApiController {
 
         if( $has_test ) {
 
-            $first_question_ids = $first->questions->pluck('id')->toArray();
-
             if(!$user->madeTest($first->id)) {
 
                 foreach (json_decode($has_test, true) as $q_id => $a_id) {

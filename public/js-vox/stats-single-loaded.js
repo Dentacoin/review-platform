@@ -679,9 +679,9 @@ $(document).ready(function(){
                 $(this).closest('.stat').find('.loader').fadeIn();
                 $(this).closest('.stat').find('.loader-mask').fadeIn();
                 $(this).closest('.stat').addClass('can-show-all');
-                $('html, body').animate({
-                    scrollTop: $(this).closest('.stat').find('.mobile-scales').offset().top
-                }, 500);
+                // $('html, body').animate({
+                //     scrollTop: $(this).closest('.stat').find('.mobile-scales').offset().top
+                // }, 500);
 
                 if($(this).closest('.stat').find('.legend:visible').length) {
                     if ($(this).closest('.stat').hasClass('two-clicks-triggerd')) {
@@ -923,9 +923,9 @@ $(document).ready(function(){
                         }
 
                         if ($(window).outerWidth() <= 768 && container.find('.mobile-button-legend').length) {
-                            $('html, body').animate({
-                                scrollTop: container.find('.mobile-button-legend').offset().top
-                            }, 500);
+                            // $('html, body').animate({
+                            //     scrollTop: container.find('.mobile-button-legend').offset().top
+                            // }, 500);
                         }
                         if(typeof scale !== 'undefined' && scale == 'dependency') {
                             container.find('.loader').fadeIn();
@@ -1083,7 +1083,10 @@ $(document).ready(function(){
                 fontSize = 8;                
             }
 
+            console.log(rows);
+
             var data = google.visualization.arrayToDataTable(rows);
+            console.log(data);
             
             var options = {
                 backgroundColor: 'transparent',

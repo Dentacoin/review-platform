@@ -11,7 +11,33 @@
     <!-- end page-header -->
 
     @if(!empty($error))
-        <i class="fa fa-exclamation-triangle err-vox" data-toggle="modal" data-target="#errorsModal"></i>
+        <div class="alert alert-danger">
+            @foreach($error_arr as $key => $value)
+                @foreach($value as $kk)
+                    Vox ID {{ $key }}: {!! $kk !!} <br/>
+                @endforeach
+            @endforeach
+        </div>
+    @endif
+
+    @if(!empty($questions_order_bug))
+        <div class="alert alert-danger m-b-15">
+            <b>Duplicated or missing order numbers</b>: <br/>
+            @foreach($questions_order_bug_message as $key => $reorder)
+                @foreach($reorder as $kk)
+                    Vox ID {{ $key }}: {!! $kk !!}
+                @endforeach
+            @endforeach
+        </div>
+    @endif
+
+    @if(!empty($without_translations))
+        <div class="alert alert-warning">
+            <b>Voxes without translations</b>: <br/>
+            @foreach($without_translations as $without_trans)
+                Vox ID {{ $without_trans }}<br/>
+            @endforeach
+        </div>
     @endif
 
     <div class="row">
@@ -79,28 +105,6 @@
             </div>
         </div>
     </div>
-
-    @if(!empty($error))
-        <div id="errorsModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Errors</h4>
-                    </div>
-                    <div class="modal-body">
-                        @foreach($error_arr as $key => $value)
-                            {{ $key+1 }}. <a href="{{ isset($value['link']) ?? 'javascript:;'  }}" target="_blank">{{ $value['error'] }}</a><br/>
-                        @endforeach
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
 
     <div id="modal-error" class="modal fade" role="dialog">
         <div class="modal-dialog">

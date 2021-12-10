@@ -57,6 +57,11 @@ class VoxQuestion extends Model {
         'image_in_question',
     ];
 
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
+
     protected $casts = [
         'excluded_answers' => 'array',
     ];
@@ -70,17 +75,13 @@ class VoxQuestion extends Model {
     public function related() {
         return $this->hasOne('App\Models\VoxQuestion', 'id', 'stats_relation_id');
     }
-
-    public function respondents() {
-        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->whereNull('is_admin')->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user');
-    }
     
     public function scale() {
         return $this->hasOne('App\Models\VoxScale', 'id', 'vox_scale_id');
     }
     
     public function respondent_count() {
-        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->whereNull('is_admin')->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select(DB::raw('count( distinct `user_id`) as num'))->first()->num;
+        return $this->hasMany('App\Models\VoxAnswerOld', 'question_id', 'id')->whereNull('is_admin')->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select(DB::raw('count( distinct `user_id`) as num'))->first()->num + $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->whereNull('is_admin')->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select(DB::raw('count( distinct `user_id`) as num'))->first()->num;
     }
 
     public function questionWithTooltips() {
@@ -272,8 +273,16 @@ class VoxQuestion extends Model {
                 'dependency_question' => $this->stats_relation_id,
             ]);
 
-            $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
-            $results = $results->get();
+            $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->get();
+
+            $results_old = VoxHelper::prepareQueryOld($this->id, null,[
+                'dependency_answer' => $this->stats_answer_id,
+                'dependency_question' => $this->stats_relation_id,
+            ]);
+
+            $results_old = $results_old->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->get();
+
+            $result = $results->concat($results_old);
 
             foreach ($results as $result) {
 
@@ -295,8 +304,16 @@ class VoxQuestion extends Model {
                     'dependency_question' => $this->stats_relation_id,
                 ]);
 
-                $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
-                $results = $results->get();
+                $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->get();
+                
+                $results_old = VoxHelper::prepareQuery($this->id, null,[
+                    'dependency_answer' => $answer_number,
+                    'dependency_question' => $this->stats_relation_id,
+                ]);
+
+                $results_old = $results_old->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->get();
+
+                $results = $results->concat($results_old);
 
                 $existing = VoxAnswersDependency::where('question_id', $this->id)->first();
 

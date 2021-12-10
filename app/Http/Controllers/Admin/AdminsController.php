@@ -9,12 +9,14 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
 use App\Models\DcnTransactionHistory;
+use App\Models\AdminMessage;
 use App\Models\AdminAction;
 use App\Models\UserHistory;
 use App\Models\AdminIp;
 use App\Models\Admin;
 
 use Validator;
+use Response;
 use Request;
 use Auth;
 use App;
@@ -277,4 +279,44 @@ class AdminsController extends AdminController {
 
         return redirect('cms/admins/admins/');
     }
+
+    public function readMessage( $id ) {
+
+        $message = AdminMessage::find($id);
+
+        if(!empty($message) && !$message->is_read && !empty($this->user) && $this->user->id == $message->admin_id) {
+            $message->is_read = true;
+            $message->save();
+        }
+
+        return Response::json([
+            'success' => true,
+        ]);
+    }
+
+    public function messagesList( ) {
+
+        if( Auth::guard('admin')->user()->id != 1 ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+    	return $this->showView('admins-messages');
+    }
+
+    public function addMessage() {
+
+        if( Auth::guard('admin')->user()->id != 1 ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+            
+        $newadmin = new AdminMessage;
+        $newadmin->admin_id = $this->request->input('admin_id');
+        $newadmin->message = $this->request->input('message');
+        $newadmin->save();
+
+        $this->request->session()->flash('success-message', 'Message added' );
+        return redirect('cms/admins/messages');
+    }
+
 }

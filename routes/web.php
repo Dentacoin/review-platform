@@ -49,6 +49,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('admins/ips/delete/{id}',							'AdminsController@deleteIp');
 	Route::get('admins/actions-history',							'AdminsController@actionsHistory');
 	Route::get('admins/reset-auth/{id}',							'AdminsController@resetAuth');
+	Route::get('admins/messages',									'AdminsController@messagesList');
+	Route::post('admins/add-message',								'AdminsController@addMessage');
+	Route::any('read-admin-message/{id}', 							'AdminsController@readMessage');
 
 	Route::any('blacklist', 										'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 							'BlacklistController@delete');
@@ -62,6 +65,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('users/users', 										'UsersController@list');
 	Route::post('users/users/mass-delete', 							'UsersController@massdelete');
 	Route::post('users/users/mass-reject', 							'UsersController@massReject');
+	Route::post('users/users/mass-approve', 						'UsersController@massApprove');
 	Route::get('users/users/byweek', 								'UsersController@byweek');
 	Route::any('users/users/loginas/{id}/{platform?}', 				'UsersController@loginas');
 	Route::any('users/users/user-data/{id}', 						'UsersController@personal_data');
@@ -189,6 +193,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/edit/{id}/change-all', 					'VoxesController@reorder');
 	Route::any('vox/edit/{id}/change-number/{question_id}', 'VoxesController@order_question');
 	Route::any('vox/edit/{id}/change-question/{question_id}', 'VoxesController@change_question_text');
+	Route::get('vox/duplicate/{id}', 						'VoxesController@duplicateSurvey');
 	Route::get('vox/ideas', 								'VoxesController@ideas');
 	Route::get('vox/categories', 							'VoxesController@categories');
 	Route::any('vox/categories/add', 						'VoxesController@add_category');
@@ -198,6 +203,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('vox/scales', 								'VoxesController@scales');
 	Route::any('vox/scales/add', 							'VoxesController@add_scale');
 	Route::any('vox/scales/edit/{id}', 						'VoxesController@edit_scale');
+	Route::any('vox/scales/delete/{id}', 					'VoxesController@delete_scale');
 	Route::any('vox/faq', 									'VoxesController@faq');
 	Route::any('vox/faq-ios', 								'VoxesController@faqiOS');
 	Route::any('vox/tests', 								'VoxesController@test');
@@ -213,7 +219,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('vox/get-respondents-count/{id}', 			'VoxesController@getRespondentsCount');
 	Route::post('vox/get-reward/{id}', 						'VoxesController@getReward');
 	Route::post('vox/get-duration/{id}', 					'VoxesController@getDuration');
-	Route::post('vox/translate-question', 					'VoxesController@translateQuestion');
 	Route::post('vox/hide-survey/{id}', 					'VoxesController@hideSurvey');
 	Route::post('vox/get-question-content/{id}', 			'VoxesController@getQuestionContent');
 	Route::post('vox/add-question-content/{id}', 			'VoxesController@addQuestionContent');

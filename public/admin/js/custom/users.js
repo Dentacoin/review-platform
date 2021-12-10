@@ -97,6 +97,13 @@ $(document).ready(function(){
 		$('#mass-delete-form').attr('action', $('#mass-delete-form').attr('mass-reject-action'));
 		$('#mass-delete-form').submit();
 	});
+
+	$('#mass-approve-button').click( function(e) {
+		e.preventDefault();
+
+		$('#mass-delete-form').attr('action', $('#mass-delete-form').attr('mass-approve-action'));
+		$('#mass-delete-form').submit();
+	});
     
     $('.external-patients-button').click( function() {
         $(this).closest('.external-patients-wrap').next().show();

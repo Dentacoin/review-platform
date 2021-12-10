@@ -11,6 +11,8 @@ use App\Models\VoxCategory;
 use App\Models\Country;
 use App\Models\User;
 
+use Carbon\Carbon;
+
 use Response;
 use Auth;
 use DB;
@@ -47,6 +49,10 @@ class PaidDentalSurveysController extends ApiController {
 
 		$all_taken = false;
 		$latest_blog_posts = false;
+
+		$vip_access_seconds = 0;
+		$vip_access_text = '';
+
 		if(!empty($user)) {
 
 			$untaken_voxes = $user->voxesTargeting();
@@ -66,8 +72,38 @@ class PaidDentalSurveysController extends ApiController {
 					$post_image_id = DB::connection('vox_wordpress_db')->table('postmeta')->where('post_id', $lbp->ID)->where('meta_key', '_thumbnail_id')->first()->meta_value;
 					$post_image_link = DB::connection('vox_wordpress_db')->table('posts')->where('id', $post_image_id)->first();
 
-					$lbp->img = $post_image_link->guid;
+					$lbp->img = isset($post_image_link->guid) ? $post_image_link->guid : '';
 				}
+			}
+
+			if($user->vip_access) {
+				$days = Carbon::now()->diffInDays($user->vip_access_until);
+				$hours = Carbon::now()->diffInHours($user->vip_access_until);
+				$min = Carbon::now()->diffInMinutes($user->vip_access_until);
+				$sec = Carbon::now()->diffInSeconds($user->vip_access_until);
+	
+				if($days) {
+					$vip_access_text .= $days;
+	
+					if($days == 1 ) {
+						$vip_access_text .= ' <span>DAY</span> ';
+					} else {
+						$vip_access_text .= ' <span>DAYS</span> ';
+					}
+				}
+	
+				$vip_access_text .= ($hours%24);
+	
+				if($hours == 1 ) {
+					$vip_access_text .= ' <span>HOUR</span> ';
+				} else {
+					$vip_access_text .= ' <span>HOURS</span> ';
+				}
+	
+				$vip_access_text .= ($min%60).' <span>MIN</span> '.
+				($sec%60).' <span>SEC</span>';
+	
+				$vip_access_seconds = $sec;
 			}
 		}
 
@@ -86,6 +122,8 @@ class PaidDentalSurveysController extends ApiController {
 
         $arr = array(
         	'all_taken' => $all_taken,
+			'vip_access_text' => $vip_access_text,
+			'vip_access_seconds' => $vip_access_seconds,
         	'latest_blog_posts' => collect(),
             'is_warning_message_shown' => $is_warning_message_shown,
             'warning_message_shown' => trans('vox.page.home.high-gas-price'),
@@ -96,6 +134,7 @@ class PaidDentalSurveysController extends ApiController {
         	'voxes' => $voxes,
         	'categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
 			'vox_levels' => $vox_levels,
+
 			'user' => $user,
 		);
 

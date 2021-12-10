@@ -74,10 +74,10 @@
                         </button>
                     </div>
 
-                    @if(!empty($dcn_warning_transaction) && $admin->id == 1)
-                        <!-- <span class="label label-danger blink" style="margin-top: 20px;display: inline-block;">BUG WITH TRANSACTIONS!!!</span>
+                    @if(!empty(App\Models\TransactionScammersByBalance::where('checked', '!=', 1)->count()))
+                        <span class="label label-danger blink" style="margin-top: 20px;display: inline-block;">Transaction scammers by ballance</span>
 
-                        <style type="text/css">
+                        {{-- <style type="text/css">
                             
                             .blink {
                               animation: blink-animation 1s steps(5, start) infinite;
@@ -93,7 +93,7 @@
                                 visibility: hidden;
                               }
                             }
-                        </style> -->
+                        </style> --}}
                     @endif
                     <!-- end mobile sidebar expand / collapse button -->
                     
@@ -194,7 +194,56 @@
                     </div>
                 </div>
             </div>
-                <!-- end #content -->
+            <!-- end #content -->
+
+            @if(!empty($messages))
+                <div class="admin-message-wrapper">
+                    @foreach($messages as $message)
+                        <div class="message" action="{{ url('cms/read-admin-message/'.$message->id) }}">
+                            <p>{{ $message->message }}</p>
+                            <div style="margin-bottom:10px;">
+                                <a class="btn btn-success" href="javascript:;">OK</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <style type="text/css">
+                    .admin-message-wrapper {
+                        position: fixed;
+                        right: 0;
+                        bottom: 0;
+                        background-color: white;
+                        border: 5px solid #00acac;
+                        padding: 10px;
+                        border-top-left-radius: 10px;
+                        border-bottom: 0px;
+                        border-right: 0px;
+                        min-height: 100px;
+                        min-width: 150px;
+                        max-width: 350px;
+                        z-index: 10000000;
+                    }
+
+                    .admin-message-wrapper .message {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        border-bottom: 1px solid #00acac;
+                        margin-bottom: 15px;
+                    }
+
+                    .admin-message-wrapper .message:last-child {
+                        border-bottom: none;
+                        margin-bottom: 0px;
+                    }
+
+                    .admin-message-wrapper .message p {
+                        margin-right: 20px;
+                    }
+                </style>
+            @endif
+
             
             <!-- begin scroll to top btn -->
             <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>

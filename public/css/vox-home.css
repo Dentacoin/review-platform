@@ -337,7 +337,7 @@
               display: none; } }
 
 .vip-access-wrapper {
-  display: none;
+  display: flex;
   background-color: #ff0046;
   margin-top: -20px;
   border-bottom-left-radius: 20px;
@@ -405,11 +405,17 @@
           margin-left: 20px; } }
       @media screen and (max-width: 768px) {
         .vip-access-wrapper .first-col .first-info {
+          width: 220px;
           margin-left: 10px;
           font-size: 16px; } }
-      .vip-access-wrapper .first-col .first-info div,
-      .vip-access-wrapper .first-col .first-info p {
+      .vip-access-wrapper .first-col .first-info div {
         color: white; }
+      .vip-access-wrapper .first-col .first-info .hours-countdown {
+        font-weight: 900;
+        color: white; }
+        .vip-access-wrapper .first-col .first-info .hours-countdown span {
+          color: white;
+          font-weight: normal; }
   @media screen and (max-width: 768px) {
     .vip-access-wrapper .second-col {
       display: none; } }

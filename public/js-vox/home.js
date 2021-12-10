@@ -234,7 +234,7 @@ $(document).ready(function(){
 
 	if($('.hours-countdown').length) {
 
-		var seconds = parseInt($('.hours-countdown').text());
+		var seconds = parseInt($('.hours-countdown').attr('seconds'));
 		function timer() {
 			var days        = Math.floor(seconds/24/60/60);
 			var hoursLeft   = Math.floor((seconds) - (days*86400));
@@ -248,12 +248,10 @@ $(document).ready(function(){
 			}
 
 			console.log(days);
-			$('.hours-countdown').html((days != 0 ? (pad(days) + " DAYS ") : '') + pad(hours) + " HOURS " + pad(minutes) + " MIN " + pad(remainingSeconds) + " SEC");
-			$('.vip-access-wrapper').css('display', 'flex');
+			$('.hours-countdown').html((days != 0 ? (pad(days) + (days == 1 ? " <span>DAY</span> " : " <span>DAYS</span> ")) : '') + pad(hours) + (hours == 1 ? " <span>HOUR</span> " : " <span>HOURS</span> ") + pad(minutes) + " <span>MIN</span> " + pad(remainingSeconds) + " <span>SEC</span>");
 
 			if (seconds == 0) {
 				clearInterval(daysCountdown);
-				$('.vip-access-wrapper').hide();
 			} else {
 				seconds--;
 			}
