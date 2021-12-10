@@ -151,40 +151,9 @@ class AddDentistController extends FrontController {
                 $newdentist->is_clinic = Request::input('mode')=='clinic' ? 1 : 0;
                 $newdentist->invited_by = $this->user ? $this->user->id : 0;
                 $newdentist->invited_from_form = true;
-
                 $newdentist->save();
 
                 session(['invite_new_dentist' => $newdentist->id]);
-                
-//                 if(!empty($this->user)) {
-//                     $mtext = 'Patient - '.$this->user->name.' invited his dentist to register 
-// Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$this->user->id.'
-// Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$newdentist->id;
-
-//                     $patient = $this->user;
-
-//                     Mail::raw($mtext, function ($message) use ($patient) {
-//                         $sender = config('mail.from.address');
-//                         $sender_name = config('mail.from.name');
-
-//                         $message->from($sender, $sender_name);
-//                         $message->to( 'betina.bogdanova@dentacoin.com' );
-//                         $message->replyTo($patient->email, $patient->name);
-//                         $message->subject('Patient invites dentist to register');
-//                     });
-//                 } else {
-//                     $mtext = 'Not registered patient invited his dentist to register
-// Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$newdentist->id;
-
-//                     Mail::raw($mtext, function ($message) {
-//                         $sender = config('mail.from.address');
-//                         $sender_name = config('mail.from.name');
-
-//                         $message->from($sender, $sender_name);
-//                         $message->to( 'betina.bogdanova@dentacoin.com' );
-//                         $message->subject('Not registered patient invites dentist to register');
-//                     });
-//                 }
 
                 return Response::json( [
                     'success' => true,

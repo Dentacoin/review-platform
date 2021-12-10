@@ -54,7 +54,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
                 $sender_name = config('mail.from.name');
 
                 $message->from($sender, $sender_name);
-                $message->to( 'betina.bogdanova@dentacoin.com' );
                 $message->to( 'petya.ivanova@dentacoin.com' );
                 $message->replyTo($user->email, $user->getNames());
                 $message->subject('Old Added by Patient Dentist claim request was approved');
@@ -131,7 +130,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
             $sender_name = config('mail.from.name');
 
             $message->from($sender, $sender_name);
-            $message->to( 'betina.bogdanova@dentacoin.com' );
             $message->to( 'petya.ivanova@dentacoin.com' );
             $message->replyTo($user->email, $user->getNames());
             $message->subject('Dentist claim request was rejected');
@@ -168,7 +166,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
             $sender_name = config('mail.from.name');
 
             $message->from($sender, $sender_name);
-            $message->to( 'betina.bogdanova@dentacoin.com' );
             $message->to( 'petya.ivanova@dentacoin.com' );
             $message->replyTo($user->email, $user->getNames());
             $message->subject('Dentist claim request was suspicious');

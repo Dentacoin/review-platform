@@ -1021,7 +1021,6 @@ class DentistController extends FrontController {
                             $sender_name = config('mail.from.name');
 
                             $message->from($sender, $sender_name);
-                            $message->to( 'betina.bogdanova@dentacoin.com' );
                             $message->to( 'petya.ivanova@dentacoin.com' );
                             $message->replyTo($user->email, $user->getNames());
                             $message->subject('Invited Dentist Claimed His Profile');
@@ -1058,7 +1057,6 @@ class DentistController extends FrontController {
                                 $sender_name = config('mail.from.name');
 
                                 $message->from($sender, $sender_name);
-                                $message->to( 'betina.bogdanova@dentacoin.com' );
                                 $message->to( 'petya.ivanova@dentacoin.com' );
                                 $message->subject('Imported Dentist Claimed His Profile');
                                 $message->setBody($mtext, 'text/html'); // for HTML rich messages
