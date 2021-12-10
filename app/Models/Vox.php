@@ -248,7 +248,7 @@ class Vox extends Model {
 
             $double_reward = 1;
 
-            if(!empty($user->vip_access)) {
+            if(!empty($user->vip_access) && !$this->featured) {
                 $double_reward = 2;
             }
 
