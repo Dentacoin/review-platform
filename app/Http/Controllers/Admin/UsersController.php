@@ -2334,7 +2334,12 @@ class UsersController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $from_date = new Carbon('2017-01-01 00:00:0');
+        $from_date = new Carbon('2017-01-01 00:00:00');
+        $to_date = Carbon::now();
+
+        if(!empty(request('search_users_to'))) {
+            $to_date = new Carbon(request('search-register-to'));
+        }
 
         if(!empty(request('search_users_from'))) {
             $from_date = new Carbon(request('search_users_from'));
@@ -2355,40 +2360,25 @@ class UsersController extends AdminController {
             }
         }
 
-        $dentists = User::where('is_dentist', 1)->where('is_clinic', 0)->where('created_at', '>=', $from_date);
-        $clinics = User::where('is_dentist', 1)->where('is_clinic', 1)->where('created_at', '>=', $from_date);
-        $dentists_clinics = User::where('is_dentist', 1)->where('created_at', '>=', $from_date);
-        $dentists_partners = User::where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->where('created_at', '>=', $from_date);
-        $clinics_partners = User::where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->where('created_at', '>=', $from_date);
-        $partners = User::where('is_partner', 1)->where('created_at', '>=', $from_date);
-        $patients = User::where('is_dentist', 0)->where('created_at', '>=', $from_date);
-        $all_types = User::whereNotNull('id')->where('created_at', '>=', $from_date);
+        // $dentists = User::where('is_dentist', 1)->where('is_clinic', 0)->where('created_at', '>=', $from_date);
+        // $clinics = User::where('is_dentist', 1)->where('is_clinic', 1)->where('created_at', '>=', $from_date);
+        // $dentists_clinics = User::where('is_dentist', 1)->where('created_at', '>=', $from_date);
+        // $dentists_partners = User::where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->where('created_at', '>=', $from_date);
+        // $clinics_partners = User::where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->where('created_at', '>=', $from_date);
+        // $partners = User::where('is_partner', 1)->where('created_at', '>=', $from_date);
+        // $patients = User::where('is_dentist', 0)->where('created_at', '>=', $from_date);
+        // $all_types = User::whereNotNull('id')->where('created_at', '>=', $from_date);
 
-        $user_genders = User::groupBy('gender')->select('gender', DB::raw('count(*) as total'))->where('created_at', '>=', $from_date);
+        $user_genders = User::groupBy('gender')->select('gender', DB::raw('count(*) as total'))->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date);
 
-        if(!empty(request('search_users_to'))) {
-            $firstday = new Carbon(request('search-register-to'));
-            
-            $dentists = $dentists->where('created_at', '<=', $firstday);
-            $clinics = $clinics->where('created_at', '<=', $firstday);
-            $dentists_clinics = $dentists_clinics->where('created_at', '<=', $firstday);
-            $dentists_partners = $dentists_partners->where('created_at', '<=', $firstday);
-            $clinics_partners = $clinics_partners->where('created_at', '<=', $firstday);
-            $partners = $partners->where('created_at', '<=', $firstday);
-            $patients = $patients->where('created_at', '<=', $firstday);
-            $all_types = $all_types->where('created_at', '<=', $firstday);
-
-            $user_genders = $user_genders->where('created_at', '<=', $firstday);
-        }
-
-        $dentists = $dentists->count();
-        $clinics = $clinics->count();
-        $dentists_clinics = $dentists_clinics->count();
-        $dentists_partners = $dentists_partners->count();
-        $clinics_partners = $clinics_partners->count();
-        $partners = $partners->count();
-        $patients = $patients->count();
-        $all_types = $all_types->count();
+        // $dentists = $dentists->count();
+        // $clinics = $clinics->count();
+        // $dentists_clinics = $dentists_clinics->count();
+        // $dentists_partners = $dentists_partners->count();
+        // $clinics_partners = $clinics_partners->count();
+        // $partners = $partners->count();
+        // $patients = $patients->count();
+        // $all_types = $all_types->count();
 
         $user_genders = $user_genders->get();
 
@@ -2397,26 +2387,26 @@ class UsersController extends AdminController {
             $countries[$c->id] = [
                 'country_name' => $c->name,
                 'total' => User::select('country_id')->where('country_id', $c->id)->count(),
-                'partners' => User::select('country_id', 'is_partner')->where('country_id', $c->id)->where('is_partner', 1)->count(),
-                'patients' => User::select('country_id', 'is_dentist')->where('country_id', $c->id)->where('is_dentist', 0)->count(),
-                'dentists' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 0)->count(),
-                'clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 1)->count(),
-                'dentists_clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->count(),
-                'dentists_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->count(),
-                'clinics_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->count(),
+                'partners' => User::select('country_id', 'is_partner')->where('country_id', $c->id)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+                'patients' => User::select('country_id', 'is_dentist')->where('country_id', $c->id)->where('is_dentist', 0)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+                'dentists' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 0)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+                'clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+                'dentists_clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+                'dentists_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+                'clinics_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
             ];
         }
 
         $countries['-'] = [
             'country_name' => '-',
             'total' => User::select('country_id')->whereNull('country_id')->count(),
-            'partners' => User::select('country_id', 'is_partner')->whereNull('country_id')->where('is_partner', 1)->count(),
-            'patients' => User::select('country_id', 'is_dentist')->whereNull('country_id')->where('is_dentist', 0)->count(),
-            'dentists' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 0)->count(),
-            'clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 1)->count(),
-            'dentists_clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->count(),
-            'dentists_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->count(),
-            'clinics_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->count(),
+            'partners' => User::select('country_id', 'is_partner')->whereNull('country_id')->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+            'patients' => User::select('country_id', 'is_dentist')->whereNull('country_id')->where('is_dentist', 0)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+            'dentists' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 0)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+            'clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+            'dentists_clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+            'dentists_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
+            'clinics_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
         ];
 
         usort($countries, function($a, $b) {
@@ -2424,14 +2414,14 @@ class UsersController extends AdminController {
         });
 
         return $this->showView('users-stats', array(
-            'dentists' => $dentists,
-            'clinics' => $clinics,
-            'dentists_clinics' => $dentists_clinics,
-            'dentists_partners' => $dentists_partners,
-            'clinics_partners' => $clinics_partners,
-            'partners' => $partners,
-            'patients' => $patients,
-            'all_types' => $all_types,
+            // 'dentists' => $dentists,
+            // 'clinics' => $clinics,
+            // 'dentists_clinics' => $dentists_clinics,
+            // 'dentists_partners' => $dentists_partners,
+            // 'clinics_partners' => $clinics_partners,
+            // 'partners' => $partners,
+            // 'patients' => $patients,
+            // 'all_types' => $all_types,
 
             'user_genders' => $user_genders,
             'countries' => $countries,
