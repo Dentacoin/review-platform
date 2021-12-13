@@ -193,10 +193,8 @@
 											<th>All types</th>
 											<th>Dentists</th>
 											<th>Clinics</th>
-											<th>Dentists/Clinics</th>
 											<th>Dentists Partners</th>
 											<th>Clinics Partners</th>
-											<th>All Partners</th>
 											<th>Patients</th>
 										</tr>
 									</thead>
@@ -207,10 +205,8 @@
 												<td>{{ $c['total'] }}</td>
 												<td>{{ $c['dentists'] }}</td>
 												<td>{{ $c['clinics'] }}</td>
-												<td>{{ $c['dentists_clinics'] }}</td>
 												<td>{{ $c['dentists_partners'] }}</td>
 												<td>{{ $c['clinics_partners'] }}</td>
-												<td>{{ $c['partners'] }}</td>
 												<td>{{ $c['patients'] }}</td>
 											</tr>
 										@endforeach

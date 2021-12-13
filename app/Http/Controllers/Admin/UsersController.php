@@ -2387,11 +2387,9 @@ class UsersController extends AdminController {
             $countries[$c->id] = [
                 'country_name' => $c->name,
                 'total' => User::select('country_id')->where('country_id', $c->id)->count(),
-                'partners' => User::select('country_id', 'is_partner')->where('country_id', $c->id)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
                 'patients' => User::select('country_id', 'is_dentist')->where('country_id', $c->id)->where('is_dentist', 0)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
                 'dentists' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 0)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
                 'clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
-                'dentists_clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
                 'dentists_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
                 'clinics_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->where('country_id', $c->id)->where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
             ];
@@ -2400,11 +2398,9 @@ class UsersController extends AdminController {
         $countries['-'] = [
             'country_name' => '-',
             'total' => User::select('country_id')->whereNull('country_id')->count(),
-            'partners' => User::select('country_id', 'is_partner')->whereNull('country_id')->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
             'patients' => User::select('country_id', 'is_dentist')->whereNull('country_id')->where('is_dentist', 0)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
             'dentists' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 0)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
             'clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
-            'dentists_clinics' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
             'dentists_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
             'clinics_partners' => User::select('country_id', 'is_dentist', 'is_clinic')->whereNull('country_id')->where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->count(),
         ];
