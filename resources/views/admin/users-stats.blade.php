@@ -191,10 +191,10 @@
 										<tr>
 											<th>Country</th>
 											<th>All types</th>
+											<th>Patients</th>
 											<th>Dentists</th>
 											<th>Clinics</th>
 											<th>Partners</th>
-											<th>Patients</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -202,10 +202,10 @@
 											<tr>
 												<td>{{ $c['country_name'] }}</td>
 												<td>{{ $c['total'] }}</td>
+												<td>{{ $c['patients'] }}</td>
 												<td>{{ $c['dentists'] }}</td>
 												<td>{{ $c['clinics'] }}</td>
 												<td>{{ $c['partners'] }}</td>
-												<td>{{ $c['patients'] }}</td>
 											</tr>
 										@endforeach
 
