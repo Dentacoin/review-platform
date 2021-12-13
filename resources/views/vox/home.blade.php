@@ -67,7 +67,7 @@
 		@endif
 	@endif
 
-	@if($all_taken || ($user && $user->id == 37530))
+	@if($all_taken)
 		<div class="all-taken-wrapper flex break-mobile">
 			<div class="col">
 				<img src="{{ url('/new-vox-img/all-surveys-taken.png') }}">
@@ -90,7 +90,7 @@
 			</div>
 		</div>
 
-		@if($user && $user->id == 37530)
+		@if(!empty($latest_blog_posts))
 			<div class="section-slider-posts">
 				<h3 class="blog-posts-title">{{ trans('vox.page.home.all-surveys-done.blog-posts-title') }}</h3>
 				<div class="slider-posts-inner">
