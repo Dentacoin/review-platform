@@ -193,8 +193,7 @@
 											<th>All types</th>
 											<th>Dentists</th>
 											<th>Clinics</th>
-											<th>Dentists Partners</th>
-											<th>Clinics Partners</th>
+											<th>Partners</th>
 											<th>Patients</th>
 										</tr>
 									</thead>
