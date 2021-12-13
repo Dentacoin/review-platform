@@ -96,7 +96,6 @@
 				<div class="slider-posts-inner">
 					<div class="flickity slider-posts">
 
-						{{ dd($latest_blog_posts) }}
 						@foreach($latest_blog_posts as $lp)
 							<a href="{{ $lp->guid }}" target="_blank" class="post">
 								<div class="post-inner">
