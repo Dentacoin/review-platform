@@ -87,6 +87,51 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-inverse">
+				<div class="panel-heading">
+					<div class="panel-heading-btn">
+						<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+					</div>
+					<h4 class="panel-title">User Types</h4>
+				</div>
+				<div class="panel-body">
+					<div class="dataTables_wrapper">
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											@foreach($user_types as $key => $type)
+												<th style="width: 33%;">
+													{{ $type->is_dentist == 1 ? 'Dentists Total' : 'Patients' }}
+												</th>
+											@endforeach
+											<th style="width: 33%;">
+												Dentists Partners
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											@foreach($user_types as $key => $type)
+												<td style="width: 33%;">{{ $type->total }}</td>
+											@endforeach
+											@foreach($dentist_partners as $key => $partner)
+												<td style="width: 33%;">{{ $partner->total }}</td>
+											@endforeach
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	{{-- <div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-inverse">
@@ -208,15 +253,6 @@
 												<td>{{ $c['partners'] }}</td>
 											</tr>
 										@endforeach
-
-										{{-- "country_name" => "Afghanistan"
-										"total" => 58
-										"partners" => 0
-										"patients" => 58
-										"dentists" => 0
-										"clinics" => 0
-										"dentists_partners" => 0
-										"clinics_partners" => 0 --}}
 									</tbody>
 								</table>
 							</div>

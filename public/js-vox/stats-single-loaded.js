@@ -1083,10 +1083,7 @@ $(document).ready(function(){
                 fontSize = 8;                
             }
 
-            console.log(rows);
-
             var data = google.visualization.arrayToDataTable(rows);
-            console.log(data);
             
             var options = {
                 backgroundColor: 'transparent',
@@ -1404,7 +1401,6 @@ $(document).ready(function(){
             if( ev.target.dataItem.dataContext.name!=map_country ) {
                 ev.target.setState("default");
             }
-
             
             drawMapColumns( map_country_data ? map_country_data.pieData : converted_rows, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers, question_type);
         }).bind(container));

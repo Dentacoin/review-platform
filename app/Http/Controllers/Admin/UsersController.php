@@ -2360,27 +2360,18 @@ class UsersController extends AdminController {
             }
         }
 
-        // $dentists = User::where('is_dentist', 1)->where('is_clinic', 0)->where('created_at', '>=', $from_date);
-        // $clinics = User::where('is_dentist', 1)->where('is_clinic', 1)->where('created_at', '>=', $from_date);
-        // $dentists_clinics = User::where('is_dentist', 1)->where('created_at', '>=', $from_date);
-        // $dentists_partners = User::where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->where('created_at', '>=', $from_date);
-        // $clinics_partners = User::where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->where('created_at', '>=', $from_date);
-        // $partners = User::where('is_partner', 1)->where('created_at', '>=', $from_date);
-        // $patients = User::where('is_dentist', 0)->where('created_at', '>=', $from_date);
-        // $all_types = User::whereNotNull('id')->where('created_at', '>=', $from_date);
+        // $dentists = User::where('is_dentist', 1)->where('is_clinic', 0)->where('created_at', '>=', $from_date)->count();
+        // $clinics = User::where('is_dentist', 1)->where('is_clinic', 1)->where('created_at', '>=', $from_date)->count();
+        // $dentists_clinics = User::where('is_dentist', 1)->where('created_at', '>=', $from_date)->count();
+        // $dentists_partners = User::where('is_dentist', 1)->where('is_clinic', 0)->where('is_partner', 1)->where('created_at', '>=', $from_date)->count();
+        // $clinics_partners = User::where('is_dentist', 1)->where('is_clinic', 1)->where('is_partner', 1)->where('created_at', '>=', $from_date)->count();
+        // $partners = User::where('is_partner', 1)->where('created_at', '>=', $from_date)->count();
+        // $patients = User::where('is_dentist', 0)->where('created_at', '>=', $from_date)->count();
+        // $all_types = User::whereNotNull('id')->where('created_at', '>=', $from_date)->count();
 
-        $user_genders = User::groupBy('gender')->select('gender', DB::raw('count(*) as total'))->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date);
-
-        // $dentists = $dentists->count();
-        // $clinics = $clinics->count();
-        // $dentists_clinics = $dentists_clinics->count();
-        // $dentists_partners = $dentists_partners->count();
-        // $clinics_partners = $clinics_partners->count();
-        // $partners = $partners->count();
-        // $patients = $patients->count();
-        // $all_types = $all_types->count();
-
-        $user_genders = $user_genders->get();
+        $user_types = User::groupBy('is_dentist')->select('is_dentist', DB::raw('count(*) as total'))->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->get();
+        $dentist_partners = User::where('is_dentist', '1')->where('is_partner' , 1)->select('is_partner', DB::raw('count(*) as total'))->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->get();
+        $user_genders = User::groupBy('gender')->select('gender', DB::raw('count(*) as total'))->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->get();
 
         $countries = [];
         foreach(Country::get() as $c) {
@@ -2418,6 +2409,8 @@ class UsersController extends AdminController {
             // 'all_types' => $all_types,
 
             'user_genders' => $user_genders,
+            'user_types' => $user_types,
+            'dentist_partners' => $dentist_partners,
             'countries' => $countries,
 
             'answered_questions' => VoxQuestionAnswered::get(),
