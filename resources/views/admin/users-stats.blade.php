@@ -205,8 +205,7 @@
 												<td>{{ $c['total'] }}</td>
 												<td>{{ $c['dentists'] }}</td>
 												<td>{{ $c['clinics'] }}</td>
-												<td>{{ $c['dentists_partners'] }}</td>
-												<td>{{ $c['clinics_partners'] }}</td>
+												<td>{{ $c['partners'] }}</td>
 												<td>{{ $c['patients'] }}</td>
 											</tr>
 										@endforeach
