@@ -15,25 +15,23 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
             </div>
             <div class="panel-body">
-        		<div class="panel-body">
-					@include('admin.parts.table', [
-						'table_id' => 'admins',
-						'table_fields' => [
-							'id'				=> array('name' => 'ID'),
-							'name'			    => array('name' => 'Name', 'label' => 'Name'),
-							'username'			=> array('name' => 'Username'),
-							'email'				=> array('name' => 'Email'),
-                            'role'              => array('name' => 'Role'),
-                            'comments'          => array('name' => 'Comments'),
-                            'reset_auth'        => array('name' => 'Reset Two Factor Auth', 'label' => 'Two Factor Authentication', 'template' => 'admin.parts.table-admins-two-factor-auth'),
-							'update'			=> array('name' => 'Update', 'format' => 'update'),
-							'delete'			=> array('name' => 'Delete', 'format' => 'delete'),
-						],
-                        'table_data' => $admins_list,
-						'table_pagination' => false,
-                        'pagination_link' => array()
-					])
-                </div>
+                @include('admin.parts.table', [
+                    'table_id' => 'admins',
+                    'table_fields' => [
+                        'id'				=> array('name' => 'ID'),
+                        'name'			    => array('name' => 'Name', 'label' => 'Name'),
+                        'username'			=> array('name' => 'Username'),
+                        'email'				=> array('name' => 'Email'),
+                        'role'              => array('name' => 'Role'),
+                        'comments'          => array('name' => 'Comments'),
+                        'reset_auth'        => array('name' => 'Reset Two Factor Auth', 'label' => 'Two Factor Authentication', 'template' => 'admin.parts.table-admins-two-factor-auth'),
+                        'update'			=> array('name' => 'Update', 'format' => 'update'),
+                        'delete'			=> array('name' => 'Delete', 'format' => 'delete'),
+                    ],
+                    'table_data' => $admins_list,
+                    'table_pagination' => false,
+                    'pagination_link' => array()
+                ])
             </div>
         </div>
     </div>

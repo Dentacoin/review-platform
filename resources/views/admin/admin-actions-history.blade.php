@@ -18,20 +18,15 @@
                     <h4 class="panel-title"> Admin History Filter</h4>
                 </div>
                 <div class="panel-body users-filters">
-                    <div class="trans-history-wrapper">
-                        <img src="{{ url('img/info.png') }}" style="max-width: 15px;">
-            
-                        <div class="trans-history">
-                            Admins: <br/>
-                            @foreach($admins as $admin)
-                                {{ $admin->name ?? $admin->username }} ( ID: {{ $admin->id }}) <br/>
-                            @endforeach
-                        </div>
-                    </div>
                     <form method="get" action="{{ url('cms/admins/actions-history/') }}">
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-2">
-                                <input type="text" class="form-control" name="search-admin-id" value="{{ $search_admin_id }}" placeholder="Search admin ID">
+                                <select name="search-admin-id" class="form-control">
+                                    <option value="">Search admin id</option>
+                                    @foreach($admins as $admin)
+                                        <option value="{{ $admin->id }}" {!! $search_admin_id == $admin->id ? 'selected="selected"' : '' !!}>{{ $admin->name ?? $admin->username }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="col-md-2">
                                 <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
@@ -39,22 +34,6 @@
                         </div>
                     </form>
                 </div>
-                
-                <style type="text/css">
-                    .trans-history-wrapper .trans-history {
-                        display: none;
-                        position: absolute;
-                        border: 1px solid black;
-                        padding: 10px;
-                        border-radius: 5px;
-                        background: white;
-                        z-index: 100;
-                    }
-
-                    .trans-history-wrapper:hover .trans-history {
-                        display: block;
-                    }
-                </style>
             </div>
         </div>
     </div>
@@ -70,22 +49,22 @@
                         <table class="table table-striped table-question-list">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Admin</th>
-                                    <th>Action</th>
-                                    <th>User/Transaction/Ban Appeal</th>
+                                    <th style="width: 25%;">Date</th>
+                                    <th style="width: 25%;">Admin</th>
+                                    <th style="width: 25%;">Action</th>
+                                    <th style="width: 25%;">User/Transaction/Ban Appeal</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($actions as $action)
                                     <tr>
-                                        <td>
+                                        <td style="width: 25%;">
                                             {{ date('d.m.Y, H:i:s', $action->created_at->timestamp) }}
                                         </td>
-                                        <td>
+                                        <td style="width: 25%;">
                                             <a href="{{ url('cms/admins/admins/edit/'.$action->admin_id) }}">{{ $action->admin->name }}</a>
                                         </td>
-                                        <td>
+                                        <td style="width: 25%;">
                                             @if(isset($action->status))
                                                 @if(isset($action->new_status))
                                                     changed from "{{ isset(config('user-statuses')[$action->status]) ? config('user-statuses')[$action->status] : config('patient-statuses')[$action->status] }}" to "{{ isset(config('user-statuses')[$action->new_status]) ? config('user-statuses')[$action->new_status] : config('patient-statuses')[$action->new_status] }}"
@@ -157,7 +136,7 @@
                                                 @endif
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="width: 25%;">
                                             @if(isset($action->user_id) && !isset($action->ban_appeal_id))
                                                 <a href="{{ url('cms/users/users/edit/'.$action->user_id) }}">{{ $action->user ? $action->user->getNames() : 'User' }}</a>
                                             @elseif(isset($action->transaction_id))

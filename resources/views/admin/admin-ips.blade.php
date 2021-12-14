@@ -44,34 +44,32 @@
                 <h4 class="panel-title">Add new login ip</h4>
             </div>
             <div class="panel-body">
-                <div class="panel-body">
-                    <form class="form-horizontal" method="post">
-						{!! csrf_field() !!}
-					    
-					    <div class="form-group">
-					        <label class="col-md-2 control-label">
-					            IP
-					        </label>
-					        <div class="col-md-4">
-					            {{ Form::text('ip', old('ip'), array('class' => 'form-control')) }}
-					        </div>
-					    </div>
+                <form class="form-horizontal" method="post">
+                    {!! csrf_field() !!}
+                    
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">
+                            IP
+                        </label>
+                        <div class="col-md-4">
+                            {{ Form::text('ip', old('ip'), array('class' => 'form-control')) }}
+                        </div>
+                    </div>
 
-					    <div class="form-group">
-					        <label class="col-md-2 control-label">Notes (i.e. why you added it)</label>
-					        <div class="col-md-4">
-					            {{ Form::textarea('comment', old('comment'), array('class' => 'form-control')) }}
-					        </div>
-					    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Notes (i.e. why you added it)</label>
+                        <div class="col-md-4">
+                            {{ Form::textarea('comment', old('comment'), array('class' => 'form-control')) }}
+                        </div>
+                    </div>
 
-					    <div class="form-group">
-					    	<div class="col-md-2"></div>
-					        <div class="col-md-4">
-					        	<button type="submit" class="btn btn-block btn-sm btn-success">Save</button>
-					        </div>
-					    </div>
-					</form>
-                </div>
+                    <div class="form-group">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-block btn-sm btn-success">Save</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

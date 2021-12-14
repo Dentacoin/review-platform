@@ -58,6 +58,7 @@
                 <h4 class="panel-title">Reviews</h4>
             </div>
             <div class="panel-body">
+                <p>Total count: {{ $total_count }}</p>
                 <form method="post" action="{{ url('cms/trp/reviews/mass-delete') }}" >
     				@include('admin.parts.table', [
     					'table_id' => 'users',

@@ -15,6 +15,7 @@
 		                <h4 class="panel-title">Orders</h4>
 		            </div>
 		            <div class="tab-content">
+						<p>Total count: {{ $total_count }}</p>
 
 		                <table class="table table-striped table-question-list">
 		                    <thead>

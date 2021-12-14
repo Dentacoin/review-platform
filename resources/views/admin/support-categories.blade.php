@@ -14,56 +14,54 @@
             <h4 class="panel-title">Support Categories</h4>
         </div>
         <div class="panel-body">
-    		<div class="panel-body">
-				<div class="dataTables_wrapper">
-				    <div class="cat">
-				    	<div class="col-sm-12">
-				    		<table class="table table-striped">
-				                <thead>
-				                    <tr>
-                                        <th>
-                                            Order
-                                        </th>
-                                        <th>
-                                            Category name
-                                        </th>
-				                        <th>
-				                            Edit
-				                        </th>
-				                        <th>
-				                            Delete
-				                        </th>
-				                    </tr>
-				                </thead>
-				                <tbody class="questions-draggable" reorder-url="{{ url('cms/support/categories/reorder') }}">
-				                	@foreach($categories as $cat)
-				                    	<tr question-id="{{ $cat->id }}">
-                                            <td class="question-number">
-                                                {{ $cat->order_number }}
-                                            </td>
-                                            <td>
-                                                {{ $cat->name }}
-                                            </td>
-				                            <td>
-				                                <a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.'/categories/edit/'.$cat->id) }}">{{ trans('admin.table.edit') }}</a>
-				                            </td>
-				                            <td>
-				                                <a class="btn btn-sm btn-deafult" href="{{ url('cms/'.$current_page.'/categories/delete/'.$cat->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>
-				                            </td>
-				                    	</tr>
-				                    @endforeach
-				                </tbody>
-				            </table>
-				        </div>
-				    </div>
-				</div>
-
-                <!-- <div class="form-group">
-                    <div class="col-md-2">
-                        <a href="{{ url('cms/'.$current_page.'/categories/add') }}" class="btn btn-sm btn-success">Add category</a>
+            <div class="dataTables_wrapper">
+                <div class="cat">
+                    <div class="col-sm-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Order
+                                    </th>
+                                    <th>
+                                        Category name
+                                    </th>
+                                    <th>
+                                        Edit
+                                    </th>
+                                    <th>
+                                        Delete
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="questions-draggable" reorder-url="{{ url('cms/support/categories/reorder') }}">
+                                @foreach($categories as $cat)
+                                    <tr question-id="{{ $cat->id }}">
+                                        <td class="question-number">
+                                            {{ $cat->order_number }}
+                                        </td>
+                                        <td>
+                                            {{ $cat->name }}
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.'/categories/edit/'.$cat->id) }}">{{ trans('admin.table.edit') }}</a>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-sm btn-deafult" href="{{ url('cms/'.$current_page.'/categories/delete/'.$cat->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                </div> -->
+                </div>
             </div>
+
+            <!-- <div class="form-group">
+                <div class="col-md-2">
+                    <a href="{{ url('cms/'.$current_page.'/categories/add') }}" class="btn btn-sm btn-success">Add category</a>
+                </div>
+            </div> -->
         </div>
     </div>
 </div>
