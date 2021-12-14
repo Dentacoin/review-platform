@@ -149,7 +149,7 @@
                                                 {!! $action->history !!}
                                             @elseif(isset($action->action))
                                                 @if($action->action == 'view')
-                                                    viewed user's profile
+                                                    view user's profile
                                                 @elseif($action->action == 'approve' && !empty($action->ban_appeal_id))
                                                     approved ban appeal
                                                 @elseif($action->action == 'export')

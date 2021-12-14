@@ -200,6 +200,10 @@
     <br/>
     <br/>
     <br/>
+
+    Current gas price: <b>{{ App\Models\GasPrice::find(1)->gas_price }}</b> <br/>
+    Max gas price: <b>{{ App\Models\GasPrice::find(1)->max_gas_price }}</b> <br/>
+    Max gas price for paid by user transactions: <b>{{ App\Models\GasPrice::find(1)->max_gas_price_approval }}</b> <br/><br/>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
