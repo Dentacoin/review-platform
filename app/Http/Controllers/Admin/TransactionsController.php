@@ -523,7 +523,7 @@ class TransactionsController extends AdminController {
 
     public function withdrawalConditions() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -688,36 +688,6 @@ class TransactionsController extends AdminController {
 
         $this->request->session()->flash('success-message', 'Enabled!' );
 
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
-    }
-
-    public function editMode() {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        session([
-            'edit-mode' => true
-        ]); 
-
-        $this->request->session()->flash('success-message', 'Edit mode enabled!' );
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
-    }
-
-    public function normalMode() {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        session([
-            'edit-mode' => false
-        ]); 
-
-        $this->request->session()->flash('success-message', 'Normal mode enabled!' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 

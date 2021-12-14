@@ -271,7 +271,7 @@
                             ->orWhere('is_paid_by_the_user', 0);
                         })->get()->sum('amount') * @file_get_contents('/tmp/dcn_original_price')) }}$</p>
                         
-                        @if($admin->role!='support')
+                        @if($admin->role=='super_admin')
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
