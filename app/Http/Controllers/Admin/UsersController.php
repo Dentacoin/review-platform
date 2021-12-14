@@ -2380,8 +2380,10 @@ class UsersController extends AdminController {
                 COUNT(*) AS `total`,
                 SUM( IF(  `is_partner` , 1, 0 ) ) AS `partners`,
                 SUM( IF(  !`is_dentist` , 1, 0 ) ) AS `patients`,
-                SUM( IF(  `is_dentist` AND !`is_clinic` , 1, 0 ) ) AS `dentists`,
-                SUM( IF(  `is_dentist` AND `is_clinic` , 1, 0 ) ) AS `clinics`,
+                SUM( IF(  `is_dentist` AND !`is_clinic` AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed'), 1, 0 ) ) AS `approved_dentists`,
+                SUM( IF(  `is_dentist` AND `is_clinic` AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed'), 1, 0 ) ) AS `approved_clinics`,
+                SUM( IF(  `is_dentist` AND !`is_clinic`, 1, 0 ) ) AS `dentists`,
+                SUM( IF(  `is_dentist` AND `is_clinic`, 1, 0 ) ) AS `clinics`,
                 `country_id`
             FROM  `users` 
             WHERE `created_at` >= '".$from_date."'

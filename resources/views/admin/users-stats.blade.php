@@ -19,10 +19,10 @@
                 <div class="panel-body users-filters">
 					<form method="get" action="{{ url('cms/users/users_stats/') }}">
 						<div class="row custom-row" style="margin-bottom: 10px;">
-							<div class="col-md-3">
+							<div class="col-md-2">
 								<input type="text" class="form-control datepicker" name="search_users_from" value="{{ $search_users_from }}" placeholder="Search from" autocomplete="off">
 							</div>
-							<div class="col-md-3">
+							<div class="col-md-2">
 								<input type="text" class="form-control datepicker" name="search_users_to" value="{{ $search_users_to }}" placeholder="Search to" autocomplete="off">
 							</div>
 							<div class="col-md-2">
@@ -126,53 +126,6 @@
 		</div>
 	</div>
 
-	{{-- <div class="row">
-		<div class="col-md-12">
-			<div class="panel panel-inverse">
-				<div class="panel-heading">
-					<div class="panel-heading-btn">
-						<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-					</div>
-					<h4 class="panel-title">User Types</h4>
-				</div>
-				<div class="panel-body">
-					<div class="dataTables_wrapper">
-						<div class="row">
-							<div class="col-sm-12">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>Dentists</th>
-											<th>Clinics</th>
-											<th>Dentists/Clinics</th>
-											<th>Dentists Partners</th>
-											<th>Clinics Partners</th>
-											<th>All Partners</th>
-											<th>Patients</th>
-											<th>All types</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>{{ $dentists }}</td>
-											<td>{{ $clinics }}</td>
-											<td>{{ $dentists_clinics }}</td>
-											<td>{{ $dentists_partners }}</td>
-											<td>{{ $clinics_partners }}</td>
-											<td>{{ $partners }}</td>
-											<td>{{ $patients }}</td>
-											<td>{{ $all_types }}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> --}}
-
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-inverse">
@@ -229,10 +182,12 @@
 									<thead>
 										<tr>
 											<th>Country</th>
-											<th>All types</th>
+											<th>Total</th>
 											<th>Patients</th>
 											<th>Dentists</th>
 											<th>Clinics</th>
+											<th>Approved <br/> Dentists</th>
+											<th>Approved <br/> Clinics</th>
 											<th>Partners</th>
 										</tr>
 									</thead>
@@ -245,6 +200,8 @@
 												<td>{{ $c->patients }}</td>
 												<td>{{ $c->dentists }}</td>
 												<td>{{ $c->clinics }}</td>
+												<td>{{ $c->approved_dentists }}</td>
+												<td>{{ $c->approved_clinics }}</td>
 												<td>{{ $c->partners }}</td>
 											</tr>
 										@endforeach
