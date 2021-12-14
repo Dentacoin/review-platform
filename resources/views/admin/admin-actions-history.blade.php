@@ -64,7 +64,7 @@
                                         <td style="width: 25%;">
                                             <a href="{{ url('cms/admins/admins/edit/'.$action->admin_id) }}">{{ $action->admin->name }}</a>
                                         </td>
-                                        <td style="width: 25%;">
+                                        <td style="width: 25%;word-break: break-all;">
                                             @if(isset($action->status))
                                                 @if(isset($action->new_status))
                                                     changed from "{{ isset(config('user-statuses')[$action->status]) ? config('user-statuses')[$action->status] : config('patient-statuses')[$action->status] }}" to "{{ isset(config('user-statuses')[$action->new_status]) ? config('user-statuses')[$action->new_status] : config('patient-statuses')[$action->new_status] }}"
