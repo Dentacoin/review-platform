@@ -103,24 +103,18 @@
 								<table class="table table-striped">
 									<thead>
 										<tr>
-											@foreach($user_types as $key => $type)
-												<th style="width: 33%;">
-													{{ $type->is_dentist == 1 ? 'Dentists Total' : 'Patients' }}
-												</th>
-											@endforeach
-											<th style="width: 33%;">
-												Dentists Partners
-											</th>
+											<th>Patients</th>
+											<th>Dentists/Clinics</th>
+											<th>Partners</th>
+											<th>Total</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
-											@foreach($user_types as $key => $type)
-												<td style="width: 33%;">{{ $type->total }}</td>
-											@endforeach
-											@foreach($dentist_partners as $key => $partner)
-												<td style="width: 33%;">{{ $partner->total }}</td>
-											@endforeach
+											<td>{{ $user_types[0]->total }}</td>
+											<td>{{ $user_types[1]->total }}</td>
+											<td>{{ $user_types[1]->partners }}</td>
+											<td>{{ $user_types[0]->total + $user_types[1]->total }}</td>
 										</tr>
 									</tbody>
 								</table>
@@ -244,13 +238,14 @@
 									</thead>
 									<tbody>
 										@foreach($countries as $c)
+											@php($country = App\Models\Country::find($c->country_id))
 											<tr>
-												<td>{{ $c['country_name'] }}</td>
-												<td>{{ $c['total'] }}</td>
-												<td>{{ $c['patients'] }}</td>
-												<td>{{ $c['dentists'] }}</td>
-												<td>{{ $c['clinics'] }}</td>
-												<td>{{ $c['partners'] }}</td>
+												<td>{{ $country ? $country->name : '-' }}</td>
+												<td>{{ $c->total }}</td>
+												<td>{{ $c->patients }}</td>
+												<td>{{ $c->dentists }}</td>
+												<td>{{ $c->clinics }}</td>
+												<td>{{ $c->partners }}</td>
 											</tr>
 										@endforeach
 									</tbody>
