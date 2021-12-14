@@ -2393,10 +2393,158 @@ class UsersController extends AdminController {
             ORDER BY `total` DESC
         ");
 
+        $marital_statuses=[];
+        $children=[];
+        $household_children=[];
+        $education=[];
+        $employment=[];
+        $job=[];
+        $job_title=[];
+        $income=[];
+
+        if(request('show-all')) {
+
+            $marital_statuses = DB::select("
+                SELECT 
+                    COUNT(*) AS `total`,
+                    SUM( IF(  `is_partner` , 1, 0 ) ) AS `partners`,
+                    SUM( IF(  !`is_dentist` , 1, 0 ) ) AS `patients`,
+                    SUM( IF(  `is_dentist` AND !`is_clinic`, 1, 0 ) ) AS `dentists`,
+                    SUM( IF(  `is_dentist` AND `is_clinic`, 1, 0 ) ) AS `clinics`,
+                    `marital_status`
+                FROM  `users` 
+                WHERE `created_at` >= '".$from_date."'
+                AND `created_at` <= '".$to_date."'
+                AND `deleted_at` is null
+                GROUP BY `marital_status` 
+                ORDER BY `total` DESC
+            ");
+
+            $children = DB::select("
+                SELECT 
+                    COUNT(*) AS `total`,
+                    SUM( IF(  `is_partner` , 1, 0 ) ) AS `partners`,
+                    SUM( IF(  !`is_dentist` , 1, 0 ) ) AS `patients`,
+                    SUM( IF(  `is_dentist` AND !`is_clinic`, 1, 0 ) ) AS `dentists`,
+                    SUM( IF(  `is_dentist` AND `is_clinic`, 1, 0 ) ) AS `clinics`,
+                    `children`
+                FROM  `users` 
+                WHERE `created_at` >= '".$from_date."'
+                AND `created_at` <= '".$to_date."'
+                AND `deleted_at` is null
+                GROUP BY `children` 
+                ORDER BY `total` DESC
+            ");
+
+            $household_children = DB::select("
+                SELECT 
+                    COUNT(*) AS `total`,
+                    SUM( IF(  `is_partner` , 1, 0 ) ) AS `partners`,
+                    SUM( IF(  !`is_dentist` , 1, 0 ) ) AS `patients`,
+                    SUM( IF(  `is_dentist` AND !`is_clinic`, 1, 0 ) ) AS `dentists`,
+                    SUM( IF(  `is_dentist` AND `is_clinic`, 1, 0 ) ) AS `clinics`,
+                    `household_children`
+                FROM  `users` 
+                WHERE `created_at` >= '".$from_date."'
+                AND `created_at` <= '".$to_date."'
+                AND `deleted_at` is null
+                GROUP BY `household_children` 
+                ORDER BY `total` DESC
+            ");
+
+            $education = DB::select("
+                SELECT 
+                    COUNT(*) AS `total`,
+                    SUM( IF(  `is_partner` , 1, 0 ) ) AS `partners`,
+                    SUM( IF(  !`is_dentist` , 1, 0 ) ) AS `patients`,
+                    SUM( IF(  `is_dentist` AND !`is_clinic`, 1, 0 ) ) AS `dentists`,
+                    SUM( IF(  `is_dentist` AND `is_clinic`, 1, 0 ) ) AS `clinics`,
+                    `education`
+                FROM  `users` 
+                WHERE `created_at` >= '".$from_date."'
+                AND `created_at` <= '".$to_date."'
+                AND `deleted_at` is null
+                GROUP BY `education` 
+                ORDER BY `total` DESC
+            ");
+
+            $employment = DB::select("
+                SELECT 
+                    COUNT(*) AS `total`,
+                    SUM( IF(  `is_partner` , 1, 0 ) ) AS `partners`,
+                    SUM( IF(  !`is_dentist` , 1, 0 ) ) AS `patients`,
+                    SUM( IF(  `is_dentist` AND !`is_clinic`, 1, 0 ) ) AS `dentists`,
+                    SUM( IF(  `is_dentist` AND `is_clinic`, 1, 0 ) ) AS `clinics`,
+                    `employment`
+                FROM  `users` 
+                WHERE `created_at` >= '".$from_date."'
+                AND `created_at` <= '".$to_date."'
+                AND `deleted_at` is null
+                GROUP BY `employment` 
+                ORDER BY `total` DESC
+            ");
+
+            $job = DB::select("
+                SELECT 
+                    COUNT(*) AS `total`,
+                    SUM( IF(  `is_partner` , 1, 0 ) ) AS `partners`,
+                    SUM( IF(  !`is_dentist` , 1, 0 ) ) AS `patients`,
+                    SUM( IF(  `is_dentist` AND !`is_clinic`, 1, 0 ) ) AS `dentists`,
+                    SUM( IF(  `is_dentist` AND `is_clinic`, 1, 0 ) ) AS `clinics`,
+                    `job`
+                FROM  `users` 
+                WHERE `created_at` >= '".$from_date."'
+                AND `created_at` <= '".$to_date."'
+                AND `deleted_at` is null
+                GROUP BY `job` 
+                ORDER BY `total` DESC
+            ");
+
+            $job_title = DB::select("
+                SELECT 
+                    COUNT(*) AS `total`,
+                    SUM( IF(  `is_partner` , 1, 0 ) ) AS `partners`,
+                    SUM( IF(  !`is_dentist` , 1, 0 ) ) AS `patients`,
+                    SUM( IF(  `is_dentist` AND !`is_clinic`, 1, 0 ) ) AS `dentists`,
+                    SUM( IF(  `is_dentist` AND `is_clinic`, 1, 0 ) ) AS `clinics`,
+                    `job_title`
+                FROM  `users` 
+                WHERE `created_at` >= '".$from_date."'
+                AND `created_at` <= '".$to_date."'
+                AND `deleted_at` is null
+                GROUP BY `job_title` 
+                ORDER BY `total` DESC
+            ");
+
+            $income = DB::select("
+                SELECT 
+                    COUNT(*) AS `total`,
+                    SUM( IF(  `is_partner` , 1, 0 ) ) AS `partners`,
+                    SUM( IF(  !`is_dentist` , 1, 0 ) ) AS `patients`,
+                    SUM( IF(  `is_dentist` AND !`is_clinic`, 1, 0 ) ) AS `dentists`,
+                    SUM( IF(  `is_dentist` AND `is_clinic`, 1, 0 ) ) AS `clinics`,
+                    `income`
+                FROM  `users` 
+                WHERE `created_at` >= '".$from_date."'
+                AND `created_at` <= '".$to_date."'
+                AND `deleted_at` is null
+                GROUP BY `income` 
+                ORDER BY `total` DESC
+            ");
+        }
+
         return $this->showView('users-stats', array(
             'user_genders' => $user_genders,
             'user_types' => $user_types,
             'countries' => $countries,
+            'marital_statuses' => $marital_statuses,
+            'children' => $children,
+            'household_children' => $household_children,
+            'education' => $education,
+            'employment' => $employment,
+            'job' => $job,
+            'job_title' => $job_title,
+            'income' => $income,
 
             'answered_questions' => VoxQuestionAnswered::get(),
             'search_users_from' => request('search_users_from'),

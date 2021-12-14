@@ -214,5 +214,379 @@
 			</div>
 		</div>
 	</div>
+	
+	@if(!request('show-all'))
+		<a class="btn btn-info btn-block" href="{{ empty($_SERVER['REQUEST_URI']) ? url('cms/users/users_stats/?show-all=1') : (str_contains($_SERVER['REQUEST_URI'], '?') ? 'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'].'&show-all=1' : 'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'].'?show-all=1') }}">Show All Demographics</a>
+	@endif
+
+	@if(request('show-all'))
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-inverse">
+					<div class="panel-heading">
+						<div class="panel-heading-btn">
+							<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+						</div>
+						<h4 class="panel-title">Users Marital Status</h4>
+					</div>
+					<div class="panel-body">
+						<div class="dataTables_wrapper">
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Marital Status</th>
+												<th>Total</th>
+												<th>Patients</th>
+												<th>Dentists</th>
+												<th>Clinics</th>
+												<th>Partners</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($marital_statuses as $m)
+												@php( $marital_status = $m->marital_status ? config('vox.details_fields.marital_status.values')[$m->marital_status] : '-')
+												<tr>
+													<td>{{ $marital_status }}</td>
+													<td>{{ $m->total }}</td>
+													<td>{{ $m->patients }}</td>
+													<td>{{ $m->dentists }}</td>
+													<td>{{ $m->clinics }}</td>
+													<td>{{ $m->partners }}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-inverse">
+					<div class="panel-heading">
+						<div class="panel-heading-btn">
+							<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+						</div>
+						<h4 class="panel-title">Users Children</h4>
+					</div>
+					<div class="panel-body">
+						<div class="dataTables_wrapper">
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Children</th>
+												<th>Total</th>
+												<th>Patients</th>
+												<th>Dentists</th>
+												<th>Clinics</th>
+												<th>Partners</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($children as $ch)
+												@php( $childs = $ch->children ? config('vox.details_fields.children.values')[$ch->children] : '-')
+												<tr>
+													<td>{{ $childs }}</td>
+													<td>{{ $ch->total }}</td>
+													<td>{{ $ch->patients }}</td>
+													<td>{{ $ch->dentists }}</td>
+													<td>{{ $ch->clinics }}</td>
+													<td>{{ $ch->partners }}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-inverse">
+					<div class="panel-heading">
+						<div class="panel-heading-btn">
+							<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+						</div>
+						<h4 class="panel-title">Users Household Children</h4>
+					</div>
+					<div class="panel-body">
+						<div class="dataTables_wrapper">
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Household Children</th>
+												<th>Total</th>
+												<th>Patients</th>
+												<th>Dentists</th>
+												<th>Clinics</th>
+												<th>Partners</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($household_children as $h_ch)
+												@php( $h_childs = $h_ch->household_children !== null ? config('vox.details_fields.household_children.values')[strval($h_ch->household_children)] : '-')
+												<tr>
+													<td>{{ $h_childs }}</td>
+													<td>{{ $h_ch->total }}</td>
+													<td>{{ $h_ch->patients }}</td>
+													<td>{{ $h_ch->dentists }}</td>
+													<td>{{ $h_ch->clinics }}</td>
+													<td>{{ $h_ch->partners }}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-inverse">
+					<div class="panel-heading">
+						<div class="panel-heading-btn">
+							<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+						</div>
+						<h4 class="panel-title">Users Education</h4>
+					</div>
+					<div class="panel-body">
+						<div class="dataTables_wrapper">
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Education</th>
+												<th>Total</th>
+												<th>Patients</th>
+												<th>Dentists</th>
+												<th>Clinics</th>
+												<th>Partners</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($education as $e)
+												@php( $ed = !empty($e->education) ? config('vox.details_fields.education.values')[$e->education] : '-')
+												<tr>
+													<td>{{ $ed }}</td>
+													<td>{{ $e->total }}</td>
+													<td>{{ $e->patients }}</td>
+													<td>{{ $e->dentists }}</td>
+													<td>{{ $e->clinics }}</td>
+													<td>{{ $e->partners }}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-inverse">
+					<div class="panel-heading">
+						<div class="panel-heading-btn">
+							<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+						</div>
+						<h4 class="panel-title">Users Еmployment</h4>
+					</div>
+					<div class="panel-body">
+						<div class="dataTables_wrapper">
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Employment</th>
+												<th>Total</th>
+												<th>Patients</th>
+												<th>Dentists</th>
+												<th>Clinics</th>
+												<th>Partners</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($employment as $e)
+												@php( $em = !empty($e->employment) ? config('vox.details_fields.employment.values')[$e->employment] : '-')
+												<tr>
+													<td>{{ $em }}</td>
+													<td>{{ $e->total }}</td>
+													<td>{{ $e->patients }}</td>
+													<td>{{ $e->dentists }}</td>
+													<td>{{ $e->clinics }}</td>
+													<td>{{ $e->partners }}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-inverse">
+					<div class="panel-heading">
+						<div class="panel-heading-btn">
+							<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+						</div>
+						<h4 class="panel-title">Users Job</h4>
+					</div>
+					<div class="panel-body">
+						<div class="dataTables_wrapper">
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Job</th>
+												<th>Total</th>
+												<th>Patients</th>
+												<th>Dentists</th>
+												<th>Clinics</th>
+												<th>Partners</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($job as $j)
+												@php( $u_job = !empty($j->job) ? config('vox.details_fields.job.values')[$j->job] : '-')
+												<tr>
+													<td>{{ $u_job }}</td>
+													<td>{{ $j->total }}</td>
+													<td>{{ $j->patients }}</td>
+													<td>{{ $j->dentists }}</td>
+													<td>{{ $j->clinics }}</td>
+													<td>{{ $j->partners }}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-inverse">
+					<div class="panel-heading">
+						<div class="panel-heading-btn">
+							<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+						</div>
+						<h4 class="panel-title">Users Job Title</h4>
+					</div>
+					<div class="panel-body">
+						<div class="dataTables_wrapper">
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Job Title</th>
+												<th>Total</th>
+												<th>Patients</th>
+												<th>Dentists</th>
+												<th>Clinics</th>
+												<th>Partners</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($job_title as $j)
+												@php( $u_job = !empty($j->job_title) ? config('vox.details_fields.job_title.values')[$j->job_title] : '-')
+												<tr>
+													<td>{{ $u_job }}</td>
+													<td>{{ $j->total }}</td>
+													<td>{{ $j->patients }}</td>
+													<td>{{ $j->dentists }}</td>
+													<td>{{ $j->clinics }}</td>
+													<td>{{ $j->partners }}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-inverse">
+					<div class="panel-heading">
+						<div class="panel-heading-btn">
+							<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+						</div>
+						<h4 class="panel-title">Users Income</h4>
+					</div>
+					<div class="panel-body">
+						<div class="dataTables_wrapper">
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Income</th>
+												<th>Total</th>
+												<th>Patients</th>
+												<th>Dentists</th>
+												<th>Clinics</th>
+												<th>Partners</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($income as $j)
+												@php( $u_job = !empty($j->income) ? config('vox.details_fields.income.values')[$j->income] : '-')
+												<tr>
+													<td>{{ $u_job }}</td>
+													<td>{{ $j->total }}</td>
+													<td>{{ $j->patients }}</td>
+													<td>{{ $j->dentists }}</td>
+													<td>{{ $j->clinics }}</td>
+													<td>{{ $j->partners }}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	@endif
 
 @endsection
