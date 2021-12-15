@@ -59,9 +59,16 @@
                             </div>
 
                             <div class="col-md-2">
-                                <label for="exclude-permaban" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
-                                    <input id="exclude-permaban" type="checkbox" name="exclude-permaban" value="1" {!! !empty($exclude_permaban) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
-                                    Exclude Permaban
+                                <label for="with-permaban" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                    <input id="with-permaban" type="checkbox" name="with-permaban" value="1" {!! !empty($with_permaban) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                    With Permanent Ban
+                                </label>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="without-permaban" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                    <input id="without-permaban" type="checkbox" name="without-permaban" value="1" {!! !empty($without_permaban) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                    Without Permanent Ban
                                 </label>
                             </div>
 

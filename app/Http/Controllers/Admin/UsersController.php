@@ -482,7 +482,11 @@ class UsersController extends AdminController {
             $users = $users->whereNotIn('country_id', request('exclude-countries') );
         }
 
-        if(!empty(request('exclude-permaban'))) {
+        if(!empty(request('with-permaban'))) {
+            $users = $users->has('permanentBans' );
+        }
+
+        if(!empty(request('without-permaban'))) {
             $users = $users->doesntHave('permanentBans' );
         }
 
@@ -744,7 +748,7 @@ class UsersController extends AdminController {
             'search_login_number' => request('search-login-number'),
             'search_dentist_claims' => request('search-dentist-claims'),
             'exclude_countries' => request('exclude-countries'),
-            'exclude_permaban' => request('exclude-permaban'),
+            'without_permaban' => request('without-permaban'),
             'exclude_unsubscribed' => request('exclude-unsubscribed'),
             'vip_access' => request('vip-access'),
             'civic_kyc_hash' => request('civic-kyc-hash'),
