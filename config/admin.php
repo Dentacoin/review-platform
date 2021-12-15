@@ -121,6 +121,7 @@ return [
                 'polls-explorer' => 'polls-explorer',
                 'recommendations' => 'recommendations',
                 'paid-reports' => 'paid-reports',
+                'history' => 'history',
                 'tests' => 'tests',
             ),
             'js' => array(

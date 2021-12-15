@@ -222,6 +222,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('vox/hide-survey/{id}', 					'VoxesController@hideSurvey');
 	Route::post('vox/get-question-content/{id}', 			'VoxesController@getQuestionContent');
 	Route::post('vox/add-question-content/{id}', 			'VoxesController@addQuestionContent');
+	Route::any('vox/history', 								'VoxesController@voxesHistory');
 
 	Route::get('vox/polls', 								'PollsController@list');
 	Route::any('vox/polls/add', 							'PollsController@add');
@@ -245,7 +246,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	
 	Route::get('orders', 									'OrdersController@list');
 	Route::get('orders/sended/{id}', 						'OrdersController@sended');
-	Route::post('orders/add-payment-info/{id}', 				'OrdersController@addPaymentInfo');
+	Route::post('orders/add-payment-info/{id}', 			'OrdersController@addPaymentInfo');
 
 	Route::get('emails', 									'EmailsController@list');
 	Route::get('emails/{what?}', 							'EmailsController@list');

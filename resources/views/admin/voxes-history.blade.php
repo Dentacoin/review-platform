@@ -8,31 +8,6 @@
         </h1>
     </div>
 
-
-    {{-- ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility
-    ///check admin roles visibility --}}
-
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
@@ -43,18 +18,21 @@
                     <h4 class="panel-title"> Admin History Filter</h4>
                 </div>
                 <div class="panel-body users-filters">
-                    <form method="get" action="{{ url('cms/admins/actions-history/') }}">
+                    <form method="get" action="{{ url('cms/vox/history/') }}">
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-2">
                                 <select name="search-admin-id" class="form-control">
-                                    <option value="">Search admin id</option>
+                                    <option value="">Search Admin ID</option>
                                     @foreach($admins as $admin)
                                         <option value="{{ $admin->id }}" {!! $search_admin_id == $admin->id ? 'selected="selected"' : '' !!}>{{ $admin->name ?? $admin->username }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <input type="text" class="form-control" name="search-admin-id" value="{{ $search_admin_id }}" placeholder="Search admin ID">
+                                <input type="text" class="form-control" name="search-vox-id" value="{{ $search_vox_id }}" placeholder="Search Vox ID">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" name="search-question-id" value="{{ $search_question_id }}" placeholder="Search Question ID">
                             </div>
                             <div class="col-md-2">
                                 <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
@@ -100,7 +78,7 @@
                                             {!! $h->vox ? '<a href="'.url('cms/vox/edit/'.$h->vox_id).'">'.$h->vox->title.'</a>' : '' !!}
                                         </td>
                                         <td style="width: 20%">
-                                            {{ $h->question ? '<a href="'.url('cms/vox/edit/'.$h->vox_id.'/question/'.$h->question_id).'">'.$h->question_id->question_id.'</a>' : '' }}
+                                            {!! $h->question_id ? '<a href="'.url('cms/vox/edit/'.$h->vox_id.'/question/'.$h->question_id).'">'.($h->question ? $h->question->question : '').'</a>' : '' !!}
                                         </td>
                                     </tr>
                                 @endforeach

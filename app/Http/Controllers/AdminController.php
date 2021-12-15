@@ -131,7 +131,7 @@ class AdminController extends BaseController {
                     if(isset($menu[$key]['subpages'])) {
 
                         foreach ($menu[$key]['subpages'] as $sk => $sv) {
-                            if($sk == 'anonymous_users' || $sk == 'users_stats' || $sk == 'incomplete-registrations' || $sk == 'lead-magnet' || $sk == 'paid-reports' || $sk == 'users_stats'|| $sk == 'questions'|| $sk == 'faq' || $sk == 'testimonials' || $sk == 'scrape-google-dentists' || $sk == 'add' || ($sk == 'categories' && $key != 'support') || $sk == 'scales' || $sk == 'faq-ios' || $sk == 'badges' || $sk == 'explorer' || $sk == 'export-survey-data' || $sk == 'polls-explorer' || $sk == 'recommendations' || $sk == 'tests') {
+                            if($sk == 'anonymous_users' || $sk == 'users_stats' || $sk == 'incomplete-registrations' || $sk == 'lead-magnet' || $sk == 'paid-reports' || $sk == 'users_stats'|| $sk == 'questions'|| $sk == 'faq' || $sk == 'testimonials' || $sk == 'scrape-google-dentists' || $sk == 'add' || ($sk == 'categories' && $key != 'support') || $sk == 'scales' || $sk == 'faq-ios' || $sk == 'badges' || $sk == 'explorer' || $sk == 'export-survey-data' || $sk == 'polls-explorer' || $sk == 'recommendations' || $sk == 'tests' || $sk == 'history') {
                                 unset( $menu[$key]['subpages'][$sk] );
                             }
                         }
@@ -146,6 +146,14 @@ class AdminController extends BaseController {
             foreach ($menu as $key => $value) {
                 if($key=='admins' || $key=='logs') {
                     unset($menu[$key]);
+                }
+                if(isset($menu[$key]['subpages'])) {
+
+                    foreach ($menu[$key]['subpages'] as $sk => $sv) {
+                        if($sk == 'history') {
+                            unset( $menu[$key]['subpages'][$sk] );
+                        }
+                    }
                 }
             }
         }

@@ -28,6 +28,7 @@ use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\VoxScale;
 use App\Models\VoxBadge;
+use App\Models\Admin;
 use App\Models\User;
 use App\Models\Vox;
 
@@ -82,9 +83,7 @@ class VoxesController extends AdminController {
         }
 
         if(Request::isMethod('post')) {
-
             if(!empty(request('ids'))) {
-
                 foreach(request('ids') as $vox_id) {
                     foreach(request('languages') as $lang) {
                         $vox_cronjob_lang = new VoxCronjobLang;
@@ -223,6 +222,12 @@ class VoxesController extends AdminController {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/'.$this->current_page);
         }
+        
+        $vox_history = new VoxHistory;
+        $vox_history->admin_id = $this->user->id;
+        $vox_history->vox_id = $id;
+        $vox_history->info = 'Vox deleted';
+        $vox_history->save();
 
         Vox::destroy( $id );
 
@@ -245,9 +250,14 @@ class VoxesController extends AdminController {
         }
 
         if(!empty($item)) {
-
             $item->hasimage = false;
             $item->save();
+
+            $vox_history = new VoxHistory;
+            $vox_history->admin_id = $this->user->id;
+            $vox_history->vox_id = $id;
+            $vox_history->info = 'Vox Image Deleted';
+            $vox_history->save();
         }
 
         $this->request->session()->flash('success-message', 'Photo deleted!' );
@@ -571,7 +581,6 @@ class VoxesController extends AdminController {
             return redirect('cms/'.$this->current_page);
         }
     }
-
 
     public function import( $id ) {
 
@@ -1046,6 +1055,14 @@ class VoxesController extends AdminController {
         }
 
         if(!empty($question)) {
+
+            $vox_history = new VoxHistory;
+            $vox_history->admin_id = $this->user->id;
+            $vox_history->vox_id = $question->vox_id;
+            $vox_history->question_id = $question_id;
+            $vox_history->info = 'Question Deleted with order '.$question->order;
+            $vox_history->save();
+
             $question->delete();
             $question->vox->checkComplex();
 
@@ -1066,8 +1083,16 @@ class VoxesController extends AdminController {
         $question = VoxQuestion::find($question_id);
 
         if(!empty($question) && $question->vox_id==$id) {
+            $vox_history = new VoxHistory;
+            $vox_history->admin_id = $this->user->id;
+            $vox_history->vox_id = $question->vox_id;
+            $vox_history->question_id = $question_id;
+            $vox_history->info = 'Old Question Order: '.$question->order.'<br/> New Question Order: '.Request::input('val');
+            $vox_history->save();
+
             $question->order = Request::input('val');
             $question->save();
+
             return Response::json( ['success' => true] );
         } else {
             return Response::json( ['success' => false] );
@@ -1086,6 +1111,14 @@ class VoxesController extends AdminController {
         foreach ($list as $qid) {
             $question = VoxQuestion::find($qid);
             if($question->vox_id==$id) {
+
+                $vox_history = new VoxHistory;
+                $vox_history->admin_id = $this->user->id;
+                $vox_history->vox_id = $question->vox_id;
+                $vox_history->question_id = $question->id;
+                $vox_history->info = 'Old Question Order: '.$question->order.'<br/> New Question Order: '.$i;
+                $vox_history->save();
+
                 $question->order = $i;
                 $question->save();
                 $i++;
@@ -1107,6 +1140,14 @@ class VoxesController extends AdminController {
 
         if(!empty($question) && $question->vox_id==$id) {
             $translation = $question->translateOrNew($lang);
+
+            $vox_history = new VoxHistory;
+            $vox_history->admin_id = $this->user->id;
+            $vox_history->vox_id = $question->vox_id;
+            $vox_history->question_id = $question->id;
+            $vox_history->info = 'Old Question Title '.$lang.': '.$translation->question.'<br/> New Question Title: '.Request::input('val');
+            $vox_history->save();
+
             $translation->question = Request::input('val');
             $translation->save();
 
@@ -1159,61 +1200,87 @@ class VoxesController extends AdminController {
         if($item->type == 'normal' && $this->request->input('type') == 'hidden' && !$this->request->input('hide-survey')) {
         } else {
             if($this->request->input('type') != $item->type) {
-                $history_info.= 'Type: '.$item->type.'<br/>';
+                $history_info.= 'OLD Type: '.$item->type.'<br/>';
+                $history_info.= 'NEW Type: '.$this->request->input('type').'<br/>';
             }
             $item->type = $this->request->input('type');
         }
 
         if($this->request->input('scheduled_at') != $item->scheduled_at) {
-            $history_info.= 'Scheduled at: '.$this->request->input('scheduled_at').'<br/>';
+            $history_info.= 'OLD Scheduled at: '.$item->scheduled_at.'<br/>';
+            $history_info.= 'NEW Scheduled at: '.$this->request->input('scheduled_at').'<br/>';
         }
         if($this->request->input('featured') != $item->featured) {
-            $history_info.= 'Featured: '.$this->request->input('featured').'<br/>';
+            $history_info.= 'OLD Featured: '.$item->featured.'<br/>';
+            $history_info.= 'NEW Featured: '.$this->request->input('featured').'<br/>';
         }
         if($this->request->input('stats_featured') != $item->stats_featured) {
-            $history_info.= 'Stats featured: '.$this->request->input('stats_featured').'<br/>';
+            $history_info.= 'OLD Stats featured: '.$item->stats_featured.'<br/>';
+            $history_info.= 'NEW Stats featured: '.$this->request->input('stats_featured').'<br/>';
         }
         if($this->request->input('has_stats') != $item->has_stats) {
-            $history_info.= 'Has stats: '.$this->request->input('has_stats').'<br/>';
+            $history_info.= 'OLD Has stats: '.$item->has_stats.'<br/>';
+            $history_info.= 'NEW Has stats: '.$this->request->input('has_stats').'<br/>';
         }
         if($this->request->input('gender') != $item->gender) {
-            $history_info.= 'Gender: '.$this->request->input('gender').'<br/>';
+            $history_info.= 'OLD Gender: '.implode(',',$item->gender).'<br/>';
+            $history_info.= 'NEW Gender: '.implode(',',$this->request->input('gender')).'<br/>';
         }
         if($this->request->input('marital_status') != $item->marital_status) {
-            $history_info.= 'Marital status: '.$this->request->input('marital_status').'<br/>';
+            $history_info.= 'OLD Marital status: '.implode(',',$item->marital_status).'<br/>';
+            $history_info.= 'NEW Marital status: '.implode(',',$this->request->input('marital_status')).'<br/>';
         }
         if($this->request->input('children') != $item->children) {
-            $history_info.= 'Children: '.$this->request->input('children').'<br/>';
+            $history_info.= 'OLD Children: '.implode(',',$item->children).'<br/>';
+            $history_info.= 'NEW Children: '.implode(',',$this->request->input('children')).'<br/>';
         }
         if($this->request->input('household_children') != $item->household_children) {
-            $history_info.= 'Household children: '.$this->request->input('household_children').'<br/>';
+            $history_info.= 'OLD Household children: '.implode(',',$item->household_children).'<br/>';
+            $history_info.= 'NEW Household children: '.implode(',',$this->request->input('household_children')).'<br/>';
         }
         if($this->request->input('education') != $item->education) {
-            $history_info.= 'Education: '.$this->request->input('education').'<br/>';
+            $history_info.= 'OLD Education: '.implode(',',$item->education).'<br/>';
+            $history_info.= 'NEW Education: '.implode(',',$this->request->input('education')).'<br/>';
         }
         if($this->request->input('employment') != $item->employment) {
-            $history_info.= 'Employment: '.$this->request->input('employment').'<br/>';
+            $history_info.= 'OLD Employment: '.implode(',',$item->employment).'<br/>';
+            $history_info.= 'NEW Employment: '.implode(',',$this->request->input('employment')).'<br/>';
         }
         if($this->request->input('job') != $item->job) {
-            $history_info.= 'Job: '.$this->request->input('job').'<br/>';
+            $history_info.= 'OLD Job: '.implode(',',$item->job).'<br/>';
+            $history_info.= 'NEW Job: '.implode(',',$this->request->input('job')).'<br/>';
         }
         if($this->request->input('job_title') != $item->job_title) {
-            $history_info.= 'Job title: '.$this->request->input('job_title').'<br/>';
+            $history_info.= 'OLD Job title: '.implode(',',$item->job_title).'<br/>';
+            $history_info.= 'NEW Job title: '.implode(',',$this->request->input('job_title')).'<br/>';
         }
         if($this->request->input('income') != $item->income) {
-            $history_info.= 'Income: '.$this->request->input('income').'<br/>';
+            $history_info.= 'OLD Income: '.implode(',',$item->income).'<br/>';
+            $history_info.= 'NEW Income: '.implode(',',$this->request->input('income')).'<br/>';
         }
         if($this->request->input('age') != $item->age) {
-            $history_info.= 'Age: '.$this->request->input('age').'<br/>';
+            $history_info.= 'OLD Age: '.implode(',',$item->age).'<br/>';
+            $history_info.= 'NEW Age: '.implode(',',$this->request->input('age')).'<br/>';
+        }
+        if($this->request->input('countries_ids') != $item->countries_ids) {
+            $history_info.= 'OLD Countries IDs: '.implode(',',$item->countries_ids).'<br/>';
+            $history_info.= 'NEW Countries IDs: '.implode(',',$this->request->input('countries_ids')).'<br/>';
+        }
+        if($this->request->input('exclude_countries_ids') != $item->exclude_countries_ids) {
+            $history_info.= 'OLD Exclude Countries IDs: '.implode(',',$item->exclude_countries_ids).'<br/>';
+            $history_info.= 'NEW Exclude Countries IDs: '.implode(',',$this->request->input('exclude_countries_ids')).'<br/>';
         }
         if($this->request->input('country_percentage') != $item->country_percentage) {
-            $history_info.= 'Country percentage: '.$this->request->input('country_percentage').'<br/>';
+            $history_info.= 'OLD Country percentage: '.$item->country_percentage.'<br/>';
+            $history_info.= 'NEW Country percentage: '.$this->request->input('country_percentage').'<br/>';
         }
         if($this->request->input('dentists_patients') != $item->dentists_patients) {
-            $history_info.= 'Dentists patients: '.$this->request->input('dentists_patients').'<br/>';
+            $history_info.= 'OLD Dentists patients: '.implode(',',$item->dentists_patients).'<br/>';
+            $history_info.= 'NEW Dentists patients: '.implode(',',$this->request->input('dentists_patients')).'<br/>';
         }
         if($this->request->input('manually_calc_reward') != $item->manually_calc_reward) {
-            $history_info.= 'Manually calc reward: '.$this->request->input('manually_calc_reward').'<br/>';
+            $history_info.= 'OLD Manually calc reward: '.$item->manually_calc_reward.'<br/>';
+            $history_info.= 'NEW Manually calc reward: '.$this->request->input('manually_calc_reward').'<br/>';
         }
 
         $item->scheduled_at = $this->request->input('scheduled_at');
@@ -1239,11 +1306,15 @@ class VoxesController extends AdminController {
         $item->manually_calc_reward = !empty($this->request->input('manually_calc_reward')) ? 1 : null;
         $item->last_count_at = null;
 
-        //dd($this->request->input('count_dcn_questions'), $this->request->input('count_dcn_answers'));
         if (!empty($this->request->input('count_dcn_questions'))) {
             $trigger_qs = [];
             foreach ($this->request->input('count_dcn_questions') as $k => $v) {
                 $trigger_qs[$this->request->input('count_dcn_questions')[$k]] = $this->request->input('count_dcn_answers')[$k];
+            }
+
+            if($trigger_qs != $item->dcn_questions_triggers) {
+                $history_info.= 'OLD Count dcn questions: '.$item->dcn_questions_triggers.'<br/>';
+                $history_info.= 'NEW Count dcn questions: '.$trigger_qs.'<br/>';
             }
 
             $item->dcn_questions_triggers = $trigger_qs;
@@ -1251,6 +1322,19 @@ class VoxesController extends AdminController {
         }
 
         $item->save();
+        
+        if( !empty( Request::input('categories') )) {
+            $catsDiff = array_merge(array_diff(request('categories'), $item->categories->pluck('vox_category_id')->toArray()), array_diff($item->categories->pluck('vox_category_id')->toArray(), request('categories')));
+
+            if(!empty($catsDiff)) {
+                $history_info.= 'OLD Categories: '.implode(',',$item->categories->pluck('vox_category_id')->toArray()).'<br/>';
+                $history_info.= 'NEW Categories: '.implode(',',request('categories')).'<br/>';
+            }
+        } else {
+            if($item->categories->isNotEmpty()) {
+                $history_info.= 'Categories: null<br/>';
+            }
+        }
 
         VoxToCategory::where('vox_id', $item->id)->delete();
         if( !empty( Request::input('categories') )) {
@@ -1260,6 +1344,26 @@ class VoxesController extends AdminController {
                 $vc->vox_category_id = $cat_id;
                 $vc->save();
             }   
+        }
+        
+        if( !empty( Request::input('related_vox_id') )) {
+            $relatedDiff = array_merge(array_diff(request('related_vox_id'), $item->related->pluck('related_vox_id')->toArray()), array_diff($item->related->pluck('related_vox_id')->toArray(), request('related_vox_id')));
+
+            $has_diff = false;
+            foreach($relatedDiff as $rd) {
+                if($rd !== null) {
+                    $has_diff = true;
+                }
+            }
+
+            if(!empty($relatedDiff) && $has_diff) {
+                $history_info.= 'OLD Relateds: '.implode(',',$item->related->pluck('related_vox_id')->toArray()).'<br/>';
+                $history_info.= 'NEW Relateds: '.implode(',',request('related_vox_id')).'<br/>';
+            }
+        } else {
+            if($item->related->isNotEmpty()) {
+                $history_info.= 'Relateds: null<br/>';
+            }
         }
 
         VoxRelated::where('vox_id', $item->id)->delete();
@@ -1280,16 +1384,20 @@ class VoxesController extends AdminController {
                 $translation = $item->translateOrNew($key);
 
                 if($this->request->input('title-'.$key) != $item->title) {
-                    $history_info.= 'Title '.$key.': '.$this->request->input('title-'.$key).'<br/>';
+                    $history_info.= 'OLD Title '.$key.': '.$item->title.'<br/>';
+                    $history_info.= 'NEW Title '.$key.': '.$this->request->input('title-'.$key).'<br/>';
                 }
                 if($this->request->input('slug-'.$key) != $item->slug) {
-                    $history_info.= 'Slug '.$key.': '.$this->request->input('slug-'.$key).'<br/>';
+                    $history_info.= 'OLD Slug '.$key.': '.$item->slug.'<br/>';
+                    $history_info.= 'NEW Slug '.$key.': '.$this->request->input('slug-'.$key).'<br/>';
                 }
                 if($this->request->input('description-'.$key) != $item->description) {
-                    $history_info.= 'Description '.$key.': '.$this->request->input('description-'.$key).'<br/>';
+                    $history_info.= 'OLD Description '.$key.': '.$item->description.'<br/>';
+                    $history_info.= 'NEW Description '.$key.': '.$this->request->input('description-'.$key).'<br/>';
                 }
                 if($this->request->input('stats_description-'.$key) != $item->stats_description) {
-                    $history_info.= 'Stats description '.$key.': '.$this->request->input('stats_description-'.$key).'<br/>';
+                    $history_info.= 'OLD Stats description '.$key.': '.$item->stats_description.'<br/>';
+                    $history_info.= 'NEW Stats description '.$key.': '.$this->request->input('stats_description-'.$key).'<br/>';
                 }
 
                 $translation->vox_id = $item->id;
@@ -1302,25 +1410,31 @@ class VoxesController extends AdminController {
         }
         $item->save();
 
+        if( Input::file('photo') ) {
+            $img = Image::make( Input::file('photo') )->orientate();
+            $item->addImage($img);
+
+            $history_info.= 'New photo<br/>';
+        }
+        if( Input::file('photo-social') ) {
+            $img = Image::make( Input::file('photo-social') )->orientate();
+            $item->addSocialImage($img);
+
+            $history_info.= 'New photo social<br/>';
+        }
+        if( Input::file('photo-stats') ) {
+            $img = Image::make( Input::file('photo-stats') )->orientate();
+            $item->addSocialImage($img, 'for-stats');
+
+            $history_info.= 'New photo stats<br/>';
+        }
+
         if(!empty($history_info)) {
             $vox_history = new VoxHistory;
             $vox_history->admin_id = $this->user->id;
             $vox_history->vox_id = $item->id;
             $vox_history->info = $history_info;
             $vox_history->save();
-        }
-
-        if( Input::file('photo') ) {
-            $img = Image::make( Input::file('photo') )->orientate();
-            $item->addImage($img);
-        }
-        if( Input::file('photo-social') ) {
-            $img = Image::make( Input::file('photo-social') )->orientate();
-            $item->addSocialImage($img);
-        }
-        if( Input::file('photo-stats') ) {
-            $img = Image::make( Input::file('photo-stats') )->orientate();
-            $item->addSocialImage($img, 'for-stats');
         }
     }
 
@@ -1339,11 +1453,13 @@ class VoxesController extends AdminController {
 
         if($this->request->input('is_control_prev')) {
             if($this->request->input('is_control_prev') != $question->is_control) {
-                $history_info.= 'Control question: '.$this->request->input('is_control_prev').'<br/>';
+                $history_info.= 'OLD Control question: '.$question->is_control.'<br/>';
+                $history_info.= 'NEW Control question: '.$this->request->input('is_control_prev').'<br/>';
             }
         } else {
             if($this->request->input('is_control') != $question->is_control) {
-                $history_info.= 'Control question: '.$this->request->input('is_control').'<br/>';
+                $history_info.= 'OLD Control question: '.$question->is_control.'<br/>';
+                $history_info.= 'NEW Control question: '.$this->request->input('is_control').'<br/>';
             }
         }
 
@@ -1353,52 +1469,83 @@ class VoxesController extends AdminController {
             $question->is_control = $data['is_control'];
         }
 
+        if($this->request->input('cross_check') != $question->cross_check) {
+            $history_info.= 'OLD Cross check: '.$question->cross_check.'<br/>';
+            $history_info.= 'NEW Cross check: '.$this->request->input('cross_check').'<br/>';
+        }
         if($this->request->input('type') != $question->type) {
-            $history_info.= 'Type: '.$this->request->input('type').'<br/>';
+            $history_info.= 'OLD Type: '.$question->type.'<br/>';
+            $history_info.= 'NEW Type: '.$this->request->input('type').'<br/>';
         }
         if($this->request->input('order') != $question->order) {
-            $history_info.= 'Order: '.$this->request->input('order').'<br/>';
+            $history_info.= 'OLD Order: '.$question->order.'<br/>';
+            $history_info.= 'NEW Order: '.$this->request->input('order').'<br/>';
         }
         if($this->request->input('stats_featured') != $question->stats_featured) {
-            $history_info.= 'Stats featured: '.$this->request->input('stats_featured').'<br/>';
+            $history_info.= 'OLD Stats featured: '.$question->stats_featured.'<br/>';
+            $history_info.= 'OLD Stats featured: '.$this->request->input('stats_featured').'<br/>';
         }
         if($this->request->input('stats_top_answers') != $question->stats_top_answers) {
-            $history_info.= 'Stats top answers: '.$this->request->input('stats_top_answers').'<br/>';
+            $history_info.= 'OLD Stats top answers: '.$question->stats_top_answers.'<br/>';
+            $history_info.= 'NEW Stats top answers: '.$this->request->input('stats_top_answers').'<br/>';
         }
-        if($this->request->input('vox_scale_id') != $question->vox_scale_id) {
-            $history_info.= 'Vox scale id: '.$this->request->input('vox_scale_id').'<br/>';
+        if($this->request->input('stats_fields') != $question->stats_fields) {
+            $history_info.= 'OLD Stats fields answers: '.implode(',',$question->stats_fields).'<br/>';
+            $history_info.= 'NEW Stats fields answers: '.($this->request->input('stats_fields') ? implode(',',$this->request->input('stats_fields')) : '').'<br/>';
+        }
+        if($this->request->input('stats_scale_answers') != json_decode($question->stats_scale_answers, true)) {
+            $history_info.= 'OLD Stats scale answers: '.$question->stats_scale_answers.'<br/>';
+            $history_info.= 'NEW Stats scale answers: '.($this->request->input('stats_scale_answers') ? implode(',',$this->request->input('stats_scale_answers')) : '').'<br/>';
+        }
+        if($this->request->input('question_scale') != $question->vox_scale_id) {
+            $history_info.= 'OLD Vox scale id: '.$question->vox_scale_id.'<br/>';
+            $history_info.= 'NEW Vox scale id: '.$this->request->input('question_scale').'<br/>';
         }
         if($this->request->input('dont_randomize_answers') != $question->dont_randomize_answers) {
-            $history_info.= 'Dont randomize answers: '.$this->request->input('dont_randomize_answers').'<br/>';
+            $history_info.= 'OLD Dont randomize answers: '.$question->dont_randomize_answers.'<br/>';
+            $history_info.= 'NEW Dont randomize answers: '.$this->request->input('dont_randomize_answers').'<br/>';
         }
         if($this->request->input('image_in_tooltip') != $question->image_in_tooltip) {
-            $history_info.= 'Image in tooltip: '.$this->request->input('image_in_tooltip').'<br/>';
+            $history_info.= 'OLD Image in tooltip: '.$question->image_in_tooltip.'<br/>';
+            $history_info.= 'NEW Image in tooltip: '.$this->request->input('image_in_tooltip').'<br/>';
         }
         if($this->request->input('image_in_question') != $question->image_in_question) {
-            $history_info.= 'Image in question: '.$this->request->input('image_in_question').'<br/>';
+            $history_info.= 'OLD Image in question: '.$question->image_in_question.'<br/>';
+            $history_info.= 'NEW Image in question: '.$this->request->input('image_in_question').'<br/>';
         }
         if($this->request->input('prev_q_id_answers') != $question->prev_q_id_answers) {
-            $history_info.= 'Prev q id answers: '.$this->request->input('prev_q_id_answers').'<br/>';
+            $history_info.= 'OLD Prev q id answers: '.$question->prev_q_id_answers.'<br/>';
+            $history_info.= 'NEW Prev q id answers: '.$this->request->input('prev_q_id_answers').'<br/>';
+        }
+        if($this->request->input('remove_answers_with_diez') != $question->remove_answers_with_diez) {
+            $history_info.= 'OLD Remove answers with diez: '.$question->remove_answers_with_diez.'<br/>';
+            $history_info.= 'NEW Remove answers with diez: '.$this->request->input('remove_answers_with_diez').'<br/>';
         }
         if($this->request->input('trigger_type') != $question->trigger_type) {
-            $history_info.= 'Trigger type: '.$this->request->input('trigger_type').'<br/>';
+            $history_info.= 'OLD Trigger type: '.$question->trigger_type.'<br/>';
+            $history_info.= 'NEW Trigger type: '.$this->request->input('trigger_type').'<br/>';
         }
         if($this->request->input('used_for_stats') != $question->used_for_stats) {
-            $history_info.= 'Used for stats: '.$this->request->input('used_for_stats').'<br/>';
+            $history_info.= 'OLD Used for stats: '.$question->used_for_stats.'<br/>';
+            $history_info.= 'NEW Used for stats: '.$this->request->input('used_for_stats').'<br/>';
         }
         if($question->used_for_stats=='dependency' && $this->request->input('stats_relation_id') != $question->stats_relation_id) {
-            $history_info.= 'Stats relation id: '.$this->request->input('stats_relation_id').'<br/>';
+            $history_info.= 'OLD Stats relation id: '.$question->stats_relation_id.'<br/>';
+            $history_info.= 'NEW Stats relation id: '.$this->request->input('stats_relation_id').'<br/>';
         }
         if($question->used_for_stats=='dependency' && $this->request->input('stats_answer_id') != $question->stats_answer_id) {
-            $history_info.= 'Stats answer id: '.$this->request->input('stats_answer_id').'<br/>';
+            $history_info.= 'OLD Stats answer id: '.$question->stats_answer_id.'<br/>';
+            $history_info.= 'NEW Stats answer id: '.$this->request->input('stats_answer_id').'<br/>';
         }
         if($this->request->input('stats_title_question') != $question->stats_title_question) {
-            $history_info.= 'Stats title question: '.$this->request->input('stats_title_question').'<br/>';
+            $history_info.= 'OLD Stats title question: '.$question->stats_title_question.'<br/>';
+            $history_info.= 'NEW Stats title question: '.$this->request->input('stats_title_question').'<br/>';
         }
         if($this->request->input('order_stats_answers_with_diez_as_they_are') != $question->order_stats_answers_with_diez_as_they_are) {
-            $history_info.= 'Order stats answers with diez as they are: '.$this->request->input('order_stats_answers_with_diez_as_they_are').'<br/>';
+            $history_info.= 'OLD Order stats answers with diez as they are: '.$question->order_stats_answers_with_diez_as_they_are.'<br/>';
+            $history_info.= 'NEW Order stats answers with diez as they are: '.$this->request->input('order_stats_answers_with_diez_as_they_are').'<br/>';
         }
-        
+
         $question->cross_check = !empty($data['cross_check']) ? $data['cross_check'] : null;
         $question->type = $data['type'];
         $question->order = $data['order'];
@@ -1426,7 +1573,8 @@ class VoxesController extends AdminController {
         if( $justCopy ) {
 
             if($this->request->input('question_trigger') != $question->question_trigger) {
-                $history_info.= 'Question trigger: '.$this->request->input('question_trigger').'<br/>';
+                $history_info.= 'OLD Question trigger: '.$question->question_trigger.'<br/>';
+                $history_info.= 'NEW Question trigger: '.$this->request->input('question_trigger').'<br/>';
             }
 
             $question->question_trigger = $data['question_trigger'];
@@ -1446,15 +1594,16 @@ class VoxesController extends AdminController {
                     $q_vox->save();
                 }
                 
-
                 if(implode(';', $help_array) != $question->question_trigger) {
-                    $history_info.= 'Question trigger: '.implode(';', $help_array).'<br/>';
+                    $history_info.= 'OLD Question trigger: '.$question->question_trigger.'<br/>';
+                    $history_info.= 'NEW Question trigger: '.implode(';', $help_array).'<br/>';
                 }
 
                 $question->question_trigger = implode(';', $help_array);
             } else {
                 if($this->request->input('question_trigger') != $question->question_trigger) {
-                    $history_info.= 'Question trigger: null<br/>';
+                    $history_info.= 'OLD Question trigger: '.$question->question_trigger.'<br/>';
+                    $history_info.= 'NEW Question trigger: null<br/>';
                 }
                 $question->question_trigger = '';
             }
@@ -1467,13 +1616,15 @@ class VoxesController extends AdminController {
             ];
             
             if(implode(':', $array) != $question->number_limit) {
-                $history_info.= 'Number limit: '.implode(':', $array).'<br/>';
+                $history_info.= 'OLD Number limit: '.$question->number_limit.'<br/>';
+                $history_info.= 'NEW Number limit: '.implode(':', $array).'<br/>';
             }
 
             $question->number_limit = implode(':', $array);
         } else {
             if($this->request->input('number_limit') != $question->number_limit) {
-                $history_info.= 'Number limit: null<br/>';
+                $history_info.= 'OLD Number limit: '.$question->number_limit.'<br/>';
+                $history_info.= 'NEW Number limit: null<br/>';
             }
             $question->number_limit = '';
         }
@@ -1481,12 +1632,14 @@ class VoxesController extends AdminController {
         if($justCopy) {
             if(isset($data['excluded_answers']) && !empty($data['excluded_answers'])) {
                 if($this->request->input('excluded_answers') != $question->excluded_answers) {
-                    $history_info.= 'Excluded answers: '.$this->request->input('excluded_answers').'<br/>';
+                    $history_info.= 'OLD Excluded answers: '.$question->excluded_answers.'<br/>';
+                    $history_info.= 'NEW Excluded answers: '.$this->request->input('excluded_answers').'<br/>';
                 }
                 $question->excluded_answers = $data['excluded_answers'];
             } else {
                 if($this->request->input('excluded_answers') != $question->excluded_answers) {
-                    $history_info.= 'Excluded answers: null<br/>';
+                    $history_info.= 'OLD Excluded answers: '.$question->excluded_answers.'<br/>';
+                    $history_info.= 'NEW Excluded answers: null<br/>';
                 }
                 $question->excluded_answers = null;
             }
@@ -1494,7 +1647,8 @@ class VoxesController extends AdminController {
 
             if(isset($data['exclude_answers_checked']) && isset($data['excluded_answers']) && !empty(json_decode($data['excluded_answers'], true))) {
                 if(json_decode($this->request->input('excluded_answers'), true) != $question->excluded_answers) {
-                    $history_info.= 'Exclude answers checked: '.json_decode($data['excluded_answers'], true).'<br/>';
+                    $history_info.= 'OLD Exclude answers checked: '.$question->excluded_answers.'<br/>';
+                    $history_info.= 'NEW Exclude answers checked: '.json_decode($data['excluded_answers'], true).'<br/>';
                 }
                 $question->excluded_answers = json_decode($data['excluded_answers'], true);
             } else {
@@ -1508,7 +1662,8 @@ class VoxesController extends AdminController {
             $prev_q = VoxQuestion::where('vox_id', $question->vox_id)->where('order', $data['prev_q_order'])->first()->id;
 
             if($prev_q != $question->number_limit) {
-                $history_info.= 'Prev q id answers: '.$prev_q.'<br/>';
+                $history_info.= 'OLD Prev q id answers: '.$question->number_limit.'<br/>';
+                $history_info.= 'NEW Prev q id answers: '.$prev_q.'<br/>';
             }
 
             $question->prev_q_id_answers = $prev_q;
@@ -1535,10 +1690,12 @@ class VoxesController extends AdminController {
                 $translation->vox_id = $question->vox_id;
 
                 if($this->request->input('question-'.$key) != $translation->question) {
-                    $history_info.= 'Question '.$key.': '.$this->request->input('question-'.$key).'<br/>';
+                    $history_info.= 'OLD Question '.$key.': '.$translation->question.'<br/>';
+                    $history_info.= 'NEW Question '.$key.': '.$this->request->input('question-'.$key).'<br/>';
                 }
                 if($this->request->input('stats_title-'.$key) != $translation->stats_title) {
-                    $history_info.= 'Stats title '.$key.': '.$this->request->input('stats_title-'.$key).'<br/>';
+                    $history_info.= 'OLD Stats title '.$key.': '.$translation->stats_title.'<br/>';
+                    $history_info.= 'NEW Stats title '.$key.': '.$this->request->input('stats_title-'.$key).'<br/>';
                 }
 
                 if (strpos($data['question-'.$key], '[')) {
@@ -1581,12 +1738,14 @@ class VoxesController extends AdminController {
                     $answrs = json_encode( $data['answers-'.$key], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE );
 
                     if($answrs != $translation->answers) {
-                        $history_info.= 'Answers '.$key.': '.$answrs.'<br/>';
+                        $history_info.= 'OLD Answers '.$key.': '.$translation->answers.'<br/>';
+                        $history_info.= 'NEW Answers '.$key.': '.$answrs.'<br/>';
                     }
 
                     $translation->answers = $answrs;
                 } else {
                     if($this->request->input('answers-'.$key) != $translation->answers) {
+                        $history_info.= 'OLD Answers '.$key.': '.$translation->answers.'<br/>';
                         $history_info.= 'Answers: null<br/>';
                     }
                     $translation->answers = '';                            
@@ -1596,15 +1755,6 @@ class VoxesController extends AdminController {
             }
         }
         $question->save();
-
-        if(!empty($history_info)) {
-            $vox_history = new VoxHistory;
-            $vox_history->admin_id = $this->user->id;
-            $vox_history->vox_id = $question->vox_id;
-            $vox_history->question_id = $question->id;
-            $vox_history->info = $history_info;
-            $vox_history->save();
-        }
 
         if($question->vox->type == 'normal') {
             foreach (config('langs-to-translate') as $lang_code => $value) {
@@ -1637,10 +1787,16 @@ class VoxesController extends AdminController {
             $question->answers_images_filename = json_encode($image_filename);
             $question->save();
 
+            $history_info.= 'NEW Answer photos<br/>';
+
         } else if(!empty($data['filename']) && !in_array(null, $data['filename'])) {
             $imgs_arr = [];
             foreach (json_decode($question->answers, true) as $k => $v) {
                 $imgs_arr[] = !empty($data['filename'][$k]) ? $data['filename'][$k] : '';
+            }
+
+            if(json_encode($imgs_arr) != $question->answers_images_filename) {
+                $history_info.= 'NEW Answer filenames: '.json_encode($imgs_arr).'<br/>';
             }
 
             $question->answers_images_filename = json_encode($imgs_arr);
@@ -1651,10 +1807,21 @@ class VoxesController extends AdminController {
             $img = Image::make( Input::file('question-photo') )->orientate();
             $question->addImage($img);
 
+            $history_info.= 'NEW Question image<br/>';
+
             if(empty($question->image_in_question) && empty($question->image_in_tooltip)) {
                 $question->image_in_question = true;
                 $question->save();
             }
+        }
+
+        if(!empty($history_info)) {
+            $vox_history = new VoxHistory;
+            $vox_history->admin_id = $this->user->id;
+            $vox_history->vox_id = $question->vox_id;
+            $vox_history->question_id = $question->id;
+            $vox_history->info = $history_info;
+            $vox_history->save();
         }
 
         session([
@@ -2235,8 +2402,6 @@ class VoxesController extends AdminController {
                 }
             }
 
-            //dd( request()->input('country') );
-
             $viewParams = [
                 'show_pagination' => $show_pagination,
                 'question_respondents' => $question_respondents,
@@ -2624,6 +2789,13 @@ class VoxesController extends AdminController {
 
         if(!empty($item)) {
 
+            $vox_history = new VoxHistory;
+            $vox_history->admin_id = $this->user->id;
+            $vox_history->vox_id = $vox_id;
+            $vox_history->question_id = $q_id;
+            $vox_history->info = 'Question Image Deleted';
+            $vox_history->save();
+
             $item->has_image = false;
             $item->save();
         }
@@ -2644,7 +2816,6 @@ class VoxesController extends AdminController {
             if($question->question_trigger == '-1') {
                 return 'Trigger: SAME AS BEFORE';
             } else {
-
                 $trigger_qs = [];
 
                 foreach (explode(';', $question->question_trigger) as $v)  {
@@ -2654,7 +2825,6 @@ class VoxesController extends AdminController {
                 $trigger_ans = [];
                 foreach (explode(';', $question->question_trigger) as $triggers)  {
                     if(isset(explode(':', $triggers)[1])) {
-
                         list($triggerId, $triggerAnswers) = explode(':', $triggers);
 
                         if(mb_strpos($triggerAnswers, '-')!==false) {
@@ -2664,26 +2834,22 @@ class VoxesController extends AdminController {
                             for ($i=$from; $i <= $to ; $i++) { 
                                 $allowedAnswers[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($i)-1];
                             }
-
                         } else {
 
                             $answer_names = [];
                             foreach (explode(',', $triggerAnswers) as $value) {
                                 $answer_names[] = isset(json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($value)-1]) ? json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($value)-1] : $value;
                             }
-
                             $allowedAnswers = $answer_names;
                         }
-
                         $trigger_ans[$triggerId] = $allowedAnswers;
                     }
                 }
 
                 if($trigger_qs) {
-
                     if(!empty($trigger_ans)) {
-                        $triggers = [];
 
+                        $triggers = [];
                         foreach ($trigger_qs as $tq) {
                             if(isset($trigger_ans[$tq])) {
                                 $triggers[] = VoxQuestion::find($tq)->question.' - '.implode(',', $trigger_ans[$tq]);
@@ -2692,9 +2858,7 @@ class VoxesController extends AdminController {
                                 $triggers[] = VoxQuestion::find($tq)->question ? VoxQuestion::find($value)->question : '';
                             }                                
                         }
-
                         $trg = implode('; ', $triggers);
-                        
                     } else {
                         $q_titles = [];
                         foreach ($trigger_qs as $key => $value) {
@@ -2707,7 +2871,6 @@ class VoxesController extends AdminController {
                             $trg = '';
                         }
                     }
-
                     $trg_logic = $question->trigger_type == 'or' ? 'ANY' : 'ALL';
 
                     return 'Trigger: (trigger logic '.$trg_logic.') '.$trg;
@@ -2715,7 +2878,6 @@ class VoxesController extends AdminController {
                     return '';
                 }
             }
-
         } else {
             return '';
         }
@@ -2784,7 +2946,6 @@ class VoxesController extends AdminController {
 
                         $export_array[] = VoxHelper::exportStatsXlsx($vox, $q, $demographics, $results, $results_old, $key+1, $all_period, true);
                     }
-
                 }
             } else {
                 $export_array[] = VoxHelper::exportStatsXlsx($vox, $q, $demographics, $results, $results_old, null, $all_period, true);
@@ -2799,34 +2960,22 @@ class VoxesController extends AdminController {
             "breakdown_rows_count" => 0
         ];
 
-
         foreach($export_array as $key => $exportArr) {
-            // dd($exportArr['flist']["Raw Data"]);
             foreach($exportArr['flist']["Raw Data"] as $raw_data) {
                 $document['flist']["Raw Data"][] = $raw_data;
             }
             foreach($exportArr['flist']["Breakdown"] as $breakdown_data) {
                 $document['flist']["Breakdown"][] = $breakdown_data;
             }
-
-            // $document['flist']["Breakdown"][] = $exportArr['flist']["Breakdown"];
             $document['breakdown_rows_count'] = $exportArr["breakdown_rows_count"]++;
         }
 
-        // dd($export_array, $document);
-
-
         $fname = $vox->title;
-
         $pdf_title = strtolower(str_replace(['?', ' ', ':', "'"], ['', '-', '', ''] ,$fname)).'-dentavox'.mb_substr(microtime(true), 0, 10);
-
         $downloaded_content = (new MultipleStatSheetExport($document['flist'], $document['breakdown_rows_count']))->download($pdf_title.'.xlsx');
         ob_end_clean();
 
         return $downloaded_content;
-
-        // return (new MultipleStatSheetExport($document['flist'], $document['breakdown_rows_count']))->download($pdf_title.'.xlsx');
-
     }
 
     public function getQuestionsCount($vox_id) {
@@ -2857,7 +3006,7 @@ class VoxesController extends AdminController {
         if( !empty($vox)) {
             return Response::json( [
                 'resp_count' => $vox->realRespondentsCountForAdminPurposes(),
-            ] );
+            ]);
         }
     }
 
@@ -2873,7 +3022,7 @@ class VoxesController extends AdminController {
         if( !empty($vox)) {
             return Response::json( [
                 'reward' => $vox->getRewardTotal(),
-            ] );
+            ]);
         }
     }
 
@@ -2889,7 +3038,7 @@ class VoxesController extends AdminController {
         if( !empty($vox)) {
             return Response::json( [
                 'duration' => '~'.ceil($vox->questions()->count()/6).'min',
-            ] );
+            ]);
         }
     }
 
@@ -3095,8 +3244,7 @@ class VoxesController extends AdminController {
         $question = VoxQuestion::find($q_id);
         $id = $question->vox_id;
 
-        if( !empty($question)) {
-
+        if(!empty($question)) {
             $trigger_question_id = null;
             $trigger_valid_answers = null;
 
@@ -3178,7 +3326,7 @@ class VoxesController extends AdminController {
 
     public function addQuestionContent($vox_id) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer', 'support'])) {
+        if(!in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
@@ -3194,7 +3342,6 @@ class VoxesController extends AdminController {
             $trigger_type = null;
 
             foreach ($vox->questions as $q) {
-                
                 if ($q->question_trigger) {
                     if($q->question_trigger!='-1') {
                         $triggers_ids = [];
@@ -3235,6 +3382,35 @@ class VoxesController extends AdminController {
                 'next' => $vox->questions->count()+1,
             ), 200)->header('X-Frame-Options', 'DENY');
         }
+    }
+
+    public function voxesHistory() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $history = VoxHistory::whereNotNull('admin_id');
+        if(!empty(request('search-admin-id'))) {
+            $history = $history->where('admin_id', request('search-admin-id'));
+        }
+        if(!empty(request('search-vox-id'))) {
+            $history = $history->where('vox_id', request('search-vox-id'));
+        }
+        if(!empty(request('search-question-id'))) {
+            $history = $history->where('question_id', request('search-question-id'));
+        }
+        $history = $history->orderBy('id', 'desc')->get();
+        $history = $this->paginate($history)->withPath('cms/vox/history/');
+
+        return $this->showView('voxes-history', array(
+            'admins' => Admin::get(),
+            'history' => $history,
+            'search_admin_id' => request('search-admin-id'),
+            'search_vox_id' => request('search-vox-id'),
+            'search_question_id' => request('search-question-id'),
+        ));
     }
 
     // public function duplicateSurvey($id) {
