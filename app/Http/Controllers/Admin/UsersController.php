@@ -749,6 +749,7 @@ class UsersController extends AdminController {
             'search_dentist_claims' => request('search-dentist-claims'),
             'exclude_countries' => request('exclude-countries'),
             'without_permaban' => request('without-permaban'),
+            'with_permaban' => request('with-permaban'),
             'exclude_unsubscribed' => request('exclude-unsubscribed'),
             'vip_access' => request('vip-access'),
             'civic_kyc_hash' => request('civic-kyc-hash'),
