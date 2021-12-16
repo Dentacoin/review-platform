@@ -1313,8 +1313,8 @@ class VoxesController extends AdminController {
             }
 
             if($trigger_qs != $item->dcn_questions_triggers) {
-                $history_info.= 'OLD Count dcn questions: '.$item->dcn_questions_triggers.'<br/>';
-                $history_info.= 'NEW Count dcn questions: '.$trigger_qs.'<br/>';
+                $history_info.= 'OLD Count dcn questions: '.(is_array($item->dcn_questions_triggers) ? implode(',', $item->dcn_questions_triggers) : $item->dcn_questions_triggers ).'<br/>';
+                $history_info.= 'NEW Count dcn questions: '.implode(',', $trigger_qs).'<br/>';
             }
 
             $item->dcn_questions_triggers = $trigger_qs;
