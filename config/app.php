@@ -196,6 +196,7 @@ return [
         Collective\Remote\RemoteServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
         PragmaRX\Google2FALaravel\ServiceProvider::class,
+        GrahamCampbell\Throttle\ThrottleServiceProvider::class,
         // Barryvdh\Debugbar\ServiceProvider::class,
 
     ],
@@ -249,6 +250,7 @@ return [
         'Session' => Illuminate\Support\Facades\Session::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Storage' => Illuminate\Support\Facades\Storage::class,
+        'Throttle' => GrahamCampbell\Throttle\Facades\Throttle::class,
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,

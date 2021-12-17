@@ -358,92 +358,102 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
 
 //Empty route
 $reviewRoutes = function () {
+
 	Route::any('test', 									'Front\YouTubeController@test');
 	Route::post('civic', 								'CivicController@add');
-	//Route::any('mobident', 								'MobidentController@reward');
 
 	Route::get('sitemap-trusted-reviews.xml', 			'Front\SitemapController@links');
 	Route::get('sitemap.xml', 							'Front\SitemapController@sitemap');
 	Route::get('robots.txt', 							'Front\RobotsController@content');
 
-	Route::get('user-logout',							'Auth\AuthenticateUser@getLogout');
-	Route::post('authenticate-user',					'Auth\AuthenticateUser@authenticateUser');
+	//after 20th refresh -> ban for 60 min
+	Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+		Route::get('user-logout',						'Auth\AuthenticateUser@getLogout');
+		Route::post('authenticate-user',				'Auth\AuthenticateUser@authenticateUser');
+	});
 
 	Route::post('get-popup', 							'Front\IndexController@getPopup');
 	
 	Route::group(['prefix' => '{locale?}'], function(){
 
-		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
-		Route::get('logout',									'Auth\AuthenticateUser@getLogout');
+		//after 20th refresh -> ban for 60 min
+		Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+			Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
+			Route::get('logout',									'Auth\AuthenticateUser@getLogout');
+		});
 
 		Route::get('widget/{id}/{hash}/{mode}', 				'WidgetController@widget');
 		Route::any('widget-new/{id}/{hash}', 					'WidgetController@widget_new');
 
 		Route::group(['namespace' => 'Front'], function () {
 
-			Route::any('/', 									'IndexController@home');
-			Route::post('index-down', 							'IndexController@index_down');
-			Route::post('index-dentist-down', 					'IndexController@index_dentist_down');
-			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
-			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
-			Route::get('remove-banner',							'IndexController@removeBanner');
-			
-			Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
-			Route::post('lead-magnet-step2', 					'IndexController@lead_magnet_step2');
-			Route::get('lead-magnet-session', 					'IndexController@lead_magnet_session');
-			Route::get('lead-magnet-results', 					'IndexController@lead_magnet_results');
+			//after 20th refresh -> ban for 60 min
+			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+				Route::any('/', 									'IndexController@home');
+				Route::post('index-down', 							'IndexController@index_down');
+				Route::post('index-dentist-down', 					'IndexController@index_dentist_down');
+				Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
+				Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
+				Route::get('remove-banner',							'IndexController@removeBanner');
+				
+				Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
+				Route::post('lead-magnet-step2', 					'IndexController@lead_magnet_step2');
+				Route::get('lead-magnet-session', 					'IndexController@lead_magnet_session');
+				Route::get('lead-magnet-results', 					'IndexController@lead_magnet_results');
+	
+				Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
+				Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
+				Route::get('unsubscribe-incomplete/{id}/{hash}', 	'UnsubscribeController@unsubscribe_incomplete');
+	
+				Route::post('register/upload', 						'RegisterController@upload');
+				Route::get('register', 								'RegisterController@register');
+				Route::post('verification-dentist', 				'RegisterController@verification_dentist');
+				Route::post('clinic-add-team', 						'RegisterController@clinic_add_team');
+				Route::post('add-working-hours',					'RegisterController@add_work_hours');
+	
+				Route::post('status', 								'LoginController@status');
 
-			Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
-			Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
-			Route::get('unsubscribe-incomplete/{id}/{hash}', 	'UnsubscribeController@unsubscribe_incomplete');
+				Route::any('dentist/{slug}/claim/{id}/',			'DentistController@claim_dentist');
+				Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
+				Route::get('dentist/{slug}/ask/{verification?}',	'DentistController@ask');
+	
+				Route::any('youtube', 								'DentistController@youtube');
+				Route::get('useful/{id}', 							'DentistController@useful');
+				Route::get('unuseful/{id}', 						'DentistController@unuseful');
+				Route::post('recommend-dentist', 					'DentistController@recommend_dentist');
+				Route::post('reorder-teams', 						'DentistController@reorderTeams');
+				Route::get('branches/{slug}', 						'BranchesController@branchesPage');	
+	
+				Route::get('page-not-found', 						'NotFoundController@home');
+	
+				Route::get('banned', 								'BannedController@home');
+				Route::get('profile-redirect', 						'BannedController@profile_redirect');
+			});
 
-			Route::post('register/upload', 						'RegisterController@upload');
-			Route::get('register', 								'RegisterController@register');
-			Route::post('verification-dentist', 				'RegisterController@verification_dentist');
-			Route::post('clinic-add-team', 						'RegisterController@clinic_add_team');
-			Route::post('add-working-hours',					'RegisterController@add_work_hours');
 			Route::post('register-invite', 						'RegisterController@register_invite');
 			Route::post('invite-dentist', 						'RegisterController@invite_dentist');
-
-			Route::post('status', 								'LoginController@status');
-
-			//Route::get('vpn', 									'VpnController@list');
 
 			Route::get('dentists/{query?}/{filter?}', 			'DentistsController@search');
 			Route::get('dentist-listings-by-country', 			'DentistsController@country');
 			Route::get('dentists-in-{country_slug}', 			'DentistsController@state');
 			Route::get('dentists-in-{country_slug}/{state}', 	'DentistsController@city');
 
-			Route::any('dentist/{slug}/claim/{id}/',			'DentistController@claim_dentist');
-			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
-			Route::get('dentist/{slug}/ask/{verification?}',	'DentistController@ask');
 			Route::any('dentist/{slug}/{review_id}', 			'DentistController@list');
 			Route::any('dentist/{slug}', 						'DentistController@list');
 			Route::post('dentist-down', 						'DentistController@dentist_down');
-			Route::any('youtube', 								'DentistController@youtube');
 			Route::any('full-review/{id}',						'DentistController@fullReview');
 			Route::get('review/{id}', 							'DentistController@fullReview');
-			Route::get('useful/{id}', 							'DentistController@useful');
-			Route::get('unuseful/{id}', 						'DentistController@unuseful');
-			Route::post('recommend-dentist', 					'DentistController@recommend_dentist');
 			Route::post('facebook-tab', 						'DentistController@dentist_fb_tab');
 			Route::any('facebook-tab-reviews', 					'DentistController@dentist_fb_tab_reviews');
 			Route::post('dentist-fb-tab', 						'DentistController@fb_tab');
-			Route::post('reorder-teams', 						'DentistController@reorderTeams');
-            Route::get('branches/{slug}', 						'BranchesController@branchesPage');	
-
-			Route::get('page-not-found', 						'NotFoundController@home');
-
-			Route::get('faq', 									'FaqController@home');
-
+	
 			Route::post('profile/invite-new', 					'ProfileController@invite_team_member');
 			Route::post('profile/add-existing-dentist-team', 	'ProfileController@invite_existing_team_member');
 			Route::any('profile/dentists/invite', 				'ProfileController@inviteDentist');
 
-			Route::get('banned', 								'BannedController@home');
-			Route::get('profile-redirect', 						'BannedController@profile_redirect');
-
 			Route::any('invite-new-dentist', 					'AddDentistController@invite_new_dentist');
+	
+			Route::get('faq', 									'FaqController@home');
 
 			Route::group(['middleware' => 'auth:web'], function () {
 
@@ -491,13 +501,10 @@ $reviewRoutes = function () {
 				Route::post('loginas', 									'BranchesController@loginas');
 				Route::post('delete-branch', 							'BranchesController@deleteBranch');				
 			});
-
-			Route::get('{query?}/{filter?}', 					'DentistsController@search')->where('locale', '(en)');
-
+			
+			Route::get('{query?}/{filter?}', 							'DentistsController@search')->where('locale', '(en)');
 		});
 	});
-	// Route::any('/{any}', 										'Front\NotFoundController@home')->where('any', '.*');
-	// Route::any('page-not-found', 								'Front\NotFoundController@home');
 };
 Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
 Route::domain('urgent.reviews.dentacoin.com')->group($reviewRoutes);
@@ -511,80 +518,92 @@ $voxRoutes = function () {
 
 	Route::post('get-popup', 									'Vox\IndexController@getPopup');
 
-	Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
+	//after 20th refresh -> ban for 60 min
+	Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+		Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
 
-	Route::post('authenticate-user',							'Auth\AuthenticateUser@authenticateUser');
+		Route::post('authenticate-user',							'Auth\AuthenticateUser@authenticateUser');
+	});
 
-	Route::group(['prefix' => '{locale?}'], function(){
+	Route::group(['prefix' => '{locale?}'], function() {
 
-		Route::get('logout',									'Auth\AuthenticateUser@getLogout');
-		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
+		//after 20th refresh -> ban for 60 min
+		Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+			Route::get('logout',									'Auth\AuthenticateUser@getLogout');
+			Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
+		});
 
 		Route::group(['namespace' => 'Vox'], function () {
+			//after 20th refresh -> ban for 60 min
+			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+				Route::get('registration', 							'RegisterController@list');
 
-			Route::get('registration', 							'RegisterController@list');
+				Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
+				Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
+				Route::get('unsubscribe-incomplete/{id}/{hash}', 	'UnsubscribeController@unsubscribe_incomplete');
 
-			Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
-			Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
-			Route::get('unsubscribe-incomplete/{id}/{hash}', 	'UnsubscribeController@unsubscribe_incomplete');
-
-			Route::get('faq', 									'FaqController@home');
-
-			Route::get('banned', 								'BannedController@home');
-			Route::get('profile-redirect', 						'BannedController@profile_redirect');
+				Route::get('banned', 								'BannedController@home');
+				Route::get('profile-redirect', 						'BannedController@profile_redirect');
+				
+				Route::any('status', 								'LoginController@status');
+			});
 			
-			Route::any('status', 								'LoginController@status');
+			//after 100th refresh -> ban for 60 min
+			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:100,60'], function(){
+				Route::any('dental-survey-stats', 					'StatsController@home');
+				Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
+				Route::post('create-stat-pdf', 						'StatsController@createPdf');
+				Route::post('create-stat-png', 						'StatsController@createPng');
+				Route::any('download-statistics', 					'StatsController@download');
+				Route::any('download-pdf/{name}', 					'StatsController@download_file');
+				Route::any('download-png/{name}', 					'StatsController@download_file_png');
 
-			Route::any('dental-survey-stats', 					'StatsController@home');
-			Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
-			Route::post('create-stat-pdf', 						'StatsController@createPdf');
-			Route::post('create-stat-png', 						'StatsController@createPng');
-			Route::any('download-statistics', 					'StatsController@download');
-			Route::any('download-pdf/{name}', 					'StatsController@download_file');
-			Route::any('download-png/{name}', 					'StatsController@download_file_png');
+				Route::any('paid-dental-surveys', 					'IndexController@surveys_public');
+				Route::post('start-over', 							'VoxController@start_over');
+				Route::post('vox-public-down', 						'VoxController@vox_public_down');
+				Route::get('remove-banner',							'VoxController@removeBanner');
 
-			Route::any('paid-dental-surveys', 					'IndexController@surveys_public');
-			Route::any('paid-dental-surveys/{id}', 				'VoxController@vox');
-			Route::post('get-next-question', 					'VoxController@getNextQuestion');
-			Route::post('start-over', 							'VoxController@start_over');
-			Route::post('vox-public-down', 						'VoxController@vox_public_down');
-			Route::get('remove-banner',							'VoxController@removeBanner');
+				Route::any('daily-polls', 							'PollsController@list');
+				Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');
+				Route::any('daily-polls/{date}/stats', 				'PollsController@show_popup_stats_poll');
+				Route::post('poll/{id}', 							'PollsController@dopoll');
+				Route::post('get-poll-content/{id}', 				'PollsController@getPollContent');
+				Route::post('get-poll-stats/{id}', 					'PollsController@getPollStats');
+				Route::get('hide-dailypoll', 						'PollsController@hidePoll');
+				Route::get('polls-calendar-html', 					'PollsController@getCalendarHtml');
 
-			Route::any('daily-polls', 							'PollsController@list');
-			Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');
-			Route::any('daily-polls/{date}/stats', 				'PollsController@show_popup_stats_poll');
-			Route::post('poll/{id}', 							'PollsController@dopoll');
-			Route::post('get-poll-content/{id}', 				'PollsController@getPollContent');
-			Route::post('get-poll-stats/{id}', 					'PollsController@getPollStats');
-			Route::get('hide-dailypoll', 						'PollsController@hidePoll');
-			Route::get('polls-calendar-html', 					'PollsController@getCalendarHtml');
+				Route::get('dental-industry-reports', 							'PaidReportsController@home');
+				Route::get('dental-industry-reports/{slug}', 					'PaidReportsController@singleReport');
+				Route::any('dental-industry-reports/{slug}/checkout', 			'PaidReportsController@reportCheckout');
+				Route::any('dental-industry-reports/{slug}/payment/{id}', 		'PaidReportsController@reportPayment');
 
-			Route::any('profile/vox-iframe', 					'ProfileController@vox');
-
-			Route::get('dental-industry-reports', 							'PaidReportsController@home');
-			Route::get('dental-industry-reports/{slug}', 					'PaidReportsController@singleReport');
-			Route::any('dental-industry-reports/{slug}/checkout', 			'PaidReportsController@reportCheckout');
-			Route::any('dental-industry-reports/{slug}/payment/{id}', 		'PaidReportsController@reportPayment');
-
-			//Route::any('vpn', 									'VpnController@list');
-
-			Route::group(['middleware' => 'auth:web'], function () {
-				Route::post('profile/info/upload', 				'ProfileController@upload');
-				Route::post('social-profile', 					'ProfileController@socialProfile');
+				Route::get('faq', 									'FaqController@home');
 			});
 
-			Route::get('/', 									'IndexController@home');
-			Route::post('request-survey', 						'IndexController@request_survey');
-			Route::post('request-survey-patients', 				'IndexController@request_survey_patients');
-			Route::post('recommend', 							'IndexController@recommend');
-			Route::get('welcome-survey', 						'IndexController@welcome');
-			Route::any('voxes-sort', 							'IndexController@voxesSort');
-			Route::post('index-down', 							'IndexController@index_down');
-			Route::post('voxes-get', 							'IndexController@getVoxes');
+			Route::any('paid-dental-surveys/{id}', 					'VoxController@vox');
+			Route::post('get-next-question', 						'VoxController@getNextQuestion');
 
-			Route::get('page-not-found', 						'NotFoundController@home');
-			Route::get('{catch?}', 								'NotFoundController@catch');
+			Route::any('profile/vox-iframe', 						'ProfileController@vox');
 
+			Route::group(['middleware' => 'auth:web'], function () {
+				Route::post('profile/info/upload', 					'ProfileController@upload');
+				Route::post('social-profile', 						'ProfileController@socialProfile');
+			});
+			
+			//after 20th refresh -> ban for 60 min
+			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+				Route::get('/', 									'IndexController@home');
+				Route::post('request-survey', 						'IndexController@request_survey');
+				Route::post('request-survey-patients', 				'IndexController@request_survey_patients');
+				Route::post('recommend', 							'IndexController@recommend');
+				Route::any('voxes-sort', 							'IndexController@voxesSort');
+				Route::post('index-down', 							'IndexController@index_down');
+				Route::post('voxes-get', 							'IndexController@getVoxes');
+				Route::get('welcome-survey', 						'IndexController@welcome');
+
+				Route::get('page-not-found', 						'NotFoundController@home');
+				Route::get('{catch?}', 								'NotFoundController@catch');
+			});
 		});
 	});
 };
