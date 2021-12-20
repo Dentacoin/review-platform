@@ -589,6 +589,8 @@ $voxRoutes = function () {
 				Route::post('profile/info/upload', 					'ProfileController@upload');
 				Route::post('social-profile', 						'ProfileController@socialProfile');
 			});
+
+			Route::post('index-down', 								'IndexController@index_down');
 			
 			//after 20th refresh -> ban for 60 min
 			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
@@ -597,7 +599,6 @@ $voxRoutes = function () {
 				Route::post('request-survey-patients', 				'IndexController@request_survey_patients');
 				Route::post('recommend', 							'IndexController@recommend');
 				Route::any('voxes-sort', 							'IndexController@voxesSort');
-				Route::post('index-down', 							'IndexController@index_down');
 				Route::post('voxes-get', 							'IndexController@getVoxes');
 				Route::get('welcome-survey', 						'IndexController@welcome');
 
