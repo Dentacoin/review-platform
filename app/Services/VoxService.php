@@ -2166,6 +2166,13 @@ class VoxService {
                                 ];
                                 $ret['content'] = $contents[$prev_bans];
                             } else {
+                                file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/><br/>User ID: '.$user->id.'; <br/> Reallist count: '.$reallist->count().'; <br/> Start created_at: '.$start->created_at.'; <br/> Normal: '.$normal.'; <br/> Difference: '.$diff.';');
+
+                                file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/> Vox answers time:');
+                                foreach(VoxAnswer::where('vox_id', $vox->id)->where('user_id', $user->id)->get() as $va) {
+                                    file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/>'.$va->created_at);
+                                }
+
                                 $ban = $user->banUser('vox', 'too-fast', $vox->id, $question->id, $a);
 
                                 $ret['ban'] = true;

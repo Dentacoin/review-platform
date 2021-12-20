@@ -195,6 +195,7 @@ return [
                 'api' => 'api',
                 'api_withdraw' => 'api_withdraw',
                 'api-ban-appeals' => 'api-ban-appeals',
+                'too-fast-bans' => 'too-fast-bans',
             ),
         ),
     )

@@ -35,6 +35,8 @@
                             {!! @file_get_contents( base_path().'\/../api/storage/logs/withdraw.log' ) !!}
                         @elseif($type == 'api-ban-appeals')
                             {!! @file_get_contents( base_path().'\/../api/storage/logs/ban-appeals.log' ) !!}
+                        @elseif($type == 'too-fast-bans')
+                            {!! @file_get_contents( base_path().'/storage/logs/'.$type.'.log' ) !!}
                         @else
                             {!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel.log' ) !!}
                         @endif
