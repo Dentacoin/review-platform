@@ -2166,10 +2166,10 @@ class VoxService {
                                 ];
                                 $ret['content'] = $contents[$prev_bans];
                             } else {
-                                file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/><br/>User ID: '.$user->id.'; <br/> Reallist count: '.$reallist->count().'; <br/> Start created_at: '.$start->created_at.'; <br/> Normal: '.$normal.'; <br/> Difference: '.$diff.';');
+                                file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/><br/>User ID: '.$user->id.'; <br/> All answered questions count: '.$reallist->count().'; <br/> Time now: '.$start->created_at.'; <br/> Normal seconds for 10 answers: '.$normal.'; <br/> Time difference between 10 answers: '.$diff.'; Users last 10 answered questions time = '.($normal-$diff));
 
                                 file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/> Vox answers time:');
-                                foreach(VoxAnswer::where('vox_id', $vox->id)->where('user_id', $user->id)->get() as $va) {
+                                foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->get() as $va) {
                                     file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/>'.$va->created_at);
                                 }
 
