@@ -2173,8 +2173,8 @@ class VoxService {
 
                                 $ban_info = 'All answered questions count: '.$reallist->count().'; <br/> Time difference between 10 answers: '.$diff.'; Users last 10 answered questions time = '.($normal-$diff).' <br/> Vox answers time:';
 
-                                foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->get() as $va) {
-                                    $ban_info .= ' <br/>Question ID: '.$va->question_id.'; Answer number: '.$va->answer.'; Answer created: '.$va->created_at.';';
+                                foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->orderBy('id', 'desc')->take(15)->get() as $va) {
+                                    $ban_info .= ' <br/>Q ID: '.$va->question_id.'; Answer: '.$va->answer.'; Created: '.$va->created_at.';';
                                     file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/>'.$va->created_at);
                                 }
 
