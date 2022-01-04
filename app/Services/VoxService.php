@@ -1494,7 +1494,7 @@ class VoxService {
 
         $ret['success'] = false;
 
-        if(empty($user) || empty($vox) || !in_array($user->status, config('dentist-statuses.approved'))) {
+        if(empty($user) || empty($vox) || !in_array($user->status, config('dentist-statuses.approved')) || $user->isBanned('vox')) {
             return Response::json( $ret );
         }
         
@@ -2174,7 +2174,7 @@ class VoxService {
                                 }
 
                                 $ban = $user->banUser('vox', 'too-fast', $vox->id, $question->id, $a);
-
+                                
                                 $ret['ban'] = true;
                                 $ret['ban_duration'] = $ban['days'];
                                 $ret['ban_times'] = $ban['times'];
@@ -2201,6 +2201,8 @@ class VoxService {
                                 ->where('user_id', $user->id)
                                 ->delete();
                             }
+
+                            return Response::json( $ret );
                         }
                     }
 
