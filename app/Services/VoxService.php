@@ -2201,7 +2201,7 @@ class VoxService {
                     });
 
                     $ppp = 10;
-                    if( $reallist->count() && $reallist->count()%$ppp==0) { //confirmed from Petya for is_partner 05.11.21
+                    if( $reallist->count() && $reallist->count()%$ppp==0 && !$testmode && !$user->is_partner ) { //confirmed from Petya for is_partner 05.11.21
 
                         $start = $reallist->forPage(1, $ppp)->last();
                         $diff = Carbon::now()->diffInSeconds( $start->created_at );
