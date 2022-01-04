@@ -2166,14 +2166,22 @@ class VoxService {
                                 ];
                                 $ret['content'] = $contents[$prev_bans];
                             } else {
+
                                 file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/><br/>User ID: '.$user->id.'; <br/> All answered questions count: '.$reallist->count().'; <br/> Time now: '.$start->created_at.'; <br/> Normal seconds for 10 answers: '.$normal.'; <br/> Time difference between 10 answers: '.$diff.'; Users last 10 answered questions time = '.($normal-$diff));
 
                                 file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/> Vox answers time:');
+
+                                $ban_info = 'All answered questions count: '.$reallist->count().'; <br/> Time difference between 10 answers: '.$diff.'; Users last 10 answered questions time = '.($normal-$diff).' <br/> Vox answers time:';
+
                                 foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->get() as $va) {
+                                    $ban_info .= ' <br/>Question ID: '.$va->question_id.'; Answer number: '.$va->answer.'; Answer created: '.$va->created_at.';';
                                     file_put_contents( base_path().'/storage/logs/too-fast-bans.log', file_get_contents(base_path().'/storage/logs/too-fast-bans.log').' <br/>'.$va->created_at);
                                 }
 
                                 $ban = $user->banUser('vox', 'too-fast', $vox->id, $question->id, $a);
+                                $new_ban = $ban['ban'];
+                                $new_ban->ban_info = $ban_info;
+                                $new_ban->save();
                                 
                                 $ret['ban'] = true;
                                 $ret['ban_duration'] = $ban['days'];
