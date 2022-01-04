@@ -1625,7 +1625,7 @@
                                     'ban_for'           => array('template' => 'admin.parts.table-bans-for'),
                                     'question_id'       => array('template' => 'admin.parts.table-user-ban-question', 'label' => 'Question'),
                                     'answer'            => array('label' => 'Answer'),
-                                    'ban_info'          => array('label' => 'Info'),
+                                    'ban_info'          => array('format' => 'nl2br', 'label' => 'Info'),
                                     'admin_description' => array('label' => 'Description'),
                                     'delete'            => array('template' => 'admin.parts.table-bans-delete'),
                                 ],
