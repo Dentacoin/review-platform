@@ -2,15 +2,14 @@
 
 namespace App\Exceptions;
 
-use Log;
-use Request;
-use Session;
-use Exception;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\AuthenticationException;
 
-class Handler extends ExceptionHandler
-{
+use Exception;
+use Request;
+use Log;
+
+class Handler extends ExceptionHandler {
     /**
      * A list of the exception types that should not be reported.
      *
@@ -36,7 +35,8 @@ class Handler extends ExceptionHandler
      */
      public function report(Exception $exception)
     {
-        if( app()->runningInConsole() || $exception instanceof \Illuminate\Session\TokenMismatchException || get_class($exception) == 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' || get_class($exception) == 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' || get_class($exception) == 'League\OAuth2\Server\Exception\OAuthServerException' ) {
+        
+        if( app()->runningInConsole() || $exception instanceof \Illuminate\Session\TokenMismatchException || in_array(get_class($exception), ['Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'League\OAuth2\Server\Exception\OAuthServerException', 'Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException']) ) {
             ;
         } else {
             if(Request::url() != 'https://dentavox.dentacoin.com/get-unseen-notifications-count' && Request::url() != 'https://reviews.dentacoin.com/get-unseen-notifications-count' ) {
