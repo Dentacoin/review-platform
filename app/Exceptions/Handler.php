@@ -33,8 +33,7 @@ class Handler extends ExceptionHandler {
      * @param  \Exception  $exception
      * @return void
      */
-     public function report(Exception $exception)
-    {
+    public function report(Exception $exception) {
         
         if( app()->runningInConsole() || $exception instanceof \Illuminate\Session\TokenMismatchException || in_array(get_class($exception), ['Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'League\OAuth2\Server\Exception\OAuthServerException', 'Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException']) ) {
             ;
@@ -58,8 +57,7 @@ class Handler extends ExceptionHandler {
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
-    {
+    public function render($request, Exception $exception) {
         return parent::render($request, $exception);
     }
 
@@ -70,12 +68,10 @@ class Handler extends ExceptionHandler {
      * @param  \Illuminate\Auth\AuthenticationException  $exception
      * @return \Illuminate\Http\Response
      */
-    protected function unauthenticated($request, AuthenticationException $exception)
-    {
+    protected function unauthenticated($request, AuthenticationException $exception) {
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-
 
         session([
             'our-intended' => $request->url()
