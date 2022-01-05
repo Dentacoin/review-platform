@@ -22,7 +22,6 @@ class VoxAnswerOld extends Model {
         'household_children',
         'job_title',
         'income',
-        'is_scam',
         'is_completed',
         'is_skipped',
         'is_admin'
