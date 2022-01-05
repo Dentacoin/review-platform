@@ -92,17 +92,13 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('users/users/info/{id}',								'UsersController@userInfo');
 	
 	Route::get('users/rewards',										'UsersController@rewards');
-
+	Route::get('users/bans',										'UsersController@bans');
 	Route::get('users/users_stats', 								'UsersController@usersStats');
-
 	Route::any('users/registrations', 								'UsersController@registrations');
-
 	Route::any('users/incomplete-registrations', 					'UsersController@incompleteRegs');
 	Route::any('users/lead-magnet', 								'UsersController@leadMagnet');
-
 	Route::get('users/anonymous_users', 							'AnonymousUsersController@anonymous_list');
 	Route::get('users/anonymous_users/delete/{id}',					'AnonymousUsersController@anonymousDelete');
-
 
 	Route::get('invites',									'InvitesController@list');
 	Route::get('invites/delete/{id}',						'InvitesController@delete');

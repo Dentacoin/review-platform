@@ -2918,4 +2918,63 @@ class UsersController extends AdminController {
             'pagination_link' => $pagination_link,
         ));
     }
+
+    public function bans() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $bans = UserBan::withTrashed()->orderBy('id', 'desc');
+
+        if(!empty(request('search-user-id'))) {
+            $bans = $bans->where('user_id', request('search-user-id'));
+        }
+
+        if(!empty(request('search-email'))) {
+            $bans = $bans->whereHas('user', function($query) {
+                $query->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
+            });
+        }
+
+        if(!empty(request('search-type'))) {
+            $bans = $bans->where('type', request('search-type') );
+        }
+
+        $total_count = $bans->count();
+        $page = max(1,intval(request('page')));
+        
+        $ppp = 25;
+        $adjacents = 2;
+        $total_pages = ceil($total_count/$ppp);
+
+        $paginations = AdminHelper::paginationsFunction($total_pages, $adjacents, $page);
+        $start = $paginations['start'];
+        $end = $paginations['end'];
+
+        $bans = $bans->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        $pagination_link = '';
+
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search' && $key != 'page') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
+        }
+
+        return $this->showView('users-bans', array(
+            'items' => $bans,
+            'total_count' => $total_count,
+            'search_user_id' =>  request('search-user-id'),
+            'search_email' =>  request('search-email'),
+            'search_type' =>  request('search-type'),
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
+            'pagination_link' => $pagination_link,
+        ));
+    }
 }

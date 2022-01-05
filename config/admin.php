@@ -11,7 +11,8 @@ return [
                 'registrations' => 'registrations',
                 'incomplete-registrations' => 'incomplete-registrations',
                 'lead-magnet' => 'lead-magnet',
-                'rewards' => 'rewards'
+                'rewards' => 'rewards',
+                'bans' => 'bans'
             ),
             'js' => array(
                 'users.js',
@@ -195,7 +196,7 @@ return [
                 'api' => 'api',
                 'api_withdraw' => 'api_withdraw',
                 'api-ban-appeals' => 'api-ban-appeals',
-                'too-fast-bans' => 'too-fast-bans',
+                // 'too-fast-bans' => 'too-fast-bans',
             ),
         ),
     )
