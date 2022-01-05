@@ -2278,7 +2278,7 @@ class VoxService {
                                 ->where('user_id', $user->id)
                                 ->delete();
                                 
-                                VoxAnswer::where('vox_id', $vox->id)
+                                VoxAnswerOld::where('vox_id', $vox->id)
                                 ->where('user_id', $user->id)
                                 ->delete();
                             }
