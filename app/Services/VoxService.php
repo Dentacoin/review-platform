@@ -2243,7 +2243,7 @@ class VoxService {
 
                                 $ban_info = 'All answered questions count: '.$reallist->count().'; <br/> Time difference between 10 answers: '.$diff.'; Users last 10 answered questions time = '.($normal-$diff).' <br/> Vox answers time:';
 
-                                foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->orderBy('id', 'desc')->take(15)->get() as $va) {
+                                foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->orderBy('id', 'desc')->take(10)->get() as $va) {
                                     $ban_info .= ' <br/>Q ID: '.$va->question_id.'; Answer: '.$va->answer.'; Created: '.$va->created_at.';';
                                 }
 
