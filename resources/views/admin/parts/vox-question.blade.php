@@ -213,13 +213,30 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group clearfix">
+                            <div class="col-md-5 hint-for-scale">
+                                * If you want to add additional answers - add them as you add normal answers
+                            </div>
+                        </div>
+
                         <div class="form-group clearfix">
                             <label class="col-md-2 control-label" for="remove_answers_with_diez">Remove answers with #</label>
                             <input type="checkbox" name="remove_answers_with_diez" value="1" id="remove_answers_with_diez" style="vertical-align: sub; margin-top: 10px;" {!! !empty($question) && $question->remove_answers_with_diez ? 'checked="checked"' : '' !!} />
                         </div>
-                        <div class="col-md-5 hint-for-scale">
-                            * If you want to add additional answers - add them as you add normal answers
-                        </div>
+
+                        @if(!empty($question->{'answers:'.$code}))
+                            @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
+                                @if(mb_strpos($ans, '!') !== false || mb_strpos($ans, '#') !== false )
+                                    <div class="form-group clearfix">
+                                        <label class="col-md-2 control-label">Show answers with !</label>
+                                        <input type="checkbox" name="show_answers_with_еxclamation_mark" value="1" id="show_answers_with_еxclamation_mark" style="vertical-align: sub; margin-top: 10px;" {!! !empty($question) && $question->show_answers_with_еxclamation_mark ? 'checked="checked"' : '' !!} />
+                                    </div>
+                                    <p>Hint: If "Show answers with !" is checked - the the additional answers won't be shown. Let me know if we should change that.</p>
+                                    @break
+                                @endif
+                            @endforeach
+                        @endif
                     @endif
 
                     @if(!empty($question) && !empty($question->{'answers:'.$code}) )

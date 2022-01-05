@@ -2463,14 +2463,16 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Remove user\'s vip access START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $users_with_vip_access = User::where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now()->addHours(2))->get();
+            $users_with_vip_access = User::withTrashed()->where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now()->addHours(2))->get();
 
             if($users_with_vip_access->isNotEmpty()) {
                 foreach($users_with_vip_access as $user) {
                     $user->vip_access = false;
                     $user->save();
 
-                    $user->sendGridTemplate(119, null, 'vox');
+                    if(empty($user->deleted_at)) {
+                        $user->sendGridTemplate(119, null, 'vox');
+                    }
                 }
             }
 

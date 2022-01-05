@@ -284,28 +284,72 @@ class VoxesController extends AdminController {
                     ]);
                 }
 
+                if($value != $item->featured) {
+                    $history_info = 'OLD Featured: '.$item->featured.'<br/>';
+                    $history_info.= 'NEW Featured: '.$value.'<br/>';
+
+                    $vox_history = new VoxHistory;
+                    $vox_history->admin_id = $this->user->id;
+                    $vox_history->vox_id = $id;
+                    $vox_history->info = $history_info;
+                    $vox_history->save();
+                }
+
                 $item->$field = $value=='0' ? 0 : 1;                
             }
+
             if($field=='type') {
+                if($value != $item->type) {
+                    $history_info = 'OLD Type: '.$item->type.'<br/>';
+                    $history_info.= 'NEW Type: '.$value.'<br/>';
+
+                    $vox_history = new VoxHistory;
+                    $vox_history->admin_id = $this->user->id;
+                    $vox_history->vox_id = $id;
+                    $vox_history->info = $history_info;
+                    $vox_history->save();
+                }
+
                 $item->$field = $value=='0' ? 'hidden' : 'normal';
                 $item->last_count_at = null;
 
                 if ($value=='1' && $item->type == 'hidden' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
-
                     $item->activeVox();
                 }
-
             }
+
             if($field=='has_stats') {
                 if($item->stats_questions->isEmpty()) {
                     $message_error = 'Missing stats questions';
                 } else {
+                    if($value != $item->has_stats) {
+                        $history_info = 'OLD Has stats: '.$item->has_stats.'<br/>';
+                        $history_info.= 'NEW Has stats: '.$value.'<br/>';
+
+                        $vox_history = new VoxHistory;
+                        $vox_history->admin_id = $this->user->id;
+                        $vox_history->vox_id = $id;
+                        $vox_history->info = $history_info;
+                        $vox_history->save();
+                    }
                     $item->$field = $value=='0' ? 0 : 1;
                 }
             }
+
             if($field=='stats_featured') {
+                if($value != $item->stats_featured) {
+                    $history_info = 'OLD Stats featured: '.$item->stats_featured.'<br/>';
+                    $history_info.= 'NEW Stats featured: '.$value.'<br/>';
+
+                    $vox_history = new VoxHistory;
+                    $vox_history->admin_id = $this->user->id;
+                    $vox_history->vox_id = $id;
+                    $vox_history->info = $history_info;
+                    $vox_history->save();
+                }
                 $item->$field = $value=='0' ? 0 : 1;
             }
+
             $item->save();
         }
 
@@ -1521,6 +1565,10 @@ class VoxesController extends AdminController {
             $history_info.= 'OLD Remove answers with diez: '.$question->remove_answers_with_diez.'<br/>';
             $history_info.= 'NEW Remove answers with diez: '.$this->request->input('remove_answers_with_diez').'<br/>';
         }
+        if($this->request->input('show_answers_with_еxclamation_mark') != $question->show_answers_with_еxclamation_mark) {
+            $history_info.= 'OLD Show answers with exclamation mark: '.$question->show_answers_with_еxclamation_mark.'<br/>';
+            $history_info.= 'NEW Show answers with exclamation mark: '.$this->request->input('show_answers_with_еxclamation_mark').'<br/>';
+        }
         if($this->request->input('trigger_type') != $question->trigger_type) {
             $history_info.= 'OLD Trigger type: '.$question->trigger_type.'<br/>';
             $history_info.= 'NEW Trigger type: '.$this->request->input('trigger_type').'<br/>';
@@ -1559,6 +1607,7 @@ class VoxesController extends AdminController {
         $question->image_in_question = !empty($data['image_in_question']) ? $data['image_in_question'] : null;
         $question->prev_q_id_answers = !empty($data['prev_q_id_answers']) ? $data['prev_q_id_answers'] : null;
         $question->remove_answers_with_diez = !empty($data['remove_answers_with_diez']) ? $data['remove_answers_with_diez'] : null;
+        $question->show_answers_with_еxclamation_mark = !empty($data['show_answers_with_еxclamation_mark']) ? $data['show_answers_with_еxclamation_mark'] : null;
               
         if( !empty($data['trigger_type']) ) {
             $question->trigger_type = $data['trigger_type'];
@@ -3223,6 +3272,18 @@ class VoxesController extends AdminController {
         $item = Vox::find($id);
 
         if(!empty($item)) {
+
+            if($this->request->input('type') != $item->type) {
+                $history_info = 'OLD Type: '.$item->type.'<br/>';
+                $history_info.= 'NEW Type: '.$this->request->input('type').'<br/>';
+
+                $vox_history = new VoxHistory;
+                $vox_history->admin_id = $this->user->id;
+                $vox_history->vox_id = $id;
+                $vox_history->info = $history_info;
+                $vox_history->save();
+            }
+            
             $item->type = 'hidden';
             $item->save();
 
