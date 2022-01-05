@@ -834,7 +834,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                                     $message->from($sender, $sender_name);
                                     $message->to( 'admin@dentacoin.com' );
                                     $message->cc( [
-                                        'stoyan.georgiev@dentaprime.com',
                                         'petya.ivanova@dentacoin.com'
                                     ] );
                                     //$message->to( 'dokinator@gmail.com' );
