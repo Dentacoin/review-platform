@@ -398,8 +398,13 @@ class VoxService {
                             foreach($diffs as $key_diff => $diff) {
                                 if(str_contains($diff, '!')) {
                                     $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
-                                    $array['answers_shown'][] = $key_diff+1;
                                     break;
+                                }
+                            }
+                            
+                            foreach($diffs as $key_diff => $diff) {
+                                if(str_contains($diff, '!')) {
+                                    $array['answers_shown'][] = $key_diff+1;
                                 }
                             }
 
