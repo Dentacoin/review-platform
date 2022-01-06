@@ -34,6 +34,10 @@ class UserBan extends Model {
     public function question() {
         return $this->hasOne('App\Models\VoxQuestion', 'id', 'question_id');
     }
+
+    public function user() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
+    }
 }
 
 ?>
