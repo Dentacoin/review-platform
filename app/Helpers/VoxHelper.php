@@ -87,19 +87,33 @@ class VoxHelper {
                 $translated_answers = [];
 
                 foreach($answers as $a) {
-                    $ch = curl_init();
+                    if(mb_substr($a, 0, 1)=='!') {
+                        $ch = curl_init();
 
-                    curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
-                    curl_setopt($ch, CURLOPT_POST, 1);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS,
-                                "auth_key=".env('DEEPL_AUTH_KEY')."&text=".$a."&target_lang=".strtoupper($lang_code));
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
+                        curl_setopt($ch, CURLOPT_POST, 1);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".env('DEEPL_AUTH_KEY')."&text=".mb_substr($a, 1)."&target_lang=".strtoupper($lang_code));
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-                    $server_output = curl_exec ($ch);
-                    curl_close ($ch);
+                        $server_output = curl_exec ($ch);
+                        curl_close ($ch);
 
-                    $translated_answers[] = isset(json_decode($server_output, true)['translations']) ? json_decode($server_output, true)['translations'][0]['text'] : '';
+                        $translated_answers[] = isset(json_decode($server_output, true)['translations']) ? '!'.json_decode($server_output, true)['translations'][0]['text'] : $a;
+                    } else {
+                        $ch = curl_init();
+
+                        curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
+                        curl_setopt($ch, CURLOPT_POST, 1);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".env('DEEPL_AUTH_KEY')."&text=".$a."&target_lang=".strtoupper($lang_code));
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                        $server_output = curl_exec ($ch);
+                        curl_close ($ch);
+
+                        $translated_answers[] = isset(json_decode($server_output, true)['translations']) ? json_decode($server_output, true)['translations'][0]['text'] : $a;
+                    }                    
                 }
 
                 $translation->answers = json_encode( $translated_answers, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE );
