@@ -387,32 +387,37 @@ class VoxService {
 
                 if($prev_answers->first()->answer != 0) {
 
-                    if(mb_strpos($answers_prev_q[$prev_answers->pluck('answer')->toArray()[0] - 1], '!') !== false) {
+                    if(mb_strpos($answers_prev_q[$prev_answers->pluck('answer')->toArray()[0] - 1], '!') !== false) { // if the answer is with !
                         return 'skip-dvq:'.$next_question->id;
                     } else {
-                        if(count($answers_prev_q) != count($answers_next_q)) {
-                            // dd($prev_answers->pluck('answer')->toArray());
-                            
-                            $diffs = array_diff($answers_next_q,$answers_prev_q);
 
-                            foreach($diffs as $key_diff => $diff) {
-                                if(str_contains($diff, '!')) {
-                                    $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
-                                    break;
-                                }
-                            }
-                            
-                            foreach($diffs as $key_diff => $diff) {
-                                if(str_contains($diff, '!')) {
-                                    $array['answers_shown'][] = $key_diff+1;
-                                }
-                            }
+                        if($next_question->show_answers_with_еxclamation_mark) {
+                            $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
 
-                            if(!isset($array['answers_shown'])) {
-                                return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+                            foreach($answers_next_q as $key => $anq) {
+                                if(str_contains($anq, '!')) {
+                                    $array['answers_shown'][] = $key+1;
+                                }
                             }
                         } else {
-                            return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+
+                            if(count($answers_prev_q) != count($answers_next_q)) {
+                                // dd($prev_answers->pluck('answer')->toArray());
+                                
+                                $diffs = array_diff($answers_next_q,$answers_prev_q);
+
+                                $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+                                
+                                foreach($diffs as $key_diff => $diff) {
+                                    $array['answers_shown'][] = $key_diff+1;
+                                }
+
+                                if(!isset($array['answers_shown'])) {
+                                    return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+                                }
+                            } else {
+                                return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+                            }
                         }
                     }
                 } else {
@@ -433,31 +438,51 @@ class VoxService {
                     }
                     // dd('2', $answers_to_be_shown, $answers_prev_q);
 
-                    if(count($answers_to_be_shown) <= 1) {
-                        return 'skip-dvq:'.$next_question->id;
+                    if($next_question->show_answers_with_еxclamation_mark) {
+                        $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+
+                        foreach($answers_next_q as $key => $anq) {
+                            if(str_contains($anq, '!')) {
+                                $array['answers_shown'][] = $key+1;
+                            }
+                        }
                     } else {
-                        $array['answers_shown'] = $answers_to_be_shown;
+                        if(count($answers_to_be_shown) <= 1) {
+                            return 'skip-dvq:'.$next_question->id;
+                        } else {
+                            $array['answers_shown'] = $answers_to_be_shown;
 
-                        if(count($answers_prev_q) != count($answers_next_q)) {
-                            $diffs = array_diff($answers_next_q,$answers_prev_q);
+                            if(count($answers_prev_q) != count($answers_next_q)) {
+                                $diffs = array_diff($answers_next_q,$answers_prev_q);
 
-                            if(!empty($diffs)) {
-                                foreach($diffs as $key_diff => $diff) {
-                                    if(!str_contains($diff, '#')) {
-                                        $array['answers_shown'][] = $key_diff+1;
+                                if(!empty($diffs)) {
+                                    foreach($diffs as $key_diff => $diff) {
+                                        if(!str_contains($diff, '#')) {
+                                            $array['answers_shown'][] = $key_diff+1;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 } else {
-                    $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
-                    if(count($answers_prev_q) != count($answers_next_q)) {
-                        $diffs = array_diff($answers_next_q,$answers_prev_q);
+                    if($next_question->show_answers_with_еxclamation_mark) {
+                        $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
 
-                        if(!empty($diffs)) {
-                            foreach($diffs as $key_diff => $diff) {
-                                $array['answers_shown'][] = $key_diff+1;
+                        foreach($answers_next_q as $key => $anq) {
+                            if(str_contains($anq, '!')) {
+                                $array['answers_shown'][] = $key+1;
+                            }
+                        }
+                    } else {
+                        $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+                        if(count($answers_prev_q) != count($answers_next_q)) {
+                            $diffs = array_diff($answers_next_q,$answers_prev_q);
+
+                            if(!empty($diffs)) {
+                                foreach($diffs as $key_diff => $diff) {
+                                    $array['answers_shown'][] = $key_diff+1;
+                                }
                             }
                         }
                     }

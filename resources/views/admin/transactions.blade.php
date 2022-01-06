@@ -200,7 +200,7 @@
     <br/>
     <br/>
     <br/>
-
+    
     Current gas price: <b>{{ App\Models\GasPrice::find(1)->gas_price }}</b> <br/>
     Max gas price: <b>{{ App\Models\GasPrice::find(1)->max_gas_price }}</b> <br/>
     Max gas price for paid by user transactions: <b>{{ App\Models\GasPrice::find(1)->max_gas_price_approval }}</b> <br/><br/>
@@ -214,8 +214,12 @@
                     <h4 class="panel-title">Withdrawals conditions</h4>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" method="post" action="{{ url('cms/transactions/conditions') }}">
+                    @if($admin->role=='super_admin')
+                        <form class="form-horizontal" method="post" action="{{ url('cms/transactions/conditions') }}">
                         {!! csrf_field() !!}
+                    @else
+                        <div class="form-horizontal">
+                    @endif
                         <div class="form-group">
                             <label class="col-md-2">Min amount</label>
                             <div class="col-md-4">
@@ -278,7 +282,12 @@
                                 </div>
                             </div>
                         @endif
-                    </form>
+                    
+                    @if($admin->role=='super_admin')
+                        </form>
+                    @else
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

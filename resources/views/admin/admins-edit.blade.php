@@ -85,6 +85,18 @@
                                 <br/>
                             @endforeach
                         </div>
+                        @if($item->role != 'super_admin')
+                            <label class="col-md-2 control-label">Email template platform access</label>
+                            <div class="col-md-4">
+                                @foreach(config('email-templates-platform') as $k => $v)
+                                    <label for="email-{{ $k }}">
+                                        <input id="email-{{ $k }}" type="checkbox" name="email_template_type[]" value="{{ $k }}" {!! in_array($k, $item->email_template_type) ? 'checked="checked"' : '' !!} />
+                                        {{ $v }}
+                                    </label>
+                                    <br/>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
 
                     <div class="form-group">

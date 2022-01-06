@@ -150,7 +150,6 @@ class AdminsController extends AdminController {
                 ->withInput()
                 ->withErrors($validator);
             } else {
-                
                 $item->username = $this->request->input('username');
                 if(!empty( $this->request->input('password') )) {
                     $item->password = bcrypt($this->request->input('password'));
@@ -162,6 +161,7 @@ class AdminsController extends AdminController {
                 $item->lang_from = $this->request->input('lang_from');
                 $item->lang_to = $this->request->input('lang_to');
                 $item->text_domain = !empty($this->request->input('text_domain')) ? implode(',', $this->request->input('text_domain')) : '';
+                $item->email_template_type = $this->request->input('email_template_type');
                 $item->user_id = $this->request->input('user_id');
                 $item->save();
 

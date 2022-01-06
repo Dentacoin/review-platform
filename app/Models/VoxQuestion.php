@@ -36,6 +36,7 @@ class VoxQuestion extends Model {
         'is_control',
         'prev_q_id_answers',
         'remove_answers_with_diez',
+        'show_answers_with_еxclamation_mark',
         'order',
         'number_limit',
         'used_for_stats',

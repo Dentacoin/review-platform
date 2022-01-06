@@ -24,57 +24,67 @@ class EmailsController extends AdminController {
 
     public function list( $what=null ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
+        $with_permissions = !empty($what) && in_array($what, Auth::guard('admin')->user()->email_template_type );
 
-        if(!empty(request('search-name')) || !empty(request('search-id')) || !empty(request('search-sendgrid-id')) || !empty(request('search-platform')) || !empty(request('without-category'))) {
-            $templates = EmailTemplate::whereNull('not_used')->orderBy('id', 'ASC');
-
-            if(!empty(request('search-name'))) {
-                $s_name = '%'.trim(request('search-name')).'%';
-                $templates = $templates->where( function($query) use ($s_name) {
-                    $query->where('name', 'LIKE', $s_name)
-                    ->orWhereHas('translations', function ($queryy) use ($s_name) {
-                        $queryy->where('title', 'LIKE', $s_name);
-                    });
-                });
-
-                // $templates = $templates->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
-                // $templates = $templates->where('title', 'LIKE', '%'.trim(request('search-name')).'%');
-                // $templates = $templates->where('subject', 'LIKE', '%'.trim(request('search-name')).'%');
-            }
-            if(!empty(request('search-id'))) {
-                $templates = $templates->where('id', request('search-id') );
-            }
-
-            if(!empty(request('search-sendgrid-id'))) {
-                $si = request('search-sendgrid-id');
-                $templates = $templates->whereHas('translations', function ($query) use ($si) {
-                    $query->where('sendgrid_template_id', 'LIKE', $si);
-                });
-            }
-
-            if(!empty(request('search-platform'))) {
-                $templates = $templates->where('type', request('search-platform') );
-            }
-
-            if(!empty(request('without-category'))) {
-                $templates = $templates->whereNull('subscribe_category');
-            }
-
-            if(!empty(request('search-category'))) {
-                $templates = $templates->where('subscribe_category', request('search-category'));
-            }
-
-            $templates = $templates->get();
-        } else {
-
+        if($with_permissions) {
             if(!in_array($what, Email::$template_types)) {
                 return redirect('cms/'.$this->current_page.'/'.current(Email::$template_types));
             }
             $templates = EmailTemplate::whereNull('not_used')->where('type', $what)->orderBy('id', 'ASC')->get();
+        } else {
+
+            if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
+                $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+                return redirect('cms/home');            
+            }
+    
+            if(!empty(request('search-name')) || !empty(request('search-id')) || !empty(request('search-sendgrid-id')) || !empty(request('search-platform')) || !empty(request('without-category'))) {
+                $templates = EmailTemplate::whereNull('not_used')->orderBy('id', 'ASC');
+    
+                if(!empty(request('search-name'))) {
+                    $s_name = '%'.trim(request('search-name')).'%';
+                    $templates = $templates->where( function($query) use ($s_name) {
+                        $query->where('name', 'LIKE', $s_name)
+                        ->orWhereHas('translations', function ($queryy) use ($s_name) {
+                            $queryy->where('title', 'LIKE', $s_name);
+                        });
+                    });
+    
+                    // $templates = $templates->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
+                    // $templates = $templates->where('title', 'LIKE', '%'.trim(request('search-name')).'%');
+                    // $templates = $templates->where('subject', 'LIKE', '%'.trim(request('search-name')).'%');
+                }
+                if(!empty(request('search-id'))) {
+                    $templates = $templates->where('id', request('search-id') );
+                }
+    
+                if(!empty(request('search-sendgrid-id'))) {
+                    $si = request('search-sendgrid-id');
+                    $templates = $templates->whereHas('translations', function ($query) use ($si) {
+                        $query->where('sendgrid_template_id', 'LIKE', $si);
+                    });
+                }
+    
+                if(!empty(request('search-platform'))) {
+                    $templates = $templates->where('type', request('search-platform') );
+                }
+    
+                if(!empty(request('without-category'))) {
+                    $templates = $templates->whereNull('subscribe_category');
+                }
+    
+                if(!empty(request('search-category'))) {
+                    $templates = $templates->where('subscribe_category', request('search-category'));
+                }
+    
+                $templates = $templates->get();
+            } else {
+    
+                if(!in_array($what, Email::$template_types)) {
+                    return redirect('cms/'.$this->current_page.'/'.current(Email::$template_types));
+                }
+                $templates = EmailTemplate::whereNull('not_used')->where('type', $what)->orderBy('id', 'ASC')->get();
+            }
         }
 
     	return $this->showView('emails', array(
@@ -91,17 +101,19 @@ class EmailsController extends AdminController {
 
     public function edit( $id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
         $template = EmailTemplate::find($id);
+
         if($template) {
-            return $this->showView('emails-edit', array(
-                'item' => $template,
-                'langs' => config('langs')['admin'],
-            ));
+
+            if(in_array(Auth::guard('admin')->user()->role, ['super_admin']) || in_array($template->type, Auth::guard('admin')->user()->email_template_type)) {
+                return $this->showView('emails-edit', array(
+                    'item' => $template,
+                    'langs' => config('langs')['admin'],
+                ));
+            } else {
+                $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+                return redirect('cms/home');       
+            }
         } else {
             return redirect('cms/'.$this->current_page);
         }
@@ -109,32 +121,34 @@ class EmailsController extends AdminController {
 
     public function save( $id ) {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin']) ) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');
-        }
-        
         $template = EmailTemplate::find($id);
-        if($template) {
-            $langs = config('langs')['admin'];
-            foreach ($langs as $langkey => $lang) {
-                $translation = $template->translateOrNew($langkey);
-                $translation->email_template_id = $template->id;
-                $translation->title = $this->request->input('title_'.$langkey);
-                $translation->subject = $this->request->input('subject_'.$langkey);
-                $translation->subtitle = $this->request->input('subtitle_'.$langkey);
-                $translation->content = $this->request->input('content_'.$langkey);
-                $translation->sendgrid_template_id = $this->request->input('sendgrid_template_id_'.$langkey);
-                $translation->category = $this->request->input('category_'.$langkey);
-                $translation->save();
-            }
-            $template->subscribe_category = $this->request->input('subscribe_category');
-            $template->validate_email = $this->request->input('validate-email');
-            $template->note = $this->request->input('note');
-            $template->save();
 
-            $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.saved'));
-            return redirect('cms/'.$this->current_page.'/'.$template->type);
+        if($template) {
+            if(in_array(Auth::guard('admin')->user()->role, ['super_admin']) || in_array($template->type, Auth::guard('admin')->user()->email_template_type)) {
+
+                $langs = config('langs')['admin'];
+                foreach ($langs as $langkey => $lang) {
+                    $translation = $template->translateOrNew($langkey);
+                    $translation->email_template_id = $template->id;
+                    $translation->title = $this->request->input('title_'.$langkey);
+                    $translation->subject = $this->request->input('subject_'.$langkey);
+                    $translation->subtitle = $this->request->input('subtitle_'.$langkey);
+                    $translation->content = $this->request->input('content_'.$langkey);
+                    $translation->sendgrid_template_id = $this->request->input('sendgrid_template_id_'.$langkey);
+                    $translation->category = $this->request->input('category_'.$langkey);
+                    $translation->save();
+                }
+                $template->subscribe_category = $this->request->input('subscribe_category');
+                $template->validate_email = $this->request->input('validate-email');
+                $template->note = $this->request->input('note');
+                $template->save();
+    
+                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.saved'));
+                return redirect('cms/'.$this->current_page.'/'.$template->type);
+            } else {
+                $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+                return redirect('cms/home');       
+            }
         } else {
             return redirect('cms/home');
         }
@@ -142,7 +156,7 @@ class EmailsController extends AdminController {
 
     public function add() {
 
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin']) ) {
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) && empty(Auth::guard('admin')->user()->email_template_type)) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');
         }

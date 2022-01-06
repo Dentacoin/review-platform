@@ -127,11 +127,11 @@ class AdminController extends BaseController {
         
         if($params['admin']->role=='support') {
             foreach ($menu as $key => $value) {
-                if($key=='users' || $key=='ips' || $key=='whitelist' || $key=='blacklist' || $key=='transactions' || $key=='email_validations' || $key=='trp' || $key=='vox' || $key=='support' || $key=='rewards' || $key=='invites' || $key=='ban_appeals' ) {
+                if(in_array($key, ['users','ips','whitelist','blacklist','transactions','email_validations','trp','vox','support','rewards','invites','ban_appeals']) ) {
                     if(isset($menu[$key]['subpages'])) {
 
                         foreach ($menu[$key]['subpages'] as $sk => $sv) {
-                            if($sk == 'anonymous_users' || $sk == 'users_stats' || $sk == 'incomplete-registrations' || $sk == 'lead-magnet' || $sk == 'paid-reports' || $sk == 'users_stats'|| $sk == 'questions'|| $sk == 'faq' || $sk == 'testimonials' || $sk == 'scrape-google-dentists' || $sk == 'add' || ($sk == 'categories' && $key != 'support') || $sk == 'scales' || $sk == 'faq-ios' || $sk == 'badges' || $sk == 'explorer' || $sk == 'export-survey-data' || $sk == 'polls-explorer' || $sk == 'recommendations' || $sk == 'tests' || $sk == 'history') {
+                            if(in_array($sk, ['anonymous_users','users_stats','incomplete-registrations','lead-magnet','paid-reports','users_stats','questions','faq','testimonials','scrape-google-dentists','add','scales','faq-ios','badges','explorer','export-survey-data','polls-explorer','recommendations','tests','history']) || ($sk == 'categories' && $key != 'support')) {
                                 unset( $menu[$key]['subpages'][$sk] );
                             }
                         }
@@ -156,6 +156,18 @@ class AdminController extends BaseController {
                     }
                 }
             }
+        }
+
+        if($params['admin']->role == 'super_admin' || !empty($params['admin']->email_template_type)) {
+            if($params['admin']->role != 'super_admin') {
+                foreach(config('email-templates-platform') as $k => $v) {
+                    if(!in_array($k, $params['admin']->email_template_type)) {
+                        unset( $menu['emails']['subpages'][$k] );
+                    }
+                }
+            }
+        } else {
+            unset($menu['emails']);
         }
 
         if($params['admin']->id!=1) {

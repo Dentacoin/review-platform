@@ -17,8 +17,12 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
             </div>
             <div class="panel-body">
-                <form class="form-horizontal" id="admin-add" method="post" action="{{ url('cms/'.$current_page) }}">
-                	{!! csrf_field() !!}
+                @if($admin->role!='support')
+                    <form class="form-horizontal" id="admin-add" method="post" action="{{ url('cms/'.$current_page) }}">
+                    {!! csrf_field() !!}
+                @else
+                    <div class="form-horizontal">
+                @endif
                     <div class="form-group">
                         <label class="col-md-4">{{ trans('admin.page.'.$current_page.'.type') }}</label>
                         <label class="col-md-4">{{ trans('admin.page.'.$current_page.'.amount') }}</label>
@@ -44,7 +48,11 @@
                             </div>
                         </div>
                     @endif
-                </form>
+                @if($admin->role!='support')
+                    </form>
+                @else
+                    <div class="form-horizontal">
+                @endif
             </div>
         </div>
         <!-- end panel -->

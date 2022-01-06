@@ -26,6 +26,7 @@ class Admin extends Model implements AuthenticatableContract, CanResetPasswordCo
     	'user_id',
         'logged_in',
         'two_factor_auth',
+        'email_template_type',
     ];
     protected $dates = [
         'password_last_updated_at',
@@ -44,6 +45,20 @@ class Admin extends Model implements AuthenticatableContract, CanResetPasswordCo
 			$query->where('is_read', '=', 0 )
 			->orWhereNull('is_read');
 		});
+    }
+
+    public function setEmailTemplateTypeAttribute($value) {
+        $this->attributes['email_template_type'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['email_template_type'] = implode(',', $value);            
+        }
+    }
+    
+    public function getEmailTemplateTypeAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
     }
 }
 
