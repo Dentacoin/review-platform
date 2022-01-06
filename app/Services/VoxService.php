@@ -648,8 +648,7 @@ class VoxService {
                                         // echo in_array($ga, $allowedAnswers) ? '<br/>'.$ga.' in _array' : '<br/>'.$ga.' not_in array';
 
                                         // dd($givenAnswers, $allowedAnswers, array_intersect($givenAnswers, $allowedAnswers));
-
-                                        if($trigger_question->type == 'multiple_choice' && $next_question->trigger_type == 'and_multiple') {
+                                        if(isset($trigger_question->type) && $trigger_question->type == 'multiple_choice' && $next_question->trigger_type == 'and_multiple') {
 
                                             if(count(array_intersect($givenAnswers, $allowedAnswers))) {
                                                 $triggerSuccess[$int] = true;
