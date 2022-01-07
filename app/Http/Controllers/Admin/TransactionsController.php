@@ -138,18 +138,22 @@ class TransactionsController extends AdminController {
         if(request('search-status') == 'first') {
             $table_fields['user_image'] = array('template' => 'admin.parts.table-users-image', 'label' => 'Image');
             $table_fields['user_website'] = array('template' => 'admin.parts.table-users-website', 'label' => 'Website');
+            $table_fields['actions'] = array('template' => 'admin.parts.table-users-actions', 'label' => 'Actions');
         }
 
-        $table_fields['user_status'] = array('template' => 'admin.parts.table-users-status');
         $table_fields['amount'] = array();
         $table_fields['address'] = array();
-        $table_fields['tx_hash'] = array('template' => 'admin.parts.table-transactions-hash');
+        if(request('search-status') != 'first') {
+            $table_fields['tx_hash'] = array('template' => 'admin.parts.table-transactions-hash');
+        }
         $table_fields['status'] = array('template' => 'admin.parts.table-transactions-status');
         $table_fields['type'] = array();
-        $table_fields['nonce'] = array();
-        $table_fields['message'] = array();
-        $table_fields['retries'] = array();
-        $table_fields['sended_at'] = array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sended at');
+        if(request('search-status') != 'first') {
+            $table_fields['nonce'] = array();
+            $table_fields['message'] = array();
+            $table_fields['retries'] = array();
+            $table_fields['sended_at'] = array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sended at');
+        }
         $table_fields['bump'] = array('template' => 'admin.parts.table-transactions-bump', 'label' => "Actions");
 
         return $this->showView('transactions', array(
