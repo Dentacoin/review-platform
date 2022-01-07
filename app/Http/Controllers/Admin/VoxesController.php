@@ -28,6 +28,7 @@ use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\VoxScale;
 use App\Models\VoxBadge;
+use App\Models\VoxError;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Vox;
@@ -134,32 +135,14 @@ class VoxesController extends AdminController {
         $voxes = collect();
 		$voxes = $voxes_without_launched->concat($voxes_with_launched);
 
-        $error = false;
-        $error_arr = [];
-
-        $questions_order_bug = false;
-        $questions_order_bug_message = [];
-
-        $without_translations = [];
-
-        foreach($voxes as $survey) {
-            if($survey->type == 'normal' && empty($survey->translation_langs) && $survey->processingForTranslations->isEmpty()) {
-                $without_translations[] = $survey->id;
-            }
-        }
-
     	return $this->showView('voxes', array(
             // 'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
             'voxes' => $voxes,
             'active_voxes_count' => Vox::where('type', '!=', 'hidden')->count(),
             'hidden_voxes_count' => Vox::where('type', 'hidden')->count(),
             'are_all_results_shown' => session('vox-show-all-results') ? true : false,
-            'error_arr' => $error_arr,
-            'error' => $error,
-            'questions_order_bug' => $questions_order_bug,
-            'questions_order_bug_message' => $questions_order_bug_message,
             'table_fields' => $table_fields,
-            'without_translations' => $without_translations,
+            'vox_errors' => VoxError::where('is_read', 0)->first(),
         ));
     }
 
@@ -3472,6 +3455,22 @@ class VoxesController extends AdminController {
             'search_vox_id' => request('search-vox-id'),
             'search_question_id' => request('search-question-id'),
         ));
+    }
+
+    public function errorsResolved() {
+
+        if(!in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $vox_error = VoxError::first();
+        $vox_error->is_read = true;
+        $vox_error->save();
+
+        return Response::json( [
+            'success' => true,
+        ]);
     }
 
     // public function duplicateSurvey($id) {

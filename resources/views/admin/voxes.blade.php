@@ -10,33 +10,39 @@
     </h1>
     <!-- end page-header -->
 
-    @if(!empty($error))
-        <div class="alert alert-danger">
-            @foreach($error_arr as $key => $value)
-                @foreach($value as $kk)
-                    Vox ID {{ $key }}: {!! $kk !!} <br/>
-                @endforeach
-            @endforeach
-        </div>
-    @endif
+    @if(!empty($vox_errors))
+        <div class="vox-errors">
+            @if(!empty($vox_errors->errors))
+                <div class="alert alert-danger">
+                    @foreach($vox_errors->errors as $key => $value)
+                        @foreach($value as $kk)
+                            <a href="{{ url('cms/vox/edit/'.$key) }}" target="_blank">Vox</a> ID {{ $key }}: {!! $kk !!} <br/>
+                        @endforeach
+                    @endforeach
+                </div>
+            @endif
+            
+            @if(!empty($vox_errors->questions_order_bugs))
+                <div class="alert alert-danger m-b-15">
+                    <b>Duplicated or missing order numbers</b>: <br/>
+                    @foreach($vox_errors->questions_order_bugs as $key => $reorder)
+                        @foreach($reorder as $kk)
+                            <a href="{{ url('cms/vox/edit/'.$key) }}" target="_blank">Vox</a> ID {{ $key }}: {!! $kk !!}
+                        @endforeach
+                    @endforeach
+                </div>
+            @endif
+        
+            @if(!empty($vox_errors->without_translations))
+                <div class="alert alert-warning">
+                    <b>Voxes without translations</b>: <br/>
+                    @foreach($vox_errors->without_translations as $without_trans)
+                        <a href="{{ url('cms/vox/edit/'.$key) }}" target="_blank">Vox</a> ID {{ $without_trans }}<br/>
+                    @endforeach
+                </div>
+            @endif
 
-    @if(!empty($questions_order_bug))
-        <div class="alert alert-danger m-b-15">
-            <b>Duplicated or missing order numbers</b>: <br/>
-            @foreach($questions_order_bug_message as $key => $reorder)
-                @foreach($reorder as $kk)
-                    Vox ID {{ $key }}: {!! $kk !!}
-                @endforeach
-            @endforeach
-        </div>
-    @endif
-
-    @if(!empty($without_translations))
-        <div class="alert alert-warning">
-            <b>Voxes without translations</b>: <br/>
-            @foreach($without_translations as $without_trans)
-                Vox ID {{ $without_trans }}<br/>
-            @endforeach
+            <a href="javascript:;" class="btn btn-primary m-b-30" id="errors-resolved" action-url="{{ url('cms/vox/errors-resolved/') }}">Errors resolved</a>
         </div>
     @endif
 

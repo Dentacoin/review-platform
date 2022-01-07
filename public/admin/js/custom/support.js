@@ -186,7 +186,6 @@ $(document).ready(function(){
 	}).disableSelection();
 
 	$('#load-email-template').change(function() {
-		console.log($(this).val());
 
 		$.ajax({
 	        url: $(this).attr('action-url')+'/'+$(this).val(),
@@ -195,17 +194,12 @@ $(document).ready(function(){
 	        contentType: false,
 	        processData: false
 	    }).done( (function (data) {
-			console.log(data);
-
 			if(data.success) {
 				$('[name="subject"]').val(data.subject);
 				$('[name="answer"]').val(data.content);
 				$('[name="title"]').val(data.title);
 				$('[name="subtitle"]').val(data.subtitle);
-			} else {
-				
 			}
-
 	    }).bind(this) ).fail(function (data) {
 			console.log(data);
 	    });

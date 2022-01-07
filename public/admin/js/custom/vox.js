@@ -1024,4 +1024,20 @@ $(document).ready(function(){
 
 		deleteVoxQuestion();
 	});
+
+	$('#errors-resolved').click( function() {
+		$.ajax({
+			url: $(this).attr('action-url'),
+			type: 'POST',
+			cache: false,
+			contentType: false,
+			processData: false
+		}).done( (function (data) {
+			if(data.success) {
+				$('.vox-errors').remove();
+			}
+		}).bind(this) ).fail(function (data) {
+			console.log(data);
+		});
+	});
 });

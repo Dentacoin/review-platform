@@ -219,6 +219,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('vox/get-question-content/{id}', 			'VoxesController@getQuestionContent');
 	Route::post('vox/add-question-content/{id}', 			'VoxesController@addQuestionContent');
 	Route::any('vox/history', 								'VoxesController@voxesHistory');
+	Route::any('vox/errors-resolved', 						'VoxesController@errorsResolved');
 
 	Route::get('vox/polls', 								'PollsController@list');
 	Route::any('vox/polls/add', 							'PollsController@add');
