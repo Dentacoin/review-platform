@@ -122,6 +122,7 @@ class AuthenticateAdmin extends BaseController {
                 ->withErrors($validator);
             } else {
                 $admin->password = bcrypt($request->input('new-password'));
+                $admin->password_last_updated_at = Carbon::now();
                 $admin->save();
                 
                 return redirect('cms/');
