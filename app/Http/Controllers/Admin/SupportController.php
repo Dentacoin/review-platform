@@ -513,4 +513,41 @@ class SupportController extends AdminController {
         }
     }
 
+    public function loadTemplate($id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            return Response::json([
+                'success' => false, 
+                'message' => "You don't have permissions"
+            ]);
+        }
+
+        if($id) {
+            $template = EmailTemplate::find($id);
+
+            if(!empty($template)) {
+
+                $title = stripslashes($template->title);
+                $subtitle = stripslashes($template->subtitle);
+                $subject = stripslashes($template->subject);
+                if(empty($subject)) {
+                    $subject = $title;
+                }
+                $content = $template->content;
+
+                return Response::json( [
+                    'success' => true,
+                    'content' => $content,
+                    'title' => $title,
+                    'subtitle' => $subtitle,
+                    'subject' => $subject,
+                ]);
+            } else {
+                return Response::json([
+                    'success' => false, 
+                    'message' => "No template found"
+                ]);
+            }
+        }
+    }
 }

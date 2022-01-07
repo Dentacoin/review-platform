@@ -225,7 +225,14 @@
                                 </select>
                             </div>
                             <div class="col-md-6" style="border-left: 1px solid #868787;">
-                                <p>Write an answer:</p>
+                                <p>Load email template:</p>
+                                <select class="form-control select2" id="load-email-template" action-url="{{ url('cms/support/contact/load-template/') }}">
+                                    <option value="0">-</option>
+                                    @foreach(App\Models\EmailTemplate::where('type', 'support')->get() as $template)
+                                        <option value="{{ $template->id }}">{{ $template->name }}</option>
+                                    @endforeach
+                                </select>
+                                <p style="margin-top: 10px;">Write an answer:</p>
                                 <input type="text" class="form-control" name="subject" style="margin-bottom: 10px;" placeholder="Subject (default is 'Re: your inquiry about [issue]')"/>
                                 <input type="text" class="form-control" name="title" style="margin-bottom: 10px;" placeholder="Title (default is 'Dear [name]')"/>
                                 <input type="text" class="form-control" name="subtitle" style="margin-bottom: 10px;" placeholder="Subtitle (default is empty)"/>

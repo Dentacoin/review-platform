@@ -149,8 +149,7 @@ $(document).ready(function(){
 	    }).bind(this) ).fail(function (data) {
 			console.log(data);
 	    });
-
-    } );
+    });
 
     $('.show-answer').click( function(e) {
     	e.preventDefault();
@@ -164,7 +163,7 @@ $(document).ready(function(){
 			var ids = [];
 			$(this).find('tr').each( function() {
 				ids.push( $(this).attr('question-id') );
-			} );
+			});
 
 	        $.ajax({
 	            url     : $(this).attr('reorder-url'),
@@ -178,12 +177,38 @@ $(document).ready(function(){
 	            	$(this).find('tr').each( function() {
 						$(this).find('.question-number').html(i);
 						i++;
-					} )
+					});
 	            }).bind( this ),
 	            error : function( data ) {
 	            }
 	        });
 		},
 	}).disableSelection();
+
+	$('#load-email-template').change(function() {
+		console.log($(this).val());
+
+		$.ajax({
+	        url: $(this).attr('action-url')+'/'+$(this).val(),
+	        type: 'POST',
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    }).done( (function (data) {
+			console.log(data);
+
+			if(data.success) {
+				$('[name="subject"]').val(data.subject);
+				$('[name="answer"]').val(data.content);
+				$('[name="title"]').val(data.title);
+				$('[name="subtitle"]').val(data.subtitle);
+			} else {
+				
+			}
+
+	    }).bind(this) ).fail(function (data) {
+			console.log(data);
+	    });
+	});
 });
 
