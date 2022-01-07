@@ -39,9 +39,11 @@ class DentistsController extends FrontController {
         if (empty($query)) {
             return redirect( getLangUrl('page-not-found') );
         }
-
         if($query == 'north-macedonia') {
             return redirect( getLangUrl('dentists/macedonia'), 301);
+        }
+        if($query == 'india') {
+            return redirect( getLangUrl('dentists/india'), 301);
         }
         // $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
         $corrected_query = $this->getCorrectedQuery($query, $filter);

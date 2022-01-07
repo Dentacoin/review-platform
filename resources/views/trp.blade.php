@@ -217,7 +217,7 @@
 
 		<div class="tooltip-window" style="display: none;"></div>
 
-		@if(!$without_banner)
+		{{-- @if(!$without_banner)
 			<div class="bottom-drawer">
 				<a href="https://dentacoin.com/holiday-calendar/2021" target="_blank" class="christmas-banner">
 					<video class="banner-video" playsinline autoplay muted loop src="https://dentacoin.com/assets/videos/dentacoin-christmas-calendar-banner-2021.mp4" type="video/mp4" style="width: 100%;margin-bottom: -6px;" controls=""></video>
@@ -229,7 +229,7 @@
 					<video class="banner-video" playsinline autoplay muted loop src="https://dentacoin.com/assets/videos/dentacoin-christmas-calendar-banner-mobile-2021.mp4" type="video/mp4" style="width: 100%;margin-bottom: -6px;" controls=""></video>
 				</a>
 			</div>
-		@endif
+		@endif --}}
 
         @if(!empty($csscdn) && is_array($csscdn))
             @foreach($csscdn as $file)
