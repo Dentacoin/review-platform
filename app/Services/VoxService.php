@@ -2805,7 +2805,7 @@ class VoxService {
 		if(!empty($poll)) {
 
 			if (!empty($user)) {
-				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $user->id)->first();
+				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('status', 'open')->where('user_id', $user->id)->first();
 			} else {
                 if($for_app) {
                     $taken_daily_poll = null;
