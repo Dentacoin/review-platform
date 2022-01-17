@@ -2481,72 +2481,72 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         })->cron("* * * * *");
 
 
-        $schedule->call(function () {
-            echo 'Voxes Errors Check - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+        // $schedule->call(function () {
+        //     echo 'Voxes Errors Check - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $voxes = Vox::with('questions')->where('type', 'normal')->get();
+        //     $voxes = Vox::with('questions')->where('type', 'normal')->get();
             
-            $questions_order_bugs = [];
-            $errors = [];
-            $without_translations = [];
+        //     $questions_order_bugs = [];
+        //     $errors = [];
+        //     $without_translations = [];
             
-            foreach($voxes as $survey) {
+        //     foreach($voxes as $survey) {
 
-                if($survey->type == 'normal' && empty($survey->translation_langs) && $survey->processingForTranslations->isEmpty()) {
-                    $without_translations[] = $survey->id;
-                }
+        //         if($survey->type == 'normal' && empty($survey->translation_langs) && $survey->processingForTranslations->isEmpty()) {
+        //             $without_translations[] = $survey->id;
+        //         }
 
-                // if there are duplicated questions order
-                if($survey->questions->isNotEmpty()) {
-                    $count_qs = $survey->questions->count();
+        //         // if there are duplicated questions order
+        //         if($survey->questions->isNotEmpty()) {
+        //             $count_qs = $survey->questions->count();
 
-                    for ($i=1; $i <= $count_qs ; $i++) { 
-                        if(!empty(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->first())) {
-                            if(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->count() > 1) {
-                                $questions_order_bugs[$survey->id][] = 'Duplicated order number - '.$i.'<br/>';  //diplicated order
-                            }
-                        } else {
-                            $questions_order_bugs[$survey->id][] = 'Missing order number - '.$i.'<br/>';  //missing order
-                        }
-                    }
-                }
+        //             for ($i=1; $i <= $count_qs ; $i++) { 
+        //                 if(!empty(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->first())) {
+        //                     if(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->count() > 1) {
+        //                         $questions_order_bugs[$survey->id][] = 'Duplicated order number - '.$i.'<br/>';  //diplicated order
+        //                     }
+        //                 } else {
+        //                     $questions_order_bugs[$survey->id][] = 'Missing order number - '.$i.'<br/>';  //missing order
+        //                 }
+        //             }
+        //         }
 
-                if($survey->has_stats) {
-                    if(empty($survey->stats_description)) {
-                        $errors[$survey->id][] = 'Missing stats description';
-                    }
+        //         if($survey->has_stats) {
+        //             if(empty($survey->stats_description)) {
+        //                 $errors[$survey->id][] = 'Missing stats description';
+        //             }
 
-                    if($survey->stats_questions->isEmpty()) {
-                        $errors[$survey->id][] = 'Missing stats questions';
-                    } else {
+        //             if($survey->stats_questions->isEmpty()) {
+        //                 $errors[$survey->id][] = 'Missing stats questions';
+        //             } else {
 
-                        foreach ($survey->stats_questions as $stat) {
-                            if(empty($stat->stats_title_question) && empty($stat->stats_title) && empty($stat->stats_title_question)) {
-                                $errors[$survey->id][] = [
-                                    'error' => 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> title',
-                                ];
-                            }
-                            if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
-                                $errors[$survey->id][] = 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> demographics';
-                            }
-                        }
-                    }
-                }
-            }
+        //                 foreach ($survey->stats_questions as $stat) {
+        //                     if(empty($stat->stats_title_question) && empty($stat->stats_title) && empty($stat->stats_title_question)) {
+        //                         $errors[$survey->id][] = [
+        //                             'error' => 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> title',
+        //                         ];
+        //                     }
+        //                     if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
+        //                         $errors[$survey->id][] = 'Missing stats <a href="https://dentavox.dentacoin.com/cms/vox/edit/'.$survey->id.'/question/'.$stat->id.'/">question</a> demographics';
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
 
-            if(!empty($errors) || !empty($questions_order_bugs) || !empty($without_translations)) {
-                VoxError::delete();
+        //     if(!empty($errors) || !empty($questions_order_bugs) || !empty($without_translations)) {
+        //         VoxError::delete();
                 
-                $new_errors = new VoxError;
-                $new_errors->questions_order_bugs = $questions_order_bugs;
-                $new_errors->without_translations = $without_translations;
-                $new_errors->errors = $errors;
-                $new_errors->save();
-            }
+        //         $new_errors = new VoxError;
+        //         $new_errors->questions_order_bugs = $questions_order_bugs;
+        //         $new_errors->without_translations = $without_translations;
+        //         $new_errors->errors = $errors;
+        //         $new_errors->save();
+        //     }
 
-            echo 'Voxes Errors Check - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     echo 'Voxes Errors Check - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->everyTwoHours();
+        // })->everyTwoHours();
 
         $schedule->call(function () {
             echo 'TEST CRON END '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
