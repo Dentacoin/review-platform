@@ -779,7 +779,7 @@
           margin-bottom: 0px; }
         .questions .question-group .answers .answer-radio.active:not(:hover),
         .questions .question-group .answers .answer-checkbox.active:not(:hover) {
-          color: #38ace5; }
+          background-color: #d3ebfb; }
           .questions .question-group .answers .answer-radio.active:not(:hover) > .checkbox-square,
           .questions .question-group .answers .answer-checkbox.active:not(:hover) > .checkbox-square {
             font-size: 12px;

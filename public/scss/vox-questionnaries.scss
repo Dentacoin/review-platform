@@ -971,7 +971,7 @@ $main-color: #38ace5;
 			    }
 
 			    &.active:not(:hover) {
-			    	color: $main-color;
+			    	background-color: #d3ebfb;
 
 			    	> .checkbox-square {
 			    		font-size: 12px;
