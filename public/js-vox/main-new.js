@@ -849,6 +849,7 @@ $(document).ready(function(){
 	doubleCoinTooltip = function() {
 
 		var handleCoinTooltip = function(e) {
+
 			var that = $(this);
 
 			$('body').append('<div class="doublecoin-tooltip">\
@@ -876,6 +877,7 @@ $(document).ready(function(){
 		}
 
 		if($('.doublecoin').length) {
+			$('.doublecoin-tooltip').remove();
 			$('.doublecoin').on('mouseover mousemove', function(e) {
 				if (window.innerWidth > 768) {
 					handleCoinTooltip.bind(this)(e);

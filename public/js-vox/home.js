@@ -58,6 +58,7 @@ $(document).ready(function(){
 		$('.survey-cats .survey-cat').click( function() {
 			$('#surveys-categories').val( $(this).attr('cat-id') ).trigger('change');
 		} );
+		doubleCoinTooltip();
 	}
 	afterSubmitActions();
 
