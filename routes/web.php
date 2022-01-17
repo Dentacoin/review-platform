@@ -213,6 +213,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/export-stats', 							'VoxesController@exportStats');
 	Route::post('vox/get-questions-count/{id}', 			'VoxesController@getQuestionsCount');
 	Route::post('vox/get-respondents-count/{id}', 			'VoxesController@getRespondentsCount');
+	Route::post('vox/get-respondents-question-count/{id}', 	'VoxesController@getRespondentsQuestionCount');
 	Route::post('vox/get-reward/{id}', 						'VoxesController@getReward');
 	Route::post('vox/get-duration/{id}', 					'VoxesController@getDuration');
 	Route::post('vox/hide-survey/{id}', 					'VoxesController@hideSurvey');

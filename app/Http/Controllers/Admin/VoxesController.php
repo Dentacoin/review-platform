@@ -206,15 +206,20 @@ class VoxesController extends AdminController {
             return redirect('cms/'.$this->current_page);
         }
         
-        $vox_history = new VoxHistory;
-        $vox_history->admin_id = $this->user->id;
-        $vox_history->vox_id = $id;
-        $vox_history->info = 'Vox deleted';
-        $vox_history->save();
+        if(!in_array($id, [11, 34])) {
+            $vox_history = new VoxHistory;
+            $vox_history->admin_id = $this->user->id;
+            $vox_history->vox_id = $id;
+            $vox_history->info = 'Vox deleted';
+            $vox_history->save();
 
-        Vox::destroy( $id );
+            Vox::destroy( $id );
 
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
+            $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
+        } else {
+            $this->request->session()->flash('error-message', 'You can\'t delete this vox!' );
+        }
+
         return redirect('cms/'.$this->current_page);
     }
 
@@ -3037,6 +3042,22 @@ class VoxesController extends AdminController {
         if( !empty($vox)) {
             return Response::json( [
                 'resp_count' => $vox->realRespondentsCountForAdminPurposes(),
+            ]);
+        }
+    }
+
+    public function getRespondentsQuestionCount($question_id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $question = VoxQuestion::find($question_id);
+
+        if( !empty($question)) {
+            return Response::json( [
+                'resp_count' => $question->respondent_count(),
             ]);
         }
     }

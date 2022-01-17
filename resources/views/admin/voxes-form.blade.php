@@ -513,9 +513,14 @@
                                                         <td class="quest-type">{{ trans('admin.enums.question-type.'.$question->type) }}</td>
                                                         <td class="q-trigger">{!! $triggers[$question->id] !!}</td>
                                                         <td>
-                                                            <a href="{{ url('cms/vox/explorer/'.$item->id.'/'.$question->id) }}" target="_blank">
-                                                                {!! $question->respondent_count() !!}
-                                                            </a>
+                                                            @if(session('vox-show-all-results'))
+                                                                <a href="{{ url('cms/vox/explorer/'.$item->id.'/'.$question->id) }}" target="_blank">
+                                                                    {!! $question->respondent_count() !!}
+                                                                </a>
+                                                            @else
+                                                                <a href="javascript:;" class="show-respondents-question" question-id="{{ $question->id }}">show</a>
+                                                                <a href="{{ url('cms/vox/explorer/'.$item->id.'/'.$question->id) }}" target="_blank" class="question-respondents-shown"></a>
+                                                            @endif
                                                         </td>
                                                         <td>
                                                             @if(empty($question->question_trigger) && $question->order != 1)

@@ -383,6 +383,23 @@ $(document).ready(function(){
 			});
 		});
 	
+		$('.show-respondents-question').click( function() {
+			var that = $(this);
+	
+			$.ajax( {
+				url: window.location.origin+'/cms/vox/get-respondents-question-count/'+$(this).attr('question-id'),
+				type: 'POST',
+				dataType: 'json',
+				success: function( data ) {
+					that.hide();
+					that.closest('td').find('.question-respondents-shown').html(data.resp_count);
+				},
+				error: function(data) {
+					console.log('error');
+				}
+			});
+		});
+	
 		$('.show-reward').click( function() {
 			var that = $(this);
 	
