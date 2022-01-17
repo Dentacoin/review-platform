@@ -2826,7 +2826,7 @@ class VoxService {
                 }
 			}
 
-			if (!empty($poll) && $poll->status == 'open' && empty($taken_daily_poll) || !empty($admin)) {
+			if ((!empty($poll) && $poll->status == 'open' && empty($taken_daily_poll)) || !empty($admin)) {
 
 				$slist = VoxScale::get();
 		        $poll_scales = [];
