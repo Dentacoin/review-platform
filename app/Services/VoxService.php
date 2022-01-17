@@ -2805,7 +2805,7 @@ class VoxService {
 		if(!empty($poll)) {
 
 			if (!empty($user)) {
-				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('status', 'open')->where('user_id', $user->id)->first();
+				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $user->id)->first();
 			} else {
                 if($for_app) {
                     $taken_daily_poll = null;
@@ -2898,13 +2898,23 @@ class VoxService {
 
 		if (!empty($poll)) {
 
-			if (!empty($user)) {
-		        $taken_daily_polls = PollAnswer::where('user_id', $user->id)->where('status', 'open')->pluck('poll_id')->toArray();
-		        $more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
-		    } else {
-		    	$taken_daily_polls = [];
-		    	$more_polls_to_take = Poll::where('status', 'open')->first();
-		    }
+            $taken_daily_poll = !empty($user) ? PollAnswer::where('poll_id', $poll->id)->where('user_id', $user->id)->first() : null;
+
+            $more_polls_to_take = Poll::where('status', 'open');
+            if($taken_daily_poll) {
+                $more_polls_to_take = $more_polls_to_take->whereNotIn('id', [$taken_daily_poll->id]);
+            }
+            $more_polls_to_take = $more_polls_to_take->first();
+
+
+
+			// if (!empty($user)) {
+		    //     $taken_daily_polls = PollAnswer::where('user_id', $user->id)->pluck('poll_id')->toArray();
+		    //     $more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
+		    // } else {
+		    // 	$taken_daily_polls = [];
+		    // 	$more_polls_to_take = Poll::where('status', 'open')->first();
+		    // }
 
 		    $next_stat = Poll::where('status', 'closed')->where('launched_at', '>', $poll->launched_at)->first();
 
