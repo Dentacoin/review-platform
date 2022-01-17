@@ -1664,23 +1664,22 @@ class VoxesController extends AdminController {
         if($justCopy) {
             if(isset($data['excluded_answers']) && !empty($data['excluded_answers'])) {
                 if($this->request->input('excluded_answers') != $question->excluded_answers) {
-                    $history_info.= 'OLD Excluded answers: '.$question->excluded_answers.'<br/>';
+                    $history_info.= 'OLD Excluded answers: '.json_encode($question->excluded_answers).'<br/>';
                     $history_info.= 'NEW Excluded answers: '.$this->request->input('excluded_answers').'<br/>';
                 }
                 $question->excluded_answers = $data['excluded_answers'];
             } else {
                 if($this->request->input('excluded_answers') != $question->excluded_answers) {
-                    $history_info.= 'OLD Excluded answers: '.$question->excluded_answers.'<br/>';
+                    $history_info.= 'OLD Excluded answers: '.json_encode($question->excluded_answers).'<br/>';
                     $history_info.= 'NEW Excluded answers: null<br/>';
                 }
                 $question->excluded_answers = null;
             }
         } else {
-
             if(isset($data['exclude_answers_checked']) && isset($data['excluded_answers']) && !empty(json_decode($data['excluded_answers'], true))) {
                 if(json_decode($this->request->input('excluded_answers'), true) != $question->excluded_answers) {
-                    $history_info.= 'OLD Exclude answers checked: '.$question->excluded_answers.'<br/>';
-                    $history_info.= 'NEW Exclude answers checked: '.json_decode($data['excluded_answers'], true).'<br/>';
+                    $history_info.= 'OLD Exclude answers checked: '.json_encode($question->excluded_answers).'<br/>';
+                    $history_info.= 'NEW Exclude answers checked: '.$data['excluded_answers'].'<br/>';
                 }
                 $question->excluded_answers = json_decode($data['excluded_answers'], true);
             } else {

@@ -179,7 +179,7 @@
                             <div class="form-group answers-group-add">
                                 <label class="col-md-2 control-label"></label>
                                 <div class="col-md-10">
-                                    <p class="answers-error" style="font-size: 20px;color: #ff8d69;display: none;">The recommended number of answers is up to 10</p>
+                                    <p class="answers-error" style="font-size: 20px;color: #ff8d69; {!! !empty($question) && !empty($question->{'answers:'.$code}) && count(json_decode($question->{'answers:'.$code}, true)) > 10 ? '' : 'display: none;' !!} ">The recommended number of answers is up to 10</p>
                                     {{ trans('admin.page.'.$current_page.'.answers-add-hint') }}<br/>
                                     * Use "#" before an answer to disable randomizing.<br/><br/>
 
