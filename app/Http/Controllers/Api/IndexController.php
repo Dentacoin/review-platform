@@ -83,8 +83,8 @@ class IndexController extends ApiController {
 			'daily_poll' => $todays_daily_poll ? $todays_daily_poll->id : null,
 			'poll_type' => $poll_type,
 			'user' => $user,
-			'app_version_android' => '1.0.7',
-			'app_version_ios' => '1.0.6',
+			'app_version_android' => '1.1.1',
+			'app_version_ios' => '1.0.9',
 		) );
     }
 
