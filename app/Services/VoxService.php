@@ -2899,11 +2899,11 @@ class VoxService {
 		if (!empty($poll)) {
 
 			if (!empty($user)) {
-		        $taken_daily_polls = PollAnswer::where('user_id', $user->id)->pluck('poll_id')->toArray();
+		        $taken_daily_polls = PollAnswer::where('user_id', $user->id)->where('status', 'open')->pluck('poll_id')->toArray();
 		        $more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
 		    } else {
-		    	$taken_daily_polls = null;
-		    	$more_polls_to_take = null;
+		    	$taken_daily_polls = [];
+		    	$more_polls_to_take = Poll::where('status', 'open')->first();
 		    }
 
 		    $next_stat = Poll::where('status', 'closed')->where('launched_at', '>', $poll->launched_at)->first();
