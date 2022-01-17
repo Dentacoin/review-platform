@@ -2904,11 +2904,10 @@ class VoxService {
 		    } else {
 
 		    	$taken_daily_polls = [];
-                dd(Cookie::get('daily_poll'));
                 if (Cookie::get('daily_poll')) {
                     $cv = json_decode(Cookie::get('daily_poll'), true);
                     foreach ($cv as $pid => $aid) {
-                        $taken_daily_polls[] = $aid;
+                        $taken_daily_polls[] = $pid;
                     }				
                     $more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
                 } else {
