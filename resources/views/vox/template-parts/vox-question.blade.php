@@ -95,7 +95,7 @@
 
 		@php($questionAnswers = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true))
 
-		@php($isInColumns = (!$question->allAnswersHaveImages() && count($questionAnswers) >= 8))
+		@php($isInColumns = (empty($answers_shown) && !$question->allAnswersHaveImages() && count($questionAnswers) >= 8))
 
 		<div class="answers {!! $isInColumns ? 'in-columns' : '' !!} {{ $question->allAnswersHaveImages() ? 'question-pictures' : '' }}">
 
