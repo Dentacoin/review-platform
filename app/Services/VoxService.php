@@ -2898,23 +2898,22 @@ class VoxService {
 
 		if (!empty($poll)) {
 
-            $taken_daily_poll = !empty($user) ? PollAnswer::where('poll_id', $poll->id)->where('user_id', $user->id)->first() : null;
+			if (!empty($user)) {
+		        $taken_daily_polls = PollAnswer::where('user_id', $user->id)->pluck('poll_id')->toArray();
+		        $more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
+		    } else {
 
-            $more_polls_to_take = Poll::where('status', 'open');
-            if($taken_daily_poll) {
-                $more_polls_to_take = $more_polls_to_take->whereNotIn('id', [$taken_daily_poll->id]);
-            }
-            $more_polls_to_take = $more_polls_to_take->first();
-
-
-
-			// if (!empty($user)) {
-		    //     $taken_daily_polls = PollAnswer::where('user_id', $user->id)->pluck('poll_id')->toArray();
-		    //     $more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
-		    // } else {
-		    // 	$taken_daily_polls = [];
-		    // 	$more_polls_to_take = Poll::where('status', 'open')->first();
-		    // }
+		    	$taken_daily_polls = [];
+                if (!$for_app && Cookie::get('daily_poll')) {
+                    $cv = json_decode(Cookie::get('daily_poll'), true);
+                    foreach ($cv as $pid => $aid) {
+                        $taken_daily_polls[] = $aid;
+                    }				
+                    $more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
+                } else {
+                    $more_polls_to_take = null;
+                }
+		    }
 
 		    $next_stat = Poll::where('status', 'closed')->where('launched_at', '>', $poll->launched_at)->first();
 
