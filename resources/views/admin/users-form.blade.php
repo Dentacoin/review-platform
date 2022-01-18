@@ -1359,7 +1359,7 @@
                             'table_id' => 'users',
                             'table_fields' => [
                                 'created_at'        => array('format' => 'datetime','width' => '20%'),
-                                'user'              => array('template' => 'admin.parts.table-users-name', 'width' => '30%'),
+                                'user'              => array('template' => 'admin.parts.table-reviews-user', 'width' => '30%'),
                                 'rating'            => array(),
                                 'upvotes'            => array(),
                                 'verified'              => array('format' => 'bool'),
