@@ -74,7 +74,7 @@ class Kernel extends ConsoleKernel {
 
             $notifications['trp'] = [
                 [
-                    'time' => Carbon::now()->addHours(2),
+                    'time' => Carbon::now(),
                     'tempalte_id' => 3,
                 ],
                 [
@@ -99,7 +99,7 @@ class Kernel extends ConsoleKernel {
 
             $notifications['dentacoin'] = [
                 [
-                    'time' => Carbon::now()->addHours(2),
+                    'time' => Carbon::now(),
                     'tempalte_id' => 95,
                 ],
                 [
@@ -114,7 +114,7 @@ class Kernel extends ConsoleKernel {
 
             $notifications['dentists'] = [
                 [
-                    'time' => Carbon::now()->addHours(2),
+                    'time' => Carbon::now(),
                     'tempalte_id' => 99,
                 ],
                 [
@@ -203,7 +203,7 @@ class Kernel extends ConsoleKernel {
 
             echo 'Incomplete Dentist Registrations cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron("*/15 * * * *"); //every 5 min
+        })->cron("*/15 * * * *"); //every 15 min
 
         $schedule->call(function () {
 
@@ -309,27 +309,8 @@ class Kernel extends ConsoleKernel {
 
             echo 'DCN Prices cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron("* * * * *"); //05:00h
+        })->cron("* * * * *"); //every minute
 
-
-
-        // $schedule->call(function () {
-
-        //     $json = [];
-
-        //     foreach (config('currencies') as $currency) {
-        //         $url = 'https://api.coinmarketcap.com/v1/ticker/dentacoin/?convert='.$currency;
-        //         $info = @file_get_contents($url);
-        //         $p = json_decode($info, true);
-        //         $price = floatval($p[0]['price_'.mb_strtolower($currency)]);
-        //         $json[$currency] = $price;
-        //     }
-
-        //     file_put_contents('/tmp/dcn_currncies', json_encode($json));
-
-        //     echo 'Currencies cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-        // })->cron("* * * * *"); //05:00h
 
         $schedule->call(function () {
             echo '
@@ -338,7 +319,6 @@ PENDING TRANSACTIONS
 ========================
 
 ';
-
 
             $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->where('cronjob_unconfirmed', 0)->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
 
@@ -821,27 +801,25 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                             $currency = $data['currency'];
 
                             Mail::send('emails.template', [
-                                    'user' => User::find(4232),
-                                    'content' => 'Address: '.$data['address'].': '.$currency.' balance is running low: '.( intval($curl['result']) / 1000000000000000000 ),
-                                    'title' => $currency.' balance is running low',
-                                    'subtitle' => '',
-                                    'platform' => 'reviews',
-                                    'unsubscribe' => 'javascript:;',
-                                ], function ($message) use ($currency) {
+                                'user' => User::find(4232),
+                                'content' => 'Address: '.$data['address'].': '.$currency.' balance is running low: '.( intval($curl['result']) / 1000000000000000000 ),
+                                'title' => $currency.' balance is running low',
+                                'subtitle' => '',
+                                'platform' => 'reviews',
+                                'unsubscribe' => 'javascript:;',
+                            ], function ($message) use ($currency) {
 
-                                    $sender = config('mail.from.address');
-                                    $sender_name = 'Low '.$currency.' Alert';
+                                $sender = config('mail.from.address');
+                                $sender_name = 'Low '.$currency.' Alert';
 
-                                    $message->from($sender, $sender_name);
-                                    $message->to( 'admin@dentacoin.com' );
-                                    $message->cc( [
-                                        'petya.ivanova@dentacoin.com'
-                                    ] );
-                                    //$message->to( 'dokinator@gmail.com' );
-                                    $message->replyTo($sender, $sender_name);
-                                    $message->subject($currency.' balance is running low');
-                                }
-                            );
+                                $message->from($sender, $sender_name);
+                                $message->to( 'admin@dentacoin.com' );
+                                $message->cc( [
+                                    'petya.ivanova@dentacoin.com'
+                                ] );
+                                $message->replyTo($sender, $sender_name);
+                                $message->subject($currency.' balance is running low');
+                            });
                         }
                     }
                 }
@@ -2285,24 +2263,23 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Transaction scammers by day cron'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-//            $min_withdraw_time = WithdrawalsCondition::find(1)->timerange;
-//            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
-//
-//            foreach ($transactions as $trans) {
-//                $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', Carbon::now()->addDays(-30))->get();
-//
-//                foreach ($user_transactions as $user_trans) {
-//                    foreach ($user_transactions as $user_t) {
-//                        if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && empty(TransactionScammersByDay::where('user_id', $user_t->user_id)->first())) {
-//
-//                            $scammer = new TransactionScammersByDay;
-//                            $scammer->user_id = $user_t->user_id;
-//                            $scammer->save();
-//                        }
-//                    }
-//                }
-//            }
+           $min_withdraw_time = WithdrawalsCondition::find(1)->timerange;
+           $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
 
+           foreach ($transactions as $trans) {
+               $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', Carbon::now()->addDays(-30))->get();
+
+               foreach ($user_transactions as $user_trans) {
+                   foreach ($user_transactions as $user_t) {
+                       if($user_t->id != $user_trans->id && ($user_t->created_at->diffInDays($user_trans->created_at) < $min_withdraw_time) && empty(TransactionScammersByDay::where('user_id', $user_t->user_id)->first())) {
+
+                           $scammer = new TransactionScammersByDay;
+                           $scammer->user_id = $user_t->user_id;
+                           $scammer->save();
+                       }
+                   }
+               }
+            }
 
             $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->where('status', '!=', 'failed')->groupBy('user_id')->get();
 
@@ -2324,7 +2301,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Scheduled surveys '.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now()->addHours(2) )->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
+            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now())->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
 
             if($hidden_voxes->isNotEmpty()) {
 
@@ -2463,7 +2440,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Remove user\'s vip access START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $users_with_vip_access = User::withTrashed()->where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now()->addHours(2))->get();
+            $users_with_vip_access = User::withTrashed()->where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now())->get();
 
             if($users_with_vip_access->isNotEmpty()) {
                 foreach($users_with_vip_access as $user) {
