@@ -54,7 +54,7 @@
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime', 'label' => 'Received'),
                             'type'              => array(),
-                            'user'              => array('template' => 'admin.parts.table-users-name'),
+                            'user'              => array('template' => 'admin.parts.table-recommend-user'),
                             'duration'          => array('template' => 'admin.parts.table-bans-duration'),
                             // 'domain'            => array(),
                             'expires'           => array('template' => 'admin.parts.table-bans-expires'),
