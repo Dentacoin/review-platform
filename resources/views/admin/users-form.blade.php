@@ -1359,7 +1359,7 @@
                             'table_id' => 'users',
                             'table_fields' => [
                                 'created_at'        => array('format' => 'datetime','width' => '20%'),
-                                'user'              => array('template' => 'admin.parts.table-reviews-user', 'width' => '30%'),
+                                'user'              => array('template' => 'admin.parts.table-users-name', 'width' => '30%'),
                                 'rating'            => array(),
                                 'upvotes'            => array(),
                                 'verified'              => array('format' => 'bool'),
@@ -1518,7 +1518,7 @@
                                 'table_id' => 'dentist-invited',
                                 'table_fields' => [
                                     'created_at'        => array('format' => 'datetime','width' => '20%'),
-                                    'dentist'           => array('template' => 'admin.parts.table-added-dentist', 'label' => 'Dentist'),
+                                    'dentist'           => array('template' => 'admin.parts.table-users-name', 'label' => 'Dentist'),
                                     'status'           => array('template' => 'admin.parts.table-added-dentist-status', 'label' => 'Status'),
                                 ],
                                 'table_subpage' => 'reviews',

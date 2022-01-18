@@ -65,7 +65,7 @@
     					'table_fields' => [
                             'selector'                => array('format' => 'selector'),
                             'created_at'        => array('format' => 'datetime'),
-                            'user'              => array('template' => 'admin.parts.table-reviews-user'),
+                            'user'              => array('template' => 'admin.parts.table-users-name'),
                             'dentist'           => array('template' => 'admin.parts.table-reviews-dentist'),
                             'rating'            => array(),
                             'verified'              => array('format' => 'bool'),
