@@ -74,7 +74,7 @@ class Kernel extends ConsoleKernel {
 
             $notifications['trp'] = [
                 [
-                    'time' => Carbon::now(),
+                    'time' => Carbon::now()->addHours(2),
                     'tempalte_id' => 3,
                 ],
                 [
@@ -99,7 +99,7 @@ class Kernel extends ConsoleKernel {
 
             $notifications['dentacoin'] = [
                 [
-                    'time' => Carbon::now(),
+                    'time' => Carbon::now()->addHours(2),
                     'tempalte_id' => 95,
                 ],
                 [
@@ -114,7 +114,7 @@ class Kernel extends ConsoleKernel {
 
             $notifications['dentists'] = [
                 [
-                    'time' => Carbon::now(),
+                    'time' => Carbon::now()->addHours(2),
                     'tempalte_id' => 99,
                 ],
                 [
@@ -2301,7 +2301,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Scheduled surveys '.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now())->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
+            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now()->addHours(2) )->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
 
             if($hidden_voxes->isNotEmpty()) {
 
@@ -2440,7 +2440,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Remove user\'s vip access START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $users_with_vip_access = User::withTrashed()->where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now())->get();
+            $users_with_vip_access = User::withTrashed()->where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now()->addHours(2))->get();
 
             if($users_with_vip_access->isNotEmpty()) {
                 foreach($users_with_vip_access as $user) {
