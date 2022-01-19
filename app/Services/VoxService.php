@@ -2223,9 +2223,9 @@ class VoxService {
                                 if(!empty(request('scale_answers_time')) && isset(request('scale_answers_time')[$k])) {
 
                                     try {
-                                        $scaleDate = Carbon::createFromFormat('D M d Y H:i:s e+',request('scale_answers_time')[$k]);
+                                        $scaleDate = Carbon::createFromFormat('D M d Y H:i:s e+',request('scale_answers_time')[$k]); //for site
                                     } catch (\Exception $e) {
-                                        $scaleDate = Carbon::parse(request('scale_answers_time')[$k]);
+                                        $scaleDate = Carbon::parse(request('scale_answers_time')[$k]); //for app
                                     }
 
                                     $answer->created_at = $scaleDate;
