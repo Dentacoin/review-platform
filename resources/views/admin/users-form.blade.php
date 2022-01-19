@@ -987,25 +987,26 @@
                                         <div class="col-md-12">
                                             @if(!empty($item->platform) && $item->platform == 'trp')
                                                 @if($item->id <= 79174)
-                                                    Added by patient <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                    Added by patient 
                                                 @else
                                                     @if($item->invited_from_form)
-                                                        Added by patient <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                        Added by patient 
                                                     @else
                                                         @if($item->is_dentist)
-                                                            @if(App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->is_clinic)
-                                                                Added by clinic at {{ config('platforms')[$item->platform]['name'] }} - <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                            @if($item->invitorWithTrashed->is_clinic)
+                                                                Added by clinic at {{ config('platforms')[$item->platform]['name'] }} - 
                                                             @else
-                                                                Added by dentist at {{ config('platforms')[$item->platform]['name'] }} signup <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                                Added by dentist at {{ config('platforms')[$item->platform]['name'] }} signup 
                                                             @endif
                                                         @else
-                                                            Registered from {{ config('platforms')[$item->platform]['name'] }} friend invite <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                            Registered from {{ config('platforms')[$item->platform]['name'] }} friend invite 
                                                         @endif
                                                     @endif
                                                 @endif
                                             @else
-                                                Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite 
                                             @endif
+                                            &nbsp;&nbsp;<a href="{{ url('cms/users/users/edit/'.$item->invitorWithTrashed->id) }}">{{ $item->invitorWithTrashed->name }}</a>
                                         </div>
                                     </div>
                                 @endif
@@ -1019,7 +1020,7 @@
                                 @if(!empty($item->invited_by) && !$item->is_dentist)
                                     <div class="form-group" style="text-align: right;">
                                         <div class="col-md-12">
-                                            Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite <a href="{{ url('cms/users/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                            Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite <a href="{{ url('cms/users/users/edit/'.$item->invitorWithTrashed->id) }}">{{ $item->invitorWithTrashed->name }}</a>
                                         </div>
                                     </div>
                                 @endif

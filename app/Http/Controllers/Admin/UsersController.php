@@ -498,6 +498,10 @@ class UsersController extends AdminController {
             $users = $users->where('vip_access', 1);
         }
 
+        if(!empty(request('test-now'))) {
+            $users = $users->where('test_now', 1);
+        }
+
         if(!empty(request('fb-tab'))) {
             $users = $users->has('dentist_fb_page');
         }
@@ -752,6 +756,7 @@ class UsersController extends AdminController {
             'with_permaban' => request('with-permaban'),
             'exclude_unsubscribed' => request('exclude-unsubscribed'),
             'vip_access' => request('vip-access'),
+            'test_now' => request('test-now'),
             'civic_kyc_hash' => request('civic-kyc-hash'),
             'fb_tab' => request('fb-tab'),
             'user_platforms' => $user_platforms,
