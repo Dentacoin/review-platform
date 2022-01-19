@@ -6,6 +6,7 @@ var skip = 0;
 var vox_id;
 var question_id;
 var handleSwiper;
+var scaleTime = [];
 
 $(document).ready(function(){
 
@@ -168,7 +169,7 @@ $(document).ready(function(){
                 group.find('input.answer').prop('disabled', false);
                 $(this).closest('.answer-checkbox').removeClass('active');
             }
-        } );
+        });
 
         $('.question-group.scale .answer').change( function() {
             $(this).closest('.answer-radios-group').removeClass('scale-error');
@@ -180,7 +181,10 @@ $(document).ready(function(){
                 }
             } );
 
+
             if( $(this).closest('.flickity').length ) {
+                scaleTime.push(new Date());
+
                 $(this).closest('.flickity').flickity('next');
             }
         });
@@ -265,6 +269,7 @@ $(document).ready(function(){
 
         //scale
         if($('.question-group').hasClass('scale')) {
+            scaleTime = [];
             $('.question-group .flickity').flickity({
                 wrapAround: true,
                 adaptiveHeight: true,
@@ -273,6 +278,14 @@ $(document).ready(function(){
 
             $('.question-group .flickity').on( 'select.flickity', checkFilledDots);
             $('.question-group .next-answer').hide();
+
+            $('.answers-inner ol.flickity-page-dots li.dot').click( function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+
+                console.log('sasaas');
+            });
         }
 
         if($('.question-group').hasClass('shuffle')) {
@@ -509,6 +522,7 @@ $(document).ready(function(){
                 question: qid,
                 answer: answer,
                 type: type,
+                scale_answers_time: scaleTime,
                 _token: $('input[name="_token"]').val()
             }, 
             function( data ) {

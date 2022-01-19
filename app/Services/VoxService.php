@@ -2219,100 +2219,143 @@ class VoxService {
                                 if($testmode) {
                                     $answer->is_admin = true;
                                 }
+
+                                if(!empty(request('scale_answers_time')) && isset(request('scale_answers_time')[$k])) {
+                                    $answer->created_at = Carbon::createFromFormat('D M d Y H:i:s e+',request('scale_answers_time')[$k]);
+                                }
                                 $answer->save();
                             }
                             $answered[$q] = $a;
                         }
                     }
+                    
+                    $listCurrnetAnswers = VoxAnswer::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'scale', 'is_skipped', 'created_at')
+                    ->where('vox_id', $vox->id)
+                    ->with('question')
+                    ->where('user_id', $user->id)
+                    ->orderBy('id', 'desc')
+                    ->get();
 
-                    $reallist = $list->filter(function ($value, $key) {
-                        return !$value->is_skipped;
-                    });
+                    $listOldCurrnetAnswers = VoxAnswerOld::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'scale', 'is_skipped', 'created_at')
+                    ->where('vox_id', $vox->id)
+                    ->with('question')
+                    ->where('user_id', $user->id)
+                    ->orderBy('id', 'desc')
+                    ->get();
 
-                    $ppp = 10;
-                    if( $reallist->count() && $reallist->count()%$ppp==0 && !$testmode && !$user->is_partner ) { //confirmed from Petya for is_partner 05.11.21
+                    $listCurrnetAnswers = $listCurrnetAnswers->concat($listOldCurrnetAnswers);
 
-                        $start = $reallist->forPage(1, $ppp)->last();
-                        $diff = Carbon::now()->diffInSeconds( $start->created_at );
-                        $normal = $ppp*2;
-                        
-                        if($normal > $diff && count($answered) != count($vox->questions)) {
+                    if(!$testmode && !$user->is_partner) { //confirmed from Petya for is_partner 05.11.21
+                        $ppp = 10;
+                        $toBeChecked = false;
 
-                            $warned_before = UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
-                            
-                            if(!$warned_before) {
-                                $new_too_fast = new UserSurveyWarning;
-                                $new_too_fast->user_id = $user->id;
-                                $new_too_fast->action = 'too_fast';
-                                $new_too_fast->save();
-                            } else {
-                                UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->delete();
+                        if($for_app) {
+                            $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
+                                return !$value->is_skipped && empty($value->scale);
+                            });
+                        } else {
+
+                            if(!empty(request('scale_answers_time'))) {
+                                $reallist = $list->filter(function ($value, $key) {
+                                    return !$value->is_skipped;
+                                });
+    
+                                if($type == 'scale' || $type == 'rank') {
+                                    $lastScalesCount = count($a);
+                                    if($reallist->count()%$ppp + $lastScalesCount >=10) { //scales answers can be more that 10, so we need to check for too fast
+                                        $toBeChecked = true;
+                                    }
+                                }    
                             }
+                            
+                            $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
+                                return !$value->is_skipped;
+                            });
+                        }
 
-                            $prev_bans = $user->getPrevBansCount('vox', 'too-fast');
-                            $ret['toofast'] = true;
-                            if(!$warned_before) {
-                                $ret['warning'] = true;
-                                $ret['img'] = url('new-vox-img/ban-warning-fast-'.($prev_bans+1).'.png');
-                                $titles = [
-                                    trans('vox.page.bans.warning-too-fast-title-1'),
-                                    trans('vox.page.bans.warning-too-fast-title-2'),
-                                    trans('vox.page.bans.warning-too-fast-title-3'),
-                                    trans('vox.page.bans.warning-too-fast-title-4'),
-                                ];
-                                $ret['title'] = $titles[$prev_bans];
-                                $contents = [
-                                    trans('vox.page.bans.warning-too-fast-content-1'),
-                                    trans('vox.page.bans.warning-too-fast-content-2'),
-                                    trans('vox.page.bans.warning-too-fast-content-3'),
-                                    trans('vox.page.bans.warning-too-fast-content-4'),
-                                ];
-                                $ret['content'] = $contents[$prev_bans];
-                            } else {
+                        if( $toBeChecked || ($reallist->count() && $reallist->count()%$ppp==0 )) {
 
-                                $ban_info = 'All answered questions count: '.$reallist->count().'; <br/> Time difference between 10 answers: '.$diff.'; Users last 10 answered questions time = '.($normal-$diff).' <br/> Vox answers time:';
+                            $start = $reallist->forPage(1, $ppp)->last();
+                            $diff = Carbon::now()->diffInSeconds( $start->created_at );
+                            $normal = $ppp*2;
+                            
+                            if($normal > $diff && count($answered) != count($vox->questions)) {
 
-                                foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->orderBy('id', 'desc')->take(10)->get() as $va) {
-                                    $ban_info .= ' <br/>Q ID: '.$va->question_id.'; Answer: '.$va->answer.'; Created: '.$va->created_at.';';
+                                $warned_before = UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
+                                
+                                if(!$warned_before) {
+                                    $new_too_fast = new UserSurveyWarning;
+                                    $new_too_fast->user_id = $user->id;
+                                    $new_too_fast->action = 'too_fast';
+                                    $new_too_fast->save();
+                                } else {
+                                    UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->delete();
                                 }
 
-                                $ban = $user->banUser('vox', 'too-fast', $vox->id, $question->id, $a);
-                                $new_ban = $ban['ban'];
-                                $new_ban->ban_info = $ban_info;
-                                $new_ban->save();
-                                
-                                $ret['ban'] = true;
-                                $ret['ban_duration'] = $ban['days'];
-                                $ret['ban_times'] = $ban['times'];
-                                $ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
-                                $titles = [
-                                    trans('vox.page.bans.ban-too-fast-title-1'),
-                                    trans('vox.page.bans.ban-too-fast-title-2'),
-                                    trans('vox.page.bans.ban-too-fast-title-3'),
-                                    trans('vox.page.bans.ban-too-fast-title-4',[
-                                        'name' => $user->getNames()
-                                    ]),
-                                ];
-                                $ret['title'] = $titles[$prev_bans];
-                                $contents = [
-                                    trans('vox.page.bans.ban-too-fast-content-1'),
-                                    trans('vox.page.bans.ban-too-fast-content-2'),
-                                    trans('vox.page.bans.ban-too-fast-content-3'),
-                                    trans('vox.page.bans.ban-too-fast-content-4'),
-                                ];
-                                $ret['content'] = $contents[$prev_bans];
+                                $prev_bans = $user->getPrevBansCount('vox', 'too-fast');
+                                $ret['toofast'] = true;
+                                if(!$warned_before) {
+                                    $ret['warning'] = true;
+                                    $ret['img'] = url('new-vox-img/ban-warning-fast-'.($prev_bans+1).'.png');
+                                    $titles = [
+                                        trans('vox.page.bans.warning-too-fast-title-1'),
+                                        trans('vox.page.bans.warning-too-fast-title-2'),
+                                        trans('vox.page.bans.warning-too-fast-title-3'),
+                                        trans('vox.page.bans.warning-too-fast-title-4'),
+                                    ];
+                                    $ret['title'] = $titles[$prev_bans];
+                                    $contents = [
+                                        trans('vox.page.bans.warning-too-fast-content-1'),
+                                        trans('vox.page.bans.warning-too-fast-content-2'),
+                                        trans('vox.page.bans.warning-too-fast-content-3'),
+                                        trans('vox.page.bans.warning-too-fast-content-4'),
+                                    ];
+                                    $ret['content'] = $contents[$prev_bans];
+                                } else {
 
-                                //Delete all answers
-                                VoxAnswer::where('vox_id', $vox->id)
-                                ->where('user_id', $user->id)
-                                ->delete();
-                                
-                                VoxAnswerOld::where('vox_id', $vox->id)
-                                ->where('user_id', $user->id)
-                                ->delete();
+                                    $ban_info = 'All answered questions count: '.$reallist->count().'; <br/> Time difference between 10 answers: '.$diff.'; Users last 10 answered questions time = '.($normal-$diff).' <br/> Vox answers time:';
+
+                                    foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->orderBy('id', 'desc')->take(10)->get() as $va) {
+                                        $ban_info .= ' <br/>Q ID: '.$va->question_id.'; Answer: '.$va->answer.'; Created: '.$va->created_at.';';
+                                    }
+
+                                    $ban = $user->banUser('vox', 'too-fast', $vox->id, $question->id, $a);
+                                    $new_ban = $ban['ban'];
+                                    $new_ban->ban_info = $ban_info;
+                                    $new_ban->save();
+                                    
+                                    $ret['ban'] = true;
+                                    $ret['ban_duration'] = $ban['days'];
+                                    $ret['ban_times'] = $ban['times'];
+                                    $ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
+                                    $titles = [
+                                        trans('vox.page.bans.ban-too-fast-title-1'),
+                                        trans('vox.page.bans.ban-too-fast-title-2'),
+                                        trans('vox.page.bans.ban-too-fast-title-3'),
+                                        trans('vox.page.bans.ban-too-fast-title-4',[
+                                            'name' => $user->getNames()
+                                        ]),
+                                    ];
+                                    $ret['title'] = $titles[$prev_bans];
+                                    $contents = [
+                                        trans('vox.page.bans.ban-too-fast-content-1'),
+                                        trans('vox.page.bans.ban-too-fast-content-2'),
+                                        trans('vox.page.bans.ban-too-fast-content-3'),
+                                        trans('vox.page.bans.ban-too-fast-content-4'),
+                                    ];
+                                    $ret['content'] = $contents[$prev_bans];
+
+                                    //Delete all answers
+                                    VoxAnswer::where('vox_id', $vox->id)
+                                    ->where('user_id', $user->id)
+                                    ->delete();
+                                    
+                                    VoxAnswerOld::where('vox_id', $vox->id)
+                                    ->where('user_id', $user->id)
+                                    ->delete();
+                                    return Response::json( $ret );
+                                }
                             }
-
-                            return Response::json( $ret );
                         }
                     }
 
@@ -2326,8 +2369,6 @@ class VoxService {
                         GeneralHelper::deviceDetector($reward);
                         $reward->save();
                     }
-
-                    // dd($answer);
 
                     if(count($answered) == count($vox->questions)) {
 
@@ -2344,32 +2385,15 @@ class VoxService {
                         }
 
                         if($user->isVoxRestricted($vox)) {
-
                             return Response::json( [
                                 'success' => false,
                                 'restricted' => true,
                             ] );
                         }
 
-                        $list = VoxAnswer::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
-                        ->where('vox_id', $vox->id)
-                        ->with('question')
-                        ->where('user_id', $user->id)
-                        ->orderBy('id', 'desc')
-                        ->get();
-
-                        $list_old = VoxAnswerOld::select('id', 'vox_id', 'question_id', 'user_id', 'answer', 'is_skipped', 'created_at')
-                        ->where('vox_id', $vox->id)
-                        ->with('question')
-                        ->where('user_id', $user->id)
-                        ->orderBy('id', 'desc')
-                        ->get();
-                        
-                        $list = $list->concat($list_old);
-
                         $answered_without_skip_count = 0;
                         $answered_without_skip = [];
-                        foreach ($list as $l) {
+                        foreach ($listCurrnetAnswers as $l) {
                             if(!isset( $answered_without_skip[$l->question_id] ) && $l->question && $l->answer > 0 || $l->question->type == 'number' || $l->question->cross_check == 'birthyear' || $l->question->cross_check == 'household_children') {
                                 $answered_without_skip[$l->question_id] = ['1']; //3
                                 $answered_without_skip_count++;
@@ -2384,7 +2408,7 @@ class VoxService {
                         $reward->platform = 'vox';
                         $reward->type = 'survey';
                         $reward->reward = $rewardForCurVox;
-                        $start = $list[$list->count() - 1]->created_at; //first answer
+                        $start = $listCurrnetAnswers[$listCurrnetAnswers->count() - 1]->created_at; //first answer
                         $normal = count($vox->questions)*2;
                         $reward->seconds = Carbon::now()->diffInSeconds( $start );
                         GeneralHelper::deviceDetector($reward);

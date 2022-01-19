@@ -45,5 +45,8 @@ class QuestionsCaching extends Command{
         }
 
         echo 'Caching dependency questions - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+
+        //to add more commands - crontab -e
     }
 }

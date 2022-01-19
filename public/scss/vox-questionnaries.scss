@@ -1046,15 +1046,15 @@ $main-color: #38ace5;
 				width: 100%;
 
 				.mobile-overflow {
-					display: none;
-
+					display: block;
+					top: 0px;
+					height: 140px;
+					width: 100%;
+					position: absolute;
+					z-index: 1000;
+					
 					@media #{$phone} {
-						display: block;
-						top: 0px;
-						width: 100%;
-					    height: 20px;
-					    position: absolute;
-					    z-index: 1000;
+						height: 20px;
 					}
 				}
 

@@ -998,7 +998,7 @@ class UsersController extends AdminController {
                                 $existing = User::withTrashed()->where('id', '!=', $item->id)->where($key, 'like', $this->request->input($key))->first();
 
                                 if (!empty($existing)) {
-                                    if($existing->status == 'added_by_dentist_new' || $existing->status == 'added_new' || $existing->status == 'added_by_clinic_new') {
+                                    if(in_array($existing->status, ['added_by_dentist_new', 'added_new', 'added_by_clinic_new'])) {
 
                                         $existing->email = $existing->email.'d';
                                         $existing->status = 'duplicated_email';
@@ -1048,23 +1048,12 @@ class UsersController extends AdminController {
                                     $this->approveDentist($item);
 
                                 } else if( $this->request->input($key)=='added_by_dentist_unclaimed' ) {
-                                    $item->status = 'added_by_dentist_unclaimed';
-                                    $item->slug = $item->makeSlug();
-                                    $item->save();
 
-                                    $dent_name = null;
-                                    if(!empty($item->invited_by)) {
-                                        $dent = User::find($item->invited_by);
+                                    $this->addedByDentistUnclaimed($item);
 
-                                        if(!empty($dent)) {
-                                            $dent_name = $dent->getNames();
-                                        }
-                                    }
+                                } else if( $this->request->input($key)=='added_by_clinic_unclaimed' ) {
 
-                                    $item->sendGridTemplate( 93 , [
-                                        'dentist_name' => !empty($dent_name) ? $dent_name : 'Name',
-                                        "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
-                                    ], 'trp');
+                                    $this->addedByClinicUnclaimed($item);
 
                                 } else if( $this->request->input($key)=='test' ) {
                                     $item->status = 'test';
@@ -1078,7 +1067,7 @@ class UsersController extends AdminController {
                                 }
                             }
 
-                            if(($this->request->input($key)=='added_approved' || $this->request->input($key)=='added_by_dentist_unclaimed' || $this->request->input($key)=='added_by_clinic_unclaimed') && !$item->hasimage_social) {
+                            if(in_array($this->request->input($key), ['added_approved', 'added_by_dentist_unclaimed', 'added_by_clinic_unclaimed']) && !$item->hasimage_social) {
                                 $item->generateSocialCover();
                             }
                             $item->$key = $this->request->input($key);
@@ -1198,28 +1187,8 @@ class UsersController extends AdminController {
                     $review_in_clinic->save();
                 }
 
-                //Categories
-                // UserCategory::where('user_id', $item->id)->delete();
-                // $cats = $this->request->input('categories');
-                // if(!empty($cats)) {
-                //     foreach ($cats as $cat) {
-                //         $newc = new ArticleCategory;
-                //         $newc->user_id = $item->id;
-                //         $newc->category_id = $cat;
-                //         $newc->save();
-                //     }
-                // }
-
-                if(($item->status=='rejected' || $item->status=='added_rejected' || $item->status=='added_by_dentist_rejected' || $item->status=='added_by_clinic_rejected' ) && empty($item->deleted_at)) {
-                    $action = new UserAction;
-                    $action->user_id = $item->id;
-                    $action->action = 'deleted';
-                    $action->reason = 'Rejected by admin';
-                    $action->actioned_at = Carbon::now();
-                    $action->save();
-
-                    $item->deleteActions();
-                    User::destroy( $item->id );
+                if(in_array($item->status, ['rejected', 'added_rejected', 'added_by_dentist_rejected', 'added_by_clinic_rejected']) && empty($item->deleted_at)) {
+                    $this->rejectDentist($item);
                 }
 
                 Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated'));
@@ -1432,6 +1401,8 @@ class UsersController extends AdminController {
                         $dent->slug = $dent->makeSlug();
                         $dent->save();
 
+                        $dent->generateSocialCover();
+
                         $dent->sendGridTemplate( 92 , [
                             'clinic_name' => $item->getNames(),
                             "invitation_link" => getLangUrl( 'dentist/'.$dent->slug.'/claim/'.$dent->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
@@ -1481,7 +1452,7 @@ class UsersController extends AdminController {
         $user_history = new UserHistory;
         $user_history->user_id = $item->id;
         $user_history->admin_id = $this->user->id;
-        $user_history->status = 'new';
+        $user_history->status = $item->status;
         $user_history->new_status = 'approved';
         $user_history->save();
 
@@ -1529,13 +1500,98 @@ class UsersController extends AdminController {
         $user_history = new UserHistory;
         $user_history->user_id = $item->id;
         $user_history->admin_id = $this->user->id;
-        $user_history->status = 'added_new';
+        $user_history->status = $item->status;
         $user_history->new_status = 'added_approved';
         $user_history->save();
+
+        if( $item->deleted_at ) {
+            $item->restore();
+        }
 
         $item->status = 'added_approved';
         $item->save();
         $item->generateSocialCover();
+    }
+
+    private function addedByDentistUnclaimed($item) {
+
+        $user_history = new UserHistory;
+        $user_history->user_id = $item->id;
+        $user_history->admin_id = $this->user->id;
+        $user_history->status = $item->status;
+        $user_history->new_status = 'added_by_dentist_unclaimed';
+        $user_history->save();
+        
+        if( $item->deleted_at ) {
+            $item->restore();
+        }
+
+        $item->status = 'added_by_dentist_unclaimed';
+        $item->slug = $item->makeSlug();
+        $item->save();
+
+        $item->generateSocialCover();
+
+        $dent_name = null;
+        if(!empty($item->invited_by)) {
+            $dent = User::find($item->invited_by);
+
+            if(!empty($dent)) {
+                $dent_name = $dent->getNames();
+            }
+        }
+
+        $item->sendGridTemplate( 93 , [
+            'dentist_name' => !empty($dent_name) ? $dent_name : 'Name',
+            "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
+        ], 'trp');
+    }
+
+    private function addedByClinicUnclaimed($item) {
+
+        $user_history = new UserHistory;
+        $user_history->user_id = $item->id;
+        $user_history->admin_id = $this->user->id;
+        $user_history->status = $item->status;
+        $user_history->new_status = 'added_by_clinic_unclaimed';
+        $user_history->save();
+        
+        if( $item->deleted_at ) {
+            $item->restore();
+        }
+
+        $item->status = 'added_by_clinic_unclaimed';
+        $item->slug = $item->makeSlug();
+        $item->save();
+
+        $item->generateSocialCover();
+
+        // $dent_name = null;
+        // if(!empty($item->invited_by)) {
+        //     $dent = User::find($item->invited_by);
+
+        //     if(!empty($dent)) {
+        //         $dent_name = $dent->getNames();
+        //     }
+        // }
+
+        // $item->sendGridTemplate( 93 , [
+        //     'dentist_name' => !empty($dent_name) ? $dent_name : 'Name',
+        //     "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
+        // ], 'trp');
+    }
+
+    private function rejectDentist($item) {
+
+        $action = new UserAction;
+        $action->user_id = $item->id;
+        $action->action = 'deleted';
+        $action->reason = 'Rejected by admin';
+        $action->actioned_at = Carbon::now();
+        $action->save();
+
+        $item->deleteActions();
+        User::destroy( $item->id );
     }
 
     public function import() {
@@ -1791,10 +1847,65 @@ class UsersController extends AdminController {
         if( Request::input('ids') ) {
             $rejectusers = User::whereIn('id', Request::input('ids'))->get();
             foreach ($rejectusers as $ru) {
-                if($ru->is_dentist && $ru->status != 'rejected') {
-                    $ru->status = 'rejected';
-                    $ru->save();
-                    $ru->sendTemplate(14);
+                if($ru->is_dentist && empty($ru->deleted_at)) {
+                    if(in_array($ru->status, ['added_new', 'added_approved'])) {
+                        
+                        $user_history = new UserHistory;
+                        $user_history->user_id = $ru->id;
+                        $user_history->admin_id = $this->user->id;
+                        $user_history->status = $ru->status;
+                        $user_history->new_status = 'added_rejected';
+                        $user_history->save();
+
+                        $ru->status = 'added_rejected';
+                        $ru->save();
+                        
+                        $this->rejectDentist($ru);
+
+                    } else if(in_array($ru->status, ['new', 'pending', 'approved'])) {
+
+                        $user_history = new UserHistory;
+                        $user_history->user_id = $ru->id;
+                        $user_history->admin_id = $this->user->id;
+                        $user_history->status = $ru->status;
+                        $user_history->new_status = 'rejected';
+                        $user_history->save();
+
+                        $ru->status = 'rejected';
+                        $ru->save();
+
+                        $ru->sendTemplate(14);
+
+                        $this->rejectDentist($ru);
+
+                    } else if(in_array($ru->status, ['added_by_clinic_new', 'added_by_clinic_unclaimed', 'added_by_clinic_claimed'])) {
+
+                        $user_history = new UserHistory;
+                        $user_history->user_id = $ru->id;
+                        $user_history->admin_id = $this->user->id;
+                        $user_history->status = $ru->status;
+                        $user_history->new_status = 'added_by_clinic_rejected';
+                        $user_history->save();
+
+                        $ru->status = 'added_by_clinic_rejected';
+                        $ru->save();
+                        
+                        $this->rejectDentist($ru);
+
+                    } else if(in_array($ru->status, ['added_by_dentist_new', 'added_by_dentist_unclaimed', 'added_by_dentist_claimed'])) {
+
+                        $user_history = new UserHistory;
+                        $user_history->user_id = $ru->id;
+                        $user_history->admin_id = $this->user->id;
+                        $user_history->status = $ru->status;
+                        $user_history->new_status = 'added_by_dentist_rejected';
+                        $user_history->save();
+
+                        $ru->status = 'added_by_dentist_rejected';
+                        $ru->save();
+                        
+                        $this->rejectDentist($ru);
+                    }
                 }
             }
         }
@@ -1814,10 +1925,14 @@ class UsersController extends AdminController {
             $approvedUsers = User::whereIn('id', Request::input('ids'))->get();
             foreach ($approvedUsers as $au) {
                 if($au->is_dentist) {
-                    if($au->status == 'added_new') {
+                    if(in_array($au->status, ['added_new', 'added_rejected'])) {
                         $this->addedApproveDentist($au);
-                    } else if($au->status == 'new') {
+                    } else if(in_array($au->status, ['new', 'pending', 'rejected'])) {
                         $this->approveDentist($au);
+                    } else if(in_array($au->status, ['added_by_clinic_new', 'added_by_clinic_rejected'])) {
+                        $this->addedByClinicUnclaimed($au);
+                    } else if(in_array($au->status, ['added_by_dentist_new', 'added_by_dentist_rejected'])) {
+                        $this->addedByDentistUnclaimed($au);
                     }
                 }
             }

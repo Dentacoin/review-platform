@@ -206,6 +206,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function invitor() {
         return $this->hasOne('App\Models\User', 'id', 'invited_by');
     }
+    public function invitorWithTrashed() {
+        return $this->hasOne('App\Models\User', 'id', 'invited_by')->withTrashed();
+    }
     public function patient_invites_dentist() {
         return $this->hasMany('App\Models\User', 'invited_by', 'id')->where('is_dentist', 1)->orderBy('id', "DESC");
     }

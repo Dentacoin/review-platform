@@ -923,7 +923,7 @@ class DentistController extends FrontController {
 
             } else {
 
-                if($user->status != 'added_approved' && $user->status != 'admin_imported' && $user->status != 'added_by_clinic_unclaimed' && $user->status != 'added_by_dentist_unclaimed') {
+                if(!in_array($user->status, ['added_approved', 'admin_imported', 'added_by_clinic_unclaimed', 'added_by_dentist_unclaimed'])) {
                     return redirect( getLangUrl('/') );
                 }
             }
