@@ -58,6 +58,7 @@
                                     <th>Date</th>
                                     <th>User</th>
                                     <th>Type</th>
+                                    <th>Platform</th>
                                     <th>Reward for</th>
                                     <th>DCN</th>
                                 </tr>
@@ -77,6 +78,11 @@
                                         <td>
                                             @if($reward->type)
                                                 {{ config('rewards-type')[$reward->type] }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($reward->platform)
+                                                {{ config('platforms')[$reward->platform]['name'] }}
                                             @endif
                                         </td>
                                         <td>
