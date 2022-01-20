@@ -1716,6 +1716,8 @@ class VoxService {
 
         $q = Request::input('question');
 
+        $giveRewardForSurvey = false;
+
         if( !isset( $answered[$q] ) && $not_bot ) {
 
             $type = Request::input('type');
@@ -2379,6 +2381,8 @@ class VoxService {
 
                     if(count($answered) == count($vox->questions)) {
 
+                        $giveRewardForSurvey = true;
+
                         if(!$for_app) {
                             session([
                                 'scales' => null,
@@ -2482,7 +2486,7 @@ class VoxService {
         }
 
         if( $ret['success'] ) {
-            if($for_app) {
+            if($for_app && $giveRewardForSurvey) {
                 $ret['related_voxes'] = self::relatedSuggestedVoxes($user, $vox->id, 'related');
                 $ret['suggested_voxes'] = self::relatedSuggestedVoxes($user, $vox->id, 'suggested');
             } else {
