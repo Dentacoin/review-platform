@@ -990,6 +990,15 @@ class UsersController extends AdminController {
                                     }
                                 }
                             }
+                        } else if($key=='is_partner') {
+                            if (!empty($this->request->input($key))) {
+                                $substitutions = [
+                                    'dentist_name' => $item->getNames(),
+                                ];
+
+                                $item->sendGridTemplate(129, $substitutions, 'dentacoin');
+                            }
+                            $item->$key = $this->request->input($key);
                         } else if($key=='email') {
                             if (empty($this->request->input($key))) {
                                 $item->$key = $this->request->input($key);
@@ -1017,7 +1026,6 @@ class UsersController extends AdminController {
                                             User::destroy( $existing->id );
                                         }
 
-
                                         $item->$key = $this->request->input($key);
                                     } else {
                                         Request::session()->flash('error-message', 'This '.$key.' is already used by another user - ID '.$existing->id);
@@ -1026,7 +1034,6 @@ class UsersController extends AdminController {
                                     
                                 } else {
                                     if ($item->$key != $this->request->input($key)) {
-                                        
                                         $oldemail = new OldEmail;
                                         $oldemail->user_id = $item->id;
                                         $oldemail->email = $item->email;
