@@ -185,7 +185,7 @@ class ProfileController extends FrontController {
             $invitation->save();
 
             $text = trans('trp.page.profile.invite.whatsapp', [
-                'name' => $this->user->getNames() 
+                'name' => str_replace(['&'], ['and'], $this->user->getNames() )
             ]).rawurlencode($this->user->getLink().'?'. http_build_query([
                 'dcn-gateway-type'=>'patient-register', 
                 'inviter' => GeneralHelper::encrypt($this->user->id), 
