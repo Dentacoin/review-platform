@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\IncompleteRegistration;
 use App\Models\WithdrawalsCondition;
@@ -11,7 +13,9 @@ use App\Models\DcnTransaction;
 use App\Models\ScrapeDentist;
 use App\Models\EmailTemplate;
 use App\Models\AnonymousUser;
+use App\Models\InvalidEmail;
 use App\Models\DentistClaim;
+use App\Models\VoxQuestion;
 use App\Models\DcnCashout;
 use App\Models\PollAnswer;
 use App\Models\CronjobRun;
@@ -21,6 +25,7 @@ use App\Models\Blacklist;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\UserLogin;
+use App\Models\VoxScale;
 use App\Models\GasPrice;
 use App\Models\UserBan;
 use App\Models\Country;
@@ -30,12 +35,12 @@ use App\Models\Reward;
 use App\Models\Civic;
 use App\Models\Email;
 use App\Models\User;
-use App\Models\VoxQuestion;
-use App\Models\VoxScale;
 use App\Models\Vox;
 use App\Models\Dcn;
-use App\Models\InvalidEmail;
 
+use App\Helpers\GeneralHelper;
+use App\Helpers\VoxHelper;
+use App\Exports\Export;
 use Carbon\Carbon;
 
 use Response;
@@ -54,7 +59,7 @@ class YouTubeController extends FrontController {
     public function test() {
 
         if(!empty($this->admin)) {
-
+            
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');

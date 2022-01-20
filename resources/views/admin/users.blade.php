@@ -161,7 +161,7 @@
                                 </select>                            
                             </div>
                             <div class="col-md-2 filter trp-filter">
-                                <label for="fb-tab" style="display: flex;align-items: center;margin-top: 7px;color: #767676;font-weight: normal;">
+                                <label for="fb-tab" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
                                     <input id="fb-tab" type="checkbox" name="fb-tab" value="1" {!! !empty($fb_tab) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
                                     With fb page tab
                                 </label>
