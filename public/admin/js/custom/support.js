@@ -204,5 +204,24 @@ $(document).ready(function(){
 			console.log(data);
 	    });
 	});
-});
 
+	$('.delete-contact').click( function(e) {
+		e.preventDefault();
+
+		var that = $(this);
+
+		$.ajax({
+	        url: $(this).attr('href'),
+	        type: 'POST',
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    }).done( (function (data) {
+			if(data.success) {
+				that.closest('tr').remove();
+			}
+	    }).bind(this) ).fail(function (data) {
+			console.log(data);
+	    });
+	});
+});

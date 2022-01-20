@@ -148,6 +148,9 @@
                                                         <a class="btn btn-sm btn-primary answer-contact" href="javascript:;" data-toggle="modal" data-target="#answerModal" contact-id="{{ $item->id }}">
                                                             Answer
                                                         </a>
+                                                        <a class="btn btn-sm btn-danger delete-contact" href="{{ url('cms/support/contact/delete/'.$item->id) }}" title="Delete">
+                                                            ✖
+                                                        </a>
                                                     @else
                                                         @if(!empty($item->admin_answer))
                                                             <a href="javascript;:" class="show-answer">Show answer</a>

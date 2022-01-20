@@ -303,6 +303,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('support/contact', 					'SupportController@contact');
 	Route::post('support/contact/{id}', 			'SupportController@sendAnswer');
 	Route::post('support/contact/load-template/{id}','SupportController@loadTemplate');	
+	Route::post('support/contact/delete/{id}',		'SupportController@deleteContact');
 
 	Route::any('ips/bad', 							'IPsController@bad');
 	Route::any('ips/vpn', 							'IPsController@vpn');

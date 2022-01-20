@@ -2,8 +2,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SupportContact extends Model {
+
+    use SoftDeletes;
     
     protected $fillable = [
         "user_id",
@@ -12,6 +15,7 @@ class SupportContact extends Model {
         "issue",
         "description",
         "file_extension",
+        "admin_id",
         "admin_answer",
         "custom_title",
         "custom_subtitle",

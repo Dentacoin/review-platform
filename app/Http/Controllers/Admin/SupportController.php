@@ -426,6 +426,7 @@ class SupportController extends AdminController {
                     $this->sendReply($title, $subtitle, $subject, $content, $contact, $user_email, $user_name);
 
                     $contact->admin_answer_id = $template->id;
+                    $contact->admin_id = $this->user->id;
                     $contact->save();
 
                     return Response::json( ['success' => true] );
@@ -443,6 +444,7 @@ class SupportController extends AdminController {
                 $this->sendReply($title, $subtitle, $subject, $content, $contact, $user_email, $user_name);
 
                 $contact->admin_answer = $content;
+                $contact->admin_id = $this->user->id;
                 $contact->custom_title = Request::input('title');
                 $contact->custom_subtitle = Request::input('subtitle');
                 $contact->custom_subject = Request::input('subject');
@@ -549,5 +551,27 @@ class SupportController extends AdminController {
                 ]);
             }
         }
+    }
+
+    public function deleteContact($id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $contact = SupportContact::find($id);
+
+        if(!empty($contact)) {
+
+            $contact->admin_id = $this->user->id;
+            $contact->save();
+
+            $contact->delete();
+
+            return Response::json( ['success' => true] );
+        }
+
+        return Response::json( ['success' => false] );
     }
 }
