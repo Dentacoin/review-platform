@@ -73,6 +73,13 @@
                             </div>
 
                             <div class="col-md-2">
+                                <label for="show-website" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                    <input id="show-website" type="checkbox" name="show-website" value="1" {!! !empty($show_website) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                    Show website
+                                </label>
+                            </div>
+
+                            <div class="col-md-2">
                                 <label for="test-now" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
                                     <input id="test-now" type="checkbox" name="test-now" value="1" {!! !empty($test_now) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
                                     with bug Rejected to Added Rejected

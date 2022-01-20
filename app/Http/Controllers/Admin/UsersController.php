@@ -703,12 +703,17 @@ class UsersController extends AdminController {
             'id' => array(),
             'name' => array('template' => 'admin.parts.table-users-name'),
             'email' => array(),
-            'login' => array('template' => 'admin.parts.table-users-login', 'label' => 'Frontend' ),
-            'type' => array('template' => 'admin.parts.table-users-type'),
-            'country_id' => array('format' => 'country'),
-            'status' => array('template' => 'admin.parts.table-users-status', 'label' => 'Status'),
-            'is_partner' => array('template' => 'admin.parts.table-users-partner', 'label' => 'Partner'),
         ];
+
+        if(!empty(request('show-website'))) {
+            $table_fields['website'] = array('label' => 'Website');
+        }
+
+        $table_fields['login'] = array('template' => 'admin.parts.table-users-login', 'label' => 'Frontend' );
+        $table_fields['type'] = array('template' => 'admin.parts.table-users-type');
+        $table_fields['country_id'] = array('format' => 'country');
+        $table_fields['status'] = array('template' => 'admin.parts.table-users-status', 'label' => 'Status');
+        $table_fields['is_partner'] = array('template' => 'admin.parts.table-users-partner', 'label' => 'Partner');
 
         if(request('search-platform') == 'trp') {
             $table_fields['ratings'] = array('template' => 'admin.parts.table-users-ratings');
@@ -757,6 +762,7 @@ class UsersController extends AdminController {
             'exclude_unsubscribed' => request('exclude-unsubscribed'),
             'vip_access' => request('vip-access'),
             'test_now' => request('test-now'),
+            'show_website' => request('show-website'),
             'civic_kyc_hash' => request('civic-kyc-hash'),
             'fb_tab' => request('fb-tab'),
             'user_platforms' => $user_platforms,
