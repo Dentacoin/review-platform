@@ -76,10 +76,14 @@ class TransactionsController extends AdminController {
             $transactions = $transactions->whereHas('user', function ($query) use ($mail) {
                 $query->where('email', 'like', '%'.trim($mail).'%');
             });
-        } 
+        }
 
-        if(!empty(request()->input( 'paid-by-user'))) {
+        if(!empty(request()->input('paid-by-user'))) {
             $transactions = $transactions->whereNotNull('is_paid_by_the_user');
+        }
+
+        if(!empty(request()->input('manual_check_admin'))) {
+            $transactions = $transactions->whereNotNull('manual_check_admin');
         }
 
         if(!empty($this->request->input('created'))) {
@@ -162,6 +166,7 @@ class TransactionsController extends AdminController {
             'are_transactions_hash_check_stopped' => $are_transactions_hash_check_stopped,
             'is_retry_stopped' => $is_retry_stopped,
             'is_retry_paid_by_the_user_stopped' => $is_retry_paid_by_the_user_stopped,
+            'manually_check_transactions' => DcnTransaction::where('manual_check_admin', 1)->first() ? true : false,
             'transactions' => $transactions,
             'total_count' => $total_count,
             'search_address' => $this->request->input('search-address'),
@@ -174,6 +179,7 @@ class TransactionsController extends AdminController {
             'search_email' =>  $this->request->input('search-email'),
             'paid_by_user' => $this->request->input('paid-by-user'),
             'search_user_status' => $this->request->input('search-user-status'),
+            'manual_check_admin' => $this->request->input('manual_check_admin'),
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
             'end' => $end,
@@ -706,7 +712,7 @@ class TransactionsController extends AdminController {
 
         if(Request::isMethod('post')) {
 
-            if((!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) || (!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) || (!empty(request('status')) && request('status') != $item->status) || (!empty(request('message')) && request('message') != $item->message)) {
+            if((!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) || (!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) || (!empty(request('status')) && request('status') != $item->status) || (!empty(request('message')) && request('message') != $item->message) || (!empty(request('address')) && request('address') != $item->address)) {
 
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $item->id;
@@ -719,6 +725,10 @@ class TransactionsController extends AdminController {
 
                 if(!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) {
                     $dcn_history->tx_hash = request('tx_hash');
+                }
+
+                if(!empty(request('address')) && request('address') != $item->address) {
+                    $dcn_history->address = request('address');
                 }
 
                 if(!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) {
@@ -739,6 +749,8 @@ class TransactionsController extends AdminController {
                 $item->allowance_hash = request('allowance_hash');
             }
             $item->status = request('status');
+            $item->address = request('address');
+            $item->manual_check_admin = null;
 
             if(request('status') == 'new') {
                 $item->processing = 0;

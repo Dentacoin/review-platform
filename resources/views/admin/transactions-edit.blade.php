@@ -45,7 +45,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Address</label>
                         <div class="col-md-10">
-                            {{ Form::text('address', $item->address, array('class' => 'form-control', 'disabled'=>'disabled')) }}
+                            {{ Form::text('address', $item->address, array('class' => 'form-control')) }}
                         </div>
                     </div>
                     
@@ -76,6 +76,13 @@
                         <label class="col-md-2 control-label">Message</label>
                         <div class="col-md-10">
                             {{ Form::textarea('message', null, array('class' => 'form-control', 'style' => 'max-height: 60px !important;', 'placeholder' => 'Write here any comment about the changes if you want..')) }}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            *Hint: If you want to send the transaction to the payment server, change transaction's status to 'New'
                         </div>
                     </div>
 

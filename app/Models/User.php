@@ -13,6 +13,7 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Str;
 
 use App\Models\DcnTransactionHistory;
+use App\Models\WithdrawalsCondition;
 use App\Models\StopEmailValidation;
 use App\Models\EmailValidation;
 use App\Models\BlacklistBlock;
@@ -1252,18 +1253,30 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             }
         }
 
-        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['stopped', 'first'])->get();
+        $is_optimism_activated = WithdrawalsCondition::find(1)->is_optimism_activated;
 
+        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['stopped', 'first'])->get();
+        
         if ($transactions->isNotEmpty()) {
             foreach ($transactions as $trans) {
-                $trans->status = 'new';
-                $trans->save();
+                if(!$is_optimism_activated || $trans->created_at > '2022-01-25 00:00:00') {
+                    $trans->status = 'new';
+                    $trans->save();
 
-                $dcn_history = new DcnTransactionHistory;
-                $dcn_history->transaction_id = $trans->id;
-                $dcn_history->status = $trans->status;
-                $dcn_history->history_message = 'Status new after the user is restored';
-                $dcn_history->save();
+                    $dcn_history = new DcnTransactionHistory;
+                    $dcn_history->transaction_id = $trans->id;
+                    $dcn_history->status = $trans->status;
+                    $dcn_history->history_message = 'Status new after the user is restored';
+                    $dcn_history->save();
+                } else {
+                    $trans->manual_check_admin = true;
+                    $trans->save();
+
+                    $dcn_history = new DcnTransactionHistory;
+                    $dcn_history->transaction_id = $trans->id;
+                    $dcn_history->history_message = 'After the user was restored, admin must check it manually';
+                    $dcn_history->save();
+                }
             }
         }
 

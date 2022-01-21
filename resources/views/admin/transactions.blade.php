@@ -21,7 +21,6 @@
                 <a href="{{ $is_retry_paid_by_the_user_stopped ? url('cms/transactions/enable-paid-by-user-retry') : url('cms/transactions/disable-paid-by-user-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_paid_by_the_user_stopped ? 'Enable' : 'Disable' }} Paid By User Retry</a>
             @endif
         </div>
-
     </div>
     <div style="margin-bottom: 10px;"><a href="https://docs.google.com/spreadsheets/d/1O3hId4TS3m_ZA-1-c77Rl6_grqyb2TIrpKkqTtmmgx8/edit#gid=0" target="_blank">Statuses info</a></div>
 
@@ -43,6 +42,11 @@
     @if($is_retry_paid_by_the_user_stopped)
         <div>
             <label class="alert alert-warning">Sending paid by user transactions to the PS is disabled.</label>
+        </div>
+    @endif
+    @if($manually_check_transactions && $admin->role=='super_admin')
+        <div>
+            <label class="alert alert-warning">Тhere are transactions that need to be checked manually.</label>
         </div>
     @endif
 
@@ -106,12 +110,20 @@
                             <div class="col-md-1">
                                 <input type="text" class="form-control datepicker" name="search-to" value="{{ $search_to }}" placeholder="Search to" autocomplete="off">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <label for="paid-by-user" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
                                     <input id="paid-by-user" type="checkbox" name="paid-by-user" value="1" {!! !empty($paid_by_user) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
                                     Paid by user
                                 </label>
                             </div>
+                            @if($admin->role=='super_admin')
+                                <div class="col-md-2">
+                                    <label for="manual_check_admin" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                        <input id="manual_check_admin" type="checkbox" name="manual_check_admin" value="1" {!! !empty($manual_check_admin) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                        For manual check
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                         <div class="row custom-row" style="margin-bottom: 10px;">
                             <input type="submit" class="btn btn-block btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
