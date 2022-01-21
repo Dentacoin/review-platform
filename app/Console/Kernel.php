@@ -366,7 +366,7 @@ PENDING TRANSACTIONS
                                         $trans->user->sendTemplate( 20, [
                                             'transaction_amount' => $trans->amount,
                                             'transaction_address' => $trans->address,
-                                            'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                            'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
                                         ], $trans->type=='vox' ? 'vox' : 'trp' );
                                     }
                                     $found = true;
@@ -633,7 +633,7 @@ UNCONFIRMED TRANSACTIONS
                                             $trans->user->sendTemplate( 20, [
                                                 'transaction_amount' => $trans->amount,
                                                 'transaction_address' => $trans->address,
-                                                'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                                'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
                                             ], $trans->type=='vox' ? 'vox' : 'trp' );
                                         }
                                         $found = true;
@@ -672,7 +672,7 @@ UNCONFIRMED TRANSACTIONS
                                             $trans->user->sendTemplate( 20, [
                                                 'transaction_amount' => $trans->amount,
                                                 'transaction_address' => $trans->address,
-                                                'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                                'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
                                             ], $trans->type=='vox' ? 'vox' : 'trp' );
                                         }
                                         $found = true;
