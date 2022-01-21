@@ -14,6 +14,7 @@ class DcnTransactionHistory extends Model {
         'amount',
         'admin_id',
         'address',
+        'layer_type',
         'tx_hash',
         'allowance_hash',
         'nonce',

@@ -21,6 +21,7 @@ class DcnTransaction extends Model {
         'allowance_hash',
         'nonce',
         'type',
+        'layer_type',
         'reference_id',
         'status',
         'hash',
