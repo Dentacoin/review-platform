@@ -13,6 +13,7 @@ use App\Models\DcnTransaction;
 use App\Models\ScrapeDentist;
 use App\Models\EmailTemplate;
 use App\Models\AnonymousUser;
+use App\Models\WalletAddress;
 use App\Models\InvalidEmail;
 use App\Models\DentistClaim;
 use App\Models\VoxQuestion;

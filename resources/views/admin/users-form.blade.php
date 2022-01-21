@@ -738,9 +738,9 @@
 
                                         @if($item->status == 'clinic_branch')
                                             @if($item->wallet_addresses->isNotEmpty())
-                                                <input type="text" name="dcn_address" class="form-control" value="{{ $item->wallet_addresses->first()->dcn_address }}">
+                                                <input type="text" name="dcn_address" class="form-control" disabled="disabled" value="{{ $item->wallet_addresses->first()->dcn_address }}">
                                             @else
-                                                <input type="text" name="dcn_address" class="form-control">
+                                                <input type="text" name="dcn_address" class="form-control" disabled="disabled">
                                             @endif
                                         @else
                                             @if($item->wallet_addresses->isNotEmpty())

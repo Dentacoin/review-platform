@@ -14,6 +14,7 @@ class WalletAddress extends Model {
         'dcn_address',
         'dcn_address_label',
         'selected_wallet_address',
+        'is_deprecated'
     ];
 
     protected $dates = [

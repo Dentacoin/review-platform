@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\IncompleteRegistration;
+use App\Models\WithdrawalsCondition;
 use App\Models\VoxQuestionAnswered;
 use App\Models\UserSurveyWarning;
 use App\Models\UnclaimedDentist;
@@ -923,27 +924,33 @@ class UsersController extends AdminController {
                     $user_history->save();
                 }
 
-                if($item->status == 'clinic_branch' && !empty($this->request->input('dcn_address'))) {
-
-                    if(mb_strlen($this->request->input('dcn_address'))!=42) {
-                        Request::session()->flash('error-message', 'Please enter a valid DCN address.');
-                        return redirect('cms/users/users/edit/'.$item->id);
-                    }
+                // if($item->status == 'clinic_branch' && !empty($this->request->input('dcn_address'))) {
+                    //if you change this -> check in api the logic
+                //     if(mb_strlen($this->request->input('dcn_address'))!=42) {
+                //         Request::session()->flash('error-message', 'Please enter a valid DCN address.');
+                //         return redirect('cms/users/users/edit/'.$item->id);
+                //     }
         
-                    $existing_address = WalletAddress::where('user_id', $item->id)->first();
+                //     $existing_address = WalletAddress::where('user_id', $item->id)->first();
         
-                    if (!empty($existing_address)) {
-                        $existing_address->dcn_address = $this->request->input('dcn_address');
-                        $existing_address->selected_wallet_address = 1;
-                        $existing_address->save();
-                    } else {
-                        $new_address = new WalletAddress;
-                        $new_address->user_id = $item->id;
-                        $new_address->dcn_address = $this->request->input('dcn_address');
-                        $new_address->selected_wallet_address = 1;
-                        $new_address->save();
-                    }
-                }
+                //     if (!empty($existing_address)) {
+                //         $existing_address->dcn_address = $this->request->input('dcn_address');
+                //         $existing_address->selected_wallet_address = 1;
+                //         $existing_address->save();
+                //     } else {
+                //         $new_address = new WalletAddress;
+                //         $new_address->user_id = $item->id;
+                //         $new_address->dcn_address = $this->request->input('dcn_address');
+                //         $new_address->selected_wallet_address = 1;
+                //         $is_optimism_activated = WithdrawalsCondition::find(1)->is_optimism_activated;
+                //         if($is_optimism_activated) {
+                //             $new_address->is_deprecated = 0;
+                //         } else {
+                //             $new_address->is_deprecated = 1;
+                //         }
+                //         $new_address->save();
+                //     }
+                // }
 
                 if( Request::input('avatar') ) {
                     $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
