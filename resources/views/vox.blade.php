@@ -200,6 +200,10 @@
 			@endif
 		@endif
 
+		@if(!empty($optimismPopup))
+			@include('vox.popups.optimism-popup')
+		@endif
+
 		@if((!empty($user) && $current_page == 'questionnaire') || request('app'))
 		@else
 			<a href="https://support.dentacoin.com/" target="_blank" class="support-icon">
