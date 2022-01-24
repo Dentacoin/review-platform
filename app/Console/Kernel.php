@@ -930,7 +930,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             //unlink('/tmp/cron-'.date('Ymd'));
             echo 'DCN Low Balance Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })>dailyAt('08:00');
+        })->dailyAt('08:00');
 
 
         $schedule->call(function () {
