@@ -13,12 +13,14 @@
                                 @elseif(!empty($v['label']))
                                     @if(!empty($v['order']))
                                         @if( !request()->input( $v['orderKey'] ) )
+
                                             <a href="{{ !empty($current_url) ? $current_url.'?&'.$v['orderKey'].'=asc'.(!empty($show_all) ? '&show_all=1' : '') : 'javascript:;' }}" class="order">{{ $v['label'] }}</a>
                                         @elseif( request()->input( $v['orderKey'] )=='desc' )
                                             <a href="{{ !empty($current_url) ? $current_url.'?&'.$v['orderKey'].'=asc'.(!empty($show_all) ? '&show_all=1' : '') : 'javascript:;' }}" class="order asc">{{ $v['label'] }}</a>
                                         @else
                                             <a href="{{ !empty($current_url) ? $current_url.'?&'.$v['orderKey'].'=desc'.(!empty($show_all) ? '&show_all=1' : '') : 'javascript:;' }}" class="order desc">{{ $v['label'] }}</a>
                                         @endif
+
                                     @else
                                         {{ $v['label'] }}
                                     @endif
@@ -35,7 +37,7 @@
                 </thead>
                 <tbody>
                 	@foreach($table_data as $row)
-                    	<tr {!! !empty($row->id) ? 'item-id="'.$row->id.'"' : '' !!} style="{!! !empty($row->deleted_at) ? 'opacity: 0.7;' : '' !!}">
+                    	<tr {!! !empty($row->id) ? 'item-id="'.$row->id.'"' : '' !!} {!! !empty($row->deleted_at) ? 'style="opacity: 0.7;"' : '' !!}>
                     		@foreach($table_fields as $k => $v)
                                 @if(!empty($v['template']))
                                     <td {!! $k == 'tx_hash' ? 'class="break-all"' : '' !!} {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>@include($v['template'], array('item' => $row) )</td>
@@ -124,11 +126,19 @@
                                         <td style="word-break: break-word;">{{ $row[$k] }}</td>
                                     @elseif($v['format']=='nl2br')
                                         <td>{!! $row[$k] !!}</td>
+                                    @elseif($v['format']=='link')
+                                        <td style="line-break: anywhere;">
+                                            @if(filter_var($row[$k], FILTER_VALIDATE_URL) === FALSE)
+                                                {{ $row[$k] }}
+                                            @else
+                                                <a href="{{ $row[$k] }}" target="_blank">{{ $row[$k] }}</a>
+                                            @endif
+                                        </td>
                                     @endif
                                 @elseif(count(explode('.', $k))==2)
                                     <td>{{ $row[explode('.', $k)[0]][explode('.', $k)[1]] }}</td>
                                 @else
-                                    <td style="{!! !empty($v['width']) ? 'line-break: anywhere; width:'.$v['width'] : '' !!} {!! !empty($v['max-width']) ? 'line-break: anywhere; max-width:'.$v['max-width'] : '' !!}">{{ $row[$k] }}</td>
+                                    <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>{{ $row[$k] }}</td>
                                 @endif
 	                        @endforeach
                     	</tr>
