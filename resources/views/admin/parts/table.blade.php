@@ -130,7 +130,7 @@
                                 @elseif(count(explode('.', $k))==2)
                                     <td>{{ $row[explode('.', $k)[0]][explode('.', $k)[1]] }}</td>
                                 @else
-                                    <td style="{!! !empty($v['width']) ? 'width:'.$v['width'] : '' !!} {!! !empty($v['max-width']) ? 'max-width:'.$v['max-width'] : '' !!}">{{ $row[$k] }}</td>
+                                    <td style="{!! !empty($v['width']) ? 'width:'.$v['width'] : '' !!} {!! !empty($v['max-width']) ? 'line-break: anywhere; max-width:'.$v['max-width'] : '' !!}">{{ $row[$k] }}</td>
                                 @endif
 	                        @endforeach
                     	</tr>
