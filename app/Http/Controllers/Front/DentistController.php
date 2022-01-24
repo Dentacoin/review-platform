@@ -134,6 +134,10 @@ class DentistController extends FrontController {
             return redirect( getLangUrl('dentist/vadivelan-jeyachandran'), 301 );
         }
 
+        if ($slug == 'zhaklin-stoykova') {
+            return redirect(getLangUrl('page-not-found'));
+        }
+
         $review_id = request('review_id');
 
         if (!empty($this->admin)) {
