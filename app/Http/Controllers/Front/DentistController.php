@@ -588,7 +588,7 @@ class DentistController extends FrontController {
         $view_params = [
             'strength_arr' => $strength_arr,
             'completed_strength' => $completed_strength,
-            'noIndex' => $item->address ? false : true,
+            'noIndex' => $item->status == 'test' ? true : ($item->address ? false : true),
             'item' => $item,
             'is_trusted' => $isTrusted,
             'canAskDentist' => $canAskDentist,
