@@ -887,7 +887,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     'currency' => 'ETH',
                     'address' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
                     'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0xe00b37962604344cacd1efbf0d45553cc400f53c&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 100000000000000000
+                    'limit' => 10000000000000000
                 ],
             ];
 
@@ -898,7 +898,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     echo ' CURL '.$curl;
                     $curl = json_decode($curl, true);
                     if(!empty(intval($curl['result']))) {
-                        if( intval($curl['result']) < $data['limit'] ) { //0.1 for VOX , 0.05 for others
+                        if( intval($curl['result']) < $data['limit'] ) { //0.01 for VOX , 0.05 for others
                             $currency = $data['currency'];
 
                             Mail::send('emails.template', [
