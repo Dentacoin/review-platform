@@ -339,43 +339,68 @@ PENDING TRANSACTIONS
                 foreach ($transactions as $trans) {
                     $int++;
 
-                    try {
-                        $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
-                    } catch (\Exception $e) {
-                        $curl = false;
-                    }
-                    if(!empty($curl)) {
-                        $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                    $transactionIsCompleted = false;
+
+                    if($trans->layer_type == 'l1') {
+                        try {
+                            $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                        } catch (\Exception $e) {
+                            $curl = false;
+                        }
                         if(!empty($curl)) {
                             $trans->cronjob_unconfirmed = 1;
                             $trans->save();
-
+    
                             $curl = json_decode($curl, true);
                             if($curl['status']) {
                                 if(!empty($curl['result']['status'])) {
-                                    $trans->status = 'completed';
-                                    $trans->cronjob_unconfirmed = 0;
-                                    $trans->save();
-
-                                    $dcn_history = new DcnTransactionHistory;
-                                    $dcn_history->transaction_id = $trans->id;
-                                    $dcn_history->status = 'completed';
-                                    $dcn_history->save();
-
-                                    if( $trans->user && !empty($trans->user->email) ) {
-                                        $trans->user->sendTemplate( 20, [
-                                            'transaction_amount' => $trans->amount,
-                                            'transaction_address' => $trans->address,
-                                            'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
-                                        ], $trans->type=='vox' ? 'vox' : 'trp' );
-                                    }
-                                    $found = true;
-                                    echo 'COMPLETED!'.PHP_EOL;
-                                    if($int % 5 == 0) {
-                                        sleep(1);
-                                    }
+                                    $transactionIsCompleted = true;
                                 }
                             }
+                        }
+                    } else {
+
+                        $ch = curl_init();
+                        curl_setopt($ch, CURLOPT_URL,"https://payment-server-info.dentacoin.com/check-l2-transaction");
+                        curl_setopt($ch, CURLOPT_POST, 1);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, "hash=".$trans->tx_hash);
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                        // receive server response ...
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $resp = json_decode(curl_exec($ch));
+                        curl_close($ch);
+
+                        if(!empty($resp)) {
+                            $trans->cronjob_unconfirmed = 1;
+                            $trans->save();
+
+                            if(isset($resp->success) && isset($resp->status) && $resp->status == 'success') {
+                                $transactionIsCompleted = true;
+                            }
+                        }
+                    }
+
+                    if(!empty($transactionIsCompleted)) {
+                        $trans->status = 'completed';
+                        $trans->cronjob_unconfirmed = 0;
+                        $trans->save();
+
+                        $dcn_history = new DcnTransactionHistory;
+                        $dcn_history->transaction_id = $trans->id;
+                        $dcn_history->status = 'completed';
+                        $dcn_history->save();
+
+                        if( $trans->user && !empty($trans->user->email) ) {
+                            $trans->user->sendTemplate( 20, [
+                                'transaction_amount' => $trans->amount,
+                                'transaction_address' => $trans->address,
+                                'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
+                            ], $trans->type=='vox' ? 'vox' : ( $trans->type=='trp' ? 'trp' : 'dentacoin') );
+                        }
+
+                        echo 'COMPLETED!'.PHP_EOL;
+                        if($int % 5 == 0) {
+                            sleep(1);
                         }
                     }
                 }
@@ -607,81 +632,131 @@ UNCONFIRMED TRANSACTIONS
                         $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                         echo $log.PHP_EOL;
 
+                        $transactionIsCompleted = false;
+                        $transactionIsPaidByUserCompleted = false;
+                        $transactionIsPaidByUserFailed = false;
                         $found = false;
                         $int++;
 
-                        $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
-                        if(!empty($curl)) {
-                            $trans->cronjob_unconfirmed = 1;
-                            $trans->save();
+                        if($trans->layer_type == 'l1') {
+                            try {
+                                $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                            } catch (\Exception $e) {
+                                $curl = false;
+                            }
+                            if(!empty($curl)) {
+                                $trans->cronjob_unconfirmed = 1;
+                                $trans->save();
 
-                            $curl = json_decode($curl, true);
-                            if($curl['status']) {
+                                $curl = json_decode($curl, true);
+                                if($curl['status']) {
 
-                                if($trans->is_paid_by_the_user) {
-                                    if($curl['result']['status'] === '1') {
-                                        $trans->status = 'completed';
-                                        $trans->cronjob_unconfirmed = 0;
-                                        $trans->save();
-
-                                        $dcn_history = new DcnTransactionHistory;
-                                        $dcn_history->transaction_id = $trans->id;
-                                        $dcn_history->status = 'completed';
-                                        $dcn_history->save();
-
-                                        if( $trans->user && !empty($trans->user->email) ) {
-                                            $trans->user->sendTemplate( 20, [
-                                                'transaction_amount' => $trans->amount,
-                                                'transaction_address' => $trans->address,
-                                                'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
-                                            ], $trans->type=='vox' ? 'vox' : 'trp' );
+                                    if($trans->is_paid_by_the_user) {
+                                        if($curl['result']['status'] === '1') {
+                                            $transactionIsPaidByUserCompleted = true;
+                                        } else if ($curl['result']['status'] === '0') {
+                                            $transactionIsPaidByUserFailed = true;
                                         }
-                                        $found = true;
-                                        echo 'COMPLETED!'.PHP_EOL;
-                                        if($int % 5 == 0) {
-                                            sleep(1);
-                                        }
-                                    } else if ($curl['result']['status'] === '0') {
-                                        $trans->status = 'failed';
-                                        $trans->cronjob_unconfirmed = 0;
-                                        $trans->save();
-
-                                        $dcn_history = new DcnTransactionHistory;
-                                        $dcn_history->transaction_id = $trans->id;
-                                        $dcn_history->status = 'failed';
-                                        $dcn_history->history_message = 'Failed in Etherscan';
-                                        $dcn_history->save();
-
-                                        if($int % 5 == 0) {
-                                            sleep(1);
-                                        }
-                                    }
-                                } else {
-
-                                    if(!empty($curl['result']['status'])) {
-                                        $trans->status = 'completed';
-                                        $trans->cronjob_unconfirmed = 0;
-                                        $trans->save();
-
-                                        $dcn_history = new DcnTransactionHistory;
-                                        $dcn_history->transaction_id = $trans->id;
-                                        $dcn_history->status = 'completed';
-                                        $dcn_history->save();
-
-                                        if( $trans->user && !empty($trans->user->email) ) {
-                                            $trans->user->sendTemplate( 20, [
-                                                'transaction_amount' => $trans->amount,
-                                                'transaction_address' => $trans->address,
-                                                'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
-                                            ], $trans->type=='vox' ? 'vox' : 'trp' );
-                                        }
-                                        $found = true;
-                                        echo 'COMPLETED!'.PHP_EOL;
-                                        if($int % 5 == 0) {
-                                            sleep(1);
+                                    } else {
+                                        if(!empty($curl['result']['status'])) {
+                                            $transactionIsCompleted = true;
                                         }
                                     }
                                 }
+                            }
+                        } else {
+                            $ch = curl_init();
+                            curl_setopt($ch, CURLOPT_URL,"https://payment-server-info.dentacoin.com/check-l2-transaction");
+                            curl_setopt($ch, CURLOPT_POST, 1);
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, "hash=".$trans->tx_hash);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                            // receive server response ...
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            $resp = json_decode(curl_exec($ch));
+                            curl_close($ch);
+
+                            if(!empty($resp)) {
+                                $trans->cronjob_unconfirmed = 1;
+                                $trans->save();
+
+                                if(isset($resp->success) && isset($resp->status)) {
+
+                                    if($trans->is_paid_by_the_user) {
+                                        if($resp->status == 'success') {
+                                            $transactionIsPaidByUserCompleted = true;
+                                        } else if ($resp->status == 'failed') {
+                                            $transactionIsPaidByUserFailed = true;
+                                        }
+                                    } else {
+                                        if($resp->status == 'success') {
+                                            $transactionIsCompleted = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if($transactionIsCompleted) {
+                            $trans->status = 'completed';
+                            $trans->cronjob_unconfirmed = 0;
+                            $trans->save();
+
+                            $dcn_history = new DcnTransactionHistory;
+                            $dcn_history->transaction_id = $trans->id;
+                            $dcn_history->status = 'completed';
+                            $dcn_history->save();
+
+                            if( $trans->user && !empty($trans->user->email) ) {
+                                $trans->user->sendTemplate( 20, [
+                                    'transaction_amount' => $trans->amount,
+                                    'transaction_address' => $trans->address,
+                                    'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
+                                ], $trans->type=='vox' ? 'vox' : ( $trans->type=='trp' ? 'trp' : 'dentacoin') );
+                            }
+                            $found = true;
+                            echo 'COMPLETED!'.PHP_EOL;
+                            if($int % 5 == 0) {
+                                sleep(1);
+                            }
+                        }
+
+                        if($transactionIsPaidByUserCompleted) {
+                            $trans->status = 'completed';
+                            $trans->cronjob_unconfirmed = 0;
+                            $trans->save();
+
+                            $dcn_history = new DcnTransactionHistory;
+                            $dcn_history->transaction_id = $trans->id;
+                            $dcn_history->status = 'completed';
+                            $dcn_history->save();
+
+                            if( $trans->user && !empty($trans->user->email) ) {
+                                $trans->user->sendTemplate( 20, [
+                                    'transaction_amount' => $trans->amount,
+                                    'transaction_address' => $trans->address,
+                                    'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
+                                ], $trans->type=='vox' ? 'vox' : ( $trans->type=='trp' ? 'trp' : 'dentacoin') );
+                            }
+                            $found = true;
+                            echo 'COMPLETED!'.PHP_EOL;
+                            if($int % 5 == 0) {
+                                sleep(1);
+                            }
+                        }
+
+                        if($transactionIsPaidByUserFailed) {
+                            $trans->status = 'failed';
+                            $trans->cronjob_unconfirmed = 0;
+                            $trans->save();
+
+                            $dcn_history = new DcnTransactionHistory;
+                            $dcn_history->transaction_id = $trans->id;
+                            $dcn_history->status = 'failed';
+                            $dcn_history->history_message = 'Failed in Etherscan';
+                            $dcn_history->save();
+
+                            if($int % 5 == 0) {
+                                sleep(1);
                             }
                         }
 
@@ -721,24 +796,50 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 $int = 0;
                 foreach ($transactions as $trans) {
                     $int++;
+                    $transactionIsCompleted = false;
 
-                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->allowance_hash.'&apikey='.env('ETHERSCAN_API'));
-                    if(!empty($curl)) {
-
-                        $curl = json_decode($curl, true);
-                        if($curl['status']) {
-                            if(!empty($curl['result']['status'])) {
-                                $trans->notified_at = Carbon::now();
-                                $trans->save();
-
-                                if( $trans->user && !empty($trans->user->email) ) {
-                                    $trans->user->sendGridTemplate( 124, null, 'dentacoin' );
-                                }
-                                echo 'COMPLETED!'.PHP_EOL;
-                                if($int % 5 == 0) {
-                                    sleep(1);
+                    if($trans->layer_type == 'l1') {
+                        try {
+                            $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->allowance_hash.'&apikey='.env('ETHERSCAN_API'));
+                        } catch (\Exception $e) {
+                            $curl = false;
+                        }
+                        if(!empty($curl)) {
+                            $curl = json_decode($curl, true);
+                            if($curl['status']) {
+                                if(!empty($curl['result']['status'])) {
+                                    $transactionIsCompleted = true;
                                 }
                             }
+                        }
+                    } else {
+                        $ch = curl_init();
+                        curl_setopt($ch, CURLOPT_URL,"https://payment-server-info.dentacoin.com/check-l2-transaction");
+                        curl_setopt($ch, CURLOPT_POST, 1);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, "hash=".$trans->allowance_hash);
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                        // receive server response ...
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $resp = json_decode(curl_exec($ch));
+                        curl_close($ch);
+
+                        if(!empty($resp)) {
+                            if(isset($resp->success) && isset($resp->status) && $resp->status == 'success') {
+                                $transactionIsCompleted = true;
+                            }
+                        }
+                    }
+
+                    if($transactionIsCompleted) {
+                        $trans->notified_at = Carbon::now();
+                        $trans->save();
+
+                        if( $trans->user && !empty($trans->user->email) ) {
+                            $trans->user->sendGridTemplate( 124, null, 'dentacoin' );
+                        }
+                        echo 'COMPLETED!'.PHP_EOL;
+                        if($int % 5 == 0) {
+                            sleep(1);
                         }
                     }
                 }

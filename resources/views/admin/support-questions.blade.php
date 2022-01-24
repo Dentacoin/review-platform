@@ -134,6 +134,11 @@
 										1. copy {{ '<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen="" frameborder="0" height="720" width="1280"></iframe></div>'}}<br/>
 										2. click on "Source" and paste it where you want.<br/>
 										3. change the video id (in this case is "tgbNymZ7vqY").<br/>
+										<br/>
+										* If you want to add an image:<br/>
+										1. copy {{ '<div style="text-align: center;"><img src="https://dentavox.dentacoin.com/new-vox-img/dv-home.jpg" style="max-width: 100%;"/></div>'}}<br/>
+										2. click on "Source" and paste it where you want.<br/>
+										3. change the image link (in this case is "https://dentavox.dentacoin.com/new-vox-img/dv-home.jpg").<br/>
 									</p>
 								</div>
 			                    <div class="form-group clearfix">
