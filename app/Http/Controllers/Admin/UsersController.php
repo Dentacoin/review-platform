@@ -707,7 +707,7 @@ class UsersController extends AdminController {
         ];
 
         if(!empty(request('show-website'))) {
-            $table_fields['website'] = array('label' => 'Website', 'max-width' => '150px');
+            $table_fields['website'] = array('label' => 'Website', 'width' => '150px');
         }
 
         $table_fields['login'] = array('template' => 'admin.parts.table-users-login', 'label' => 'Frontend' );
