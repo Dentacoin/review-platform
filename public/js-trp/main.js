@@ -356,10 +356,6 @@ jQuery(document).ready(function($){
 
 			if(id=='submit-review-popup') {
 
-				if($(window).outerWidth() && typeof FB !== 'undefined') {
-				    FB.CustomerChat.hide();
-			    }
-
 			    if($(window).outerWidth() < 768) {
 			    	$(document.body).on('touchmove', function() {
 			    		$('.question').find('.popup-title').removeClass('sticky-q');
@@ -652,18 +648,6 @@ jQuery(document).ready(function($){
 			window.location.reload();
 		}
 
-		if(invite_popup) {
-			showPopup( 'popup-invite' );
-		}
-
-		if(custom_widget_popup) {
-			showPopup( 'popup-widget' );
-		}
-
-		if(window.innerWidth < 768 && typeof FB !== 'undefined') {
-		    FB.CustomerChat.show();
-	    }
-
 		if(existing_dentist) {
 			$('#popup-existing-dentist').remove();
 			$('#verification-popup').addClass('active');
@@ -695,6 +679,14 @@ jQuery(document).ready(function($){
 		} else {
 			$('.popup').removeClass('active');
 			$('body').removeClass('popup-visible');
+		}
+
+		if(custom_widget_popup) {
+			showPopup( 'popup-widget' );
+		}
+
+		if(invite_popup) {
+			showPopup( 'popup-invite' );
 		}
 	}
 
