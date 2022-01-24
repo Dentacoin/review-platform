@@ -135,7 +135,11 @@ class DentistController extends FrontController {
         }
 
         if ($slug == 'zhaklin-stoykova') {
-            return redirect(getLangUrl('page-not-found'));
+
+            if(!empty($this->user) && $this->user->slug == 'zhaklin-stoykova') {
+            } else {
+                return redirect(getLangUrl('page-not-found'));
+            }
         }
 
         $review_id = request('review_id');
