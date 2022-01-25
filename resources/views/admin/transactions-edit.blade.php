@@ -66,6 +66,16 @@
                     @endif
 
                     <div class="form-group">
+                        <label class="col-md-2 control-label">Layer Type</label>
+                        <div class="col-md-10">
+                            <select class="form-control" name="layer_type">
+                                <option value="l1" {!! 'l1'==$item->layer_type ? 'selected="selected"' : '' !!}>Ethereum</option>
+                                <option value="l2" {!! 'l2'==$item->layer_type ? 'selected="selected"' : '' !!}>Optimistic Ethereum</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="col-md-2 control-label">Status</label>
                         <div class="col-md-10">
                             {{ Form::select('status', config('transaction-statuses'), $item->status , array('class' => 'form-control')) }}

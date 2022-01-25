@@ -717,7 +717,14 @@ class TransactionsController extends AdminController {
 
         if(Request::isMethod('post')) {
 
-            if((!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash) || (!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash) || (!empty(request('status')) && request('status') != $item->status) || (!empty(request('message')) && request('message') != $item->message) || (!empty(request('address')) && request('address') != $item->address)) {
+            if(
+                (!empty(request('tx_hash')) && request('tx_hash') != $item->tx_hash)
+                || (!empty(request('allowance_hash')) && request('allowance_hash') != $item->allowance_hash)
+                || (!empty(request('status')) && request('status') != $item->status) 
+                || (!empty(request('message')) && request('message') != $item->message) 
+                || (!empty(request('address')) && request('address') != $item->address)
+                || (!empty(request('layer_type')) && request('layer_type') != $item->layer_type)
+            ) {
 
                 $dcn_history = new DcnTransactionHistory;
                 $dcn_history->transaction_id = $item->id;
@@ -744,6 +751,10 @@ class TransactionsController extends AdminController {
                     $dcn_history->message = request('message');
                 }
 
+                if(!empty(request('layer_type')) && request('layer_type') != $item->layer_type) {
+                    $dcn_history->layer_type = request('layer_type');
+                }
+
                 $dcn_history->history_message = 'Edited by admin';
                 $dcn_history->save();
             }
@@ -755,6 +766,7 @@ class TransactionsController extends AdminController {
             }
             $item->status = request('status');
             $item->address = request('address');
+            $item->layer_type = request('layer_type');
             $item->manual_check_admin = null;
 
             if(request('status') == 'new') {
