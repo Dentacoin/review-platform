@@ -745,7 +745,12 @@
                                         @else
                                             @if($item->wallet_addresses->isNotEmpty())
                                                 @foreach($item->wallet_addresses as $wa)
-                                                    <input type="text" name="dcn_address" class="form-control" value="{{ $wa->dcn_address }}" disabled="disabled"> <br/>
+                                                    <div style="display: flex;align-items: center;clear: both;"> 
+                                                        <input type="text" name="dcn_address" class="form-control" value="{{ $wa->dcn_address }}" disabled="disabled">
+                                                        @if(!$wa->is_deprecated)
+                                                            <img title="confirmed by user" style="max-width: 13px;margin-left: 10px;" src="{{ url('img/alert-small-success.png')}}"/>
+                                                        @endif
+                                                    </div>
 
                                                     @if(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get()->isNotEmpty())
 
