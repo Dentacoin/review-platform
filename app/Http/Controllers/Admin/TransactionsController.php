@@ -86,6 +86,10 @@ class TransactionsController extends AdminController {
             $transactions = $transactions->whereNotNull('manual_check_admin');
         }
 
+        if(!empty(request()->input('search-layer'))) {
+            $transactions = $transactions->where('layer_type', request()->input('search-layer'));
+        }
+
         if(!empty($this->request->input('created'))) {
             $order = request()->input( 'created' );
             $transactions->getQuery()->orders = null;
@@ -146,7 +150,7 @@ class TransactionsController extends AdminController {
         }
 
         $table_fields['amount'] = array();
-        $table_fields['address'] = array();
+        $table_fields['address'] = array('template' => 'admin.parts.table-transactions-address');
         if(request('search-status') != 'first') {
             $table_fields['tx_hash'] = array('template' => 'admin.parts.table-transactions-hash');
         }
@@ -180,6 +184,7 @@ class TransactionsController extends AdminController {
             'paid_by_user' => $this->request->input('paid-by-user'),
             'search_user_status' => $this->request->input('search-user-status'),
             'manual_check_admin' => $this->request->input('manual_check_admin'),
+            'search_layer_type' => $this->request->input('search-layer'),
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
             'end' => $end,

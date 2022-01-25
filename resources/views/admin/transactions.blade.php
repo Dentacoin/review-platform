@@ -116,6 +116,13 @@
                                     Paid by user
                                 </label>
                             </div>
+                            <div class="col-md-2">
+                                <select class="form-control" name="search-layer">
+                                    <option value="">Transaction Layer Type</option>
+                                    <option value="l1" {!! 'l1'==$search_layer_type ? 'selected="selected"' : '' !!}>Ethereum</option>
+                                    <option value="l2" {!! 'l2'==$search_layer_type ? 'selected="selected"' : '' !!}>Optimistic Ethereum</option>
+                                </select>
+                            </div>
                             @if($admin->role=='super_admin')
                                 <div class="col-md-2">
                                     <label for="manual_check_admin" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">

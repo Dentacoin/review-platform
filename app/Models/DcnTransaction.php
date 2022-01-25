@@ -51,6 +51,10 @@ class DcnTransaction extends Model {
         return $this->hasMany('App\Models\DcnTransactionHistory', 'transaction_id', 'id');
     }
 
+    public function userWalletAddress() {
+        return $this->hasOne('App\Models\WalletAddress', 'dcn_address', 'address')->where('user_id', $this->user_id);
+    }
+
     public function user_patient_no_kyc() {
         return $this->hasOne('App\Models\User', 'id', 'user_id')->where('is_dentist', 0)->where('civic_kyc', 0)->whereNull('self_deleted')->whereNull('patient_status');
     }

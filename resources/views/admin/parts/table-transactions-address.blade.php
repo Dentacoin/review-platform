@@ -1,0 +1,1 @@
+{{ $item->address }} {!! $item->userWalletAddress ? ($item->userWalletAddress->is_deprecated ? '' : '<img src="'.url('img/alert-small-success.png').'"') : '' !!}
