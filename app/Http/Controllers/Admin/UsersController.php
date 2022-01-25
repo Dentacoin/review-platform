@@ -2008,11 +2008,8 @@ class UsersController extends AdminController {
 
         $item = User::withTrashed()->find($id);
         $ban = UserBan::find($ban_id);
-
         
-        if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-            
+        if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {            
             $item->sendgridSubscribeToGroup($ban->domain);
             
             UserBan::destroy( $ban_id );

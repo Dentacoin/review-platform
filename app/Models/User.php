@@ -1371,7 +1371,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             $group_id = config('email-preferences')['product_news'][$platform]['sendgrid_group_id'];
             $email = $this->email;
 
-            $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->_($email)->delete();
+            $sg->client->asm()->groups()->_($group_id)->suppressions()->_($email)->delete();
         }
     }
 

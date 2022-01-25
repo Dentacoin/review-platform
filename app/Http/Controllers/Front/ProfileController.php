@@ -1984,16 +1984,13 @@ class ProfileController extends FrontController {
 
                     if($email != $inviter_email) {
                         $dentist_name = $this->user->name;
-
                         $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', $email);
 
                         if(!empty($existing_anonymous)) {
-
                             if(!$unsubscribed) {
                                 $subscribe_cats = $existing_anonymous->website_notifications;
 
                                 if(!isset($subscribe_cats['trp'])) {
-
                                     $subscribe_cats[] = 'trp';
                                     $existing_anonymous->website_notifications = $subscribe_cats;
                                     $existing_anonymous->save();

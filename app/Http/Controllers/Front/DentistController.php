@@ -1549,18 +1549,15 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                 if(empty($existing_patient)) {
 
                     if(!empty($existing_anonymous)) {
-
                         if(!$unsubscribed) {
                             $subscribe_cats = $existing_anonymous->website_notifications;
 
                             if(!isset($subscribe_cats['trp'])) {
-
                                 $subscribe_cats[] = 'trp';
                                 $existing_anonymous->website_notifications = $subscribe_cats;
                                 $existing_anonymous->save();
                             }
                         }
-
                     } else {
                         $new_anonymous_user = new AnonymousUser;
                         $new_anonymous_user->email = Request::Input('email');
