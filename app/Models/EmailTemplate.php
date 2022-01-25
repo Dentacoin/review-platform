@@ -159,7 +159,6 @@ class EmailTemplate extends Model {
         if( $this->id==3 || $this->id==5 || $this->id==41 ) { //Unfinished registrations
             $codes[] = '[button]Click here to finish the registration[/button]';
             $codes[] = '[missing-info]';
-            $codes[] = '[unsubscribe]click here to unsubscribe[/unsubscribe]';
         }
 
         if( $this->id==42 ) { // Invite Clinic After Dentist Registration

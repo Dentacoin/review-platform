@@ -26,9 +26,9 @@ class Email extends Model {
     	"user_id",
     	"template_id",
     	"meta",
+    	"platform",
     	"sent",
     	"invalid_email",
-    	"platform",
     	"unsubscribed",
 	];
 
@@ -422,14 +422,10 @@ class Email extends Model {
 				'[button]',
 				'[/button]',
 				'[missing-info]',
-				'[unsubscribe]',
-				'[/unsubscribe]',
 			), array(
 				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist/'.$this->meta['link'], null, $domain).'">',
 				'</a>',
 				!empty($this->meta['missing-info']) ? $this->meta['missing-info'] : '',
-				'<a '.$this->text_style.' href="'.getLangUrl( 'welcome-dentist/unsubscribe/'.$this->meta['link'], null, $domain).'">',
-				'</a>',
 			), $content);
         }
 

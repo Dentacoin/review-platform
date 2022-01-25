@@ -1543,17 +1543,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                 $new_recommendation->friend_name = Request::Input('name');
                 $new_recommendation->save();
 
-                $substitutions = [
-                    'type' => $type,
-                    'invited_user_name' => Request::Input('name'),
-                    'inviting_user_name' => $this->user->name,
-                    'recommended_dentist' => $recommended_user->getNames(),
-                    'recommend_dentist_link' => $recommended_user->getLink(),
-                    'image_recommended_dentist' => $recommended_user->getSocialCover(),
-                ];
-
                 $existing_anonymous = AnonymousUser::where('email', 'LIKE', Request::Input('email'))->first();
-                
                 $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', Request::Input('email'));
 
                 if(empty($existing_patient)) {
@@ -1578,6 +1568,16 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                         $new_anonymous_user->save();
                     }
                 }
+
+                $substitutions = [
+                    'type' => $type,
+                    'invited_user_name' => Request::Input('name'),
+                    'inviting_user_name' => $this->user->name,
+                    'inviting_user_profile_image' => $this->user->getImageUrl(true),
+                    'recommended_dentist' => $recommended_user->getNames(),
+                    'recommend_dentist_link' => $recommended_user->getLink(),
+                    'image_recommended_dentist' => $recommended_user->getSocialCover(),
+                ];
 
                 $mail = GeneralHelper::unregisteredSendGridTemplate($this->user, Request::Input('email'), Request::Input('name'), 89, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
                 $mail->delete();

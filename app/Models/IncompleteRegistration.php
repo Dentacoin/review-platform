@@ -31,7 +31,6 @@ class IncompleteRegistration extends Model {
         'notified1',
         'notified2',
         'notified3',
-        'unsubscribed',
     ];
 
     protected $dates = [

@@ -127,17 +127,22 @@ class Kernel extends ConsoleKernel {
                 ]
             ];
 
-            foreach ($notifications as $key => $value) {
+            foreach ($notifications as $platform => $value) {
                 $i = 0;
                 foreach ($value as $k => $v) {
                     $i++;
-                    if($key == 'vox' || $key == 'assurance') {
+                    if($platform == 'vox' || $platform == 'assurance') {
                         $field = 'notified2';
                     } else {
                         $field = 'notified'.$i;
                     }
 
-                    $list = IncompleteRegistration::whereNull('completed')->whereNull('unsubscribed')->whereNull( $field )->whereNotNull( 'platform' )->where('platform', $key)->where('created_at', '<', $v['time'])->get();
+                    $list = IncompleteRegistration::whereNull('completed')
+                    ->whereNull( $field )
+                    ->whereNotNull( 'platform' )
+                    ->where('platform', $platform)
+                    ->where('created_at', '<', $v['time'])
+                    ->get();
 
                     if(!empty($list)) {
                         foreach ($list as $notify) {
@@ -148,12 +153,8 @@ class Kernel extends ConsoleKernel {
 
                                 if(empty($user)) {
 
-                                    $unsubscribed = User::isUnsubscribedAnonymous($v['tempalte_id'], 'trp', $notify->email);
-
                                     echo 'USER: '.$notify->id;
-                                    $u = User::find(3);
-                                    $tmpEmail = $u->email;
-                                    $tmpName = $u->name;
+                                    $u = User::find(113928);
 
                                     echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
 
@@ -167,28 +168,25 @@ class Kernel extends ConsoleKernel {
 
                                     $active_voxes_count = Vox::where('type', '!=', 'hidden')->count();
 
-                                    $arr = [];
+                                    $content = [];
 
-                                    if($key == 'trp') {
-                                        $arr['trp-signup-continue'] = 'https://reviews.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                    } else if($key == 'vox') {
-                                        $arr['vox-signup-continue'] = 'https://dentavox.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                    } else if($key == 'assurance') {
-                                        $arr['assurance-signup-continue'] = 'https://assurance.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                    } else if($key == 'dentacoin') {
-                                        $arr['dcn-signup-continue'] = 'https://dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                    } else if($key == 'dentists') {
-                                        $arr['dentists-signup-continue'] = 'https://dentists.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    if($platform == 'trp') {
+                                        $content['trp-signup-continue'] = 'https://reviews.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    } else if($platform == 'vox') {
+                                        $content['vox-signup-continue'] = 'https://dentavox.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    } else if($platform == 'assurance') {
+                                        $content['assurance-signup-continue'] = 'https://assurance.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    } else if($platform == 'dentacoin') {
+                                        $content['dcn-signup-continue'] = 'https://dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    } else if($platform == 'dentists') {
+                                        $content['dentists-signup-continue'] = 'https://dentists.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
                                     }
 
-                                    $arr['missing-info'] = $missingInfo;
-                                    $arr['active-surveys'] = $active_voxes_count;
+                                    $content['missing-info'] = $missingInfo;
+                                    $content['active-surveys'] = $active_voxes_count;
 
-                                    $domain = 'https://'.config('platforms.'.($key == 'trp' ? 'trp' : 'vox').'.url').'/';
-
-                                    //$arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
-
-                                    $mail = GeneralHelper::unregisteredSendGridTemplate($u, $notify->email, $notify->name, $v['tempalte_id'], $arr, $key, $unsubscribed, $notify->email);
+                                    $unsubscribed = User::isUnsubscribedAnonymous($v['tempalte_id'], 'trp', $notify->email);
+                                    $mail = GeneralHelper::unregisteredSendGridTemplate($u, $notify->email, $notify->name, $v['tempalte_id'], $content, $platform, $unsubscribed, $notify->email);
 
                                     $notify->$field = true;
                                     $notify->save();
@@ -226,17 +224,20 @@ class Kernel extends ConsoleKernel {
 
                 $field = 'notified'.(intval($key)+1);
 
-                $list = UserInvite::whereNull('completed')->whereNull('unsubscribed')->whereNotNull('review')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
+                $list = UserInvite::whereNull('completed')
+                ->whereNotNull('review')
+                ->whereNull( $field )
+                ->where('created_at', '<', $time['time'])
+                ->get();
 
                 foreach ($list as $notify) {
                     if (!empty($notify->email) && filter_var($notify->email, FILTER_VALIDATE_EMAIL)) {
-
-                        $unsubscribed = User::isUnsubscribedAnonymous($time['tempalte_id'], 'trp', $notify->email);
 
                         echo 'USER: '.$notify;
                         echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
 
                         $user = User::find(113928);
+                        $unsubscribed = User::isUnsubscribedAnonymous($time['tempalte_id'], 'trp', $notify->email);
                         $mail = GeneralHelper::unregisteredSendGridTemplate($user, $notify->email, $notify->name, $time['tempalte_id'], null, 'trp', $unsubscribed, $notify->email);
 
                         $notify->$field = true;
@@ -285,7 +286,6 @@ class Kernel extends ConsoleKernel {
             //     $price = 1 / (int)((int)$resp / 100);
             // }
 
-
             if(!empty($price)) {
                 file_put_contents('/tmp/dcn_original_price', sprintf('%.10F',$price));
 
@@ -295,12 +295,12 @@ class Kernel extends ConsoleKernel {
 
                 file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
 
-
                 DB::table('voxes')
                 ->where('reward_usd', '>', 0)
                 ->update([
                     'reward' =>  DB::raw( 'CEIL(`reward_usd` / '.$price.')' )
                 ]);
+
                 DB::table('rewards')
                 ->update([
                     'dcn' =>  DB::raw( 'CEIL(`amount` / '.$price.')' )
@@ -320,10 +320,21 @@ PENDING TRANSACTIONS
 
 ';
 
-            $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->where('cronjob_unconfirmed', 0)->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+            $transactions = DcnTransaction::where('status', 'pending')
+            ->whereNotNull('tx_hash')
+            ->where('cronjob_unconfirmed', 0)
+            ->where('processing', 0)
+            ->orderBy('id', 'asc')
+            ->take(50)
+            ->get(); //
 
             if(empty($transactions)) {
-                $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+                $transactions = DcnTransaction::where('status', 'pending')
+                ->whereNotNull('tx_hash')
+                ->where('processing', 0)
+                ->orderBy('id', 'asc')
+                ->take(50)
+                ->get(); //
 
                 if($transactions->isNotEmpty()) {
                     foreach ($transactions as $trans) {
@@ -334,7 +345,6 @@ PENDING TRANSACTIONS
             }
 
             if($transactions->isNotEmpty()) {
-
                 $int = 0;
                 foreach ($transactions as $trans) {
                     $int++;
@@ -359,7 +369,6 @@ PENDING TRANSACTIONS
                             }
                         }
                     } else {
-
                         $ch = curl_init();
                         curl_setopt($ch, CURLOPT_URL,"https://payment-server-info.dentacoin.com/check-l2-transaction");
                         curl_setopt($ch, CURLOPT_POST, 1);
@@ -405,7 +414,6 @@ PENDING TRANSACTIONS
                     }
                 }
             }
-
         })->cron("*/30 * * * *");
 
 
@@ -433,8 +441,15 @@ NEW & NOT SENT TRANSACTIONS
                 $number = 16; //always has to be %2
                 $half_number = $number/2;
 
-                $count_new_trans = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
-                $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->count();
+                $count_new_trans = DcnTransaction::where('status', 'new')
+                ->whereNull('is_paid_by_the_user')
+                ->where('processing', 0)
+                ->count();
+
+                $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')
+                ->whereNull('is_paid_by_the_user')
+                ->where('processing', 0)
+                ->count();
 
                 if(empty($count_not_sent_trans )) {
                     $count_new_trans = $number;
@@ -453,16 +468,26 @@ NEW & NOT SENT TRANSACTIONS
                     }
                 }
 
-                $new_transactions = DcnTransaction::where('status', 'new')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
-                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNull('is_paid_by_the_user')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
+                $new_transactions = DcnTransaction::where('status', 'new')
+                ->whereNull('is_paid_by_the_user')
+                ->where('processing', 0)
+                ->orderBy('id', 'asc')
+                ->take($count_new_trans)
+                ->get(); //
+
+                $not_sent_transactions = DcnTransaction::where('status', 'not_sent')
+                ->whereNull('is_paid_by_the_user')
+                ->where('processing', 0)
+                ->orderBy('id', 'asc')
+                ->take($count_not_sent_trans)
+                ->get();
+
                 $transactions = $new_transactions->concat($not_sent_transactions);
 
                 if($transactions->isNotEmpty()) {
-
                     $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
                     if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(30)) {
-
                         if (!GeneralHelper::isGasExpensive()) {
 
                             foreach ($transactions as $trans) {
@@ -479,7 +504,6 @@ NEW & NOT SENT TRANSACTIONS
                             $cron_new_trans_time->cron_new_trans = Carbon::now();
                             $cron_new_trans_time->save();
                         } else {
-
                             $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(30);
                             $cron_new_trans_time->save();
 
@@ -521,8 +545,17 @@ PAID BY USER TRANSACTIONS
                 $number = 16; //always has to be %2
                 $half_number = $number/2;
 
-                $count_new_trans = DcnTransaction::where('status', 'new')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->count();
-                $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->count();
+                $count_new_trans = DcnTransaction::where('status', 'new')
+                ->whereNotNull('is_paid_by_the_user')
+                ->whereNull('allowance_hash')
+                ->where('processing', 0)
+                ->count();
+
+                $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')
+                ->whereNotNull('is_paid_by_the_user')
+                ->whereNull('allowance_hash')
+                ->where('processing', 0)
+                ->count();
 
                 if($count_new_trans || $count_not_sent_trans) {
                     
@@ -543,16 +576,28 @@ PAID BY USER TRANSACTIONS
                         }
                     }
 
-                    $new_transactions = DcnTransaction::where('status', 'new')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->orderBy('id', 'asc')->take($count_new_trans)->get(); //
-                    $not_sent_transactions = DcnTransaction::where('status', 'not_sent')->whereNotNull('is_paid_by_the_user')->whereNull('allowance_hash')->where('processing', 0)->orderBy('id', 'asc')->take($count_not_sent_trans)->get();
+                    $new_transactions = DcnTransaction::where('status', 'new')
+                    ->whereNotNull('is_paid_by_the_user')
+                    ->whereNull('allowance_hash')
+                    ->where('processing', 0)
+                    ->orderBy('id', 'asc')
+                    ->take($count_new_trans)
+                    ->get(); //
+
+                    $not_sent_transactions = DcnTransaction::where('status', 'not_sent')
+                    ->whereNotNull('is_paid_by_the_user')
+                    ->whereNull('allowance_hash')
+                    ->where('processing', 0)
+                    ->orderBy('id', 'asc')
+                    ->take($count_not_sent_trans)
+                    ->get();
+
                     $transactions = $new_transactions->concat($not_sent_transactions);
 
                     if($transactions->isNotEmpty()) {
-
                         $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
                         if ($cron_new_trans_time->cron_paid_by_user_trans < Carbon::now()->subMinutes(10)) {
-
                             if (!GeneralHelper::isApprovalGasExpensive()) {
 
                                 foreach ($transactions as $trans) {
@@ -569,7 +614,6 @@ PAID BY USER TRANSACTIONS
                                 $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now();
                                 $cron_new_trans_time->save();
                             } else {
-
                                 $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now()->subMinutes(10);
                                 $cron_new_trans_time->save();
 
@@ -610,10 +654,20 @@ UNCONFIRMED TRANSACTIONS
 
 ';
 
-                $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('cronjob_unconfirmed', 0)->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+                $transactions = DcnTransaction::where('status', 'unconfirmed')
+                ->whereNotNull('tx_hash')
+                ->where('cronjob_unconfirmed', 0)
+                ->where('processing', 0)
+                ->orderBy('id', 'asc')
+                ->take(50)
+                ->get(); //
 
                 if($transactions->isEmpty()) {
-                    $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('processing', 0)->orderBy('id', 'asc')->get(); //
+                    $transactions = DcnTransaction::where('status', 'unconfirmed')
+                    ->whereNotNull('tx_hash')
+                    ->where('processing', 0)
+                    ->orderBy('id', 'asc')
+                    ->get(); //
 
                     if($transactions->isNotEmpty()) {
                         foreach ($transactions as $trans) {
@@ -621,7 +675,13 @@ UNCONFIRMED TRANSACTIONS
                             $trans->save();
                         }
 
-                        $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNotNull('tx_hash')->where('cronjob_unconfirmed', 0)->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); //
+                        $transactions = DcnTransaction::where('status', 'unconfirmed')
+                        ->whereNotNull('tx_hash')
+                        ->where('cronjob_unconfirmed', 0)
+                        ->where('processing', 0)
+                        ->orderBy('id', 'asc')
+                        ->take(50)
+                        ->get(); //
                     }
                 }
 
@@ -696,31 +756,7 @@ UNCONFIRMED TRANSACTIONS
                             }
                         }
 
-                        if($transactionIsCompleted) {
-                            $trans->status = 'completed';
-                            $trans->cronjob_unconfirmed = 0;
-                            $trans->save();
-
-                            $dcn_history = new DcnTransactionHistory;
-                            $dcn_history->transaction_id = $trans->id;
-                            $dcn_history->status = 'completed';
-                            $dcn_history->save();
-
-                            if( $trans->user && !empty($trans->user->email) ) {
-                                $trans->user->sendTemplate( 20, [
-                                    'transaction_amount' => $trans->amount,
-                                    'transaction_address' => $trans->address,
-                                    'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
-                                ], $trans->type=='vox' ? 'vox' : ( $trans->type=='trp' ? 'trp' : 'dentacoin') );
-                            }
-                            $found = true;
-                            echo 'COMPLETED!'.PHP_EOL;
-                            if($int % 5 == 0) {
-                                sleep(1);
-                            }
-                        }
-
-                        if($transactionIsPaidByUserCompleted) {
+                        if($transactionIsCompleted || $transactionIsPaidByUserCompleted) {
                             $trans->status = 'completed';
                             $trans->cronjob_unconfirmed = 0;
                             $trans->save();
@@ -789,7 +825,14 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
 ';
 
-            $transactions = DcnTransaction::where('status', 'unconfirmed')->whereNull('tx_hash')->whereNotNull('allowance_hash')->whereNull('notified_at')->where('processing', 0)->orderBy('id', 'asc')->take(50)->get(); 
+            $transactions = DcnTransaction::where('status', 'unconfirmed')
+            ->whereNotNull('allowance_hash')
+            ->whereNull('tx_hash')
+            ->whereNull('notified_at')
+            ->where('processing', 0)
+            ->orderBy('id', 'asc')
+            ->take(50)
+            ->get(); 
 
             if($transactions->isNotEmpty()) {
 
@@ -894,10 +937,13 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             foreach ($alerts as $data) {
                 echo ' DATA URL '.$data['url'];
                 $curl = file_get_contents($data['url']);
+
                 if(!empty($curl)) {
                     echo ' CURL '.$curl;
                     $curl = json_decode($curl, true);
+
                     if(!empty(intval($curl['result']))) {
+
                         if( intval($curl['result']) < $data['limit'] ) { //0.01 for VOX , 0.05 for others
                             $currency = $data['currency'];
 
@@ -936,7 +982,11 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Suspicious Dentist Delete Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $users = User::where('is_dentist', '1')->where('status', 'pending')->where('updated_at', '<', Carbon::now()->subDays(7) )->get();
+            $users = User::where('is_dentist', '1')
+            ->where('status', 'pending')
+            ->where('updated_at', '<', Carbon::now()
+            ->subDays(7) )
+            ->get();
 
             if ($users->isNotEmpty()) {
                 $userNames = [];
@@ -972,7 +1022,10 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Suspicious Patients Delete Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $users = User::whereIn('patient_status', ['suspicious_admin', 'suspicious_badip'])->where('updated_at', '<', Carbon::now()->subDays(30) )->doesnthave('newBanAppeal')->get();
+            $users = User::whereIn('patient_status', ['suspicious_admin', 'suspicious_badip'])
+            ->where('updated_at', '<', Carbon::now()->subDays(30) )
+            ->doesnthave('newBanAppeal')
+            ->get();
 
             if ($users->isNotEmpty()) {
 
@@ -997,15 +1050,15 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Delete pending ban appeals Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $pendingBanAppeals = BanAppeal::whereNotNull('pending_fields')->where('updated_at', '<', Carbon::now()->subDays(14) )->get();
+            $pendingBanAppeals = BanAppeal::whereNotNull('pending_fields')
+            ->where('updated_at', '<', Carbon::now()->subDays(14) )
+            ->get();
 
             if($pendingBanAppeals->isNotEmpty()) {
                 foreach ($pendingBanAppeals as $item) {
-
                     $user = $item->user;
 
                     if($user->patient_status != 'deleted') {
-
                         $user_history = new UserHistory;
                         $user_history->user_id = $user->id;
                         $user_history->patient_status = $user->patient_status;
@@ -1052,10 +1105,22 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 WHERE 
                     template_id = 26
                     AND `user_id` NOT IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id = 44
+                        SELECT 
+                            `user_id`
+                        FROM 
+                            emails 
+                        WHERE template_id = 44
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null AND `platform` = 'trp'
+                        SELECT 
+                            `id` 
+                        FROM 
+                            users 
+                        WHERE 
+                            is_dentist = 1 
+                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+                            AND `self_deleted` is null 
+                            AND `platform` = 'trp'
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
                     AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
@@ -1088,10 +1153,22 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 WHERE 
                     template_id = 44
                     AND `user_id` NOT IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id = 45
+                        SELECT 
+                            `user_id` 
+                        FROM 
+                            emails 
+                        WHERE template_id = 45
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null AND `platform` = 'trp'
+                        SELECT 
+                            `id` 
+                        FROM 
+                            users 
+                        WHERE 
+                            is_dentist = 1 
+                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+                            AND `self_deleted` is null 
+                            AND `platform` = 'trp'
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
             ";
@@ -1152,10 +1229,22 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 WHERE 
                     template_id = 45
                     AND `user_id` NOT IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id IN ( 46, 47)
+                        SELECT 
+                            `user_id` 
+                        FROM 
+                            emails 
+                        WHERE template_id IN ( 46, 47)
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null AND `platform` = 'trp'
+                        SELECT 
+                            `id` 
+                        FROM 
+                            users 
+                        WHERE 
+                            is_dentist = 1 
+                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+                            AND `self_deleted` is null 
+                            AND `platform` = 'trp'
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -1186,10 +1275,22 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 WHERE 
                     template_id IN ( 46, 47)
                     AND `user_id` NOT IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id = 48
+                        SELECT 
+                            `user_id` 
+                        FROM 
+                            emails 
+                        WHERE template_id = 48
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null AND `platform` = 'trp'
+                        SELECT 
+                            `id` 
+                        FROM 
+                            users 
+                        WHERE 
+                            is_dentist = 1 
+                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+                            AND `self_deleted` is null 
+                            AND `platform` = 'trp'
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
             ";
@@ -1248,7 +1349,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                         `u`.`id` = `rewards`.`user_id`
                     WHERE
                         `is_dentist` = 1
-                        AND `unsubscribe` is null
                         AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed')
                         AND `self_deleted` is null
                         AND `id` NOT IN ( 
@@ -1257,13 +1357,24 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                         AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > ".WithdrawalsCondition::find(1)->min_vox_amount."
                         AND `deleted_at` is null
                         AND `id` NOT IN ( 
-                            SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+                            SELECT 
+                                `user_id`
+                            FROM 
+                                emails 
+                            WHERE 
+                                template_id = 57 
+                                AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                         )
                         AND `id` NOT IN ( 
-                            SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` < '".date('Y-m-d', time() - 86400*31*6)." 00:00:00'
+                            SELECT 
+                                `user_id` 
+                            FROM 
+                                emails 
+                            WHERE 
+                                template_id = 57 
+                                AND `created_at` < '".date('Y-m-d', time() - 86400*31*6)." 00:00:00'
                         )
                 LIMIT 100
-
             ";
 
             $users = DB::select(
@@ -1283,9 +1394,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             echo 'Create Wallet Email DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-
             //No reviews last 30 days
-
             //Email2
 
             $query = "
@@ -1296,10 +1405,23 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 WHERE 
                     template_id = 49
                     AND `user_id` NOT IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id = 50 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+                        SELECT 
+                            `user_id` 
+                        FROM 
+                            emails 
+                        WHERE 
+                            template_id = 50 
+                            AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT 
+                            `id` 
+                        FROM 
+                            users 
+                        WHERE 
+                            is_dentist = 1 
+                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+                            AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -1307,7 +1429,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             $emails = DB::select(
                 DB::raw($query), []
             );
-
 
             if (!empty($emails)) {
                 foreach ($emails as $e) {
@@ -1319,7 +1440,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             }
             echo 'No reviews last 30 days Email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-
             //Email3
 
             $query = "
@@ -1330,13 +1450,32 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 WHERE 
                     template_id = 50
                     AND `user_id` NOT IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id IN ( 51, 52) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+                        SELECT 
+                            `user_id` 
+                        FROM 
+                            emails 
+                        WHERE 
+                            template_id IN ( 51, 52) 
+                            AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
                     )
                     AND `user_id` IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+                        SELECT 
+                            `user_id` 
+                        FROM 
+                            emails 
+                        WHERE 
+                            template_id = 49 
+                            AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT 
+                            `id` 
+                        FROM 
+                            users 
+                        WHERE 
+                            is_dentist = 1 
+                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+                            AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*7)." 00:00:00'
             ";
@@ -1344,7 +1483,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             $emails = DB::select(
                 DB::raw($query), []
             );
-
 
             if (!empty($emails)) {
                 foreach ($emails as $e) {
@@ -1356,11 +1494,9 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                             $from_day = Carbon::now()->subDays(11);
 
                             $prev_reviews = Review::where(function($query) use ($id) {
-                            $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
-                            })
-                            ->where('created_at', '>=', $from_day)
+                                $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+                            })->where('created_at', '>=', $from_day)
                             ->get();
-
 
                             $rating = 0;
                             foreach($prev_reviews as $reviews) {
@@ -1372,13 +1508,9 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                             }
 
                             $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
-
                             $results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';                   
-
                         } else {
-
                             $invites_text = $user->invites->count() > 1 ? "invites" : "invite";
-
                             $results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
                         }
 
@@ -1387,14 +1519,12 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                         ];
 
                         $user->sendGridTemplate(51, $substitutions, 'trp');
-
                     } else {
                         $user->sendGridTemplate(52, null, 'trp');
                     }   
                 }
             }
             echo 'No reviews last 30 days Email 3 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
-
 
             //Email4
 
@@ -1406,13 +1536,32 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 WHERE 
                     template_id = 52
                     AND `user_id` NOT IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id IN ( 53, 54) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+                        SELECT 
+                            `user_id` 
+                        FROM 
+                            emails 
+                        WHERE 
+                            template_id IN ( 53, 54) 
+                            AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
                     )
                     AND `user_id` IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+                        SELECT 
+                            `user_id` 
+                        FROM 
+                            emails 
+                        WHERE 
+                            template_id = 49 
+                            AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT 
+                            `id` 
+                        FROM 
+                            users 
+                        WHERE 
+                            is_dentist = 1 
+                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+                            AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*14)." 00:00:00'
             ";
@@ -1420,7 +1569,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             $emails = DB::select(
                 DB::raw($query), []
             );
-
 
             if (!empty($emails)) {
                 foreach ($emails as $e) {
@@ -1432,11 +1580,9 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                             $from_day = Carbon::now()->subDays(25);
 
                             $prev_reviews = Review::where(function($query) use ($id) {
-                            $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
-                            })
-                            ->where('created_at', '>=', $from_day)
+                                $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+                            })->where('created_at', '>=', $from_day)
                             ->get();
-
 
                             $rating = 0;
                             foreach($prev_reviews as $reviews) {
@@ -1448,13 +1594,9 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                             }
 
                             $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
-
                             $results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';                   
-
                         } else {
-
                             $invites_text = $user->invites->count() > 1 ? "invites" : "invite";
-
                             $results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
                         }
 
@@ -1463,7 +1605,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                         ];
 
                         $user->sendGridTemplate(53, $substitutions, 'trp');
-
                     } else {
                         $user->sendGridTemplate(54, null, 'trp');
                     }   
@@ -1471,99 +1612,11 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             }
             echo 'No reviews last 30 days Email 4 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-
         })->cron("15 */6 * * *"); //05:00h
-
-
-        // $schedule->call(function () {
-        //     echo 'Balance over 1 000 000 Email 2 START'.PHP_EOL.PHP_EOL.PHP_EOL;
-        //     //users with balance over 500,000 DCN
-
-        //     $query = "
-        //         SELECT 
-        //             `rewards`.`user_id`
-        //         FROM
-        //             (
-        //                 SELECT 
-        //                     `user_id`, 
-        //                     sum(reward) as `rewards_total` 
-        //                 FROM 
-        //                     dcn_rewards 
-        //                 GROUP BY 
-        //                     `user_id`
-        //             ) `rewards`
-        //             left OUTER JOIN
-        //             (
-        //                 SELECT 
-        //                     `user_id`, 
-        //                     sum(reward) as `withdraws_total` 
-        //                 FROM 
-        //                     dcn_cashouts 
-        //                 GROUP BY 
-        //                     `user_id`
-        //             ) `cashouts`
-        //             ON
-        //                 `rewards`.user_id = `cashouts`.user_id  
-        //             LEFT JOIN 
-        //                 `users` `u`
-        //             ON
-        //                 `u`.`id` = `rewards`.`user_id`
-        //             WHERE 
-        //                 (rewards_total - IF (withdraws_total IS NULL, 0, withdraws_total) ) >= 1000000
-        //                 AND `deleted_at` is null
-
-        //     ";
-
-        //     $users = DB::select(
-        //         DB::raw($query), []
-        //     );
-
-        //     $user_links = [];
-
-        //     if (!empty($users)) {
-        //         foreach ($users as $u) {
-        //             $user = User::find($u->user_id);
-
-        //             if (!empty($user)) {
-        //                 $user_links[] = [
-        //                     'link' => 'https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id,
-        //                     'name' => $user->name,
-        //                 ];
-        //             }
-        //         }
-        //     }
-
-        //     if (!empty($user_links)) {
-        //         $mtext = 'Users with balance of 1,000,000 DCN or more.
-                
-        //         Link to profiles in CMS:  
-
-        //         ';
-
-        //         foreach ($user_links as $ul) {
-        //             $mtext .= '<a href="'.$ul['link'].'">'.$ul['name'].'</a> , ';
-        //         }
-
-        //         Mail::send([], [], function ($message) use ($mtext) {
-        //             $sender = config('mail.from.address');
-        //             $sender_name = config('mail.from.name');
-
-        //             $message->from($sender, $sender_name);
-        //             $message->to( 'donika.kraeva@dentacoin.com' );
-        //             $message->subject('Users with high balance');
-        //             $message->setBody($mtext, 'text/html'); // for HTML rich messages
-        //         });
-        //     }
-        //     echo 'Balance over 1 000 000 Email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-        // })->cron("00 10 * * 1"); //05:00h
-
-
 
         //
         //Monthly score
         //
-
 
         $schedule->call(function () {
             echo 'Monthly score Email START'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -1577,7 +1630,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     `is_dentist` = 1
                     AND `created_at` < '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     AND `deleted_at` is null
-                    AND `unsubscribe` is null
                     AND `self_deleted` is null
                     AND `status` IN ('approved', 'test', 'added_by_clinic_claimed','added_by_dentist_claimed')
             ";
@@ -1766,7 +1818,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             }
             echo 'Daily Poll DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->dailyAt('01:00');
+        })->dailyAt('03:00');
 
 
         $schedule->call(function () {
@@ -2049,7 +2101,11 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Self deleted users cron start'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $self_deleted_users = User::whereNotNull('self_deleted')->whereNotNull('self_deleted_at')->where('self_deleted_at', '<', Carbon::now()->subDays(90) )->take(100)->get();
+            $self_deleted_users = User::whereNotNull('self_deleted')
+            ->whereNotNull('self_deleted_at')
+            ->where('self_deleted_at', '<', Carbon::now()->subDays(90) )
+            ->take(100)
+            ->get();
 
             $i=0;
             foreach ($self_deleted_users as $sdu) {
@@ -2069,7 +2125,11 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Find logins country cron start'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $logins = UserLogin::whereNull('country')->whereNull('test')->orderBy('id', 'desc')->take(100)->get();
+            $logins = UserLogin::whereNull('country')
+            ->whereNull('test')
+            ->orderBy('id', 'desc')
+            ->take(100)
+            ->get();
 
             if ($logins->isNotEmpty()) {
                 foreach ($logins as $login) {
@@ -2342,7 +2402,9 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Video reviews cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $video_reviews = Review::where('youtube_id', '!=', '')->where('created_at', '>=', Carbon::now()->addDays(-1))->count();
+            $video_reviews = Review::where('youtube_id', '!=', '')
+            ->where('created_at', '>=', Carbon::now()->addDays(-1))
+            ->count();
 
             if($video_reviews >= 5) {
                 echo 'Stop video reviews'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -2386,8 +2448,9 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             foreach ($transactions as $trans) {
                 $user = User::withTrashed()->find($trans->user_id);
+                $isScammer = TransactionScammersByBalance::withTrashed()->where('user_id', $user->id)->first();
 
-                if(!empty($user) && empty(TransactionScammersByBalance::withTrashed()->where('user_id', $user->id)->first()) && intval(DcnReward::where('user_id', $user->id)->sum('reward')) < intval(DcnTransaction::where('user_id', $user->id)->where('created_at', '>', Carbon::now()->addDays(-30))->where('type', '!=', 'register-reward')->where('status', '!=', 'failed')->sum('amount'))) {
+                if(!empty($user) && empty($isScammer) && intval(DcnReward::where('user_id', $user->id)->sum('reward')) < intval(DcnTransaction::where('user_id', $user->id)->where('created_at', '>', Carbon::now()->addDays(-30))->where('type', '!=', 'register-reward')->where('status', '!=', 'failed')->sum('amount'))) {
                     $scammer = new TransactionScammersByBalance;
                     $scammer->user_id = $user->id;
                     $scammer->save();
@@ -2402,7 +2465,11 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Scheduled surveys '.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $hidden_voxes = Vox::where('type', 'hidden')->whereNotNull('scheduled_at')->where('scheduled_at', '<=', Carbon::now())->where('scheduled_at', '>', Carbon::now()->addDays(-1) )->get();
+            $hidden_voxes = Vox::where('type', 'hidden')
+            ->whereNotNull('scheduled_at')
+            ->where('scheduled_at', '<=', Carbon::now())
+            ->where('scheduled_at', '>', Carbon::now()->addDays(-1) )
+            ->get();
 
             if($hidden_voxes->isNotEmpty()) {
 
@@ -2541,7 +2608,11 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Remove user\'s vip access START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $users_with_vip_access = User::withTrashed()->where('vip_access', 1)->whereNotNull('vip_access_until')->where('vip_access_until', '<', Carbon::now())->get();
+            $users_with_vip_access = User::withTrashed()
+            ->where('vip_access', 1)
+            ->whereNotNull('vip_access_until')
+            ->where('vip_access_until', '<', Carbon::now())
+            ->get();
 
             if($users_with_vip_access->isNotEmpty()) {
                 foreach($users_with_vip_access as $user) {
@@ -2578,9 +2649,10 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                 if($survey->questions->isNotEmpty()) {
                     $count_qs = $survey->questions->count();
 
-                    for ($i=1; $i <= $count_qs ; $i++) { 
-                        if(!empty(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->first())) {
-                            if(VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->count() > 1) {
+                    for ($i=1; $i <= $count_qs ; $i++) {
+                        $voxQuestionsCount = VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->count();
+                        if(!empty($voxQuestionsCount)) {
+                            if($voxQuestionsCount > 1) {
                                 $questions_order_bugs[$survey->id][] = 'Duplicated order number - '.$i.'<br/>';  //diplicated order
                             }
                         } else {

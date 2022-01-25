@@ -218,9 +218,6 @@ class UsersController extends AdminController {
             'fb_recommendation' => [
                 'type' => 'bool',
             ],
-            'unsubscribe' => [
-                'type' => 'bool',
-            ],
             'featured' => [
                 'type' => 'bool',
             ],
@@ -491,10 +488,6 @@ class UsersController extends AdminController {
             $users = $users->doesntHave('permanentBans' );
         }
 
-        if(!empty(request('exclude-unsubscribed'))) {
-            $users = $users->whereNull('unsubscribe');
-        }
-
         if(!empty(request('vip-access'))) {
             $users = $users->where('vip_access', 1);
         }
@@ -760,7 +753,6 @@ class UsersController extends AdminController {
             'exclude_countries' => request('exclude-countries'),
             'without_permaban' => request('without-permaban'),
             'with_permaban' => request('with-permaban'),
-            'exclude_unsubscribed' => request('exclude-unsubscribed'),
             'vip_access' => request('vip-access'),
             'test_now' => request('test-now'),
             'show_website' => request('show-website'),
@@ -1143,33 +1135,6 @@ class UsersController extends AdminController {
 
                         } else if($value['type']=='datepicker') {
                            $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
-                        } else if($key=='unsubscribe') {
-
-                            $on_invites = UserInvite::where('invited_id', $item->id)->get();
-
-                            if (!empty($on_invites)) {
-                                foreach ($on_invites as $inv) {
-                                    if (!empty($this->request->input($key))) {
-                                        $inv->unsubscribed = true;
-                                    } else {
-                                        $inv->unsubscribed = false;
-                                    }
-                                    $inv->save();
-                                }
-                            }
-
-                            $unclaimed_dentist = UnclaimedDentist::find($item->id);
-
-                            if(!empty($unclaimed_dentist)) {
-                                if (!empty($this->request->input($key))) {
-                                    $unclaimed_dentist->unsubscribed = true;
-                                } else {
-                                    $unclaimed_dentist->unsubscribed = false;
-                                }
-                                $unclaimed_dentist->save();
-                            }
-
-                            $item->$key = $this->request->input($key);
                         } else {
                            $item->$key = $this->request->input($key);                            
                         }

@@ -549,6 +549,7 @@ class ProfileController extends FrontController {
                     $substitutions = [
                         'type' => $this->user->is_clinic ? 'dental clinic' : 'your dentist',
                         'inviting_user_name' => $this->user->getNames(),
+                        'inviting_user_profile_image' => $this->user->getImageUrl(true),
                         'invited_user_name' => $last_invite->invited_name,
                         "invitation_link" => $this->user->getLink().'?'. http_build_query([
                             'dcn-gateway-type'=>'patient-login', 
@@ -1912,14 +1913,12 @@ class ProfileController extends FrontController {
 
                     $invitation->invited_name = $name;
                     $invitation->created_at = Carbon::now();
-
-                    if (empty($invitation->unsubscribed)) {
-                        $invitation->review = true;
-                        $invitation->completed = null;
-                        $invitation->notified1 = null;
-                        $invitation->notified2 = null;
-                        $invitation->notified3 = null;
-                    }
+                    $invitation->review = true;
+                    $invitation->completed = null;
+                    $invitation->notified1 = null;
+                    $invitation->notified2 = null;
+                    $invitation->notified3 = null;
+                    
                     if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
                         $invitation->for_dentist_patients = true;
                     }
@@ -1968,6 +1967,7 @@ class ProfileController extends FrontController {
                     $substitutions = [
                         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                         'inviting_user_name' => $this->user->getNames(),
+                        'inviting_user_profile_image' => $this->user->getImageUrl(true),
                         'invited_user_name' => $name,
                         "invitation_link" => $this->user->getLink().'?'. http_build_query([
                             'dcn-gateway-type'=>'patient-login', 
@@ -2009,6 +2009,7 @@ class ProfileController extends FrontController {
                         $substitutions = [
                             'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                             'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
+                            'inviting_user_profile_image' => $this->user->getImageUrl(true),
                             'invited_user_name' => $name,
                             "invitation_link" => $this->user->getLink().'?'. http_build_query([
                                 'dcn-gateway-type'=>'patient-register', 

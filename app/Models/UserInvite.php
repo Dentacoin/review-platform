@@ -24,7 +24,6 @@ class UserInvite extends Model {
         'notified1',
         'notified2',
         'notified3',
-        'unsubscribed',
         'platform',
         'hidden',
     ];

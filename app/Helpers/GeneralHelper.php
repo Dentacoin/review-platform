@@ -104,7 +104,6 @@ class GeneralHelper {
                 "trp_profile" => $user->getLink(),
                 "town" => $user->city_name ? $user->city_name : 'your town',
                 "country" => $user->country_id ? Country::find($user->country_id)->name : 'your country',
-                //"unsubscribe" => getLangUrl( 'unsubscription/'.$user->id.'/'.$user->get_token(), null, $domain),
                 "unsubscribe" => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(self::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $to_email),'email_category' => $item->template->subscribe_category, 'platform' => $item->platform ))))]),
                 "pageviews" => $pageviews,
                 "trp" => url('https://reviews.dentacoin.com/'),

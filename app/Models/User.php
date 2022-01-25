@@ -123,7 +123,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'patient_of',
         'is_hub_app_dentist',
         'place_id',
-        'unsubscribe',
         'gdpr_privacy',
         'self_deleted',
         'allow_withdraw',
@@ -698,7 +697,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
 
             if(!$unsubscribed && $to_be_send) {
-
                 $item->send($anonymous_email);
             }
 
@@ -2137,7 +2135,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             if(!empty($cat)) {
                 $unsub_cat = 'unsubscribed_'.$cat;
 
-                if(is_array($anonymous_user->$cat) && in_array($platform, $anonymous_user->$cat)) {
+                if(in_array($platform, $anonymous_user->$unsub_cat)) {
                     $unsubscribed = true;
                 }
             }

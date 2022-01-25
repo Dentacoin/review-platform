@@ -219,7 +219,6 @@ class EmailsController extends AdminController {
                 AND `id` NOT IN ( SELECT `clinic_id` FROM `reviews` WHERE `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
                 AND `id` NOT IN ( SELECT `user_id` FROM `emails` WHERE `template_id` = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00' )
                 AND `created_at` < '".date('Y-m-d', time() - 86400*30)." 00:00:00'
-                AND `unsubscribe` is null
                 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed')
                 AND `deleted_at` is null
         ";

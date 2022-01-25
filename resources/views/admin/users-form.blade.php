@@ -752,12 +752,15 @@
                                                         @endif
                                                     </div>
 
-                                                    @if(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get()->isNotEmpty())
+                                                    @php
+                                                        $otherUsersWallets = App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get();
+                                                    @endphp
 
+                                                    @if($otherUsersWallets->isNotEmpty())
                                                         <p style="color: red;" class="col-md-12">⇧ User/s with this dcn address already exists:</p>
-                                                        @foreach(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get() as $dw)
-                                                            @if(!empty(App\Models\User::withTrashed()->find($dw->user_id)))
-                                                                <p style="color: red;" class="col-md-12">{{ $loop->iteration }}. <a href="{{ url('cms/users/users/edit/'.$dw->user_id) }}">{{ App\Models\User::withTrashed()->find($dw->user_id)->name }}</a></p>
+                                                        @foreach($otherUsersWallets as $dw)
+                                                            @if(!empty($dw->user))
+                                                                <p style="color: red;" class="col-md-12">{{ $loop->iteration }}. <a href="{{ url('cms/users/users/edit/'.$dw->user_id) }}">{{ $dw->user->name }}</a></p>
                                                             @endif
                                                         @endforeach
                                                     @endif
@@ -920,13 +923,13 @@
                                         </a>
                                     </div>
 
-                                    <!-- <label class="col-md-6 control-label">Profile photo</label>
+                                    {{-- <!-- <label class="col-md-6 control-label">Profile photo</label>
                                     <div class="col-md-6">
                                         @include('admin.parts.user-field',[
                                             'key' => 'avatar',
                                             'info' => $fields['avatar']
                                         ])
-                                    </div> -->
+                                    </div> --> --}}
 
                                     @if($item->is_dentist)
                                         <div class="ratings">
@@ -975,8 +978,15 @@
                                     <div class="form-group">
                                         <div class="col-md-12" style="text-align: right;">
                                             @foreach($item->actions as $act)
-                                                <span style="color: {{ $act->action == 'deleted' || $act->action == 'bad_ip' || $act->action == 'suspicious_admin' ? 'red' : 'black' }};"><span style="text-transform: capitalize;">{{ $act->action == 'restored_self_deleted' ? 'Self Deleted Restored' : ($act->action == 'bad_ip' ? 'Bad IP' : ($act->action == 'suspicious_admin' ? 'Suspicious' : $act->action)) }}</span> at: {{ $act->actioned_at->toDateTimeString() }}</span><br/>
-                                                <span style="color: {{ $act->action == 'deleted' || $act->action == 'bad_ip' || $act->action == 'suspicious_admin' ? 'red' : 'black' }};">Reason: {{ $act->reason }}</span><br/><br/>
+                                                <span style="color: {{ in_array($act->action, ['deleted', 'bad_ip', 'suspicious_admin']) ? 'red' : 'black' }};">
+                                                    <span style="text-transform: capitalize;">
+                                                        {{ $act->action == 'restored_self_deleted' ? 'Self Deleted Restored' : ($act->action == 'bad_ip' ? 'Bad IP' : ($act->action == 'suspicious_admin' ? 'Suspicious' : $act->action)) }}
+                                                    </span>
+                                                     at: {{ $act->actioned_at->toDateTimeString() }}
+                                                </span><br/>
+                                                <span style="color: {{ in_array($act->action, ['deleted', 'bad_ip', 'suspicious_admin']) ? 'red' : 'black' }};">
+                                                    Reason: {{ $act->reason }}
+                                                </span><br/><br/>
                                             @endforeach
                                         </div>
                                     </div>
