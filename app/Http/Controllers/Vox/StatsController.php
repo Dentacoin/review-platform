@@ -61,9 +61,8 @@ class StatsController extends FrontController {
             $searchValues = preg_split('/\s+/', $name, -1, PREG_SPLIT_NO_EMPTY); 
 
             // where('type', '!=', 'hidden')
-            $voxes = Vox::with('stats_main_question')
+            $voxes = Vox::with(['stats_main_question', 'translations'])
             ->where('has_stats', 1)
-            ->with('translations')
             ->whereHas('translations', function ($query) use ($searchValues) {
                 foreach ($searchValues as $value) {
                     $query->where(function($q) use ($value) {
@@ -75,7 +74,7 @@ class StatsController extends FrontController {
 
         } else {
 
-            $voxes = Vox::with('stats_main_question')->where('has_stats', 1)->with('translations');
+            $voxes = Vox::with(['stats_main_question', 'translations'])->where('has_stats', 1);
 
             // if (!Auth::guard('admin')->user()) {
             //     $voxes = $voxes->where('type', '!=', 'hidden');
@@ -103,7 +102,7 @@ class StatsController extends FrontController {
             'canonical' => getLangUrl('dental-survey-stats'),
             'countries' => Country::with('translations')->get(),
             'voxes' => $voxes,
-            'cats' => VoxCategory::with('voxes.vox')->with('translations')->get(),
+            'cats' => VoxCategory::with(['translations', 'voxes.vox'])->get(),
             'sorts' => $sorts,
             'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,

@@ -45,9 +45,7 @@ class VoxController extends FrontController {
      * bottom content of single vox page
      */
 	public function vox_public_down($locale=null) {
-		$featured_voxes = Vox::with('translations')
-		->with('categories.category')
-		->with('categories.category.translations')
+		$featured_voxes = Vox::with(['translations', 'categories.category', 'categories.category.translations'])
 		->where('type', 'normal')
 		->where('featured', true)
 		->orderBy('launched_at', 'desc')
@@ -61,9 +59,7 @@ class VoxController extends FrontController {
 				$arr_v[] = $fv->id;
 			}
 
-			$swiper_voxes = Vox::with('translations')
-			->with('categories.category')
-			->with('categories.category.translations')
+			$swiper_voxes = Vox::with(['translations', 'categories.category', 'categories.category.translations'])
 			->where('type', 'normal')
 			->whereNotIn('id', $arr_v)
 			->orderBy('launched_at', 'desc')

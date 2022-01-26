@@ -64,8 +64,7 @@ class Review extends Model {
 
     public function answers() {
         return $this->hasMany('App\Models\ReviewAnswer', 'review_id', 'id')
-        ->with('question')
-        ->with('question.translations');
+        ->with(['question', 'question.translations']);
     }
 
     public function upvotes() {

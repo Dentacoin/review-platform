@@ -120,6 +120,12 @@ class PaidDentalSurveysController extends ApiController {
         	$vox_levels = [];
         }
 
+		$categories = VoxCategory::with('translations')
+		->whereHas('voxes')
+		->get()
+		->pluck('name', 'id')
+		->toArray();
+
         $arr = array(
         	'all_taken' => $all_taken,
 			'vip_access_text' => $vip_access_text,
@@ -132,9 +138,8 @@ class PaidDentalSurveysController extends ApiController {
 			'filters' => $filters,
 			'taken' => $taken,
         	'voxes' => $voxes,
-        	'categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
+        	'categories' => $categories,
 			'vox_levels' => $vox_levels,
-
 			'user' => $user,
 		);
 

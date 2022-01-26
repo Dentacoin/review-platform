@@ -256,9 +256,7 @@ class IndexController extends FrontController {
      * bottom content of the index page
      */
 	public function index_down($locale=null) {
-		$featured_voxes = Vox::with('translations')
-		->with('categories.category')
-		->with('categories.category.translations')
+		$featured_voxes = Vox::with(['translations', 'categories.category', 'categories.category.translations'])
 		->where('type', 'normal')
 		->where('featured', true)
 		->orderBy('launched_at', 'desc')
@@ -272,9 +270,7 @@ class IndexController extends FrontController {
 				$arr_v[] = $fv->id;
 			}
 
-			$swiper_voxes = Vox::with('translations')
-			->with('categories.category')
-			->with('categories.category.translations')
+			$swiper_voxes = Vox::with(['translations', 'categories.category', 'categories.category.translations'])
 			->where('type', 'normal')
 			->whereNotIn('id', $arr_v)
 			->orderBy('launched_at', 'desc')

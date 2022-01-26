@@ -134,9 +134,7 @@ class ProfileController extends FrontController {
 
             if($os) {
                 $latestVoxes = Vox::where('type', 'normal')
-                ->with('translations')
-                ->with('categories.category')
-                ->with('categories.category.translations')
+                ->with(['translations', 'categories.category', 'categories.category.translations'])
                 ->orderBy('created_at', 'desc')
                 ->take(3)
                 ->get();

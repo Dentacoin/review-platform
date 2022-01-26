@@ -225,15 +225,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function reviews_in_dentist() {
         return $this->hasMany('App\Models\Review', 'dentist_id', 'id')
         ->where('status', 'accepted')
-        ->with('user')
-        ->with('answers')
         ->orderBy('id', 'desc');
     }
     public function reviews_in_clinic() {
         return $this->hasMany('App\Models\Review', 'clinic_id', 'id')
         ->where('status', 'accepted')
-        ->with('user')
-        ->with('answers')
+        ->with(['user', 'answers'])
         ->orderBy('id', 'desc');
     }
     public function reviews_out_standard() {
@@ -1927,7 +1924,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
     }
 
     public static function getAllVoxes() {
-        return Vox::with('translations')->with('categories.category')->with('categories.category.translations');
+        return Vox::with(['translations', 'categories.category', 'categories.category.translations']);
     }
 
     public function voxesTargeting() {

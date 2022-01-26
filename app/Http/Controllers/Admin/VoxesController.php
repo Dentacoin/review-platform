@@ -2415,7 +2415,13 @@ class VoxesController extends AdminController {
                 $respondents = '';
 
             } else {
-                $respondents = DcnReward::with('user')->where('reference_id',$vox_id )->where('platform', 'vox')->where('type', 'survey')->has('user')->select('dcn_rewards.*');
+                $respondents = DcnReward::with('user')
+                ->where('reference_id',$vox_id )
+                ->where('platform', 'vox')
+                ->where('type', 'survey')
+                ->has('user')
+                ->select('dcn_rewards.*');
+                
                 if (request()->input( 'country' )) {
                     $order = request()->input( 'country' );
                     $respondents = $respondents

@@ -1168,8 +1168,7 @@ class VoxService {
 
                 $suggested_voxes = $user->voxesTargeting()
                 ->where('type', 'normal')
-                ->with('categories.category')
-                ->with('categories.category.translations')
+                ->with(['translations', 'categories.category', 'categories.category.translations'])
                 ->orderBy('launched_at', 'desc')
                 ->whereNotIn('id', $related_voxes_ids)
                 ->whereNotIn('id', $taken)
@@ -1248,8 +1247,7 @@ class VoxService {
 
                     $suggested_voxes = $user->voxesTargeting()
                     ->where('type', 'normal')
-                    ->with('categories.category')
-                    ->with('categories.category.translations')
+                    ->with(['translations', 'categories.category', 'categories.category.translations'])
                     ->orderBy('launched_at', 'desc')
                     ->whereNotIn('id', $related_voxes_ids)
                     ->whereNotIn('id', $taken)
@@ -1533,15 +1531,13 @@ class VoxService {
             }
 
             if (!empty($related_voxes_ids)) {
-                foreach(Vox::with('translations')->with('categories.category')->with('categories.category.translations')->whereIn('id', $related_voxes_ids)->get() as $rv) {
+                foreach(Vox::with(['translations', 'categories.category', 'categories.category.translations'])->whereIn('id', $related_voxes_ids)->get() as $rv) {
                     $related_voxes[] = $rv;
                 }
             }
         }
         $suggested_voxes = Vox::where('type', 'normal')
-        ->with('translations')
-        ->with('categories.category')
-        ->with('categories.category.translations')
+        ->with(['translations', 'categories.category', 'categories.category.translations'])
         ->orderBy('launched_at', 'desc')
         ->whereNotIn('id', $related_voxes_ids)
         ->whereNotIn('id', $taken)
