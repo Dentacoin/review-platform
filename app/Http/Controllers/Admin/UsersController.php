@@ -3156,4 +3156,21 @@ class UsersController extends AdminController {
             'pagination_link' => $pagination_link,
         ));
     }
+
+    public function answeredQuestionsCount() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $answered_questions_count = VoxAnswer::where('created_at', '>=', request('search_from'))
+        ->where('created_at', '<=', request('search_to'))
+        ->count();
+
+        return Response::json([
+            'success' => true, 
+            'data' => $answered_questions_count,
+        ]);
+    }
 }

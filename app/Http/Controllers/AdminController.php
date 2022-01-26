@@ -199,7 +199,7 @@ class AdminController extends BaseController {
         $params['counters']['orders'] = Order::whereNull('is_send')->count();
         $params['dcn_warning_transaction'] = DcnTransaction::where('status', 'dont_retry')->count();
 
-        $params['cache_version'] = '20220120';
+        $params['cache_version'] = '20220126';
         //dd($params['counters']);
 
         if($this->current_page!='home' && !isset($menu[$this->current_page])) {

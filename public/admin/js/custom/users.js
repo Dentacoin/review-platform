@@ -259,4 +259,33 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#answered-questions-count-form').submit( function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+		var that = $(this);
+		that.find('p').css('display', 'block');
+
+        $.ajax({
+	        url: $(this).attr('action'),
+	        type: 'POST',
+	        data: formData,
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    }).done( (function (data) {
+			console.log(data);
+
+			if(data.success) {
+				that.parent().find('table tbody').append('<tr>\
+					<td>'+that.attr('date')+'</td>\
+					<td>'+data.data+'</td>\
+				</tr>');
+				that.find('p').hide();
+			}
+
+	    }).bind(this) ).fail(function (data) {
+			console.log(data);
+	    });
+    });
 });

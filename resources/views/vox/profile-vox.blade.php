@@ -187,10 +187,10 @@
 	            					<td style="width: 25%;">
 	            						@if($ban->expires==null)
 	            							{{ trans('vox.page.profile.vox.ban-permanent') }}
-	            						@elseif($ban->expires->lt( Carbon\Carbon::now() ))
+	            						@elseif($ban->expires->lt( Carbon::now() ))
 	            							{{ trans('vox.page.profile.vox.ban-expired') }}
 	            						@else
-	            							{{ str_pad(\Carbon\Carbon::now()->diffInHours($ban->expires), 2, "0", STR_PAD_LEFT)}}:{{ str_pad(\Carbon\Carbon::now()->diffInMinutes($ban->expires) % 60 , 2, "0", STR_PAD_LEFT)}}:{{ str_pad(\Carbon\Carbon::now()->diffInSeconds($ban->expires) % 60 , 2, "0", STR_PAD_LEFT)}}
+	            							{{ str_pad(Carbon::now()->diffInHours($ban->expires), 2, "0", STR_PAD_LEFT)}}:{{ str_pad(\Carbon::now()->diffInMinutes($ban->expires) % 60 , 2, "0", STR_PAD_LEFT)}}:{{ str_pad(Carbon::now()->diffInSeconds($ban->expires) % 60 , 2, "0", STR_PAD_LEFT)}}
 	            						@endif
 	            					</td>
 	            				</tr>
