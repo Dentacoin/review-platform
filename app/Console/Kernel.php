@@ -2685,7 +2685,9 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             }
 
             if(!empty($errors) || !empty($questions_order_bugs) || !empty($without_translations)) {
-                VoxError::delete();
+                if(!empty(VoxError::first())) {
+                    VoxError::first()->delete();
+                }
                 
                 $new_errors = new VoxError;
                 $new_errors->questions_order_bugs = $questions_order_bugs;
@@ -2696,7 +2698,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
             echo 'Voxes Errors Check - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('06:00');
+        })->dailyAt('10:35');
 
         $schedule->call(function () {
             echo 'TEST CRON END '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
