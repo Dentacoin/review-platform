@@ -36,7 +36,7 @@
             @if(!empty($vox_errors->without_translations))
                 <div class="alert alert-warning">
                     <b>Voxes without translations</b>: <br/>
-                    @foreach($vox_errors->without_translations as $without_trans)
+                    @foreach($vox_errors->without_translations as $key => $without_trans)
                         <a href="{{ url('cms/vox/edit/'.$key) }}" target="_blank">Vox</a> ID {{ $without_trans }}<br/>
                     @endforeach
                 </div>
