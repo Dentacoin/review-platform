@@ -65,7 +65,6 @@ class PollsController extends AdminController {
 
         $total_count = $polls->count();
         $page = max(1,intval(request('page')));
-        
         $ppp = 100;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
@@ -485,7 +484,6 @@ class PollsController extends AdminController {
 
         $total_count = $descriptions->count();
         $page = max(1,intval(request('page')));
-        
         $ppp = 100;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
@@ -640,5 +638,4 @@ class PollsController extends AdminController {
         $this->request->session()->flash('success-message', 'Polls monthly description deleted' );
         return redirect('cms/vox/polls-monthly-description/');
     }
-
 }

@@ -16,7 +16,6 @@ use App\Models\SupportCategory;
 use App\Models\SupportContact;
 use App\Models\EmailTemplate;
 use App\Models\AnonymousUser;
-use App\Models\User;
 
 use App\Helpers\GeneralHelper;
 use App\Helpers\AdminHelper;
@@ -91,7 +90,11 @@ class SupportController extends AdminController {
             $translation->content = $this->request->input('answer');
             $translation->save();
         
-            return Response::json( ['success' => true, 'q_id' => $item->id, 'order' => $item->order_number] );
+            return Response::json([
+                'success' => true, 
+                'q_id' => $item->id, 
+                'order' => $item->order_number
+            ]);
         }
     }
 
@@ -104,7 +107,9 @@ class SupportController extends AdminController {
 
         SupportQuestion::destroy( $id );
 
-        return Response::json( ['success' => true] );
+        return Response::json([
+            'success' => true
+        ]);
     }
 
     public function edit_question( $id ) {
@@ -164,7 +169,9 @@ class SupportController extends AdminController {
             $i++;
         }
 
-        return Response::json( ['success' => true] );
+        return Response::json([
+            'success' => true
+        ]);
     }
 
     public function categoriesReorder() {
@@ -183,7 +190,9 @@ class SupportController extends AdminController {
             $i++;
         }
 
-        return Response::json( ['success' => true] );
+        return Response::json([
+            'success' => true
+        ]);
     }
 
     public function categories() {
@@ -429,10 +438,15 @@ class SupportController extends AdminController {
                     $contact->admin_id = $this->user->id;
                     $contact->save();
 
-                    return Response::json( ['success' => true] );
+                    return Response::json([
+                        'success' => true
+                    ]);
                 }
 
-                return Response::json( ['success' => false, 'message' => "Invalid email template"] );
+                return Response::json([
+                    'success' => false, 
+                    'message' => "Invalid email template"
+                ]);
 
             } else if(!empty(Request::input('answer'))) {
 
@@ -450,7 +464,9 @@ class SupportController extends AdminController {
                 $contact->custom_subject = Request::input('subject');
                 $contact->save();
 
-                return Response::json( ['success' => true] );
+                return Response::json([
+                    'success' => true
+                ]);
             }
         }
     }
@@ -569,9 +585,13 @@ class SupportController extends AdminController {
 
             $contact->delete();
 
-            return Response::json( ['success' => true] );
+            return Response::json([
+                'success' => true
+            ]);
         }
 
-        return Response::json( ['success' => false] );
+        return Response::json([
+            'success' => false
+        ]);
     }
 }

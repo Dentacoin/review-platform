@@ -11,7 +11,6 @@ use App\Models\IncompleteRegistration;
 use App\Models\WithdrawalsCondition;
 use App\Models\VoxQuestionAnswered;
 use App\Models\UserSurveyWarning;
-use App\Models\UnclaimedDentist;
 use App\Models\UserGuidedTour;
 use App\Models\DcnTransaction;
 use App\Models\VoxCrossCheck;
@@ -439,7 +438,6 @@ class UsersController extends AdminController {
 
                         $query = $query->where('is_partner', 1);
                     }
-
                 }
             });
         }
@@ -530,7 +528,6 @@ class UsersController extends AdminController {
 
                 $message->from($sender, $sender_name);
                 $message->to( 'petya.ivanova@dentacoin.com' );
-                // $message->to( 'gergana@youpluswe.com' );
                 $message->subject('Admin exports users');
             });
 
@@ -576,7 +573,6 @@ class UsersController extends AdminController {
 
                 $message->from($sender, $sender_name);
                 $message->to( 'petya.ivanova@dentacoin.com' );
-                // $message->to( 'gergana@youpluswe.com' );
                 $message->subject('Admin exports users');
             });
 
@@ -782,7 +778,7 @@ class UsersController extends AdminController {
                 'address' =>  array('required', 'string'),
             ]);
 
-            if ($validator->fails()) {;
+            if ($validator->fails()) {
 
                 return redirect(url('cms/users/users/add'))
                 ->withInput()
@@ -849,7 +845,10 @@ class UsersController extends AdminController {
 
         if(!empty($item)) {
 
-            $already_viewed = AdminAction::where('admin_id', $this->user->id)->where('user_id', $item->id)->where('created_at', '>', Carbon::now()->addHour(-1))->first();
+            $already_viewed = AdminAction::where('admin_id', $this->user->id)
+            ->where('user_id', $item->id)
+            ->where('created_at', '>', Carbon::now()->addHour(-1))
+            ->first();
 
             if(empty($already_viewed)) {
                 $new_admin_actions = new AdminAction;
@@ -1198,12 +1197,21 @@ class UsersController extends AdminController {
             
             foreach ($unfinishedVoxes as $v) {
                 $unfinished[$v->id] = $v;
-                $ans = VoxAnswer::where('user_id', $id)->where('vox_id', $v->id)->orderBy('created_at', 'asc')->first();
+                $ans = VoxAnswer::where('user_id', $id)
+                ->where('vox_id', $v->id)
+                ->orderBy('created_at', 'asc')
+                ->first();
 
                 if(empty($ans)) {
-                    $ans = VoxAnswerOld::where('user_id', $id)->where('vox_id', $v->id)->orderBy('created_at', 'asc')->first();
+                    $ans = VoxAnswerOld::where('user_id', $id)
+                    ->where('vox_id', $v->id)
+                    ->orderBy('created_at', 'asc')
+                    ->first();
                 }
-                $user_log = UserLogin::where('user_id', $id)->where('created_at', '<', $ans->created_at )->orderBy('id', 'desc')->first();
+                $user_log = UserLogin::where('user_id', $id)
+                ->where('created_at', '<', $ans->created_at )
+                ->orderBy('id', 'desc')
+                ->first();
 
                 $unfinished[$v->id]->user_id = $item->id;
                 $unfinished[$v->id]->login = $user_log;
@@ -1217,15 +1225,25 @@ class UsersController extends AdminController {
             $welcome_questions = VoxQuestion::where('vox_id', $welcome_survey->id)->get();
 
             foreach ($welcome_questions as $welcome_question) {
-                $welcome_answer = VoxAnswer::where('vox_id', $welcome_survey->id)->where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
+                $welcome_answer = VoxAnswer::where('vox_id', $welcome_survey->id)
+                ->where('user_id', $item->id)
+                ->where('question_id', $welcome_question->id)
+                ->first();
+
                 if(empty($welcome_answer)) {
-                    $welcome_answer = VoxAnswerOld::where('vox_id', $welcome_survey->id)->where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
+                    $welcome_answer = VoxAnswerOld::where('vox_id', $welcome_survey->id)
+                    ->where('user_id', $item->id)
+                    ->where('question_id', $welcome_question->id)
+                    ->first();
                 }
                 if ($welcome_answer) {
                     $habits_test_ans = true;
                 }
 
-                $welcome_old = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
+                $welcome_old = VoxCrossCheck::where('user_id', $item->id)
+                ->where('question_id', $welcome_question->id)
+                ->first();
+
                 if(!empty($welcome_old)) {
                     $oldans= $welcome_old->old_answer;
                     $n = $oldans != 0 ? (($oldans) -1) : 1;
@@ -1233,29 +1251,53 @@ class UsersController extends AdminController {
                 } else {
                     $oq = '';
                 }
+
+                $updatedWelcomeQuestion = VoxCrossCheck::where('user_id', $item->id)
+                ->where('question_id', $welcome_question->id)
+                ->orderBy('id', 'desc')
+                ->get();
+
                 $habits_tests[] = [
                     'question' => $welcome_question->question,
                     'old_answer' => $oq ? $oq : ($welcome_answer ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : ''),
                     'answer' => $oq && $welcome_answer ? ((isset(json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1])) ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : '' ) : '',
-                    'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->orderBy('id', 'desc')->first()->created_at : '',
-                    'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->count() : '',
+                    'last_updated' => $updatedWelcomeQuestion->isNotEmpty() ? $updatedWelcomeQuestion->first()->created_at : '',
+                    'updates_count' => $updatedWelcomeQuestion->isNotEmpty() ? $updatedWelcomeQuestion->count() : '',
                 ];
             }
 
+            $firstAnswerSex = VoxCrossCheck::where('user_id', $item->id)
+            ->where('question_id', 'gender')
+            ->first();
+
+            $allAnswersSex = VoxCrossCheck::where('user_id', $item->id)
+            ->where('question_id','gender')
+            ->orderBy('id', 'desc')
+            ->get();
+
             $habits_tests[] = [
                 'question' => 'What is your biological sex?',
-                'old_answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()) ? (VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()->old_answer == 1 ? 'Male' : 'Female') : (!empty($item->gender) ? ($item->gender == 'm' ? 'Male' : 'Female') : ''),
-                'answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()) && !empty($item->gender) ? ($item->gender == 'm' ? 'Male' : 'Female') : '',
-                'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id','gender')->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->orderBy('id', 'desc')->first()->created_at : '',
-                'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->count() : '',
+                'old_answer' => !empty($firstAnswerSex) ? ($firstAnswerSex->old_answer == 1 ? 'Male' : 'Female') : (!empty($item->gender) ? ($item->gender == 'm' ? 'Male' : 'Female') : ''),
+                'answer' => !empty($firstAnswerSex) && !empty($item->gender) ? ($item->gender == 'm' ? 'Male' : 'Female') : '',
+                'last_updated' => $allAnswersSex->isNotEmpty() ? $allAnswersSex->first()->created_at : '',
+                'updates_count' => $allAnswersSex->isNotEmpty() ? $allAnswersSex->count() : '',
             ];
+
+            $firstAnswerBirth = VoxCrossCheck::where('user_id', $item->id)
+            ->where('question_id', 'birthyear')
+            ->first();
+
+            $allAnswersBirth = VoxCrossCheck::where('user_id', $item->id)
+            ->where('question_id','birthyear')
+            ->orderBy('id', 'desc')
+            ->get();
 
             $habits_tests[] = [
                 'question' => "What's your year of birth?",
-                'old_answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()->old_answer : (!empty($item->birthyear) ? $item->birthyear : ''),
-                'answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()) && !empty($item->birthyear) ? $item->birthyear : '',
-                'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id','birthyear')->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->orderBy('id', 'desc')->first()->created_at : '',
-                'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->count() : '',
+                'old_answer' => !empty($firstAnswerBirth) ? $firstAnswerBirth->old_answer : (!empty($item->birthyear) ? $item->birthyear : ''),
+                'answer' => !empty($firstAnswerBirth) && !empty($item->birthyear) ? $item->birthyear : '',
+                'last_updated' => $allAnswersBirth->isNotEmpty() ? $allAnswersBirth->first()->created_at : '',
+                'updates_count' => $allAnswersBirth->isNotEmpty() ? $allAnswersBirth->count() : '',
             ];
 
             foreach (config('vox.details_fields') as $k => $v) {
@@ -1276,8 +1318,14 @@ class UsersController extends AdminController {
                     }
                 }
 
-                $habits_last = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->orderBy('id', 'desc')->first();
-                $habits_count = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->count();
+                $habits_last = VoxCrossCheck::where('user_id', $item->id)
+                ->where('question_id', $k)
+                ->orderBy('id', 'desc')
+                ->first();
+
+                $habits_count = VoxCrossCheck::where('user_id', $item->id)
+                ->where('question_id', $k)
+                ->count();
 
                 $habits_tests[] = [
                     'question' => $v['label'],
@@ -1290,13 +1338,21 @@ class UsersController extends AdminController {
 
             $duplicated_mails = collect();
             if( !empty($item->email)) {
-                $duplicated_mails = User::where('id', '!=', $item->id)->where('email', 'LIKE', $item->email)->withTrashed()->get();
+                $duplicated_mails = User::where('id', '!=', $item->id)
+                ->where('email', 'LIKE', $item->email)
+                ->withTrashed()
+                ->get();
             }
 
             $duplicated_names = collect();
             if( !empty($item->name)) {
-                $duplicated_names = User::where('id', '!=', $item->id)->where('name', 'LIKE', $item->name)->withTrashed()->get();
+                $duplicated_names = User::where('id', '!=', $item->id)
+                ->where('name', 'LIKE', $item->name)
+                ->withTrashed()
+                ->get();
             }
+
+            
 
             return $this->showView('users-form', array(
                 'duplicated_names' => $duplicated_names,
@@ -1310,7 +1366,7 @@ class UsersController extends AdminController {
                 'emails' => $emails,
                 'habits_tests' => $habits_tests,
                 'countries' => Country::with('translations')->get(),
-                'dev_domain' => Request::getHost() == 'urgent.dentavox.dentacoin.com' || Request::getHost() == 'urgent.reviews.dentacoin.com' ? true : false,
+                'dev_domain' => in_array( Request::getHost(), ['urgent.dentavox.dentacoin.com', 'urgent.reviews.dentacoin.com'] ) ? true : false,
             ));
         } else {
             return redirect('cms/users/users/');
@@ -1776,7 +1832,9 @@ class UsersController extends AdminController {
             }
         }
 
-        $transactions = DcnTransaction::where('user_id', $item->id)->whereIn('status', ['new', 'failed', 'first', 'not_sent'])->get();
+        $transactions = DcnTransaction::where('user_id', $item->id)
+        ->whereIn('status', ['new', 'failed', 'first', 'not_sent'])
+        ->get();
 
         if ($transactions->isNotEmpty()) {
             foreach ($transactions as $trans) {
@@ -1976,7 +2034,11 @@ class UsersController extends AdminController {
                 $review_in_clinic->save();
             }
 
-            return Response::json(['success' => true, 'thumb' => $user->getImageUrl(true), 'name' => '' ]);
+            return Response::json([
+                'success' => true, 
+                'thumb' => $user->getImageUrl(true), 
+                'name' => '' 
+            ]);
         }
     }
 
@@ -2042,7 +2104,7 @@ class UsersController extends AdminController {
                 $group_id = config('email-preferences')['product_news']['vox']['sendgrid_group_id'];
             }
         
-            $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->post($request_body);
+            $sg->client->asm()->groups()->_($group_id)->suppressions()->post($request_body);
 
             $ban->restore();
         }
@@ -2133,7 +2195,12 @@ class UsersController extends AdminController {
                 $clinic = User::find($item->clinic_id);
             }
 
-            $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
+            $reward_for_review = DcnReward::where('user_id', $patient->id)
+            ->where('platform', 'trp')
+            ->where('type', 'review')
+            ->where('reference_id', $item->id)
+            ->first();
+
             if (!empty($reward_for_review)) {
                 $reward_for_review->delete();
             }
@@ -2167,7 +2234,7 @@ class UsersController extends AdminController {
 
             if(!empty($notifications)) {
 
-                if (($key = array_search('trp', $notifications)) !== false) {
+                if(($key = array_search('trp', $notifications)) !== false) {
                     unset($notifications[$key]);
                 }
 
@@ -2181,7 +2248,7 @@ class UsersController extends AdminController {
             $request_body->recipient_emails = [$patient->email];
             
             $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
-            $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
+            $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
 
             $patient->sendGridTemplate(86, null, 'trp');
 
@@ -2314,9 +2381,15 @@ class UsersController extends AdminController {
         }
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
+
             $img = Image::make( Input::file('image') )->orientate();
             list($thumb, $full, $name) = GeneralHelper::addTempImage($img);
-            return Response::json(['success' => true, 'thumb' => $thumb, 'name' => $name ]);
+
+            return Response::json([
+                'success' => true, 
+                'thumb' => $thumb, 
+                'name' => $name 
+            ]);
         }
     }
 
@@ -2425,7 +2498,10 @@ class UsersController extends AdminController {
 
         $duplicated_names = collect();
         if( !empty($user->name)) {
-            $duplicated_names = User::where('id', '!=', $user->id)->where('name', 'LIKE', $user->name)->withTrashed()->get();
+            $duplicated_names = User::where('id', '!=', $user->id)
+            ->where('name', 'LIKE', $user->name)
+            ->withTrashed()
+            ->get();
         }
 
         return $this->showView('user-info', [
@@ -2480,7 +2556,11 @@ class UsersController extends AdminController {
             ORDER BY `total` DESC
         ");
 
-        $user_genders = User::groupBy('gender')->select('gender', DB::raw('count(*) as total'))->where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->get();
+        $user_genders = User::groupBy('gender')
+        ->select('gender', DB::raw('count(*) as total'))
+        ->where('created_at', '>=', $from_date)
+        ->where('created_at', '<=', $to_date)
+        ->get();
 
         $countries = DB::select("
             SELECT 
@@ -2652,7 +2732,6 @@ class UsersController extends AdminController {
             'job' => $job,
             'job_title' => $job_title,
             'income' => $income,
-
             'answered_questions' => VoxQuestionAnswered::get(),
             'search_users_from' => request('search_users_from'),
             'search_users_to' => request('search_users_to'),
@@ -2741,7 +2820,10 @@ class UsersController extends AdminController {
         }
 
         if(request('export')) {
-            $incomplete = IncompleteRegistration::whereNull('completed')->orderBy('id', 'desc')->get();
+            $incomplete = IncompleteRegistration::whereNull('completed')
+            ->orderBy('id', 'desc')
+            ->get();
+
             $export = [];
             foreach ($incomplete as $u) {
                 $nameArr = explode(' ', $u->name);
@@ -2886,7 +2968,6 @@ class UsersController extends AdminController {
             $leads_export = LeadMagnet::orderBy('id', 'desc')->get();
             $export = [];
             foreach ($leads_export as $u) {
-
                 $third_answer = '';
 
                 if (!empty(!empty($u->answers) && !empty(json_decode($u->answers, true)[3]))) {
@@ -2952,7 +3033,6 @@ class UsersController extends AdminController {
             exit;
         }
 
-
         $leads = LeadMagnet::orderBy('id', 'desc')->get();
         return $this->showView('users-lead-magnet', array(
             'leads' => $leads,
@@ -2984,9 +3064,7 @@ class UsersController extends AdminController {
 
         $total_count = $rewards->count();
         $sum_price = $rewards->sum('reward');
-
         $page = max(1,intval(request('page')));
-        
         $ppp = 25;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
@@ -3046,7 +3124,6 @@ class UsersController extends AdminController {
 
         $total_count = $bans->count();
         $page = max(1,intval(request('page')));
-        
         $ppp = 25;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);

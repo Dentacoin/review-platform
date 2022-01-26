@@ -56,7 +56,6 @@ class PaidReportsController extends AdminController {
 
         $total_count = $reports->count();
         $page = max(1,intval(request('page')));
-        
         $ppp = 100;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
@@ -320,5 +319,4 @@ class PaidReportsController extends AdminController {
         $this->request->session()->flash('success-message', 'Report deleted' );
         return redirect('cms/vox/paid-reports/');
     }
-
 }

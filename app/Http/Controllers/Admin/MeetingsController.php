@@ -26,7 +26,6 @@ class MeetingsController extends AdminController {
 
         $total_count = $meetings->count();
         $page = max(1,intval(request('page')));
-        
         $ppp = 100;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);

@@ -122,7 +122,6 @@ class TranslationsController extends AdminController {
             if(empty($target_list[$key])) {
                 $flist[] = [$key, $value, ''];
             }
-            
         }
 
         $dir = storage_path().'/app/public/xls/';
@@ -171,7 +170,6 @@ class TranslationsController extends AdminController {
                 unlink($newName);
 
                 $this->request->session()->flash('success-message', trans('admin.page.translations.imported'));
-
             }
         } else {
             $this->request->session()->flash('error-message', 'Please first upload a file.');

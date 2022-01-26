@@ -61,7 +61,9 @@ class BranchesController extends AdminController {
 
     			if(!empty($main_clinic) && !empty($branch_clinic)) {
 
-    				$existing_branch = UserBranch::where('clinic_id', $main_clinic->id)->where('branch_clinic_id', $branch_clinic->id)->first();
+    				$existing_branch = UserBranch::where('clinic_id', $main_clinic->id)
+					->where('branch_clinic_id', $branch_clinic->id)
+					->first();
 
     				if($existing_branch) {
     					$this->request->session()->flash('error-message', 'Branch already exists!');
@@ -100,7 +102,6 @@ class BranchesController extends AdminController {
     				}
 
     				$this->request->session()->flash('success-message', 'Branch added!');
-
     			} else {
     				if(empty($main_clinic)) {
     					$this->request->session()->flash('error-message', 'Main clinic doesn\'t exists!');
@@ -119,5 +120,4 @@ class BranchesController extends AdminController {
 
     	return $this->showView('clinic-branches-add');
     }
-
 }

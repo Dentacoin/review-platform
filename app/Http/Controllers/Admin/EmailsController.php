@@ -38,7 +38,13 @@ class EmailsController extends AdminController {
                 return redirect('cms/home');            
             }
     
-            if(!empty(request('search-name')) || !empty(request('search-id')) || !empty(request('search-sendgrid-id')) || !empty(request('search-platform')) || !empty(request('without-category'))) {
+            if(
+                !empty(request('search-name')) 
+                || !empty(request('search-id')) 
+                || !empty(request('search-sendgrid-id')) 
+                || !empty(request('search-platform')) 
+                || !empty(request('without-category'))
+            ) {
                 $templates = EmailTemplate::whereNull('not_used')->orderBy('id', 'ASC');
     
                 if(!empty(request('search-name'))) {
@@ -681,5 +687,4 @@ class EmailsController extends AdminController {
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/email_validations/old_emails');
     }
-
 }

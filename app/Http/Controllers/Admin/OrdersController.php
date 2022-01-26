@@ -25,7 +25,6 @@ class OrdersController extends AdminController {
 
         $total_count = $orders->count();
         $page = max(1,intval(request('page')));
-        
         $ppp = 100;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
@@ -90,5 +89,4 @@ class OrdersController extends AdminController {
             return Response::json( ['success' => true, 'payment_info' => $item->payment_info] );
         }
 	}
-
 }

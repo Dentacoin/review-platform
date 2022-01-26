@@ -21,14 +21,18 @@ class VoxCategory extends Model {
     public $timestamps = false;
 
     public function voxes() {
-        return $this->hasMany('App\Models\VoxToCategory', 'vox_category_id', 'id')->with('vox')->whereHas('vox', function ($query) {
+        return $this->hasMany('App\Models\VoxToCategory', 'vox_category_id', 'id')
+        ->with('vox')
+        ->whereHas('vox', function ($query) {
             $query->where('type', 'normal');
         });
     }
 
     public function stats_voxes() {
-        return $this->hasMany('App\Models\VoxToCategory', 'vox_category_id', 'id')->whereHas('vox', function ($query) {
-            $query->where('type', 'normal')->where( 'has_stats', 1 );
+        return $this->hasMany('App\Models\VoxToCategory', 'vox_category_id', 'id')
+        ->whereHas('vox', function ($query) {
+            $query->where('type', 'normal')
+            ->where( 'has_stats', 1 );
         })->with('vox.translations');
     }
 
@@ -63,7 +67,6 @@ class VoxCategory extends Model {
         $this->hasimage = true;
         $this->save();
     }
-
 }
 
 class VoxCategoryTranslation extends Model {
@@ -72,7 +75,6 @@ class VoxCategoryTranslation extends Model {
     protected $fillable = [
         'name',
     ];
-
 }
 
 ?>

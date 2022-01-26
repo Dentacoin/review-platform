@@ -42,9 +42,7 @@ class RecommendationsController extends AdminController {
         }
 
         $total_count = $recommendations->count();
-
         $page = max(1,intval(request('page')));
-        
         $ppp = 100;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);

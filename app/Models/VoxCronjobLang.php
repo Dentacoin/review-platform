@@ -20,8 +20,7 @@ class VoxCronjobLang extends Model {
 
     public function vox() {
         return $this->hasOne('App\Models\Vox', 'id', 'vox_id');        
-    }   
-    
+    }
 }
 
 ?>

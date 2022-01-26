@@ -31,9 +31,7 @@ class AnonymousUsersController extends AdminController {
         }
 
         $total_count = $users->count();
-
         $page = max(1,intval(request('page')));
-
         $ppp = 100;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);

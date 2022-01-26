@@ -62,9 +62,7 @@ class ReviewsController extends AdminController {
         }
 
         $total_count = $reviews->count();
-
         $page = max(1,intval(request('page')));
-        
         $ppp = 50;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
@@ -151,10 +149,10 @@ class ReviewsController extends AdminController {
 
         if(!empty($item)) {            
             $item->restore();
+
             ReviewAnswer::onlyTrashed()->where([
                 ['review_id', $item->id],
-            ])
-            ->restore();
+            ])->restore();
 
             $dentist = null;
             $clinic = null;
@@ -199,7 +197,11 @@ class ReviewsController extends AdminController {
             $clinic = User::find($item->clinic_id);
         }
 
-        $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
+        $reward_for_review = DcnReward::where('user_id', $patient->id)
+        ->where('platform', 'trp')
+        ->where('type', 'review')
+        ->where('reference_id', $item->id)
+        ->first();
 
         if (!empty($reward_for_review)) {
             $reward_for_review->delete();

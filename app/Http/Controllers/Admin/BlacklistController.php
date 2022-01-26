@@ -83,5 +83,4 @@ class BlacklistController extends AdminController {
         $this->request->session()->flash('success-message', 'Blacklist item deleted' );
         return redirect('cms/blacklist');
     }
-
 }

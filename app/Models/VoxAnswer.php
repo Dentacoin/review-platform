@@ -47,8 +47,10 @@ class VoxAnswer extends Model {
     }
 
     public static function getCount($reload=false) {
+        
         $fn = storage_path('vox_count');
         $t = file_exists($fn) ? filemtime($fn) : null;
+        
         if($reload || !$t || $t < time()-3600) {
             $cnt = self::count();
             $cnt_old = VoxAnswerOld::count();

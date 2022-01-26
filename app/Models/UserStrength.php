@@ -106,7 +106,7 @@ class UserStrength extends Model {
                         foreach ($last_month_reviews as $rev) {
                             foreach($rev->answers as $answer) {
                                 if(!$user->is_clinic && $user->my_workplace_approved->isNotEmpty()) {
-                                    if($answer->question['label'] == 'Doctor' || $answer->question['label'] == 'Treatment experience' || $answer->question['label'] == 'Treatment quality' ) {
+                                    if(in_array($answer->question['label'], ['Doctor', 'Treatment experience', 'Treatment quality'])) {
                                         if(!isset($aggregated[$answer->question['label']])) {
                                             $aggregated[$answer->question['label']] = 0;
                                         }
@@ -127,15 +127,16 @@ class UserStrength extends Model {
                             $aggregated[$key] /= $last_month_reviews->count();
                         }
 
-                        $now = Carbon::now();
-
                         $arrayIndex = (intval(date('Y')) - 2019)*12 + intval(date('n')); // + ....
                         $arrayIndex = $arrayIndex % count($aggregated);
 
                         $prev_month_rating = array_values($aggregated)[$arrayIndex];
                         $prev_month_label = array_keys($aggregated)[$arrayIndex];
 
-                        $check_reviews = UserGuidedTour::where('user_id', $user->id)->whereNotNull('check_reviews_on')->where('check_reviews_on', '>', $first_day_of_month)->first();
+                        $check_reviews = UserGuidedTour::where('user_id', $user->id)
+                        ->whereNotNull('check_reviews_on')
+                        ->where('check_reviews_on', '>', $first_day_of_month)
+                        ->first();
 
                         if(!empty($check_reviews)) {
                             $ret['completed_steps']++;
@@ -218,9 +219,7 @@ class UserStrength extends Model {
                         ->where('created_at', '<=', $last_day_of_last_month)
                         ->get();
 
-                        $has_country_reviews = false;
                         if ($country_reviews->count()) {
-                            $has_country_reviews = true;
                             $country_rating = 0;
                             foreach ($country_reviews as $c_review) {
                                 $country_rating += $c_review->rating;
@@ -253,7 +252,8 @@ class UserStrength extends Model {
                         $id = $user->id;
 
                         $current_month_reviews = Review::where(function($query) use ($id) {
-                            $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+                            $query->where( 'dentist_id', $id)
+                            ->orWhere('clinic_id', $id);
                         })
                         ->where('created_at', '>=', $first_day_of_month)
                         ->get();
@@ -262,7 +262,7 @@ class UserStrength extends Model {
                             foreach ($current_month_reviews as $rev) {
                                 foreach($rev->answers as $answer) {
                                     if(!$user->is_clinic && $user->my_workplace_approved->isNotEmpty()) {
-                                        if($answer->question['label'] == 'Doctor' || $answer->question['label'] == 'Treatment experience' || $answer->question['label'] == 'Treatment quality' ) {
+                                        if(in_array($answer->question['label'], ['Doctor', 'Treatment experience', 'Treatment quality'])) {
                                             if(!isset($aggregated[$answer->question['label']])) {
                                                 $aggregated[$answer->question['label']] = 0;
                                             }
@@ -285,16 +285,16 @@ class UserStrength extends Model {
                                 $aggregated[$key] /= $current_month_reviews->count();
                             }
 
-                            $now = Carbon::now();
-
                             $arrayIndex = (intval(date('Y')) - 2019)*12 + intval(date('n')); // + ....
-
                             $arrayIndex = $arrayIndex % count($aggregated);
 
                             $cur_month_rating = array_values($aggregated)[$arrayIndex];
                             $cur_month_label = array_keys($aggregated)[$arrayIndex];
 
-                            $check_reviews = UserGuidedTour::where('user_id', $user->id)->whereNotNull('check_reviews_on')->where('check_reviews_on', '>', $first_day_of_month)->first();
+                            $check_reviews = UserGuidedTour::where('user_id', $user->id)
+                            ->whereNotNull('check_reviews_on')
+                            ->where('check_reviews_on', '>', $first_day_of_month)
+                            ->first();
 
                             if(!empty($check_reviews)) {
                                 $ret['completed_steps']++;
@@ -348,11 +348,10 @@ class UserStrength extends Model {
                         
                         $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
                             $query->where('country_id', $country_id);
-                        })->where('created_at', '>=', $first_day_of_month)->get();
+                        })->where('created_at', '>=', $first_day_of_month)
+                        ->get();
 
-                        $has_country_reviews = false;
                         if ($country_reviews->count()) {
-                            $has_country_reviews = true;
 
                             $country_rating = 0;
                             foreach ($country_reviews as $c_review) {
@@ -441,15 +440,24 @@ class UserStrength extends Model {
                 }
 
 
-                $check_stats = UserGuidedTour::where('user_id', $user->id)->whereNotNull('check_stats_on')->where('check_stats_on', '>', $first_day_of_month)->first();
+                $check_stats = UserGuidedTour::where('user_id', $user->id)
+                ->whereNotNull('check_stats_on')
+                ->where('check_stats_on', '>', $first_day_of_month)
+                ->first();
 
                 if(!empty($check_stats)) {
                     $ret['completed_steps']++;
                 }
-                $stats = Vox::where('has_stats', 1)->where('stats_featured', 1)->orderBy('launched_at', 'desc')->first();
+
+                $stats = Vox::where('has_stats', 1)
+                ->where('stats_featured', 1)
+                ->orderBy('launched_at', 'desc')
+                ->first();
 
                 if (empty($stats)) {
-                    $stats = Vox::where('has_stats', 1)->orderBy('launched_at', 'desc')->first();
+                    $stats = Vox::where('has_stats', 1)
+                    ->orderBy('launched_at', 'desc')
+                    ->first();
                 }
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.check-stats.title'),
@@ -466,7 +474,9 @@ class UserStrength extends Model {
                 $array_number_shuffle['not_important']++;
 
 
-                $check_assurance = UserGuidedTour::where('user_id', $user->id)->whereNotNull('dcn_assurance')->first();
+                $check_assurance = UserGuidedTour::where('user_id', $user->id)
+                ->whereNotNull('dcn_assurance')
+                ->first();
 
                 if(!empty($check_assurance)) {
                     $ret['completed_steps']++;
@@ -489,7 +499,9 @@ class UserStrength extends Model {
                 }
 
 
-                $check_dentacare = UserGuidedTour::where('user_id', $user->id)->whereNotNull('dentacare_app')->first();
+                $check_dentacare = UserGuidedTour::where('user_id', $user->id)
+                ->whereNotNull('dentacare_app')
+                ->first();
 
                 if(!empty($check_dentacare)) {
                     $ret['completed_steps']++;
@@ -667,7 +679,12 @@ class UserStrength extends Model {
                     ];
                 } else if (empty($done_all) ) {
 
-                    $voxes = Vox::where('type', 'normal')->orderBy('featured', 'desc')->orderBy('id', 'desc')->get()->pluck('id')->toArray();
+                    $voxes = Vox::where('type', 'normal')
+                    ->orderBy('featured', 'desc')
+                    ->orderBy('id', 'desc')
+                    ->get()
+                    ->pluck('id')
+                    ->toArray();
                     
                     $filled_voxes = $user->filledVoxes();
 
@@ -709,10 +726,8 @@ class UserStrength extends Model {
                     'event_label' => 'Dentacare',
                 ];
             }
-
         }
 
         return $ret;
     }
-
 }

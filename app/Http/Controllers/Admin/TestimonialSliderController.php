@@ -135,7 +135,11 @@ class TestimonialSliderController extends AdminController {
             $img = Image::make( Input::file('image') )->orientate();
             $item->addImage($img);
 
-            return Response::json(['success' => true, 'thumb' => $item->getImageUrl(), 'name' => '' ]);
+            return Response::json([
+                'success' => true, 
+                'thumb' => $item->getImageUrl(), 
+                'name' => '' 
+            ]);
         }
     }
 

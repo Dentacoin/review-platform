@@ -101,9 +101,7 @@ class InvitesController extends AdminController {
         }
 
         $total_count = $items->count();
-
         $page = max(1,intval(request('page')));
-        
         $ppp = 50;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);

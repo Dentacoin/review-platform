@@ -108,7 +108,6 @@ class TransactionsController extends AdminController {
         $total_dcn_price = $transactions->sum('amount');
 
         $page = max(1,intval(request('page')));
-        
         $ppp = 25;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
@@ -656,6 +655,7 @@ class TransactionsController extends AdminController {
             $trans->save();
         }
 
+        $this->request->session()->flash('success-message', 'Transaction checked!' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
@@ -671,7 +671,6 @@ class TransactionsController extends AdminController {
         $allow->save();
 
         $this->request->session()->flash('success-message', 'Disabled!' );
-
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
@@ -687,7 +686,6 @@ class TransactionsController extends AdminController {
         $allow->save();
 
         $this->request->session()->flash('success-message', 'Enabled!' );
-
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
@@ -703,7 +701,6 @@ class TransactionsController extends AdminController {
         $allow->save();
 
         $this->request->session()->flash('success-message', 'Disabled!' );
-
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
@@ -719,7 +716,6 @@ class TransactionsController extends AdminController {
         $allow->save();
 
         $this->request->session()->flash('success-message', 'Enabled!' );
-
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
@@ -820,7 +816,9 @@ class TransactionsController extends AdminController {
 
         $pending_transactions = !empty($resp) ? $resp->success : 'Error';
 
-        return Response::json( ['data' => $pending_transactions] );
+        return Response::json([
+            'data' => $pending_transactions
+        ]);
     }
 
     public function checkConnectedNodes() {
@@ -843,7 +841,9 @@ class TransactionsController extends AdminController {
 
         $connected_nodes = !empty($response) ? $response->success : 'Error';
 
-        return Response::json( ['data' => $connected_nodes] );
+        return Response::json([
+            'data' => $connected_nodes
+        ]);
     }
 
     public function makeUserSuspicious($user_id) {
@@ -856,7 +856,6 @@ class TransactionsController extends AdminController {
         $user = User::find($user_id);
 
         if($user && !$user->is_dentist) {
-
             $user_history = new UserHistory;
             $user_history->admin_id = $this->user->id;
             $user_history->user_id = $user->id;

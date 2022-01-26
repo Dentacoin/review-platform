@@ -88,9 +88,7 @@ class BanAppealsController extends AdminController {
         }
 
         $total_count = $items->count();
-
         $page = max(1,intval(request('page')));
-        
         $ppp = 50;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
@@ -177,11 +175,11 @@ class BanAppealsController extends AdminController {
             $new_admin_actions->action = 'approve';
             $new_admin_actions->save();
 
-            // $this->request->session()->flash('success-message', "Appeal approved" );
-            return Response::json( ['success' => true, 'type' => 'approved'] );
+            return Response::json([
+                'success' => true, 
+                'type' => 'approved'
+            ]);
         }
-
-        // return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
     }
 
     public function reject($id) {
@@ -194,13 +192,16 @@ class BanAppealsController extends AdminController {
         if (empty(Request::input('reject_radio')) || (!empty(Request::input('reject_radio')) && (Request::input('reject_radio') == 'Other' || Request::input('reject_radio') == 'Multiple accounts') && empty(Request::input('rejected_reason')))) {
 
             if(!empty(Request::input('reject_radio')) && Request::input('reject_radio') == 'Multiple accounts' && empty(Request::input('rejected_reason'))) {
-                // $this->request->session()->flash('error-message', "You have to write which are the multiple accounts" );
-                return Response::json( ['success' => false, 'message' => "You have to write which are the multiple accounts"] );
+                return Response::json([
+                    'success' => false, 
+                    'message' => "You have to write which are the multiple accounts"
+                ]);
             } else {
-                // $this->request->session()->flash('error-message', "You have to write a reason why this appeal has to be rejected" );
-                return Response::json( ['success' => false, 'message' => "You have to write a reason why this appeal has to be rejected"] );
+                return Response::json([
+                    'success' => false, 
+                    'message' => "You have to write a reason why this appeal has to be rejected"
+                ]);
             }
-
         } else {
 
             $item = BanAppeal::find($id);
@@ -231,12 +232,11 @@ class BanAppealsController extends AdminController {
             $item->pending_fields = null;
             $item->save();
 
-            // $this->request->session()->flash('success-message', "Appeal rejected" );
-            return Response::json( ['success' => true, 'type' => 'rejected'] );
+            return Response::json([
+                'success' => true, 
+                'type' => 'rejected'
+            ]);
         }
-
-        // return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
-
     }
 
     public function pending($id) {
@@ -268,14 +268,16 @@ class BanAppealsController extends AdminController {
 
             $item->save();
 
-            // $this->request->session()->flash('success-message', "Email send" );
-            return Response::json( ['success' => true, 'type' => 'pending'] );
+            return Response::json([
+                'success' => true, 
+                'type' => 'pending'
+            ]);
         } else {
-            // $this->request->session()->flash('error-message', "Select missing info" );
-            return Response::json( ['success' => false, 'message' => "Select missing info"] );
+            return Response::json([
+                'success' => false, 
+                'message' => "Select missing info"
+            ]);
         }
-
-        // return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
     }
 
     public function userInfo($user_id) {
@@ -288,7 +290,9 @@ class BanAppealsController extends AdminController {
         $user = User::withTrashed()->find($user_id);
 
         if(!empty($user)) {
-            return Response::json( ['data' => $user->banAppealInfo()] );
+            return Response::json([
+                'data' => $user->banAppealInfo()
+            ]);
         }
     }
 }

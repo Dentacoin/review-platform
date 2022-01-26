@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MultipleLangSheetExport;
 use App\Exports\MultipleStatSheetExport;
-use App\Helpers\AdminHelper;
-use App\Helpers\VoxHelper;
-use App\Exports\Export;
-use App\Imports\Import;
-use Carbon\Carbon;
 
 use App\Models\VoxCronjobLang;
 use App\Models\VoxToCategory;
@@ -32,6 +27,12 @@ use App\Models\VoxError;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Vox;
+
+use App\Helpers\AdminHelper;
+use App\Helpers\VoxHelper;
+use App\Exports\Export;
+use App\Imports\Import;
+use Carbon\Carbon;
 
 use Response;
 use Request;
@@ -73,7 +74,10 @@ class VoxesController extends AdminController {
             'top_10' => 'TOP 10',
         ];
 
-        $this->scales_arr = VoxScale::orderBy('title')->get()->pluck('title', 'id')->toArray();
+        $this->scales_arr = VoxScale::orderBy('title')
+        ->get()
+        ->pluck('title', 'id')
+        ->toArray();
     }
 
     public function list() {
@@ -129,14 +133,21 @@ class VoxesController extends AdminController {
             $table_fields['update'] = array('template' => 'admin.parts.table-voxes-edit', 'label' => 'View');
         }
 
-        $voxes_with_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])->whereNotNull('launched_at')->orderBy('launched_at', 'desc')->get();
-        $voxes_without_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])->whereNull('launched_at')->orderBy('id', 'desc')->whereNotIn('id', [48,80])->get();
+        $voxes_with_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])
+        ->whereNotNull('launched_at')
+        ->orderBy('launched_at', 'desc')
+        ->get();
+
+        $voxes_without_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])
+        ->whereNull('launched_at')
+        ->orderBy('id', 'desc')
+        ->whereNotIn('id', [48,80])
+        ->get();
 
         $voxes = collect();
 		$voxes = $voxes_without_launched->concat($voxes_with_launched);
 
     	return $this->showView('voxes', array(
-            // 'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
             'voxes' => $voxes,
             'active_voxes_count' => Vox::where('type', '!=', 'hidden')->count(),
             'hidden_voxes_count' => Vox::where('type', 'hidden')->count(),
@@ -164,7 +175,9 @@ class VoxesController extends AdminController {
             }
         }
 
-        return Response::json( ['success' => true] );
+        return Response::json([
+            'success' => true
+        ]);
     }
 
     public function add() {
@@ -341,7 +354,9 @@ class VoxesController extends AdminController {
             $item->save();
         }
 
-        return Response::json( ['message' => $message_error] );
+        return Response::json([
+            'message' => $message_error
+        ]);
     }
 
     public function edit( $id ) {
@@ -396,7 +411,8 @@ class VoxesController extends AdminController {
                 $this->saveOrUpdate($item);
 
                 $slug = $this->request->input('slug-en');
-                $vox_with_same_slug = Vox::where('id', '!=', $item->id)->whereHas('translations', function ($queryy) use ($slug) {
+                $vox_with_same_slug = Vox::where('id', '!=', $item->id)
+                ->whereHas('translations', function ($queryy) use ($slug) {
                     $queryy->where('slug', 'LIKE', $slug);
                 })->first();
 
@@ -411,7 +427,6 @@ class VoxesController extends AdminController {
                 return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
             }
 
-
             $trigger_question_id = null;
             $trigger_valid_answers = null;
             foreach ($item->questions as $q) {
@@ -422,7 +437,6 @@ class VoxesController extends AdminController {
                     $trigger_valid_answers = !empty($first_triger[1]) ? $first_triger[1] : null;
                 }
             }
-
 
             $q_triggers_arr = [];
             $q_trigger_obj = [];
@@ -437,7 +451,6 @@ class VoxesController extends AdminController {
                             if(!in_array(explode(':', $trg)[0], $q_triggers_arr)) {
                                 $q_triggers_arr[] = explode(':', $trg)[0];
                             }
-                            
                         }
                     }
                 }
@@ -935,7 +948,11 @@ class VoxesController extends AdminController {
             }
 
             if(empty( $trigger_question_id )) {
-                $prev_question = VoxQuestion::where('vox_id', $id)->where('order', '<', intVal($question->order) )->orderBy('order', 'DESC')->first();
+                $prev_question = VoxQuestion::where('vox_id', $id)
+                ->where('order', '<', intVal($question->order) )
+                ->orderBy('order', 'DESC')
+                ->first();
+
                 $trigger_question_id = $prev_question ? $prev_question->id : '';
                 $trigger_valid_answers = null;
             }
@@ -1087,7 +1104,6 @@ class VoxesController extends AdminController {
         }
 
         if(!empty($question)) {
-
             $vox_history = new VoxHistory;
             $vox_history->admin_id = $this->user->id;
             $vox_history->vox_id = $question->vox_id;
@@ -1098,10 +1114,14 @@ class VoxesController extends AdminController {
             $question->delete();
             $question->vox->checkComplex();
 
-            return Response::json( ['success' => true] );
+            return Response::json([
+                'success' => true
+            ]);
 
         } else {
-            return Response::json( ['success' => false] );
+            return Response::json([
+                'success' => false
+            ]);
         }
     }
 
@@ -1125,9 +1145,13 @@ class VoxesController extends AdminController {
             $question->order = Request::input('val');
             $question->save();
 
-            return Response::json( ['success' => true] );
+            return Response::json([
+                'success' => true
+            ]);
         } else {
-            return Response::json( ['success' => false] );
+            return Response::json([
+                'success' => false
+            ]);
         }
     }
 
@@ -1157,7 +1181,9 @@ class VoxesController extends AdminController {
             }
         }
 
-        return Response::json( ['success' => true] );
+        return Response::json([
+            'success' => true
+        ]);
     }
 
     public function change_question_text( $id, $question_id ) {
@@ -1190,9 +1216,13 @@ class VoxesController extends AdminController {
                     }
                 }
             }
-            return Response::json( ['success' => true] );
+            return Response::json([
+                'success' => true
+            ]);
         } else {
-            return Response::json( ['success' => false] );
+            return Response::json([
+                'success' => false
+            ]);
         }
     }
 
@@ -1218,7 +1248,11 @@ class VoxesController extends AdminController {
         }
 
         if(!empty($item) && !$item->has_stats && !empty($this->request->input('has_stats'))) {
-            $dependency_questions = VoxQuestion::where('vox_id', $item->id)->where('used_for_stats', 'dependency')->whereNotNull('stats_relation_id')->whereNull('dependency_caching')->get();
+            $dependency_questions = VoxQuestion::where('vox_id', $item->id)
+            ->where('used_for_stats', 'dependency')
+            ->whereNotNull('stats_relation_id')
+            ->whereNull('dependency_caching')
+            ->get();
 
             if($dependency_questions->isNotEmpty()) {
                 foreach ($dependency_questions as $dq) {
@@ -2115,9 +2149,9 @@ class VoxesController extends AdminController {
             file_put_contents($pathToFile, json_encode(request('faq')));
             $this->request->session()->flash('success-message', 'FAQs are saved!');
 
-            return Response::json( [
+            return Response::json([
                 'success' => true
-            ] );
+            ]);
         }
 
         return $this->showView('voxes-faq', array(
@@ -2139,9 +2173,9 @@ class VoxesController extends AdminController {
             file_put_contents($pathToFile, json_encode(request('faq')));
             $this->request->session()->flash('success-message', 'FAQs are saved!');
 
-            return Response::json( [
+            return Response::json([
                 'success' => true
-            ] );
+            ]);
         }
 
         return $this->showView('voxes-faq', array(
@@ -2552,7 +2586,11 @@ class VoxesController extends AdminController {
                 $cols3
             ];
 
-            $users = DcnReward::where('reference_id',$vox->id )->where('platform', 'vox')->where('type', 'survey')->with('user');
+            $users = DcnReward::where('reference_id', $vox->id)
+            ->where('platform', 'vox')
+            ->where('type', 'survey')
+            ->with('user');
+
             if( request('date-from') ) {
                 $users->where('created_at', '>=', new Carbon(request('date-from')));
             }
@@ -2725,7 +2763,9 @@ class VoxesController extends AdminController {
 
         $test_surveys_ids = [48,80];
 
-        $voxes = Vox::with('translations')->whereNotIn('id', $test_surveys_ids)->whereHas('translations', function ($query) use ($title) {
+        $voxes = Vox::with('translations')
+        ->whereNotIn('id', $test_surveys_ids)
+        ->whereHas('translations', function ($query) use ($title) {
             $query->where('title', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
         })->get();
 
@@ -2733,7 +2773,6 @@ class VoxesController extends AdminController {
 
         if($voxes->isNotEmpty()) {
             foreach ($voxes as $vox) {
-
                 $list[$vox->id] = [
                     'name' => $vox->title,
                     'link' => url('cms/vox/edit/'.$vox->id),
@@ -2742,12 +2781,13 @@ class VoxesController extends AdminController {
             }
         }
 
-        $questions = VoxQuestion::has('vox')->whereNotIn('vox_id', $test_surveys_ids)->whereHas('translations', function ($query) use ($title) {
+        $questions = VoxQuestion::has('vox')
+        ->whereNotIn('vox_id', $test_surveys_ids)
+        ->whereHas('translations', function ($query) use ($title) {
             $query->where('question', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
         })->get();
 
         if($questions->isNotEmpty()) {
-
             foreach ($questions as $question) {
 
                 if(!isset($list[$question->vox->id])) {
@@ -2778,7 +2818,6 @@ class VoxesController extends AdminController {
         if( Request::input('ids') ) {
 
             $delqs = VoxQuestion::whereIn('id', Request::input('ids'))->get();
-
             foreach ($delqs as $dq) {
                 $dq->delete();
             }
@@ -2809,9 +2848,9 @@ class VoxesController extends AdminController {
             $question->save();
         }
 
-        return Response::json( [
+        return Response::json([
             'success' => true,
-        ] );
+        ]);
     }
 
     public function deleteQuestionImage( $vox_id, $q_id ) {
@@ -2824,7 +2863,6 @@ class VoxesController extends AdminController {
         $item = VoxQuestion::find($q_id);
 
         if(!empty($item)) {
-
             $vox_history = new VoxHistory;
             $vox_history->admin_id = $this->user->id;
             $vox_history->vox_id = $vox_id;
@@ -3024,9 +3062,9 @@ class VoxesController extends AdminController {
         $vox = Vox::find($vox_id);
 
         if( !empty($vox)) {
-            return Response::json( [
+            return Response::json([
                 'q_count' => $vox->questions->count(),
-            ] );
+            ]);
         }
     }
 
@@ -3144,33 +3182,55 @@ class VoxesController extends AdminController {
         $questions_control_trigger_and = VoxQuestion::where('trigger_type', 'and')->orderBy('id', 'DESC')->take(3)->get();
         $questions_control_trigger_or = VoxQuestion::where('trigger_type', 'or')->orderBy('id', 'DESC')->take(3)->get();
 
-        $questions_stats_multiple = VoxQuestion::where('used_for_stats', 'standard')->whereHas('vox', function($query) {
+        $questions_stats_multiple = VoxQuestion::where('used_for_stats', 'standard')
+        ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
-        })->where('type', 'multiple_choice')->orderBy('id', 'DESC')->take(3)->get();
+        })->where('type', 'multiple_choice')
+        ->orderBy('id', 'DESC')
+        ->take(3)
+        ->get();
 
-        $questions_stats_scale = VoxQuestion::where('used_for_stats', 'standard')->whereHas('vox', function($query) {
+        $questions_stats_scale = VoxQuestion::where('used_for_stats', 'standard')
+        ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
-        })->where('type', 'scale')->orderBy('id', 'DESC')->take(3)->get();
+        })->where('type', 'scale')
+        ->orderBy('id', 'DESC')
+        ->take(3)
+        ->get();
 
-        $questions_stats_number = VoxQuestion::where('used_for_stats', 'standard')->whereHas('vox', function($query) {
+        $questions_stats_number = VoxQuestion::where('used_for_stats', 'standard')
+        ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
-        })->where('type', 'number')->orderBy('id', 'DESC')->take(3)->get();
+        })->where('type', 'number')
+        ->orderBy('id', 'DESC')
+        ->take(3)
+        ->get();
 
-        $questions_stats_rank = VoxQuestion::where('used_for_stats', 'standard')->whereHas('vox', function($query) {
+        $questions_stats_rank = VoxQuestion::where('used_for_stats', 'standard')
+        ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
-        })->where('type', 'rank')->orderBy('id', 'DESC')->take(3)->get();
+        })->where('type', 'rank')
+        ->orderBy('id', 'DESC')
+        ->take(3)
+        ->get();
 
-        $questions_stats_dependency_single = VoxQuestion::where('used_for_stats', 'dependency')->whereHas('vox', function($query) {
+        $questions_stats_dependency_single = VoxQuestion::where('used_for_stats', 'dependency')
+        ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->whereHas('related', function($query) {
             $query->where('type', 'single_choice');
-        })->orderBy('id', 'DESC')->take(3)->get();
+        })->orderBy('id', 'DESC')
+        ->take(3)
+        ->get();
 
-        $questions_stats_dependency_multiple = VoxQuestion::where('used_for_stats', 'dependency')->whereHas('vox', function($query) {
+        $questions_stats_dependency_multiple = VoxQuestion::where('used_for_stats', 'dependency')
+        ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->whereHas('related', function($query) {
             $query->where('type', 'multiple_choice');
-        })->orderBy('id', 'DESC')->take(3)->get();
+        })->orderBy('id', 'DESC')
+        ->take(3)
+        ->get();
 
         $arr = [
             'single' => [

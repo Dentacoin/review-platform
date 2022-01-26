@@ -13,7 +13,6 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Str;
 
 use App\Models\DcnTransactionHistory;
-use App\Models\WithdrawalsCondition;
 use App\Models\StopEmailValidation;
 use App\Models\EmailValidation;
 use App\Models\BlacklistBlock;
@@ -211,19 +210,31 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasOne('App\Models\User', 'id', 'invited_by')->withTrashed();
     }
     public function patient_invites_dentist() {
-        return $this->hasMany('App\Models\User', 'invited_by', 'id')->where('is_dentist', 1)->orderBy('id', "DESC");
+        return $this->hasMany('App\Models\User', 'invited_by', 'id')
+        ->where('is_dentist', 1)
+        ->orderBy('id', "DESC");
     }
     public function old_unclaimed_profile() {
         return $this->hasOne('App\Models\UnclaimedDentist', 'user_id', 'id')->whereNull('completed');
     }
     public function reviews_out() {
-        return $this->hasMany('App\Models\Review', 'user_id', 'id')->where('status', 'accepted')->orderBy('id', "DESC");
+        return $this->hasMany('App\Models\Review', 'user_id', 'id')
+        ->where('status', 'accepted')
+        ->orderBy('id', "DESC");
     }
     public function reviews_in_dentist() {
-        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted')->with('user')->with('answers')->orderBy('id', 'desc');
+        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')
+        ->where('status', 'accepted')
+        ->with('user')
+        ->with('answers')
+        ->orderBy('id', 'desc');
     }
     public function reviews_in_clinic() {
-        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')->where('status', 'accepted')->with('user')->with('answers')->orderBy('id', 'desc');
+        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')
+        ->where('status', 'accepted')
+        ->with('user')
+        ->with('answers')
+        ->orderBy('id', 'desc');
     }
     public function reviews_out_standard() {
         return $this->reviews_out->reject(function($item) {
@@ -282,10 +293,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('created_at', 'DESC');
     }
     public function invites_team_unverified() {
-        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->whereNotNull('for_team')->whereNull('invited_id')->orderBy('created_at', 'DESC');
+        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')
+        ->whereNotNull('for_team')
+        ->whereNull('invited_id')
+        ->orderBy('created_at', 'DESC');
     }
     public function patients_invites() {
-        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->whereNull('for_team')->where(function ($query) {
+        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')
+        ->whereNull('for_team')->where(function ($query) {
             $query->where('platform', 'trp')
             ->orWhere('platform', null);
         })->orderBy('created_at', 'DESC');
@@ -366,10 +381,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
     }
     public function surveys_rewards() {
-        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->where('type', 'survey')->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')
+        ->where('platform', 'vox')
+        ->where('type', 'survey')
+        ->orderBy('id', 'DESC');
     }
     public function vox_surveys_and_polls() {
-        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->whereIn('type', ['daily_poll', 'survey'])->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')
+        ->where('platform', 'vox')
+        ->whereIn('type', ['daily_poll', 'survey'])
+        ->orderBy('id', 'DESC');
     }
 
     public function kycEmailPhone() {
@@ -442,7 +463,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function canAskDentist($dentist_id) {
-        $user_ask = UserAsk::where('user_id', $this->id)->where('dentist_id', $dentist_id )->orderBy('id', 'desc')->first();
+        $user_ask = UserAsk::where('user_id', $this->id)
+        ->where('dentist_id', $dentist_id )
+        ->orderBy('id', 'desc')
+        ->first();
 
         if (!empty($user_ask)) {
             $days = $user_ask->created_at->diffInDays( Carbon::now() );
@@ -458,9 +482,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function approvedPatientcanAskDentist($dentist_id) {
 
-        $lastReview = Review::where('user_id', $this->id)->where(function($query) use ($dentist_id) {
-            $query->where( 'dentist_id', $dentist_id)->orWhere('clinic_id', $dentist_id);
-        })->orderBy('id', 'desc')->first();
+        $lastReview = Review::where('user_id', $this->id)
+        ->where(function($query) use ($dentist_id) {
+            $query->where( 'dentist_id', $dentist_id)
+            ->orWhere('clinic_id', $dentist_id);
+        })->orderBy('id', 'desc')
+        ->first();
 
         $days = $lastReview->created_at->diffInDays( Carbon::now() );
 
@@ -470,7 +497,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             } else {
                 return false;
             }
-
         } else {
             return false;
         }
@@ -631,7 +657,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             ['dentist_id', $dentist_id],
         ])->whereHas('upvotes', function ($query) use ($myid) {
             $query->where('user_id', $myid);
-        })->get()->pluck('id')->toArray();
+        })->get()
+        ->pluck('id')
+        ->toArray();
     }
 
     public function unusefulVotesForDenist($dentist_id) {
@@ -640,7 +668,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             ['dentist_id', $dentist_id],
         ])->whereHas('downvotes', function ($query) use ($myid) {
             $query->where('user_id', $myid);
-        })->get()->pluck('id')->toArray();
+        })->get()
+        ->pluck('id')
+        ->toArray();
     }
     
     public function get_invite_token() {
@@ -812,7 +842,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $result = false;
         $clean_email = str_replace('.', '', $this->email);
-        $found_email = self::where('email_clean', 'LIKE', $clean_email)->where('id', '!=', $this->id)->first();
+        $found_email = self::where('email_clean', 'LIKE', $clean_email)
+        ->where('id', '!=', $this->id)
+        ->first();
      
         if ($found_email) {
             $result = true;
@@ -941,7 +973,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $destination_thumb = self::getImagePath(true).'.webp';
         WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
-
     }
 
     public function recalculateRating() {
@@ -1034,7 +1065,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     //
 
     public function filledDailyPolls() {
-        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'daily_poll')->get()->pluck('reference_id')->toArray();
+        return DcnReward::where('user_id', $this->id)
+        ->where('platform', 'vox')
+        ->where('type', 'daily_poll')
+        ->get()
+        ->pluck('reference_id')
+        ->toArray();
     }
 
     public function getTotalBalance($platform=null) {
@@ -1062,25 +1098,47 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function filledVoxes() {
-        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->with('vox')->whereHas('vox', function ($query) {
+        return DcnReward::where('user_id', $this->id)
+        ->where('platform', 'vox')
+        ->where('type', 'survey')
+        ->with('vox')
+        ->whereHas('vox', function ($query) {
             $query->where('type', 'normal');
-        })->get()->pluck('reference_id')->toArray();
+        })->get()
+        ->pluck('reference_id')
+        ->toArray();
     }
 
     public function filledVoxesCount() {
-        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->whereHas('vox', function ($query) {
+        return DcnReward::where('user_id', $this->id)
+        ->where('platform', 'vox')
+        ->where('type', 'survey')
+        ->whereHas('vox', function ($query) {
             $query->where('type', 'normal');
         })->count();
     }
 
     public function filledFeaturedVoxes() {
-        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->with('vox')->whereHas('vox', function ($query) {
-            $query->where('type', 'normal')->where('featured', 1);
-        })->get()->pluck('reference_id')->toArray();
+        return DcnReward::where('user_id', $this->id)
+        ->where('platform', 'vox')
+        ->where('type', 'survey')
+        ->with('vox')
+        ->whereHas('vox', function ($query) {
+            $query->where('type', 'normal')
+            ->where('featured', 1);
+        })->get()
+        ->pluck('reference_id')
+        ->toArray();
     }
 
     public function countAllSurveysRewards() {
-        return count(DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->where('reference_id', '!=', 34)->get()->pluck('reference_id')->toArray());
+        return count(DcnReward::where('user_id', $this->id)
+        ->where('platform', 'vox')
+        ->where('type', 'survey')
+        ->where('reference_id', '!=', 34)
+        ->get()
+        ->pluck('reference_id')
+        ->toArray());
     }
 
     public function deleteActions() {
@@ -1097,7 +1155,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $id = $this->id;
         $teams = UserTeam::where(function($query) use ($id) {
-            $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
+            $query->where( 'dentist_id', $id)
+            ->orWhere('user_id', $id);
         })->get();
 
         if (!empty($teams)) {
@@ -1109,7 +1168,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 if(!empty($dent) && $dent->is_clinic) {
 
                     if ($dent->status == 'added_by_clinic_new') {
-
                         $user_history = new UserHistory;
                         $user_history->user_id = $dent->id;
                         $user_history->status = $dent->status;
@@ -1133,17 +1191,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         if($this->is_dentist) {
-            UserBranch::where('clinic_id', $this->id)->orWhere('branch_clinic_id', $this->id)->delete();
+            UserBranch::where('clinic_id', $this->id)
+            ->orWhere('branch_clinic_id', $this->id)
+            ->delete();
         }
 
         $user_invites = UserInvite::where(function($query) use ($id) {
-            $query->where( 'user_id', $id)->orWhere('invited_id', $id);
+            $query->where( 'user_id', $id)
+            ->orWhere('invited_id', $id);
         })->get();
 
         if (!empty($user_invites)) {
-           foreach ($user_invites as $user_invite) {
+            foreach ($user_invites as $user_invite) {
                $user_invite->delete();
-           }
+            }
         }
 
         if($this->claims->isNotEmpty()) {
@@ -1182,7 +1243,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             });
         }
 
-        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['new', 'failed', 'first', 'not_sent'])->get();
+        $transactions = DcnTransaction::where('user_id', $this->id)
+        ->whereIn('status', ['new', 'failed', 'first', 'not_sent'])
+        ->get();
 
         if ($transactions->isNotEmpty()) {
             foreach ($transactions as $trans) {
@@ -1234,7 +1297,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         if($this->is_dentist) {
 
             $teams = UserTeam::where(function($query) use ($id) {
-                $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
+                $query->where( 'dentist_id', $id)
+                ->orWhere('user_id', $id);
             })->get();
 
             if ($teams->isNotEmpty()) {
@@ -1252,13 +1316,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             }
         }
 
-        $is_optimism_activated = WithdrawalsCondition::find(1)->is_optimism_activated;
-
-        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['stopped', 'first'])->get();
+        $transactions = DcnTransaction::where('user_id', $this->id)
+        ->whereIn('status', ['stopped', 'first'])
+        ->get();
         
         if ($transactions->isNotEmpty()) {
             foreach ($transactions as $trans) {
-                if(!$is_optimism_activated || $trans->created_at > '2022-01-25 00:00:00') {
+                if($trans->created_at > '2022-01-25 00:00:00') {
                     $trans->status = 'new';
                     $trans->save();
 
@@ -1325,7 +1389,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
                 //add to list
                 if($recipient_id) {
-
                     $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
                     $list_id = config('email-preferences')['product_news']['vox']['sendgrid_list_id'];
                     $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
@@ -1355,7 +1418,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
                 //add to list
                 if($recipient_id) {
-
                     $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
                     $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
                     $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
@@ -1381,15 +1443,22 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
     public function getSameIPUsers() {
         if( $this->logins->pluck('ip')->toArray() ) {
-            $list = UserLogin::where('user_id', '!=', $this->id)->whereIn('ip', $this->logins->pluck('ip')->toArray() )->groupBy('user_id')->get();
+
+            $list = UserLogin::where('user_id', '!=', $this->id)
+            ->whereIn('ip', $this->logins->pluck('ip')->toArray() )
+            ->groupBy('user_id')
+            ->get();
+
             return $list->count();
         }
         return false;
     }
 
     public static function getCount($type) {
+        
         $fn = storage_path('user-count-'.$type);
         $t = file_exists($fn) ? filemtime($fn) : null;
+
         if(!$t || $t < time()-300) {
             $cnt = self::where('platform', $type)->count();
             file_put_contents($fn, $cnt);
@@ -1409,11 +1478,18 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         if (!empty($is_whitelist_ip)) {
             return false;
         } else {
-            $users_with_same_ip = UserLogin::where('ip', 'like', $ip)->where('user_id', '!=', $this->id)->groupBy('user_id')->get()->count();
+            $users_with_same_ip = UserLogin::where('ip', 'like', $ip)
+            ->where('user_id', '!=', $this->id)
+            ->groupBy('user_id')
+            ->get()
+            ->count();
 
             if ($users_with_same_ip >=2 && !$this->ip_protected && !$this->allow_withdraw && !$this->is_dentist && $this::getRealIp() != '213.91.254.194' ) {
 
-                $similar_users = UserLogin::where('ip', 'like', $ip)->where('user_id', '!=', $this->id)->groupBy('user_id')->get();
+                $similar_users = UserLogin::where('ip', 'like', $ip)
+                ->where('user_id', '!=', $this->id)
+                ->groupBy('user_id')
+                ->get();
 
                 foreach ($similar_users as $su) {
                     
@@ -1818,7 +1894,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         $from_month = Carbon::now()->modify('-'.($month+1).' months');
 
         $prev_reviews = Review::where(function($query) use ($id) {
-            $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+            $query->where( 'dentist_id', $id)
+            ->orWhere('clinic_id', $id);
         })
         ->where('created_at', '>=', $from_month)
         ->where('created_at', '<=', $to_month)
@@ -2068,7 +2145,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
     }
 
 
-
     public function setServiceInfoAttribute($value) {
         $this->attributes['service_info'] = null;
         if(!empty($value) && is_array($value)) {
@@ -2162,9 +2238,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
     }
 
     public function getRewardForSurvey($vox_id) {
-        return DcnReward::where('user_id', $this->id)->where('type', 'survey')->where('platform', 'vox')->where('reference_id', $vox_id)->first();
+        return DcnReward::where('user_id', $this->id)
+        ->where('type', 'survey')
+        ->where('platform', 'vox')
+        ->where('reference_id', $vox_id)
+        ->first();
     }
-
 
     public function notRestrictedVoxesList($voxList) {
 
@@ -2178,10 +2257,14 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
             if($restricted_voxes->count()) {
                 foreach ($restricted_voxes as $vl) {
-                    $has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->id)->first();
+                    $has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)
+                    ->where('user_id', $this->id)
+                    ->first();
 
                     if(empty($has_started_the_survey)) {
-                        $has_started_the_survey = VoxAnswerOld::where('vox_id', $vl->id)->where('user_id', $this->id)->first();
+                        $has_started_the_survey = VoxAnswerOld::where('vox_id', $vl->id)
+                        ->where('user_id', $this->id)
+                        ->first();
                     }
 
                     if(empty($has_started_the_survey)) {
@@ -2207,7 +2290,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         $info = '';
 
         if( !empty($this->name)) {
-            $duplicated_names = self::where('id', '!=', $this->id)->where('name', 'LIKE', $this->name)->withTrashed()->get();
+            $duplicated_names = self::where('id', '!=', $this->id)
+            ->where('name', 'LIKE', $this->name)
+            ->withTrashed()
+            ->get();
+
             if($duplicated_names->isNotEmpty()) {
                 $info .= '<p>Duplicated names:</p>';
                 $i=0;
@@ -2219,7 +2306,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         }
 
         if( !empty($this->civic_kyc_hash)) {
-            $duplicated_kyc = self::where('id', '!=', $this->id)->where('civic_kyc_hash', $this->civic_kyc_hash)->withTrashed()->get();
+            $duplicated_kyc = self::where('id', '!=', $this->id)
+            ->where('civic_kyc_hash', $this->civic_kyc_hash)
+            ->withTrashed()
+            ->get();
+
             if($duplicated_kyc->isNotEmpty()) {
                 $info .= '<p>Duplicated KYC:</p>';
                 $i=0;
@@ -2230,7 +2321,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             }
         }
 
-        $duplicated_kyc_reason = UserAction::where('user_id', $this->id)->where('reason', 'LIKE', '%Duplicated Civic KYC%')->first();
+        $duplicated_kyc_reason = UserAction::where('user_id', $this->id)
+        ->where('reason', 'LIKE', '%Duplicated Civic KYC%')
+        ->first();
 
         if(!empty($duplicated_kyc_reason)) {
             $info .= '<p>Duplicated KYC</p>';
@@ -2250,7 +2343,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
         if( $this->wallet_addresses->isNotEmpty()) {
             foreach($this->wallet_addresses as $wa) {
-                $duplicated_wallets = WalletAddress::where('user_id', '!=', $this->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get();
+                $duplicated_wallets = WalletAddress::where('user_id', '!=', $this->id)
+                ->where('dcn_address', 'LIKE', $wa->dcn_address)
+                ->get();
 
                 if($duplicated_wallets->isNotEmpty()) {
                     $info .= '<p>Duplicated Wallets:</p>';
@@ -2267,7 +2362,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         }
 
         if( $this->logins->pluck('ip')->toArray() ) {
-            $dublicated_ips = UserLogin::where('user_id', '!=', $this->id)->whereIn('ip', $this->logins->pluck('ip')->toArray() )->groupBy('user_id')->get();
+            $dublicated_ips = UserLogin::where('user_id', '!=', $this->id)
+            ->whereIn('ip', $this->logins->pluck('ip')->toArray() )
+            ->groupBy('user_id')
+            ->get();
+
             if($dublicated_ips->isNotEmpty()) {
                 $info .= '<p>Duplicated IPs:</p>';
                 $i=0;

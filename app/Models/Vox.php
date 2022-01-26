@@ -153,10 +153,18 @@ class Vox extends Model {
         if ($diff >= 1) {
 
             $this->respondents_last_count_at = Carbon::now();
-            $this->respondents_count = DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
+            $this->respondents_count = DcnReward::where('reference_id', $this->id)
+            ->where('platform', 'vox')
+            ->where('type', 'survey')
+            ->has('user')
+            ->count();
             $this->save();
 
-            return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
+            return DcnReward::where('reference_id', $this->id)
+            ->where('platform', 'vox')
+            ->where('type', 'survey')
+            ->has('user')
+            ->count();
 
         } else {
             return $this->respondents_count;
@@ -164,7 +172,11 @@ class Vox extends Model {
     }
 
     public function realRespondentsCountForAdminPurposes() {
-        return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
+        return DcnReward::where('reference_id', $this->id)
+        ->where('platform', 'vox')
+        ->where('type', 'survey')
+        ->has('user')
+        ->count();
     }
 
     public function respondentsCountryCount() {
@@ -538,7 +550,11 @@ class Vox extends Model {
         if(!empty($this->country_percentage) ) {
             $country = $user->country_id;
 
-            $respondents_users = DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->get();
+            $respondents_users = DcnReward::where('reference_id', $this->id)
+            ->where('platform', 'vox')
+            ->where('type', 'survey')
+            ->has('user')
+            ->get();
 
             if ($respondents_users->count() > 9) {
 
