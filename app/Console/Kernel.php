@@ -2080,6 +2080,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Vox answers count Cron START'.PHP_EOL.PHP_EOL.PHP_EOL;
             
             VoxAnswer::getCount(true);
 
@@ -2089,6 +2090,7 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'amount reward vox_question CRON START';
 
             $reward = json_encode(Reward::where('reward_type', 'vox_question')->first());
             file_put_contents('/tmp/reward_vox_question', $reward);
@@ -2528,15 +2530,15 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
         $schedule->call(function () {
             echo 'Answered questions count'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $answered_questions_count_old = VoxAnswerOld::where('created_at', '>=', Carbon::now()->addMonths(-1)->firstOfMonth()->toDateTimeString())->where('created_at', '<=', Carbon::now()->addMonths(-1)->endOfMonth()->toDateTimeString())->count();
-
-            $answered_questions_count = VoxAnswer::where('created_at', '>=', Carbon::now()->addMonths(-1)->firstOfMonth()->toDateTimeString())->where('created_at', '<=', Carbon::now()->addMonths(-1)->endOfMonth()->toDateTimeString())->count();
+            $answered_questions_count = VoxAnswer::where('created_at', '>=', Carbon::now()->addMonths(-1)->firstOfMonth())
+            ->where('created_at', '<=', Carbon::now()->addMonths(-1)->endOfMonth())
+            ->count();
             // $answered_questions_count = VoxAnswer::where('created_at', '>=', '2021-09-01 00:00:00')->where('created_at', '<=', '2021-09-30 23:59:59')->count();
             
             $vox_q_count = new VoxQuestionAnswered;
             $vox_q_count->month = Carbon::now()->addMonths(-1)->month;
             $vox_q_count->year = Carbon::now()->addMonths(-1)->year;
-            $vox_q_count->count = $answered_questions_count_old + $answered_questions_count;
+            $vox_q_count->count = $answered_questions_count;
             $vox_q_count->save();
 
             echo 'Answered questions count cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -2650,7 +2652,11 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
                     $count_qs = $survey->questions->count();
 
                     for ($i=1; $i <= $count_qs ; $i++) {
-                        $voxQuestionsCount = VoxQuestion::with('translations')->where('vox_id', $survey->id)->where('order', $i)->count();
+                        $voxQuestionsCount = VoxQuestion::with('translations')
+                        ->where('vox_id', $survey->id)
+                        ->where('order', $i)
+                        ->count();
+
                         if(!empty($voxQuestionsCount)) {
                             if($voxQuestionsCount > 1) {
                                 $questions_order_bugs[$survey->id][] = 'Duplicated order number - '.$i.'<br/>';  //diplicated order
