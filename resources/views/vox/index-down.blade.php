@@ -65,9 +65,7 @@
 		<h2>{!! nl2br(trans('vox.page.index.mobile-app.subtitle')) !!}</h2>
 		<div class="flex flex-text-center">
 			<a class="mobile-app-button google-play" href="https://play.google.com/store/apps/details?id=com.dentacoin.dentavox" target="_blank"></a>
-			@if(false)
-				<a class="mobile-app-button app-store" href="https://play.google.com/store/apps/details?id=com.dentacoin.dentavox" target="_blank"></a>
-			@endif
+			<a class="mobile-app-button app-store" href="https://apps.apple.com/mm/app/dentavox-surveys/id1538575449" target="_blank"></a>
 		</div>
 	</div>
 	<div class="col phone-col">
