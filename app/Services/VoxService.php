@@ -90,7 +90,11 @@ class VoxService {
 
                         if(!empty($question_id)) {
                             //question order
-                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
+                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)
+                            ->orderBy('order', 'asc')
+                            ->where('order', '>', $cur_question->order)
+                            ->first();
+
                             $array['question'] = $next_question;
                         } else {
                             //first question
@@ -122,6 +126,7 @@ class VoxService {
                 if(empty($array)) {
 
                     if(count($vox->questions) > 93 && count($vox->questions) - VoxAnswer::where('vox_id', $vox->id)->where('user_id', $user->id)->groupBy('question_id')->get()->count() == 1) {
+                        //because of bug
                         $order_93 = VoxQuestion::where('vox_id', $vox->id)->where('order', 93)->first();
                         if($order_93 && empty(VoxAnswer::where('vox_id', $vox->id)->where('user_id', $user->id)->where('question_id', $order_93->id)->first())) {
                             $array['question'] = $order_93;
@@ -131,7 +136,10 @@ class VoxService {
                             }
         
                             if(!empty($question_id) && is_numeric($question_id)) {
-                                $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
+                                $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)
+                                ->orderBy('order', 'asc')
+                                ->where('order', '>', $cur_question->order)
+                                ->first();
         
                                 // if($next_question) {
                                     $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $array);
@@ -188,7 +196,10 @@ class VoxService {
                         }
     
                         if(!empty($question_id) && is_numeric($question_id)) {
-                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
+                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)
+                            ->orderBy('order', 'asc')
+                            ->where('order', '>', $cur_question->order)
+                            ->first();
     
                             // if($next_question) {
                                 $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $array);
@@ -260,9 +271,16 @@ class VoxService {
                             $cross_check = true;
 
                             if (is_numeric($vq->cross_check)) {
-                                $va = VoxAnswer::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+                                $va = VoxAnswer::where('user_id',$user->id )
+                                ->where('vox_id', 11)
+                                ->where('question_id', $vq->cross_check )
+                                ->first();
+
                                 if(empty($va)) {
-                                    $va = VoxAnswerOld::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+                                    $va = VoxAnswerOld::where('user_id',$user->id )
+                                    ->where('vox_id', 11)
+                                    ->where('question_id', $vq->cross_check )
+                                    ->first();
                                 }
                                 $cross_check_answer = $va ? $va->answer : null;
                             } else if($vq->cross_check == 'gender') {
@@ -758,9 +776,17 @@ class VoxService {
             if (!empty($vq->cross_check)) {
 
                 if (is_numeric($vq->cross_check)) {
-                    $va = VoxAnswer::select('answer')->where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+                    $va = VoxAnswer::select('answer')
+                    ->where('user_id',$user->id )
+                    ->where('vox_id', 11)
+                    ->where('question_id', $vq->cross_check )
+                    ->first();
                     if(empty($va)) {
-                        $va = VoxAnswerOld::select('answer')->where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+                        $va = VoxAnswerOld::select('answer')
+                        ->where('user_id',$user->id )
+                        ->where('vox_id', 11)
+                        ->where('question_id', $vq->cross_check )
+                        ->first();
                     }
                     $cross_checks[$vq->id] = $va ? $va->answer : null;
                     $cross_checks_references[$vq->id] = $vq->cross_check;
@@ -859,7 +885,12 @@ class VoxService {
     }
 
     public static function featuredVoxes() {
-        $featured_voxes = Vox::with('translations')->where('type', 'normal')->where('featured', true)->orderBy('launched_at', 'desc')->take(9)->get();
+        $featured_voxes = Vox::with('translations')
+        ->where('type', 'normal')
+        ->where('featured', true)
+        ->orderBy('launched_at', 'desc')
+        ->take(9)
+        ->get();
 
         if( $featured_voxes->count() < 9 ) {
 
@@ -868,7 +899,12 @@ class VoxService {
                 $arr_v[] = $fv->id;
             }
 
-            $swiper_voxes = Vox::with('translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('launched_at', 'desc')->take( 9 - $featured_voxes->count() )->get();
+            $swiper_voxes = Vox::with('translations')
+            ->where('type', 'normal')
+            ->whereNotIn('id', $arr_v)
+            ->orderBy('launched_at', 'desc')
+            ->take( 9 - $featured_voxes->count() )
+            ->get();
 
             $featured_voxes = $featured_voxes->concat($swiper_voxes);
         }
@@ -904,7 +940,13 @@ class VoxService {
             }
         }
 
-        $s_voxes = Vox::where('type', 'normal')->orderBy('launched_at', 'desc')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $filled_voxes)->take(9)->get();
+        $s_voxes = Vox::where('type', 'normal')
+        ->orderBy('launched_at', 'desc')
+        ->whereNotIn('id', $related_voxes_ids)
+        ->whereNotIn('id', $filled_voxes)
+        ->take(9)
+        ->get();
+
         $s_voxes = $user->notRestrictedVoxesList($s_voxes);
 
         $suggested_voxes = [];
@@ -1124,7 +1166,15 @@ class VoxService {
                     }
                 }
 
-                $suggested_voxes = $user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('launched_at', 'desc')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
+                $suggested_voxes = $user->voxesTargeting()
+                ->where('type', 'normal')
+                ->with('categories.category')
+                ->with('categories.category.translations')
+                ->orderBy('launched_at', 'desc')
+                ->whereNotIn('id', $related_voxes_ids)
+                ->whereNotIn('id', $taken)
+                ->take(9)
+                ->get();
 
                 $suggested_voxes = $user->notRestrictedVoxesList($suggested_voxes);
 
@@ -1196,7 +1246,15 @@ class VoxService {
                         }
                     }
 
-                    $suggested_voxes = $user->voxesTargeting()->where('type', 'normal')->with('categories.category')->with('categories.category.translations')->orderBy('launched_at', 'desc')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
+                    $suggested_voxes = $user->voxesTargeting()
+                    ->where('type', 'normal')
+                    ->with('categories.category')
+                    ->with('categories.category.translations')
+                    ->orderBy('launched_at', 'desc')
+                    ->whereNotIn('id', $related_voxes_ids)
+                    ->whereNotIn('id', $taken)
+                    ->take(9)
+                    ->get();
 
                     $suggested_voxes = $user->notRestrictedVoxesList($suggested_voxes);
 
@@ -1233,11 +1291,20 @@ class VoxService {
                 }
             }
 
-            $daily_voxes = DcnReward::where('user_id', $user->id)->where('platform', 'vox')->where('type', 'survey')->where('created_at', '>', Carbon::now()->subDays(1))->count();
+            $daily_voxes = DcnReward::where('user_id', $user->id)
+            ->where('platform', 'vox')
+            ->where('type', 'survey')
+            ->where('created_at', '>', Carbon::now()->subDays(1))
+            ->count();
 
             if($daily_voxes >= 10) {
 
-                $last_vox = DcnReward::where('user_id', $user->id)->where('platform', 'vox')->where('type', 'survey')->where('created_at', '>', Carbon::now()->subDays(1))->orderBy('id', 'desc')->first();
+                $last_vox = DcnReward::where('user_id', $user->id)
+                ->where('platform', 'vox')
+                ->where('type', 'survey')
+                ->where('created_at', '>', Carbon::now()->subDays(1))
+                ->orderBy('id', 'desc')
+                ->first();
 
                 $now = Carbon::now()->subDays(1);
                 $time_left = $last_vox->created_at->diffInHours($now).':'.
@@ -1471,7 +1538,15 @@ class VoxService {
                 }
             }
         }
-        $suggested_voxes = Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('launched_at', 'desc')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
+        $suggested_voxes = Vox::where('type', 'normal')
+        ->with('translations')
+        ->with('categories.category')
+        ->with('categories.category.translations')
+        ->orderBy('launched_at', 'desc')
+        ->whereNotIn('id', $related_voxes_ids)
+        ->whereNotIn('id', $taken)
+        ->take(9)
+        ->get();
 
         $suggested_voxes = $user->notRestrictedVoxesList($suggested_voxes);
 
@@ -1777,7 +1852,11 @@ class VoxService {
 
                     if( $should_reward ) {
 
-                        DcnReward::where('user_id', $user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
+                        DcnReward::where('user_id', $user->id )
+                        ->where('platform', 'vox')
+                        ->where('reference_id',$vox->id )
+                        ->where('type', 'survey')
+                        ->update(
                             array(
                                 'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
                             ))
@@ -1787,7 +1866,11 @@ class VoxService {
                 } else if ($type == 'location-question') {
 
                     if($user->country_id===null) {
-                        DcnReward::where('user_id', $user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
+                        DcnReward::where('user_id', $user->id )
+                        ->where('platform', 'vox')
+                        ->where('reference_id',$vox->id )
+                        ->where('type', 'survey')
+                        ->update(
                             array(
                                 'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
                             ))
@@ -1796,6 +1879,7 @@ class VoxService {
                     //answer = 71,2312
                     $country_id = $answ;
                     $user->country_id = $country_id;
+
                     VoxAnswer::where('user_id', $user->id)->update([
                         'country_id' => $country_id
                     ]);
@@ -1810,7 +1894,11 @@ class VoxService {
                 } else if ($type == 'birthyear-question') {
 
                     if($user->birthyear===null || $user->birthyear===0) {
-                        DcnReward::where('user_id', $user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
+                        DcnReward::where('user_id', $user->id )
+                        ->where('platform', 'vox')
+                        ->where('reference_id',$vox->id )
+                        ->where('type', 'survey')
+                        ->update(
                             array(
                                 'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
                             ))
@@ -1836,7 +1924,11 @@ class VoxService {
                 } else if ($type == 'gender-question') {
 
                     if($user->gender===null) {
-                        DcnReward::where('user_id', $user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
+                        DcnReward::where('user_id', $user->id )
+                        ->where('platform', 'vox')
+                        ->where('reference_id',$vox->id )
+                        ->where('type', 'survey')
+                        ->update(
                             array(
                                 'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
                             ))
@@ -1936,7 +2028,10 @@ class VoxService {
 
                     // dd($is_scam);
                     if($is_scam && !$user->is_partner) { //confirmed from Petya for is_partner 05.11.21
-                        $wrongs = UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
+                        $wrongs = UserSurveyWarning::where('user_id', $user->id)
+                        ->where('action', 'wrong')
+                        ->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )
+                        ->count();
                         $wrongs++;
 
                         if(!$testmode) {
@@ -2092,10 +2187,16 @@ class VoxService {
                                         $vcc->save();
                                     }
 
-                                    VoxAnswer::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $found->cross_check )->update([
+                                    VoxAnswer::where('user_id',$user->id )
+                                    ->where('vox_id', 11)
+                                    ->where('question_id', $found->cross_check )
+                                    ->update([
                                         'answer' => $a,
                                     ]);
-                                    VoxAnswerOld::where('user_id',$user->id )->where('vox_id', 11)->where('question_id', $found->cross_check )->update([
+                                    VoxAnswerOld::where('user_id',$user->id )
+                                    ->where('vox_id', 11)
+                                    ->where('question_id', $found->cross_check )
+                                    ->update([
                                         'answer' => $a,
                                     ]);
                                 } else if($found->cross_check == 'gender') {
@@ -2290,7 +2391,10 @@ class VoxService {
                             
                             if($normal > $diff && count($answered) != count($vox->questions)) {
 
-                                $warned_before = UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )->count();
+                                $warned_before = UserSurveyWarning::where('user_id', $user->id)
+                                ->where('action', 'too_fast')
+                                ->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )
+                                ->count();
                                 
                                 if(!$warned_before) {
                                     $new_too_fast = new UserSurveyWarning;
@@ -2298,7 +2402,9 @@ class VoxService {
                                     $new_too_fast->action = 'too_fast';
                                     $new_too_fast->save();
                                 } else {
-                                    UserSurveyWarning::where('user_id', $user->id)->where('action', 'too_fast')->delete();
+                                    UserSurveyWarning::where('user_id', $user->id)
+                                    ->where('action', 'too_fast')
+                                    ->delete();
                                 }
 
                                 $prev_bans = $user->getPrevBansCount('vox', 'too-fast');

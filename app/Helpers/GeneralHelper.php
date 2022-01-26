@@ -409,17 +409,6 @@ class GeneralHelper {
     }
 
     public static function isGasExpensive() {
-
-        // $url = file_get_contents('https://dentacoin.net/gas-price');
-
-        // $gas = json_decode($url, true);
-
-        // if(intVal($gas['gasPrice']) > intVal($gas['treshold']) ) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
-
         $gas = GasPrice::find(1);
 
         if($gas->gas_price > $gas->max_gas_price) {
@@ -430,17 +419,6 @@ class GeneralHelper {
     }
 
     public static function isApprovalGasExpensive() {
-
-        // $url = file_get_contents('https://dentacoin.net/gas-price');
-
-        // $gas = json_decode($url, true);
-
-        // if(intVal($gas['gasPrice']) > intVal($gas['treshold']) ) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
-
         $gas = GasPrice::find(1);
 
         if($gas->gas_price > $gas->max_gas_price_approval) {
@@ -494,5 +472,4 @@ class GeneralHelper {
 
         $item->save();
     }
-
 }
