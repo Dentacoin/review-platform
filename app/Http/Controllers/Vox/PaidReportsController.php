@@ -26,11 +26,17 @@ class PaidReportsController extends FrontController {
 
 		$seos = PageSeo::find(36);
 
-		$item = PaidReport::where('status', 'published')->orderBy('launched_at', 'desc')->first();
+		$item = PaidReport::where('status', 'published')
+		->orderBy('launched_at', 'desc')
+		->first();
+		
 		$items = collect();
 		
 		if(!empty($item)) {
-			$items = PaidReport::where('status', 'published')->orderBy('launched_at', 'desc')->whereNotIn('id', [$item->id])->get();
+			$items = PaidReport::where('status', 'published')
+			->orderBy('launched_at', 'desc')
+			->whereNotIn('id', [$item->id])
+			->get();
 		}
 
 		return $this->ShowVoxView('research-reports', array(
@@ -61,7 +67,10 @@ class PaidReportsController extends FrontController {
 
 		$seos = PageSeo::find(37);
 
-		$item = PaidReport::whereTranslationLike('slug', $slug)->where('status', 'published')->first();
+		$item = PaidReport::whereTranslationLike('slug', $slug)
+		->where('status', 'published')
+		->first();
+
 		if(empty($item)) {
 			return redirect( getLangUrl('page-not-found') );
 		}
@@ -100,7 +109,10 @@ class PaidReportsController extends FrontController {
 
 		$seos = PageSeo::find(38);
 
-		$item = PaidReport::whereTranslationLike('slug', $slug)->where('status', 'published')->first();
+		$item = PaidReport::whereTranslationLike('slug', $slug)
+		->where('status', 'published')
+		->first();
+
 		if(empty($item)) {
 			return redirect( getLangUrl('page-not-found') );
 		}
@@ -242,7 +254,10 @@ class PaidReportsController extends FrontController {
 			return redirect( getLangUrl('page-not-found') );
 		}
 
-		$item = PaidReport::whereTranslationLike('slug', $slug)->where('status', 'published')->first();
+		$item = PaidReport::whereTranslationLike('slug', $slug)
+		->where('status', 'published')
+		->first();
+
 		$order = Order::find($order_id);
 
 		if(empty($item) || empty($order) || empty(session('report_order'))) {
@@ -303,10 +318,6 @@ class PaidReportsController extends FrontController {
             'js' => [
             	'paid-reports.js'
             ],
-		));	
-	}  
-
-    
-
-
+		));
+	}
 }

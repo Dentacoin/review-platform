@@ -33,5 +33,4 @@ class BannedController extends FrontController {
 			'noIndex' => true,
         ));
 	}
-
 }

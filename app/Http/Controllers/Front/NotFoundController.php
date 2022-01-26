@@ -24,32 +24,44 @@ class NotFoundController extends FrontController {
 		if( !empty($this->user) ) {
 			if( $homeDentists->count() < 12 && $this->user->city_name ) {
 				$addMore = clone $featured;
-				$addMore = $addMore->where('city_name', 'LIKE', $this->user->city_name)->take( 12 - $homeDentists->count() )->get();
+				$addMore = $addMore->where('city_name', 'LIKE', $this->user->city_name)
+				->take( 12 - $homeDentists->count() )
+				->get();
 				$homeDentists = $homeDentists->concat($addMore);
 			}
 
 			if( $homeDentists->count() < 12 && $this->user->state_name ) {
 				$addMore = clone $featured;
-				$addMore = $addMore->where('state_name', 'LIKE', $this->user->state_name)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+				$addMore = $addMore->where('state_name', 'LIKE', $this->user->state_name)
+				->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+				->take( 12 - $homeDentists->count() )
+				->get();
 				$homeDentists = $homeDentists->concat($addMore);
 			}
 
 			if( $homeDentists->count() < 12 && $this->user->country_id ) {
 				$addMore = clone $featured;
-				$addMore = $addMore->where('country_id', 'LIKE', $this->user->country_id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+				$addMore = $addMore->where('country_id', 'LIKE', $this->user->country_id)
+				->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+				->take( 12 - $homeDentists->count() )
+				->get();
 				$homeDentists = $homeDentists->concat($addMore);
 			}
 		} else {
 
 			if( $homeDentists->count() < 12 && $this->city_id ) {
 				$addMore = clone $featured;
-				$addMore = $addMore->where('city_id', 'LIKE', $this->city_id)->take( 12 - $homeDentists->count() )->get();
+				$addMore = $addMore->where('city_id', 'LIKE', $this->city_id)
+				->take( 12 - $homeDentists->count() )
+				->get();
 				$homeDentists = $homeDentists->concat($addMore);
 			}
 
 			if( $homeDentists->count() < 12 && $this->country_id ) {
 				$addMore = clone $featured;
-				$addMore = $addMore->where('country_id', 'LIKE', $this->country_id)->take( 12 - $homeDentists->count() )->get();
+				$addMore = $addMore->where('country_id', 'LIKE', $this->country_id)
+				->take( 12 - $homeDentists->count() )
+				->get();
 				$homeDentists = $homeDentists->concat($addMore);				
 			}
 		}

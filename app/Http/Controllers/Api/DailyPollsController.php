@@ -68,7 +68,9 @@ class DailyPollsController extends ApiController {
 		// 	}
 		// }
 
-		$monthly_descr = PollsMonthlyDescription::where('month', $month)->where('year', $year)->first();
+		$monthly_descr = PollsMonthlyDescription::where('month', $month)
+		->where('year', $year)
+		->first();
 
 		$ret = [
         	'success' => true,
@@ -123,7 +125,11 @@ class DailyPollsController extends ApiController {
 
 		if(!empty($answer) && !empty($user)) {
 
-	        $taken_reward = DcnReward::where('user_id', $user->id)->where('reference_id', $answer->poll_id)->where('platform', 'vox')->where('type', 'daily_poll')->first();
+	        $taken_reward = DcnReward::where('user_id', $user->id)
+			->where('reference_id', $answer->poll_id)
+			->where('platform', 'vox')
+			->where('type', 'daily_poll')
+			->first();
 
 	        if (empty($taken_reward)) {
 
@@ -203,7 +209,6 @@ class DailyPollsController extends ApiController {
 	            if(!empty($user) && !empty($user->country_id)) {
 	                $restrictions = $poll->isPollRestricted($user->country_id);
 	            } else {
-
 	                $country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
 	                $country_db = Country::where('code', 'like', $country_code)->first();
 
@@ -219,7 +224,9 @@ class DailyPollsController extends ApiController {
 					$poll_type = 'current';
 
 		            if(!empty($user)) {
-		                $is_taken = PollAnswer::where('poll_id', $poll->id)->where('user_id', $user->id)->first();
+		                $is_taken = PollAnswer::where('poll_id', $poll->id)
+						->where('user_id', $user->id)
+						->first();
 
 		                if ($is_taken) {
 		        			$poll_type = 'stats';
@@ -237,12 +244,11 @@ class DailyPollsController extends ApiController {
 				'success' => true,
 				'poll_id' => $poll->id,
 				'poll_type' => $poll_type,
-			] );
+			]);
 		}
 
 		return Response::json( [
 			'success' => false,
-		] );
+		]);
 	}
-    
 }

@@ -52,7 +52,10 @@ class DentistsController extends FrontController {
             return redirect( getLangUrl($corrected_query) );
         }
 
-        $items = User::where('is_dentist', 1)->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNull('self_deleted');
+        $items = User::where('is_dentist', 1)
+        ->whereIn('status', config('dentist-statuses.shown_with_link'))
+        ->whereNull('self_deleted');
+
         $mode = 'map';
         $formattedAddress = $query;
         $country_search = false;
@@ -78,8 +81,7 @@ class DentistsController extends FrontController {
                 $geores = \GoogleMaps::load('geocoding')
                 ->setParam ([
                     'address'    => $query,
-                ])
-                ->get();
+                ])->get();
 
                 $geores = json_decode($geores);
                 if(!empty($geores->results[0]->geometry->location)) {
@@ -107,8 +109,7 @@ class DentistsController extends FrontController {
                 $geores = \GoogleMaps::load('geocoding')
                 ->setParam ([
                     'latlng'    => $lat.','.$lon,
-                ])
-                ->get();
+                ])->get();
 
                 $geores = json_decode($geores);
                 if(!empty($geores->results[0]->geometry->location)) {
@@ -129,8 +130,7 @@ class DentistsController extends FrontController {
                         $geores = \GoogleMaps::load('geocoding')
                         ->setParam ([
                             'address'    => $geores->results[0]->formatted_address,
-                        ])
-                        ->get();
+                        ])->get();
 
                         $geores = json_decode($geores);
                         if(!empty($geores->results[0]->geometry->location)) {
@@ -465,7 +465,14 @@ class DentistsController extends FrontController {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
 
-        $dentists = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
+        $dentists = User::where('is_dentist', 1)
+        ->whereNull('self_deleted')
+        ->whereIn('status', config('dentist-statuses.shown_with_link'))
+        ->whereNotNull('country_id')
+        ->whereNotNull('city_name')
+        ->groupBy('country_id')
+        ->get()
+        ->pluck('country_id');
 
         $dentist_countries = Country::whereIn('id', $dentists )->get();
 
@@ -498,7 +505,11 @@ class DentistsController extends FrontController {
             }
         }
 
-        $all_dentists = User::where('is_dentist', 1)->whereIn('status', config('dentist-statuses.shown_with_link'))->whereNotNull('country_id')->whereNotNull('city_name')->get();
+        $all_dentists = User::where('is_dentist', 1)
+        ->whereIn('status', config('dentist-statuses.shown_with_link'))
+        ->whereNotNull('country_id')
+        ->whereNotNull('city_name')
+        ->get();
 
         $seos = PageSeo::find(28);
 
@@ -542,9 +553,23 @@ class DentistsController extends FrontController {
             return redirect('page-not-found');
         }
 
-        $cities_name = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
+        $cities_name = User::where('is_dentist', 1)
+        ->whereNull('self_deleted')
+        ->whereIn('status', config('dentist-statuses.shown_with_link'))
+        ->where('country_id', $country->id)
+        ->where('state_slug', 'like', $state_slug)
+        ->whereNotNull('city_name')
+        ->groupBy('city_name')
+        ->orderBy('city_name', 'asc')
+        ->get();
 
-        $all_dentists = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->count();
+        $all_dentists = User::where('is_dentist', 1)
+        ->whereNull('self_deleted')
+        ->whereIn('status', config('dentist-statuses.shown_with_link'))
+        ->where('country_id', $country->id)
+        ->where('state_slug', 'like', $state_slug)
+        ->whereNotNull('city_name')
+        ->count();
 
         $cities_groups = [];
         $letter = null;
@@ -621,15 +646,31 @@ class DentistsController extends FrontController {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
 
-        $country = Country::with('translations')->where('slug', 'like', $country_slug )->first();
+        $country = Country::with('translations')
+        ->where('slug', 'like', $country_slug )
+        ->first();
 
         if(empty($country)) {
             return redirect('page-not-found');
         }
 
-        $states = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->whereNotNull('state_name')->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();
+        $states = User::where('is_dentist', 1)
+        ->whereNull('self_deleted')
+        ->whereIn('status', config('dentist-statuses.shown_with_link'))
+        ->where('country_id', $country->id)
+        ->whereNotNull('state_name')
+        ->whereNotNull('city_name')
+        ->groupBy('state_name')
+        ->orderBy('state_name', 'asc')
+        ->get();
 
-        $all_dentists = User::where('is_dentist', 1)->whereNull('self_deleted')->whereIn('status', config('dentist-statuses.shown_with_link'))->where('country_id', $country->id)->whereNotNull('state_name')->whereNotNull('city_name')->count();
+        $all_dentists = User::where('is_dentist', 1)
+        ->whereNull('self_deleted')
+        ->whereIn('status', config('dentist-statuses.shown_with_link'))
+        ->where('country_id', $country->id)
+        ->whereNotNull('state_name')
+        ->whereNotNull('city_name')
+        ->count();
 
         $states_groups = [];
         $letter = null;

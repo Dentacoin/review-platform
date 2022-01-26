@@ -60,22 +60,46 @@ class IndexController extends FrontController {
 
 		if(!empty($this->user)) {
 			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
-			$untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)->where('type', 'normal')->get();
+			$untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)
+			->where('type', 'normal')
+			->get();
 
 			if(!$this->user->notRestrictedVoxesList($untaken_voxes)->count()) {
 				$all_taken = true;
-				$latest_blog_posts = DB::connection('vox_wordpress_db')->table('posts')->where('post_type', 'post')->where('post_status','publish')->orderBy('id', 'desc')->take(10)->get();
+				$latest_blog_posts = DB::connection('vox_wordpress_db')
+				->table('posts')
+				->where('post_type', 'post')
+				->where('post_status','publish')
+				->orderBy('id', 'desc')
+				->take(10)
+				->get();
 
 				foreach($latest_blog_posts as $lbp) {
-					$post_terms = DB::connection('vox_wordpress_db')->table('term_relationships')->where('object_id', $lbp->ID)->get()->pluck('term_taxonomy_id')->toArray();
-					$category = DB::connection('vox_wordpress_db')->table('terms')->whereIn('term_id', $post_terms)->first();
+					$post_terms = DB::connection('vox_wordpress_db')
+					->table('term_relationships')
+					->where('object_id', $lbp->ID)
+					->get()
+					->pluck('term_taxonomy_id')
+					->toArray();
+
+					$category = DB::connection('vox_wordpress_db')
+					->table('terms')
+					->whereIn('term_id', $post_terms)
+					->first();
 
 					$lbp->cat_name = $category->name;
 
-					$post_image_obj = DB::connection('vox_wordpress_db')->table('postmeta')->where('post_id', $lbp->ID)->where('meta_key', '_thumbnail_id')->first();
+					$post_image_obj = DB::connection('vox_wordpress_db')
+					->table('postmeta')
+					->where('post_id', $lbp->ID)
+					->where('meta_key', '_thumbnail_id')
+					->first();
 
 					$post_image_id = $post_image_obj ? $post_image_obj->meta_value : null;
-					$post_image_link = DB::connection('vox_wordpress_db')->table('posts')->where('id', $post_image_id)->first();
+					$post_image_link = DB::connection('vox_wordpress_db')
+					->table('posts')
+					->where('id', $post_image_id)
+					->first();
 
 					$lbp->img = isset($post_image_link->guid) ? $post_image_link->guid : '';
 				}
@@ -115,6 +139,12 @@ class IndexController extends FrontController {
 		$seos = PageSeo::find(2);
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
+		$voxCategories = VoxCategory::with('translations')
+		->whereHas('voxes')
+		->get()
+		->pluck('name', 'id')
+		->toArray();
+
         $arr = array(
 			'vip_access_text' => $vip_access_text,
 			'vip_access_seconds' => $vip_access_seconds,
@@ -131,7 +161,7 @@ class IndexController extends FrontController {
 			'filters' => $filters,
 			'taken' => $taken,
         	'voxes' => $voxList,
-        	'vox_categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
+        	'vox_categories' => $voxCategories,
         	'js' => [
         		'home.js',
         	],
@@ -226,7 +256,14 @@ class IndexController extends FrontController {
      * bottom content of the index page
      */
 	public function index_down($locale=null) {
-		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('launched_at', 'desc')->take(9)->get();
+		$featured_voxes = Vox::with('translations')
+		->with('categories.category')
+		->with('categories.category.translations')
+		->where('type', 'normal')
+		->where('featured', true)
+		->orderBy('launched_at', 'desc')
+		->take(9)
+		->get();
 
 		if( $featured_voxes->count() < 9 ) {
 
@@ -235,7 +272,14 @@ class IndexController extends FrontController {
 				$arr_v[] = $fv->id;
 			}
 
-			$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('launched_at', 'desc')->take( 9 - $featured_voxes->count() )->get();
+			$swiper_voxes = Vox::with('translations')
+			->with('categories.category')
+			->with('categories.category.translations')
+			->where('type', 'normal')
+			->whereNotIn('id', $arr_v)
+			->orderBy('launched_at', 'desc')
+			->take( 9 - $featured_voxes->count() )
+			->get();
 
 			$featured_voxes = $featured_voxes->concat($swiper_voxes);
 		}
@@ -303,7 +347,6 @@ class IndexController extends FrontController {
      * Dentist request a survey
      */
 	public function request_survey($locale=null) {
-
 		return ServicesVox::requestSurvey($this->user, false);
 	}
 
@@ -334,7 +377,6 @@ class IndexController extends FrontController {
 Survey topics and the questions: '.request('topics');
 
 	        Mail::raw($mtext, function ($message) {
-
 	            $sender = config('mail.from.address-vox');
                 $sender_name = config('mail.from.name-vox');
 
@@ -346,8 +388,7 @@ Survey topics and the questions: '.request('topics');
 
             return Response::json( [
                 'success' => true,
-            ] );
-
+            ]);
         }
 	}
 
@@ -355,7 +396,6 @@ Survey topics and the questions: '.request('topics');
      * DV recommendation form
      */
 	public function recommend($locale=null) {
-
 		return ServicesVox::recommendDentavox($this->user, false);
 	}
 
@@ -379,7 +419,12 @@ Survey topics and the questions: '.request('topics');
 	public function getPopup() {
 
 		//dd(request('id'));
-		if(request('id') == 'request-survey-popup' && !empty($this->user) && $this->user->is_dentist && in_array($this->user->status, config('dentist-statuses.approved_test'))) {
+		if(
+			request('id') == 'request-survey-popup' 
+			&& !empty($this->user) 
+			&& $this->user->is_dentist 
+			&& in_array($this->user->status, config('dentist-statuses.approved_test'))
+		) {
 
 			return $this->ShowVoxView('popups/request-survey', [
 				'countries' => Country::with('translations')->get(),

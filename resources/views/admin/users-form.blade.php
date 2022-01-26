@@ -2008,7 +2008,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <a href="javascript::" class="btn btn-info preferences-button" email="{{ App\Helpers\GeneralHelper::encrypt($item->email) }}">Check preferences for Product news & Blog</a> 
+                        <a href="javascript::" class="btn btn-info preferences-button" email="{{ GeneralHelper::encrypt($item->email) }}">Check preferences for Product news & Blog</a> 
                     </div>
                 </div>
             </div>

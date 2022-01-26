@@ -40,8 +40,7 @@ class SitemapController extends FrontController {
 		}
 		$content .= '</urlset>';
 
-		return response($content, 200)
-            ->header('Content-Type', 'application/xml');        
+		return response($content, 200)->header('Content-Type', 'application/xml');        
 	}
 
 	/**
@@ -61,8 +60,6 @@ class SitemapController extends FrontController {
 		   </sitemap>
 		</sitemapindex>';
         
-		return response($content, 200)
-            ->header('Content-Type', 'application/xml');
+		return response($content, 200)->header('Content-Type', 'application/xml');
 	}
-
 }

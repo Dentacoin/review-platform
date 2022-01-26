@@ -152,14 +152,14 @@ class TransactionsController extends AdminController {
         $table_fields['amount'] = array();
         $table_fields['address'] = array('template' => 'admin.parts.table-transactions-address');
         if(request('search-status') != 'first') {
-            $table_fields['tx_hash'] = array('template' => 'admin.parts.table-transactions-hash');
+            $table_fields['tx_hash'] = array('template' => 'admin.parts.table-transactions-hash', 'width' => '200px');
         }
         $table_fields['status'] = array('template' => 'admin.parts.table-transactions-status');
         $table_fields['type'] = array();
         if(request('search-status') != 'first') {
             $table_fields['nonce'] = array();
             $table_fields['message'] = array();
-            $table_fields['retries'] = array();
+            // $table_fields['retries'] = array();
             $table_fields['sended_at'] = array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sended at');
         }
         $table_fields['bump'] = array('template' => 'admin.parts.table-transactions-bump', 'label' => "Actions");
@@ -637,6 +637,23 @@ class TransactionsController extends AdminController {
         if(!empty($scam)) {
             $scam->checked = true;
             $scam->save();
+        }
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function checkedByAdmin($id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $trans = DcnTransaction::find($id);
+
+        if(!empty($trans)) {
+            $trans->manual_check_admin = null;
+            $trans->save();
         }
 
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');

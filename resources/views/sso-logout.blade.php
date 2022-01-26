@@ -1,4 +1,4 @@
-@php($token = App\Helpers\GeneralHelper::encrypt($markLogout))
+@php($token = GeneralHelper::encrypt($markLogout))
 <div style="display: none;">
 	@foreach( config('platforms') as $k => $platform )
 		@if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  )

@@ -341,7 +341,10 @@ class ProfileController extends FrontController {
 
                 foreach ($emails as $key => $email) {
 
-                    $is_dentist = User::where('email', 'LIKE', $email )->where('is_dentist', 1)->first();
+                    $is_dentist = User::where('email', 'LIKE', $email )
+                    ->where('is_dentist', 1)
+                    ->first();
+
                     $valid_email = $this->user->sendgridEmailValidation(68, $email);
 
                     if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !empty($is_dentist) || !$valid_email) {
@@ -745,7 +748,6 @@ class ProfileController extends FrontController {
                                 ';
 
                                 Mail::raw($mtext, function ($message) use ($current_user) {
-
                                     $sender = config('mail.from.address');
                                     $sender_name = config('mail.from.name');
 
@@ -1248,11 +1250,9 @@ class ProfileController extends FrontController {
             ->get();
 
             if ($reviews->count()) {
-                
                 foreach ($reviews as $review) {
 
                     if(empty($review->verified)) {
-
                         $review->verified = true;
                         $review->save();
 
@@ -1352,10 +1352,10 @@ class ProfileController extends FrontController {
                 'original' => $dapic->getImageUrl(),
             ]);
         }
-        $ret = [
+        
+        return Response::json( [
             'success' => true
-        ];
-        return Response::json( $ret );
+        ]);
     }    
 
     /**
@@ -1366,7 +1366,7 @@ class ProfileController extends FrontController {
 
         return Response::json( [
             'success' => true,
-        ] );
+        ]);
     }
 
     /**
@@ -1388,11 +1388,13 @@ class ProfileController extends FrontController {
             User::destroy( $dentist->id );
         }
 
-        UserTeam::where('user_id', $this->user->id)->where('dentist_id', $id)->delete();
+        UserTeam::where('user_id', $this->user->id)
+        ->where('dentist_id', $id)
+        ->delete();
         
         return Response::json( [
             'success' => true,
-        ] );
+        ]);
     }
 
     /**
@@ -1400,11 +1402,12 @@ class ProfileController extends FrontController {
      */
     public function dentists_reject( $locale=null, $id ) {
 
-        $res = UserTeam::where('user_id', $this->user->id)->where('dentist_id', $id)->delete();
+        $res = UserTeam::where('user_id', $this->user->id)
+        ->where('dentist_id', $id)
+        ->delete();
 
         if( $res ) {
             $dentist = User::find( $id );
-
             $dentist->sendTemplate(36, [
                 'clinic-name' => $this->user->getNames()
             ], 'trp');
@@ -1412,7 +1415,7 @@ class ProfileController extends FrontController {
         
         return Response::json( [
             'success' => true,
-        ] );
+        ]);
     }
 
     /**
@@ -1420,7 +1423,9 @@ class ProfileController extends FrontController {
      */
     public function dentists_accept( $locale=null, $id ) {
 
-        $item = UserTeam::where('dentist_id', $id)->where('user_id', $this->user->id)->first();
+        $item = UserTeam::where('dentist_id', $id)
+        ->where('user_id', $this->user->id)
+        ->first();
 
         if ($item) {
             $item->approved = 1;
@@ -1434,18 +1439,19 @@ class ProfileController extends FrontController {
 
         return Response::json( [
             'success' => true,
-        ] );
+        ]);
     }
     
     /**
      * clinic accepts team member
      */
     public function clinics_delete( $locale=null, $id ) {
-        $res = UserTeam::where('dentist_id', $this->user->id)->where('user_id', $id)->delete();
+        $res = UserTeam::where('dentist_id', $this->user->id)
+        ->where('user_id', $id)
+        ->delete();
 
         if( $res ) {
             $clinic = User::find( $id );
-
             $clinic->sendTemplate(38, [
                 'dentist-name' => $this->user->getNames()
             ], 'trp');
@@ -1453,7 +1459,7 @@ class ProfileController extends FrontController {
 
         return Response::json( [
             'success' => true,
-        ] );
+        ]);
     }
 
     /**
@@ -1479,14 +1485,14 @@ class ProfileController extends FrontController {
                 return Response::json( [
                     'success' => true,
                     'message' => trans('trp.page.user.clinic-invited', ['name' => $clinic->getNames() ])
-                ] );
+                ]);
             }
         } 
             
         return Response::json( [
             'success' => false,
             'message' => trans('trp.page.user.clinic-invited-error')
-        ] );
+        ]);
     }
 
     /**
@@ -1550,13 +1556,12 @@ class ProfileController extends FrontController {
             $gt = UserGuidedTour::where('user_id', $this->user->id)->first();
 
             if(!empty($gt)) {
-
                 $gt->dcn_assurance = true;
                 $gt->save();
 
                 return Response::json( [
                     'success' => true,
-                ] );
+                ]);
             }
         }
         return redirect(getLangUrl('/'));
@@ -1571,13 +1576,12 @@ class ProfileController extends FrontController {
             $gt = UserGuidedTour::where('user_id', $this->user->id)->first();
 
             if(!empty($gt)) {
-
                 $gt->dentacare_app = true;
                 $gt->save();
 
                 return Response::json( [
                     'success' => true,
-                ] );
+                ]);
             }
         }
         return redirect(getLangUrl('/'));
@@ -1592,13 +1596,12 @@ class ProfileController extends FrontController {
             $gt = UserGuidedTour::where('user_id', $this->user->id)->first();
 
             if(!empty($gt)) {
-
                 $gt->check_reviews_on = Carbon::now();
                 $gt->save();
 
                 return Response::json( [
                     'success' => true,
-                ] );
+                ]);
             }
         }
         return redirect(getLangUrl('/'));
@@ -1702,7 +1705,7 @@ class ProfileController extends FrontController {
                 'success' => true,
                 'steps' => session('guided_tour'),
                 'count_all_steps' => session('guided_tour_count'),
-            ] );
+            ]);
         }
 
         return Response::json([
@@ -1877,7 +1880,10 @@ class ProfileController extends FrontController {
             ['invited_email', 'LIKE', $email],
         ])->first();
 
-        $existing_patient = User::withTrashed()->where('email', 'LIKE', $email )->where('is_dentist', 0)->first();
+        $existing_patient = User::withTrashed()
+        ->where('email', 'LIKE', $email )
+        ->where('is_dentist', 0)
+        ->first();
         $existing_anonymous = AnonymousUser::where('email', 'LIKE', $email)->first();
 
         if(!$for_bulk_invites) {
@@ -2057,7 +2063,10 @@ class ProfileController extends FrontController {
 
     private function askDentistToBeHisPatient($existing_patient) {
 
-        $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
+        $last_ask = UserAsk::where('user_id', $existing_patient->id)
+        ->where('dentist_id', $this->user->id)
+        ->first();
+        
         if(!empty($last_ask)) {
             $last_ask->created_at = Carbon::now();
             $last_ask->on_review = true;

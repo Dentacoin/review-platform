@@ -27,7 +27,9 @@ class CitiesController extends BaseController {
                 });
             }
 		})->whereIn('status', config('dentist-statuses.shown'))
-		->whereNull('self_deleted')->take(10)->get();
+		->whereNull('self_deleted')
+		->take(10)
+		->get();
 
 		$user_list = [];
 
@@ -52,11 +54,15 @@ class CitiesController extends BaseController {
 
 	public function getDentistLocation() {
 		$username = trim(Request::input('username'));
+
 		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
 			$query->where('name', 'LIKE', '%'.$username.'%')
 			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
 		})->whereIn('status', config('dentist-statuses.shown'))
-		->whereNull('self_deleted')->take(10)->get();
+		->whereNull('self_deleted')
+		->take(10)
+		->get();
+
 		$user_list = [];
 		foreach ($users as $user) {
 			$user_list[] = [
@@ -71,6 +77,7 @@ class CitiesController extends BaseController {
 	}
 
 	public function getCities($id, $empty=false) {
+
 		$country = Country::find($id);
 		if(!empty($country)) {
 			
@@ -166,8 +173,11 @@ class CitiesController extends BaseController {
 	            $query->where('dentist_id', $id);
 	        });
 		}
-		$clinics = $clinics->where('name', 'LIKE', $joinclinic.'%')->whereIn('status', config('dentist-statuses.shown_with_link'))
-		->whereNull('self_deleted')->take(10)->get();
+		$clinics = $clinics->where('name', 'LIKE', $joinclinic.'%')
+		->whereIn('status', config('dentist-statuses.shown_with_link'))
+		->whereNull('self_deleted')
+		->take(10)
+		->get();
 
 		$clinic_list = [];
 		foreach ($clinics as $clinic) {
@@ -195,8 +205,11 @@ class CitiesController extends BaseController {
 	        });
 		}
 
-        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')->whereIn('status', config('dentist-statuses.shown_with_link'))
-		->whereNull('self_deleted')->take(10)->get();
+        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')
+		->whereIn('status', config('dentist-statuses.shown_with_link'))
+		->whereNull('self_deleted')
+		->take(10)
+		->get();
 
 		$dentist_list = [];
 		foreach ($dentists as $dentist) {

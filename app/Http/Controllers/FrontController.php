@@ -95,23 +95,6 @@ class FrontController extends BaseController {
         if( Request::getHost() == 'vox.dentacoin.com' && Request::server('HTTP_REFERER') && Request::isMethod('get') && request()->url() != 'https://vox.dentacoin.com/en/registration' && request()->url() != 'https://vox.dentacoin.com/en/login') {
             Redirect::to( str_replace('vox.', 'dentavox.', Request::url() ) )->send();
         }
-        
-        //VPNs
-        // $myips = session('my-ips');
-       
-        // if( !isset( $myips[User::getRealIp()] ) ) {
-        //     if(!is_array($myips)) {
-        //         $myips = [];
-        //     }
-        //     $myips[User::getRealIp()] = User::checkForBlockedIP();
-        //     session(['my-ips' => $myips]);
-        // }
-        // if($myips[User::getRealIp()] && $this->current_page!='vpn' ) {
-        //     Redirect::to( getLangUrl('vpn') )->send();
-        // }
-        // if( !$myips[User::getRealIp()] && $this->current_page=='vpn' ) {
-        //     Redirect::to( getLangUrl('/') )->send();
-        // }
 
         $this->trackEvents = [];
 
@@ -147,7 +130,11 @@ class FrontController extends BaseController {
                 $given_reward = false;
 
                 foreach ($cv as $pid => $aid) {
-                    $taken_reward = DcnReward::where('user_id', $this->user->id)->where('reference_id', $pid)->where('platform', 'vox')->where('type', 'daily_poll')->first();
+                    $taken_reward = DcnReward::where('user_id', $this->user->id)
+                    ->where('reference_id', $pid)
+                    ->where('platform', 'vox')
+                    ->where('type', 'daily_poll')
+                    ->first();
 
                     if (empty($taken_reward)) {
                         $given_reward = true;
@@ -226,7 +213,10 @@ class FrontController extends BaseController {
                                 $date = $review->created_at;
                             }
 
-                            $last_login = UserLogin::where('user_id', $this->user->id)->where('created_at', '<=', Carbon::now()->addMinutes(-10))->where('created_at', '>', $date)->first();
+                            $last_login = UserLogin::where('user_id', $this->user->id)
+                            ->where('created_at', '<=', Carbon::now()->addMinutes(-10))
+                            ->where('created_at', '>', $date)
+                            ->first();
 
                             if(empty($last_login)) {
                                 $gt_exist->login_after_first_review = true;
@@ -322,11 +312,6 @@ class FrontController extends BaseController {
                 'city_id' => $this->city_id,
             ]);
 
-            // if(mb_strpos(Request::url(), '//dev.') && !$this->admin) {
-            //     echo '<a href="'.str_replace('//dev.', '//', Request::url()).'">Click here</a> or <a href="'.url('cms').'"> log in as admin </a>';
-            //     exit;
-            // }
-
             $response = $next($request);
             $response->headers->set('Referrer-Policy', 'no-referrer');
             $response->headers->set('X-XSS-Protection', '1; mode=block');
@@ -409,7 +394,10 @@ class FrontController extends BaseController {
 
         ///Daily Polls
 
-        $daily_polls = Poll::with('translations')->where('launched_at', date('Y-m-d') )->whereIn('status', ['open', 'closed'])->get();
+        $daily_polls = Poll::with('translations')
+        ->where('launched_at', date('Y-m-d') )
+        ->whereIn('status', ['open', 'closed'])
+        ->get();
 
         if(!empty($daily_polls)) {
             
@@ -456,7 +444,9 @@ class FrontController extends BaseController {
                 $params['poll_scales'] = $poll_scales;
 
                 if(!empty($this->user)) {
-                    $taken_daily_poll = PollAnswer::where('poll_id', $daily_poll->id)->where('user_id', $this->user->id)->first();
+                    $taken_daily_poll = PollAnswer::where('poll_id', $daily_poll->id)
+                    ->where('user_id', $this->user->id)
+                    ->first();
 
                     if ($taken_daily_poll) {
                         $params['taken_daily_poll'] = true;
@@ -492,6 +482,7 @@ class FrontController extends BaseController {
 
         $params['clinicBranches'] = false;
         $params['has_review_notification'] = false;
+        
         if(!empty($this->user) && $this->user->is_clinic && $this->user->branches->isNotEmpty()) {
             $params['clinicBranches'] = [];
             foreach($this->user->branches as $branch) {

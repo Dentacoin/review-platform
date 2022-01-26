@@ -259,6 +259,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'GoogleMaps' => GoogleMaps\Facade\GoogleMapsFacade::class,
         'SSH' => Collective\Remote\RemoteFacade::class,
+        'GeneralHelper' => App\Helpers\GeneralHelper::class,
     ],
 
 ];

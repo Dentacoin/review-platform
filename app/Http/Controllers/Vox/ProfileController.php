@@ -42,7 +42,13 @@ class ProfileController extends FrontController {
 
             $user = Auth::guard('web')->user();
 
-            if($user->is_dentist && $user->status!='approved' && $user->status!='added_by_clinic_claimed' && $user->status!='added_by_dentist_claimed' && $user->status!='test') {
+            if(
+                $user->is_dentist 
+                && $user->status!='approved'
+                && $user->status!='added_by_clinic_claimed' 
+                && $user->status!='added_by_dentist_claimed' 
+                && $user->status!='test'
+            ) {
                 return redirect(getLangUrl('/'));
             }
 
@@ -103,7 +109,11 @@ class ProfileController extends FrontController {
             }
 
             $more_surveys = false;
-            $rewards = DcnReward::where('user_id', $user->id)->where('platform', 'vox')->where('type', 'survey')->where('reference_id', '!=', 34)->get();
+            $rewards = DcnReward::where('user_id', $user->id)
+            ->where('platform', 'vox')
+            ->where('type', 'survey')
+            ->where('reference_id', '!=', 34)
+            ->get();
             
             if ($rewards->count() == 1 && $rewards->first()->vox_id == 11) {
                 $more_surveys = true;
@@ -120,9 +130,21 @@ class ProfileController extends FrontController {
                 $ios = true;
             }
 
+            $latestVoxes = collect();
+
+            if($os) {
+                $latestVoxes = Vox::where('type', 'normal')
+                ->with('translations')
+                ->with('categories.category')
+                ->with('categories.category.translations')
+                ->orderBy('created_at', 'desc')
+                ->take(3)
+                ->get();
+            }
+
             $params = [
                 'xframe' => true,
-                'latest_voxes' => $os ? Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('created_at', 'desc')->take(3)->get() : collect(),
+                'latest_voxes' => $latestVoxes,
                 'more_surveys' => $more_surveys,
                 'ios' => $ios,
                 'prev_bans' => $prev_bans,
@@ -168,7 +190,11 @@ class ProfileController extends FrontController {
             $this->user->addImage($img);
             $this->user->save();
 
-            return Response::json(['success' => true, 'thumb' => $this->user->getImageUrl(true), 'name' => '' ]);
+            return Response::json([
+                'success' => true, 
+                'thumb' => $this->user->getImageUrl(true), 
+                'name' => '' 
+            ]);
         }
     }
 

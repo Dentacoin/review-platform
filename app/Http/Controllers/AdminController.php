@@ -65,7 +65,11 @@ class AdminController extends BaseController {
                 ->with('error-message', 'This IP is not in the whitelist!');
             }
             
-            if(Auth::guard('admin')->user() && Auth::guard('admin')->user()->password_last_updated_at->toDateTimeString() < Carbon::now()->addDays(-60)->toDateTimeString() &&  $request->path() != 'cms/password-expired') {
+            if(
+                Auth::guard('admin')->user() 
+                && Auth::guard('admin')->user()->password_last_updated_at->toDateTimeString() < Carbon::now()->addDays(-60)->toDateTimeString() 
+                &&  $request->path() != 'cms/password-expired'
+            ) {
                 return redirect('cms/password-expired');
             }
 

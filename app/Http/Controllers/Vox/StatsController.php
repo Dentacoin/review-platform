@@ -260,7 +260,6 @@ class StatsController extends FrontController {
                 }
             }
 
-
             foreach ($answers as $key => $value) {
                 // if(mb_strpos($value, '!')===0 || ($question->type != 'single_choice' && mb_strpos($value, '#')===0)) {
                 //     $answers[$key] = mb_substr($value, 1);
@@ -283,13 +282,21 @@ class StatsController extends FrontController {
 
                 if($dates || $question->respondent_count() < 50) {
 
-                    $results_old = $results_old->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt')->get();
-                    $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt')->get();
+                    $results_old = $results_old->groupBy($answerField)
+                    ->selectRaw($answerField.', COUNT(*) as cnt')
+                    ->get();
+
+                    $results = $results->groupBy($answerField)
+                    ->selectRaw($answerField.', COUNT(*) as cnt')
+                    ->get();
 
                     $results = $results->concat($results_old);
                 } else {
                     
-                    $results_old = VoxAnswersDependency::where('question_id', $question_id)->where('question_dependency_id', $question->stats_relation_id)->where('answer_id', $answer_id)->get();
+                    $results_old = VoxAnswersDependency::where('question_id', $question_id)
+                    ->where('question_dependency_id', $question->stats_relation_id)
+                    ->where('answer_id', $answer_id)
+                    ->get();
 
                     if($results_old->isEmpty()) {
                         $results_old = VoxHelper::prepareQueryOld($question_id, null,[
@@ -297,10 +304,15 @@ class StatsController extends FrontController {
                             'dependency_question' => $question->stats_relation_id,
                         ]);
 
-                        $results_old = $results_old->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt')->get();
+                        $results_old = $results_old->groupBy($answerField)
+                        ->selectRaw($answerField.', COUNT(*) as cnt')
+                        ->get();
                     }
 
-                    $results = VoxAnswersDependency::where('question_id', $question_id)->where('question_dependency_id', $question->stats_relation_id)->where('answer_id', $answer_id)->get();
+                    $results = VoxAnswersDependency::where('question_id', $question_id)
+                    ->where('question_dependency_id', $question->stats_relation_id)
+                    ->where('answer_id', $answer_id)
+                    ->get();
 
                     if($results->isEmpty()) {
                         $results = VoxHelper::prepareQuery($question_id, null,[
@@ -308,7 +320,9 @@ class StatsController extends FrontController {
                             'dependency_question' => $question->stats_relation_id,
                         ]);
 
-                        $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt')->get();
+                        $results = $results->groupBy($answerField)
+                        ->selectRaw($answerField.', COUNT(*) as cnt')
+                        ->get();
                     }
 
                     $results = $results->concat($results_old);
@@ -319,7 +333,6 @@ class StatsController extends FrontController {
                 }
 
                 foreach ($results as $res) {
-
                     $answer_number = $this->getAnswerNumber($question->type, $answers, $res->$answerField);
 
                     if(!isset( $answer_number )) {
@@ -478,11 +491,17 @@ class StatsController extends FrontController {
 
                 $total = VoxHelper::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
-                ])->whereNotNull('gender')->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+                ])->whereNotNull('gender')
+                ->select(DB::raw('count(distinct `user_id`) as num'))
+                ->first()
+                ->num;
 
                 $total_old = VoxHelper::prepareQueryOld($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
-                ])->whereNotNull('gender')->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+                ])->whereNotNull('gender')
+                ->select(DB::raw('count(distinct `user_id`) as num'))
+                ->first()
+                ->num;
 
                 $total = $total + $total_old;
 
@@ -498,7 +517,9 @@ class StatsController extends FrontController {
 
                     //SUM( '.(count($answers)+1).' - `scale`) / COUNT(*) AS `weight`
                 } else {
-                    $results_main_chart_old = $results_main_chart_old->groupBy($answerField, 'gender')->selectRaw($answerField.', gender, COUNT(*) as cnt')->get();
+                    $results_main_chart_old = $results_main_chart_old->groupBy($answerField, 'gender')
+                    ->selectRaw($answerField.', gender, COUNT(*) as cnt')
+                    ->get();
                 }
 
                 if( $scale_options ) {
@@ -507,7 +528,8 @@ class StatsController extends FrontController {
                 $results_old = $results_old->whereNotNull('gender');
 
                 if($question->type == 'rank') {
-                    $results_old = $results_old->groupBy($answerField, 'scale', 'gender')->selectRaw($answerField.', 
+                    $results_old = $results_old->groupBy($answerField, 'scale', 'gender')
+                    ->selectRaw($answerField.', 
                         scale, 
                         gender, 
                         SUM(`scale`) AS `sbor`, 
@@ -515,13 +537,15 @@ class StatsController extends FrontController {
                         ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
                     ')->get();
                 } else {
-                    $results_old = $results_old->groupBy($answerField, 'gender')->selectRaw($answerField.', gender, COUNT(*) as cnt')->get();
+                    $results_old = $results_old->groupBy($answerField, 'gender')
+                    ->selectRaw($answerField.', gender, COUNT(*) as cnt')
+                    ->get();
                 }
 
-                
                 $results_main_chart = $results->whereNotNull('gender');
                 if($question->type == 'rank') {
-                    $results_main_chart = $results_main_chart->groupBy($answerField, 'scale', 'gender')->selectRaw($answerField.', 
+                    $results_main_chart = $results_main_chart->groupBy($answerField, 'scale', 'gender')
+                    ->selectRaw($answerField.', 
                         scale, 
                         gender, 
                         SUM(`scale`) AS `sbor`, 
@@ -531,7 +555,9 @@ class StatsController extends FrontController {
 
                     //SUM( '.(count($answers)+1).' - `scale`) / COUNT(*) AS `weight`
                 } else {
-                    $results_main_chart = $results_main_chart->groupBy($answerField, 'gender')->selectRaw($answerField.', gender, COUNT(*) as cnt')->get();
+                    $results_main_chart = $results_main_chart->groupBy($answerField, 'gender')
+                    ->selectRaw($answerField.', gender, COUNT(*) as cnt')
+                    ->get();
                 }
 
                 if( $scale_options ) {
@@ -540,7 +566,8 @@ class StatsController extends FrontController {
                 $results = $results->whereNotNull('gender');
 
                 if($question->type == 'rank') {
-                    $results = $results->groupBy($answerField, 'scale', 'gender')->selectRaw($answerField.', 
+                    $results = $results->groupBy($answerField, 'scale', 'gender')
+                    ->selectRaw($answerField.', 
                         scale, 
                         gender, 
                         SUM(`scale`) AS `sbor`, 
@@ -548,7 +575,9 @@ class StatsController extends FrontController {
                         ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
                     ')->get();
                 } else {
-                    $results = $results->groupBy($answerField, 'gender')->selectRaw($answerField.', gender, COUNT(*) as cnt')->get();
+                    $results = $results->groupBy($answerField, 'gender')
+                    ->selectRaw($answerField.', gender, COUNT(*) as cnt')
+                    ->get();
                 }
 
                 $results = $results->concat($results_old);
@@ -633,13 +662,19 @@ class StatsController extends FrontController {
                         'scale_answer_id' => $scale_answer_id, 
                         'scale' => $scale, 
                         'scale_options' => $scale_options
-                    ])->whereNotNull('gender')->groupBy('gender')->select(DB::raw('gender, count(distinct `user_id`) as num'))->get();
+                    ])->whereNotNull('gender')
+                    ->groupBy('gender')
+                    ->select(DB::raw('gender, count(distinct `user_id`) as num'))
+                    ->get();
 
                     $totalQuery = VoxHelper::prepareQuery($question_id, $dates, [
                         'scale_answer_id' => $scale_answer_id, 
                         'scale' => $scale, 
                         'scale_options' => $scale_options
-                    ])->whereNotNull('gender')->groupBy('gender')->select(DB::raw('gender, count(distinct `user_id`) as num'))->get();
+                    ])->whereNotNull('gender')
+                    ->groupBy('gender')
+                    ->select(DB::raw('gender, count(distinct `user_id`) as num'))
+                    ->get();
 
                     $totalQuery = $totalQuery->concat($totalQueryOld);
 
@@ -804,7 +839,8 @@ class StatsController extends FrontController {
                 $total = $total + $total_old;
 
                 if($question->type == 'rank') {
-                    $results_old = $results_old->groupBy($answerField, 'scale', 'country_id')->selectRaw($answerField.', 
+                    $results_old = $results_old->groupBy($answerField, 'scale', 'country_id')
+                    ->selectRaw($answerField.', 
                         scale, 
                         country_id, 
                         SUM(`scale`) AS `sbor`, 
@@ -812,11 +848,14 @@ class StatsController extends FrontController {
                         ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
                     ')->get();
                 } else {
-                    $results_old = $results_old->groupBy($answerField, 'country_id')->selectRaw($answerField.', country_id, COUNT(*) as cnt')->get();
+                    $results_old = $results_old->groupBy($answerField, 'country_id')
+                    ->selectRaw($answerField.', country_id, COUNT(*) as cnt')
+                    ->get();
                 }
 
                 if($question->type == 'rank') {
-                    $results = $results->groupBy($answerField, 'scale', 'country_id')->selectRaw($answerField.', 
+                    $results = $results->groupBy($answerField, 'scale', 'country_id')
+                    ->selectRaw($answerField.', 
                         scale, 
                         country_id, 
                         SUM(`scale`) AS `sbor`, 
@@ -824,7 +863,9 @@ class StatsController extends FrontController {
                         ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
                     ')->get();
                 } else {
-                    $results = $results->groupBy($answerField, 'country_id')->selectRaw($answerField.', country_id, COUNT(*) as cnt')->get();
+                    $results = $results->groupBy($answerField, 'country_id')
+                    ->selectRaw($answerField.', country_id, COUNT(*) as cnt')
+                    ->get();
                 }
 
                 $results = $results->concat($results_old);
@@ -1167,7 +1208,10 @@ class StatsController extends FrontController {
                     'scale_options' => $scale_options
                 ]);
 
-                $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->whereNotNull('age')->first()->num;
+                $total = $total->select(DB::raw('count(distinct `user_id`) as num'))
+                ->whereNotNull('age')
+                ->first()
+                ->num;
 
                 $total_old = VoxHelper::prepareQueryOld($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id, 
@@ -1175,7 +1219,10 @@ class StatsController extends FrontController {
                     'scale_options' => $scale_options
                 ]);
 
-                $total_old = $total_old->select(DB::raw('count(distinct `user_id`) as num'))->whereNotNull('age')->first()->num;
+                $total_old = $total_old->select(DB::raw('count(distinct `user_id`) as num'))
+                ->whereNotNull('age')
+                ->first()
+                ->num;
 
                 $total = $total + $total_old;
 
@@ -1183,7 +1230,8 @@ class StatsController extends FrontController {
                     $results_old = $results_old->whereIn($scale, array_values($scale_options));
                 }
                 if($question->type == 'rank') {
-                    $results_old = $results_old->groupBy($answerField, 'scale', 'age')->selectRaw($answerField.', 
+                    $results_old = $results_old->groupBy($answerField, 'scale', 'age')
+                    ->selectRaw($answerField.', 
                         scale, 
                         age, 
                         SUM(`scale`) AS `sbor`, 
@@ -1191,7 +1239,9 @@ class StatsController extends FrontController {
                         ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
                     ')->get();
                 } else {
-                    $results_old = $results_old->groupBy($answerField, 'age')->selectRaw($answerField.', age, COUNT(*) as cnt')->get();
+                    $results_old = $results_old->groupBy($answerField, 'age')
+                    ->selectRaw($answerField.', age, COUNT(*) as cnt')
+                    ->get();
                 }
 
                 if( $scale_options ) {
@@ -1199,7 +1249,8 @@ class StatsController extends FrontController {
                 }
                 
                 if($question->type == 'rank') {
-                    $results = $results->groupBy($answerField, 'scale', 'age')->selectRaw($answerField.', 
+                    $results = $results->groupBy($answerField, 'scale', 'age')
+                    ->selectRaw($answerField.', 
                         scale, 
                         age, 
                         SUM(`scale`) AS `sbor`, 
@@ -1207,7 +1258,9 @@ class StatsController extends FrontController {
                         ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
                     ')->get();
                 } else {
-                    $results = $results->groupBy($answerField, 'age')->selectRaw($answerField.', age, COUNT(*) as cnt')->get();
+                    $results = $results->groupBy($answerField, 'age')
+                    ->selectRaw($answerField.', age, COUNT(*) as cnt')
+                    ->get();
                 }
 
                 $results = $results->concat($results_old);
@@ -1264,14 +1317,20 @@ class StatsController extends FrontController {
                     'scale' => $scale, 
                     'scale_options' => $scale_options
                 ]);
-                $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->whereNotNull($scale)->first()->num;
+                $total = $total->select(DB::raw('count(distinct `user_id`) as num'))
+                ->whereNotNull($scale)
+                ->first()
+                ->num;
 
                 $total_old = VoxHelper::prepareQueryOld($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id, 
                     'scale' => $scale, 
                     'scale_options' => $scale_options
                 ]);
-                $total_old = $total_old->select(DB::raw('count(distinct `user_id`) as num'))->whereNotNull($scale)->first()->num;
+                $total_old = $total_old->select(DB::raw('count(distinct `user_id`) as num'))
+                ->whereNotNull($scale)
+                ->first()
+                ->num;
 
                 $total = $total + $total_old;
 
@@ -1280,7 +1339,8 @@ class StatsController extends FrontController {
                 }
                 
                 if($question->type == 'rank') {
-                    $results_old = $results_old->groupBy($answerField, 'scale', $scale)->selectRaw($answerField.', 
+                    $results_old = $results_old->groupBy($answerField, 'scale', $scale)
+                    ->selectRaw($answerField.', 
                         scale, 
                         '.$scale.', 
                         SUM(`scale`) AS `sbor`, 
@@ -1288,7 +1348,9 @@ class StatsController extends FrontController {
                         ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
                     ')->get();
                 } else {
-                    $results_old = $results_old->groupBy($answerField, $scale)->selectRaw($answerField.', '.$scale.', COUNT(*) as cnt')->get();
+                    $results_old = $results_old->groupBy($answerField, $scale)
+                    ->selectRaw($answerField.', '.$scale.', COUNT(*) as cnt')
+                    ->get();
                 }
                 
                 if( $scale_options ) {
@@ -1296,7 +1358,8 @@ class StatsController extends FrontController {
                 }
                 
                 if($question->type == 'rank') {
-                    $results = $results->groupBy($answerField, 'scale', $scale)->selectRaw($answerField.', 
+                    $results = $results->groupBy($answerField, 'scale', $scale)
+                    ->selectRaw($answerField.', 
                         scale, 
                         '.$scale.', 
                         SUM(`scale`) AS `sbor`, 
@@ -1304,7 +1367,9 @@ class StatsController extends FrontController {
                         ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
                     ')->get();
                 } else {
-                    $results = $results->groupBy($answerField, $scale)->selectRaw($answerField.', '.$scale.', COUNT(*) as cnt')->get();
+                    $results = $results->groupBy($answerField, $scale)
+                    ->selectRaw($answerField.', '.$scale.', COUNT(*) as cnt')
+                    ->get();
                 }
 
                 $results = $results->concat($results_old);
@@ -1546,7 +1611,6 @@ class StatsController extends FrontController {
                 $total = $c;
             }
 
-            
             return Response::json( [
                 'related_question_type' => $related_question_type,
                 'converted_rows' => $converted_rows,
@@ -1595,7 +1659,13 @@ class StatsController extends FrontController {
                     $dem_not_null = [];
 
                     foreach ($demographics as $demographic) {
-                        if($demographic != 'gender' && $demographic != 'country_id' && (!empty(Request::input('dem-'.$demographic)) || Request::input('dem-'.$demographic) == 0)) {
+                        if(
+                            $demographic != 'gender' 
+                            && $demographic != 'country_id' 
+                            && (
+                                !empty(Request::input('dem-'.$demographic)) || Request::input('dem-'.$demographic) == 0
+                            )
+                        ) {
                             $dem_options[$demographic] = explode(',', Request::input('dem-'.$demographic));
                         }
 

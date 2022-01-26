@@ -113,7 +113,7 @@ class IndexController extends ApiController {
 
         return Response::json( [
         	'time_left' => $time_left,
-        ] );
+        ]);
 	}
 
 

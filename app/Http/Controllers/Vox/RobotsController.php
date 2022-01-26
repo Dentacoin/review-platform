@@ -12,7 +12,7 @@ class RobotsController extends FrontController {
      */
 	public function content($locale=null) {
 
-		if (Request::getHost() == 'vox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com' || Request::getHost() == 'dev.dentavox.dentacoin.com') {
+		if (in_array(Request::getHost(), ['vox.dentacoin.com', 'urgent.dentavox.dentacoin.com', 'dev.dentavox.dentacoin.com'])) {
 
 			$content = 'User-agent: *
 Disallow: /';
@@ -30,8 +30,6 @@ Disallow: /status/
 ';
 		}
 
-		return response($content, 200)
-        ->header('Content-Type', 'text/plain');
+		return response($content, 200)->header('Content-Type', 'text/plain');
 	}
-
 }

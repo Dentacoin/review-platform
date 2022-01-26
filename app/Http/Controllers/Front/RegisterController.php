@@ -29,9 +29,15 @@ class RegisterController extends FrontController {
      */
     public function upload($locale=null) {
         if( Request::file('image') && Request::file('image')->isValid() ) {
+
             $img = Image::make( Input::file('image') )->orientate();
             list($thumb, $full, $name) = GeneralHelper::addTempImage($img);
-            return Response::json(['success' => true, 'thumb' => $thumb, 'name' => $name ]);
+
+            return Response::json([
+                'success' => true, 
+                'thumb' => $thumb, 
+                'name' => $name 
+            ]);
         }
     }
 
@@ -65,7 +71,7 @@ class RegisterController extends FrontController {
                     return Response::json( [
                         'success' => true,
                         'message' => trans('trp.popup.verification-popup.join-workplace.success', ['clinic-name' => request('clinic_name')]),
-                    ] );
+                    ]);
                 }
             }
         }
@@ -73,7 +79,7 @@ class RegisterController extends FrontController {
         return Response::json( [
             'success' => false,
             'message' => trans('trp.popup.verification-popup.join-workplace.error'),
-        ] );
+        ]);
     }
 
     /**
@@ -102,14 +108,14 @@ class RegisterController extends FrontController {
                     return Response::json( [
                         'success' => true,
                         'message' => trans('trp.popup.verification-popup.dentist-invite.success', ['dentist-name' => $dentist->getNames()]),
-                    ] );
+                    ]);
                 }
             }
         }
         return Response::json( [
             'success' => false,
             'message' => trans('trp.popup.verification-popup.dentist-invite.error'),
-        ] );
+        ]);
     }
 
     /**
@@ -148,7 +154,7 @@ class RegisterController extends FrontController {
                         'success' => true,
                         'user' => $user->is_clinic ? 'clinic' : 'dentist',
                         'message' => trans('trp.popup.verification-popup.user-info.success'),
-                    ] );
+                    ]);
                 }
             }
         }
@@ -156,7 +162,7 @@ class RegisterController extends FrontController {
         return Response::json( [
             'success' => false,
             'message' => trans('trp.popup.verification-popup.user-info.error'),
-        ] );
+        ]);
     }
 
     /**
@@ -189,13 +195,13 @@ class RegisterController extends FrontController {
 
                 return Response::json( [
                     'success' => true,
-                ] );
+                ]);
             }
         }
 
         return Response::json( [
             'success' => false,
             'message' => trans('trp.common.something-wrong'),
-        ] );
+        ]);
     }
 }

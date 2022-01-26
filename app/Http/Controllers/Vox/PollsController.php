@@ -20,7 +20,6 @@ class PollsController extends FrontController {
 	public function list($locale=null) {
 
 		$seos = PageSeo::find(14);
-
 		$monthly_descr = PollsMonthlyDescription::where('month', date('n'))->where('year', date('Y'))->first();
 		
 		return $this->ShowVoxView('daily-polls', array(
@@ -167,7 +166,9 @@ class PollsController extends FrontController {
 	public function getCalendarHtml() {
 		$calendar = new \App\Helpers\Calendar();
 
-		$monthly_descr = PollsMonthlyDescription::where('month', Request::input('month'))->where('year', Request::input('year'))->first();
+		$monthly_descr = PollsMonthlyDescription::where('month', Request::input('month'))
+		->where('year', Request::input('year'))
+		->first();
 
 		return Response::json( [
 			'success' => true,

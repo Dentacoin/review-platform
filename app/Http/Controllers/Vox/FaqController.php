@@ -30,7 +30,5 @@ class FaqController extends FrontController {
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
         ));
-
 	}
-
 }

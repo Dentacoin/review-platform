@@ -17,7 +17,6 @@ class FaqController extends ApiController {
         return Response::json( array(
 			'faq' => $content,
 			'faq_ios' => $contentiOS,
-		) );
+		));
 	}
-    
 }

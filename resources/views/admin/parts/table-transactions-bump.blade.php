@@ -24,4 +24,9 @@
 	<a class="btn btn-info" href="{{ url('cms/transactions/edit/'.$item->id) }}" style="margin-top: 2px;">
 		Edit
 	</a>
+	@if($item->manual_check_admin)
+		<a class="btn btn-success" href="{{ url('cms/transactions/checked-by-admin/'.$item->id) }}" style="margin-top: 2px;">
+			Checked
+		</a>
+	@endif
 @endif
