@@ -162,7 +162,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('transactions/disable-paid-by-user-retry', 	'TransactionsController@disablePaidByUserRetry');
 	Route::get('transactions/enable-paid-by-user-retry', 	'TransactionsController@enablePaidByUserRetry');
 	Route::post('transactions/user-suspicious/{id}',		'TransactionsController@makeUserSuspicious');
-	Route::post('transactions/checked-by-admin/{id}',		'TransactionsController@checkedByAdmin');
+	Route::any('transactions/checked-by-admin/{id}',		'TransactionsController@checkedByAdmin');
 	Route::post('check-pending-trans', 						'TransactionsController@checkPendingTransactions');
 	Route::post('check-nodes', 								'TransactionsController@checkConnectedNodes');
 
