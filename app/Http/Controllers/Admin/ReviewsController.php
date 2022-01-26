@@ -76,7 +76,7 @@ class ReviewsController extends AdminController {
         $pagination_link = '';
 
         foreach (Request::all() as $key => $value) {
-            if($key != 'search' && $key != 'page') {
+            if($key != 'page') {
                 $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
             }
         }

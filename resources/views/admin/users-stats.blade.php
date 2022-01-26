@@ -76,7 +76,7 @@
 								<input type="text" class="form-control datepicker" name="search_users_to" value="{{ $search_users_to }}" placeholder="Search to" autocomplete="off">
 							</div>
 							<div class="col-md-2">
-								<input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
+								<input type="submit" class="btn btn-sm btn-primary btn-block" value="Search">
 							</div>
 						</div>
 						<div class="row custom-row" style="margin-bottom: 10px;">

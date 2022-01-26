@@ -40,7 +40,7 @@
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="search-answer" value="{{ $search_answer }}" placeholder="Review content">
                     </div>
-                    <input type="submit" class="btn btn-sm btn-primary col-md-1" name="search" value="Search" style="line-height: 31px;">
+                    <input type="submit" class="btn btn-sm btn-primary col-md-1" value="Search" style="line-height: 31px;">
                     <input type="submit" class="btn btn-secondary btn-sm col-md-1" name="search-deleted" value="Search Deleted" style="line-height: 31px;">
                 </form>
             </div>

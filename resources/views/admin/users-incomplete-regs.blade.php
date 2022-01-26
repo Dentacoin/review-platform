@@ -60,7 +60,7 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <input type="submit" class="btn btn-block btn-primary btn-block" name="search" value="Submit">
+                                <input type="submit" class="btn btn-block btn-primary btn-block" value="Submit">
                             </div>
                         </div>
                     </form>

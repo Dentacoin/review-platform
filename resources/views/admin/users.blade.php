@@ -207,7 +207,7 @@
                         </div>
                         <div class="row">                        
                             <div class="col-md-12">
-                                <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
+                                <input type="submit" class="btn btn-sm btn-primary btn-block" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
                             </div>
                         </div>
                     </form>

@@ -24,7 +24,7 @@
                             <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder=Email>
                         </div>
                         <div class="col-md-2">
-                            <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
+                            <input type="submit" class="btn btn-sm btn-primary btn-block" value="Search">
                         </div>
                     </div>
                 </form>

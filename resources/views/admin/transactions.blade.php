@@ -133,7 +133,7 @@
                             @endif
                         </div>
                         <div class="row custom-row" style="margin-bottom: 10px;">
-                            <input type="submit" class="btn btn-block btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
+                            <input type="submit" class="btn btn-block btn-primary btn-block" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
                         </div>
                     </form>
                 </div>

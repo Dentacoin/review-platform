@@ -39,7 +39,7 @@
                             With comment
                         </label>
                     </div>
-                    <input type="submit" class="btn btn-sm btn-primary col-md-1" name="search" value="Search">
+                    <input type="submit" class="btn btn-sm btn-primary col-md-1" value="Search">
                 </form>
             </div>
         </div>

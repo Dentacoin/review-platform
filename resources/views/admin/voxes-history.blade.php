@@ -35,7 +35,7 @@
                                 <input type="text" class="form-control" name="search-question-id" value="{{ $search_question_id }}" placeholder="Search Question ID">
                             </div>
                             <div class="col-md-2">
-                                <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
+                                <input type="submit" class="btn btn-sm btn-primary btn-block" value="Search">
                             </div>
                         </div>
                     </form>
