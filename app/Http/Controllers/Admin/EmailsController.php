@@ -44,6 +44,7 @@ class EmailsController extends AdminController {
                 || !empty(request('search-sendgrid-id')) 
                 || !empty(request('search-platform')) 
                 || !empty(request('without-category'))
+                || !empty(request('search-category'))
             ) {
                 $templates = EmailTemplate::whereNull('not_used')->orderBy('id', 'ASC');
     
