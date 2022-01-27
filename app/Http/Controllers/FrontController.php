@@ -7,7 +7,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-use App\Models\WithdrawalsCondition;
 use App\Models\UserGuidedTour;
 use App\Models\PollAnswer;
 use App\Models\UserLogin;
@@ -357,8 +356,7 @@ class FrontController extends BaseController {
 
         $params['optimismPopup'] = false;
 
-        $is_optimism_activated = WithdrawalsCondition::find(1)->is_optimism_activated;
-        if($is_optimism_activated && !empty($this->user) && empty($this->user->optimism_popup) && $this->current_page != 'questionnaire' && request()->getHost() != 'account.dentacoin.com') {
+        if(!empty($this->user) && empty($this->user->optimism_popup) && $this->current_page != 'questionnaire' && request()->getHost() != 'account.dentacoin.com') {
             $this->user->optimism_popup = true;
             $this->user->save();
             $params['optimismPopup'] = true;

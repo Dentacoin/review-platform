@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\IncompleteRegistration;
-use App\Models\WithdrawalsCondition;
 use App\Models\VoxQuestionAnswered;
 use App\Models\UserSurveyWarning;
 use App\Models\UserGuidedTour;
@@ -933,12 +932,7 @@ class UsersController extends AdminController {
                 //         $new_address->user_id = $item->id;
                 //         $new_address->dcn_address = $this->request->input('dcn_address');
                 //         $new_address->selected_wallet_address = 1;
-                //         $is_optimism_activated = WithdrawalsCondition::find(1)->is_optimism_activated;
-                //         if($is_optimism_activated) {
-                //             $new_address->is_deprecated = 0;
-                //         } else {
-                //             $new_address->is_deprecated = 1;
-                //         }
+                //         $new_address->is_deprecated = 0;
                 //         $new_address->save();
                 //     }
                 // }

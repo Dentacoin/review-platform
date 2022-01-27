@@ -144,22 +144,25 @@
                         {!! nl2br($review->reply) !!}
                     </div>
 
-                    <div class="review-footer">
-                        <div class="col">
-                            <a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-                                <img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}" width="24" height="30">
-                                <span>
-                                    {{ intval($review->upvotes_reply) }}
-                                </span>
-                            </a>
-                            <a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-                                <img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}" width="24" height="30">
-                                <span>
-                                    {{ intval($review->downvotes_reply) }}
-                                </span>
-                            </a>
+                    @if(!empty($user) && $user->id==$current_dentist->id)
+                    @else
+                        <div class="review-footer">
+                            <div class="col">
+                                <a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
+                                    <img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}" width="24" height="30">
+                                    <span>
+                                        {{ intval($review->upvotes_reply) }}
+                                    </span>
+                                </a>
+                                <a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes) ) ? 'voted' : '' !!}" href="javascript:;">
+                                    <img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}" width="24" height="30">
+                                    <span>
+                                        {{ intval($review->downvotes_reply) }}
+                                    </span>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         @endif
