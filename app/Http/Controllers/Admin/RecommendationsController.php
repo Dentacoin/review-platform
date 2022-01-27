@@ -20,7 +20,7 @@ class RecommendationsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $recommendations = Recommendation::orderBy('id', 'DESC');
+        $recommendations = Recommendation::with('user')->orderBy('id', 'DESC');
 
         if(!empty($this->request->input('search-user-id'))) {
             $id = $this->request->input('search-user-id');

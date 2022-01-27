@@ -67,7 +67,7 @@
 		                                    {!! $statuses[$poll->status] !!}
 		                                </td>	
 		                                <td>
-		                                    {!! App\Models\VoxCategory::find($poll->category)->name !!}
+		                                    {!! $poll->pollCategory->name !!}
 		                                </td>
                                         <td>
                                             <a href="{{ url('cms/vox/polls-explorer/'.$poll->id) }}" target="_blank">

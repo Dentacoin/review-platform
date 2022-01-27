@@ -49,7 +49,7 @@
                                             {{ $lead->website }}
                                         </td>
                                         <td>
-                                            {!! \App\Models\Country::find($lead->country_id)->name !!}
+                                            {!! $lead->country_id ? $lead->country->name : '-' !!}
                                         </td>
                                         <td>
                                             {{ !empty($lead->answers) ? config('trp.lead_magnet')[1][json_decode($lead->answers, true)[1]] : '' }}

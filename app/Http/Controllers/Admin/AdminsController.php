@@ -229,19 +229,19 @@ class AdminsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $actions = UserHistory::whereNotNull('admin_id');
+        $actions = UserHistory::with(['admin', 'user'])->whereNotNull('admin_id');
         if(!empty(request('search-admin-id'))) {
             $actions = $actions->where('admin_id', request('search-admin-id'));
         }
         $actions = $actions->get();
 
-        $admin_actions = AdminAction::whereNotNull('admin_id');
+        $admin_actions = AdminAction::with(['admin', 'user'])->whereNotNull('admin_id');
         if(!empty(request('search-admin-id'))) {
             $admin_actions = $admin_actions->where('admin_id', request('search-admin-id'));
         }
         $admin_actions = $admin_actions->get();
 
-        $transaction_actions = DcnTransactionHistory::whereNotNull('admin_id');
+        $transaction_actions = DcnTransactionHistory::with(['admin'])->whereNotNull('admin_id');
         if(!empty(request('search-admin-id'))) {
             $transaction_actions = $transaction_actions->where('admin_id', request('search-admin-id'));
         }

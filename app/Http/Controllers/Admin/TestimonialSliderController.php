@@ -26,7 +26,7 @@ class TestimonialSliderController extends AdminController {
             return redirect('cms/home');            
         }
 
-    	$testimonials = DentistTestimonial::orderBy('id', 'desc')->get();
+    	$testimonials = DentistTestimonial::with('translations')->orderBy('id', 'desc')->get();
 
     	return $this->showView('testimonial-slider', [
 			'testimonials' => $testimonials,

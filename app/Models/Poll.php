@@ -43,6 +43,10 @@ class Poll extends Model {
     public function answers_count() {
         return $this->hasMany('App\Models\PollAnswer', 'poll_id', 'id')->count();
     }
+
+    public function pollCategory() {
+        return $this->hasOne('App\Models\VoxCategory', 'id', 'category');
+    }
     
     public function respondentsCount() {
         return PollAnswer::where('poll_id', $this->id)->count();   

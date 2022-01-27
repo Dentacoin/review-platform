@@ -272,7 +272,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function bansWithDeleted() {
-        return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->orderBy('id', 'DESC')->withTrashed();
+        return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->with(['vox', 'vox.translations'])->orderBy('id', 'DESC')->withTrashed();
     }
     public function vox_bans() {
         return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->where('domain', 'vox')->orderBy('id', 'DESC');
@@ -288,6 +288,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     public function invites() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('created_at', 'DESC');
+    }
+    public function deletedReasonAction() {
+        return $this->hasMany('App\Models\UserAction', 'user_id', 'id')->whereIn('action', ['deleted'])->orderBy('id', 'desc');
+    }
+    public function suspiciousReasonAction() {
+        return $this->hasMany('App\Models\UserAction', 'user_id', 'id')->whereIn('action', ['suspicious_admin'])->orderBy('id', 'desc');
     }
     public function invites_team_unverified() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')
@@ -385,6 +391,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     public function vox_surveys_and_polls() {
         return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')
+        ->with(['vox', 'vox.translations'])
         ->where('platform', 'vox')
         ->whereIn('type', ['daily_poll', 'survey'])
         ->orderBy('id', 'DESC');

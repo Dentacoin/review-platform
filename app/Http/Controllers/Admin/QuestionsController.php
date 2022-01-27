@@ -19,7 +19,7 @@ class QuestionsController extends AdminController {
         }
 
     	return $this->showView('questions', array(
-            'questions' => Question::orderBy('order', 'ASC')->get()
+            'questions' => Question::with('translations')->orderBy('order', 'ASC')->get()
         ));
     }
 

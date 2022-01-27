@@ -27,6 +27,10 @@ class LeadMagnet extends Model {
     protected $casts = [
         'answers' => 'array',
     ];
+    
+    public function country() {
+        return $this->hasOne('App\Models\Country', 'id', 'country_id')->with('translations');
+    }
 }
 
 ?>

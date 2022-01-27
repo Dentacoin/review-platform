@@ -744,7 +744,10 @@
                                                     </div>
 
                                                     @php
-                                                        $otherUsersWallets = App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get();
+                                                        $otherUsersWallets = App\Models\WalletAddress::with('user')
+                                                        ->where('user_id', '!=', $item->id)
+                                                        ->where('dcn_address', 'LIKE', $wa->dcn_address)
+                                                        ->get();
                                                     @endphp
 
                                                     @if($otherUsersWallets->isNotEmpty())

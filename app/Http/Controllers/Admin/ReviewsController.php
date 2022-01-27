@@ -25,7 +25,7 @@ class ReviewsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $reviews = Review::orderBy('id', 'DESC');
+        $reviews = Review::with(['user', 'dentist', 'clinic'])->orderBy('id', 'DESC');
 
         if(!empty($this->request->input('id'))) {
             $reviews = $reviews->where('id', $this->request->input('id'));

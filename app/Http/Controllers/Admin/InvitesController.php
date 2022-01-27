@@ -20,7 +20,7 @@ class InvitesController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $items = UserInvite::orderBy('id', 'desc');
+        $items = UserInvite::with(['user', 'invited'])->orderBy('id', 'desc');
 
         if(!empty(request('id'))) {
             $items = $items->where('id', request('id'));

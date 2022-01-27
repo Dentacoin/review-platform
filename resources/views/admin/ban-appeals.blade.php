@@ -139,15 +139,12 @@
 				                    		<td>
 				                    			{{ !empty($item->user) ? $item->user->patient_status == 'deleted' && $item->id < 23 ? 'Deleted' : $types[$item->type] : '-' }}
 
-                                                @php($deleted_reason_action = App\Models\UserAction::where('user_id', $item->user_id)->whereIn('action', ['deleted'])->orderBy('id', 'desc')->first())
-                                                @php($suspicious_reason_action = App\Models\UserAction::where('user_id', $item->user_id)->whereIn('action', ['suspicious_admin'])->orderBy('id', 'desc')->first())
-
-                                                @if($item->type == 'deleted' && !empty($deleted_reason_action))
+                                                @if($item->type == 'deleted' && !empty($item->user->deletedReasonAction->first()))
                                                     <br/>
-                                                    <p style="color: red;">{{ $deleted_reason_action->reason }}</p>
+                                                    <p style="color: red;">{{ $item->user->deletedReasonAction->first()->reason }}</p>
                                                 @elseif($item->type == 'suspicious_admin' && !empty($suspicious_reason_action))
                                                     <br/>
-                                                    <p style="color: red;">{{ $suspicious_reason_action->reason }}</p>
+                                                    <p style="color: red;">{{ $item->user->suspiciousReasonAction->first()->reason }}</p>
                                                 @endif
 				                    		</td>
 				                    		<td>

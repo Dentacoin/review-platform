@@ -38,6 +38,10 @@ class IncompleteRegistration extends Model {
         'updated_at',
         'deleted_at'
     ];
+    
+    public function country() {
+        return $this->hasOne('App\Models\Country', 'id', 'country_id')->with('translations');
+    }
 }
 
 ?>

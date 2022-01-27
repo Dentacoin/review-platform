@@ -50,9 +50,9 @@
                     @include('admin.parts.table', [
                         'table_id' => 'respondents',
                         'table_fields' => [
-                            'created_at'                => array('format' => 'datetime', 'label' => 'Date Taken','order' => true, 'orderKey' => 'taken'),
-                            'user.name'              => array('template' => 'admin.parts.table-respondents-user-name', 'label' => 'Name','order' => true, 'orderKey' => 'name'),
-                            'country_id'              => array('format' => 'country', 'label' => 'Country','order' => true, 'orderKey' => 'name'),
+                            'created_at'   => array('format' => 'datetime', 'label' => 'Date Taken','order' => true, 'orderKey' => 'taken'),
+                            'user.name'    => array('template' => 'admin.parts.table-respondents-user-name', 'label' => 'Name','order' => true, 'orderKey' => 'name'),
+                            'country_id'   => array('template' => 'admin.parts.table-item-user-country', 'label' => 'Country','order' => true, 'orderKey' => 'name'),
                         ],
                         'table_data' => $respondents,
                         'table_pagination' => false,

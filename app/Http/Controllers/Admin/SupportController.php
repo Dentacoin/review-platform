@@ -35,7 +35,9 @@ class SupportController extends AdminController {
             return redirect('cms/home');            
         }
         
-        $categories = SupportCategory::orderBy('order_number', 'asc')->get();
+        $categories = SupportCategory::with(['translations', 'questions', 'questions.translations'])
+        ->orderBy('order_number', 'asc')
+        ->get();
 
         return $this->showView('support-questions', array(
             'categories' => $categories,
@@ -202,7 +204,7 @@ class SupportController extends AdminController {
             return redirect('cms/home');            
         }
 
-    	$categories = SupportCategory::orderBy('order_number', 'asc')->get();
+    	$categories = SupportCategory::with('translations')->orderBy('order_number', 'asc')->get();
 
         return $this->showView('support-categories', array(
             'categories' => $categories,
@@ -292,7 +294,7 @@ class SupportController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $items = SupportContact::orderBy('id', 'desc');        
+        $items = SupportContact::with(['user', 'mainContactReply', 'userEmail'])->orderBy('id', 'desc');        
 
         if(!empty(request('search-user-id'))) {
             $items = $items->where('user_id', request('search-user-id'));

@@ -33,7 +33,7 @@ class PollsController extends AdminController {
             'closed' => 'Closed',
         ];
 
-        $v_categories = VoxCategory::get();
+        $v_categories = VoxCategory::with('translations')->get();
 
     	foreach ($v_categories as $key => $value) {
     		$this->poll_categories[$value['id']] = $value['name'];
@@ -49,9 +49,9 @@ class PollsController extends AdminController {
 
         if (!empty($this->request->input('date' ))) {
             $order = $this->request->input( 'date' );
-            $polls = Poll::orderBy('launched_at', $order);
+            $polls = Poll::with(['translations', 'pollCategory', 'pollCategory.translations'])->orderBy('launched_at', $order);
         } else {
-            $polls = Poll::orderBy('launched_at', 'desc');
+            $polls = Poll::with(['translations', 'pollCategory', 'pollCategory.translations'])->orderBy('launched_at', 'desc');
         }
 
         if(!empty($this->request->input('search-polls-from'))) {
@@ -396,7 +396,7 @@ class PollsController extends AdminController {
         if(!empty($poll_id)) {
 
             $poll = Poll::find($poll_id);
-            $respondents = PollAnswer::where('poll_id', $poll_id )->get();
+            $respondents = PollAnswer::with(['user', 'user.country', 'user.country.translations'])->where('poll_id', $poll_id )->get();
 
             $time = $poll->launched_at->timestamp;
             $newformat = date('d-m-Y',$time);
@@ -405,12 +405,12 @@ class PollsController extends AdminController {
                 'poll_id' => $poll_id,
                 'respondents' => $respondents,
                 'poll' => $poll,
-                'polls' => Poll::orderBy('launched_at', 'desc')->get(),
+                'polls' => Poll::with(['translations'])->orderBy('launched_at', 'desc')->get(),
                 'poll_date' => $newformat,
             ];
         } else {
             $viewParams = [
-                'polls' => Poll::orderBy('launched_at', 'desc')->get(),
+                'polls' => Poll::with(['translations'])->orderBy('launched_at', 'desc')->get(),
             ];
         }
 
@@ -473,7 +473,7 @@ class PollsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $descriptions = PollsMonthlyDescription::orderBy('year', 'desc')->orderBy('month', 'desc');
+        $descriptions = PollsMonthlyDescription::with('translations')->orderBy('year', 'desc')->orderBy('month', 'desc');
 
         if(!empty($this->request->input('month'))) {
             $descriptions = $descriptions->where('month', $this->request->input('month'));

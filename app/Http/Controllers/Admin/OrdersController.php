@@ -21,7 +21,7 @@ class OrdersController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $orders = Order::orderBy('id', 'desc');
+        $orders = Order::with(['report', 'report.translations'])->orderBy('id', 'desc');
 
         $total_count = $orders->count();
         $page = max(1,intval(request('page')));

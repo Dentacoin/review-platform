@@ -64,7 +64,7 @@ class BlacklistController extends AdminController {
             }
         }
 
-        $items = Blacklist::get();
+        $items = Blacklist::with('blacklistBlock')->get();
 
         return $this->showView('blacklist', array(
             'items' => $items,

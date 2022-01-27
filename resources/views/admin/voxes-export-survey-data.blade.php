@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-6">
                             <select class="form-control" name="country_id[]" multiple style="min-height: 300px;">
-                                @foreach(\App\Models\Country::get() as $country)
+                                @foreach(\App\Models\Country::with('translations')->get() as $country)
                                     <option value="{{ $country->id }}" >{{ $country->name }}</option>
                                 @endforeach
                             </select>

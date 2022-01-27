@@ -133,12 +133,12 @@ class VoxesController extends AdminController {
             $table_fields['update'] = array('template' => 'admin.parts.table-voxes-edit', 'label' => 'View');
         }
 
-        $voxes_with_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])
+        $voxes_with_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions', 'processingForTranslations'])
         ->whereNotNull('launched_at')
         ->orderBy('launched_at', 'desc')
         ->get();
 
-        $voxes_without_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])
+        $voxes_without_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions', 'processingForTranslations'])
         ->whereNull('launched_at')
         ->orderBy('id', 'desc')
         ->whereNotIn('id', [48,80])
@@ -1907,7 +1907,7 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('vox-categories', array(
-            'categories' => VoxCategory::orderBy('id', 'ASC')->get()
+            'categories' => VoxCategory::with(['voxes', 'voxes.vox.translations', 'translations'])->orderBy('id', 'ASC')->get()
         ));
     }
 
@@ -2024,7 +2024,7 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('vox-scales', array(
-            'scales' => VoxScale::orderBy('id', 'DESC')->get()
+            'scales' => VoxScale::with('translations')->orderBy('id', 'DESC')->get()
         ));
     }
 
@@ -2256,7 +2256,8 @@ class VoxesController extends AdminController {
             if (!empty($question_id)) {
 
                 if (request()->input( 'country' )) {
-                    $items_count = VoxAnswer::whereNull('is_admin')
+                    $items_count = VoxAnswer::with(['user.country', 'user.country.translations'])
+                    ->whereNull('is_admin')
                     ->where('question_id',$question_id )
                     ->select('vox_answers.*')
                     ->where('is_completed', 1)
@@ -2267,7 +2268,8 @@ class VoxesController extends AdminController {
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->count();
 
-                    $items_count_old = VoxAnswerOld::whereNull('is_admin')
+                    $items_count_old = VoxAnswerOld::with(['user.country', 'user.country.translations'])
+                    ->whereNull('is_admin')
                     ->where('question_id',$question_id )
                     ->select('vox_answer_olds.*')
                     ->where('is_completed', 1)
@@ -2280,7 +2282,8 @@ class VoxesController extends AdminController {
 
                     $items_count = $items_count + $items_count_old;
                 } else {
-                    $items_count = VoxAnswer::whereNull('is_admin')
+                    $items_count = VoxAnswer::with(['user.country', 'user.country.translations'])
+                    ->whereNull('is_admin')
                     ->where('question_id',$question_id )
                     ->where('is_completed', 1)
                     ->where('is_skipped', 0)
@@ -2288,7 +2291,8 @@ class VoxesController extends AdminController {
                     ->has('user')
                     ->count();
 
-                    $items_count_old = VoxAnswerOld::whereNull('is_admin')
+                    $items_count_old = VoxAnswerOld::with(['user.country', 'user.country.translations'])
+                    ->whereNull('is_admin')
                     ->where('question_id',$question_id )
                     ->where('is_completed', 1)
                     ->where('is_skipped', 0)
@@ -2327,7 +2331,8 @@ class VoxesController extends AdminController {
             }
        
             if (!empty($question_id)) {
-                $question_respondents = VoxAnswer::whereNull('is_admin')
+                $question_respondents = VoxAnswer::with(['user.country', 'user.country.translations'])
+                ->whereNull('is_admin')
                 ->where('question_id',$question_id )
                 ->where('is_completed', 1)
                 ->where('is_skipped', 0)
@@ -2336,26 +2341,34 @@ class VoxesController extends AdminController {
                 ->select('vox_answers.*');
 
                 if (request()->input( 'country' )) {
+
                     $order = request()->input( 'country' );
                     $question_respondents = $question_respondents
                     ->join('users', 'vox_answers.user_id', '=', 'users.id')
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->orderBy('countries.name', $order);
+
                 } else if (request()->input( 'name' )) {
+
                     $order = request()->input( 'name' );
                     $question_respondents = $question_respondents
                     ->join('users', 'vox_answers.user_id', '=', 'users.id')
                     ->orderBy('users.name', $order);
+
                 } else if (request()->input( 'taken' )) {
+
                     $order = request()->input( 'taken' );
                     $question_respondents = $question_respondents
                     ->orderBy('created_at', $order);
+
                 } else if (request()->input( 'type' )) {
+
                     $order = request()->input( 'type' );
                     $question_respondents = $question_respondents
                     ->join('users', 'vox_answers.user_id', '=', 'users.id')
                     ->orderBy('users.is_dentist', $order)
                     ->orderBy('users.is_clinic', $order);
+
                 } else {
                     $question_respondents = $question_respondents
                     ->orderBy('created_at', 'desc');
@@ -2363,7 +2376,8 @@ class VoxesController extends AdminController {
 
                 $question_respondents = $question_respondents->get();
 
-                $question_respondents_old = VoxAnswerOld::whereNull('is_admin')
+                $question_respondents_old = VoxAnswerOld::with(['user.country', 'user.country.translations'])
+                ->whereNull('is_admin')
                 ->where('question_id',$question_id )
                 ->where('is_completed', 1)
                 ->where('is_skipped', 0)
@@ -2372,26 +2386,34 @@ class VoxesController extends AdminController {
                 ->select('vox_answer_olds.*');
 
                 if (request()->input( 'country' )) {
+
                     $order = request()->input( 'country' );
                     $question_respondents_old = $question_respondents_old
                     ->join('users', 'vox_answer_olds.user_id', '=', 'users.id')
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->orderBy('countries.name', $order);
+
                 } else if (request()->input( 'name' )) {
+
                     $order = request()->input( 'name' );
                     $question_respondents_old = $question_respondents_old
                     ->join('users', 'vox_answer_olds.user_id', '=', 'users.id')
                     ->orderBy('users.name', $order);
+
                 } else if (request()->input( 'taken' )) {
+
                     $order = request()->input( 'taken' );
                     $question_respondents_old = $question_respondents_old
                     ->orderBy('created_at', $order);
+
                 } else if (request()->input( 'type' )) {
+
                     $order = request()->input( 'type' );
                     $question_respondents_old = $question_respondents_old
                     ->join('users', 'vox_answer_olds.user_id', '=', 'users.id')
                     ->orderBy('users.is_dentist', $order)
                     ->orderBy('users.is_clinic', $order);
+
                 } else {
                     $question_respondents_old = $question_respondents_old
                     ->orderBy('created_at', 'desc');
@@ -2409,13 +2431,14 @@ class VoxesController extends AdminController {
                     $respondents_shown = $items_count;
                 } else {
                     // $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
-                    $question_respondents = $this->paginate($question_respondents, $ppp)->withPath('cms/vox/explorer/'.($vox_id ? $vox_id.($question_id ? '/'.$question_id : '') : ''));
+                    $question_respondents = $this->paginate($question_respondents, $ppp)
+                    ->withPath('cms/vox/explorer/'.($vox_id ? $vox_id.($question_id ? '/'.$question_id : '') : ''));
                 }
 
                 $respondents = '';
 
             } else {
-                $respondents = DcnReward::with('user')
+                $respondents = DcnReward::with(['user', 'user.country'])
                 ->where('reference_id',$vox_id )
                 ->where('platform', 'vox')
                 ->where('type', 'survey')
@@ -2485,7 +2508,7 @@ class VoxesController extends AdminController {
                 'vox_id' => $vox_id,
                 'respondents' => $respondents,
                 'vox' => $vox,
-                'voxes' => Vox::orderBy('launched_at', 'desc')->get(),
+                'voxes' => Vox::with(['translations', 'questions.translations'])->orderBy('launched_at', 'desc')->get(),
                 'count' =>($page - 1)*$ppp ,
                 'start' => $start,
                 'end' => $end,
@@ -2500,7 +2523,7 @@ class VoxesController extends AdminController {
             ];
         } else {
             $viewParams = [
-                'voxes' => Vox::orderBy('launched_at', 'desc')->get(),
+                'voxes' => Vox::with(['translations', 'questions.translations'])->orderBy('launched_at', 'desc')->get(),
             ];
         }
 
@@ -2703,7 +2726,7 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('voxes-export-survey-data', array(
-            'voxes' => Vox::orderBy('launched_at', 'desc')->get()
+            'voxes' => Vox::with('translations')->orderBy('launched_at', 'desc')->get()
         ));
     }
 

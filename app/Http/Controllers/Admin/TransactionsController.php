@@ -32,7 +32,7 @@ class TransactionsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $transactions = DcnTransaction::orderBy('id', 'DESC');
+        $transactions = DcnTransaction::with(['user', 'history', 'userWalletAddress'])->orderBy('id', 'DESC');
 
         if(!empty($this->request->input('search-address'))) {
             $transactions = $transactions->where('address', 'LIKE', '%'.trim($this->request->input('search-address')).'%');

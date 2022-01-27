@@ -38,7 +38,7 @@ class BanAppealsController extends AdminController {
             return redirect('cms/home');            
         }
 
-    	$items = BanAppeal::orderBy('id', 'desc');
+    	$items = BanAppeal::with(['user', 'user.allBanAppeals', 'user.deletedReasonAction', 'user.suspiciousReasonAction'])->orderBy('id', 'desc');
 
         if(!empty(request('search-user-id'))) {
             $items = $items->where('user_id', request('search-user-id'));

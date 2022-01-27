@@ -1,0 +1,1 @@
+{{ $item->country_id ? $item->country->name : '' }}

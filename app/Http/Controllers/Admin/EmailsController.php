@@ -30,7 +30,7 @@ class EmailsController extends AdminController {
             if(!in_array($what, Email::$template_types)) {
                 return redirect('cms/'.$this->current_page.'/'.current(Email::$template_types));
             }
-            $templates = EmailTemplate::whereNull('not_used')->where('type', $what)->orderBy('id', 'ASC')->get();
+            $templates = EmailTemplate::with('translations')->whereNull('not_used')->where('type', $what)->orderBy('id', 'ASC')->get();
         } else {
 
             if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
@@ -46,7 +46,7 @@ class EmailsController extends AdminController {
                 || !empty(request('without-category'))
                 || !empty(request('search-category'))
             ) {
-                $templates = EmailTemplate::whereNull('not_used')->orderBy('id', 'ASC');
+                $templates = EmailTemplate::with('translations')->whereNull('not_used')->orderBy('id', 'ASC');
     
                 if(!empty(request('search-name'))) {
                     $s_name = '%'.trim(request('search-name')).'%';
@@ -90,7 +90,7 @@ class EmailsController extends AdminController {
                 if(!in_array($what, Email::$template_types)) {
                     return redirect('cms/'.$this->current_page.'/'.current(Email::$template_types));
                 }
-                $templates = EmailTemplate::whereNull('not_used')->where('type', $what)->orderBy('id', 'ASC')->get();
+                $templates = EmailTemplate::with('translations')->whereNull('not_used')->where('type', $what)->orderBy('id', 'ASC')->get();
             }
         }
 
@@ -510,7 +510,7 @@ class EmailsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $invalids = InvalidEmail::orderBy('id', 'asc');
+        $invalids = InvalidEmail::with('user')->orderBy('id', 'asc');
 
         if(!empty(request('search-email'))) {
             $invalids = $invalids->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
@@ -627,7 +627,7 @@ class EmailsController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $olds = OldEmail::orderBy('id', 'desc');
+        $olds = OldEmail::with('user')->orderBy('id', 'desc');
 
         if(!empty(request('search-email'))) {
             $olds = $olds->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
