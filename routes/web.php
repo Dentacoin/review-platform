@@ -564,13 +564,6 @@ $voxRoutes = function () {
 				Route::get('remove-banner',							'VoxController@removeBanner');
 
 				Route::any('daily-polls', 							'PollsController@list');
-				Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');
-				Route::any('daily-polls/{date}/stats', 				'PollsController@show_popup_stats_poll');
-				Route::post('poll/{id}', 							'PollsController@dopoll');
-				Route::post('get-poll-content/{id}', 				'PollsController@getPollContent');
-				Route::post('get-poll-stats/{id}', 					'PollsController@getPollStats');
-				Route::get('hide-dailypoll', 						'PollsController@hidePoll');
-				Route::get('polls-calendar-html', 					'PollsController@getCalendarHtml');
 
 				Route::get('dental-industry-reports', 							'PaidReportsController@home');
 				Route::get('dental-industry-reports/{slug}', 					'PaidReportsController@singleReport');
@@ -579,6 +572,14 @@ $voxRoutes = function () {
 
 				Route::get('faq', 									'FaqController@home');
 			});
+
+			Route::any('daily-polls/{date}', 						'PollsController@show_popup_poll');
+			Route::any('daily-polls/{date}/stats', 					'PollsController@show_popup_stats_poll');
+			Route::post('poll/{id}', 								'PollsController@dopoll');
+			Route::post('get-poll-content/{id}', 					'PollsController@getPollContent');
+			Route::post('get-poll-stats/{id}', 						'PollsController@getPollStats');
+			Route::get('hide-dailypoll', 							'PollsController@hidePoll');
+			Route::get('polls-calendar-html', 						'PollsController@getCalendarHtml');
 
 			Route::any('paid-dental-surveys/{id}', 					'VoxController@vox');
 			Route::post('get-next-question', 						'VoxController@getNextQuestion');

@@ -19,7 +19,6 @@
 			{!! trans('vox.page.stats.description') !!}
 		</p>
 
-		{!! csrf_field() !!}
 		<form class="search-stats-form" method="post" action="{{ getLangUrl('dental-survey-stats') }}">
 			{!! csrf_field() !!}
 			<div class="search-survey">
@@ -56,15 +55,7 @@
 			@endif
 
 			@foreach($voxes as $vox)
-				<div 
-					class="vox-stat flex normal-stat" 
-					featured="{{ intval($vox->stats_featured) }}" 
-					published="{{ $vox->created_at->timestamp }}" 
-					updated="{{ $vox->updated_at->timestamp }}" 
-					launched="{{ $vox->launched_at? $vox->launched_at->timestamp : 0 }}" 
-					popular="{{ intval($vox->rewardsCount()) }}" 
-	      			sort-order="{{ $vox->sort_order }}"
-	      			>
+				<div class="vox-stat flex normal-stat">
 					@if($vox->stats_featured)
 						<img class="featured" src="{{ url('new-vox-img/star.svg') }}" alt="Dentavox featured statistic" width="50" height="48">
 					@endif

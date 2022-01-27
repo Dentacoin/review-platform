@@ -3282,7 +3282,8 @@ class VoxService {
 		$year = Request::input('year') ?? date('Y');
         $month = Request::input('month') ?? date('m');
 
-        $all_daily_polls = Poll::where('launched_at', '>=', $year."-".$month."-01 00:00:00")
+        $all_daily_polls = Poll::with(['translations', 'pollCategory', 'pollCategory.translations'])
+        ->where('launched_at', '>=', $year."-".$month."-01 00:00:00")
 		->where('launched_at', '<', $year."-".str_pad($month, 2)."-31 23:59:59");
 
 		if( empty($admin)) {
@@ -3318,11 +3319,10 @@ class VoxService {
 				}
 
 				$to_take_poll = $poll->status=='open' && !$taken_daily_poll;
-                $vox_category = VoxCategory::find($poll->category);
 
 				$daily_polls[] = [
                     'title' => $poll->question,
-					'category_image' => $vox_category->getImageUrl(),
+					'category_image' => $poll->pollCategory->getImageUrl(),
 					'id' => $poll->id,
 					'closed' => $poll->status == 'closed' ? true : false,
 					'closed_image' => url('new-vox-img/stat-poll.png'),
@@ -3335,7 +3335,7 @@ class VoxService {
 					'day' => date('d', $poll->launched_at->timestamp),
 					'day_word' => date('D', $poll->launched_at->timestamp),
 					'custom_date' => date('F j, Y', $poll->launched_at->timestamp),
-					'color' => $vox_category->color,
+					'color' => $poll->pollCategory->color,
 				];
 			}
 		} else {
