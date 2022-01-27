@@ -2355,56 +2355,52 @@ class VoxService {
                         $ppp = 10;
                         $toBeChecked = false;
 
-                        if(!empty(request('scale_answers_time'))) {
-                            $reallist = $list->filter(function ($value, $key) {
-                                return !$value->is_skipped;
-                            });
-
-                            if($type == 'scale' || $type == 'rank') {
-                                $lastScalesCount = count($a);
-                                if($reallist->count()%$ppp + $lastScalesCount >=10) { //scales answers can be more that 10, so we need to check for too fast
-                                    $toBeChecked = true;
-                                }
-                            }
-
-                            $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
-                                return !$value->is_skipped;
-                            });
-                        } else {
-                            if($type == 'scale' || $type == 'rank') {
-                                $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
-                                    return !$value->is_skipped && empty($value->scale);
+                        if($for_app) {
+                            if(!empty(request('scale_answers_time'))) {
+                                $reallist = $list->filter(function ($value, $key) {
+                                    return !$value->is_skipped;
                                 });
-                            } else {
+    
+                                if($type == 'scale' || $type == 'rank') {
+                                    $lastScalesCount = count($a);
+                                    if($reallist->count()%$ppp + $lastScalesCount >=10) { //scales answers can be more that 10, so we need to check for too fast
+                                        $toBeChecked = true;
+                                    }
+                                }
+    
                                 $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
                                     return !$value->is_skipped;
                                 });
+                            } else {
+                                if($type == 'scale' || $type == 'rank') {
+                                    $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
+                                        return !$value->is_skipped && empty($value->scale);
+                                    });
+                                } else {
+                                    $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
+                                        return !$value->is_skipped;
+                                    });
+                                }
                             }
-                        }
+                        } else {
 
-                        // if($for_app) {
-                        //     $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
-                        //         return !$value->is_skipped && empty($value->scale);
-                        //     });
-                        // } else {
-
-                        //     if(!empty(request('scale_answers_time'))) {
-                        //         $reallist = $list->filter(function ($value, $key) {
-                        //             return !$value->is_skipped;
-                        //         });
+                            if(!empty(request('scale_answers_time'))) {
+                                $reallist = $list->filter(function ($value, $key) {
+                                    return !$value->is_skipped;
+                                });
     
-                        //         if($type == 'scale' || $type == 'rank') {
-                        //             $lastScalesCount = count($a);
-                        //             if($reallist->count()%$ppp + $lastScalesCount >=10) { //scales answers can be more that 10, so we need to check for too fast
-                        //                 $toBeChecked = true;
-                        //             }
-                        //         }    
-                        //     }
+                                if($type == 'scale' || $type == 'rank') {
+                                    $lastScalesCount = count($a);
+                                    if($reallist->count()%$ppp + $lastScalesCount >=10) { //scales answers can be more that 10, so we need to check for too fast
+                                        $toBeChecked = true;
+                                    }
+                                }    
+                            }
                             
-                        //     $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
-                        //         return !$value->is_skipped;
-                        //     });
-                        // }
+                            $reallist = $listCurrnetAnswers->filter(function ($value, $key) {
+                                return !$value->is_skipped;
+                            });
+                        }
 
                         if( $toBeChecked || ($reallist->count() && $reallist->count()%$ppp==0 )) {
 
