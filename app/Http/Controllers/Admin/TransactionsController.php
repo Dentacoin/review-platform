@@ -127,9 +127,11 @@ class TransactionsController extends AdminController {
             }
         }
 
-        $are_transactions_stopped = StopTransaction::find(1)->stopped;
-        $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
-        $are_transactions_hash_check_stopped = StopTransaction::find(1)->stop_check_for_hash;
+        $transactionsStopped = StopTransaction::find(1);
+
+        $are_transactions_stopped = $transactionsStopped->stopped;
+        $is_warning_message_shown = $transactionsStopped->show_warning_text;
+        $are_transactions_hash_check_stopped = $transactionsStopped->stop_check_for_hash;
 
         $is_retry_stopped = GasPrice::find(1)->cron_new_trans > Carbon::now();
 
@@ -138,7 +140,7 @@ class TransactionsController extends AdminController {
             'id'                => array('template' => 'admin.parts.table-transactions-id'),
             'created_at'        => array('format' => 'datetime','order' => true, 'orderKey' => 'created','label' => 'Date'),
             'user'              => array('template' => 'admin.parts.table-transactions-user'),
-            'email'             => array('template' => 'admin.parts.table-transactions-email'),
+            // 'email'             => array('template' => 'admin.parts.table-transactions-email'),
         ];
 
         if(request('search-status') == 'first') {
@@ -158,7 +160,7 @@ class TransactionsController extends AdminController {
             $table_fields['nonce'] = array();
             $table_fields['message'] = array();
             // $table_fields['retries'] = array();
-            $table_fields['sended_at'] = array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sended at');
+            // $table_fields['sended_at'] = array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sended at');
         }
         $table_fields['bump'] = array('template' => 'admin.parts.table-transactions-bump', 'label' => "Actions");
 
