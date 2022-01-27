@@ -377,9 +377,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function dcn_cashouts() {
         return $this->hasMany('App\Models\DcnCashout', 'user_id', 'id')->orderBy('id', 'DESC');
     }
-    public function vox_cashouts() {
-        return $this->hasMany('App\Models\DcnCashout', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
-    }
     public function vox_rewards() {
         return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
     }
