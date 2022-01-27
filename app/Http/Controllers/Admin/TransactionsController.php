@@ -132,7 +132,6 @@ class TransactionsController extends AdminController {
         $are_transactions_hash_check_stopped = StopTransaction::find(1)->stop_check_for_hash;
 
         $is_retry_stopped = GasPrice::find(1)->cron_new_trans > Carbon::now();
-        $is_retry_paid_by_the_user_stopped = GasPrice::find(1)->cron_paid_by_user_trans > Carbon::now();
 
         $table_fields = [
             'checkboxes' => array('format' => 'checkboxes'),
@@ -168,7 +167,6 @@ class TransactionsController extends AdminController {
             'is_warning_message_shown' => $is_warning_message_shown,
             'are_transactions_hash_check_stopped' => $are_transactions_hash_check_stopped,
             'is_retry_stopped' => $is_retry_stopped,
-            'is_retry_paid_by_the_user_stopped' => $is_retry_paid_by_the_user_stopped,
             'manually_check_transactions' => DcnTransaction::where('manual_check_admin', 1)->first() ? true : false,
             'transactions' => $transactions,
             'total_count' => $total_count,
@@ -683,36 +681,6 @@ class TransactionsController extends AdminController {
 
         $allow = GasPrice::find(1);
         $allow->cron_new_trans = Carbon::now()->addDays(-1);
-        $allow->save();
-
-        $this->request->session()->flash('success-message', 'Enabled!' );
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
-    }
-
-    public function disablePaidByUserRetry() {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $allow = GasPrice::find(1);
-        $allow->cron_paid_by_user_trans = Carbon::now()->addYears(5);
-        $allow->save();
-
-        $this->request->session()->flash('success-message', 'Disabled!' );
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
-    }
-
-    public function enablePaidByUserRetry() {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $allow = GasPrice::find(1);
-        $allow->cron_paid_by_user_trans = Carbon::now()->addDays(-1);
         $allow->save();
 
         $this->request->session()->flash('success-message', 'Enabled!' );

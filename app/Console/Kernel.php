@@ -524,117 +524,6 @@ NEW & NOT SENT TRANSACTIONS
 
         $schedule->call(function () {
 
-            $cron_running = CronjobFourRun::first();
-
-            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
-
-                if(!empty($cron_running)) {
-                    CronjobFourRun::destroy($cron_running->id);
-                }
-
-                $cronjob_stars = new CronjobFourRun;
-                $cronjob_stars->started_at = Carbon::now();
-                $cronjob_stars->save();
-
-                echo '
-PAID BY USER TRANSACTIONS
-
-=========================
-
-';
-                $number = 16; //always has to be %2
-                $half_number = $number/2;
-
-                $count_new_trans = DcnTransaction::where('status', 'new')
-                ->whereNotNull('is_paid_by_the_user')
-                ->whereNull('allowance_hash')
-                ->where('processing', 0)
-                ->count();
-
-                $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')
-                ->whereNotNull('is_paid_by_the_user')
-                ->whereNull('allowance_hash')
-                ->where('processing', 0)
-                ->count();
-
-                if($count_new_trans || $count_not_sent_trans) {
-                    
-                    if(empty($count_not_sent_trans )) {
-                        $count_new_trans = $number;
-                    } else if(empty($count_new_trans)) {
-                        $count_not_sent_trans = $number;
-                    } else {
-                        if($count_not_sent_trans >= $half_number && $count_new_trans >= $half_number) {
-                            $count_not_sent_trans = $half_number;
-                            $count_new_trans = $half_number;
-
-                        } else if($count_not_sent_trans < $half_number && $count_new_trans >= $half_number) {
-                            $count_new_trans = $number - $count_not_sent_trans;
-
-                        } else if($count_not_sent_trans >= $half_number && $count_new_trans < $half_number) {
-                            $count_not_sent_trans = $number - $count_new_trans;
-                        }
-                    }
-
-                    $new_transactions = DcnTransaction::where('status', 'new')
-                    ->whereNotNull('is_paid_by_the_user')
-                    ->whereNull('allowance_hash')
-                    ->where('processing', 0)
-                    ->orderBy('id', 'asc')
-                    ->take($count_new_trans)
-                    ->get(); //
-
-                    $not_sent_transactions = DcnTransaction::where('status', 'not_sent')
-                    ->whereNotNull('is_paid_by_the_user')
-                    ->whereNull('allowance_hash')
-                    ->where('processing', 0)
-                    ->orderBy('id', 'asc')
-                    ->take($count_not_sent_trans)
-                    ->get();
-
-                    $transactions = $new_transactions->concat($not_sent_transactions);
-
-                    if($transactions->isNotEmpty()) {
-                        $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
-
-                        if ($cron_new_trans_time->cron_paid_by_user_trans < Carbon::now()->subMinutes(10)) {
-                            if (!GeneralHelper::isApprovalGasExpensive()) {
-
-                                foreach ($transactions as $trans) {
-                                    $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
-                                    echo $log . PHP_EOL;
-                                }
-
-                                Dcn::retry($transactions, true);
-
-                                foreach ($transactions as $trans) {
-                                    echo 'NEW STATUS: ' . $trans->status . ' / ID ' . $trans->id . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
-                                }
-
-                                $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now();
-                                $cron_new_trans_time->save();
-                            } else {
-                                $cron_new_trans_time->cron_paid_by_user_trans = Carbon::now()->subMinutes(10);
-                                $cron_new_trans_time->save();
-
-                                echo 'New Transactions High Gas Price';
-                            }
-                        }
-                    }
-                }
-
-                echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-                CronjobFourRun::destroy($cronjob_stars->id);
-            } else {
-                echo 'New transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
-            }
-
-        })->cron("* * * * *");
-
-
-        $schedule->call(function () {
-
             $cron_running = CronjobThirdRun::first();
 
             if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
@@ -660,14 +549,14 @@ UNCONFIRMED TRANSACTIONS
                 ->where('processing', 0)
                 ->orderBy('id', 'asc')
                 ->take(50)
-                ->get(); //
+                ->get();
 
                 if($transactions->isEmpty()) {
                     $transactions = DcnTransaction::where('status', 'unconfirmed')
                     ->whereNotNull('tx_hash')
                     ->where('processing', 0)
                     ->orderBy('id', 'asc')
-                    ->get(); //
+                    ->get();
 
                     if($transactions->isNotEmpty()) {
                         foreach ($transactions as $trans) {
@@ -681,7 +570,7 @@ UNCONFIRMED TRANSACTIONS
                         ->where('processing', 0)
                         ->orderBy('id', 'asc')
                         ->take(50)
-                        ->get(); //
+                        ->get();
                     }
                 }
 
@@ -693,8 +582,6 @@ UNCONFIRMED TRANSACTIONS
                         echo $log.PHP_EOL;
 
                         $transactionIsCompleted = false;
-                        $transactionIsPaidByUserCompleted = false;
-                        $transactionIsPaidByUserFailed = false;
                         $found = false;
                         $int++;
 
@@ -710,17 +597,8 @@ UNCONFIRMED TRANSACTIONS
 
                                 $curl = json_decode($curl, true);
                                 if($curl['status']) {
-
-                                    if($trans->is_paid_by_the_user) {
-                                        if($curl['result']['status'] === '1') {
-                                            $transactionIsPaidByUserCompleted = true;
-                                        } else if ($curl['result']['status'] === '0') {
-                                            $transactionIsPaidByUserFailed = true;
-                                        }
-                                    } else {
-                                        if(!empty($curl['result']['status'])) {
-                                            $transactionIsCompleted = true;
-                                        }
+                                    if($curl['result']['status'] === '1') {
+                                        $transactionIsCompleted = true;
                                     }
                                 }
                             }
@@ -740,23 +618,14 @@ UNCONFIRMED TRANSACTIONS
                                 $trans->save();
 
                                 if(isset($resp->success) && isset($resp->status)) {
-
-                                    if($trans->is_paid_by_the_user) {
-                                        if($resp->status == 'success') {
-                                            $transactionIsPaidByUserCompleted = true;
-                                        } else if ($resp->status == 'failed') {
-                                            $transactionIsPaidByUserFailed = true;
-                                        }
-                                    } else {
-                                        if($resp->status == 'success') {
-                                            $transactionIsCompleted = true;
-                                        }
+                                    if($resp->status == 'success') {
+                                        $transactionIsCompleted = true;
                                     }
                                 }
                             }
                         }
 
-                        if($transactionIsCompleted || $transactionIsPaidByUserCompleted) {
+                        if($transactionIsCompleted) {
                             $trans->status = 'completed';
                             $trans->cronjob_unconfirmed = 0;
                             $trans->save();
@@ -780,22 +649,6 @@ UNCONFIRMED TRANSACTIONS
                             }
                         }
 
-                        if($transactionIsPaidByUserFailed) {
-                            $trans->status = 'failed';
-                            $trans->cronjob_unconfirmed = 0;
-                            $trans->save();
-
-                            $dcn_history = new DcnTransactionHistory;
-                            $dcn_history->transaction_id = $trans->id;
-                            $dcn_history->status = 'failed';
-                            $dcn_history->history_message = 'Failed in Etherscan';
-                            $dcn_history->save();
-
-                            if($int % 5 == 0) {
-                                sleep(1);
-                            }
-                        }
-
                         //after 14 days
                         if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*336 && !GeneralHelper::isGasExpensive()) {  //14 days = 24 * 14 = 336
                             $trans->status = 'not_sent';
@@ -811,81 +664,6 @@ UNCONFIRMED TRANSACTIONS
                 CronjobThirdRun::destroy($cronjob_stars->id);
             } else {
                 echo 'Unconfirmed transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
-            }
-
-        })->cron("*/10 * * * *");
-
-
-        $schedule->call(function () {
-
-            echo '
-PAID BY USER NOTIFICATION FOR TRANSACTIONS
-
-========================
-
-';
-
-            $transactions = DcnTransaction::where('status', 'unconfirmed')
-            ->whereNotNull('allowance_hash')
-            ->whereNull('tx_hash')
-            ->whereNull('notified_at')
-            ->where('processing', 0)
-            ->orderBy('id', 'asc')
-            ->take(50)
-            ->get(); 
-
-            if($transactions->isNotEmpty()) {
-
-                $int = 0;
-                foreach ($transactions as $trans) {
-                    $int++;
-                    $transactionIsCompleted = false;
-
-                    if($trans->layer_type == 'l1') {
-                        try {
-                            $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->allowance_hash.'&apikey='.env('ETHERSCAN_API'));
-                        } catch (\Exception $e) {
-                            $curl = false;
-                        }
-                        if(!empty($curl)) {
-                            $curl = json_decode($curl, true);
-                            if($curl['status']) {
-                                if(!empty($curl['result']['status'])) {
-                                    $transactionIsCompleted = true;
-                                }
-                            }
-                        }
-                    } else {
-                        $ch = curl_init();
-                        curl_setopt($ch, CURLOPT_URL,"https://payment-server-info.dentacoin.com/check-l2-transaction");
-                        curl_setopt($ch, CURLOPT_POST, 1);
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, "hash=".$trans->allowance_hash);
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                        // receive server response ...
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                        $resp = json_decode(curl_exec($ch));
-                        curl_close($ch);
-
-                        if(!empty($resp)) {
-                            if(isset($resp->success) && isset($resp->status) && $resp->status == 'success') {
-                                $transactionIsCompleted = true;
-                            }
-                        }
-                    }
-
-                    if($transactionIsCompleted) {
-                        $trans->notified_at = Carbon::now();
-                        $trans->save();
-
-                        if( $trans->user && !empty($trans->user->email) ) {
-                            $trans->user->sendGridTemplate( 124, null, 'dentacoin' );
-                        }
-                        echo 'COMPLETED!'.PHP_EOL;
-                        if($int % 5 == 0) {
-                            sleep(1);
-                        }
-                    }
-                }
             }
 
         })->cron("*/10 * * * *");
@@ -2376,23 +2154,6 @@ PAID BY USER NOTIFICATION FOR TRANSACTIONS
             if (!empty($resp) && isset($resp->success)) {
                 $gas = GasPrice::find(1);
                 $gas->max_gas_price = intval(number_format($resp->success / 1000000000));
-                $gas->save();
-            }
-
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-max-gas-price-for-approval',
-                CURLOPT_SSL_VERIFYPEER => 0,
-                CURLOPT_POST => 1,
-            ));
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-            $resp = json_decode(curl_exec($curl));
-            curl_close($curl);
-
-            if (!empty($resp) && isset($resp->success)) {
-                $gas = GasPrice::find(1);
-                $gas->max_gas_price_approval = intval(number_format($resp->success / 1000000000));
                 $gas->save();
             }
 

@@ -17,8 +17,6 @@
 
             @if(in_array($admin->role, ['super_admin', 'support']))
                 <a href="{{ $is_retry_stopped ? url('cms/transactions/enable-retry') : url('cms/transactions/disable-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_stopped ? 'Enable' : 'Disable' }} Retry</a>
-
-                <a href="{{ $is_retry_paid_by_the_user_stopped ? url('cms/transactions/enable-paid-by-user-retry') : url('cms/transactions/disable-paid-by-user-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_paid_by_the_user_stopped ? 'Enable' : 'Disable' }} Paid By User Retry</a>
             @endif
         </div>
     </div>
@@ -37,11 +35,6 @@
     @if($is_retry_stopped)
         <div>
             <label class="alert alert-warning">Sending normal transactions to the PS is disabled.</label>
-        </div>
-    @endif
-    @if($is_retry_paid_by_the_user_stopped)
-        <div>
-            <label class="alert alert-warning">Sending paid by user transactions to the PS is disabled.</label>
         </div>
     @endif
     @if($manually_check_transactions && $admin->role=='super_admin')
@@ -222,7 +215,6 @@
     
     Current gas price: <b>{{ App\Models\GasPrice::find(1)->gas_price }}</b> <br/>
     Max gas price: <b>{{ App\Models\GasPrice::find(1)->max_gas_price }}</b> <br/>
-    Max gas price for paid by user transactions: <b>{{ App\Models\GasPrice::find(1)->max_gas_price_approval }}</b> <br/><br/>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
