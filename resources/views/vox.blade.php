@@ -107,6 +107,18 @@
 		<meta name="msapplication-TileColor" content="#ffffff">
 		<meta name="msapplication-TileImage" content="{{ url('vox-fav/ms-icon-144x144.png') }}">
 		<meta name="theme-color" content="#ffffff">
+		
+		@if(!empty($admin))
+			<style type="text/css">
+				.hidden {
+					display: none !important;
+				}
+				
+				div.phpdebugbar-widgets-sqlqueries li.phpdebugbar-widgets-list-item.phpdebugbar-widgets-sql-duplicate {
+					background-color: yellow !important;
+				}
+			</style>
+		@endif
 
     </head>
 

@@ -59,12 +59,12 @@ class IndexController extends FrontController {
 		$vip_access_text = '';
 
 		if(!empty($this->user)) {
-			$untaken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
-			$untaken_voxes = $untaken_voxes->whereNotIn('id', $taken)
+			$not_taken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
+			$not_taken_voxes = $not_taken_voxes->whereNotIn('id', $taken)
 			->where('type', 'normal')
 			->get();
 
-			if(!$this->user->notRestrictedVoxesList($untaken_voxes)->count()) {
+			if(!$this->user->notRestrictedVoxesList($not_taken_voxes)->count()) {
 				$all_taken = true;
 				$latest_blog_posts = DB::connection('vox_wordpress_db')
 				->table('posts')

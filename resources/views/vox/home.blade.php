@@ -6,9 +6,12 @@
 		<div class="level-wrapper">
 			<div class="container">
 				<div class="flex flex-center">
+					@php
+						$userVoxLevelName = $user->getVoxLevelName();	
+					@endphp
 					<div class="col">
-						<img src="{{ url('new-vox-img/vox-'.$user->getVoxLevelName().'-icon.svg') }}" width="76" height="76">
-						<p class="bold">{{ trans('vox.page.home.levels.'.$user->getVoxLevelName()) }}</p>
+						<img src="{{ url('new-vox-img/vox-'.$userVoxLevelName.'-icon.svg') }}" width="76" height="76">
+						<p class="bold">{{ trans('vox.page.home.levels.'.$userVoxLevelName) }}</p>
 					</div>
 					<div class="col">
 						<p class="big bold">{{ $user->countAllSurveysRewards() }}</p>

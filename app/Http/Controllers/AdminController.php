@@ -185,19 +185,21 @@ class AdminController extends BaseController {
         if(!empty($this->user) && $this->user->messages->isNotEmpty()) {
             $params['messages'] = $this->user->messages;
         }
-        
+
+        $video_reviews = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
+        $support_contacts = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
+
         //Counts
         $params['counters'] = [];
-        $params['counters']['trp'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
-        $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
+        $params['counters']['trp'] = $video_reviews;
+        $params['counters']['youtube'] = $video_reviews;
         $params['counters']['ban_appeals'] = BanAppeal::where('status', 'new')->whereNull('pending_fields')->count();
         $params['counters']['transactions'] = DcnTransaction::where('status', 'first')->whereHas('user', function($query) {
             $query->where('status', '!=', 'pending')->whereNotIn('patient_status', ['suspicious_admin', 'suspicious_badip']);
         })->count();
-        $params['counters']['support'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
-        $params['counters']['contact'] = SupportContact::whereNull('admin_answer')->whereNull('admin_answer_id')->count();
+        $params['counters']['support'] = $support_contacts;
+        $params['counters']['contact'] = $support_contacts;
         $params['counters']['orders'] = Order::whereNull('is_send')->count();
-        $params['dcn_warning_transaction'] = DcnTransaction::where('status', 'dont_retry')->count();
 
         $params['cache_version'] = '20220126';
         //dd($params['counters']);

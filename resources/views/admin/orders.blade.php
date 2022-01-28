@@ -54,7 +54,7 @@
                                             @if($order->company_name)
 		                                        Company Name: {{ $order->company_name }} <br/>
 		                                        Reg №: {{ $order->company_number }} <br/>
-		                                        Country: {{ App\Models\Country::find($order->country_id)->name }} <br/>
+		                                        Country: {{ $order->country_id ? $order->country->name : '' }} <br/>
 		                                        Address: {{ $order->address }} <br/>
 		                                        VAT: {{ $order->vat }} <br/>
                                             @else

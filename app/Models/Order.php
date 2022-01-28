@@ -39,6 +39,10 @@ class Order extends Model {
 	public function report() {
 	    return $this->hasOne('App\Models\PaidReport', 'id', 'paid_report_id')->withTrashed();
 	}
+    
+    public function country() {
+        return $this->hasOne('App\Models\Country', 'id', 'country_id')->with('translations');
+    }
 }
 
 ?>
