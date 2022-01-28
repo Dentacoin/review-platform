@@ -238,6 +238,10 @@ class UsersController extends AdminController {
                 'type' => 'bool',
             ],
         ];
+
+        $this->rewardsPlatforms = [
+            'trp','vox','dentacare','assurance','dentacoin','dentists','wallet'
+        ];
     }
 
     public function list() {
@@ -3069,6 +3073,10 @@ class UsersController extends AdminController {
             $rewards = $rewards->where('type', request('search-type') );
         }
 
+        if(!empty(request('search-platform'))) {
+            $rewards = $rewards->where('platform', request('search-platform') );
+        }
+
         $total_count = $rewards->count();
         $sum_price = $rewards->sum('reward');
         $page = max(1,intval(request('page')));
@@ -3097,6 +3105,8 @@ class UsersController extends AdminController {
             'search_user_id' =>  request('search-user-id'),
             'search_email' =>  request('search-email'),
             'search_type' =>  request('search-type'),
+            'search_platform' =>  request('search-platform'),
+            'rewardsPlatforms' => $this->rewardsPlatforms,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
             'end' => $end,

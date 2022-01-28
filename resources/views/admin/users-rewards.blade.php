@@ -30,7 +30,15 @@
                                         <option value="{{ $k }}" {!! $k==$search_type ? 'selected="selected"' : '' !!}>{{ $v }}</option>
                                     @endforeach
                                 </select>
-                            </div>                            
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-control" name="search-platform">
+                                    <option value="">Reward Platform</option>
+                                    @foreach($rewardsPlatforms as $platform)
+                                        <option value="{{ $platform }}" {!! $platform==$search_platform ? 'selected="selected"' : '' !!}>{{ config('platforms')[$platform]['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="col-md-2">
                                 <input type="submit" class="btn btn-sm btn-primary btn-block" value="Search">
                             </div>
