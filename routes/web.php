@@ -390,8 +390,6 @@ $reviewRoutes = function () {
 			//after 20th refresh -> ban for 60 min
 			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
 				Route::any('/', 									'IndexController@home');
-				Route::post('index-down', 							'IndexController@index_down');
-				Route::post('index-dentist-down', 					'IndexController@index_dentist_down');
 				Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 				Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
 				Route::get('remove-banner',							'IndexController@removeBanner');
@@ -429,6 +427,9 @@ $reviewRoutes = function () {
 				Route::get('banned', 								'BannedController@home');
 				Route::get('profile-redirect', 						'BannedController@profile_redirect');
 			});
+
+			Route::post('index-down', 							'IndexController@index_down');
+			Route::post('index-dentist-down', 					'IndexController@index_dentist_down');
 
 			Route::post('register-invite', 						'RegisterController@register_invite');
 			Route::post('invite-dentist', 						'RegisterController@invite_dentist');
@@ -560,7 +561,6 @@ $voxRoutes = function () {
 
 				Route::any('paid-dental-surveys', 					'IndexController@surveys_public');
 				Route::post('start-over', 							'VoxController@start_over');
-				Route::post('vox-public-down', 						'VoxController@vox_public_down');
 				Route::get('remove-banner',							'VoxController@removeBanner');
 
 				Route::any('daily-polls', 							'PollsController@list');
@@ -581,6 +581,7 @@ $voxRoutes = function () {
 			Route::get('hide-dailypoll', 							'PollsController@hidePoll');
 			Route::get('polls-calendar-html', 						'PollsController@getCalendarHtml');
 
+			Route::post('vox-public-down', 							'VoxController@vox_public_down');
 			Route::any('paid-dental-surveys/{id}', 					'VoxController@vox');
 			Route::post('get-next-question', 						'VoxController@getNextQuestion');
 

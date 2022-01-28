@@ -451,7 +451,7 @@ class DentistController extends FrontController {
             session(['pageview-'.$item->id => true]);
         }
 
-        $reviews = $item->reviews_in();
+        $reviews = $item->is_clinic ? $item->clinicReviews() : $item->dentistReviews();
         if($review_id) {
             $review = Review::find($review_id);
             if(!empty($review) && !empty($reviews)) {
@@ -471,8 +471,17 @@ class DentistController extends FrontController {
             foreach ($reviews as $rev) {
                 foreach($rev->answers as $answer) {
 
-                    if ($item->my_workplace_approved->isEmpty() || ($item->my_workplace_approved->isNotEmpty() && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7))) {
-
+                    if (
+                        $item->my_workplace_approved->isEmpty() 
+                        || (
+                            $item->my_workplace_approved->isNotEmpty() 
+                            && (
+                                $answer->question_id == 4 
+                                || $answer->question_id == 6 
+                                || $answer->question_id == 7
+                            )
+                        )
+                    ) {
                         if(!isset($aggregated[$answer->question['label']])) {
                             $aggregated[$answer->question['label']] = 0;
                         }
@@ -482,7 +491,6 @@ class DentistController extends FrontController {
                         }
 
                         $arr_sum = array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
-
                         if(!empty($arr_sum)) {
                             $aggregated_count_opt[$answer->question['label']] += 1;
                         }
@@ -503,8 +511,17 @@ class DentistController extends FrontController {
         if($count) {
             foreach ($reviews as $review) {
                 foreach($review->answers as $answer) {
-                    if ($item->my_workplace_approved->isEmpty() || ($item->my_workplace_approved->isNotEmpty() && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7))) {
-
+                    if (
+                        $item->my_workplace_approved->isEmpty() 
+                        || (
+                            $item->my_workplace_approved->isNotEmpty() 
+                            && (
+                                $answer->question_id == 4 
+                                || $answer->question_id == 6 
+                                || $answer->question_id == 7
+                            )
+                        )
+                    ) {
                         if(empty($aggregated_rates[$answer->question->id])) {
                             $aggregated_rates[$answer->question->id] = [];
                         }
@@ -571,7 +588,8 @@ class DentistController extends FrontController {
         if(!empty($this->user)) {
             $dent_id = $item->id;
             $reviews = Review::where(function($query) use ($dent_id) {
-                $query->where( 'dentist_id', $dent_id)->orWhere('clinic_id', $dent_id);
+                $query->where( 'dentist_id', $dent_id)
+                ->orWhere('clinic_id', $dent_id);
             })->where('user_id', $this->user->id)
             ->first();
 
@@ -583,7 +601,9 @@ class DentistController extends FrontController {
             
         } else {
             $writes_review = false;
-        }       
+        }
+
+        $countries = Country::with('translations')->get();
 
         $view_params = [
             'strength_arr' => $strength_arr,
@@ -610,8 +630,9 @@ class DentistController extends FrontController {
             'social_image' => $social_image,
             'canonical' => $item->getLink(),
             'og_url' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
-            'countries' => Country::with('translations')->get(),
-            'video_reviews_stopped' => StopVideoReview::find(1)->stopped ? true : false,
+            'countries' => $countries,
+            'countriesArray' => $countries->pluck('name', 'id')->toArray(),
+            'video_reviews_stopped' => !empty($this->user) && StopVideoReview::find(1)->stopped ? true : false,
             'js' => [
                 'user.js',
                 'search.js',
@@ -666,7 +687,12 @@ class DentistController extends FrontController {
         $view_params['load_lightbox'] = $load_lightbox;
 
         $dont_initialize_flickity = 'false';
-        if((!empty($this->user) && $this->user->id == $item->id) || ($item->photos->isNotEmpty() || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty())) {
+        if(
+            (!empty($this->user) && $this->user->id == $item->id) 
+            || ($item->photos->isNotEmpty() 
+            || $item->teamApproved->isNotEmpty() 
+            || $item->invites_team_unverified->isNotEmpty())
+        ) {
 
             if(!empty($this->user) && $this->user->id == $item->id) {
                 $load_flickity = 'true';
@@ -800,7 +826,6 @@ class DentistController extends FrontController {
 
         if(!empty($item->short_description)) {
             $short_description = $item->short_description;
-
         } else {
             if($item->is_clinic) {
                 $short_description = trans('trp.page.user.short_description.clinic', ['location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country_id ? $item->country->name : '') ]);
