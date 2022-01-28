@@ -148,7 +148,7 @@ class SupportController extends AdminController {
 
             return $this->showView('support-questions-edit', [
             	'item' => $item,
-                'categories' => SupportCategory::get(),
+                'categories' => SupportCategory::with('translations')->get(),
             ]);
         } else {
             return redirect('cms/'.$this->current_page);
@@ -294,7 +294,7 @@ class SupportController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $items = SupportContact::with(['user', 'mainContactReply', 'userEmail'])->orderBy('id', 'desc');        
+        $items = SupportContact::with(['user', 'mainContactReply', 'userEmail', 'emailTemplate'])->orderBy('id', 'desc');        
 
         if(!empty(request('search-user-id'))) {
             $items = $items->where('user_id', request('search-user-id'));

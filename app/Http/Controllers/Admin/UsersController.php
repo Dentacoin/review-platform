@@ -1187,7 +1187,7 @@ class UsersController extends AdminController {
             $all_questions_answerd = $all_questions_answerd->concat($all_questions_answerd_old);
 
             $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $item->filledVoxes() );
-            
+
             $unfinishedVoxes = Vox::with('translations')
             ->whereIn('id', $unanswerd_questions)
             ->where('id', '!=', 11)
@@ -2722,6 +2722,8 @@ class UsersController extends AdminController {
                 ORDER BY `total` DESC
             ");
         }
+        
+        $countriesTable = Country::with('translations')->get();
 
         return $this->showView('users-stats', array(
             'user_genders' => $user_genders,
@@ -2738,6 +2740,7 @@ class UsersController extends AdminController {
             'answered_questions' => VoxQuestionAnswered::get(),
             'search_users_from' => request('search_users_from'),
             'search_users_to' => request('search_users_to'),
+            'countriesArray' => $countriesTable->pluck('name', 'id')->toArray(),
         ));
     }
 

@@ -10,6 +10,7 @@ use App\Models\PollsMonthlyDescription;
 use App\Models\VoxCategory;
 use App\Models\PollAnswer;
 use App\Models\VoxScale;
+use App\Models\Country;
 use App\Models\Poll;
 
 use App\Helpers\AdminHelper;
@@ -173,10 +174,14 @@ class PollsController extends AdminController {
             }
         }
 
+        $countries = Country::with('translations')->get();
+
         return $this->showView('polls-form', array(
     		'categories' => $this->poll_categories,
 	        'statuses' => $this->statuses,
             'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
+            'countries' => $countries,
+            'countriesArray' => $countries->pluck('name', 'id')->toArray(),
         ));
     }
 
@@ -279,7 +284,9 @@ class PollsController extends AdminController {
                 $newformat = date('d-m-Y',$time);
             } else {
                 $newformat = null;
-            }            
+            }
+
+            $countries = Country::with('translations')->get();
 
 	        return $this->showView('polls-form', array(
 	            'item' => $item,
@@ -287,6 +294,8 @@ class PollsController extends AdminController {
     			'categories' => $this->poll_categories,
 	            'statuses' => $this->statuses,
                 'poll_date' => $newformat,
+                'countries' => $countries,
+                'countriesArray' => $countries->pluck('name', 'id')->toArray(),
 	        ));
 	    } else {
             return redirect('cms/'.$this->current_page.'/polls/');
@@ -400,6 +409,8 @@ class PollsController extends AdminController {
 
             $time = $poll->launched_at->timestamp;
             $newformat = date('d-m-Y',$time);
+            
+            $countries = Country::with('translations')->get();
 
             $viewParams = [
                 'poll_id' => $poll_id,
@@ -407,6 +418,8 @@ class PollsController extends AdminController {
                 'poll' => $poll,
                 'polls' => Poll::with(['translations'])->orderBy('launched_at', 'desc')->get(),
                 'poll_date' => $newformat,
+                'countries' => $countries,
+                'countriesArray' => $countries->pluck('name', 'id')->toArray(),
             ];
         } else {
             $viewParams = [

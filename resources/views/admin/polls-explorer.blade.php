@@ -74,7 +74,7 @@
                 <b> Current users percentage :</b> <br/><br/>
 
                 @foreach($poll->users_percentage as $c => $up)
-                    <p {!! 20 <= intval($up) ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
+                    <p {!! 20 <= intval($up) ? 'style="color:red;"' : '' !!}> {{ $countriesArray[$c] }} : {{ $up }}% <p/>
                 @endforeach
             </div>
         </p>

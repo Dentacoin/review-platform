@@ -1090,8 +1090,7 @@ class VoxHelper {
 
     public static function getDemographicQuestions() {
         $demographic_questions = [];
-        $welcome_survey = Vox::find(11);
-        $welcome_questions = VoxQuestion::where('vox_id', $welcome_survey->id)->get();
+        $welcome_questions = VoxQuestion::with('translations')->where('vox_id', 11)->get();
         
         foreach ($welcome_questions as $welcome_question) {
             $demographic_questions[$welcome_question->id] = $welcome_question->question;
@@ -1113,7 +1112,7 @@ class VoxHelper {
         foreach (self::getDemographicQuestions() as $key => $value) {
             if (is_numeric($key)) {
                 $welcome_question = VoxQuestion::where('id', $key)->first();
-                $welcome_answers[$welcome_question->id] = json_decode($welcome_question->answers, true);
+                $welcome_answers[$key] = json_decode($welcome_question->answers, true);
             } else {
                 if ($key == 'gender') {
                     $welcome_answers['gender'] = [

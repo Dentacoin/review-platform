@@ -89,7 +89,7 @@ class Vox extends Model {
     ];
     
     public function questions() {
-        return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->orderBy('order', 'ASC');
+        return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->with('translations')->orderBy('order', 'ASC');
     }
 
     public function categories() {
@@ -97,7 +97,7 @@ class Vox extends Model {
     }
 
     public function stats_questions() {
-        return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->where('used_for_stats', '!=', '')->orderBy('order', 'ASC');
+        return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->with('translations')->where('used_for_stats', '!=', '')->orderBy('order', 'ASC');
     }
     
     public function stats_main_question() {

@@ -335,7 +335,7 @@
                                         <label class="col-md-1 control-label">Countries</label>
                                         <div class="col-md-2">
                                             <select class="form-control select2" name="countries_ids[]" multiple>
-                                                @foreach( \App\Models\Country::with('translations')->get() as $country )
+                                                @foreach( $countries as $country )
                                                     <option value="{{ $country->id }}" {!! !empty($item) && !empty($item->countries_ids) && in_array($country->id, $item->countries_ids) ? 'selected="selected"' : null !!}>{{ $country->name }}</option>
                                                 @endforeach
                                             </select>
@@ -343,7 +343,7 @@
                                         <label class="col-md-1 control-label">Limit not valid for countries</label>
                                         <div class="col-md-2">
                                             <select class="form-control select2" name="exclude_countries_ids[]" multiple>
-                                                @foreach( \App\Models\Country::with('translations')->get() as $country )
+                                                @foreach( $countries as $country )
                                                     <option value="{{ $country->id }}" {!! !empty($item) && !empty($item->exclude_countries_ids) && in_array($country->id, $item->exclude_countries_ids) ? 'selected="selected"' : null !!}>{{ $country->name }}</option>
                                                 @endforeach
                                             </select>
@@ -370,9 +370,8 @@
                                         @if(!empty($item) && !empty($item->users_percentage) && !empty($item->country_percentage))
                                             <div class="col-md-3" style="border: 1px solid black;padding-top: 10px;padding-bottom: 10px;">
                                                 <b> Current users percentage :</b> <br/><br/>
-
                                                 @foreach($item->users_percentage as $c => $up)
-                                                    <p {!! intval($item->country_percentage) <= intval($up) ? 'style="color:red;"' : ( !empty($item->exclude_countries_ids) && in_array($c, $item->exclude_countries_ids) ? 'style="color:blue;"' : '') !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
+                                                    <p {!! intval($item->country_percentage) <= intval($up) ? 'style="color:red;"' : ( !empty($item->exclude_countries_ids) && in_array($c, $item->exclude_countries_ids) ? 'style="color:blue;"' : '') !!}> {{ $countriesArray[$c] }} : {{ $up }}% <p/>
                                                 @endforeach
                                             </div>
                                         @endif
@@ -391,9 +390,9 @@
                                 <br/>                            
 
                                 <div class="calculating-wrapper" style="display: none;">
-                                    <!-- @if(!empty($item->dcn_questions_count))
+                                    {{-- <!-- @if(!empty($item->dcn_questions_count))
                                         <p>Calculated {{ $item->dcn_questions_count }} questions from {{ $item->questions->count() }} original questions</p>
-                                    @endif -->
+                                    @endif --> --}}
                                     @foreach($q_trigger_obj as $iq)
                                         @if(!empty($iq))
                                             @if(is_object($iq) && $iq->type == 'multiple_choice')
@@ -524,7 +523,10 @@
                                                         </td>
                                                         <td>
                                                             @if(empty($question->question_trigger) && $question->order != 1)
-                                                                <a class="btn btn-sm btn-info" href="{{ $item->getLink().'?testmode=1&start-from='.$question->id.'&q-id='.(!empty(App\Models\VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order -1)->first()) ? App\Models\VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order -1)->first()->id : $question->id) }}" target="_blank">
+                                                                @php
+                                                                    $last_question = App\Models\VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order -1)->first();
+                                                                @endphp
+                                                                <a class="btn btn-sm btn-info" href="{{ $item->getLink().'?testmode=1&start-from='.$question->id.'&q-id='.(!empty($last_question) ? $last_question->id : $question->id) }}" target="_blank">
                                                                     Test
                                                                 </a>
                                                             @endif

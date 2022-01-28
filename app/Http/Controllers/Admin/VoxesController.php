@@ -24,6 +24,7 @@ use App\Models\DcnReward;
 use App\Models\VoxScale;
 use App\Models\VoxBadge;
 use App\Models\VoxError;
+use App\Models\Country;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Vox;
@@ -458,9 +459,15 @@ class VoxesController extends AdminController {
 
             if (!empty($q_triggers_arr)) {
                 foreach ($q_triggers_arr as $q_trigger) {
-                    $q_trigger_obj[] = is_numeric($q_trigger) ? VoxQuestion::find($q_trigger) : $q_trigger ;
-                    if(is_numeric($q_trigger) && !empty(VoxQuestion::find($q_trigger)) && VoxQuestion::find($q_trigger)->type == 'multiple_choice') {
-                        $q_trigger_multiple_answ[VoxQuestion::find($q_trigger)->id] = '';
+                    if(is_numeric($q_trigger)) {
+                        $questionTrigger = VoxQuestion::with('translations')->find($q_trigger);
+                    } else {
+                        $questionTrigger = $q_trigger;
+                    }
+
+                    $q_trigger_obj[] = $questionTrigger;
+                    if(is_numeric($q_trigger) && !empty($questionTrigger) && $questionTrigger->type == 'multiple_choice') {
+                        $q_trigger_multiple_answ[$questionTrigger->id] = '';
                     }
                 }
             }
@@ -519,8 +526,9 @@ class VoxesController extends AdminController {
                 $count_qs = $item->questions->count();
 
                 for ($i=1; $i <= $count_qs ; $i++) { 
-                    if(!empty(VoxQuestion::with('translations')->where('vox_id', $item->id)->where('order', $i)->first())) {
-                        if(VoxQuestion::with('translations')->where('vox_id', $item->id)->where('order', $i)->count() > 1) {
+                    $duplicatedQuestion = VoxQuestion::with('translations')->where('vox_id', $item->id)->where('order', $i)->count();
+                    if(!empty($duplicatedQuestion)) {
+                        if($duplicatedQuestion > 1) {
                             $questions_order_bug = true;
                             $questions_order_bug_message .= 'Duplicated order number - '.$i.'<br/>';  //diplicated order
                         }
@@ -531,6 +539,8 @@ class VoxesController extends AdminController {
                 }
             }
 
+            $countries = Country::with('translations')->get();
+
             return $this->showView('voxes-form', array(
                 'types' => $this->types,
                 'scales' => $this->scales_arr,
@@ -539,12 +549,14 @@ class VoxesController extends AdminController {
                 'stat_top_answers' => $this->stat_top_answers,
                 'scales_arr' => $scales,
                 'item' => $item,
-                'category_list' => VoxCategory::get(),
+                'category_list' => VoxCategory::with('translations')->get(),
                 'triggers' => $triggers,
                 'linked_triggers' => $linked_triggers,
                 'trigger_question_id' => $trigger_question_id,
                 'trigger_valid_answers' => $trigger_valid_answers,
-                'all_voxes' => Vox::orderBy('launched_at', 'desc')->get(),
+                'all_voxes' => Vox::with('translations')->orderBy('launched_at', 'desc')->get(),
+                'countries' => $countries,
+                'countriesArray' => $countries->pluck('name', 'id')->toArray(),
                 'q_trigger_obj' => $q_trigger_obj,
                 'q_trigger_multiple_answ' => $q_trigger_multiple_answ,
                 'error_arr' => $error_arr,

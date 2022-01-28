@@ -196,9 +196,8 @@
 													</thead>
 													<tbody>
 														@foreach($countries as $c)
-															@php($country = App\Models\Country::find($c->country_id))
 															<tr>
-																<td>{{ $country ? $country->name : '-' }}</td>
+																<td>{{ $c->country_id ? $countriesArray[$c->country_id] : '-' }}</td>
 																<td>{{ $c->total }}</td>
 																<td>{{ $c->patients }}</td>
 																<td>{{ $c->dentists }}</td>
