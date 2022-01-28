@@ -543,8 +543,11 @@
                                         <div class="form-group">
                                             <label class="col-md-2 control-label">KYC Country</label>
                                             <div class="col-md-10" style="margin-top: 6px;">
-                                                @if(!empty(App\Models\Country::where('code_3', strtolower($item->kycValidation->country_code))->first()))
-                                                    {{ App\Models\Country::where('code_3', strtolower($item->kycValidation->country_code))->first()->name }}
+                                                @php
+                                                    $kycCountry = App\Models\Country::where('code_3', strtolower($item->kycValidation->country_code))->first();
+                                                @endphp
+                                                @if(!empty($kycCountry))
+                                                    {{ $kycCountry->name }}
                                                 @else
                                                     {{ $item->kycValidation->country_code }}
                                                 @endif
