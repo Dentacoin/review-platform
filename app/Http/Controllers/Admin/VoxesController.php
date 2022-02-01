@@ -197,6 +197,8 @@ class VoxesController extends AdminController {
             return redirect('cms/'.$this->current_page.'/edit/'.$newvox->id);
         }
 
+        $countries = Country::with('translations')->get();
+
         return $this->showView('voxes-form', array(
             'types' => $this->types,
             'scales' => $this->scales_arr,
@@ -204,6 +206,8 @@ class VoxesController extends AdminController {
             'question_types' => $this->question_types,
             'stat_types' => $this->stat_types,
             'stat_top_answers' => $this->stat_top_answers,
+            'countries' => $countries,
+            'countriesArray' => $countries->pluck('name', 'id')->toArray(),
             'all_voxes' => Vox::orderBy('launched_at', 'desc')->get(),
         ));
     }

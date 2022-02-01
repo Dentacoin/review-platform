@@ -192,8 +192,8 @@
 					@endforeach
 				@endif
 				<tr class="row">
-					<td> <b> Privacy Policy accepted ? </b> </td>
-					<td> {{ $item->gdpr_privacy ? 'Yes' : 'No'  }} </td>
+					<td> <b> Privacy Policy accepted? </b> </td>
+					<td>Yes</td>
 				</tr>
 			</table>
 
@@ -210,7 +210,6 @@
 					</tr>
 					@foreach($item->vox_rewards as $reward)
 						<tr>
-						
 							<td>{{ $reward->created_at->toDateTimeString() }}</td>
 							<td>{{ !empty($reward->vox) ? $reward->vox->title : 'Deleted' }}</td>
 							<td>{{ $reward->reward }}</td>
