@@ -38,7 +38,7 @@
 		                        <tr>
 		                        	<th>
 			                        	@if( !request()->input('date') )
-	                                       <a href="{{ url('cms/vox/polls/?date=asc') }}" class="order">Calendar date</a>
+	                                       	<a href="{{ url('cms/vox/polls/?date=asc') }}" class="order">Calendar date</a>
 	                                    @elseif( request()->input('date')=='desc' )
 	                                        <a href="{{ url('cms/vox/polls/?date=asc') }}" class="order">Calendar date</a>
 	                                    @else
@@ -67,7 +67,7 @@
 		                                    {!! $statuses[$poll->status] !!}
 		                                </td>	
 		                                <td>
-		                                    {!! $poll->pollCategory->name !!}
+		                                    {!! $poll->pollCategory ? $poll->pollCategory->name : '' !!}
 		                                </td>
                                         <td>
                                             <a href="{{ url('cms/vox/polls-explorer/'.$poll->id) }}" target="_blank">
