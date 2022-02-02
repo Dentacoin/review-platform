@@ -2013,16 +2013,25 @@ class StatsController extends FrontController {
      */
     public function createPng() {
 
+        $vox_title = '';
+        if(!empty(Request::input('stat_id'))) {
+            $vox = Vox::find(Request::input('stat_id'));
+
+            if(!empty($vox)) {
+                $vox_title = $vox->title;
+            }
+        }
+
         $cur_time = mb_substr(microtime(true), 0, 10);
 
-        $png_title = strtolower(str_replace(['?', ' ', ':', '&'], ['', '-', '', 'and'] ,Request::input("stat_title"))).'-dentavox'.$cur_time;
+        $png_title = strtolower(str_replace(['?', ' ', ':', '&'], ['', '-', '', 'and'] ,$vox_title)).'-dentavox'.$cur_time;
 
         $folder = storage_path().'/app/public/png/'.$png_title;
         if(!is_dir($folder)) {
             mkdir($folder);
         }
 
-        $picture_title = strtolower(str_replace(['?', ' ', ':', '&'], ['', '-', '', 'and'] ,Request::input("stat_title"))).'-dentavox-';
+        $picture_title = strtolower(str_replace(['?', ' ', ':', '&'], ['', '-', '', 'and'] ,$vox_title)).'-dentavox-';
 
         $count_img = 0;
         for ($i=1; $i < 7; $i++) { 

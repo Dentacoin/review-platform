@@ -1828,7 +1828,7 @@ $(document).ready(function(){
         var formData = new FormData();
         formData.append("_token", $(this).find('input[name="_token"]').val());
         formData.append("stat_url", $(this).find('input[name="stat_url_png"]').val());
-        formData.append("stat_title", $(this).find('input[name="stat_title_png"]').val());
+        formData.append("stat_id", $(this).find('input[name="stat_id"]').val());
 
         var i=0;
         $('#stats-png-imgs img').each( function() {

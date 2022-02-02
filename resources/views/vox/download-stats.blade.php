@@ -231,7 +231,7 @@
 			<form method="post" id="download-form-png" action="{{ getLangUrl('create-stat-png') }}">
 				{!! csrf_field() !!}
 				<input type="hidden" name="stat_url_png" id="stat_url_png" value="{{ $vox->getStatsList() }}">
-				<input type="hidden" name="stat_title_png" id="stat_title_png" value="{{ $vox->title }}">
+				<input type="hidden" name="stat_id" id="stat_id" value="{{ $vox->id }}">
 			</form>
 
 			<!-- tova da e display none -->
