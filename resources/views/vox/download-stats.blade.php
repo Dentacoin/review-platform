@@ -216,7 +216,7 @@
 					{!! csrf_field() !!}
 					<input type="hidden" name="hidden_html" id="hidden_html" />
 					<input type="hidden" name="stats-title" value="{{ trans('vox.page.stats.title-single', ['name' => $vox->title]) }}">
-					<input type="hidden" name="stats-original-title" value="{{ $vox->title }}">
+					<input type="hidden" name="vox-id" value="{{ $vox->id }}">
 					<input type="hidden" name="stats-respondents" value="{{ $respondents }}">
 					<input type="hidden" name="period" value="{{ $all_period }}">
 					<input type="hidden" name="hidden_heigth" id="hidden_heigth" value="">

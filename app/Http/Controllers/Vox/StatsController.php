@@ -1963,9 +1963,17 @@ class StatsController extends FrontController {
             set_time_limit(300);
             ini_set('memory_limit', '1024М');
 
+            $original_title = '';
+            if(Request::input('vox-id')) {
+                $vox = Vox::find(Request::input('vox-id'));
+
+                if(!empty($vox)) {
+                    $original_title = $vox->title;
+                }
+            }
+
             $html = Request::input("hidden_html");
             $title = Request::input("stats-title");
-            $original_title = Request::input("stats-original-title");
             $respondents = Request::input("stats-respondents");
             $period = Request::input("period");
 
@@ -2065,6 +2073,11 @@ class StatsController extends FrontController {
      * Download the pdf stat file
      */
     public function download_file($locale=null,$name) {
+
+        if (str_contains($name, '..')) {
+            return redirect(getLangUrl('/'));
+        }
+
         session()->pull('download_stat');
 
         $file = storage_path().'/app/public/pdf/'.$name.'.pdf';
@@ -2075,6 +2088,11 @@ class StatsController extends FrontController {
      * Download the png stat file
      */
     public function download_file_png($locale=null,$name) {
+
+        if (str_contains($name, '..')) {
+            return redirect(getLangUrl('/'));
+        }
+
         session()->pull('download_stat_png');
 
         $file = storage_path().'/app/public/png/'.$name.'.zip';
