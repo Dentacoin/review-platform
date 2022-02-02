@@ -383,6 +383,13 @@ class GeneralHelper {
     }
 
     public static function addTempImage($img) {
+
+        $extensions = ['image/jpeg', 'image/png'];
+
+        if (!in_array($img->mime(), $extensions)) {
+            return [];
+        }
+
         $name = self::getTempImageName();
         $to = self::getTempImagePath($name);
         $to_thumb = self::getTempImagePath($name, true);
@@ -405,7 +412,10 @@ class GeneralHelper {
         // });
         $img->save($to_thumb);
         
-        return [ self::getTempImageUrl($name, true), self::getTempImageUrl($name), $name ];
+        return [ 
+            self::getTempImageUrl($name, true), 
+            self::getTempImageUrl($name), $name 
+        ];
     }
 
     public static function isGasExpensive() {

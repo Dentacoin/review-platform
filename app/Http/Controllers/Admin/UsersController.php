@@ -2356,13 +2356,22 @@ class UsersController extends AdminController {
             }
 
             $img = Image::make( Input::file('image') )->orientate();
-            list($thumb, $full, $name) = GeneralHelper::addTempImage($img);
 
-            return Response::json([
-                'success' => true, 
-                'thumb' => $thumb, 
-                'name' => $name 
-            ]);
+            $imageArray = GeneralHelper::addTempImage($img);
+
+            if(count($imageArray)) {
+                list($thumb, $full, $name) = $imageArray;
+
+                return Response::json([
+                    'success' => true, 
+                    'thumb' => $thumb, 
+                    'name' => $name 
+                ]);
+            } else {
+                return Response::json([
+                    'success' => false,
+                ]);
+            }
         }
     }
 

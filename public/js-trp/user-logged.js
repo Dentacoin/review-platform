@@ -967,31 +967,37 @@ $(document).ready(function(){
 
         var sure_text = $('#add-gallery-photo').attr('sure-trans');
         var file = $(this)[0].files[0];
-        var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
-            $('.add-gallery-image .image-label').removeClass('loading');
+        var that = $(this);
 
-            var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
-                <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
-                    <div class="delete-gallery delete-button" sure="'+sure_text+'">\
-                        <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
+        var fileExtension = ['jpeg', 'jpg', 'png'];
+        if ($.inArray(that.val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+            console.log("Only formats are allowed : "+fileExtension.join(', '));
+        } else {
+            var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
+                $('.add-gallery-image .image-label').removeClass('loading');
+
+                var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
+                    <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
+                        <div class="delete-gallery delete-button" sure="'+sure_text+'">\
+                            <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
+                        </div>\
                     </div>\
-                </div>\
-            </a>\
-            ';
+                </a>\
+                ';
 
-            galleryFlickty.flickity( 'insert', $(html), 1 );
-            handleGalleryRemoved();
+                galleryFlickty.flickity( 'insert', $(html), 1 );
+                handleGalleryRemoved();
 
-            if($('body').hasClass('guided-tour')) {
-                $('.bubble-guided-tour .skip-step').trigger('click');
-            }
+                if($('body').hasClass('guided-tour')) {
+                    $('.bubble-guided-tour .skip-step').trigger('click');
+                }
 
+                ajax_is_running = false;
+            });
 
-            ajax_is_running = false;
-        });
-
-        upload.doUpload();
-    } );
+            upload.doUpload();
+        }
+    });
 
     //Work hours
 

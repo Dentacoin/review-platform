@@ -17,93 +17,99 @@ $(document).ready(function(){
             var that = $(this);
             var main_parent = that.closest('.upload-image-wrapper');
 
-            if(file.size > 2000000) {
-                main_parent.find('.image-big-error').show();
-                that.closest('.image-label').removeClass('loading');
-                ajax_is_running = false;
+            var fileExtension = ['jpeg', 'jpg', 'png'];
+            if ($.inArray(that.val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                console.log("Only formats are allowed : "+fileExtension.join(', '));
             } else {
-                main_parent.find('.image-big-error').hide();
-                var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
-    
+
+                if(file.size > 2000000) {
+                    main_parent.find('.image-big-error').show();
                     that.closest('.image-label').removeClass('loading');
-    
-                    if(!that.hasClass('no-cropper')) {
-                        main_parent.find('.avatar-name').text(file.name);
-                        main_parent.find('.avatar-name-wrapper').show();
-        
-                        that.closest('.image-label').hide();
-                        main_parent.find('.cropper-container').show();
-    
-                        var croppieParams = {
-                            enableOrientation: true,
-                            enforceBoundary: false
-                        };
-                
-                        croppieParams.viewport = {
-                            width: 180,
-                            height: 180
-                        };
-                        croppieParams.boundary = {width: 180, height: 180};
-                
-                        croppie_instance = main_parent.find('.cropper-container').croppie(croppieParams);
-    
-                        croppie_instance.croppie('bind', {
-                            url: data.thumb
-                        });
-                        
-                        main_parent.find('.cropper-container').on('update.croppie', function(ev, cropData) {
-                            croppie_instance.croppie('result', {
-                                type: 'canvas',
-                                size: {width: 180, height: 180},
-                            }).then(function (src) {
-                                main_parent.find('.avatar').val(src);
-                            });
-                        });
-    
-                    } else {
-    
-                        that.closest('.image-label').removeClass('loading');
-                        that.closest('.image-label').css('background-image', "url('"+data.thumb+"')");
-    
-                        if(that.closest('.image-label').find('.centered-hack').length) {
-                            that.closest('.image-label').find('.centered-hack').remove();
-                        }
-    
-                        if(that.attr('id') == 'add-avatar') {
-                            if( $('#photo-name').length ) {
-                                $('#photo-name').val( data.name );
-                            }
-                            if( $('#photo-thumb').length ) {
-                                $('#photo-thumb').val( data.thumb );
-                            }
-                        } else if(that.hasClass('add-avatar-member')) {
-                            if(that.parent().parent().find('.photo-name-team').length) {
-                                that.parent().parent().find('.photo-name-team').val( data.name );
-                            }
-                            if( that.parent().parent().find('.photo-thumb-team').length ) {
-                                that.parent().parent().find('.photo-thumb-team').val( data.thumb );
-                            }
-                        } else if(that.attr('id') == 'add-avatar-patient') {
-                            if(that.parent().parent().find('.photo-name').length) {
-                                that.parent().parent().find('.photo-name').val( data.name );
-                            }
-                            if( that.parent().parent().find('.photo-thumb').length ) {
-                                that.parent().parent().find('.photo-thumb').val( data.thumb );
-                            }
-                        } else if(that.hasClass('add-avatar-clinic-branch')) {
-                            if(that.parent().parent().find('.photo-name-branch').length) {
-                                that.parent().parent().find('.photo-name-branch').val( data.name );
-                            }
-                            if( that.parent().parent().find('.photo-thumb-branch').length ) {
-                                that.parent().parent().find('.photo-thumb-branch').val( data.thumb );
-                            }
-                        }
-                    }
-    
                     ajax_is_running = false;
-                });
-    
-                upload.doUpload();
+                } else {
+                    main_parent.find('.image-big-error').hide();
+                    var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
+        
+                        that.closest('.image-label').removeClass('loading');
+        
+                        if(!that.hasClass('no-cropper')) {
+                            main_parent.find('.avatar-name').text(file.name);
+                            main_parent.find('.avatar-name-wrapper').show();
+            
+                            that.closest('.image-label').hide();
+                            main_parent.find('.cropper-container').show();
+        
+                            var croppieParams = {
+                                enableOrientation: true,
+                                enforceBoundary: false
+                            };
+                    
+                            croppieParams.viewport = {
+                                width: 180,
+                                height: 180
+                            };
+                            croppieParams.boundary = {width: 180, height: 180};
+                    
+                            croppie_instance = main_parent.find('.cropper-container').croppie(croppieParams);
+        
+                            croppie_instance.croppie('bind', {
+                                url: data.thumb
+                            });
+                            
+                            main_parent.find('.cropper-container').on('update.croppie', function(ev, cropData) {
+                                croppie_instance.croppie('result', {
+                                    type: 'canvas',
+                                    size: {width: 180, height: 180},
+                                }).then(function (src) {
+                                    main_parent.find('.avatar').val(src);
+                                });
+                            });
+        
+                        } else {
+        
+                            that.closest('.image-label').removeClass('loading');
+                            that.closest('.image-label').css('background-image', "url('"+data.thumb+"')");
+        
+                            if(that.closest('.image-label').find('.centered-hack').length) {
+                                that.closest('.image-label').find('.centered-hack').remove();
+                            }
+        
+                            if(that.attr('id') == 'add-avatar') {
+                                if( $('#photo-name').length ) {
+                                    $('#photo-name').val( data.name );
+                                }
+                                if( $('#photo-thumb').length ) {
+                                    $('#photo-thumb').val( data.thumb );
+                                }
+                            } else if(that.hasClass('add-avatar-member')) {
+                                if(that.parent().parent().find('.photo-name-team').length) {
+                                    that.parent().parent().find('.photo-name-team').val( data.name );
+                                }
+                                if( that.parent().parent().find('.photo-thumb-team').length ) {
+                                    that.parent().parent().find('.photo-thumb-team').val( data.thumb );
+                                }
+                            } else if(that.attr('id') == 'add-avatar-patient') {
+                                if(that.parent().parent().find('.photo-name').length) {
+                                    that.parent().parent().find('.photo-name').val( data.name );
+                                }
+                                if( that.parent().parent().find('.photo-thumb').length ) {
+                                    that.parent().parent().find('.photo-thumb').val( data.thumb );
+                                }
+                            } else if(that.hasClass('add-avatar-clinic-branch')) {
+                                if(that.parent().parent().find('.photo-name-branch').length) {
+                                    that.parent().parent().find('.photo-name-branch').val( data.name );
+                                }
+                                if( that.parent().parent().find('.photo-thumb-branch').length ) {
+                                    that.parent().parent().find('.photo-thumb-branch').val( data.thumb );
+                                }
+                            }
+                        }
+        
+                        ajax_is_running = false;
+                    });
+        
+                    upload.doUpload();
+                }
             }
         }
     });
