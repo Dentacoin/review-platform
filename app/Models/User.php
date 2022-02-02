@@ -963,34 +963,38 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function addImage($img) {
 
-        $to = $this->getImagePath();
-        $to_thumb = $this->getImagePath(true);
+        $extensions = ['image/jpeg', 'image/png'];
 
-        $img->resize(1920, null, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-        $img->save($to);
-
-        if ($img->height() > $img->width()) {
-            $img->heighten(400);
-        } else {
-            $img->widen(400);
+        if (in_array($img->mime(), $extensions)) {
+            $to = $this->getImagePath();
+            $to_thumb = $this->getImagePath(true);
+    
+            $img->resize(1920, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            $img->save($to);
+    
+            if ($img->height() > $img->width()) {
+                $img->heighten(400);
+            } else {
+                $img->widen(400);
+            }
+            $img->resizeCanvas(400, 400);
+    
+            //$img->fit( 400, 400 );
+            $img->save($to_thumb);
+            $this->hasimage = true;
+            $this->hasimage_social = false;
+            $this->refreshReviews();
+            $this->save();
+    
+            $destination = self::getImagePath().'.webp';
+            WebPConvert::convert(self::getImagePath(), $destination, []);
+    
+            $destination_thumb = self::getImagePath(true).'.webp';
+            WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
         }
-        $img->resizeCanvas(400, 400);
-
-        //$img->fit( 400, 400 );
-        $img->save($to_thumb);
-        $this->hasimage = true;
-        $this->hasimage_social = false;
-        $this->refreshReviews();
-        $this->save();
-
-        $destination = self::getImagePath().'.webp';
-        WebPConvert::convert(self::getImagePath(), $destination, []);
-
-        $destination_thumb = self::getImagePath(true).'.webp';
-        WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
     }
 
     public function recalculateRating() {
