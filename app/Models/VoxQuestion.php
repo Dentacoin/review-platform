@@ -229,24 +229,29 @@ class VoxQuestion extends Model {
 
     public function addImage($img) {
 
-        $to = $this->getImagePath();
-        $to_thumb = $this->getImagePath(true);
+        $extensions = ['image/jpeg', 'image/png'];
 
-        $img->resize(1920, null, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-        $img->save($to);
-        $img->fit( 90, 90 );
-        $img->save($to_thumb);
-        $this->has_image = true;
-        $this->save();
+        if (in_array($img->mime(), $extensions)) {
 
-        $destination = self::getImagePath().'.webp';
-        WebPConvert::convert(self::getImagePath(), $destination, []);
+            $to = $this->getImagePath();
+            $to_thumb = $this->getImagePath(true);
 
-        $destination_thumb = self::getImagePath(true).'.webp';
-        WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
+            $img->resize(1920, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            $img->save($to);
+            $img->fit( 90, 90 );
+            $img->save($to_thumb);
+            $this->has_image = true;
+            $this->save();
+
+            $destination = self::getImagePath().'.webp';
+            WebPConvert::convert(self::getImagePath(), $destination, []);
+
+            $destination_thumb = self::getImagePath(true).'.webp';
+            WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
+        }
     }
 
     public function imageOnlyInQuestion() {

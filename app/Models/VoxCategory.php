@@ -58,14 +58,18 @@ class VoxCategory extends Model {
 
     public function addImage($img) {
 
-        $to = $this->getImagePath();
-        $to_thumb = $this->getImagePath(true);
+        $extensions = ['image/jpeg', 'image/png'];
 
-        $img->save($to);
-        $img->fit( 50, 50 );
-        $img->save($to_thumb);
-        $this->hasimage = true;
-        $this->save();
+        if (in_array($img->mime(), $extensions)) {
+            $to = $this->getImagePath();
+            $to_thumb = $this->getImagePath(true);
+
+            $img->save($to);
+            $img->fit( 50, 50 );
+            $img->save($to_thumb);
+            $this->hasimage = true;
+            $this->save();
+        }
     }
 }
 

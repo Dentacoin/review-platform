@@ -45,15 +45,20 @@ class DentistTestimonial extends Model {
     }
 
     public function addImage($img) {
+        
+        $extensions = ['image/jpeg', 'image/png'];
 
-        $to = $this->getImagePath();
-        $img->fit( 400, 400 );
-        $img->save($to);
-        $this->image = true;
-        $this->save();
+        if (in_array($img->mime(), $extensions)) {
 
-        $destination = self::getImagePath().'.webp';
-        WebPConvert::convert(self::getImagePath(), $destination, []);
+            $to = $this->getImagePath();
+            $img->fit( 400, 400 );
+            $img->save($to);
+            $this->image = true;
+            $this->save();
+
+            $destination = self::getImagePath().'.webp';
+            WebPConvert::convert(self::getImagePath(), $destination, []);
+        }
     }
 }
 

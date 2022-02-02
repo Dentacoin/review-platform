@@ -299,24 +299,28 @@ class Vox extends Model {
 
     public function addImage($img) {
 
-        $to = $this->getImagePath();
-        $to_thumb = $this->getImagePath(true);
+        $extensions = ['image/jpeg', 'image/png'];
 
-        $img->resize(1920, null, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-        $img->save($to);
-        $img->fit( 520, 352 );
-        $img->save($to_thumb);
-        $this->hasimage = true;
-        $this->save();
+        if (in_array($img->mime(), $extensions)) {
+            $to = $this->getImagePath();
+            $to_thumb = $this->getImagePath(true);
 
-        $destination = self::getImagePath().'.webp';
-        WebPConvert::convert(self::getImagePath(), $destination, []);
+            $img->resize(1920, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            $img->save($to);
+            $img->fit( 520, 352 );
+            $img->save($to_thumb);
+            $this->hasimage = true;
+            $this->save();
 
-        $destination_thumb = self::getImagePath(true).'.webp';
-        WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
+            $destination = self::getImagePath().'.webp';
+            WebPConvert::convert(self::getImagePath(), $destination, []);
+
+            $destination_thumb = self::getImagePath(true).'.webp';
+            WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
+        }
     }
 
     public function getSocialImageUrl($type = 'social') {

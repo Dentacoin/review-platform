@@ -43,27 +43,32 @@ class PageSeo extends Model {
     }
 
     public function addImage($img) {
+        
+        $extensions = ['image/jpeg', 'image/png'];
 
-        $to = $this->getImagePath();
-        $to_thumb = $this->getImagePath(true);
+        if (in_array($img->mime(), $extensions)) {
 
-        $img->resize(1920, null, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-        $img->save($to);
+            $to = $this->getImagePath();
+            $to_thumb = $this->getImagePath(true);
 
-        if ($img->height() > $img->width()) {
-            $img->heighten(400);
-        } else {
-            $img->widen(400);
+            $img->resize(1920, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            $img->save($to);
+
+            if ($img->height() > $img->width()) {
+                $img->heighten(400);
+            } else {
+                $img->widen(400);
+            }
+            $img->resizeCanvas(400, 400);
+
+            //$img->fit( 400, 400 );
+            $img->save($to_thumb);
+            $this->hasimage = true;
+            $this->save();
         }
-        $img->resizeCanvas(400, 400);
-
-        //$img->fit( 400, 400 );
-        $img->save($to_thumb);
-        $this->hasimage = true;
-        $this->save();
     }
 }
 

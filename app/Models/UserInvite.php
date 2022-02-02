@@ -58,22 +58,26 @@ class UserInvite extends Model {
     }
 
     public function addImage($img) {
+        
+        $extensions = ['image/jpeg', 'image/png'];
 
-        $to = $this->getImagePath();
-        $to_thumb = $this->getImagePath(true);
+        if (in_array($img->mime(), $extensions)) {
+            $to = $this->getImagePath();
+            $to_thumb = $this->getImagePath(true);
 
-        $img->resize(1920, null, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-        $img->save($to);
-        $img->heighten(400, function ($constraint) {
-            $constraint->upsize();
-        });
-        $img->save($to_thumb);
+            $img->resize(1920, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            $img->save($to);
+            $img->heighten(400, function ($constraint) {
+                $constraint->upsize();
+            });
+            $img->save($to_thumb);
 
-        $this->has_image = true;
-        $this->save();
+            $this->has_image = true;
+            $this->save();
+        }
     }
 
     public function hasReview($id) {

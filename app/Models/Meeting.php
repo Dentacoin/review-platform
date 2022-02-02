@@ -46,15 +46,20 @@ class Meeting extends Model {
     }
 
     public function addImage($img) {
+        
+        $extensions = ['image/jpeg', 'image/png'];
 
-        $to = $this->getImagePath();
-        $img->resize(610, null, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-        $img->save($to);
-        $this->hasimage = true;
-        $this->save();
+        if (in_array($img->mime(), $extensions)) {
+
+            $to = $this->getImagePath();
+            $img->resize(610, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            $img->save($to);
+            $this->hasimage = true;
+            $this->save();
+        }
     }
 
     public function getWebsiteImageUrl() {
