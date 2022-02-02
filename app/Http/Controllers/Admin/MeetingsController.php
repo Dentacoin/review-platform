@@ -9,6 +9,7 @@ use App\Helpers\AdminHelper;
 
 use App\Models\Meeting;
 
+use Validator;
 use Request;
 use Image;
 use Auth;
@@ -71,49 +72,73 @@ class MeetingsController extends AdminController {
 
 	        if(Request::isMethod('post')) {
 
-                $item->seo_title = $this->request->input('seo_title');
-                $item->seo_description = $this->request->input('seo_description');
+                $extensions = ['png', 'jpg', 'jpeg'];
 
-                if(!empty( $this->request->input('checklists') )) {
-                    $newchecklists = $this->request->input('checklists');
-
-                    $newchecklistsArr = [];
-                    foreach ($newchecklists as $ka => $va) {
-                        if(!empty($va)) {
-                            $newchecklistsArr[] = $va;
-                        }
+                $validator = Validator::make(Request::all(), [
+                    'photo' => array('mimes:'.implode(',', $extensions)),
+                    'website-photo' => array('mimes:'.implode(',', $extensions)),
+                ]);
+                
+                if ($validator->fails()) {
+                
+                    $msg = $validator->getMessageBag()->toArray();
+                    $ret = array(
+                        'success' => false,
+                        'messages' => array()
+                    );
+                
+                    foreach ($msg as $field => $errors) {
+                        $ret['messages'][$field] = implode(', ', $errors);
                     }
-                    $item->checklists = json_encode( $newchecklistsArr );
-                }
+                    
+                    $this->request->session()->flash('error-message', 'File extension not supported' );
+                    return redirect('cms/meetings/edit/'.$id);
+                } else {
 
-                if(!empty( $this->request->input('after_checklist_info') )) {
-                    $newchecklists = $this->request->input('after_checklist_info');
+                    $item->seo_title = $this->request->input('seo_title');
+                    $item->seo_description = $this->request->input('seo_description');
 
-                    $newchecklistsArr = [];
-                    foreach ($newchecklists as $ka => $va) {
-                        if(!empty($va)) {
-                            $newchecklistsArr[] = $va;
+                    if(!empty( $this->request->input('checklists') )) {
+                        $newchecklists = $this->request->input('checklists');
+
+                        $newchecklistsArr = [];
+                        foreach ($newchecklists as $ka => $va) {
+                            if(!empty($va)) {
+                                $newchecklistsArr[] = $va;
+                            }
                         }
+                        $item->checklists = json_encode( $newchecklistsArr );
                     }
-                    $item->after_checklist_info = json_encode( $newchecklistsArr );
-                }
 
-                $item->checklist_title = $this->request->input('checklist_title');
-                $item->duration = $this->request->input('duration');
-                $item->video_id = $this->request->input('video_id');
-                $item->video_title = $this->request->input('video_title');
-                $item->iframe_id = $this->request->input('iframe_id');
-                $item->website_url = $this->request->input('website_url');
-                $item->save();
+                    if(!empty( $this->request->input('after_checklist_info') )) {
+                        $newchecklists = $this->request->input('after_checklist_info');
 
-                if( Input::file('photo') ) {
-                    $img = Image::make( Input::file('photo') )->orientate();
-                    $item->addImage($img);
-                }
+                        $newchecklistsArr = [];
+                        foreach ($newchecklists as $ka => $va) {
+                            if(!empty($va)) {
+                                $newchecklistsArr[] = $va;
+                            }
+                        }
+                        $item->after_checklist_info = json_encode( $newchecklistsArr );
+                    }
 
-                if( Input::file('website-photo') ) {
-                    $img = Image::make( Input::file('website-photo') )->orientate();
-                    $item->addWebsiteImage($img);
+                    $item->checklist_title = $this->request->input('checklist_title');
+                    $item->duration = $this->request->input('duration');
+                    $item->video_id = $this->request->input('video_id');
+                    $item->video_title = $this->request->input('video_title');
+                    $item->iframe_id = $this->request->input('iframe_id');
+                    $item->website_url = $this->request->input('website_url');
+                    $item->save();
+
+                    if( Input::file('photo') ) {
+                        $img = Image::make( Input::file('photo') )->orientate();
+                        $item->addImage($img);
+                    }
+
+                    if( Input::file('website-photo') ) {
+                        $img = Image::make( Input::file('website-photo') )->orientate();
+                        $item->addWebsiteImage($img);
+                    }
                 }
 	        }
 

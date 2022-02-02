@@ -277,17 +277,29 @@ class IndexController extends ApiController {
 	    	$user = GeneralHelper::decrypt(request('userId')) ? User::find(GeneralHelper::decrypt(request('userId'))) : null;
 
 	    	if(!empty($user)) {
+
+				$extensions = ['png', 'jpg', 'jpeg'];
+
+				$path = $_FILES['avatar']['name'];
+				$ext = pathinfo($path, PATHINFO_EXTENSION);
+		
+				if (!in_array($ext, $extensions)) {
+					return Response::json( [
+						'success' => false,
+					]);
+				}
+
 				$user->addImage(Image::make( request()->file('avatar') )->orientate());
 
 		    	return Response::json( [
 		            'success' => true,
-		        ] );
+		        ]);
 	    	}
     	}
 
 	    return Response::json( [
             'success' => false,
-        ] );
+        ]);
     }
 
     public function socialProfileLink() {

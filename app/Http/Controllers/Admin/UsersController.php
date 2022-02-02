@@ -787,7 +787,6 @@ class UsersController extends AdminController {
                 ->withInput()
                 ->withErrors($validator);
             } else {
-                
                 $newuser = new User;
                 $newuser->title = Request::input('title');
                 $newuser->name = Request::input('name');
@@ -812,11 +811,6 @@ class UsersController extends AdminController {
 
                 $newuser->slug = $newuser->makeSlug();
                 $newuser->save();
-
-                if( Request::file('image') && Request::file('image')->isValid() ) {
-                    $img = Image::make( Input::file('image') )->orientate();
-                    $newuser->addImage($img);
-                }
 
                 $newuser->generateSocialCover();
 
@@ -2010,45 +2004,6 @@ class UsersController extends AdminController {
         return redirect('cms/users/users/edit/'.$id);
     }
 
-    public function add_avatar( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support', 'voxer'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $user = User::find($id);
-
-        if( !empty($user) && Request::file('image') && Request::file('image')->isValid() ) {
-            $img = Image::make( Input::file('image') )->orientate();
-            $user->addImage($img);
-
-            $user->hasimage_social = false;
-            $user->save();
-
-            foreach ($user->reviews_out as $review_out) {
-                $review_out->hasimage_social = false;
-                $review_out->save();
-            }
-
-            foreach ($user->reviews_in_dentist as $review_in_dentist) {
-                $review_in_dentist->hasimage_social = false;
-                $review_in_dentist->save();
-            }
-
-            foreach ($user->reviews_in_clinic as $review_in_clinic) {
-                $review_in_clinic->hasimage_social = false;
-                $review_in_clinic->save();
-            }
-
-            return Response::json([
-                'success' => true, 
-                'thumb' => $user->getImageUrl(true), 
-                'name' => '' 
-            ]);
-        }
-    }
-
     public function delete_photo( $id, $position ) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
@@ -2388,6 +2343,17 @@ class UsersController extends AdminController {
         }
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
+
+            $extensions = ['png', 'jpg', 'jpeg'];
+            
+            $path = $_FILES['image']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+            if (!in_array($ext, $extensions)) {
+                return Response::json([
+                    'success' => false,
+                ]);
+            }
 
             $img = Image::make( Input::file('image') )->orientate();
             list($thumb, $full, $name) = GeneralHelper::addTempImage($img);

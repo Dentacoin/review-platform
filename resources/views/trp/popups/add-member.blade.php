@@ -61,7 +61,7 @@
 				    		<div class="loader">
 				    			<i></i>
 				    		</div>
-							<input type="file" name="image" class="add-avatar-member" id="add-avatar-member-login" upload-url="{{ getLangUrl('register/upload') }}"/>
+							<input type="file" name="image" class="add-avatar-member" accept="image/png,image/jpeg,image/jpg" id="add-avatar-member-login" upload-url="{{ getLangUrl('register/upload') }}"/>
 							<input type="hidden" name="avatar" class="avatar"/>
 						</label>
 						

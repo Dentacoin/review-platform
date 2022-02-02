@@ -282,7 +282,7 @@ class BranchesController extends FrontController {
                 $newuser->slug = $newuser->makeSlug();
                 $newuser->save();
 
-                if( Request::input('avatar') ) {
+                if( Request::input('avatar') ) {                    
                     $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
                     $newuser->addImage($img);
                 }

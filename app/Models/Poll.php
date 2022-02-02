@@ -78,7 +78,6 @@ class Poll extends Model {
 
         $img = Image::canvas(1200, 628, '#fff');
 
-
         if ($this->status == 'closed') {
             $img->insert( public_path().'/img-trp/cover-dailypoll-closed.png');
         } else {

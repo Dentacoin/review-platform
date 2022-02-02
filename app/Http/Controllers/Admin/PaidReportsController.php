@@ -11,6 +11,7 @@ use App\Models\PaidReport;
 use App\Helpers\AdminHelper;
 use Carbon\Carbon;
 
+use Validator;
 use Response;
 use Request;
 use Image;
@@ -108,36 +109,36 @@ class PaidReportsController extends AdminController {
             }
             $newreport->languages = $this->request->input('languages');
             $newreport->download_format = $this->request->input('download_format');
-	        $newreport->save();
+            $newreport->save();
 
-	        foreach ($this->langs as $key => $value) {
-	            if(!empty($this->request->input('title-'.$key))) {
-	                $translation = $newreport->translateOrNew($key);
-	                $translation->paid_report_id = $newreport->id;
-	                $translation->slug = $this->request->input('slug-'.$key);
-	                $translation->main_title = $this->request->input('main-title-'.$key);
-	                $translation->title = $this->request->input('title-'.$key);
-	                $translation->methodology = $this->request->input('methodology-'.$key);
-	                $translation->summary = $this->request->input('summary-'.$key);
-	                $translation->short_description = $this->request->input('short-description-'.$key);
+            foreach ($this->langs as $key => $value) {
+                if(!empty($this->request->input('title-'.$key))) {
+                    $translation = $newreport->translateOrNew($key);
+                    $translation->paid_report_id = $newreport->id;
+                    $translation->slug = $this->request->input('slug-'.$key);
+                    $translation->main_title = $this->request->input('main-title-'.$key);
+                    $translation->title = $this->request->input('title-'.$key);
+                    $translation->methodology = $this->request->input('methodology-'.$key);
+                    $translation->summary = $this->request->input('summary-'.$key);
+                    $translation->short_description = $this->request->input('short-description-'.$key);
                     $translation->save();
-	            }
+                }
                 
-	            if(!empty( $this->request->input('checklists-'.$key) )) {
+                if(!empty( $this->request->input('checklists-'.$key) )) {
                     $newchecklists = $this->request->input('checklists-'.$key);
 
                     $newchecklistsArr = [];
                     foreach ($newchecklists as $ka => $va) {
-                       if(!empty($va)) {
+                        if(!empty($va)) {
                             $newchecklistsArr[] = $va;
-                       }
+                        }
                     }
                     $translation = $newreport->translateOrNew($key);
                     $translation->checklists = json_encode( $newchecklistsArr );
                     $translation->save();
                 }
 
-	            if(!empty( $this->request->input('table_contents-'.$key) )) {
+                if(!empty( $this->request->input('table_contents-'.$key) )) {
                     $newContents = $this->request->input('table_contents-'.$key);
                     $newMain = $this->request->input('main-'.$key);
                     $newPage = $this->request->input('page-'.$key);
@@ -156,27 +157,10 @@ class PaidReportsController extends AdminController {
                     $translation->table_contents = json_encode( $newContentsArr );
                     $translation->save();
                 }
-	        }
-	        $newreport->save();
+            }
+            $newreport->save();
 
-            if( Input::file('photo') ) {
-                $img = Image::make( Input::file('photo') )->orientate();
-                $newreport->addImage($img);
-            }
-            if( Input::file('photo-social') ) {
-                $img = Image::make( Input::file('photo-social') )->orientate();
-                $newreport->addImage($img, 'social');
-            }
-
-            if(!empty(Input::file('gallery'))) {
-                foreach(Input::file('gallery') as $sp) {
-                    $sample_page = new PaidReportPhoto;
-                    $sample_page->paid_report_id = $newreport->id;
-                    $sample_page->save();
-                    $img = Image::make( $sp )->orientate();
-                    $sample_page->addImage($img);
-                }
-            }
+            $this->addImages($newreport);
 
             Request::session()->flash('success-message', 'Paid Report Added');
             return redirect('cms/vox/paid-reports');
@@ -187,6 +171,58 @@ class PaidReportsController extends AdminController {
 	        'languages' => $this->languages,
 	        'formats' => $this->formats,
         ));
+    }
+
+    private function addImages($report) {
+        
+        $extensions = ['png', 'jpg', 'jpeg'];
+
+        if( Input::file('photo') ) {
+
+            $path = $_FILES['photo']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+            if (!in_array($ext, $extensions)) {                    
+                $this->request->session()->flash('error-message', 'File extension not supported' );
+                return redirect('cms/vox/paid-reports');
+            }
+                
+            $img = Image::make( Input::file('photo') )->orientate();
+            $report->addImage($img);
+        }
+        
+        if( Input::file('photo-social') ) {
+
+            $path = $_FILES['photo-social']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+            if (!in_array($ext, $extensions)) {                    
+                $this->request->session()->flash('error-message', 'File extension not supported' );
+                return redirect('cms/vox/paid-reports');
+            }
+                
+            $img = Image::make( Input::file('photo-social') )->orientate();
+            $report->addImage($img, 'social');
+        }
+
+        if(!empty(Input::file('gallery'))) {
+
+            foreach(Input::file('gallery') as $k => $sp) {
+
+                $path = $_FILES['gallery']['name'][$k];
+                $ext = pathinfo($path, PATHINFO_EXTENSION);
+    
+                if (!in_array($ext, $extensions)) {                    
+                    $this->request->session()->flash('error-message', 'File extension not supported' );
+                    return redirect('cms/vox/paid-reports');
+                }
+                $sample_page = new PaidReportPhoto;
+                $sample_page->paid_report_id = $report->id;
+                $sample_page->save();
+                $img = Image::make( $sp )->orientate();
+                $sample_page->addImage($img);
+            }
+        }
     }
 
     public function edit( $id ) {
@@ -262,25 +298,8 @@ class PaidReportsController extends AdminController {
                 }
                 $item->save();
 
-                if( Input::file('photo') ) {
-                    $img = Image::make( Input::file('photo') )->orientate();
-                    $item->addImage($img);
-                }
-                if( Input::file('photo-social') ) {
-                    $img = Image::make( Input::file('photo-social') )->orientate();
-                    $item->addImage($img, 'social');
-                }
-
-                if(!empty(Input::file('gallery'))) {
-                    foreach(Input::file('gallery') as $sp) {
-                        $sample_page = new PaidReportPhoto;
-                        $sample_page->paid_report_id = $item->id;
-                        $sample_page->save();
-                        $img = Image::make( $sp )->orientate();
-                        $sample_page->addImage($img);
-                    }
-                }
-	        }        
+                $this->addImages($item);
+	        }
 
 	        return $this->showView('paid-reports-form', array(
 	            'item' => $item,

@@ -40,9 +40,11 @@ class TestimonialSliderController extends AdminController {
             return redirect('cms/home');            
         }
 
+        $extensions = ['png', 'jpg', 'jpeg'];
+
         $validator = Validator::make($this->request->all(), [
             'name-en' => array('required'),
-            'image' => array('required'),
+            'image' => array('required', 'mimes:'.implode(',', $extensions)),
         ]);
 
         if ($validator->fails()) {
@@ -65,6 +67,15 @@ class TestimonialSliderController extends AdminController {
             }
 
             if( Request::file('image') && Request::file('image')->isValid() ) {
+
+                $path = $_FILES['image']['name'];
+                $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+                if (!in_array($ext, $extensions)) {                    
+                    $this->request->session()->flash('error-message', 'File extension not supported' );
+                    return redirect('cms/vox/paid-reports');
+                }
+                
                 $img = Image::make( Input::file('image') )->orientate();
                 $newtestimonial->addImage($img);
             }
@@ -132,13 +143,25 @@ class TestimonialSliderController extends AdminController {
         $item = DentistTestimonial::find($id);
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
+
+            $extensions = ['png', 'jpg', 'jpeg'];
+
+            $path = $_FILES['image']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+            if (!in_array($ext, $extensions)) {
+                return Response::json([
+                    'success' => false,
+                ]);
+            }
+
             $img = Image::make( Input::file('image') )->orientate();
             $item->addImage($img);
 
             return Response::json([
-                'success' => true, 
-                'thumb' => $item->getImageUrl(), 
-                'name' => '' 
+                'success' => true,
+                'thumb' => $item->getImageUrl(),
+                'name' => ''
             ]);
         }
     }

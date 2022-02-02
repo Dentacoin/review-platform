@@ -933,6 +933,18 @@ class ProfileController extends FrontController {
         }
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
+
+            $extensions = ['png', 'jpg', 'jpeg'];
+
+            $path = $_FILES['image']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+    
+            if (!in_array($ext, $extensions)) {
+                return Response::json( [
+                    'success' => false,
+                ]);
+            }
+
             $img = Image::make( Input::file('image') )->orientate();
             $this->user->addImage($img);
 
@@ -1338,7 +1350,19 @@ class ProfileController extends FrontController {
      * dentist adds a gallery photos
      */
     public function gallery($locale=null, $position=null) {
-        if( Request::file('image') && Request::file('image')->isValid() ) {
+
+        if(Request::file('image') && Request::file('image')->isValid()) {
+
+            $extensions = ['png', 'jpg', 'jpeg'];
+
+            $path = $_FILES['image']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+    
+            if (!in_array($ext, $extensions)) {
+                return Response::json( [
+                    'success' => false,
+                ]);
+            }
 
             $dapic = new UserPhoto;
             $dapic->user_id = $this->user->id;
@@ -1373,6 +1397,7 @@ class ProfileController extends FrontController {
      * clinic removes team members
      */
     public function dentists_delete( $locale=null, $id ) {
+
         $dentist = User::find( $id );
         $clinic = $this->user;
 

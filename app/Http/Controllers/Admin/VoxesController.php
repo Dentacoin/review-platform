@@ -1492,19 +1492,67 @@ class VoxesController extends AdminController {
         }
         $item->save();
 
+        $extensions = ['png', 'jpg', 'jpeg'];
+            
         if( Input::file('photo') ) {
+            $path = $_FILES['photo']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+    
+            if (!in_array($ext, $extensions)) {
+
+                if(!empty($history_info)) {
+                    $vox_history = new VoxHistory;
+                    $vox_history->admin_id = $this->user->id;
+                    $vox_history->vox_id = $item->id;
+                    $vox_history->info = $history_info;
+                    $vox_history->save();
+                }
+                
+                $this->request->session()->flash('error-message', 'File extension not supported' );
+                return redirect('cms/vox/edit/'.$item->id);
+            }
             $img = Image::make( Input::file('photo') )->orientate();
             $item->addImage($img);
 
             $history_info.= 'New photo<br/>';
         }
         if( Input::file('photo-social') ) {
+            $path = $_FILES['photo-social']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+    
+            if (!in_array($ext, $extensions)) {
+
+                if(!empty($history_info)) {
+                    $vox_history = new VoxHistory;
+                    $vox_history->admin_id = $this->user->id;
+                    $vox_history->vox_id = $item->id;
+                    $vox_history->info = $history_info;
+                    $vox_history->save();
+                }
+                $this->request->session()->flash('error-message', 'File extension not supported' );
+                return redirect('cms/vox/edit/'.$item->id);
+            }
             $img = Image::make( Input::file('photo-social') )->orientate();
             $item->addSocialImage($img);
 
             $history_info.= 'New photo social<br/>';
         }
         if( Input::file('photo-stats') ) {
+            $path = $_FILES['photo-stats']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+    
+            if (!in_array($ext, $extensions)) {
+
+                if(!empty($history_info)) {
+                    $vox_history = new VoxHistory;
+                    $vox_history->admin_id = $this->user->id;
+                    $vox_history->vox_id = $item->id;
+                    $vox_history->info = $history_info;
+                    $vox_history->save();
+                }
+                $this->request->session()->flash('error-message', 'File extension not supported' );
+                return redirect('cms/vox/edit/'.$item->id);
+            }
             $img = Image::make( Input::file('photo-stats') )->orientate();
             $item->addSocialImage($img, 'for-stats');
 
@@ -1856,6 +1904,17 @@ class VoxesController extends AdminController {
             foreach (json_decode($question->answers, true) as $k => $v) {
 
                 if(!empty(Input::file('answer-photos')[$k])) {
+
+                    $extensions = ['png', 'jpg', 'jpeg'];
+
+                    $path = $_FILES['answer-photos']['name'][$k];
+                    $ext = pathinfo($path, PATHINFO_EXTENSION);
+            
+                    if (!in_array($ext, $extensions)) {
+                        $this->request->session()->flash('error-message', 'File extension not supported' );
+                        return redirect('cms/vox/edit/'.$question->vox_id.'/question/'.$question->id);
+                    }
+
                     $unique = 'ans-'.mb_substr(microtime(true), 0, 10).$k;
 
                     $image_filename[] = $unique;
@@ -1890,6 +1949,17 @@ class VoxesController extends AdminController {
         }
 
         if( Input::file('question-photo') ) {
+            
+            $extensions = ['png', 'jpg', 'jpeg'];
+
+            $path = $_FILES['question-photo']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+    
+            if (!in_array($ext, $extensions)) {
+                $this->request->session()->flash('error-message', 'File extension not supported' );
+                return redirect('cms/vox/edit/'.$question->vox_id.'/question/'.$question->id);
+            }
+
             $img = Image::make( Input::file('question-photo') )->orientate();
             $question->addImage($img);
 
@@ -1931,7 +2001,7 @@ class VoxesController extends AdminController {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
+            return redirect('cms/home');
         }
 
         if(Request::isMethod('post')) {
@@ -1949,6 +2019,17 @@ class VoxesController extends AdminController {
             }
 
             if( Input::file('icon') ) {
+                
+                $extensions = ['png', 'jpg', 'jpeg'];
+
+                $path = $_FILES['icon']['name'];
+                $ext = pathinfo($path, PATHINFO_EXTENSION);
+        
+                if (!in_array($ext, $extensions)) {
+                    $this->request->session()->flash('error-message', 'File extension not supported' );
+                    return redirect('cms/vox/categories');
+                }
+                
                 $img = Image::make( Input::file('icon') )->orientate();
                 $item->addImage($img);
             }
@@ -2016,6 +2097,17 @@ class VoxesController extends AdminController {
                 $item->save();
 
                 if( Input::file('icon') ) {
+                
+                    $extensions = ['png', 'jpg', 'jpeg'];
+    
+                    $path = $_FILES['icon']['name'];
+                    $ext = pathinfo($path, PATHINFO_EXTENSION);
+            
+                    if (!in_array($ext, $extensions)) {
+                        $this->request->session()->flash('error-message', 'File extension not supported' );
+                        return redirect('cms/vox/categories');
+                    }
+
                     $img = Image::make( Input::file('icon') )->orientate();
                     $item->addImage($img);
                 }
@@ -2207,8 +2299,20 @@ class VoxesController extends AdminController {
         }
             
         if( Input::file('photo') && request('id') ) {
+
             $item = VoxBadge::find( request('id') );
             if($item) {
+
+                $extensions = ['png', 'jpg', 'jpeg'];
+    
+                $path = $_FILES['photo']['name'];
+                $ext = pathinfo($path, PATHINFO_EXTENSION);
+        
+                if (!in_array($ext, $extensions)) {
+                    $this->request->session()->flash('error-message', 'File extension not supported' );
+                    return redirect('cms/vox/badges');
+                }
+
                 $img = Image::make( Input::file('photo') )->orientate();
                 $item->addImage($img);
 

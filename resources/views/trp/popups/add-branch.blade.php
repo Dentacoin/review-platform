@@ -127,7 +127,7 @@
 								<div class="loader">
 									<i></i>
 								</div>
-								<input type="file" name="clinic_image" class="add-avatar-clinic-branch" id="add-avatar-clinic-branch" upload-url="{{ getLangUrl('register/upload') }}"/>
+								<input type="file" name="clinic_image" class="add-avatar-clinic-branch" id="add-avatar-clinic-branch" upload-url="{{ getLangUrl('register/upload') }}" accept="image/png,image/jpeg,image/jpg"/>
 								<input type="hidden" name="avatar" class="avatar"/>
 							</label>
 		

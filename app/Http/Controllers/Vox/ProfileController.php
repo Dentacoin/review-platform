@@ -184,6 +184,18 @@ class ProfileController extends FrontController {
     public function upload($locale=null) {
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
+
+            $extensions = ['png', 'jpg', 'jpeg'];
+
+            $path = $_FILES['image']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+    
+            if (!in_array($ext, $extensions)) {
+                return Response::json([
+                    'success' => false,
+                ]);
+            }
+
             $img = Image::make( Input::file('image') )->orientate();
             $this->user->addImage($img);
             $this->user->save();

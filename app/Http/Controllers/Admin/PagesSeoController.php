@@ -84,8 +84,11 @@ class PagesSeoController extends AdminController {
 
             if(Request::isMethod('post')) {
 
+                $extensions = ['png', 'jpg', 'jpeg'];
+
                 $validator = Validator::make($this->request->all(), [
                     'seo-title-en' => array('required'),
+                    'image' => array('mimes:'.implode(',', $extensions)),
                 ]);
 
                 if ($validator->fails()) {
