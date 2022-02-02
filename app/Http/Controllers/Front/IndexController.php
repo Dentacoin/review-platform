@@ -160,7 +160,7 @@ class IndexController extends FrontController {
 				$addMore = $addMore->where('state_name', 'LIKE', $city_cookie['state_name'])
 				->take( 12 - $homeDentists->count() )
 				->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-				>get();
+				->get();
 				$homeDentists = $homeDentists->concat($addMore);
 			}
 
