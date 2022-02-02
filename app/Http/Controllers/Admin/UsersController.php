@@ -2344,12 +2344,9 @@ class UsersController extends AdminController {
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
 
-            $extensions = ['png', 'jpg', 'jpeg'];
-            
-            $path = $_FILES['image']['name'];
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
+            $extensions = ['image/jpeg', 'image/png'];
 
-            if (!in_array($ext, $extensions)) {
+            if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
                 return Response::json([
                     'success' => false,
                 ]);

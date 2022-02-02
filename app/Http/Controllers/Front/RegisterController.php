@@ -30,12 +30,9 @@ class RegisterController extends FrontController {
     public function upload($locale=null) {
         if( Request::file('image') && Request::file('image')->isValid() ) {
 
-            $extensions = ['png', 'jpg', 'jpeg'];
+            $extensions = ['image/jpeg', 'image/png'];
 
-            $path = $_FILES['image']['name'];
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
-    
-            if (!in_array($ext, $extensions)) {
+            if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
                 return Response::json( [
                     'success' => false,
                 ]);

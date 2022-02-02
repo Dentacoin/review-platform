@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 
 use App\Services\VoxService as ServicesVox;
+use Illuminate\Support\Facades\Input;
 
 use App\Models\UserDevice;
 use App\Models\PollAnswer;
@@ -278,12 +279,9 @@ class IndexController extends ApiController {
 
 	    	if(!empty($user)) {
 
-				$extensions = ['png', 'jpg', 'jpeg'];
+                $extensions = ['image/jpeg', 'image/png'];
 
-				$path = $_FILES['avatar']['name'];
-				$ext = pathinfo($path, PATHINFO_EXTENSION);
-		
-				if (!in_array($ext, $extensions)) {
+                if (!in_array(Input::file('avatar')->getMimeType(), $extensions)) {
 					return Response::json( [
 						'success' => false,
 					]);

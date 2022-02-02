@@ -68,10 +68,9 @@ class TestimonialSliderController extends AdminController {
 
             if( Request::file('image') && Request::file('image')->isValid() ) {
 
-                $path = $_FILES['image']['name'];
-                $ext = pathinfo($path, PATHINFO_EXTENSION);
+                $extensions = ['image/jpeg', 'image/png'];
 
-                if (!in_array($ext, $extensions)) {                    
+                if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
                     $this->request->session()->flash('error-message', 'File extension not supported' );
                     return redirect('cms/vox/paid-reports');
                 }
@@ -144,12 +143,9 @@ class TestimonialSliderController extends AdminController {
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
 
-            $extensions = ['png', 'jpg', 'jpeg'];
+            $extensions = ['image/jpeg', 'image/png'];
 
-            $path = $_FILES['image']['name'];
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
-
-            if (!in_array($ext, $extensions)) {
+            if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
                 return Response::json([
                     'success' => false,
                 ]);

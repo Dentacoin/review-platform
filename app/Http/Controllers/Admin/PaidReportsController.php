@@ -175,14 +175,11 @@ class PaidReportsController extends AdminController {
 
     private function addImages($report) {
         
-        $extensions = ['png', 'jpg', 'jpeg'];
+        $extensions = ['image/jpeg', 'image/png'];
 
         if( Input::file('photo') ) {
 
-            $path = $_FILES['photo']['name'];
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
-
-            if (!in_array($ext, $extensions)) {                    
+            if (!in_array(Input::file('photo')->getMimeType(), $extensions)) {
                 $this->request->session()->flash('error-message', 'File extension not supported' );
                 return redirect('cms/vox/paid-reports');
             }
@@ -193,10 +190,7 @@ class PaidReportsController extends AdminController {
         
         if( Input::file('photo-social') ) {
 
-            $path = $_FILES['photo-social']['name'];
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
-
-            if (!in_array($ext, $extensions)) {                    
+            if (!in_array(Input::file('photo-social')->getMimeType(), $extensions)) {
                 $this->request->session()->flash('error-message', 'File extension not supported' );
                 return redirect('cms/vox/paid-reports');
             }
@@ -208,11 +202,8 @@ class PaidReportsController extends AdminController {
         if(!empty(Input::file('gallery'))) {
 
             foreach(Input::file('gallery') as $k => $sp) {
-
-                $path = $_FILES['gallery']['name'][$k];
-                $ext = pathinfo($path, PATHINFO_EXTENSION);
     
-                if (!in_array($ext, $extensions)) {                    
+                if (!in_array($sp->getMimeType(), $extensions)) {
                     $this->request->session()->flash('error-message', 'File extension not supported' );
                     return redirect('cms/vox/paid-reports');
                 }
