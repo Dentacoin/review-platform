@@ -2150,7 +2150,7 @@ UNCONFIRMED TRANSACTIONS
 
             echo 'Alert devs for suspicious files!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->cron('*/5 * * * *');
+        })->dailyAt('10:00');
 
 
         $schedule->call(function () {
