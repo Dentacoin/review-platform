@@ -404,7 +404,7 @@ class VoxService {
             if($prev_answers->count() == 1) {
 
                 if($prev_answers->first()->answer != 0) {
-
+                    
                     if(mb_strpos($answers_prev_q[$prev_answers->pluck('answer')->toArray()[0] - 1], '!') !== false) { // if the answer is with !
                         return 'skip-dvq:'.$next_question->id;
                     } else {
@@ -419,23 +419,23 @@ class VoxService {
                             }
                         } else {
 
-                            if(count($answers_prev_q) != count($answers_next_q)) {
-                                // dd($prev_answers->pluck('answer')->toArray());
+                            // if(count($answers_prev_q) != count($answers_next_q)) {
+                            //     // dd($prev_answers->pluck('answer')->toArray());
                                 
-                                $diffs = array_diff($answers_next_q,$answers_prev_q);
+                            //     $diffs = array_diff($answers_next_q,$answers_prev_q);
 
-                                $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+                            //     $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
                                 
-                                foreach($diffs as $key_diff => $diff) {
-                                    $array['answers_shown'][] = $key_diff+1;
-                                }
+                            //     foreach($diffs as $key_diff => $diff) {
+                            //         $array['answers_shown'][] = $key_diff+1;
+                            //     }
 
-                                if(!isset($array['answers_shown'])) {
-                                    return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
-                                }
-                            } else {
+                            //     if(!isset($array['answers_shown'])) {
+                            //         return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
+                            //     }
+                            // } else {
                                 return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
-                            }
+                            // }
                         }
                     }
                 } else {
