@@ -78,7 +78,6 @@ class YouTubeController extends FrontController {
                 printf("Open the following link in your browser:\n%s\n", $authUrl);
 
                 if (isset($_GET['code'])) {
-
                     $credentialsPath = storage_path() . '/yt-oauth2.json';
                     // Exchange authorization code for an access token.
                     $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
