@@ -2121,7 +2121,7 @@ UNCONFIRMED TRANSACTIONS
                     $file_mime = exec('file -b --mime-type '.$file);
 
                     // dd($file_mime);                                                  ??
-                    if(!in_array($file_mime, ['inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
+                    if(!in_array($file_mime, ['application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
                         // if(!in_array($file_mime, ['text/plain', 'text/x-php', 'inode/x-empty', 'application/octet-stream',        'text/html',               'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
                         $suspiciousFiles[$file_mime] = $file;
                         // dd($file, $file_mime);
