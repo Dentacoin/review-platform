@@ -2122,7 +2122,7 @@ UNCONFIRMED TRANSACTIONS
 
                     // dd($file_mime);                                                  ??
                     if(!in_array($file_mime, ['application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
-                        // if(!in_array($file_mime, ['text/plain', 'text/x-php', 'inode/x-empty', 'application/octet-stream',        'text/html',               'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
+                        // if(!in_array($file_mime, ['text/plain', 'text/x-php', 'inode/x-empty',        'text/html',               'application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
                         $suspiciousFiles[$file_mime] = $file;
                         // dd($file, $file_mime);
                     }
@@ -2145,7 +2145,7 @@ UNCONFIRMED TRANSACTIONS
     
                     $message->from($sender, $sender_name);
                     $message->to('gergana@youpluswe.com');
-                    // $message->to('miroslav.nedelchev@dentacoin.com');
+                    $message->to('miroslav.nedelchev@dentacoin.com');
                     $message->subject('Suspicious files uploaded in TRP server');
                 });
             }
