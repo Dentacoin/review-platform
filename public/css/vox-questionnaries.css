@@ -839,14 +839,15 @@
         width: 100%; }
         .questions .question-group .answers .answers-inner .mobile-overflow {
           display: block;
-          top: 0px;
-          height: 140px;
+          top: 70px;
+          height: 60px;
           width: 100%;
           position: absolute;
           z-index: 1000; }
           @media screen and (max-width: 768px) {
             .questions .question-group .answers .answers-inner .mobile-overflow {
-              height: 20px; } }
+              height: 20px;
+              top: 0px; } }
         @media screen and (max-width: 768px) {
           .questions .question-group .answers .answers-inner .mobile-hide {
             display: none; } }
