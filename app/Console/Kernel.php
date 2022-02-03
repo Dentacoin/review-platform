@@ -2117,13 +2117,15 @@ UNCONFIRMED TRANSACTIONS
             $suspiciousFiles = [];
 
             foreach($files as $file) {
-                $file_mime = exec('file -b --mime-type '.$file);
+                if(!empty($file)) {
+                    $file_mime = exec('file -b --mime-type '.$file);
 
-                // dd($file_mime);                                                  ??
-                if(!in_array($file_mime, ['inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime'] )) {
-                // if(!in_array($file_mime, ['text/plain', 'text/x-php',         'text/html',               'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime'] )) {
-                    $suspiciousFiles[] = $file;
-                    // dd($file, $file_mime);
+                    // dd($file_mime);                                                  ??
+                    // if(!in_array($file_mime, ['inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime'] )) {
+                        if(!in_array($file_mime, ['text/plain', 'text/x-php', 'inode/x-empty', 'application/octet-stream',        'text/html',               'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
+                        $suspiciousFiles[$file_mime] = $file;
+                        // dd($file, $file_mime);
+                    }
                 }
             }
 
@@ -2132,8 +2134,8 @@ UNCONFIRMED TRANSACTIONS
 
                 ';
 
-                foreach ($suspiciousFiles as $sf) {
-                    $mtext .= $sf.'
+                foreach ($suspiciousFiles as $mime => $sf) {
+                    $mtext .= $sf.' ( Mime type - '.$mime.')
                     ';
                 }
             
@@ -2150,7 +2152,7 @@ UNCONFIRMED TRANSACTIONS
 
             echo 'Alert devs for suspicious files!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('10:00');
+        })->dailyAt('12:30');
 
 
         $schedule->call(function () {
