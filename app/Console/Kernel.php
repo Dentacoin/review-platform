@@ -2120,9 +2120,9 @@ UNCONFIRMED TRANSACTIONS
                 if(!empty($file)) {
                     $file_mime = exec('file -b --mime-type '.$file);
 
-                    // dd($file_mime);                                                  ??
-                    if(!in_array($file_mime, ['application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
-                        // if(!in_array($file_mime, ['text/plain', 'text/x-php', 'inode/x-empty',        'text/html',               'application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
+                    // dd($file_mime);
+                    if(!in_array($file_mime, ['application/zip', 'application/pdf', 'application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
+                        // if(!in_array($file_mime, ['text/plain', 'text/x-php', 'inode/x-empty',        'text/html',              'application/zip', 'application/pdf', 'application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
                         $suspiciousFiles[$file_mime] = $file;
                         // dd($file, $file_mime);
                     }
@@ -2152,7 +2152,7 @@ UNCONFIRMED TRANSACTIONS
 
             echo 'Alert devs for suspicious files!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('13:05');
+        })->dailyAt('10:00');
 
 
         $schedule->call(function () {

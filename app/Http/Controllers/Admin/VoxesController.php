@@ -1532,7 +1532,7 @@ class VoxesController extends AdminController {
                 $this->request->session()->flash('error-message', 'File extension not supported' );
                 return redirect('cms/vox/edit/'.$item->id);
             }
-            $img = Image::make( Input::file('photo-social') )->orientate();
+            $img = Image::make( Input::file('photo-social')->getRealPath() )->orientate();
             $item->addSocialImage($img);
 
             $history_info.= 'New photo social<br/>';
