@@ -1085,7 +1085,7 @@ class UsersController extends AdminController {
                                     }
 
                                     $substitutions = [
-                                        'valid_until' => date('F d, Y, H:i', strtotime(Carbon::parse($this->request->input('vip_access_until'))->addHours(-2)) ).' GMT',
+                                        'valid_until' => date('F d, Y, H:i', strtotime(Carbon::parse($this->request->input('vip_access_until'))) ).' GMT',
                                         'days' => Carbon::now()->diffInDays($this->request->input('vip_access_until')),
                                     ];
 
