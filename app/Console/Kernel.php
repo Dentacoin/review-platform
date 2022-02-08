@@ -2438,6 +2438,33 @@ UNCONFIRMED TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Activate vip access START'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $users = User::where( function($query) {
+                $query->where('vip_access', 0)
+                ->orWhereNull('vip_access');
+            })->whereNull('self_deleted')->doesntHave('permanentVoxBan')->where('id', '>=', 30000)->get();
+
+            foreach($users as $user) {
+
+                $user->vip_access = true;
+                $user->vip_access_until = Carbon::now()->addDays(7);
+                $user->save();
+
+                $substitutions = [
+                    'valid_until' => date('F d, Y, H:i', strtotime(Carbon::parse($user->vip_access_until)) ).' GMT',
+                    'days' => Carbon::now()->diffInDays($user->vip_access_until),
+                ];
+
+                $user->sendGridTemplate(118, $substitutions, 'vox');
+            }
+
+            echo 'Activate vip access - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->dailyAt('18:10');
+
+
+        $schedule->call(function () {
             echo 'Voxes Errors Check - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $voxes = Vox::with('questions')->where('type', 'normal')->get();
