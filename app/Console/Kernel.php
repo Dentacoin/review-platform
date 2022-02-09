@@ -436,7 +436,7 @@ NEW & NOT SENT TRANSACTIONS
 =========================
 
 ';
-                $number = 16; //always has to be %2
+                $number = 20; //always has to be %2
                 $half_number = $number/2;
 
                 $count_new_trans = DcnTransaction::where('status', 'new')
@@ -485,7 +485,7 @@ NEW & NOT SENT TRANSACTIONS
                 if($transactions->isNotEmpty()) {
                     $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
-                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(30)) {
+                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(10)) {
                         if (!GeneralHelper::isGasExpensive()) {
 
                             foreach ($transactions as $trans) {
@@ -502,7 +502,7 @@ NEW & NOT SENT TRANSACTIONS
                             $cron_new_trans_time->cron_new_trans = Carbon::now();
                             $cron_new_trans_time->save();
                         } else {
-                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(30);
+                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(10);
                             $cron_new_trans_time->save();
 
                             echo 'New Transactions High Gas Price';
@@ -2138,21 +2138,23 @@ UNCONFIRMED TRANSACTIONS
                     $mtext .= $sf.' ( Mime type - '.$mime.')
                     ';
                 }
-            
-                Mail::raw($mtext, function ($message) {
-                    $sender = config('mail.from.address');
-                    $sender_name = config('mail.from.name');
-    
-                    $message->from($sender, $sender_name);
-                    $message->to('gergana@youpluswe.com');
-                    $message->to('miroslav.nedelchev@dentacoin.com');
-                    $message->subject('Suspicious files uploaded in TRP server');
-                });
+            } else {
+                $mtext = 'No suspicious files found';
             }
+            
+            Mail::raw($mtext, function ($message) {
+                $sender = config('mail.from.address');
+                $sender_name = config('mail.from.name');
+
+                $message->from($sender, $sender_name);
+                $message->to('gergana@youpluswe.com');
+                $message->to('miroslav.nedelchev@dentacoin.com');
+                $message->subject('Suspicious files uploaded in TRP server');
+            });
 
             echo 'Alert devs for suspicious files!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('10:00');
+        })->cron('00 10,20 * * *');
 
 
         $schedule->call(function () {
