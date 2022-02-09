@@ -22,6 +22,7 @@
                                     <th>Registered user</th>
                                     <th>Registered at</th>
                                     <th>Has vip access?</th>
+                                    <th>Is deleted?</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,6 +54,13 @@
                                                 {{ $item->user->vip_access ? 'Yes' : 'No' }}
                                             @elseif(!empty($item->emailUser))
                                                 {{ $item->emailUser->vip_access ? 'Yes' : 'No' }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(!empty($item->user))
+                                                {{ $item->user->deleted_at ? 'Yes' : 'No' }}
+                                            @elseif(!empty($item->emailUser))
+                                                {{ $item->emailUser->deleted_at ? 'Yes' : 'No' }}
                                             @endif
                                         </td>
                                     </tr>
