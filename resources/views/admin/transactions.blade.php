@@ -16,7 +16,7 @@
             @endif
 
             @if(in_array($admin->role, ['super_admin', 'support']))
-                <a href="{{ $is_retry_stopped ? url('cms/transactions/enable-retry') : url('cms/transactions/disable-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_stopped ? 'Enable' : 'Disable' }} Retry</a>
+                <a href="{{ $is_retry_stopped ? url('cms/transactions/enable-retry') : url('cms/transactions/disable-retry') }}" class="btn btn-primary pull-right" style="margin-left: 10px;">{{ $is_retry_stopped ? 'Enable' : 'Disable' }} sending trans to PS</a>
             @endif
         </div>
     </div>
@@ -34,7 +34,7 @@
     @endif
     @if($is_retry_stopped)
         <div>
-            <label class="alert alert-warning">Sending normal transactions to the PS is disabled.</label>
+            <label class="alert alert-warning">Sending transactions to the PS is disabled.</label>
         </div>
     @endif
     @if($manually_check_transactions && $admin->role=='super_admin')
