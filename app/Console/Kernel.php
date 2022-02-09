@@ -512,7 +512,7 @@ NEW & NOT SENT TRANSACTIONS
 
                 echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-                CronjobRun::destroy($cronjob_stars->id);
+                // CronjobRun::destroy($cronjob_stars->id);
             } else {
                 echo 'New transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
