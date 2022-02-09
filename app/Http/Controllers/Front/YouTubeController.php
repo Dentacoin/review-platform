@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\IncompleteRegistration;
 use App\Models\WithdrawalsCondition;
 use App\Models\ScrapeDentistResult;
+use App\Models\DeletedUserEmails;
 use App\Models\UnclaimedDentist;
 use App\Models\DcnTransaction;
 use App\Models\ScrapeDentist;
@@ -60,7 +61,7 @@ class YouTubeController extends FrontController {
     public function test() {
         
         if(!empty($this->admin)) {
-                        
+            
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
