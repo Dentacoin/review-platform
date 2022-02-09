@@ -293,6 +293,9 @@ $main-color: #38ace5;
 	}
 	
 	.second-col {
+		align-items: center;
+		display: flex;
+		flex-direction: column;
 
 		@media #{$phone} {
 			display: none;
@@ -300,6 +303,8 @@ $main-color: #38ace5;
 
 		div {
 			color: white;
+			flex: 1;
+			width: 100%;
 
 			img {
 				max-width: 12px;

@@ -418,14 +418,20 @@
         .vip-access-wrapper .first-col .first-info .hours-countdown span {
           color: white;
           font-weight: normal; }
-  @media screen and (max-width: 768px) {
-    .vip-access-wrapper .second-col {
-      display: none; } }
-  .vip-access-wrapper .second-col div {
-    color: white; }
-    .vip-access-wrapper .second-col div img {
-      max-width: 12px;
-      margin-left: 6px; }
+  .vip-access-wrapper .second-col {
+    align-items: center;
+    display: flex;
+    flex-direction: column; }
+    @media screen and (max-width: 768px) {
+      .vip-access-wrapper .second-col {
+        display: none; } }
+    .vip-access-wrapper .second-col div {
+      color: white;
+      flex: 1;
+      width: 100%; }
+      .vip-access-wrapper .second-col div img {
+        max-width: 12px;
+        margin-left: 6px; }
 
 @media screen and (max-width: 768px) {
   .all-qs-wrap {
