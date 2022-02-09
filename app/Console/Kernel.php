@@ -481,9 +481,9 @@ NEW & NOT SENT TRANSACTIONS
                 ->get();
 
                 $transactions = $new_transactions->concat($not_sent_transactions);
-                echo 'before trans '.PHP_EOL;
+                
                 if($transactions->isNotEmpty()) {
-                    echo 'trans count '.$transactions->count().PHP_EOL;
+                    
                     $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
                     if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(10)) {
@@ -493,7 +493,6 @@ NEW & NOT SENT TRANSACTIONS
                                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
                                 echo $log . PHP_EOL;
                             }
-                            echo 'before retry '.PHP_EOL;
 
                             Dcn::retry($transactions);
 
