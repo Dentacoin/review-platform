@@ -20,6 +20,8 @@
                                 <tr>
                                     <th>Email</th>
                                     <th>Registered user</th>
+                                    <th>Registered at</th>
+                                    <th>Has vip access?</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,6 +39,20 @@
                                                 <a href="{{ url('cms/users/users/edit/'.$item->emailUser->id) }}">
                                                     {{ $item->emailUser->email }}
                                                 </a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(!empty($item->user))
+                                                {{ date('d.m.Y, H:i:s', $item->user->created_at->timestamp) }}
+                                            @elseif(!empty($item->emailUser))
+                                                {{ date('d.m.Y, H:i:s', $item->emailUser->created_at->timestamp) }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(!empty($item->user))
+                                                {{ $item->user->vip_access ? 'Yes' : 'No' }}
+                                            @elseif(!empty($item->emailUser))
+                                                {{ $item->emailUser->vip_access ? 'Yes' : 'No' }}
                                             @endif
                                         </td>
                                     </tr>
