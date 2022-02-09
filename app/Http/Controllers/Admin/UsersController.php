@@ -3158,7 +3158,7 @@ class UsersController extends AdminController {
 
         $total_count = $items->count();
         $page = max(1,intval(request('page')));
-        $ppp = 25;
+        $ppp = 100;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
 
