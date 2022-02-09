@@ -12,7 +12,8 @@ return [
                 'incomplete-registrations' => 'incomplete-registrations',
                 'lead-magnet' => 'lead-magnet',
                 'rewards' => 'rewards',
-                'bans' => 'bans'
+                'bans' => 'bans',
+                'lost_users' => 'lost_users'
             ),
             'js' => array(
                 'users.js',

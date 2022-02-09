@@ -20,6 +20,10 @@ class DeletedUserEmails extends Model {
 	public function user() {
 	    return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
 	}
+
+	public function emailUser() {
+	    return $this->hasOne('App\Models\User', 'email', 'email')->withTrashed();
+	}
 }
 
 ?>

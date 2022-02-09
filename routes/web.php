@@ -92,6 +92,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	
 	Route::get('users/rewards',										'UsersController@rewards');
 	Route::get('users/bans',										'UsersController@bans');
+	Route::get('users/lost_users',									'UsersController@lostUsers');
 	Route::get('users/users_stats', 								'UsersController@usersStats');
 	Route::post('users/answered-questions-count',					'UsersController@answeredQuestionsCount');
 	Route::any('users/registrations', 								'UsersController@registrations');
