@@ -191,12 +191,14 @@ $main-color: #38ace5;
     max-width: 790px;
     margin-right: auto;
     margin-left: auto;
+	max-height: 82px;
 		
 	@media #{$phone} {
 		justify-content: center;
 		margin-top: -30px;
 		margin-right: -15px;
 		margin-left: -15px;
+		max-height: 72px;
 	}
 
 	.first-col {

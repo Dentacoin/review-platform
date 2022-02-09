@@ -346,13 +346,15 @@
   padding: 10px 20px;
   max-width: 790px;
   margin-right: auto;
-  margin-left: auto; }
+  margin-left: auto;
+  max-height: 82px; }
   @media screen and (max-width: 768px) {
     .vip-access-wrapper {
       justify-content: center;
       margin-top: -30px;
       margin-right: -15px;
-      margin-left: -15px; } }
+      margin-left: -15px;
+      max-height: 72px; } }
   .vip-access-wrapper .first-col {
     min-width: 460px;
     position: relative; }
