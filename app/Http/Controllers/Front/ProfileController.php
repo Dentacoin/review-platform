@@ -1087,7 +1087,7 @@ class ProfileController extends FrontController {
                     $ret = [
                         'success' => false,
                         'messages' => [
-                            'address' => 'The city and the country mismatch'
+                            'address' => trans('trp.page.user.invalid-country')
                         ]
                     ];
                     return Response::json($ret);
@@ -1096,7 +1096,7 @@ class ProfileController extends FrontController {
                 return redirect( getLangUrl('/') )
                 ->withInput()
                 ->withErrors([
-                    'address' => trans('The city and the country mismatch')
+                    'address' => trans('trp.page.user.invalid-country')
                 ]);
             }
 
