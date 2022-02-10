@@ -88,6 +88,10 @@ class VoxesController extends AdminController {
             return redirect('cms/home');            
         }
 
+        ini_set('max_execution_time', 0);
+        set_time_limit(0);
+        ini_set('memory_limit','1024M');
+
         if(Request::isMethod('post')) {
             if(!empty(request('ids'))) {
                 foreach(request('ids') as $vox_id) {
@@ -134,12 +138,12 @@ class VoxesController extends AdminController {
             $table_fields['update'] = array('template' => 'admin.parts.table-voxes-edit', 'label' => 'View');
         }
 
-        $voxes_with_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions', 'processingForTranslations'])
+        $voxes_with_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])
         ->whereNotNull('launched_at')
         ->orderBy('launched_at', 'desc')
         ->get();
 
-        $voxes_without_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions', 'processingForTranslations'])
+        $voxes_without_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])
         ->whereNull('launched_at')
         ->orderBy('id', 'desc')
         ->whereNotIn('id', [48,80])
@@ -663,8 +667,6 @@ class VoxesController extends AdminController {
 
             $results = Excel::toArray(new Import, $newName );
 
-            dd($results);
-
             if(!empty($results)) {
                 $maxlen = 0;
                 foreach ($results as $r) {
@@ -733,9 +735,8 @@ class VoxesController extends AdminController {
 
             $that = $this;
 
-            $newName = '/tmp/'.str_replace(' ', '-', Input::file('table')->getClientOriginalName());
+            $newName = '/tmp/'.str_replace([' ', ','], ['-', ''], Input::file('table')->getClientOriginalName());
             copy( Input::file('table')->path(), $newName );
-
             $results = Excel::toArray(new Import, $newName );
 
             if(!empty($results)) {
@@ -799,7 +800,7 @@ class VoxesController extends AdminController {
                     Request::session()->flash('warning-message', 'Missing or more than necessary question/s tooltip brackets: '.implode(' ;     ', session('brackets')['q_br'] ));
                 }
                 if (!empty(session('brackets')['a_br'])) {
-                    Request::session()->flash('error-message', 'Missing or more than necessary answers/s tooltip brackets: '.implode(' ;     ', session('brackets')['a_br'] ));
+                    Request::session()->flash('error-message', 'Missing or more than necessary answer/s tooltip brackets: '.implode(' ;     ', session('brackets')['a_br'] ));
                 }
             }
             
