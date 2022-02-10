@@ -3318,7 +3318,7 @@ class VoxService {
 
 				$daily_polls[] = [
                     'title' => $poll->question,
-					'category_image' => $poll->pollCategory->getImageUrl(),
+					'category_image' => $poll->pollCategory ? $poll->pollCategory->getImageUrl() : '',
 					'id' => $poll->id,
 					'closed' => $poll->status == 'closed' ? true : false,
 					'closed_image' => url('new-vox-img/stat-poll.png'),
