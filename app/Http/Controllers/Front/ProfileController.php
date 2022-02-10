@@ -1057,7 +1057,14 @@ class ProfileController extends FrontController {
             ->withErrors($validator);
         } else {
 
-            if(is_numeric(request('country_id')) && empty(Request::input('field')) && $this->user->is_dentist && !GeneralHelper::validateAddress( $this->user->country_id, request('address') ) ) {
+            $checkAddress = GeneralHelper::validateAddress( $this->user->country_id, request('address') );
+
+            if(
+                is_numeric(request('country_id')) 
+                && empty(Request::input('field')) 
+                && $this->user->is_dentist 
+                && !$checkAddress 
+            ) {
                 if( Request::input('json') ) {
                     $ret = [
                         'success' => false,
@@ -1072,6 +1079,24 @@ class ProfileController extends FrontController {
                 ->withInput()
                 ->withErrors([
                     'address' => trans('trp.common.invalid-address')
+                ]);
+            }
+
+            if(!empty($checkAddress) && isset($checkAddress['country_name']) && $checkAddress['country_name'] != $this->user->country->name) {
+                if( Request::input('json') ) {
+                    $ret = [
+                        'success' => false,
+                        'messages' => [
+                            'address' => 'The city and the country mismatch'
+                        ]
+                    ];
+                    return Response::json($ret);
+                }
+
+                return redirect( getLangUrl('/') )
+                ->withInput()
+                ->withErrors([
+                    'address' => trans('The city and the country mismatch')
                 ]);
             }
 

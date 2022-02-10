@@ -1076,10 +1076,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return count($nonverified)>=3 ? true : null;
     }
 
-    public function canIuseAddress( $address ) {
-        return true;
-    }
-
     //
     //
     // Vox 
