@@ -20,6 +20,10 @@ class VoxCategory extends Model {
 
     public $timestamps = false;
 
+    public function polls() {
+        return $this->hasMany('App\Models\Poll', 'category', 'id');
+    }
+
     public function voxes() {
         return $this->hasMany('App\Models\VoxToCategory', 'vox_category_id', 'id')
         ->with('vox')

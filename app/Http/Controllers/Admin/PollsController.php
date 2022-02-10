@@ -165,7 +165,7 @@ class PollsController extends AdminController {
                 ->withInput()
                 ->withErrors($validator);
             } else {
-                Request::session()->flash('success-message', 'Daily Poll Addede');
+                Request::session()->flash('success-message', 'Daily Poll Added');
                 if(request('stay-on-same-page')) {
                     return redirect('cms/vox/polls/edit/'.$newpoll->id);
                 } else {
