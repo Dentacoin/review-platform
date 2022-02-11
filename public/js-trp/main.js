@@ -220,10 +220,16 @@ jQuery(document).ready(function($){
 					$.event.trigger({type: 'openPatientRegister'});
 				}, 500);
 			}
-		} else if(id == 'popup-share' || id == 'verification-popup' || id == 'popup-wokring-time-waiting'
-		|| id == 'failed-popup' || id == 'popup-existing-dentist' || id == 'invite-new-dentist-popup'
-		|| id == 'invite-new-dentist-success-popup' || id == 'popup-lead-magnet') {
-
+		} else if(
+			id == 'popup-share' 
+			|| id == 'verification-popup' 
+			|| id == 'popup-wokring-time-waiting'
+			|| id == 'failed-popup' 
+			|| id == 'popup-existing-dentist' 
+			|| id == 'invite-new-dentist-popup'
+			|| id == 'invite-new-dentist-success-popup' 
+			|| id == 'popup-lead-magnet'
+		) {
 			$.ajax({
 	            type: "POST",
 	            url: window.location.origin+'/get-popup/',

@@ -507,7 +507,7 @@
 	    				<div class="chart-outher">
 	    					@for($i=0;$i<=5;$i++)
 	    						<div class="chart-line"></div>
-	    					@endfor 
+	    					@endfor
 	    					@foreach($aggregated as $lab => $rat)
 	    						<div class="chart-parent">
 	    							<div class="chart tooltip-text" text="{{ number_format($rat,2) }}" to-height="{{ number_format($rat,2) }}"

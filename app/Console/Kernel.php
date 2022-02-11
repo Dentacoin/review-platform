@@ -672,44 +672,61 @@ UNCONFIRMED TRANSACTIONS
 
             echo 'DCN Low Balance Cron - START!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $alerts = [
-                [
-                    'currency' => 'DCN',
-                    'address' => '0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 200000
+            $platformAddresses = [
+                'dentavox' => [
+                    'address' => '0xa9bf76f9082ea2117c224049cda897536174d85e',
+                    'optimism' => true,
+                    'limit_dcn' => 200000,
+                    'limit_eth' => 10000000000000000, //0.01
                 ],
-                [
-                    'currency' => 'ETH',
-                    'address' => '0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0x61c3d833aa42aa92b7ea8870d8a003d19df8ff3e&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 50000000000000000
-                ],
-                [
-                    'currency' => 'DCN',
+                'reviews' => [
                     'address' => '0x6052a6292873947eb547456716afcc539b172fde',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0x6052a6292873947eb547456716afcc539b172fde&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 200000
+                    'optimism' => true,
+                    'limit_dcn' => 200000,
+                    'limit_eth' => 50000000000000000, //0.05
                 ],
-                [
-                    'currency' => 'ETH',
-                    'address' => '0x6052a6292873947eb547456716afcc539b172fde',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0x6052a6292873947eb547456716afcc539b172fde&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 50000000000000000
+                'dentacare' => [
+                    'address' => '0xDcDc0063fFcc425867fe4f9F4eFCfDF03d1D66D1',
+                    'optimism' => false,
+                    'limit_dcn' => 200000,
+                    'limit_eth' => 50000000000000000, //0.05
                 ],
-                [
-                    'currency' => 'DCN',
-                    'address' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0xe00b37962604344cacd1efbf0d45553cc400f53c&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 200000
+                'assurance' => [
+                    'address' => '0x7e742383713d2337de37d1470a3c6142e489f8ac',
+                    'optimism' => true,
+                    'limit_dcn' => 200000,
+                    'limit_eth' => 50000000000000000, //0.05
                 ],
-                [
-                    'currency' => 'ETH',
-                    'address' => '0xe00b37962604344cacd1efbf0d45553cc400f53c',
-                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0xe00b37962604344cacd1efbf0d45553cc400f53c&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => 10000000000000000
+                'dentacoin' => [
+                    'address' => '0x461c092805a3736d34da831ae3490982d27d94e0',
+                    'optimism' => true,
+                    'limit_dcn' => 200000,
+                    'limit_eth' => 50000000000000000, //0.05
+                ],
+                'dentists' => [
+                    'address' => '0x9375da038110f69e6475de6cf25fe52cfc366eef',
+                    'optimism' => true,
+                    'limit_dcn' => 200000,
+                    'limit_eth' => 50000000000000000, //0.05
                 ],
             ];
+
+            $alerts = [];
+
+            foreach($platformAddresses as $platformAddress) {
+                $alerts[] = [
+                    'currency' => 'DCN',
+                    'address' => $platformAddress['address'],
+                    'url' => 'https://api.etherscan.io//api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'limit' => $platformAddress['limit_dcn']
+                ];
+                $alerts[] = [
+                    'currency' => 'ETH',
+                    'address' => $platformAddress['address'],
+                    'url' => 'https://api'.($platformAddress['optimism'] ? '-optimism' : '').'.etherscan.io//api?module=account&action=balance&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'limit' => $platformAddress['limit_eth']
+                ];
+            }
 
             foreach ($alerts as $data) {
                 echo ' DATA URL '.$data['url'];
