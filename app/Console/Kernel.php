@@ -2134,12 +2134,14 @@ UNCONFIRMED TRANSACTIONS
             $personal_info = glob(storage_path().'/app/public/gdpr/*');
 
             foreach ($personal_info as $pi) {
-                unlink($pi);
+                if(is_dir($pi)) {
+                    exec('truncate -s 0 '.$pi);
+                }
             }
 
             echo 'Remove personal info files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('16:37');
+        })->dailyAt('16:45');
 
 
         $schedule->call(function () {
