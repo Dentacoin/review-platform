@@ -2139,7 +2139,7 @@ UNCONFIRMED TRANSACTIONS
 
             echo 'Remove personal info files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->cron('00 10,20 * * *');
+        })->dailyAt('16:37');
 
 
         $schedule->call(function () {
