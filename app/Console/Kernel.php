@@ -2141,7 +2141,7 @@ UNCONFIRMED TRANSACTIONS
 
             echo 'Remove personal info files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('16:45');
+        })->dailyAt('16:49');
 
 
         $schedule->call(function () {
