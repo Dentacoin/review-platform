@@ -335,12 +335,29 @@ class UsersController extends AdminController {
         }
         if(!empty(request('search-email'))) {
             $s_email = request('search-email');
-            $users = $users->where( function($query) use ($s_email) {
-                $query->where('email', 'LIKE', '%'.trim($s_email).'%')
-                ->orWhereHas('oldEmails', function ($queryy) use ($s_email) {
-                    $queryy->where('email', 'LIKE', $s_email);
+
+            if(str_contains($s_email, ',')) {
+                if(str_contains($s_email, '"')) {
+                    $emails = str_replace('"', '', $s_email);
+                    $users = $users->whereIn('email', explode(',', $emails ));
+                } else {
+                    $users = $users->whereIn('email', explode(',', $s_email ));
+                }
+            } else if(str_contains($s_email, ' ')) {
+                if(str_contains($s_email, '"')) {
+                    $ids = str_replace('"', '', $s_email);
+                    $users = $users->whereIn('email', explode(' ', $ids ));
+                } else {
+                    $users = $users->whereIn('email', explode(' ', $s_email ));
+                }
+            } else {
+                $users = $users->where( function($query) use ($s_email) {
+                    $query->where('email', 'LIKE', '%'.trim($s_email).'%')
+                    ->orWhereHas('oldEmails', function ($queryy) use ($s_email) {
+                        $queryy->where('email', 'LIKE', $s_email);
+                    });
                 });
-            });
+            }
         }
         if(!empty(request('search-address'))) {
             $dcn_address = request('search-address');
@@ -352,7 +369,23 @@ class UsersController extends AdminController {
             $users = $users->where('civic_kyc_hash', 'LIKE', '%'.trim(request('civic-kyc-hash')).'%');
         }
         if(!empty(request('search-id'))) {
-            $users = $users->where('id', request('search-id') );
+            if(str_contains(request('search-id'), ',')) {
+                if(str_contains(request('search-id'), '"')) {
+                    $ids = str_replace('"', '', request('search-id'));
+                    $users = $users->whereIn('id', explode(',', $ids ));
+                } else {
+                    $users = $users->whereIn('id', explode(',', request('search-id') ));
+                }
+            } else if(str_contains(request('search-id'), ' ')) {
+                if(str_contains(request('search-id'), '"')) {
+                    $ids = str_replace('"', '', request('search-id'));
+                    $users = $users->whereIn('id', explode(' ', $ids ));
+                } else {
+                    $users = $users->whereIn('id', explode(' ', request('search-id') ));
+                }
+            } else {
+                $users = $users->where('id', request('search-id') );
+            }
         }
         if(!empty(request('search-ip-address'))) {
             $ip = request('search-ip-address');

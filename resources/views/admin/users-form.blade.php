@@ -157,7 +157,6 @@
         </div>
     @endif
 
-
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
@@ -201,38 +200,29 @@
                                                                 <option value="added_new" {{ $item->status == 'added_new' ? 'selected="selected"' : ''}} >Added New</option>
                                                                 <option value="added_approved" {{ $item->status == 'added_approved' ? 'selected="selected"' : ''}} >Added Approved</option>
                                                                 <option value="added_rejected" {{ $item->status == 'added_rejected' ? 'selected="selected"' : ''}} >Added Rejected</option>
-
                                                             @elseif($item->status == 'added_approved')
                                                                 <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>
                                                                 <option value="added_new" {{ $item->status == 'added_new' ? 'selected="selected"' : ''}} >Added New</option>
                                                                 <option value="added_approved" {{ $item->status == 'added_approved' ? 'selected="selected"' : ''}} >Added Approved</option>
                                                                 <option value="added_rejected" {{ $item->status == 'added_rejected' ? 'selected="selected"' : ''}} >Added Rejected</option>
-
                                                             @elseif($item->status == 'admin_imported')
                                                                 <option value="admin_imported" {{ $item->status == 'admin_imported' ? 'selected="selected"' : ''}} >Imported by Admin</option>
                                                                 <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>
-
                                                             @elseif($item->status == 'added_by_clinic_rejected' || $item->status == 'added_by_clinic_unclaimed')
                                                                 <option value="added_by_clinic_unclaimed" {{ $item->status == 'added_by_clinic_unclaimed' ? 'selected="selected"' : ''}} >Added by Clinic Approved</option>
                                                                 <option value="added_by_clinic_rejected" {{ $item->status == 'added_by_clinic_rejected' ? 'selected="selected"' : ''}} >Added by Clinic Rejected</option>
-
                                                             @elseif($item->status == 'added_by_clinic_new')
                                                                 <option value="added_by_clinic_new" {{ $item->status == 'added_by_clinic_new' ? 'selected="selected"' : ''}} >Added by Clinic New</option>
-
                                                             @elseif($item->status == 'added_by_clinic_claimed')
                                                                 <option value="added_by_clinic_claimed" {{ $item->status == 'added_by_clinic_claimed' ? 'selected="selected"' : ''}} >Added by Clinic Claimed</option>
-
                                                             @elseif($item->status == 'added_by_dentist_new' || $item->status == 'added_by_dentist_rejected' || $item->status == 'added_by_dentist_unclaimed')
                                                                 <option value="added_by_dentist_new" {{ $item->status == 'added_by_dentist_new' ? 'selected="selected"' : ''}} >Added by Dentist New</option>
                                                                 <option value="added_by_dentist_unclaimed" {{ $item->status == 'added_by_dentist_unclaimed' ? 'selected="selected"' : ''}} >Added by Dentist Approved</option>
                                                                 <option value="added_by_dentist_rejected" {{ $item->status == 'added_by_dentist_rejected' ? 'selected="selected"' : ''}} >Added by Dentist Rejected</option>     
-
                                                             @elseif($item->status == 'added_by_dentist_claimed')
                                                                 <option value="added_by_dentist_claimed" {{ $item->status == 'added_by_dentist_claimed' ? 'selected="selected"' : ''}} >Added by Dentist Claimed</option>
-
                                                             @elseif($item->status == 'duplicated_email')
                                                                 <option value="duplicated_email" {{ $item->status == 'duplicated_email' ? 'selected="selected"' : ''}} >Duplicated Email</option>
-
                                                             @else
                                                                 <option value="new" {{ $item->status == 'new' ? 'selected="selected"' : ''}} >New</option>
                                                                 <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>

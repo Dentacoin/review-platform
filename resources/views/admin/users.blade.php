@@ -179,13 +179,13 @@
                         </div>
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-1">
-                                <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-id') }}">
+                                <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="IDs">
                             </div>
                             <div class="col-md-2">
                                 <input type="text" class="form-control" name="search-name" value="{{ $search_name }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-name') }}">
                             </div>
                             <div class="col-md-2">
-                                <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-email') }}">
+                                <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="Emails">
                             </div>
                             <div class="col-md-2">
                                 <input type="text" class="form-control" name="search-phone" value="{{ $search_phone }}" placeholder="Phone ( without the country code )">

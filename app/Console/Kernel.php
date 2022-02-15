@@ -2129,22 +2129,6 @@ UNCONFIRMED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Remove personal info files'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-            $personal_info = glob(storage_path().'/app/public/gdpr/*');
-
-            foreach ($personal_info as $pi) {
-                if(is_dir($pi)) {
-                    exec('truncate -s 0 '.$pi);
-                }
-            }
-
-            echo 'Remove personal info files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-            
-        })->dailyAt('16:49');
-
-
-        $schedule->call(function () {
             echo 'Alert devs for suspicious files'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $files = GeneralHelper::getDirContents(storage_path().'/app/public/');
@@ -2352,9 +2336,9 @@ UNCONFIRMED TRANSACTIONS
                     unlink($file);
                 }
             }
-            
-            echo 'Remove support uploaded files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
+            echo 'Remove support uploaded files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
         })->dailyAt('10:00');
 
 
