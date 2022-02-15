@@ -1764,7 +1764,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
 
             return Response::json([
                 'success' => true,
-                'link' => 'https://www.facebook.com/dialog/pagetab?app_id=1906201509652855&redirect_uri='.$this->user->getLink().'?popup=facebook-tab-success',
+                'link' => 'https://www.facebook.com/dialog/pagetab?app_id='.request('page').'&redirect_uri='.$this->user->getLink().'?popup=facebook-tab-success',
             ] );
         }
     }
