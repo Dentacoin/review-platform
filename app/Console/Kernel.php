@@ -2446,9 +2446,9 @@ UNCONFIRMED TRANSACTIONS
                     $user->vip_access = false;
                     $user->save();
 
-                    if(empty($user->deleted_at)) {
-                        $user->sendGridTemplate(119, null, 'vox');
-                    }
+                    // if(empty($user->deleted_at)) {
+                    //     $user->sendGridTemplate(119, null, 'vox');
+                    // }
                 }
             }
 
