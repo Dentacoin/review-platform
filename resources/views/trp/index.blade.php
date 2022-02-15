@@ -29,6 +29,8 @@
 			</div>
 		@endif
 
+		{{-- Location: <div url="{{ getLangUrl('get-current-location') }}" id="location"> </div> --}}
+
 	    <div class="flickity-oval">
 		    <div class="container">
 		    	<a href="javascript:;" class="slider-left"></a>

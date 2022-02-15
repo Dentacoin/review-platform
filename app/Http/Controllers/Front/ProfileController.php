@@ -2009,11 +2009,6 @@ class ProfileController extends FrontController {
             if ($send_mail) {
                 if(!empty($existing_patient)) {
 
-                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
-                        $existing_patient->patient_of = $this->user->id;
-                        $existing_patient->save();
-                    }
-
                     $substitutions = [
                         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                         'inviting_user_name' => $this->user->getNames(),
@@ -2026,8 +2021,14 @@ class ProfileController extends FrontController {
                         ]),
                     ];
 
-                    $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
+                    if(!empty(Request::Input('invite_hubapp')) && $this->user->is_partner) {
+                        $existing_patient->patient_of = $this->user->id;
+                        $existing_patient->save();
 
+                        $existing_patient->sendGridTemplate(130, $substitutions, 'trp');
+                    } else {
+                        $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
+                    }
                 } else {
 
                     $inviter_email = $this->user->email ? $this->user->email : $this->user->mainBranchEmail();
@@ -2069,7 +2070,7 @@ class ProfileController extends FrontController {
                             $this->user, 
                             $email, 
                             $name, 
-                            106, 
+                            !empty(Request::Input('invite_hubapp')) && $this->user->is_partner ? 130 : 106, 
                             $substitutions, 
                             'trp', 
                             $unsubscribed, 

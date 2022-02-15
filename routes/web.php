@@ -390,6 +390,7 @@ $reviewRoutes = function () {
 			//after 20th refresh -> ban for 60 min
 			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
 				Route::any('/', 									'IndexController@home');
+				Route::any('get-current-location',					'IndexController@getCurrentLocation');
 				Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 				Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
 				Route::get('remove-banner',							'IndexController@removeBanner');

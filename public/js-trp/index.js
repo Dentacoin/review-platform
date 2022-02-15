@@ -23,6 +23,32 @@ jQuery(document).ready(function($){
 	// 	});
 	// }
 
+	// if(navigator.geolocation){
+	// 	navigator.geolocation.getCurrentPosition(showLocation);
+	// }else{ 
+	// 	$('#location').html('Geolocation is not supported by this browser.');
+	// }
+	
+	// function showLocation(position){
+	// 	var latitude = position.coords.latitude;
+	// 	var longitude = position.coords.longitude;
+	// 	console.log(latitude, longitude);
+	// 	$.ajax({
+	// 		type:'POST',
+	// 		url:$("#location").attr('url'),
+	// 		data:'latitude='+latitude+'&longitude='+longitude,
+	// 		success:function(msg){
+
+	// 			console.log(msg);
+	// 			if(msg){
+	// 			   $("#location").html(msg);
+	// 			}else{
+	// 				$("#location").html('Not Available');
+	// 			}
+	// 		}
+	// 	});
+	// }
+
 	if($('.slider-wrapper').length) {
 		var max_h = 0;
 		var width = 0;
