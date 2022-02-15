@@ -10,10 +10,16 @@
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
 		<h2 class="hide-fb">{!! nl2br(trans('trp.popup.popup-widget.title')) !!}</h2>
-		<h2 class="show-fb" style="display: none;">{!! nl2br(trans('trp.popup.popup-widget.facebook-title')) !!}</h2>
+		
+		@if(false)
+			<h2 class="show-fb" style="display: none;">{!! nl2br(trans('trp.popup.popup-widget.facebook-title')) !!}</h2>
+		@endif
 
 		<h4 class="popup-title hide-fb">{!! nl2br(trans('trp.popup.popup-widget.subtitle')) !!}</h4>
-		<h4 class="popup-title show-fb" style="display: none;">{!! nl2br(trans('trp.popup.popup-widget.facebook-subtitle')) !!}</h4>
+		
+		@if(false)
+			<h4 class="popup-title show-fb" style="display: none;">{!! nl2br(trans('trp.popup.popup-widget.facebook-subtitle')) !!}</h4>
+		@endif
 
 		<div class="widget-step widget-step-1">
 			<p class="popup-desc">
@@ -86,22 +92,24 @@
 					    	</div>
 					  	</label>
 					</div>
-					<div class="radio-label">
-					  	<label for="widget-fb" class="flex mobile-tac">
-							<span class="modern-radio">
-								<span></span>
-							</span>
-					    	<input class="type-radio" type="radio" name="widget-layout" id="widget-fb" value="fb">
-					    	<img class="layout-img" src="{{ url('img-trp/fb-tab.png') }}" alt="{{ trans('trp.alt-tags.fb-tab') }}">
-					    	<div class="widget-option">
-					    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}</p>
+					@if(false)
+						<div class="radio-label">
+							<label for="widget-fb" class="flex mobile-tac">
+								<span class="modern-radio">
+									<span></span>
+								</span>
+								<input class="type-radio" type="radio" name="widget-layout" id="widget-fb" value="fb">
+								<img class="layout-img" src="{{ url('img-trp/fb-tab.png') }}" alt="{{ trans('trp.alt-tags.fb-tab') }}">
+								<div class="widget-option">
+									<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}</p>
 
-					    		<div class="select-wrap flex flex-mobile">
-					    		 	<span>{!! nl2br(trans('trp.popup.popup-widget.layout.fb.hint')) !!}</span>
-					    		</div>
-					    	</div>
-					  	</label>
-					</div>
+									<div class="select-wrap flex flex-mobile">
+										<span>{!! nl2br(trans('trp.popup.popup-widget.layout.fb.hint')) !!}</span>
+									</div>
+								</div>
+							</label>
+						</div>
+					@endif
 				</div>
 
 				<div class="tac widget-button-next-wrap">
@@ -112,23 +120,28 @@
 		<div class="widget-step widget-step-2" style="display: none;">
 
 			<h3 class="widget-step-title hide-fb">{!! nl2br(trans('trp.popup.popup-widget.step2.title')) !!}</h3>
-			<h3 class="widget-step-title show-fb" style="display: none; margin-bottom: 30px !important;">{!! nl2br(trans('trp.popup.popup-widget.step2-facebook.title')) !!}</h3>
+			
+			@if(false)
+				<h3 class="widget-step-title show-fb" style="display: none; margin-bottom: 30px !important;">{!! nl2br(trans('trp.popup.popup-widget.step2-facebook.title')) !!}</h3>
+			@endif
 			<p class="step-description hide-fb">{!! trans('trp.popup.popup-widget.selected-layout') !!}: <text id="selected-layout">Carousel</text></p>
 
 			<div class="tac">
 				<img id="selected-image-layout" src="{{ url('img-trp/widget-carousel.png') }}">
 			</div>
 
-			<div class="facebook-tab show-fb" error-missing="{{ trans('trp.popup.popup-widget.fb-page-id.missing-page-id') }}" error-not-numeric="{{ trans('trp.popup.popup-widget.fb-page-id.not-numeric-page-id', ['link' => '<a href="https://reviews.dentacoin.com/blog/display-trusted-reviews-on-facebook-with-the-new-tab/" target="_blank">', 'endlink' => '</a>']) }}">
-				<p class="tab-info"><img src="{{ url('img-trp/info.svg') }}">{!! trans('trp.popup.popup-widget.fb-info') !!}</p>
-				<div class="modern-field alert-after dont-count" reviews-guided-action="fb_id">
-					<input type="text" name="fb-page-id" id="fb-page-id" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
-					<label for="fb-page-id">
-						<span>{!! trans('trp.popup.popup-widget.fb-page-id') !!}</span>
-					</label>
-					<p>{!! trans('trp.popup.popup-widget.fb-page-id.info') !!}</p>
+			@if(false)
+				<div class="facebook-tab show-fb" error-missing="{{ trans('trp.popup.popup-widget.fb-page-id.missing-page-id') }}" error-not-numeric="{{ trans('trp.popup.popup-widget.fb-page-id.not-numeric-page-id', ['link' => '<a href="https://reviews.dentacoin.com/blog/display-trusted-reviews-on-facebook-with-the-new-tab/" target="_blank">', 'endlink' => '</a>']) }}">
+					<p class="tab-info"><img src="{{ url('img-trp/info.svg') }}">{!! trans('trp.popup.popup-widget.fb-info') !!}</p>
+					<div class="modern-field alert-after dont-count" reviews-guided-action="fb_id">
+						<input type="text" name="fb-page-id" id="fb-page-id" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+						<label for="fb-page-id">
+							<span>{!! trans('trp.popup.popup-widget.fb-page-id') !!}</span>
+						</label>
+						<p>{!! trans('trp.popup.popup-widget.fb-page-id.info') !!}</p>
+					</div>
 				</div>
-			</div>
+			@endif
 
 			<div class="dont-count" reviews-guided-action="reviews_type">
 				<div class="select-reviews">
@@ -253,7 +266,10 @@
 				<div class="tac get-widget-code-wrap">
 					<a href="javascript:;" class="button widget-button back-widget" to-step="1">< {!! nl2br(trans('trp.page.invite.popup.success.button')) !!}</a>
 					<a href="javascript:;" class="button get-widget-code hide-fb">{!! nl2br(trans('trp.popup.popup-widget.get-code')) !!}</a>
-					<a href="javascript:;" class="button fb-tab-submit show-fb" fb-url="{{ getLangUrl('dentist-fb-tab') }}">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
+					
+					@if(false)
+						<a href="javascript:;" class="button fb-tab-submit show-fb" fb-url="{{ getLangUrl('dentist-fb-tab') }}">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
+					@endif
 				</div>
 			</div>
 			<div style="display: none;" class="next-tour-step with-layout"></div>
