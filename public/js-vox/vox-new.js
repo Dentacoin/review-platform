@@ -1,6 +1,4 @@
-var sendReCaptcha;
 var recaptchaCode = null;
-var sendValidation;
 var preloadImages;
 var skip = 0;
 var vox_id;
@@ -42,48 +40,6 @@ $(document).ready(function(){
     if(typeof(vox)!='undefined') {
         VoxTest.handleNextQuestion();
     }
-    
-    sendValidation = function() {
-        if(recaptchaCode) { // && $('#iagree').is(':checked')
-            $.post( 
-                VoxTest.url, 
-                {
-                    captcha: recaptchaCode,
-                    _token: $('input[name="_token"]').val()
-                },
-                function( data ) {
-                    if(data.success) {
-                        $('input[name="_token"]').val(data.token);
-
-                        $('#bot-group').remove();
-
-                        fbq('track', 'SurveyLaunch');
-                        gtag('event', 'Take', {
-                            'event_category': 'Survey',
-                            'event_label': 'SurveyLaunch',
-                        });
-
-                        getNextQuestion(data.vox_id);
-                    } else {
-                        if(data.is_vpn) {
-                            $('.popup.vpn').addClass('active');
-                        } else {
-
-                            $('#captcha-error').show();
-                        }
-                    }
-                }
-            );
-        }
-    }
-
-    $('#iagree').change( sendValidation );
-
-    sendReCaptcha = function(code) {
-        $('#captcha-error').hide();
-        recaptchaCode = code;
-        sendValidation();
-    }
 
     var getNextQuestion = function(vox_id, question_id=null, token=null) {
         
@@ -91,6 +47,7 @@ $(document).ready(function(){
             url: next_q_url,
             type: 'POST',
             data: {
+                captcha: $('#g-recaptcha-response').val(),
                 vox_id: vox_id,
                 question_id: question_id,
                 _token: token ? token : $('input[name="_token"]').val(),
@@ -523,6 +480,7 @@ $(document).ready(function(){
                 answer: answer,
                 type: type,
                 scale_answers_time: scaleTime,
+                captcha: $('#g-recaptcha-response').val(),
                 _token: $('input[name="_token"]').val()
             }, 
             function( data ) {
@@ -618,6 +576,7 @@ $(document).ready(function(){
                 question: next_q_id,
                 answer: ans ? ans : 0,
                 type: ans ? 'previous' : 'skip',
+                captcha: $('#g-recaptcha-response').val(),
                 _token: $('input[name="_token"]').val()
             }, 
             function( data ) {
@@ -741,6 +700,7 @@ $(document).ready(function(){
             data: {
                 user_id: user_id,
                 vox_id: vox_id,
+                captcha: $('#g-recaptcha-response').val(),
                 _token: $('input[name="_token"]').val(),
             },
             dataType: 'json',

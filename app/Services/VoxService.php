@@ -1744,7 +1744,7 @@ class VoxService {
                 }
             }
             
-            if(Request::input('captcha')) {
+            if(Request::input('captcha') && !$not_bot) {
                 $captcha = false;
                 $cpost = [
                     'secret' => env('CAPTCHA_SECRET'),
@@ -1761,12 +1761,12 @@ class VoxService {
                 curl_close($ch);
                 if($response) {
                     $api_response = json_decode($response, true);
-
+                    
                     if(!empty($api_response['success'])) {
                         $captcha = true;
                     }
                 }
-
+                
                 if(!$captcha) {
                     $ret['captcha_error'] = true;
 

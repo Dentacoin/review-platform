@@ -45,15 +45,20 @@
 		@if(!empty($unbanned))
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/vox-popup-unbanned.css').'?ver='.$cache_version }}" />
 		@endif
-{{-- 
-		<style type="text/css">
-			body {
-				{!! config('langs.vox')[App::getLocale()]['font_css'] !!}
-			}
-		</style> --}}
 		
 		@if($current_page == 'questionnaire')
-			<script src='https://www.google.com/recaptcha/api.js'></script>
+			<script src="https://www.google.com/recaptcha/api.js?render=6LcWlH0eAAAAAMnfBcZIr5uiQLTq371prkYYMBKo"></script>
+
+			<script>
+				grecaptcha.ready(function() {
+				// do request for recaptcha token
+				// response is promise with passed token
+					grecaptcha.execute('6LcWlH0eAAAAAMnfBcZIr5uiQLTq371prkYYMBKo', {action: 'login'}).then(function(token) {
+						// add token value to form
+						document.getElementById('g-recaptcha-response').value = token;
+					});
+				});
+			</script>
 		@endif
 
 		<!-- Global site tag (gtag.js) - Google Analytics -->

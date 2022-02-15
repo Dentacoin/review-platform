@@ -90,20 +90,10 @@
 				</div>
 				<div class="quest-wrap" id="q-wrap">
 					<div class="loader-survey" id="loader-survey" style="display: none;"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
+					<input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+					<input type="hidden" name="action" value="validate_captcha">
 					<div id="questions-box">
-						@if(!$not_bot)
-							<div class="question-group" data-id="bot" id="bot-group">
-								<div class="question">
-									{!! trans('vox.page.questionnaire.not-robot') !!}
-								</div>
-								<div class="answers tac">
-									<div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>
-									<div class="alert alert-warning" id="captcha-error" style="display: none;">
-										{!! trans('vox.page.questionnaire.not-robot-invalid') !!}
-									</div>					
-								</div>
-							</div>
-						@endif
+						
 					</div>
  				</div>
 			</div>
