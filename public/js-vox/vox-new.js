@@ -47,7 +47,7 @@ $(document).ready(function(){
             url: next_q_url,
             type: 'POST',
             data: {
-                captcha: $('#g-recaptcha-response').val(),
+                // captcha: $('#g-recaptcha-response').val(),
                 vox_id: vox_id,
                 question_id: question_id,
                 _token: token ? token : $('input[name="_token"]').val(),
@@ -480,7 +480,7 @@ $(document).ready(function(){
                 answer: answer,
                 type: type,
                 scale_answers_time: scaleTime,
-                captcha: $('#g-recaptcha-response').val(),
+                // captcha: $('#g-recaptcha-response').val(),
                 _token: $('input[name="_token"]').val()
             }, 
             function( data ) {
@@ -576,7 +576,7 @@ $(document).ready(function(){
                 question: next_q_id,
                 answer: ans ? ans : 0,
                 type: ans ? 'previous' : 'skip',
-                captcha: $('#g-recaptcha-response').val(),
+                // captcha: $('#g-recaptcha-response').val(),
                 _token: $('input[name="_token"]').val()
             }, 
             function( data ) {
@@ -700,7 +700,7 @@ $(document).ready(function(){
             data: {
                 user_id: user_id,
                 vox_id: vox_id,
-                captcha: $('#g-recaptcha-response').val(),
+                // captcha: $('#g-recaptcha-response').val(),
                 _token: $('input[name="_token"]').val(),
             },
             dataType: 'json',

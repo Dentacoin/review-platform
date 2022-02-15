@@ -46,7 +46,7 @@
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/vox-popup-unbanned.css').'?ver='.$cache_version }}" />
 		@endif
 		
-		@if($current_page == 'questionnaire')
+		{{-- @if($current_page == 'questionnaire')
 			<script src="https://www.google.com/recaptcha/api.js?render=6LcWlH0eAAAAAMnfBcZIr5uiQLTq371prkYYMBKo"></script>
 
 			<script>
@@ -59,7 +59,7 @@
 					});
 				});
 			</script>
-		@endif
+		@endif --}}
 
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108398439-2"></script>
