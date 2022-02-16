@@ -36,6 +36,7 @@ use Request;
 use Cookie;
 use Auth;
 use Mail;
+use Log;
 use App;
 use DB;
 
@@ -2505,7 +2506,7 @@ class VoxService {
                     }
 
                     if(count($answered) == count($vox->questions)) {
-
+                        Log::info('end');
                         $giveRewardForSurvey = true;
 
                         if(!$for_app) {
