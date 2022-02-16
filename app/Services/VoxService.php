@@ -247,9 +247,18 @@ class VoxService {
                             if(!isset($answered[$question->id])) {
                                 //first question
                                 $array['question'] = $question;
+
+                                if(!$question) {
+                                    Log::error('!!!No question!!!');
+                                }
                             } else {
                                 //first unanswered question
-                                $array['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
+                                $firstUnansweredQuestion = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
+                                $array['question'] = $firstUnansweredQuestion;
+
+                                if(!$firstUnansweredQuestion) {
+                                    Log::error('No question!!!');
+                                }
                             }
     
                             $checkQuestion = self::checkQuestion($array['question'], $vox_id, $vox, $user, $array);
