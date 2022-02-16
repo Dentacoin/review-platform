@@ -99,6 +99,7 @@ class VoxService {
                             $array['question'] = $next_question;
                             if(!$next_question) {
                                 Log::error('No question!!! Cur question id: '.$question_id.' .User ID: '.$user->id);
+                                return 'reload';
                             }
                         } else {
                             //first question
@@ -106,6 +107,7 @@ class VoxService {
                             $array['question'] = $question;
                             if(!$question) {
                                 Log::error('No question here!!!');
+                                return 'reload';
                             }
                         }
                     } else if(empty($user->birthyear)) {
@@ -139,6 +141,7 @@ class VoxService {
                             $array['question'] = $order_93;
                             if(!$order_93) {
                                 Log::error('No question 93');
+                                return 'reload';
                             }
                         } else {
                             if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
@@ -158,6 +161,7 @@ class VoxService {
                                 $array['question'] = $next_question;
                                 if(!$next_question) {
                                     Log::error('No question!!! Cur question id: '.$question_id.' .User ID: '.$user->id);
+                                    return 'reload';
                                 }
                                 
                             } else {
@@ -187,6 +191,7 @@ class VoxService {
                                     $array['question'] = $question;
                                     if(!$question) {
                                         Log::error('No question 22');
+                                        return 'reload';
                                     }
                                 } else {
                                     //first unanswered question
@@ -195,6 +200,7 @@ class VoxService {
 
                                     if(!$firstUnansweredQuestion) {
                                         Log::error('No question 65!!!');
+                                        return 'reload';
                                     }
                                 }
         
@@ -264,6 +270,7 @@ class VoxService {
 
                                 if(!$question) {
                                     Log::error('!!!No question!!!');
+                                    return 'reload';
                                 }
                             } else {
                                 //first unanswered question
@@ -272,6 +279,7 @@ class VoxService {
 
                                 if(!$firstUnansweredQuestion) {
                                     Log::error('No question!!!');
+                                    return 'reload';
                                 }
                             }
     
