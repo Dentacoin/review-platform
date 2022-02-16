@@ -97,6 +97,9 @@ class VoxService {
                             ->first();
 
                             $array['question'] = $next_question;
+                            if(!$next_question) {
+                                Log::error('No question!!! Cur question id: '.$question_id.' .User ID: '.$user->id);
+                            }
                         } else {
                             //first question
                             $question = VoxQuestion::where('vox_id', $welcome_vox_id)->orderBy('order', 'ASC')->first();
