@@ -2083,7 +2083,6 @@ class VoxService {
                                 $answer->is_admin = true;
                             }
                             $answer->save();
-                            $answered[$q] = 0;
                             
                         } else if($type == 'previous') {
                             $answer = new VoxAnswer;
@@ -2098,7 +2097,6 @@ class VoxService {
                                 $answer->is_admin = true;
                             }
                             $answer->save();
-                            $answered[$q] = 0;
                             
                         } else if($type == 'single') {
 
@@ -2119,7 +2117,6 @@ class VoxService {
                                 $answer->is_admin = true;
                             }
                             $answer->save();
-                            $answered[$q] = $a;
 
                             if( $found->cross_check ) {
                                 if (is_numeric($found->cross_check)) {
@@ -2175,7 +2172,6 @@ class VoxService {
                                 }
                             }
                         } else if(isset( config('vox.details_fields')[$type] ) || $type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
-                            $answered[$q] = 1;
                             $answer = null;
 
                             if( !empty($found->cross_check) ) {
@@ -2206,7 +2202,6 @@ class VoxService {
                                         $answer->is_admin = true;
                                     }
                                     $answer->save();
-                                    $answered[$q] = 0;
                                 }
                             }
                         } else if($type == 'number') {
@@ -2227,7 +2222,6 @@ class VoxService {
                             }
                             $answer->save();
 
-                            $answered[$q] = $a;
                         } else if($type == 'multiple') {
                             foreach ($a as $value) {
                                 $answer = new VoxAnswer;
@@ -2247,7 +2241,6 @@ class VoxService {
                                 }
                                 $answer->save();
                             }
-                            $answered[$q] = $a;
                         } else if($type == 'scale' || $type == 'rank') {
                             foreach ($a as $k => $value) {
                                 $answer = new VoxAnswer;
@@ -2279,7 +2272,6 @@ class VoxService {
                                 }
                                 $answer->save();
                             }
-                            $answered[$q] = $a;
                         }
                     }
                     
@@ -2298,18 +2290,6 @@ class VoxService {
                     ->get();
 
                     $listCurrnetAnswers = $listCurrnetAnswers->concat($listOldCurrnetAnswers);
-
-                    $answered = [];
-                    foreach ($listCurrnetAnswers as $l) {
-                        if(!isset( $answered[$l->question_id] )) {
-                            $answered[$l->question_id] = $l->answer; //3
-                        } else {
-                            if(!is_array($answered[$l->question_id])) {
-                                $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
-                            }
-                            $answered[$l->question_id][] = $l->answer; // [3,5,7]
-                        }
-                    }
 
                     if(!$testmode && !$user->is_partner) { //confirmed from Petya for is_partner 05.11.21
                         $ppp = 10;
@@ -2368,7 +2348,7 @@ class VoxService {
                             $diff = Carbon::now()->diffInSeconds( $start->created_at );
                             $normal = $ppp*2;
                             
-                            if($normal > $diff && count($answered) != count($vox->questions)) {
+                            if($normal > $diff && $listCurrnetAnswers->count() != count($vox->questions)) {
 
                                 $warned_before = UserSurveyWarning::where('user_id', $user->id)
                                 ->where('action', 'too_fast')
@@ -2464,7 +2444,7 @@ class VoxService {
                         $reward->save();
                     }
 
-                    if(count($answered) == count($vox->questions)) {
+                    if($listCurrnetAnswers->count() == count($vox->questions)) {
                         Log::info('user ID: '.$user->id);
                         Log::info('end');
                         $giveRewardForSurvey = true;
