@@ -2603,6 +2603,8 @@ class VoxService {
                             $resp = json_decode(curl_exec($curl));
                             curl_close($curl);
                         }
+
+                        // dd($ret);
                     }
                 } else {
                     $ret['success'] = false;
@@ -2618,8 +2620,10 @@ class VoxService {
                 request()->session()->regenerateToken();
                 $ret['token'] = request()->session()->token();
             }
-            $ret['vox_id'] = $vox->id;
-            $ret['question_id'] = !empty($q) ? $q : null;
+            if(!$giveRewardForSurvey) {
+                $ret['vox_id'] = $vox->id;
+                $ret['question_id'] = !empty($q) ? $q : null;
+            }
         }
 
         return Response::json( $ret );
