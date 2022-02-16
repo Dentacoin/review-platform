@@ -1769,41 +1769,41 @@ class VoxService {
                 }
             }
             
-            if(Request::input('captcha') && !$not_bot) {
-                $captcha = false;
-                $cpost = [
-                    'secret' => env('CAPTCHA_SECRET'),
-                    'response' => Request::input('captcha'),
-                    'remoteip' => User::getRealIp()
-                ];
-                $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
-                curl_setopt($ch, CURLOPT_HEADER, 0);
-                curl_setopt ($ch, CURLOPT_POST, 1);
-                curl_setopt ($ch, CURLOPT_POSTFIELDS, http_build_query($cpost));
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);    
-                curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-                $response = curl_exec($ch);
-                curl_close($ch);
-                if($response) {
-                    $api_response = json_decode($response, true);
+            // if(Request::input('captcha') && !$not_bot) {
+            //     $captcha = false;
+            //     $cpost = [
+            //         'secret' => env('CAPTCHA_SECRET'),
+            //         'response' => Request::input('captcha'),
+            //         'remoteip' => User::getRealIp()
+            //     ];
+            //     $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
+            //     curl_setopt($ch, CURLOPT_HEADER, 0);
+            //     curl_setopt ($ch, CURLOPT_POST, 1);
+            //     curl_setopt ($ch, CURLOPT_POSTFIELDS, http_build_query($cpost));
+            //     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);    
+            //     curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+            //     $response = curl_exec($ch);
+            //     curl_close($ch);
+            //     if($response) {
+            //         $api_response = json_decode($response, true);
                     
-                    if(!empty($api_response['success'])) {
-                        $captcha = true;
-                    }
-                }
+            //         if(!empty($api_response['success'])) {
+            //             $captcha = true;
+            //         }
+            //     }
                 
-                if(!$captcha) {
-                    $ret['captcha_error'] = true;
+            //     if(!$captcha) {
+            //         $ret['captcha_error'] = true;
 
-                    return Response::json( $ret );
-                } else {
+            //         return Response::json( $ret );
+            //     } else {
                     session([
                         'not_not-'.$vox->id => true,
                         'reward-for-'.$vox->id => $vox->getRewardTotal()
                     ]);
-                    $ret['vox_id'] = $vox->id;
-                }
-            }
+            //         $ret['vox_id'] = $vox->id;
+            //     }
+            // }
         }
 
         $ret = [
