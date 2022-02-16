@@ -382,6 +382,8 @@ class VoxService {
 
                     //don't randomize answers here// only in js
 
+                    Log::error('Question: '.json_encode($array));
+
                     return response()->view('vox.template-parts.vox-question', $array, 200)->header('X-Frame-Options', 'DENY');
                 }
             }

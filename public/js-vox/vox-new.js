@@ -56,8 +56,6 @@ $(document).ready(function(){
                 $('.question-group').find('.loader').remove();
 
                 if(data) {
-
-                    console.log(data);
                     if(data.indexOf("skip-dvq") >= 0) {
 
                         if(data.indexOf("answer") >= 0) {
