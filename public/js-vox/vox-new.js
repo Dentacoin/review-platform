@@ -56,6 +56,8 @@ $(document).ready(function(){
                 $('.question-group').find('.loader').remove();
 
                 if(data) {
+
+                    console.log(data);
                     if(data.indexOf("skip-dvq") >= 0) {
 
                         if(data.indexOf("answer") >= 0) {
@@ -485,7 +487,7 @@ $(document).ready(function(){
             }, 
             function( data ) {
                 if(data.success) {
-
+                    console.log(data);
                     if(data.balance) {
                         //test done
                         surveyDone(data);
@@ -580,6 +582,7 @@ $(document).ready(function(){
                 _token: $('input[name="_token"]').val()
             }, 
             function( data ) {
+                console.log(data);
                 if(data.success) {
 
                     if(data.balance) {
