@@ -225,7 +225,7 @@ class VoxService {
                             if(!$next_question) {
                             // } else {
                                 Log::error('No question 76');
-                            //     return '';
+                                return 'reload';
                             }
                             
                         } else {
@@ -404,8 +404,6 @@ class VoxService {
                     $array['current_admin_id'] = $admin ? $admin->id : '';
 
                     //don't randomize answers here// only in js
-
-                    Log::error('User id: '.$user->id.' Question: '.json_encode($array));
 
                     return response()->view('vox.template-parts.vox-question', $array, 200)->header('X-Frame-Options', 'DENY');
                 }
@@ -2543,10 +2541,8 @@ class VoxService {
                         $reward->save();
                     }
 
-                    Log::info('user ID: '.$user->id);
-                    Log::info('answered count: '.count($answered));
-                    Log::info('vox qs count: '.count($vox->questions));
                     if(count($answered) == count($vox->questions)) {
+                        Log::info('user ID: '.$user->id);
                         Log::info('end');
                         $giveRewardForSurvey = true;
 

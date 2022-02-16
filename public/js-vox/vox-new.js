@@ -73,6 +73,8 @@ $(document).ready(function(){
                             $('.question-group').hide();
                             sendSkipAnswer(next_q_id);
                         }
+                    } else if(data.indexOf("reload") >= 0) {
+                        window.location.reload();
                     } else {
                         $('#loader-survey').hide();
                         $('#questions-box').html('');
