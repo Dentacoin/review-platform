@@ -132,154 +132,77 @@ class VoxService {
 
                 if(empty($array)) {
 
-                    if(count($vox->questions) > 93 && count($vox->questions) - VoxAnswer::where('vox_id', $vox->id)->where('user_id', $user->id)->groupBy('question_id')->get()->count() == 1) {
-                        //because of bug
-                        $order_93 = VoxQuestion::where('vox_id', $vox->id)->where('order', 93)->first();
-                        if($order_93 && empty(VoxAnswer::where('vox_id', $vox->id)->where('user_id', $user->id)->where('question_id', $order_93->id)->first())) {
-                            $array['question'] = $order_93;
-                            if(!$order_93) {
-                                Log::error('No question 93');
-                            }
-                        } else {
-                            if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
-                                $question_id=null;
-                            }
-        
-                            if(!empty($question_id) && is_numeric($question_id)) {
-                                $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)
-                                ->orderBy('order', 'asc')
-                                ->where('order', '>', $cur_question->order)
-                                ->first();
-        
-                                $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $array);
-                                if(str_contains($checkQuestion, 'skip')) {
-                                    return $checkQuestion;
-                                }
-                                $array['question'] = $next_question;
-                                if(!$next_question) {
-                                    Log::error('No question!!! Cur question id: '.$question_id.' .User ID: '.$user->id);
-                                }
-                                
-                            } else {
-                                $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
-                                ->where('vox_id', $vox_id)
-                                ->where('user_id', $user->id)
-                                ->orderBy('id', 'desc')
-                                ->get();
-                                
-                                $answered = [];
-                                foreach ($list as $l) {
-                                    if(!isset( $answered[$l->question_id] )) {
-                                        $answered[$l->question_id] = $l->answer; //3
-                                    } else {
-                                        if(!is_array($answered[$l->question_id])) {
-                                            $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
-                                        }
-                                        $answered[$l->question_id][] = $l->answer; // [3,5,7]
-                                    }
-                                }
-        
-                                $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
-                                $question = $questions_list->first();
-        
-                                if(!isset($answered[$question->id])) {
-                                    //first question
-                                    $array['question'] = $question;
-                                    if(!$question) {
-                                        Log::error('No question 22');
-                                    }
-                                } else {
-                                    //first unanswered question
-                                    $firstUnansweredQuestion = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
-                                    $array['question'] = $firstUnansweredQuestion;
+                    if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
+                        $question_id=null;
+                    }
 
-                                    if(!$firstUnansweredQuestion) {
-                                        Log::error('No question 65!!!');
-                                    }
-                                }
-        
-                                $checkQuestion = self::checkQuestion($array['question'], $vox_id, $vox, $user, $array);
-        
-                                if(str_contains($checkQuestion, 'skip')) {
-                                    return $checkQuestion;
-                                }
-                            }
+                    if(!empty($question_id) && is_numeric($question_id)) {
+                        $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)
+                        ->orderBy('order', 'asc')
+                        ->where('order', '>', $cur_question->order)
+                        ->first();
+
+                        $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $array);
+                        if(str_contains($checkQuestion, 'skip')) {
+                            return $checkQuestion;
                         }
+                        $array['question'] = $next_question;
+                        if(!$next_question) {
+                            Log::error('No question 76');
+                            return 'reload';
+                        }
+                        
                     } else {
+                        $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
+                        ->where('vox_id', $vox_id)
+                        ->where('user_id', $user->id)
+                        ->orderBy('id', 'desc')
+                        ->get();
 
-                        if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
-                            $question_id=null;
-                        }
-    
-                        if(!empty($question_id) && is_numeric($question_id)) {
-                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)
-                            ->orderBy('order', 'asc')
-                            ->where('order', '>', $cur_question->order)
-                            ->first();
-    
-                            $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $array);
-                            if(str_contains($checkQuestion, 'skip')) {
-                                return $checkQuestion;
-                            }
-                            $array['question'] = $next_question;
-                            if(!$next_question) {
-                            // } else {
-                                Log::error('No question 76');
-                                return 'reload';
-                            }
-                            
-                        } else {
-                            $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
-                            ->where('vox_id', $vox_id)
-                            ->where('user_id', $user->id)
-                            ->orderBy('id', 'desc')
-                            ->get();
+                        $list_old = VoxAnswerOld::select('id', 'answer', 'question_id', 'created_at')
+                        ->where('vox_id', $vox_id)
+                        ->where('user_id', $user->id)
+                        ->orderBy('id', 'desc')
+                        ->get();
 
-                            $list_old = VoxAnswerOld::select('id', 'answer', 'question_id', 'created_at')
-                            ->where('vox_id', $vox_id)
-                            ->where('user_id', $user->id)
-                            ->orderBy('id', 'desc')
-                            ->get();
-
-                            $list = $list->concat($list_old);
-                            
-                            $answered = [];
-                            foreach ($list as $l) {
-                                if(!isset( $answered[$l->question_id] )) {
-                                    $answered[$l->question_id] = $l->answer; //3
-                                } else {
-                                    if(!is_array($answered[$l->question_id])) {
-                                        $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
-                                    }
-                                    $answered[$l->question_id][] = $l->answer; // [3,5,7]
-                                }
-                            }
-    
-                            $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
-                            $question = $questions_list->first();
-    
-                            if(!isset($answered[$question->id])) {
-                                //first question
-                                $array['question'] = $question;
-
-                                if(!$question) {
-                                    Log::error('!!!No question!!!');
-                                }
+                        $list = $list->concat($list_old);
+                        
+                        $answered = [];
+                        foreach ($list as $l) {
+                            if(!isset( $answered[$l->question_id] )) {
+                                $answered[$l->question_id] = $l->answer; //3
                             } else {
-                                //first unanswered question
-                                $firstUnansweredQuestion = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
-                                $array['question'] = $firstUnansweredQuestion;
-
-                                if(!$firstUnansweredQuestion) {
-                                    Log::error('No question!!!');
+                                if(!is_array($answered[$l->question_id])) {
+                                    $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
                                 }
+                                $answered[$l->question_id][] = $l->answer; // [3,5,7]
                             }
-    
-                            $checkQuestion = self::checkQuestion($array['question'], $vox_id, $vox, $user, $array);
-    
-                            if(str_contains($checkQuestion, 'skip')) {
-                                return $checkQuestion;
+                        }
+
+                        $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
+                        $question = $questions_list->first();
+
+                        if(!isset($answered[$question->id])) {
+                            //first question
+                            $array['question'] = $question;
+
+                            if(!$question) {
+                                Log::error('!!!No question!!!');
                             }
+                        } else {
+                            //first unanswered question
+                            $firstUnansweredQuestion = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
+                            $array['question'] = $firstUnansweredQuestion;
+
+                            if(!$firstUnansweredQuestion) {
+                                Log::error('No question!!!');
+                            }
+                        }
+
+                        $checkQuestion = self::checkQuestion($array['question'], $vox_id, $vox, $user, $array);
+
+                        if(str_contains($checkQuestion, 'skip')) {
+                            return $checkQuestion;
                         }
                     }
                 }
