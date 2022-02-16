@@ -2505,6 +2505,8 @@ class VoxService {
                         $reward->save();
                     }
 
+                    Log::info('answered count: '.count($answered));
+                    Log::info('vox qs count: '.count($vox->questions));
                     if(count($answered) == count($vox->questions)) {
                         Log::info('end');
                         $giveRewardForSurvey = true;
