@@ -2352,6 +2352,18 @@ class VoxService {
 
                     $listCurrnetAnswers = $listCurrnetAnswers->concat($listOldCurrnetAnswers);
 
+                    $answered = [];
+                    foreach ($listCurrnetAnswers as $l) {
+                        if(!isset( $answered[$l->question_id] )) {
+                            $answered[$l->question_id] = $l->answer; //3
+                        } else {
+                            if(!is_array($answered[$l->question_id])) {
+                                $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
+                            }
+                            $answered[$l->question_id][] = $l->answer; // [3,5,7]
+                        }
+                    }
+
                     if(!$testmode && !$user->is_partner) { //confirmed from Petya for is_partner 05.11.21
                         $ppp = 10;
                         $toBeChecked = false;
