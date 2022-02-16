@@ -142,16 +142,14 @@ class VoxService {
                                 ->where('order', '>', $cur_question->order)
                                 ->first();
         
-                                // if($next_question) {
-                                    $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $array);
-                                    if(str_contains($checkQuestion, 'skip')) {
-                                        return $checkQuestion;
-                                    }
-                                    $array['question'] = $next_question;
-                                // } else {
-                                //     Log::error('No question!!! Cur question id: '.$question_id.' .User ID: '.$user->id);
-                                //     return '';
-                                // }
+                                $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $array);
+                                if(str_contains($checkQuestion, 'skip')) {
+                                    return $checkQuestion;
+                                }
+                                $array['question'] = $next_question;
+                                if(!$next_question) {
+                                    Log::error('No question!!! Cur question id: '.$question_id.' .User ID: '.$user->id);
+                                }
                                 
                             } else {
                                 $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
