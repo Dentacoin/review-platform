@@ -148,7 +148,7 @@ class VoxService {
                         }
                         $array['question'] = $next_question;
                         if(!$next_question) {
-                            Log::error('No question 76');
+                            Log::error('No question 76; Question ID: '.$question_id.'; User ID: '.$user->id);
                             return 'reload';
                         }
                         
