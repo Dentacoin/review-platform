@@ -46,20 +46,9 @@
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/vox-popup-unbanned.css').'?ver='.$cache_version }}" />
 		@endif
 		
-		{{-- @if($current_page == 'questionnaire')
-			<script src="https://www.google.com/recaptcha/api.js?render=6LcWlH0eAAAAAMnfBcZIr5uiQLTq371prkYYMBKo"></script>
-
-			<script>
-				grecaptcha.ready(function() {
-				// do request for recaptcha token
-				// response is promise with passed token
-					grecaptcha.execute('6LcWlH0eAAAAAMnfBcZIr5uiQLTq371prkYYMBKo', {action: 'login'}).then(function(token) {
-						// add token value to form
-						document.getElementById('g-recaptcha-response').value = token;
-					});
-				});
-			</script>
-		@endif --}}
+		@if($current_page == 'questionnaire')
+			<script src='https://www.google.com/recaptcha/api.js'></script>
+		@endif
 
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108398439-2"></script>
