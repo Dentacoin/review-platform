@@ -2444,8 +2444,12 @@ class VoxService {
                         $reward->save();
                     }
 
+                    Log::info('user ID: '.$user->id);
+                    Log::info('all questions: '.json_encode($listCurrnetAnswers));
+                    Log::info('all questions count: '.$listCurrnetAnswers->count());
+                    Log::info('vox qs  count: '.count($vox->questions));
+
                     if($listCurrnetAnswers->count() == count($vox->questions)) {
-                        Log::info('user ID: '.$user->id);
                         Log::info('end');
                         $giveRewardForSurvey = true;
 
