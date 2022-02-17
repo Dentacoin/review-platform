@@ -908,10 +908,6 @@ class VoxService {
 
     public static function doVox($vox, $user, $for_app) {
 
-        if($user->id == '196698') {
-            Log::info('Test 2');
-        }
-
         if (empty($vox) || $vox->id == 11) {
             if($for_app) {
                 return Response::json( array(
