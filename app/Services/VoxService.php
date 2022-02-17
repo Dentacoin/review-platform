@@ -1139,10 +1139,6 @@ class VoxService {
             }
         }
 
-        if($user->id == '196698') {
-            Log::info('Test');
-        }
-
         if (!$testmode) {
 
             $restrictedVox = $user->isVoxRestricted($vox);
@@ -1567,11 +1563,6 @@ class VoxService {
 
     public static function surveyAnswer($vox, $user, $for_app) {
 
-
-        if($user->id == '196698') {
-            Log::info('Test 44');
-        }
-
         $ret['success'] = false;
 
         if(empty($user) || empty($vox) || !in_array($user->status, config('dentist-statuses.approved')) || $user->isBanned('vox')) {
@@ -1720,10 +1711,6 @@ class VoxService {
                     $ret['vox_id'] = $vox->id;
                 }
             }
-        }
-        
-        if($user->id == '196698') {
-            Log::info('Test 55');
         }
 
         $ret = [
@@ -1894,19 +1881,12 @@ class VoxService {
 
                     if($for_app) {
                         if(is_string($a)) {
-                            if($user->id == '196698') {
-                                Log::info('is string: '.$a);
-                            }
                             $a = explode(',', $a);
                         }
                     }
 
                     foreach ($a as $k => $value) {
                         if (!($value>=1 && $value<=$answer_count)) {
-                            if($user->id == '196698') {
-                                Log::info('Not valid 1');
-                                Log::info('Answers count: '.$answer_count);
-                            }
                             $valid = false; 
                             break;
                         }
@@ -1925,9 +1905,6 @@ class VoxService {
                         foreach ($a as $k => $value) {
                             if(isset($excluded_answers[$value])) {
                                 if($group == $excluded_answers[$value]) {
-                                    if($user->id == '196698') {
-                                        Log::info('Not valid 2');
-                                    }
                                     $valid = false;
                                     break;
                                 }
@@ -1951,13 +1928,6 @@ class VoxService {
                     $max_num = intval(explode(':', $question->number_limit)[1]);
                     $a = intval($answ);
                     $valid = $a>=$min_num && $a<=$max_num;
-                }
-                
-                if($user->id == '196698') {
-                    Log::info('Test 66');
-                    Log::info('Type: '.$type);
-                    Log::info('Valid: '.($valid ? 'yes' : 'no'));
-                    Log::info('Answer :'.json_encode($a));
                 }
 
                 if( $valid ) {
@@ -1984,17 +1954,10 @@ class VoxService {
                             }
                         }
                     }
-                
-                    if($user->id == '196698') {
-                        Log::info('Test 77');
-                    }
 
                     // dd($is_scam);
                     if($is_scam && !$user->is_partner) { //confirmed from Petya for is_partner 05.11.21
                 
-                        if($user->id == '196698') {
-                            Log::info('Test 88');
-                        }
                         $wrongs = UserSurveyWarning::where('user_id', $user->id)
                         ->where('action', 'wrong')
                         ->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )
@@ -2054,10 +2017,6 @@ class VoxService {
                                 ->delete();
                             }
                         } else {
-                
-                            if($user->id == '196698') {
-                                Log::info('Test 99');
-                            }
 
                             UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->delete();
                                 
@@ -2096,10 +2055,6 @@ class VoxService {
                         
                         return Response::json( $ret );
                     } else {
-                
-                        if($user->id == '196698') {
-                            Log::info('Test 10');
-                        }
 
                         if($type == 'skip') {
                             $answer = new VoxAnswer;
@@ -2299,17 +2254,11 @@ class VoxService {
                                 }
 
                                 if(!empty(request('scale_answers_time')) && isset(request('scale_answers_time')[$k])) {
-                                    if($user->id == '196698') {
-                                        Log::info('here in scale');
-                                    }
                                     try {
                                         $scaleDate = Carbon::createFromFormat('D M d Y H:i:s e+',request('scale_answers_time')[$k]); //for site
                                     } catch (\Exception $e) {
                                         $scaleDate = Carbon::parse(request('scale_answers_time')[$k]); //for app
                                     }
-                                    // if($user->id == '196698') {
-                                    //     Log::info('Scale Date: '+$scaleDate);
-                                    // }
                                     $answer->created_at = $scaleDate;
                                 }
                                 $answer->save();
