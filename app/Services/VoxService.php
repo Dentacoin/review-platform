@@ -36,6 +36,7 @@ use Request;
 use Cookie;
 use Auth;
 use Mail;
+use Log;
 use App;
 use DB;
 
