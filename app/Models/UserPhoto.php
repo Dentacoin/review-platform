@@ -15,6 +15,10 @@ class UserPhoto extends Model {
         'updated_at',
     ];
 
+    public function user() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
+
     public function getImageUrl($thumb = false) {
         return url('/storage/gallery/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg');
     }
