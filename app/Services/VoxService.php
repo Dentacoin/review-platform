@@ -1897,6 +1897,9 @@ class VoxService {
 
                     foreach ($a as $k => $value) {
                         if (!($value>=1 && $value<=$answer_count)) {
+                            if($user->id == '196698') {
+                                Log::info('Not valid 1');
+                            }
                             $valid = false; 
                             break;
                         }
@@ -1915,6 +1918,9 @@ class VoxService {
                         foreach ($a as $k => $value) {
                             if(isset($excluded_answers[$value])) {
                                 if($group == $excluded_answers[$value]) {
+                                    if($user->id == '196698') {
+                                        Log::info('Not valid 2');
+                                    }
                                     $valid = false;
                                     break;
                                 }
