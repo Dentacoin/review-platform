@@ -1902,6 +1902,7 @@ class VoxService {
                         if (!($value>=1 && $value<=$answer_count)) {
                             if($user->id == '196698') {
                                 Log::info('Not valid 1');
+                                Log::info('Answers count: '.$answer_count);
                             }
                             $valid = false; 
                             break;
