@@ -1139,6 +1139,10 @@ class VoxService {
             }
         }
 
+        if($user->id == '196698') {
+            Log::info('Test');
+        }
+
         if (!$testmode) {
 
             $restrictedVox = $user->isVoxRestricted($vox);
