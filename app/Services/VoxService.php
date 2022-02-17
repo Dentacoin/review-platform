@@ -1571,6 +1571,11 @@ class VoxService {
 
     public static function surveyAnswer($vox, $user, $for_app) {
 
+
+        if($user->id == '196698') {
+            Log::info('Test 44');
+        }
+
         $ret['success'] = false;
 
         if(empty($user) || empty($vox) || !in_array($user->status, config('dentist-statuses.approved')) || $user->isBanned('vox')) {
@@ -1717,6 +1722,10 @@ class VoxService {
                     $ret['vox_id'] = $vox->id;
                 }
             }
+        }
+        
+        if($user->id == '196698') {
+            Log::info('Test 55');
         }
 
         $ret = [
@@ -1934,6 +1943,10 @@ class VoxService {
                     $a = intval($answ);
                     $valid = $a>=$min_num && $a<=$max_num;
                 }
+                
+                if($user->id == '196698') {
+                    Log::info('Test 66');
+                }
 
                 if( $valid ) {
                     $is_scam = false;
@@ -2059,6 +2072,10 @@ class VoxService {
                         
                         return Response::json( $ret );
                     } else {
+                
+                        if($user->id == '196698') {
+                            Log::info('Test 77');
+                        }
 
                         if($type == 'skip') {
                             $answer = new VoxAnswer;
