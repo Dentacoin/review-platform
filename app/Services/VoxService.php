@@ -191,6 +191,8 @@ class VoxService {
                             $firstUnansweredQuestion = $allVoxQuestions->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
                             $questionData['question'] = $firstUnansweredQuestion;
                             if(!$firstUnansweredQuestion) { // log for bug or scam
+                                Log::error('---------------');
+                                Log::error('Answered: '.json_encode($answered));
                                 Log::error('5. No question!!! Vox id: '.$vox_id.'; User ID: '.$user->id);
                             }
                         }
