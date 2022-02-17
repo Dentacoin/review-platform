@@ -53,6 +53,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('admins/add-message',								'AdminsController@addMessage');
 	Route::any('read-admin-message/{id}', 							'AdminsController@readMessage');
 
+	Route::any('upload-file', 										'AdminsController@uploadFile');
+
 	Route::any('blacklist', 										'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 							'BlacklistController@delete');
 

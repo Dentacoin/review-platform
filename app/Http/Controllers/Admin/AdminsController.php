@@ -6,18 +6,21 @@ use App\Http\Controllers\AdminController;
 
 use Illuminate\Http\Request as Requestt;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Pagination\Paginator;
 
 use App\Models\DcnTransactionHistory;
 use App\Models\AdminMessage;
 use App\Models\AdminAction;
 use App\Models\UserHistory;
+use App\Models\UserPhoto;
 use App\Models\AdminIp;
 use App\Models\Admin;
 
 use Validator;
 use Response;
 use Request;
+use Image;
 use Auth;
 use App;
 
@@ -317,6 +320,27 @@ class AdminsController extends AdminController {
 
         $this->request->session()->flash('success-message', 'Message added' );
         return redirect('cms/admins/messages');
+    }
+
+    public function uploadFile() {
+
+        if( Auth::guard('admin')->user()->id != 1 ) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+        
+        if(Request::isMethod('post')) {
+            
+            foreach($_FILES['file']['name'] as $k => $file) {
+                $file_name = explode('.', $file)[0];
+                $gallery = UserPhoto::find($file_name);
+
+                $img = Image::make( Input::file('file')[$k] )->orientate();
+                $gallery->addImage($img);
+            }
+        }
+
+        return $this->showView('upload-file');
     }
 
 }
