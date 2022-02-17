@@ -2307,9 +2307,9 @@ class VoxService {
                                     } catch (\Exception $e) {
                                         $scaleDate = Carbon::parse(request('scale_answers_time')[$k]); //for app
                                     }
-                                    if($user->id == '196698') {
-                                        Log::info('Scale Date: '+$scaleDate);
-                                    }
+                                    // if($user->id == '196698') {
+                                    //     Log::info('Scale Date: '+$scaleDate);
+                                    // }
                                     $answer->created_at = $scaleDate;
                                 }
                                 $answer->save();
