@@ -1681,6 +1681,8 @@ class VoxService {
                     $user->update_vox_scales = null;
                     $user->save();
                 }
+            } else {
+                $slist = session('scales');
             }
             
             if(Request::input('captcha')) { //do not replace V2 captcha with V3 captcha - first answered question is not recording ( if you have to - check why is happening ) 
@@ -1755,8 +1757,9 @@ class VoxService {
             }
 
             if($found) {
+
                 $valid = false;
-                $answer_count = in_array($type, ['multiple', 'rank', 'scale', 'single']) ? count($question->vox_scale_id && !empty(session('scales')[$question->vox_scale_id]) ? explode(',', session('scales')[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
+                $answer_count = in_array($type, ['multiple', 'rank', 'scale', 'single']) ? count($question->vox_scale_id && !empty($slist[$question->vox_scale_id]) ? explode(',', $slist[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
 
                 if ($type == 'skip') {
                     $valid = true;
