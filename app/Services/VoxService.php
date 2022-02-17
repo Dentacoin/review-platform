@@ -49,19 +49,19 @@ class VoxService {
             $welcome_vox_id = 11;
             
             if(!empty($question_id)) {
-                $cur_question = VoxQuestion::find($question_id);
+                $currentQuestionObject = VoxQuestion::find($question_id);
             }
 
             $admin_ids = Admin::getAdminProfileIds();
             $isAdmin = $for_app ? ( $user->is_admin ? true : false) : ($admin || in_array($user->id, $admin_ids));
-            $testmode = session('testmode') && $isAdmin;
+            $testmode = session('testmode') && $isAdmin; //if is admin
 
             $vox = [];
 
             if(!empty($vox_id)) {
                 $vox = Vox::select('id')->where('id', $vox_id);
 
-                if(empty($admin)) {
+                if(empty($admin)) { // show only non hidden surveys to users
                     $vox = $vox->where('type', 'normal');
                 }
                 $vox = $vox->first();
@@ -69,9 +69,9 @@ class VoxService {
 
             if(!empty($vox)) {
 
-                $array = [];
+                $questionData = [];
 
-                if(!$testmode) {
+                if(!$testmode) { //for admins there is no welcome survey and demographic qs
 
                     if($for_app) {
                         $madeWelcomeTest = $user->madeTest($welcome_vox_id);
@@ -84,177 +84,106 @@ class VoxService {
                         $madeWelcomeTest = session('made-welcome-test');
                     }
 
-                    if (!$madeWelcomeTest) {
-                        // welcome qs
-                        $array['welcome_vox'] = true;
+                    if (!$madeWelcomeTest) { //must do welcome survey
+                        $questionData['welcome_vox'] = true;
 
-                        if(!empty($question_id)) {
-                            //question order
-                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)
+                        if(!empty($question_id)) { // do welcome survey next question
+                            $next_question = VoxQuestion::where('vox_id', $currentQuestionObject->vox_id)
                             ->orderBy('order', 'asc')
-                            ->where('order', '>', $cur_question->order)
+                            ->where('order', '>', $currentQuestionObject->order)
                             ->first();
 
-                            $array['question'] = $next_question;
-                        } else {
-                            //first question
+                            $questionData['question'] = $next_question;
+                        } else { //do welcome survey first question
                             $question = VoxQuestion::where('vox_id', $welcome_vox_id)->orderBy('order', 'ASC')->first();
-                            $array['question'] = $question;
+                            $questionData['question'] = $question;
                         }
-                    } else if(empty($user->birthyear)) {
-                        //demographic qs
-                        $array['birthyear_q'] = true;
-                    } else if(empty($user->gender)) {
-                        //demographic qs
-                        $array['gender_q'] = true;
-                    } else if(empty($user->country_id)) {
-                        //demographic qs
-                        $array['country_id_q'] = true;
+                    } else if(empty($user->birthyear)) { //do demographic qs
+                        $questionData['birthyear_q'] = true;
+                    } else if(empty($user->gender)) { //do demographic qs
+                        $questionData['gender_q'] = true;
+                    } else if(empty($user->country_id)) { //do demographic qs
+                        $questionData['country_id_q'] = true;
                     }
 
-                    if(empty($array)) {
+                    if(empty($questionData)) { // do other demographic qs
                         foreach (config('vox.details_fields') as $key => $info) {
                             if($user->$key==null) {
-                                $array['details_question'] = $info;
-                                $array['details_question_id'] = $key;
+                                $questionData['details_question'] = $info;
+                                $questionData['details_question_id'] = $key;
                                 break;
                             }
                         }
                     }
                 }
 
-                if(empty($array)) {
+                if(empty($questionData)) { // if the user made the welcome survey and demographic qs
 
-                    if(count($vox->questions) > 93 && count($vox->questions) - VoxAnswer::where('vox_id', $vox->id)->where('user_id', $user->id)->groupBy('question_id')->get()->count() == 1) {
-                        //because of bug
-                        $order_93 = VoxQuestion::where('vox_id', $vox->id)->where('order', 93)->first();
-                        if($order_93 && empty(VoxAnswer::where('vox_id', $vox->id)->where('user_id', $user->id)->where('question_id', $order_93->id)->first())) {
-                            $array['question'] = $order_93;
-                        } else {
-                            if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
-                                $question_id=null;
-                            }
-        
-                            if(!empty($question_id) && is_numeric($question_id)) {
-                                $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)
-                                ->orderBy('order', 'asc')
-                                ->where('order', '>', $cur_question->order)
-                                ->first();
-        
-                                // if($next_question) {
-                                    $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $array);
-                                    if(str_contains($checkQuestion, 'skip')) {
-                                        return $checkQuestion;
-                                    }
-                                    $array['question'] = $next_question;
-                                // } else {
-                                //     Log::error('No question!!! Cur question id: '.$question_id.' .User ID: '.$user->id);
-                                //     return '';
-                                // }
-                                
-                            } else {
-                                $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
-                                ->where('vox_id', $vox_id)
-                                ->where('user_id', $user->id)
-                                ->orderBy('id', 'desc')
-                                ->get();
-                                
-                                $answered = [];
-                                foreach ($list as $l) {
-                                    if(!isset( $answered[$l->question_id] )) {
-                                        $answered[$l->question_id] = $l->answer; //3
-                                    } else {
-                                        if(!is_array($answered[$l->question_id])) {
-                                            $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
-                                        }
-                                        $answered[$l->question_id][] = $l->answer; // [3,5,7]
-                                    }
-                                }
-        
-                                $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
-                                $question = $questions_list->first();
-        
-                                if(!isset($answered[$question->id])) {
-                                    //first question
-                                    $array['question'] = $question;
-                                } else {
-                                    //first unanswered question
-                                    $array['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
-                                }
-        
-                                $checkQuestion = self::checkQuestion($array['question'], $vox_id, $vox, $user, $array);
-        
-                                if(str_contains($checkQuestion, 'skip')) {
-                                    return $checkQuestion;
-                                }
-                            }
+                    if(!empty($question_id) && is_numeric($question_id) && $currentQuestionObject->vox_id == 11) {
+                        $question_id=null;
+                    }
+
+                    if(!empty($question_id) && is_numeric($question_id)) {
+                        $next_question = VoxQuestion::where('vox_id', $currentQuestionObject->vox_id)
+                        ->orderBy('order', 'asc')
+                        ->where('order', '>', $currentQuestionObject->order) //always check by order, because id's are rearranged
+                        ->first();
+
+                        // check next question for triggers and previous question answers
+                        $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $questionData);
+                        if(str_contains($checkQuestion, 'skip')) { //if next question have to be skipped
+                            return $checkQuestion;
                         }
+
+                        $questionData['question'] = $next_question;
+                        if(!$next_question) { // log for bug or scam
+                            Log::error('No question!!! Current question id: '.$question_id.'; User ID: '.$user->id);
+                        }
+                        
                     } else {
+                        //if there is no question_id param - get the next question by already answered questions for this survey by user (example If the user refreshes the page )
 
-                        if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
-                            $question_id=null;
-                        }
-    
-                        if(!empty($question_id) && is_numeric($question_id)) {
-                            $next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)
-                            ->orderBy('order', 'asc')
-                            ->where('order', '>', $cur_question->order)
-                            ->first();
-    
-                            // if($next_question) {
-                                $checkQuestion = self::checkQuestion($next_question, $vox_id, $vox, $user, $array);
-                                if(str_contains($checkQuestion, 'skip')) {
-                                    return $checkQuestion;
-                                }
-                                $array['question'] = $next_question;
-                            // } else {
-                            //     Log::error('No question!!! Cur question id: '.$question_id.' .User ID: '.$user->id);
-                            //     return '';
-                            // }
-                            
-                        } else {
-                            $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
-                            ->where('vox_id', $vox_id)
-                            ->where('user_id', $user->id)
-                            ->orderBy('id', 'desc')
-                            ->get();
+                        $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
+                        ->where('vox_id', $vox_id)
+                        ->where('user_id', $user->id)
+                        ->orderBy('id', 'desc')
+                        ->get(); //new table
 
-                            $list_old = VoxAnswerOld::select('id', 'answer', 'question_id', 'created_at')
-                            ->where('vox_id', $vox_id)
-                            ->where('user_id', $user->id)
-                            ->orderBy('id', 'desc')
-                            ->get();
+                        $list_old = VoxAnswerOld::select('id', 'answer', 'question_id', 'created_at')
+                        ->where('vox_id', $vox_id)
+                        ->where('user_id', $user->id)
+                        ->orderBy('id', 'desc')
+                        ->get(); //old table
 
-                            $list = $list->concat($list_old);
-                            
-                            $answered = [];
-                            foreach ($list as $l) {
-                                if(!isset( $answered[$l->question_id] )) {
-                                    $answered[$l->question_id] = $l->answer; //3
-                                } else {
-                                    if(!is_array($answered[$l->question_id])) {
-                                        $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
-                                    }
-                                    $answered[$l->question_id][] = $l->answer; // [3,5,7]
-                                }
-                            }
-    
-                            $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
-                            $question = $questions_list->first();
-    
-                            if(!isset($answered[$question->id])) {
-                                //first question
-                                $array['question'] = $question;
+                        $list = $list->concat($list_old);
+                        
+                        $answered = [];
+                        foreach ($list as $l) {
+                            if(!isset( $answered[$l->question_id] )) {
+                                $answered[$l->question_id] = $l->answer; //3
                             } else {
-                                //first unanswered question
-                                $array['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
+                                if(!is_array($answered[$l->question_id])) {
+                                    $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
+                                }
+                                $answered[$l->question_id][] = $l->answer; // [3,5,7]
                             }
-    
-                            $checkQuestion = self::checkQuestion($array['question'], $vox_id, $vox, $user, $array);
-    
-                            if(str_contains($checkQuestion, 'skip')) {
-                                return $checkQuestion;
-                            }
+                        }
+
+                        $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
+                        $question = $questions_list->first();
+
+                        if(!isset($answered[$question->id])) {
+                            //first question
+                            $questionData['question'] = $question;
+                        } else {
+                            //first unanswered question
+                            $questionData['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
+                        }
+
+                        $checkQuestion = self::checkQuestion($questionData['question'], $vox_id, $vox, $user, $questionData);
+
+                        if(str_contains($checkQuestion, 'skip')) {
+                            return $checkQuestion;
                         }
                     }
                 }
@@ -264,9 +193,9 @@ class VoxService {
                     $cross_check_answer = null;
                     $cross_check_birthyear = false;
 
-                    if(isset($array['question'])) {
+                    if(isset($questionData['question'])) {
 
-                        $vq = $array['question'];
+                        $vq = $questionData['question'];
                         if (!empty($vq) && !empty($vq->cross_check)) {
                             $cross_check = true;
 
@@ -305,7 +234,7 @@ class VoxService {
                             }
                         }
 
-                        $array['question'] = $vq->convertForResponse();
+                        $questionData['question'] = $vq->convertForResponse();
                     }
                 } else {
 
@@ -323,23 +252,23 @@ class VoxService {
                     }
 
                     $excluded_answers = [];
-                    if(isset($array['question']) && !empty($array['question']['excluded_answers'])) {
-                        foreach($array['question']['excluded_answers'] as $k => $excluded_answers_array) {
+                    if(isset($questionData['question']) && !empty($questionData['question']['excluded_answers'])) {
+                        foreach($questionData['question']['excluded_answers'] as $k => $excluded_answers_array) {
                             foreach($excluded_answers_array as $excluded_answ) {
                                 $excluded_answers[$excluded_answ] = $k+1;
                             }
                         }
                     }
 
-                    $array['excluded_answers'] = $excluded_answers;
-                    $array['cross_check'] = $cross_check;
-                    $array['cross_check_answer'] = $cross_check_answer;
-                    $array['cross_check_birthyear'] = $cross_check_birthyear;
-                    $array['scales'] = $scales;
-                    $array['user'] = $user;
-                    $array['country_id'] = $user->country_id ?? self::getCountryIdByIp() ?? '';
+                    $questionData['excluded_answers'] = $excluded_answers;
+                    $questionData['cross_check'] = $cross_check;
+                    $questionData['cross_check_answer'] = $cross_check_answer;
+                    $questionData['cross_check_birthyear'] = $cross_check_birthyear;
+                    $questionData['scales'] = $scales;
+                    $questionData['user'] = $user;
+                    $questionData['country_id'] = $user->country_id ?? self::getCountryIdByIp() ?? '';
 
-                    return Response::json( $array );
+                    return Response::json( $questionData );
 
                 } else {
 
@@ -361,26 +290,26 @@ class VoxService {
                     }
 
                     $excluded_answers = [];
-                    if(isset($array['question']) && !empty($array['question']->excluded_answers)) {
-                        foreach($array['question']->excluded_answers as $k => $excluded_answers_array) {
+                    if(isset($questionData['question']) && !empty($questionData['question']->excluded_answers)) {
+                        foreach($questionData['question']->excluded_answers as $k => $excluded_answers_array) {
                             foreach($excluded_answers_array as $excluded_answ) {
                                 $excluded_answers[$excluded_answ] = $k+1;
                             }
                         }
                     }
                     
-                    $array['excluded_answers'] = $excluded_answers;
-                    $array['cross_checks'] = $cross_checks;
-                    $array['cross_checks_references'] = $cross_checks_references;
-                    $array['scales'] = session('scales');
-                    $array['user'] = $user;
-                    $array['country_id'] = $country_id;
-                    $array['isAdmin'] = $isAdmin;
-                    $array['current_admin_id'] = $admin ? $admin->id : '';
+                    $questionData['excluded_answers'] = $excluded_answers;
+                    $questionData['cross_checks'] = $cross_checks;
+                    $questionData['cross_checks_references'] = $cross_checks_references;
+                    $questionData['scales'] = session('scales');
+                    $questionData['user'] = $user;
+                    $questionData['country_id'] = $country_id;
+                    $questionData['isAdmin'] = $isAdmin;
+                    $questionData['current_admin_id'] = $admin ? $admin->id : '';
 
                     //don't randomize answers here// only in js
 
-                    return response()->view('vox.template-parts.vox-question', $array, 200)->header('X-Frame-Options', 'DENY');
+                    return response()->view('vox.template-parts.vox-question', $questionData, 200)->header('X-Frame-Options', 'DENY');
                 }
             }
         }
@@ -388,9 +317,9 @@ class VoxService {
         return '';
     }
 
-    public static function checkQuestion($next_question, $vox_id, $vox, $user, &$array) {
+    public static function checkQuestion($next_question, $vox_id, $vox, $user, &$questionData) {
         
-        if(!empty($next_question->prev_q_id_answers)) {
+        if(!empty($next_question->prev_q_id_answers)) { //question that gets answers from previous chosen question
 
             $prev_q = VoxQuestion::find($next_question->prev_q_id_answers);
             $prev_answers = VoxAnswer::where('vox_id', $vox_id)->where('question_id', $prev_q->id)->where('user_id', $user->id)->get();
@@ -410,11 +339,11 @@ class VoxService {
                     } else {
 
                         if($next_question->show_answers_with_еxclamation_mark) {
-                            $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+                            $questionData['answers_shown'] = $prev_answers->pluck('answer')->toArray();
 
                             foreach($answers_next_q as $key => $anq) {
                                 if(str_contains($anq, '!')) {
-                                    $array['answers_shown'][] = $key+1;
+                                    $questionData['answers_shown'][] = $key+1;
                                 }
                             }
                         } else {
@@ -424,13 +353,13 @@ class VoxService {
                                 
                             //     $diffs = array_diff($answers_next_q,$answers_prev_q);
 
-                            //     $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+                            //     $questionData['answers_shown'] = $prev_answers->pluck('answer')->toArray();
                                 
                             //     foreach($diffs as $key_diff => $diff) {
-                            //         $array['answers_shown'][] = $key_diff+1;
+                            //         $questionData['answers_shown'][] = $key_diff+1;
                             //     }
 
-                            //     if(!isset($array['answers_shown'])) {
+                            //     if(!isset($questionData['answers_shown'])) {
                             //         return 'skip-dvq:'.$next_question->id.';answer:'.$prev_answers->pluck('answer')->toArray()[0];
                             //     }
                             // } else {
@@ -457,18 +386,18 @@ class VoxService {
                     // dd('2', $answers_to_be_shown, $answers_prev_q);
 
                     if($next_question->show_answers_with_еxclamation_mark) {
-                        $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+                        $questionData['answers_shown'] = $prev_answers->pluck('answer')->toArray();
 
                         foreach($answers_next_q as $key => $anq) {
                             if(str_contains($anq, '!')) {
-                                $array['answers_shown'][] = $key+1;
+                                $questionData['answers_shown'][] = $key+1;
                             }
                         }
                     } else {
                         if(count($answers_to_be_shown) <= 1) {
                             return 'skip-dvq:'.$next_question->id;
                         } else {
-                            $array['answers_shown'] = $answers_to_be_shown;
+                            $questionData['answers_shown'] = $answers_to_be_shown;
 
                             if(count($answers_prev_q) != count($answers_next_q)) {
                                 $diffs = array_diff($answers_next_q,$answers_prev_q);
@@ -476,7 +405,7 @@ class VoxService {
                                 if(!empty($diffs)) {
                                     foreach($diffs as $key_diff => $diff) {
                                         if(!str_contains($diff, '#')) {
-                                            $array['answers_shown'][] = $key_diff+1;
+                                            $questionData['answers_shown'][] = $key_diff+1;
                                         }
                                     }
                                 }
@@ -485,21 +414,21 @@ class VoxService {
                     }
                 } else {
                     if($next_question->show_answers_with_еxclamation_mark) {
-                        $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+                        $questionData['answers_shown'] = $prev_answers->pluck('answer')->toArray();
 
                         foreach($answers_next_q as $key => $anq) {
                             if(str_contains($anq, '!')) {
-                                $array['answers_shown'][] = $key+1;
+                                $questionData['answers_shown'][] = $key+1;
                             }
                         }
                     } else {
-                        $array['answers_shown'] = $prev_answers->pluck('answer')->toArray();
+                        $questionData['answers_shown'] = $prev_answers->pluck('answer')->toArray();
                         if(count($answers_prev_q) != count($answers_next_q)) {
                             $diffs = array_diff($answers_next_q,$answers_prev_q);
 
                             if(!empty($diffs)) {
                                 foreach($diffs as $key_diff => $diff) {
-                                    $array['answers_shown'][] = $key_diff+1;
+                                    $questionData['answers_shown'][] = $key_diff+1;
                                 }
                             }
                         }
@@ -1744,7 +1673,7 @@ class VoxService {
                 }
             }
             
-            if(Request::input('captcha')) {
+            if(Request::input('captcha')) { //do not replace V2 captcha with V3 captcha - first answered question is not recording ( if you have to - check why is happening ) 
                 $captcha = false;
                 $cpost = [
                     'secret' => env('CAPTCHA_SECRET'),
@@ -2320,13 +2249,17 @@ class VoxService {
                                 }
 
                                 if(!empty(request('scale_answers_time')) && isset(request('scale_answers_time')[$k])) {
-
+                                    if($user->id == '196698') {
+                                        Log::info('here in scale');
+                                    }
                                     try {
                                         $scaleDate = Carbon::createFromFormat('D M d Y H:i:s e+',request('scale_answers_time')[$k]); //for site
                                     } catch (\Exception $e) {
                                         $scaleDate = Carbon::parse(request('scale_answers_time')[$k]); //for app
                                     }
-
+                                    if($user->id == '196698') {
+                                        Log::info('Scale Date: '+$scaleDate);
+                                    }
                                     $answer->created_at = $scaleDate;
                                 }
                                 $answer->save();
