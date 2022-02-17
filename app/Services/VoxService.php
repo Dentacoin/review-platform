@@ -1891,6 +1891,9 @@ class VoxService {
 
                     if($for_app) {
                         if(is_string($a)) {
+                            if($user->id == '196698') {
+                                Log::info('is string: '.$a);
+                            }
                             $a = explode(',', $a);
                         }
                     }
