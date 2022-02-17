@@ -95,9 +95,15 @@ class VoxService {
                             ->first();
 
                             $questionData['question'] = $next_question;
+                            if(!$next_question) { // log for bug or scam
+                                Log::error('1. No question!!! Current question id: '.$question_id.'; User ID: '.$user->id);
+                            }
                         } else { //do welcome survey first question
                             $question = VoxQuestion::where('vox_id', $welcome_vox_id)->orderBy('order', 'ASC')->first();
                             $questionData['question'] = $question;
+                            if(!$question) { // log for bug or scam
+                                Log::error('2. No question!!! Vox id: '.$vox_id.'; User ID: '.$user->id);
+                            }
                         }
                     } else if(empty($user->birthyear)) { //do demographic qs
                         $questionData['birthyear_q'] = true;
@@ -138,12 +144,13 @@ class VoxService {
 
                         $questionData['question'] = $next_question;
                         if(!$next_question) { // log for bug or scam
-                            Log::error('No question!!! Current question id: '.$question_id.'; User ID: '.$user->id);
+                            Log::error('3. No question!!! Current question id: '.$question_id.'; User ID: '.$user->id);
                         }
                         
                     } else {
                         //if there is no question_id param - get the next question by already answered questions for this survey by user (example If the user refreshes the page )
 
+                        //get all vox answered questions by the user
                         $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
                         ->where('vox_id', $vox_id)
                         ->where('user_id', $user->id)
@@ -170,20 +177,27 @@ class VoxService {
                             }
                         }
 
-                        $questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
-                        $question = $questions_list->first();
+                        $allVoxQuestions = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
+                        $question = $allVoxQuestions->first();
 
                         if(!isset($answered[$question->id])) {
-                            //first question
+                            //first question of vox
                             $questionData['question'] = $question;
+                            if(!$question) { // log for bug or scam
+                                Log::error('4. No question!!! Vox id: '.$vox_id.'; User ID: '.$user->id);
+                            }
                         } else {
-                            //first unanswered question
-                            $questionData['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
+                            //first unanswered question of vox
+                            $firstUnansweredQuestion = $allVoxQuestions->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
+                            $questionData['question'] = $firstUnansweredQuestion;
+                            if(!$firstUnansweredQuestion) { // log for bug or scam
+                                Log::error('5. No question!!! Vox id: '.$vox_id.'; User ID: '.$user->id);
+                            }
                         }
 
+                        // check next question for triggers and previous question answers
                         $checkQuestion = self::checkQuestion($questionData['question'], $vox_id, $vox, $user, $questionData);
-
-                        if(str_contains($checkQuestion, 'skip')) {
+                        if(str_contains($checkQuestion, 'skip')) { //if next question have to be skipped
                             return $checkQuestion;
                         }
                     }
@@ -196,37 +210,44 @@ class VoxService {
 
                     if(isset($questionData['question'])) {
 
-                        $vq = $questionData['question'];
-                        if (!empty($vq) && !empty($vq->cross_check)) {
+                        if (!empty($questionData['question']) && !empty($questionData['question']->cross_check)) { //if next question is cross check
                             $cross_check = true;
 
-                            if (is_numeric($vq->cross_check)) {
-                                $va = VoxAnswer::where('user_id',$user->id )
-                                ->where('vox_id', 11)
-                                ->where('question_id', $vq->cross_check )
-                                ->first();
+                            if (is_numeric($questionData['question']->cross_check)) { //if the cross check is from welcome survey
 
-                                if(empty($va)) {
-                                    $va = VoxAnswerOld::where('user_id',$user->id )
+                                $crossCheckAnswer = VoxAnswer::where('user_id',$user->id )
+                                ->where('vox_id', 11)
+                                ->where('question_id', $questionData['question']->cross_check )
+                                ->first(); // check vox answer in new table
+
+                                if(empty($crossCheckAnswer)) {
+                                    $crossCheckAnswer = VoxAnswerOld::where('user_id',$user->id )
                                     ->where('vox_id', 11)
-                                    ->where('question_id', $vq->cross_check )
-                                    ->first();
+                                    ->where('question_id', $questionData['question']->cross_check )
+                                    ->first(); // check vox answer in old table
                                 }
-                                $cross_check_answer = $va ? $va->answer : null;
-                            } else if($vq->cross_check == 'gender') {
+
+                                $cross_check_answer = $crossCheckAnswer ? $crossCheckAnswer->answer : null;
+
+                            } else if($questionData['question']->cross_check == 'gender') { //if the cross check is gender
+
                                 $cross_check_answer = $user->gender == 'm' ? 1 : 2;
-                            } else if($vq->cross_check == 'birthyear') {
+
+                            } else if($questionData['question']->cross_check == 'birthyear') { //if the cross check is birth year
+
                                 $cross_check_birthyear = true;
                                 $cross_check_answer = $user->birthyear;
-                            } else {
-                                $cc = $vq->cross_check;
+
+                            } else {  //if the cross check is another demographic
+
+                                $crossCheckDemographic = $questionData['question']->cross_check;
                                 $i=1;
-                                foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
-                                    if($key==$user->$cc) {
+                                foreach (config('vox.details_fields.'.$crossCheckDemographic.'.values') as $key => $value) {
+                                    if($key==$user->$crossCheckDemographic) {
                                         if($key == 'household_children') {
-                                            $cross_checks[$vq->id] = $i + 1;
+                                            $cross_check_answer = $i + 1;
                                         } else {                                
-                                            $cross_checks[$vq->id] = $i;
+                                            $cross_check_answer = $i;
                                         }
                                         break;
                                     }
@@ -235,23 +256,17 @@ class VoxService {
                             }
                         }
 
-                        $questionData['question'] = $vq->convertForResponse();
+                        $questionData['question'] = $questionData['question']->convertForResponse();
                     }
-                } else {
 
-                    $crossCheckParams = self::getCrossChecks($user, $vox->questions);
-                    $cross_checks = $crossCheckParams['cross_checks'];
-                    $cross_checks_references = $crossCheckParams['cross_checks_references'];
-                }
-
-                if($for_app) {
-
+                    //get vox scales
                     $slist = VoxScale::get();
                     $scales = [];
                     foreach ($slist as $sitem) {
                         $scales[$sitem->id] = $sitem;
                     }
 
+                    //answers from multiple choice question that are grouped and can't be checked at once
                     $excluded_answers = [];
                     if(isset($questionData['question']) && !empty($questionData['question']['excluded_answers'])) {
                         foreach($questionData['question']['excluded_answers'] as $k => $excluded_answers_array) {
@@ -272,7 +287,12 @@ class VoxService {
                     return Response::json( $questionData );
 
                 } else {
+                    //check if next question is cross check
+                    $crossCheckParams = self::getCrossChecks($user, $vox->questions);
+                    $cross_checks = $crossCheckParams['cross_checks'];
+                    $cross_checks_references = $crossCheckParams['cross_checks_references'];
 
+                    //get vox scales
                     if(!session('scales') || (session('scales') && $user->update_vox_scales)) {
                         $slist = VoxScale::get();
                         $scales = [];
@@ -290,6 +310,7 @@ class VoxService {
                         }
                     }
 
+                    //answers from multiple choice question that are grouped and can't be checked at once
                     $excluded_answers = [];
                     if(isset($questionData['question']) && !empty($questionData['question']->excluded_answers)) {
                         foreach($questionData['question']->excluded_answers as $k => $excluded_answers_array) {
@@ -380,11 +401,9 @@ class VoxService {
                             if(str_contains($answer_prev_q, '#')) {
                                 $key_with_diez = array_search($ans_key+1, $answers_to_be_shown);
                                 unset($answers_to_be_shown[$key_with_diez]);
-                                // dd('1', $answers_to_be_shown, $answers_prev_q, $ans_key+1, array_search($ans_key+1, $answers_to_be_shown));
                             }
                         }
                     }
-                    // dd('2', $answers_to_be_shown, $answers_prev_q);
 
                     if($next_question->show_answers_with_еxclamation_mark) {
                         $questionData['answers_shown'] = $prev_answers->pluck('answer')->toArray();
@@ -460,8 +479,6 @@ class VoxService {
                 $triggerSuccess = [];
 
                 foreach ($triggers as $trigger) {
-
-                    // dd($trigger);
 
                     list($triggerId, $triggerAnswers) = explode(':', $trigger);
                     if(is_numeric($triggerId)) {
@@ -539,7 +556,6 @@ class VoxService {
 
                         // echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($allowedAnswers, true).' / Answer: '.var_export($givenAnswers, true).' / Inverted logic: '.($invert_trigger_logic ? 'da' : 'ne').'<br/>';
                         
-
                         foreach ($givenAnswers as $ga) {
                             $int = intval($ga) + rand(74575,998858);
 
