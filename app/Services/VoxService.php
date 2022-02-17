@@ -1942,6 +1942,8 @@ class VoxService {
                 
                 if($user->id == '196698') {
                     Log::info('Test 66');
+                    Log::info('Valid');
+                    Log::info('Answer :'.json_encode($a));
                 }
 
                 if( $valid ) {
