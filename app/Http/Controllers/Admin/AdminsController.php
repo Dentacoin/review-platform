@@ -330,13 +330,17 @@ class AdminsController extends AdminController {
         }
         
         if(Request::isMethod('post')) {
-            
+
             foreach($_FILES['file']['name'] as $k => $file) {
                 $file_name = explode('.', $file)[0];
                 $gallery = UserPhoto::find($file_name);
 
-                $img = Image::make( Input::file('file')[$k] )->orientate();
-                $gallery->addImage($img);
+                if(!empty($gallery)) {
+
+                    $img = Image::make( Input::file('file')[$k] )->orientate();
+                    $gallery->addImage($img);
+                }
+
             }
         }
 
