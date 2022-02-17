@@ -1968,9 +1968,17 @@ class VoxService {
                             }
                         }
                     }
+                
+                    if($user->id == '196698') {
+                        Log::info('Test 77');
+                    }
 
                     // dd($is_scam);
                     if($is_scam && !$user->is_partner) { //confirmed from Petya for is_partner 05.11.21
+                
+                        if($user->id == '196698') {
+                            Log::info('Test 88');
+                        }
                         $wrongs = UserSurveyWarning::where('user_id', $user->id)
                         ->where('action', 'wrong')
                         ->where('created_at', '>', Carbon::now()->addHours(-3)->toDateTimeString() )
@@ -2030,6 +2038,10 @@ class VoxService {
                                 ->delete();
                             }
                         } else {
+                
+                            if($user->id == '196698') {
+                                Log::info('Test 99');
+                            }
 
                             UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->delete();
                                 
@@ -2070,7 +2082,7 @@ class VoxService {
                     } else {
                 
                         if($user->id == '196698') {
-                            Log::info('Test 77');
+                            Log::info('Test 10');
                         }
 
                         if($type == 'skip') {
