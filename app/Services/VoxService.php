@@ -142,9 +142,45 @@ class VoxService {
                             return $checkQuestion;
                         }
 
-                        $questionData['question'] = $next_question;
                         if(!$next_question) { // log for bug or scam
+                            Log::error('---------------');
+
+                            $list = VoxAnswer::select('id', 'answer', 'question_id', 'created_at')
+                            ->where('vox_id', $vox_id)
+                            ->where('user_id', $user->id)
+                            ->orderBy('id', 'desc')
+                            ->get(); //new table
+
+                            $list_old = VoxAnswerOld::select('id', 'answer', 'question_id', 'created_at')
+                            ->where('vox_id', $vox_id)
+                            ->where('user_id', $user->id)
+                            ->orderBy('id', 'desc')
+                            ->get(); //old table
+
+                            $list = $list->concat($list_old);
+                            
+                            $answered = [];
+                            foreach ($list as $l) {
+                                if(!isset( $answered[$l->question_id] )) {
+                                    $answered[$l->question_id] = $l->answer; //3
+                                } else {
+                                    if(!is_array($answered[$l->question_id])) {
+                                        $answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
+                                    }
+                                    $answered[$l->question_id][] = $l->answer; // [3,5,7]
+                                }
+                            }
+
+                            if(VoxQuestion::where('vox_id', $currentQuestionObject->vox_id)->count() - count($answered) == 1) {
+                                $questionData['question'] = VoxQuestion::where('vox_id', $vox_id)->whereNotIn('id', array_keys($answered))->first();
+                                Log::error('1');
+                            } else {
+                                Log::error('2');
+                            }
+                            Log::error('Answered: '.json_encode($answered));
                             Log::error('3. No question!!! Current question id: '.$question_id.'; User ID: '.$user->id);
+                        } else {
+                            $questionData['question'] = $next_question;
                         }
                         
                     } else {
@@ -189,11 +225,18 @@ class VoxService {
                         } else {
                             //first unanswered question of vox
                             $firstUnansweredQuestion = $allVoxQuestions->where('order','>', VoxQuestion::find(array_key_first($answered))->order)->first();
-                            $questionData['question'] = $firstUnansweredQuestion;
                             if(!$firstUnansweredQuestion) { // log for bug or scam
                                 Log::error('---------------');
+                                if(VoxQuestion::where('vox_id', $vox_id)->count() - count($answered) == 1) {
+                                    $questionData['question'] = VoxQuestion::where('vox_id', $vox_id)->whereNotIn('id', array_keys($answered))->first();
+                                    Log::error('1');
+                                } else {
+                                    Log::error('2');
+                                }
                                 Log::error('Answered: '.json_encode($answered));
                                 Log::error('5. No question!!! Vox id: '.$vox_id.'; User ID: '.$user->id);
+                            } else {
+                                $questionData['question'] = $firstUnansweredQuestion;
                             }
                         }
 
