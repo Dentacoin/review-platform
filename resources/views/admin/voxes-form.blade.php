@@ -12,7 +12,7 @@
 
     <div class="custom-popup">
         <div class="custom-popup-inner">
-            <p>Please, refresh the page, because someone has made changes to the survey!</p>
+            <p>Please refresh the page as someone made changes here.</p>
         </div>
     </div>
     

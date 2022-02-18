@@ -69,6 +69,9 @@ class Vox extends Model {
         'age',
         'country_percentage',
         'dentists_patients',
+        'thumbnail_name',
+        'social_image_name',
+        'stats_image_name',
     ];
 
     protected $dates = [
@@ -298,24 +301,31 @@ class Vox extends Model {
     }
 
     public function getImageUrl($thumb = false) {
-        return $this->hasimage ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : url('new-vox-img/stats-dummy.png');
+        if($this->hasimage) {
+            if(!empty($this->thumbnail_name)) {
+                return url('/storage/voxes/'.($this->id%100).'/'.$this->thumbnail_name.($thumb ? '-thumb' : '').'.jpg').'?rev=1'.$this->updated_at->timestamp;
+            } else {
+                return url('/storage/voxes/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev=1'.$this->updated_at->timestamp;
+            }
+        } else {
+            return url('new-vox-img/stats-dummy.png');
+        }
     }
 
-    public function getImagePath($thumb = false) {
+    public function getImagePath($thumb = false, $name) {
         $folder = storage_path().'/app/public/voxes/'.($this->id%100);
         if(!is_dir($folder)) {
             mkdir($folder);
         }
-        return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.jpg';
+        return $folder.'/'.$name.($thumb ? '-thumb' : '').'.jpg';
     }
 
-    public function addImage($img) {
-
+    public function addImage($img, $name) {
         $extensions = ['image/jpeg', 'image/png'];
 
         if (in_array($img->mime(), $extensions)) {
-            $to = $this->getImagePath();
-            $to_thumb = $this->getImagePath(true);
+            $to = $this->getImagePath(false, $name);
+            $to_thumb = $this->getImagePath(true, $name);
 
             $img->resize(1920, null, function ($constraint) {
                 $constraint->aspectRatio();
@@ -324,67 +334,85 @@ class Vox extends Model {
             $img->save($to);
             $img->fit( 520, 352 );
             $img->save($to_thumb);
+
+            $this->thumbnail_name = $name;
             $this->hasimage = true;
             $this->save();
 
-            $destination = self::getImagePath().'.webp';
-            WebPConvert::convert(self::getImagePath(), $destination, []);
+            $destination = $this->getImagePath(false, $name).'.webp';
+            WebPConvert::convert($this->getImagePath(false, $name), $destination, []);
 
-            $destination_thumb = self::getImagePath(true).'.webp';
-            WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
+            $destination_thumb = $this->getImagePath(true, $name).'.webp';
+            WebPConvert::convert($this->getImagePath(true, $name), $destination_thumb, []);
         }
     }
 
     public function getSocialImageUrl($type = 'social') {
-        return $this->hasimage_social ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.'-'.$type.'.png').'?rev=1'.$this->updated_at->timestamp : url('new-vox-img/stats-dummy.png');
+        
+        if($this->hasimage_social) {
+            if(!empty($this->thumbnail_name)) {
+                return url('/storage/voxes/'.($this->id%100).'/'.($type == 'social' ? $this->social_image_name : $this->stats_image_name).'.png').'?rev=1'.$this->updated_at->timestamp;
+            } else {
+                return url('/storage/voxes/'.($this->id%100).'/'.$this->id.'-'.$type.'.png').'?rev=1'.$this->updated_at->timestamp;
+            }
+        } else {
+            return url('new-vox-img/stats-dummy.png');
+        }
     }
 
-    public function getSocialImagePath($type = 'social') {
+    public function getSocialImagePath($type = 'social', $name=null) {
+
         $folder = storage_path().'/app/public/voxes/'.($this->id%100);
         if(!is_dir($folder)) {
             mkdir($folder);
         }
-        return $folder.'/'.$this->id.'-'.$type.'.png';
+
+        if(!empty($name)) {
+            return $folder.'/'.$name.'.png';
+        } else {
+            return $folder.'/'.$this->id.'-'.$type.'.png';
+        }
     }
 
-    public function addSocialImage($img, $type='social') {
+    public function addSocialImage($img, $name, $type='social') {
 
-        $to = $this->getSocialImagePath($type);
-
+        $to = $this->getSocialImagePath($type, $name);
         $img->fit(1920, 1005);
         $img->save($to);
         if($type=='social') {
             $this->hasimage_social = true;
+            $this->social_image_name = $name;
         } else if($type=='for-stats') {
             $this->hasimage_stats = true;
+            $this->stats_image_name = $name;
         }
         $this->save();
 
-        $this->regenerateSocialImages();
+        // $this->regenerateSocialImages();
     }
 
-    public function regenerateSocialImages() {
+    // public function regenerateSocialImages() {
 
-        if( $this->hasimage_social ) {
-            $original = Image::make( $this->getSocialImagePath() );
-            $badge_file = VoxBadge::find(1)->getImagePath(); //survey
-            if(file_exists($badge_file)) {
-                $original->insert( $badge_file, 'bottom-left', 0, 0);                
-            }
-            $original->save( $this->getSocialImagePath('survey') );
-        }
+    //     if( $this->hasimage_social ) {
+    //         $original = Image::make( $this->getSocialImagePath('social', $this->social_image_name) );
+    //         $badge_file = VoxBadge::find(1)->getImagePath(); //survey
+    //         if(file_exists($badge_file)) {
+    //             $original->insert( $badge_file, 'bottom-left', 0, 0);                
+    //         }
+    //         $original->save( $this->getSocialImagePath('survey', $this->social_image_name) );
+    //     }
 
-        if( $this->hasimage_stats ) {
-            $original = Image::make( $this->getSocialImagePath('for-stats') );
-            $badge_file = VoxBadge::find(2)->getImagePath(); //stats
-            if(file_exists($badge_file)) {
-                $original->insert( $badge_file, 'bottom-left', 0, 0);                
-            }
-            $original->save( $this->getSocialImagePath('stats') );
-        }
+    //     if( $this->hasimage_stats ) {
+    //         $original = Image::make( $this->getSocialImagePath('for-stats', ) );
+    //         $badge_file = VoxBadge::find(2)->getImagePath(); //stats
+    //         if(file_exists($badge_file)) {
+    //             $original->insert( $badge_file, 'bottom-left', 0, 0);                
+    //         }
+    //         $original->save( $this->getSocialImagePath('stats') );
+    //     }
 
-        $this->updated_at = Carbon::now();
-    }
+    //     $this->updated_at = Carbon::now();
+    // }
 
     public function setTypeAttribute($newvalue) {
         if (!empty($this->attributes['type']) && $this->attributes['type'] != 'normal' && $newvalue == 'normal' && empty($this->attributes['launched_at'])) {

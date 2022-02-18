@@ -1513,7 +1513,8 @@ class VoxesController extends AdminController {
                 return redirect('cms/vox/edit/'.$item->id);
             }
             $img = Image::make( Input::file('photo') )->orientate();
-            $item->addImage($img);
+            $filename = explode('.', $_FILES['photo']['name'])[0];
+            $item->addImage($img ,$filename);
 
             $history_info.= 'New photo<br/>';
         }
@@ -1534,7 +1535,8 @@ class VoxesController extends AdminController {
                 return redirect('cms/vox/edit/'.$item->id);
             }
             $img = Image::make( Input::file('photo-social')->getRealPath() )->orientate();
-            $item->addSocialImage($img);
+            $filename = explode('.', $_FILES['photo-social']['name'])[0];
+            $item->addSocialImage($img, $filename);
 
             $history_info.= 'New photo social<br/>';
         }
@@ -1555,7 +1557,8 @@ class VoxesController extends AdminController {
                 return redirect('cms/vox/edit/'.$item->id);
             }
             $img = Image::make( Input::file('photo-stats') )->orientate();
-            $item->addSocialImage($img, 'for-stats');
+            $filename = explode('.', $_FILES['photo-stats']['name'])[0];
+            $item->addSocialImage($img, $filename, 'for-stats');
 
             $history_info.= 'New photo stats<br/>';
         }
