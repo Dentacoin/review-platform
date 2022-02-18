@@ -96,6 +96,18 @@ class Vox extends Model {
         return $this->hasMany('App\Models\VoxToCategory', 'vox_id', 'id');
     }
 
+    public function history() {
+        return $this->hasMany('App\Models\VoxHistory', 'vox_id', 'id')->orderBy('id', 'DESC');;
+    }
+
+    public function historyOnlyVox() {
+        return $this->hasMany('App\Models\VoxHistory', 'vox_id', 'id')->whereNull('question_id')->orderBy('id', 'DESC');;
+    }
+
+    public function historyOnlyVoxQuestions() {
+        return $this->hasMany('App\Models\VoxHistory', 'vox_id', 'id')->whereNotNull('question_id')->orderBy('id', 'DESC');;
+    }
+
     public function stats_questions() {
         return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->with('translations')->where('used_for_stats', '!=', '')->orderBy('order', 'ASC');
     }

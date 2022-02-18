@@ -1057,4 +1057,32 @@ $(document).ready(function(){
 			console.log(data);
 		});
 	});
+
+	if($('#current-date').length) {
+		var that = $('#current-date');
+		var current_hour = that.val();
+		var checkForChangesUrl = that.attr('link');
+
+		setInterval(function () {
+			console.log(current_hour);
+
+			$.ajax({
+				url: that.attr('link'),
+				type: 'POST',
+				data: {
+					date: current_hour,
+				},
+				dataType: 'json',
+				success: function( data ) {
+
+					if(data.has_changes) {
+						$('.custom-popup').css('display', 'block');
+					}
+				},
+				error: function(data) {
+					console.log('error');
+				}
+			});
+		}, 5000);
+	}
 });

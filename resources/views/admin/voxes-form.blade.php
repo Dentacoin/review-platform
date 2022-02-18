@@ -5,6 +5,16 @@
     <h1 class="page-header">
         {{ empty($item) ? trans('admin.page.'.$current_page.'.new.title') : trans('admin.page.'.$current_page.'.edit.title') }}
     </h1>
+
+    @if(!empty($item))
+        <input type="hidden" id="current-date" name="current-date" value="{{ Carbon::now() }}" link="{{ url('cms/vox/edit/'.$item->id.'/check-for-vox-changes/') }}"/>
+    @endif
+
+    <div class="custom-popup">
+        <div class="custom-popup-inner">
+            <p>Please, refresh the page, because someone has made changes to the survey!</p>
+        </div>
+    </div>
     
     @if(!empty($error))
         <div class="alert alert-danger">
@@ -20,16 +30,13 @@
             {!! $questions_order_bug_message !!}
         </div>
     @endif
-    <!-- end page-header -->
 
     <div class="row">
-        <!-- begin col-6 -->
         <div class="col-md-12 ui-sortable">
             {{ Form::open(array('id' => 'page-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true)) }}
 
                 <div class="panel panel-inverse panel-with-tabs custom-tabs">
                     <div class="panel-heading p-0">
-                        <!-- begin nav-tabs -->
                         <div class="tab-overflow overflow-right">
                             <ul class="nav nav-tabs nav-tabs-inverse">
                                 @foreach($langs as $code => $lang_info)

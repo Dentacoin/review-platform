@@ -191,6 +191,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/edit/{id}/change-all', 					'VoxesController@reorder');
 	Route::any('vox/edit/{id}/change-number/{question_id}', 'VoxesController@order_question');
 	Route::any('vox/edit/{id}/change-question/{question_id}', 'VoxesController@change_question_text');
+
+	Route::post('vox/edit/{id}/check-for-vox-changes', 		'VoxesController@checkVoxForChanges');
+	
 	Route::get('vox/duplicate/{id}', 						'VoxesController@duplicateSurvey');
 	Route::get('vox/ideas', 								'VoxesController@ideas');
 	Route::get('vox/categories', 							'VoxesController@categories');

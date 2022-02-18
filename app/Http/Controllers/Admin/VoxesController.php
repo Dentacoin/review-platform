@@ -3688,6 +3688,32 @@ class VoxesController extends AdminController {
         ]);
     }
 
+    public function checkVoxForChanges($vox_id) {
+
+        $vox = Vox::find($vox_id);
+
+        if(!empty($vox)) {
+
+            $has_changes = false;
+
+            if($vox->historyOnlyVox->isNotEmpty()) {
+                if($vox->historyOnlyVox->first()->created_at > Carbon::parse(request()->input('date'))) {
+                    $has_changes = true;
+                }
+            }
+    
+            return Response::json( [
+                'success' => true,
+                'has_changes' => $has_changes
+            ]);
+        }
+
+        return Response::json( [
+            'success' => false,
+        ]);
+
+    }
+
     // public function duplicateSurvey($id) {
         
     //     if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer', 'support'])) {

@@ -795,6 +795,37 @@ input[type="number"]::-webkit-inner-spin-button {
     vertical-align: sub;
 }
 
+.custom-popup {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    background-color: #00000096;
+}
+
+.custom-popup .custom-popup-inner {
+    width: 460px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    padding: 20px;
+    background: #ffafaf;
+    border-radius: 7px;
+}
+
+.custom-popup .custom-popup-inner p {
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    font-size: 20px;
+}
+
 @media screen and (max-width: 767px) {
     .col-60 {
         max-width: 30px;
