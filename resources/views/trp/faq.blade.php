@@ -18,17 +18,19 @@
 			@foreach($content as $block)
 				<h2>{{ $block['title'] }}</h2>
 				<div class="questions">
-					@foreach( $block['questions'] as $question )
-						<div class="question {{ $loop->first ? 'active' : '' }}">
-			                <a class="question-title" href="javascript:;">
-			                	<span>{{ str_pad($loop->iteration, 2, "0", STR_PAD_LEFT) }}</span>{{ $question[0] }}
-								<img src="{{ url('img/caret-black-down.png') }}"/>
-			                </a>
-			                <div class="question-description clearfix">
-								<p>{!! nl2br($question[1]) !!}</p>
-			                </div>
-			            </div>
-					@endforeach
+					@if(isset($block['questions']))
+						@foreach( $block['questions'] as $question )
+							<div class="question {{ $loop->first ? 'active' : '' }}">
+				                <a class="question-title" href="javascript:;">
+				                	<span>{{ str_pad($loop->iteration, 2, "0", STR_PAD_LEFT) }}</span>{{ $question[0] }}
+									<img src="{{ url('img/caret-black-down.png') }}"/>
+				                </a>
+				                <div class="question-description clearfix">
+									<p>{!! nl2br($question[1]) !!}</p>
+				                </div>
+				            </div>
+						@endforeach
+					@endif
 				</div>
 			@endforeach
 		</div>
