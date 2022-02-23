@@ -17,6 +17,8 @@ class FaqController extends FrontController {
 
 		$seos = PageSeo::find(22);
 
+		dd($content);
+
 		return $this->ShowView('faq', array(
 			'content' => $content,
 			'social_image' => $seos->getImageUrl(),

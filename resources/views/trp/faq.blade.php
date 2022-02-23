@@ -13,8 +13,6 @@
 		</div>
 	</div>
 
-	{{ dd($block) }}
-
 	<div class="faq-wrapper">
 		<div class="container">
 			@foreach($content as $block)
