@@ -363,7 +363,11 @@ class PollsController extends AdminController {
 
         if(!empty($poll)) {
 
+            $lastPoll = Poll::orderBy('launched_at', 'desc')->first();
+
             $clone = $poll->replicate();
+            $clone->status = 'scheduled';
+            $clone->launched_at = $lastPoll->launched_at->addDays(1);
 			$clone->push();
 
    //      	foreach($poll->translations as $trans)
