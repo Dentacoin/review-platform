@@ -27,6 +27,7 @@
     </div>
 
     <form class="checkout-form checkout-container active" method="post" action="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/checkout/') }}">
+        {!! csrf_field() !!}
         <div class="modern-field alert-after">
             <input type="email" name="email" id="email" value="{{ $order ? $order->email : '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
             <label for="email">

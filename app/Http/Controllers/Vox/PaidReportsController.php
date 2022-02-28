@@ -12,6 +12,7 @@ use App\Models\Order;
 use Validator;
 use Response;
 use Request;
+use Mail;
 
 class PaidReportsController extends FrontController {
     
@@ -98,21 +99,20 @@ class PaidReportsController extends FrontController {
      * Paid report checkout page
      */
 	public function reportCheckout($locale=null, $slug) {
-
 		if(empty($this->admin)) {
 			return redirect( getLangUrl('page-not-found') );
 		}
-
+		
 		$seos = PageSeo::find(38);
-
+		
 		$item = PaidReport::whereTranslationLike('slug', $slug)
 		->where('status', 'published')
 		->first();
-
+		
 		if(empty($item)) {
 			return redirect( getLangUrl('page-not-found') );
 		}
-
+		
 		if(Request::isMethod('post')) {
 			$validator = Validator::make(Request::all(), [
                 'name' => array('required', 'min:3'),
