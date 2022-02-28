@@ -121,7 +121,7 @@ class PollsController extends AdminController {
 
 	        // foreach ($this->langs as $key => $value) {
                 $key = 'en';
-                
+
 	            if(!empty($this->request->input('question-'.$key))) {
 	                $translation = $newpoll->translateOrNew($key);
 	                $translation->poll_id = $newpoll->id;
@@ -225,7 +225,8 @@ class PollsController extends AdminController {
                     $item->dont_randomize_answers = $this->request->input('dont_randomize_answers');
     		        $item->save();
 
-    		        foreach ($this->langs as $key => $value) {
+    		        // foreach ($this->langs as $key => $value) {
+                        $key = 'en';
     		            if(!empty($this->request->input('question-'.$key))) {
     		                $translation = $item->translateOrNew($key);
     		                $translation->poll_id = $item->id;
@@ -249,8 +250,8 @@ class PollsController extends AdminController {
                                 $translator = [];
 
                                 if(!empty($oldAnswers)) {
-                                    foreach ($oldAnswers as $key => $value) {
-                                        $translator[($key+1)] = array_search($value, $newAnswersArr) + 1;
+                                    foreach ($oldAnswers as $kkk => $value) {
+                                        $translator[($kkk+1)] = array_search($value, $newAnswersArr) + 1;
                                     }
                                 }
 
@@ -269,7 +270,7 @@ class PollsController extends AdminController {
     	                }
 
     	                $translation->save();
-    		        }
+    		        // }
     		        $item->save();
 
                     Request::session()->flash('success-message', 'Daily Poll Edited');
