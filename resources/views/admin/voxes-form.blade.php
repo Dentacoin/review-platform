@@ -220,19 +220,19 @@
                                     <br/>
                                     <a href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/delpic') }}">Delete photo</a>
                                 </div>
+                                <div class="col-md-2">
+                                    Original image<br/>
+                                    <a target="_blank" href="{{ $item->getImageUrl() }}">
+                                        <img src="{{ $item->getImageUrl() }}" style="background: #2f7de1; width: 100%;" />
+                                    </a>
+                                </div>
                             @endif
                             @if(!empty($item) && $item->hasimage_social)
                                 <div class="form-group">
                                     <div class="col-md-2">
-                                        Original image<br/>
-                                        <a target="_blank" href="{{ $item->getSocialImageUrl() }}">
-                                            <img src="{{ $item->getSocialImageUrl() }}" style="background: #2f7de1; width: 100%;" />
-                                        </a>
-                                    </div>
-                                    <div class="col-md-2">
                                         Survey Social<br/>
-                                        <a target="_blank" href="{{ $item->getSocialImageUrl('survey') }}">
-                                            <img src="{{ $item->getSocialImageUrl('survey') }}" style="background: #2f7de1; width: 100%;" />
+                                        <a target="_blank" href="{{ $item->getSocialImageUrl('social') }}">
+                                            <img src="{{ $item->getSocialImageUrl('social') }}" style="background: #2f7de1; width: 100%;" />
                                         </a>
                                     </div>
                                     <div class="col-md-2">

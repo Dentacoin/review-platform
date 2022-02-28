@@ -1034,7 +1034,7 @@ class VoxService {
                             'vox-public-vox.css',
                         ],
                         'canonical' => $vox->getLink(),
-                        'social_image' => $vox->getSocialImageUrl('survey'),
+                        'social_image' => $vox->getSocialImageUrl('social'),
                         'seo_title' => $seo_title,
                         'seo_description' => $seo_description,
                         'social_title' => $social_title,

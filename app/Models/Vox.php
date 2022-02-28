@@ -11,13 +11,10 @@ use App\Models\VoxAnswerOld;
 use App\Models\UserDevice;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
-use App\Models\VoxBadge;
-use App\Models\User;
 
 use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
-use Image;
 use App;
 use DB;
 
@@ -350,7 +347,7 @@ class Vox extends Model {
     public function getSocialImageUrl($type = 'social') {
         
         if($this->hasimage_social) {
-            if(!empty($this->thumbnail_name)) {
+            if(!empty($this->social_image_name)) {
                 return url('/storage/voxes/'.($this->id%100).'/'.($type == 'social' ? $this->social_image_name : $this->stats_image_name).'.png').'?rev=1'.$this->updated_at->timestamp;
             } else {
                 return url('/storage/voxes/'.($this->id%100).'/'.$this->id.'-'.$type.'.png').'?rev=1'.$this->updated_at->timestamp;
@@ -387,32 +384,7 @@ class Vox extends Model {
             $this->stats_image_name = $name;
         }
         $this->save();
-
-        // $this->regenerateSocialImages();
     }
-
-    // public function regenerateSocialImages() {
-
-    //     if( $this->hasimage_social ) {
-    //         $original = Image::make( $this->getSocialImagePath('social', $this->social_image_name) );
-    //         $badge_file = VoxBadge::find(1)->getImagePath(); //survey
-    //         if(file_exists($badge_file)) {
-    //             $original->insert( $badge_file, 'bottom-left', 0, 0);                
-    //         }
-    //         $original->save( $this->getSocialImagePath('survey', $this->social_image_name) );
-    //     }
-
-    //     if( $this->hasimage_stats ) {
-    //         $original = Image::make( $this->getSocialImagePath('for-stats', ) );
-    //         $badge_file = VoxBadge::find(2)->getImagePath(); //stats
-    //         if(file_exists($badge_file)) {
-    //             $original->insert( $badge_file, 'bottom-left', 0, 0);                
-    //         }
-    //         $original->save( $this->getSocialImagePath('stats') );
-    //     }
-
-    //     $this->updated_at = Carbon::now();
-    // }
 
     public function setTypeAttribute($newvalue) {
         if (!empty($this->attributes['type']) && $this->attributes['type'] != 'normal' && $newvalue == 'normal' && empty($this->attributes['launched_at'])) {

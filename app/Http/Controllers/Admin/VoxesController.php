@@ -22,7 +22,6 @@ use App\Models\VoxHistory;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\VoxScale;
-use App\Models\VoxBadge;
 use App\Models\VoxError;
 use App\Models\Country;
 use App\Models\Admin;
@@ -2281,61 +2280,6 @@ class VoxesController extends AdminController {
         return $this->showView('voxes-faq', array(
             'content' => $content
         ));
-    }
-
-    public function badges() {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-            
-        if( Input::file('photo') && request('id') ) {
-
-            $item = VoxBadge::find( request('id') );
-            if($item) {
-
-                $extensions = ['image/jpeg', 'image/png'];
-
-                if (!in_array(Input::file('photo')->getMimeType(), $extensions)) {
-                    $this->request->session()->flash('error-message', 'File extension not supported' );
-                    return redirect('cms/vox/badges');
-                }
-
-                $img = Image::make( Input::file('photo') )->orientate();
-                $item->addImage($img);
-
-                $voxes = Vox::whereNotNull('hasimage_social')->get();
-                foreach ($voxes as $v) {
-                    $v->regenerateSocialImages();
-                }
-            }
-        }
-
-        return $this->showView('voxes-badges', array(
-            'items' => VoxBadge::get()
-        ));
-    }
-
-    public function delbadge($id) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-            
-        $item = VoxBadge::find( $id );
-        if($item) {
-            $item->delImage();
-
-            $voxes = Vox::whereNotNull('hasimage_social')->get();
-            foreach ($voxes as $v) {
-                $v->regenerateSocialImages();
-            }
-        }
-
-        Request::session()->flash('success-message', 'Badge deleted');
-        return redirect('cms/'.$this->current_page.'/badges');
     }
 
     public function explorer($vox_id=null,$question_id=null) {

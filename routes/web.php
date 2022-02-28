@@ -193,7 +193,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/edit/{id}/change-question/{question_id}', 'VoxesController@change_question_text');
 
 	Route::post('vox/edit/{id}/check-for-vox-changes', 		'VoxesController@checkVoxForChanges');
-	
+
 	Route::get('vox/duplicate/{id}', 						'VoxesController@duplicateSurvey');
 	Route::get('vox/ideas', 								'VoxesController@ideas');
 	Route::get('vox/categories', 							'VoxesController@categories');
@@ -208,8 +208,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/faq', 									'VoxesController@faq');
 	Route::any('vox/faq-ios', 								'VoxesController@faqiOS');
 	Route::any('vox/tests', 								'VoxesController@test');
-	Route::any('vox/badges', 								'VoxesController@badges');
-	Route::any('vox/badges/delete/{id}', 					'VoxesController@delbadge');
 	Route::any('vox/explorer/{vox_id?}/{question_id?}', 	'VoxesController@explorer');
 	Route::any('vox/export-survey-data', 					'VoxesController@export_survey_data');
 	Route::any('vox/duplicate-question', 					'VoxesController@duplicate_question');
