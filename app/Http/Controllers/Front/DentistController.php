@@ -557,7 +557,12 @@ class DentistController extends FrontController {
             $review_reward = $review_reward_video = 0;
         }
 
-        $social_image = $item->getSocialCover();
+        try {
+            $social_image = $item->getSocialCover();
+        } catch (\Exception $e) {
+            $social_image = '';
+        }
+
         $is_review = false;
         if( request('review_id') && $current_review = $reviews->where('id', request('review_id'))->first() ) {
             if(!empty($current_review->dentist_id) && !empty($current_review->clinic_id)) {

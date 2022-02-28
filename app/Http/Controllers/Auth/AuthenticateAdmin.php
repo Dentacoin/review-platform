@@ -94,13 +94,7 @@ class AuthenticateAdmin extends BaseController {
         
         if($request->isMethod('post')) {
             $validator = Validator::make($request->all(), [
-                'current-password' => array('required', function ($attribute, $value, $fail) use ($admin) {
-                    if (!\Hash::check($value, $admin->password)) {
-                        return redirect('cms/password-expired')
-                        ->withInput()
-                        ->with('error-message', 'The current password is incorrect.');
-                    }
-                }),
+                'current-password' => array('required'),
                 'new-password' => array('required','min:10','regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9]).*$/'),
                 // 'new-password' => array('required'),
                 'new-password-repeat' => array('required','same:new-password'),
@@ -121,6 +115,13 @@ class AuthenticateAdmin extends BaseController {
                 ->withInput()
                 ->withErrors($validator);
             } else {
+
+                if (!\Hash::check(request('current-password'), $admin->password)) {
+                    return redirect('cms/password-expired')
+                    ->withInput()
+                    ->with('error-message', 'The current password is incorrect.');
+                }
+
                 $admin->password = bcrypt($request->input('new-password'));
                 $admin->password_last_updated_at = Carbon::now();
                 $admin->save();
