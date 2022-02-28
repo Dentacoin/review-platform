@@ -569,7 +569,11 @@ class DentistController extends FrontController {
                 $current_review->generateSocialCover($item->id);
             }
             
-            $social_image = $current_review->getSocialCover($item->id);
+            try {
+                $social_image = $current_review->getSocialCover($item->id);
+            } catch (\Exception $e) {
+                $social_image = '';
+            }
             $is_review = true;
         }
 
