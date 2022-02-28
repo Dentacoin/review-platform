@@ -129,7 +129,9 @@
                     Accepted cryptocurrencies: DCN, BTC and ETH
                 </p>                
                 <div class="tac">
-                    <a href="javascript:;" class="blue-button new-style with-arrow white-button go-to-reports">SEE REPORTS<img src="{{ url('new-vox-img/red-arrow-right.svg') }}"></a>
+                    <a href="{!! $items->count() > 1 ? 'javascript:;' : getLangUrl('dental-industry-reports/'.$item->slug) !!}" class="blue-button new-style with-arrow white-button {!! $items->count() > 1 ? 'go-to-reports' : '' !!}">
+                        SEE REPORTS<img src="{{ url('new-vox-img/red-arrow-right.svg') }}">
+                    </a>
                 </div>
             </div>
         </div>

@@ -90,9 +90,7 @@ $(document).ready(function(){
 			num++;
 		}
 
-		console.log(num);
-
-		$('.sample-list .input-group:nth-child('+num+')').remove();
+		$('.contents-list .input-group:nth-child('+num+')').remove();
 	} );
 
 	$( ".contents-draggable" ).sortable().disableSelection();

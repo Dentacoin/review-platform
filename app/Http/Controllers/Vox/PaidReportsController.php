@@ -30,14 +30,10 @@ class PaidReportsController extends FrontController {
 		->orderBy('launched_at', 'desc')
 		->first();
 		
-		$items = collect();
-		
-		if(!empty($item)) {
-			$items = PaidReport::where('status', 'published')
-			->orderBy('launched_at', 'desc')
-			->whereNotIn('id', [$item->id])
-			->get();
-		}
+		$items = PaidReport::where('status', 'published')
+		->orderBy('launched_at', 'desc')
+		->where('id', '!=', $item->id)
+		->get();
 
 		return $this->ShowVoxView('research-reports', array(
 			'social_image' => $seos->getImageUrl(),

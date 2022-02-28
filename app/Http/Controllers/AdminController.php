@@ -201,7 +201,7 @@ class AdminController extends BaseController {
         $params['counters']['contact'] = $support_contacts;
         $params['counters']['orders'] = Order::whereNull('is_send')->count();
 
-        $params['cache_version'] = '20220218';
+        $params['cache_version'] = '20220228';
         //dd($params['counters']);
 
         if($this->current_page!='home' && !isset($menu[$this->current_page])) {

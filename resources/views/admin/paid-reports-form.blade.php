@@ -211,15 +211,15 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Short description</label>
-                                <div class="col-md-10">
-                                    {{ Form::textarea('short-description-'.$code, !empty($item) ? $item->{'short_description:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title', 'style' => 'max-height: 114px;', 'id' => 'paid-report-short-descr')) }}
-                                </div>
-                            </div>
                             
                             @foreach($langs as $code => $lang_info)
                                 <div class="tab-pane contents-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Short description</label>
+                                        <div class="col-md-10">
+                                            {{ Form::textarea('short-description-'.$code, !empty($item) ? $item->{'short_description:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title', 'style' => 'max-height: 114px;', 'id' => 'paid-report-short-descr')) }}
+                                        </div>
+                                    </div>
                                     <div class="form-group answers-group-poll">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-10">
@@ -261,22 +261,21 @@
                                             <a href="javascript:;" class="btn btn-success btn-block btn-add-table-contents" style="max-width: 161px;">Add new</a>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Methodology</label>
+                                        <div class="col-md-10">
+                                            {{ Form::textarea('methodology-'.$code, !empty($item) ? $item->{'methodology:'.$code} : '', array('class' => 'form-control input-title', 'style' => 'max-height: 114px;', 'id' => 'methodology')) }}
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Summary</label>
+                                        <div class="col-md-10">
+                                            {{ Form::textarea('summary-'.$code, !empty($item) ? $item->{'summary:'.$code} : '', array('class' => 'form-control input-title', 'style' => 'max-height: 114px;', 'id' => 'summary')) }}
+                                        </div>
+                                    </div>
                                 </div>
                             @endforeach
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Methodology</label>
-                                <div class="col-md-10">
-                                    {{ Form::textarea('methodology-'.$code, !empty($item) ? $item->{'methodology:'.$code} : '', array('class' => 'form-control input-title', 'style' => 'max-height: 114px;', 'id' => 'methodology')) }}
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Summary</label>
-                                <div class="col-md-10">
-                                    {{ Form::textarea('summary-'.$code, !empty($item) ? $item->{'summary:'.$code} : '', array('class' => 'form-control input-title', 'style' => 'max-height: 114px;', 'id' => 'summary')) }}
-                                </div>
-                            </div>
                             
                         </div>
 
