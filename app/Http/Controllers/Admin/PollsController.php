@@ -119,7 +119,9 @@ class PollsController extends AdminController {
             $newpoll->dont_randomize_answers = $this->request->input('dont_randomize_answers');
 	        $newpoll->save();
 
-	        foreach ($this->langs as $key => $value) {
+	        // foreach ($this->langs as $key => $value) {
+                $key = 'en';
+                
 	            if(!empty($this->request->input('question-'.$key))) {
 	                $translation = $newpoll->translateOrNew($key);
 	                $translation->poll_id = $newpoll->id;
@@ -144,7 +146,7 @@ class PollsController extends AdminController {
                         $translation->save();
                     }
                 }
-	        }
+	        // }
             
 	        $newpoll->save();
 
