@@ -370,7 +370,7 @@ $reviewRoutes = function () {
 	Route::get('robots.txt', 							'Front\RobotsController@content');
 
 	//after 20th refresh -> ban for 60 min
-	Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+	Route::group(['middleware' => 'throttleIp:20,60'], function(){
 		Route::get('user-logout',						'Auth\AuthenticateUser@getLogout');
 		Route::post('authenticate-user',				'Auth\AuthenticateUser@authenticateUser');
 	});
@@ -380,7 +380,7 @@ $reviewRoutes = function () {
 	Route::group(['prefix' => '{locale?}'], function(){
 
 		//after 20th refresh -> ban for 60 min
-		Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+		Route::group(['middleware' => 'throttleIp:20,60'], function(){
 			Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
 			Route::get('logout',									'Auth\AuthenticateUser@getLogout');
 		});
@@ -391,7 +391,7 @@ $reviewRoutes = function () {
 		Route::group(['namespace' => 'Front'], function () {
 
 			//after 20th refresh -> ban for 60 min
-			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+			Route::group(['middleware' => 'throttleIp:20,60'], function(){
 				Route::any('/', 									'IndexController@home');
 				Route::any('get-current-location',					'IndexController@getCurrentLocation');
 				Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
@@ -524,7 +524,7 @@ $voxRoutes = function () {
 	Route::post('get-popup', 									'Vox\IndexController@getPopup');
 
 	//after 20th refresh -> ban for 60 min
-	Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+	Route::group(['middleware' => 'throttleIp:20,60'], function(){
 		Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
 
 		Route::post('authenticate-user',							'Auth\AuthenticateUser@authenticateUser');
@@ -533,14 +533,14 @@ $voxRoutes = function () {
 	Route::group(['prefix' => '{locale?}'], function() {
 
 		//after 20th refresh -> ban for 60 min
-		Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+		Route::group(['middleware' => 'throttleIp:20,60'], function(){
 			Route::get('logout',									'Auth\AuthenticateUser@getLogout');
 			Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
 		});
 
 		Route::group(['namespace' => 'Vox'], function () {
 			//after 20th refresh -> ban for 60 min
-			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+			Route::group(['middleware' => 'throttleIp:20,60'], function(){
 				Route::get('registration', 							'RegisterController@list');
 
 				Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
@@ -554,7 +554,7 @@ $voxRoutes = function () {
 			});
 			
 			//after 100th refresh -> ban for 60 min
-			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:100,60'], function(){
+			Route::group(['middleware' => 'throttleIp:100,60'], function(){
 				Route::any('dental-survey-stats', 					'StatsController@home');
 				Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
 				Route::post('create-stat-pdf', 						'StatsController@createPdf');
@@ -601,7 +601,7 @@ $voxRoutes = function () {
 			Route::post('voxes-get', 								'IndexController@getVoxes');
 			
 			//after 20th refresh -> ban for 60 min
-			Route::group(['middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:20,60'], function(){
+			Route::group(['middleware' => 'throttleIp:20,60'], function(){
 				Route::get('/', 									'IndexController@home');
 				Route::post('request-survey', 						'IndexController@request_survey');
 				Route::post('request-survey-patients', 				'IndexController@request_survey_patients');

@@ -19,6 +19,22 @@ class AdminIp extends Model {
         'updated_at',
         'deleted_at'
     ];
+
+    public static function getAdminIps($clearCache=false) {
+
+        // dd(cache('admin-ips'));
+		$ips = cache('admin-ips');
+		if(empty($ips) || $clearCache ) {
+			$ips = self::get()->pluck('ip')->toArray();
+
+            cache([
+            	'admin-ips' => $ips
+            ], 86400);
+
+		}
+
+		return $ips;
+	}
 }
 
 ?>
