@@ -52,6 +52,13 @@ class SupportContact extends Model {
     }
 
     public function getFileUrl($thumb = false) {
-        return url('/storage/support-contact/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.'.$this->file_extension).'?rev='.$this->updated_at->timestamp;
+
+        try {
+            $url = storage_path().'/app/private/private/support-contact/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.'.$this->file_extension).'?rev='.$this->updated_at->timestamp;
+        } catch (\Exception $e) {
+            $url = '';
+        }
+
+        return $url;
     }
 }
