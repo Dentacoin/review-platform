@@ -23,13 +23,15 @@
                     <div class="clearfix">
                         @if(in_array($type, ['trp', 'api']))
                             <div class="row">
-                                <div class="col-md-8">
-                                    @foreach($logDates as $logDate)
-                                    <a href="{{ url('cms/logs/'.$type) }}?date={{ date('Y-m-d', $logDate->timestamp) }}" class="btn btn-{{ request('date') == date('Y-m-d', $logDate->timestamp) ? 'primary' : 'info' }}">
-                                        {{ date('d-m-Y', $logDate->timestamp) }}
-                                    </a>
-                                    @endforeach
-                                </div>
+                                @if($type == 'trp')
+                                    <div class="col-md-8">
+                                        @foreach($logDates as $logDate)
+                                            <a href="{{ url('cms/logs/'.$type) }}?date={{ date('Y-m-d', $logDate->timestamp) }}" class="btn btn-{{ request('date') == date('Y-m-d', $logDate->timestamp) ? 'primary' : 'info' }}">
+                                                {{ date('d-m-Y', $logDate->timestamp) }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                    @endif
                                 <div class="col-md-4">
                                     <a href="{{ url('cms/logs/'.$type) }}?clear=1" class="btn btn-danger pull-right" onclick="return confirm('Are you sure?')">
                                         clear
@@ -53,7 +55,7 @@
                         @elseif($type == 'too-fast-bans')
                             {!! @file_get_contents( base_path().'/storage/logs/'.$type.'.log' ) !!}
                         @else
-                            {!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel-'.(request('date') ?? date('Y-m-d')).'.log' ) !!}
+                            {!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel'.($type == 'trp' ? '-'.(request('date') ?? date('Y-m-d')) : '').'.log' ) !!}
                         @endif
                     </pre>
                 </div>
