@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use Carbon\Carbon;
 use Auth;
 
 class LogsController extends AdminController {
@@ -24,8 +25,17 @@ class LogsController extends AdminController {
                 return redirect('cms/logs/'.$type);
         	}
 
+            $logDates = [];
+
+            $previousDay = Carbon::now()->addDays(-1);
+            for($i=0; $i<5; $i++) {
+                $logDates[] = $previousDay;
+                $previousDay = Carbon::parse($previousDay)->addDays(-1);
+            }
+
             return $this->ShowView('logs', array(
                 'type' => $type,
+                'logDates' => $logDates
             ));
         } else {
             return redirect( url('cms/logs/trp'));
