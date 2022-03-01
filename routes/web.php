@@ -313,7 +313,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('meetings',							'MeetingsController@list');
 	Route::any('meetings/edit/{id}',				'MeetingsController@edit');
 
-	Route::get('/images/{folder}/{id}/{thumb?}',	'ImageController@getImage');
+	Route::get('/images/{folder}/{id}/{thumb?}',	'ImagesController@getImage');
 });
 
 
