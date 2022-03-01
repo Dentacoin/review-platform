@@ -1596,7 +1596,7 @@ UNCONFIRMED TRANSACTIONS
                 }
             }
             echo 'Monthly score Email - DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
-        })->monthlyOn(1, '14:15');
+        })->monthlyOn(1, '12:30');
 
 
         //Daily Polls
