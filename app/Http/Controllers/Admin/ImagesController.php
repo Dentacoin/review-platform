@@ -16,9 +16,13 @@ class ImagesController extends AdminController {
 
         $path = storage_path().'/app/private/private/'.$folder.'/'.($item->id%100).'/'.$item->id.($thumbnail ? '-thumb' : '').'.'.$file_extension;
 
-        $type = mime_content_type($path);
-        header('Content-Type:'.$type);
-        header('Content-Length: ' . filesize($path));
-        readfile($path);
+        try {
+            $type = mime_content_type($path);
+            header('Content-Type:'.$type);
+            header('Content-Length: ' . filesize($path));
+            readfile($path);
+        } catch (\Exception $e) {
+
+        }
     }
 }
