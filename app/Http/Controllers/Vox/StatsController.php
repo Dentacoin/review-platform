@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Vox;
 
 use App\Http\Controllers\FrontController;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -47,20 +44,12 @@ class StatsController extends FrontController {
 
         $this->current_page = 'stats';
 
-        $sorts = [
-            // 'featured' => trans('vox.page.stats.sort-featured'),
-            'all' => trans('vox.page.stats.sort-all'),
-            'newest' => trans('vox.page.stats.sort-newest'),
-            // 'popular' => trans('vox.page.stats.sort-popular'),
-        ];
+        $voxName = !empty(Request::input('survey-search')) ? Request::input('survey-search') : null;
 
-        $name = !empty(Request::input('survey-search')) ? Request::input('survey-search') : null;
+        if(Request::isMethod('post') && !empty($voxName)) {
 
-        if(Request::isMethod('post') && !empty($name)) {
+            $searchValues = preg_split('/\s+/', $voxName, -1, PREG_SPLIT_NO_EMPTY); 
 
-            $searchValues = preg_split('/\s+/', $name, -1, PREG_SPLIT_NO_EMPTY); 
-
-            // where('type', '!=', 'hidden')
             $voxes = Vox::with(['stats_main_question', 'translations'])
             ->where('has_stats', 1)
             ->whereHas('translations', function ($query) use ($searchValues) {
@@ -69,41 +58,35 @@ class StatsController extends FrontController {
                         $q->orWhere('title', 'like', "%{$value}%");
                     });
                 }
-            })->orderBy('stats_featured', 'DESC')
-            ->get();
+            })->orderBy('stats_featured', 'DESC')->get();
 
         } else {
 
-            $voxes = Vox::with(['stats_main_question', 'translations'])->where('has_stats', 1);
+            $voxes = Vox::with(['stats_main_question', 'translations'])
+            ->where('has_stats', 1)
+            ->get();
 
-            // if (!Auth::guard('admin')->user()) {
-            //     $voxes = $voxes->where('type', '!=', 'hidden');
-            // }
-
-            $voxes = $voxes->get();
-
+            //first featured and sorted by launched at, then sorted by launched at
             $voxes = $voxes->sortByDesc(function ($vox, $key) {
                 if($vox->stats_featured) {
                     return 10000000000 + ($vox->launched_at ? $vox->launched_at->timestamp : 0);
                 } else {
-
                     return 10000 + ($vox->launched_at ? $vox->launched_at->timestamp : 0);
                 }
             });
 
-            $voxes = $this->paginate($voxes)->withPath(App::getLocale().'/dental-survey-stats/');
+            $voxes = GeneralHelper::paginate($voxes)->withPath(App::getLocale().'/dental-survey-stats/');
         }
 
         $seos = PageSeo::find(11);
 
         return $this->ShowVoxView('stats', array(
-            'name' => $name,
+            'name' => $voxName,
             'taken' => $this->user ? $this->user->filledVoxes() : [],
             'canonical' => getLangUrl('dental-survey-stats'),
             'countries' => Country::with('translations')->get(),
             'voxes' => $voxes,
             'cats' => VoxCategory::with(['translations', 'voxes.vox'])->get(),
-            'sorts' => $sorts,
             'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,
             'seo_description' => $seos->seo_description,
@@ -125,7 +108,9 @@ class StatsController extends FrontController {
         
         $this->current_page = 'stats';
 
-        $vox = Vox::with('stats_questions.translations')->whereTranslationLike('slug', $slug)->first();
+        $vox = Vox::with('stats_questions.translations')
+        ->whereTranslationLike('slug', $slug)
+        ->first();
 
         if(empty($vox)) {
             return redirect( getLangUrl('page-not-found') );
@@ -135,7 +120,7 @@ class StatsController extends FrontController {
             return redirect( getLangUrl('dental-survey-stats') );
         }
 
-        if(request('app')) {
+        if(request('app')) { //mobile app
             if(request('app-user-id')) {
                 $user_id = GeneralHelper::decrypt(request('app-user-id'));
 
@@ -171,7 +156,6 @@ class StatsController extends FrontController {
             $question = VoxQuestion::find($question_id);
             $scale = Request::input('scale');
             $scale_name = Request::input('scale_name');
-            $type = $question->used_for_stats;
             $scale_options  = Request::input('scale_options');
 
             if(!empty($scale_options) && in_array('all', $scale_options)) {
@@ -2103,11 +2087,6 @@ class StatsController extends FrontController {
             $png_file = storage_path().'/app/public/png/'.$name.'/'.mb_substr($name, 0, -10).'-1.png';
             return response()->download($png_file);
         }
-    }
-
-    private function paginate($items, $perPage = 10, $page = null, $options = []) {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
     private function getAnswerNumber($q_type, $answers, $answerfield) {

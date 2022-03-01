@@ -38,7 +38,6 @@ class FrontController extends BaseController {
     public $user;
 
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
-        
         $to_redirect_404 = false;
         $platform_domain = null;
 

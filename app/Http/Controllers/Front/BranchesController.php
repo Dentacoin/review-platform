@@ -29,7 +29,6 @@ class BranchesController extends FrontController {
         if(!empty($clinic) && $clinic->branches->isNotEmpty()) {
 
             $seos = PageSeo::find(35);
-
             $seo_title = $seos->seo_title;
             $seo_description = $seos->seo_description;
             $social_title = $seos->social_title;
@@ -89,7 +88,7 @@ class BranchesController extends FrontController {
                             'messages' => [
                                 'clinic_name' => trans('trp.common.invalid-name')
                             ]
-                        ] );
+                        ]);
                     }
 
                     $session_user_branch = [];
@@ -111,6 +110,7 @@ class BranchesController extends FrontController {
                 return Response::json( $ret );
 
             } else if($step == 2) {
+
                 if (request('clinic_website') && mb_strpos(mb_strtolower(request('clinic_website')), 'http') !== 0) {
                     request()->merge([
                         'clinic_website' => 'http://'.request('clinic_website')
@@ -125,7 +125,6 @@ class BranchesController extends FrontController {
                 ]);
 
                 if ($validator->fails()) {
-
                     $msg = $validator->getMessageBag()->toArray();
                     $ret = array(
                         'success' => false,
@@ -166,12 +165,12 @@ class BranchesController extends FrontController {
                     ]);
 
                     if ($validator->fails()) {
-                        return Response::json( [
+                        return Response::json([
                             'success' => false, 
                             'messages' => [
                                 'clinic_phone' => trans('trp.popup.registration.phone')
                             ]
-                        ] );
+                        ]);
                     }
 
                     $session_user_branch = [];
@@ -223,12 +222,12 @@ class BranchesController extends FrontController {
             } else {
 
                 if(GeneralHelper::validateLatin(Request::input('clinic_name')) == false) {
-                    return Response::json( [
+                    return Response::json([
                         'success' => false, 
                         'messages' => [
                             'name' => trans('trp.common.invalid-name')
                         ]
-                    ] );
+                    ]);
                 }
 
                 if(Request::getHost() != 'urgent.reviews.dentacoin.com') {
@@ -254,12 +253,12 @@ class BranchesController extends FrontController {
                 ]);
 
                 if ($validator->fails()) {
-                    return Response::json( [
+                    return Response::json([
                         'success' => false, 
                         'messages' => [
                             'clinic_phone' => trans('trp.popup.registration.phone')
                         ]
-                    ] );
+                    ]);
                 }
                 
                 $newuser = new User;
@@ -272,11 +271,9 @@ class BranchesController extends FrontController {
                 $newuser->platform = 'trp';
                 $newuser->website = Request::input('clinic_website');
                 $newuser->status = 'clinic_branch';
-                
                 $newuser->gdpr_privacy = true;
                 $newuser->is_dentist = 1;
                 $newuser->is_clinic = 1;
-
                 $newuser->save();
 
                 $newuser->slug = $newuser->makeSlug();
@@ -327,9 +324,9 @@ class BranchesController extends FrontController {
 
                 session()->pull('user_branch');
 
-                return Response::json( [
+                return Response::json([
                     'success' => true,
-                ] );
+                ]);
             }
         }
     }
@@ -338,14 +335,21 @@ class BranchesController extends FrontController {
 
         $ret['success'] = false;
 
-        if(!empty($this->user) && !empty(request('branch_id')) && $this->user->branches->isNotEmpty() && in_array(request('branch_id'), $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+        if(
+            !empty($this->user) 
+            && !empty(request('branch_id')) 
+            && $this->user->branches->isNotEmpty() 
+            && in_array(request('branch_id'), $this->user->branches->pluck('branch_clinic_id')->toArray())
+        ) {
 
             $id = request('branch_id');
             $item = User::find($id);
 
             if(!empty($item)) {
 
-            	UserBranch::where('clinic_id', $id)->orWhere('branch_clinic_id', $id)->delete();
+            	UserBranch::where('clinic_id', $id)
+                ->orWhere('branch_clinic_id', $id)
+                ->delete();
             	
             	if(!$item->email) {
 
@@ -397,7 +401,12 @@ class BranchesController extends FrontController {
     public function loginas( $locale=null) {
         $ret['success'] = false;
 
-        if(!empty($this->user) && !empty(request('branch_id')) && $this->user->branches->isNotEmpty() && in_array(request('branch_id'), $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+        if(
+            !empty($this->user) 
+            && !empty(request('branch_id')) 
+            && $this->user->branches->isNotEmpty() 
+            && in_array(request('branch_id'), $this->user->branches->pluck('branch_clinic_id')->toArray())
+        ) {
 
             $id = request('branch_id');
             $item = User::find($id);

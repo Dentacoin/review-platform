@@ -38,7 +38,7 @@
                         @elseif($type == 'too-fast-bans')
                             {!! @file_get_contents( base_path().'/storage/logs/'.$type.'.log' ) !!}
                         @else
-                            {!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel.log' ) !!}
+                            {!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel-'.date('Y-m-d').'.log' ) !!}
                         @endif
 					</pre>
                 </div>

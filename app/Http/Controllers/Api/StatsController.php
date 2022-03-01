@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
+use App\Services\VoxService;
 
 use App\Models\Country;
 use App\Models\User;
@@ -51,22 +50,12 @@ class StatsController extends ApiController {
         unset($get['page']);
         unset($get['submit']);
 
-		$voxes = $this->paginate($voxes, 10, request('slice') ?? 1)->appends($get);
+		$user = Auth::guard('api')->user();
+		$voxes = VoxService::paginate($user, $voxes, 10, request('slice') ?? 1)->appends($get);
 
 		return Response::json( array(
 			'voxes' => $voxes,			
 			'countries' => Country::with('translations')->get(),
 		) );
 	}
-
-    private function paginate($items, $perPage, $page, $options = []) {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $pageItems = $perPage;
-        $user = Auth::guard('api')->user();
-        if(!empty($user) && $user->is_dentist && $page == 1) {
-        	$pageItems = $pageItems - 1;
-        }
-        return new LengthAwarePaginator($items->forPage($page, $pageItems), $items->count(), $pageItems, $page, $options);
-    }
-    
 }

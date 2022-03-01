@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Input;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MultipleLangSheetExport;
 use App\Exports\MultipleStatSheetExport;
+use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\VoxCronjobLang;
 use App\Models\VoxToCategory;
@@ -28,6 +26,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\Vox;
 
+use App\Helpers\GeneralHelper;
 use App\Helpers\AdminHelper;
 use App\Helpers\VoxHelper;
 use App\Exports\Export;
@@ -2484,7 +2483,7 @@ class VoxesController extends AdminController {
                     $respondents_shown = $items_count;
                 } else {
                     // $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
-                    $question_respondents = $this->paginate($question_respondents, $ppp)
+                    $question_respondents = GeneralHelper::paginate($question_respondents, $ppp)
                     ->withPath('cms/vox/explorer/'.($vox_id ? $vox_id.($question_id ? '/'.$question_id : '') : ''));
                 }
 
@@ -2532,7 +2531,7 @@ class VoxesController extends AdminController {
                     $show_pagination = false;
                     $respondents_shown = $items_count;
                 } else {
-                    $respondents = $this->paginate($respondents, $ppp)->withPath('cms/vox/explorer/'.($vox_id ? $vox_id.($question_id ? '/'.$question_id : '') : ''));
+                    $respondents = GeneralHelper::paginate($respondents, $ppp)->withPath('cms/vox/explorer/'.($vox_id ? $vox_id.($question_id ? '/'.$question_id : '') : ''));
                 }
 
                 $question_respondents = '';
@@ -2581,11 +2580,6 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('voxes-explorer', $viewParams);
-    }
-
-    private function paginate($items, $perPage = 50, $page = null, $options = []) {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
     public function export_survey_data() {
@@ -3608,7 +3602,7 @@ class VoxesController extends AdminController {
             $history = $history->where('question_id', request('search-question-id'));
         }
         $history = $history->orderBy('id', 'desc')->get();
-        $history = $this->paginate($history)->withPath('cms/vox/history/');
+        $history = GeneralHelper::paginate($history)->withPath('cms/vox/history/');
 
         return $this->showView('voxes-history', array(
             'admins' => Admin::get(),

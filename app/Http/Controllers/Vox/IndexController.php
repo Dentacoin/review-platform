@@ -28,8 +28,8 @@ class IndexController extends FrontController {
      * Home page get voxes by filters
      */
 	public function getVoxList() {
-		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
-		return ServicesVox::getVoxList($this->user, $this->admin, $taken);
+		$takenVoxesByUser = !empty($this->user) ? $this->user->filledVoxes() : null;
+		return ServicesVox::getVoxList($this->user, $this->admin, $takenVoxesByUser);
 	}
 
     /**
@@ -50,22 +50,23 @@ class IndexController extends FrontController {
 			'all' => trans('vox.page.home.sort-all'),
 		];
 
-		$taken = !empty($this->user) ? $this->user->filledVoxes() : null;
-		$voxList = ServicesVox::getVoxList($this->user, $this->admin, $taken);
+		$takenVoxesByUser = !empty($this->user) ? $this->user->filledVoxes() : null;
+		$voxList = ServicesVox::getVoxList($this->user, $this->admin, $takenVoxesByUser);
 
-		$all_taken = false;
+		$allVoxesAreTaken = false;
 		$latest_blog_posts = null;
 		$vip_access_seconds = 0;
 		$vip_access_text = '';
 
 		if(!empty($this->user)) {
 			$not_taken_voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
-			$not_taken_voxes = $not_taken_voxes->whereNotIn('id', $taken)
+			$not_taken_voxes = $not_taken_voxes->whereNotIn('id', $takenVoxesByUser)
 			->where('type', 'normal')
 			->get();
 
 			if(!$this->user->notRestrictedVoxesList($not_taken_voxes)->count()) {
-				$all_taken = true;
+				//get latest blog posts from VOX blog database
+				$allVoxesAreTaken = true;
 				$latest_blog_posts = DB::connection('vox_wordpress_db')
 				->table('posts')
 				->where('post_type', 'post')
@@ -112,22 +113,10 @@ class IndexController extends FrontController {
 				$sec = Carbon::now()->diffInSeconds($this->user->vip_access_until);
 				
 				if($days) {
-					$vip_access_text .= $days;
-	
-					if($days == 1 ) {
-						$vip_access_text .= ' <span>DAY</span> ';
-					} else {
-						$vip_access_text .= ' <span>DAYS</span> ';
-					}
+					$vip_access_text .= $days.' <span>DAY'.($days != 1 ? 'S' : '').'</span> ';
 				}
 
-				$vip_access_text .= ($hours%24);
-
-				if($hours == 1 ) {
-					$vip_access_text .= ' <span>HOUR</span> ';
-				} else {
-					$vip_access_text .= ' <span>HOURS</span> ';
-				}
+				$vip_access_text .= ($hours%24).' <span>HOUR'.($hours != 1 ? 'S' : '').'</span> ';
 
 				$vip_access_text .= ($min%60).' <span>MIN</span> '.
 				($sec%60).' <span>SEC</span>';
@@ -148,7 +137,7 @@ class IndexController extends FrontController {
         $arr = array(
 			'vip_access_text' => $vip_access_text,
 			'vip_access_seconds' => $vip_access_seconds,
-        	'all_taken' => $all_taken,
+        	'all_taken' => $allVoxesAreTaken,
         	'latest_blog_posts' => $latest_blog_posts,
             'is_warning_message_shown' => $is_warning_message_shown,
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
@@ -159,7 +148,7 @@ class IndexController extends FrontController {
             'social_description' => $seos->social_description,
 			'sorts' => $sorts,
 			'filters' => $filters,
-			'taken' => $taken,
+			'taken' => $takenVoxesByUser,
         	'voxes' => $voxList,
         	'vox_categories' => $voxCategories,
         	'js' => [
@@ -175,7 +164,7 @@ class IndexController extends FrontController {
 			$arr['js'][] = '../js/select2.min.js';
 		}
 
-		if($all_taken) {
+		if($allVoxesAreTaken) {
 			$arr['css'][] = 'flickity.min.css';
             $arr['js'][] = '../js/flickity.min.js';
 		}

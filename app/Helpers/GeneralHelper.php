@@ -3,6 +3,8 @@
 namespace App\Helpers;
 
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use DeviceDetector\DeviceDetector;
 
 use \SendGrid\Mail\Mail as SendGridMail;
@@ -169,6 +171,7 @@ class GeneralHelper {
     }
 
     public static function validateName($name) {
+        //users with the same name
         $result = false;
 
         $found_name = User::where('name', 'LIKE', $name)->withTrashed()->first();
@@ -193,6 +196,7 @@ class GeneralHelper {
     }
 
     public static function validateEmail($email) {
+        //users with the same email
         $result = false;
 
         $clean_email = str_replace('.', '', $email);
@@ -206,6 +210,7 @@ class GeneralHelper {
     }
 
     public static function validateLatin($string) {
+        //only latin characters
         $result = false;
      
         if (preg_match("/^[\w\d\s\+\'\&.,-]*$/", $string)) {
@@ -487,5 +492,10 @@ class GeneralHelper {
         }
     
         return $results;
+    }
+
+    public static function paginate($items, $perPage = 50, $page = null, $options = []) {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }

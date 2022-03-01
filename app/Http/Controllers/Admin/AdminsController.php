@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use Illuminate\Http\Request as Requestt;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Pagination\Paginator;
 
 use App\Models\DcnTransactionHistory;
+use App\Helpers\GeneralHelper;
 use App\Models\AdminMessage;
 use App\Models\AdminAction;
 use App\Models\UserHistory;
@@ -253,7 +252,7 @@ class AdminsController extends AdminController {
         $actions = $actions->concat($transaction_actions);
         $actions = $actions->concat($admin_actions);
         $actions = $actions->sortByDesc('created_at');
-        $actions = $this->paginate($actions)->withPath('cms/admins/actions-history/');
+        $actions = GeneralHelper::paginate($actions)->withPath('cms/admins/actions-history/');
 
         $admins = Admin::get();
 
@@ -262,11 +261,6 @@ class AdminsController extends AdminController {
             'actions' => $actions,
             'search_admin_id' => request('search-admin-id')
         ));
-    }
-
-    private function paginate($items, $perPage = 50, $page = null, $options = []) {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
     public function resetAuth( $id ) {

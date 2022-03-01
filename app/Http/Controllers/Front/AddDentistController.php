@@ -30,7 +30,6 @@ class AddDentistController extends FrontController {
             if (request('name') && (mb_strpos(mb_strtolower(request('name')), 'dr. ') === 0 || mb_strpos(mb_strtolower(request('name')), 'dr ') === 0)) {
 
                 $removed_word = mb_strpos(mb_strtolower(request('name')), 'dr. ') === 0 ? 'dr. ' : (mb_strpos(mb_strtolower(request('name')), 'dr ') === 0 ? 'dr ' : '');
-
                 $new_name = str_replace($removed_word,'',mb_strtolower(request('name')));
 
                 $final_name = [];
@@ -72,70 +71,65 @@ class AddDentistController extends FrontController {
             } else {
 
                 if(GeneralHelper::validateName(Request::input('name')) == true) {
-                    $ret = array(
+                    return Response::json([
                         'success' => false,
                         'messages' =>[
                             'name' => trans('trp.invite.taken-name')
                         ]
-                    );
-                    return Response::json( $ret );
+                    ]);
                 }
 
                 if(GeneralHelper::validateLatin(Request::input('name')) == false) {
-                    return Response::json( [
+                    return Response::json([
                         'success' => false, 
                         'messages' => [
                             'name' => trans('trp.common.invalid-name')
                         ]
-                    ] );
+                    ]);
                 }
 
                 if(GeneralHelper::validateEmail(Request::input('email')) == true) {
-                    $ret = array(
+                    return Response::json([
                         'success' => false,
-                        'messages' =>[
+                        'messages' => [
                             'email' => trans('trp.invite.invalid-email')
                         ]
-                    );
-                    return Response::json( $ret );
+                    ]);
                 }
 
                 $info = GeneralHelper::validateAddress( Country::find(request('country_id'))->name, request('address') );
                 if(empty($info)) {
-                    $ret = array(
+                    return Response::json([
                         'success' => false,
-                        'messages' => array(
+                        'messages' => [
                             'address' => trans('trp.common.invalid-address')
-                        )
-                    );
+                        ]
+                    ]);
                 }
 
                 if(GeneralHelper::validateWebsite(Request::input('website')) == true) {
-                    $ret = array(
+                    return Response::json([
                         'success' => false,
-                        'messages' =>[
+                        'messages' => [
                             'website' => trans('trp.invite.invalid-website')
                         ]
-                    );
-                    return Response::json( $ret );
+                    ]);
                 }
 
                 if (!empty($this->user) && !empty($this->user->country_id) && Request::input('country_id') != $this->user->country_id) {
-                    $ret = array(
+                    return Response::json([
                         'success' => false,
-                        'messages' =>[
+                        'messages' => [
                             'address' => trans('trp.invite.invalid-address')
                         ]
-                    );
-                    return Response::json( $ret );
+                    ]);
                 } else if (!empty($this->country_id) && Request::input('country_id') != $this->country_id) {
-                    $ret = array(
+                    return Response::json([
                         'success' => false,
-                        'messages' =>[
+                        'messages' => [
                             'address' => trans('trp.invite.invalid-address')
                         ]
-                    );
-                    return Response::json( $ret );
+                    ]);
                 }
                 
                 $newdentist = new User;
@@ -153,13 +147,17 @@ class AddDentistController extends FrontController {
                 $newdentist->invited_from_form = true;
                 $newdentist->save();
 
-                session(['invite_new_dentist' => $newdentist->id]);
+                session([
+                    'invite_new_dentist' => $newdentist->id
+                ]);
 
-                return Response::json( [
+                return Response::json([
                     'success' => true,
-                	'message' => trans('trp.page.invite.success', ['name' => $newdentist->name]),
+                	'message' => trans('trp.page.invite.success', [
+                        'name' => $newdentist->name
+                    ]),
                     'dentist_name' => $newdentist->name,
-                ] );
+                ]);
             }
         }
     }

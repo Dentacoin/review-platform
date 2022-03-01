@@ -100,20 +100,23 @@ class DentistController extends FrontController {
             $url = $this->videosInsert($client,
                 $service,
                 $fileName,
-                array('snippet.categoryId' => '22',
-                       'snippet.defaultLanguage' => '',
-                       'snippet.description' => $this->user->getNames().'\'s video review on ',
-                       'snippet.tags[]' => '',
-                       'snippet.title' => 'Dentist review by '.$this->user->getNames(),
-                       'status.embeddable' => '',
-                       'status.license' => '',
-                       'status.privacyStatus' => 'unlisted',
-                       'status.publicStatsViewable' => ''),
-                'snippet,status', array());
+                array(
+                    'snippet.categoryId' => '22',
+                    'snippet.defaultLanguage' => '',
+                    'snippet.description' => $this->user->getNames().'\'s video review on ',
+                    'snippet.tags[]' => '',
+                    'snippet.title' => 'Dentist review by '.$this->user->getNames(),
+                    'status.embeddable' => '',
+                    'status.license' => '',
+                    'status.privacyStatus' => 'unlisted',
+                    'status.publicStatsViewable' => ''
+                ),
+                'snippet,status', array()
+            );
 
-            return Response::json( [
+            return Response::json([
                 'url' => $url
-            ] );
+            ]);
         }
 
         print("no user");
@@ -135,7 +138,6 @@ class DentistController extends FrontController {
         }
 
         if ($slug == 'zhaklin-stoykova') {
-
             if(!empty($this->user) && $this->user->slug == 'zhaklin-stoykova') {
             } else {
                 return redirect(getLangUrl('page-not-found'));
@@ -144,11 +146,11 @@ class DentistController extends FrontController {
 
         $review_id = request('review_id');
 
-        if (!empty($this->admin)) {
-            $item = User::where('slug', 'LIKE', $slug)->first();
-        } else {
-            $item = User::where('slug', 'LIKE', $slug)->whereNull('self_deleted')->first();
+        $item = User::where('slug', 'LIKE', $slug);
+        if (empty($this->admin)) {
+            $item = $item->whereNull('self_deleted');
         }
+        $item = $item->first();
 
         if(empty($item)) {
             $old_slug = OldSlug::where('slug', 'LIKE', $slug)->first();
@@ -180,8 +182,8 @@ class DentistController extends FrontController {
                     'youtube_id' => ['required_without:answer'],
                     'treatments' => ['required']
                 ];
-                foreach ($questions as $question) {
 
+                foreach ($questions as $question) {
                     if(!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') == 'own') {
                         $validator_arr['option.4.0'] = ['required', 'numeric', 'min:1', 'max:5'];
                         $validator_arr['option.4.1'] = ['required', 'numeric', 'min:1', 'max:5'];
@@ -219,10 +221,10 @@ class DentistController extends FrontController {
 
                     $real_text = strip_tags(Request::input( 'answer' ));
                     $real_text_words = explode(' ', $real_text);
+
                     if( empty(Request::input( 'youtube_id' )) && (mb_strlen($real_text)<50 || count($real_text_words)<10) ) {
                         $ret['short_text'] = true;
                         return Response::json( $ret );
-
                     }
 
                     $ret['valid_input'] = true;
@@ -404,7 +406,6 @@ class DentistController extends FrontController {
                                 $notifications = $this->user->website_notifications;
 
                                 if(!empty($notifications)) {
-                                    
                                     if (($key = array_search('trp', $notifications)) !== false) {
                                         unset($notifications[$key]);
                                     }
@@ -448,7 +449,9 @@ class DentistController extends FrontController {
                 $pageview->ip = User::getRealIp();
                 $pageview->save();
             }
-            session(['pageview-'.$item->id => true]);
+            session([
+                'pageview-'.$item->id => true
+            ]);
         }
 
         $reviews = $item->is_clinic ? $item->clinicReviews() : $item->dentistReviews();
@@ -558,6 +561,7 @@ class DentistController extends FrontController {
         }
 
         try {
+            //because of deleted avatars
             $social_image = $item->getSocialCover();
         } catch (\Exception $e) {
             $social_image = '';
@@ -570,6 +574,7 @@ class DentistController extends FrontController {
             }
             
             try {
+                //because of deleted avatars
                 $social_image = $current_review->getSocialCover($item->id);
             } catch (\Exception $e) {
                 $social_image = '';
@@ -837,10 +842,14 @@ class DentistController extends FrontController {
             $short_description = $item->short_description;
         } else {
             if($item->is_clinic) {
-                $short_description = trans('trp.page.user.short_description.clinic', ['location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country_id ? $item->country->name : '') ]);
+                $short_description = trans('trp.page.user.short_description.clinic', [
+                    'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country_id ? $item->country->name : '') 
+                ]);
 
                 if($item->categories->isNotEmpty()) {
-                    $short_description.= ' '.trans('trp.page.user.short_description.categories', ['categories' => strtolower(implode(', ', $item->parseCategories($this->categories))) ]);
+                    $short_description.= ' '.trans('trp.page.user.short_description.categories', [
+                        'categories' => strtolower(implode(', ', $item->parseCategories($this->categories))) 
+                    ]);
                 }
             } else {
 
