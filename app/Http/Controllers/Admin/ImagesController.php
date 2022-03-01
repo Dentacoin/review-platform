@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 use Auth;
 
-class ImageController extends AdminController {
+class ImagesController extends AdminController {
 
     public function getImage($folder, $id, $thumbnail=false) {
 
