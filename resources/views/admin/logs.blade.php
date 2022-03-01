@@ -31,8 +31,8 @@
                                             </a>
                                         @endforeach
                                     </div>
-                                    @endif
-                                <div class="col-md-4">
+                                @endif
+                                <div class="col-md-{{ $type == 'trp' ? '4' : '12' }}">
                                     <a href="{{ url('cms/logs/'.$type) }}?clear=1" class="btn btn-danger pull-right" onclick="return confirm('Are you sure?')">
                                         clear
                                     </a>
