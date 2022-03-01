@@ -139,7 +139,7 @@
                                                         <a href="{{ url('cms/images/support-contact/'.$cur_item->id) }}" class="html5lightbox">Video</a>
                                                     @else
                                                         <a href="{{ url('cms/images/support-contact/'.$cur_item->id) }}" data-lightbox="contact{{ $cur_item->id }}">
-                                                            <img src="{{ {{ url('cms/images/support-contact/'.$cur_item->id.'/1') }} }}" style="max-width: 30px;">
+                                                            <img src="{{ url('cms/images/support-contact/'.$cur_item->id.'/1') }}" style="max-width: 30px;">
                                                         </a>
                                                     @endif
                                                 </td>
