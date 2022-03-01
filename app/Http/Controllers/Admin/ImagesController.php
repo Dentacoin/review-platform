@@ -18,7 +18,7 @@ class ImagesController extends AdminController {
             $file_extension = $item->file_extension;
         }
 
-        $path = storage_path().'/app/private/private/'.$folder.'/'.($item->id%100).'/'.$item->id.($thumbnail ? '-thumb' : '').'.'.$file_extension).'?rev='.$item->updated_at->timestamp;
+        $path = storage_path().'/app/private/private/'.$folder.'/'.($item->id%100).'/'.$item->id.($thumbnail ? '-thumb' : '').'.'.$file_extension.'?rev='.$item->updated_at->timestamp;
 
         $type = mime_content_type($path);
         header('Content-Type:'.$type);
