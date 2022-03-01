@@ -51,17 +51,6 @@ class SupportContact extends Model {
         return $this->hasOne('App\Models\SupportContact', 'id', 'replied_support_id');
     }
 
-    // public function getFileUrl($thumb = false) {
-
-    //     try {
-    //         $url = file_get_contents(storage_path().'/app/private/private/support-contact/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.'.$this->file_extension).'?rev='.$this->updated_at->timestamp;
-    //     } catch (\Exception $e) {
-    //         $url = '';
-    //     }
-
-    //     return $url;
-    // }
-
     public function getFileUrl($thumb = false) {
         return url('/storage/support-contact/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.'.$this->file_extension).'?rev='.$this->updated_at->timestamp;
     }

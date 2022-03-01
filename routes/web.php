@@ -167,7 +167,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('check-pending-trans', 						'TransactionsController@checkPendingTransactions');
 	Route::post('check-nodes', 								'TransactionsController@checkConnectedNodes');
 
-
 	Route::get('spending', 									'SpendingController@list');
 
 	Route::get('vox', 										'VoxesController@list');
@@ -313,6 +312,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('meetings',							'MeetingsController@list');
 	Route::any('meetings/edit/{id}',				'MeetingsController@edit');
+
+	Route::get('/images/{folder}/{id}/{thumb?}',	'ImageController@getImage');
 });
 
 
