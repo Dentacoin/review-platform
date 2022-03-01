@@ -1,13 +1,9 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests;
+use App\Http\Controllers\AdminController;
 
-use App\Http\Controllers\Controller;
 use App\Models\SupportContact;
-use Illuminate\Http\Request;
-
-use Auth;
 
 class ImagesController extends AdminController {
 
