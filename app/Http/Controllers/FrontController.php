@@ -355,7 +355,13 @@ class FrontController extends BaseController {
 
         $params['optimismPopup'] = false;
 
-        if(!empty($this->user) && empty($this->user->optimism_popup) && $this->current_page != 'questionnaire' && request()->getHost() != 'account.dentacoin.com') {
+        if(
+            !empty($this->user) 
+            && empty($this->user->optimism_popup) 
+            && $this->user->wallet_addresses->isNotEmpty() 
+            && $this->current_page != 'questionnaire' 
+            && request()->getHost() != 'account.dentacoin.com'
+        ) {
             $this->user->optimism_popup = true;
             $this->user->save();
             $params['optimismPopup'] = true;
