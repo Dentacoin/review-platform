@@ -72,8 +72,9 @@ class Vox extends Model {
     ];
 
     protected $dates = [
-        'last_count_at',
+		'respondents_country_last_count_at',
         'respondents_last_count_at',
+		'rewards_last_count_at',
         'created_at',
         'launched_at',
         'scheduled_at',
@@ -133,27 +134,7 @@ class Vox extends Model {
     }
 
     public function questionsCount() {
-        if ($this->type == 'hidden') {
-            return $this->questions()->count();
-        } else {
-            
-            $date = $this->last_count_at;
-            $now = Carbon::now();
-
-            $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
-
-            if ($diff >= 1) {
-
-                $this->questions_count = $this->questions()->count();
-                $this->last_count_at = Carbon::now();
-                $this->save();
-
-                return $this->questions()->count();
-
-            } else {
-                return !empty($this->questions_count) ? $this->questions_count : $this->questions()->count();
-            }
-        }
+        return !empty($this->questions_count) ? $this->questions_count : $this->questions->count();
     }
     
     public function respondentsCount() {
@@ -193,10 +174,10 @@ class Vox extends Model {
 
     public function respondentsCountryCount() {
 
-        $date = $this->last_count_at;
+        $date = $this->respondents_country_last_count_at;
         $now = Carbon::now();
 
-        $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
+        $diff = !$this->respondents_country_last_count_at ? 1 : $date->diffInDays($now);
 
         if ($diff >= 1 || empty($this->country_count)) {
 
@@ -210,7 +191,7 @@ class Vox extends Model {
             ->get()
             ->count();
 
-            $this->last_count_at = Carbon::now();
+            $this->respondents_country_last_count_at = Carbon::now();
             $this->country_count = $counted_countries;
             $this->save();
 
@@ -222,15 +203,15 @@ class Vox extends Model {
     }
 
     public function rewardsCount() {
-        $date = $this->last_count_at;
+        $date = $this->rewards_last_count_at;
         $now = Carbon::now();
 
-        $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
+        $diff = !$this->rewards_last_count_at ? 1 : $date->diffInDays($now);
 
         if ($diff >= 1 || empty($this->rewards_count)) {
             $rewards_count = $this->rewards()->count();
 
-            $this->last_count_at = Carbon::now();
+            $this->rewards_last_count_at = Carbon::now();
             $this->rewards_count = $rewards_count;
             $this->save();
 
@@ -387,8 +368,14 @@ class Vox extends Model {
     }
 
     public function setTypeAttribute($newvalue) {
-        if (!empty($this->attributes['type']) && $this->attributes['type'] != 'normal' && $newvalue == 'normal' && empty($this->attributes['launched_at'])) {
-            $this->attributes['launched_at'] = Carbon::now();
+        if (!empty($this->attributes['type']) && $this->attributes['type'] != 'normal' && $newvalue == 'normal') {
+
+            if(empty($this->attributes['launched_at'])) {
+                $this->attributes['launched_at'] = Carbon::now();
+            }
+
+            $this->attributes['questions_count'] = $this->questions->count();
+            $this->save();
         }
         $this->attributes['type'] = $newvalue;
     }

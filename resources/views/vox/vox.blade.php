@@ -179,7 +179,7 @@
 		};
 
 		var welcome_vox = {{ !empty($welcome_vox) ? 'true' : 'false' }};
-		var welcome_vox_q_count = {{ !empty($welcome_vox) ? $welcome_vox->questions->count() : 'false' }};
+		var welcome_vox_q_count = {{ !empty($welcome_vox) ? $welcome_vox->questionsCount() : 'false' }};
 		var testmode = {{ $testmode ? $testmode : 'false' }};
 		var next_q_url = '{{ getLangUrl('get-next-question') }}';
 		var vox_id = {{ $vox->id }};

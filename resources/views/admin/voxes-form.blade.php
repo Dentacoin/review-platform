@@ -113,7 +113,7 @@
                                     @if(!empty($item->dcn_questions_count))
                                         {{ $item->dcn_questions_count }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
                                     @else
-                                        {{ $item->questions->count() }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
+                                        {{ $item->questionsCount() }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
                                     @endif
                                 </label>
                             </div>
@@ -123,7 +123,7 @@
                                     @if(!empty($item->dcn_questions_count))
                                         {{ $item->dcn_questions_count }} x 10sec = ~{{ ceil( $item->dcn_questions_count/6 ) }} min
                                     @else
-                                        {{ $item->questions->count() }} x 10sec = ~{{ ceil( $item->questions->count()/6 ) }} min
+                                        {{ $item->questionsCount() }} x 10sec = ~{{ ceil( $item->questionsCount()/6 ) }} min
                                     @endif
                                 </label>
                             </div>
@@ -398,7 +398,7 @@
 
                                 <div class="calculating-wrapper" style="display: none;">
                                     {{-- <!-- @if(!empty($item->dcn_questions_count))
-                                        <p>Calculated {{ $item->dcn_questions_count }} questions from {{ $item->questions->count() }} original questions</p>
+                                        <p>Calculated {{ $item->dcn_questions_count }} questions from {{ $item->questionsCount() }} original questions</p>
                                     @endif --> --}}
                                     @foreach($q_trigger_obj as $iq)
                                         @if(!empty($iq))

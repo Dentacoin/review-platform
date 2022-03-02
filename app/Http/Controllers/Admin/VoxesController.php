@@ -319,7 +319,6 @@ class VoxesController extends AdminController {
                 }
 
                 $item->$field = $value=='0' ? 'hidden' : 'normal';
-                $item->last_count_at = null;
 
                 if ($value=='1' && $item->type == 'hidden' && Request::getHost() != 'urgent.dentavox.dentacoin.com' && Request::getHost() != 'urgent.reviews.dentacoin.com') {
                     $item->activeVox();
@@ -529,7 +528,7 @@ class VoxesController extends AdminController {
 
             if($item->questions->isNotEmpty()) {
 
-                $count_qs = $item->questions->count();
+                $count_qs = $item->questionsCount();
 
                 for ($i=1; $i <= $count_qs ; $i++) { 
                     $duplicatedQuestion = VoxQuestion::with('translations')->where('vox_id', $item->id)->where('order', $i)->count();
@@ -1385,7 +1384,6 @@ class VoxesController extends AdminController {
         $item->country_percentage = $this->request->input('country_percentage');
         $item->dentists_patients = $this->request->input('dentists_patients');
         $item->manually_calc_reward = !empty($this->request->input('manually_calc_reward')) ? 1 : null;
-        $item->last_count_at = null;
 
         if (!empty($this->request->input('count_dcn_questions'))) {
             $trigger_qs = [];
@@ -3139,7 +3137,7 @@ class VoxesController extends AdminController {
 
         if( !empty($vox)) {
             return Response::json([
-                'q_count' => $vox->questions->count(),
+                'q_count' => $vox->questionsCount(),
             ]);
         }
     }
@@ -3203,7 +3201,7 @@ class VoxesController extends AdminController {
 
         if( !empty($vox)) {
             return Response::json( [
-                'duration' => '~'.ceil($vox->questions()->count()/6).'min',
+                'duration' => '~'.ceil($vox->questionsCount()/6).'min',
             ]);
         }
     }
@@ -3579,7 +3577,7 @@ class VoxesController extends AdminController {
                 'trigger_valid_answers' => $trigger_valid_answers,
                 'triggers_ids' => $triggers_ids,
                 'trigger_type' => $trigger_type,
-                'next' => $vox->questions->count()+1,
+                'next' => $vox->questionsCount()+1,
             ), 200)->header('X-Frame-Options', 'DENY');
         }
     }

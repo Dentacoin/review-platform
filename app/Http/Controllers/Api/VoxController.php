@@ -64,7 +64,7 @@ class VoxController extends ApiController {
 	public function welcomeSurvey() {
 		$first = Vox::with('questions.translations')->where('type', 'home')->first();
 
-		$total_questions = $first->questions->count() + 3;
+		$total_questions = $first->questionsCount() + 3;
 
 		$welcome = $first->convertForResponse();
 		$welcome['questions'] = $first->questions->toArray();

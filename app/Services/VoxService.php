@@ -1560,7 +1560,7 @@ class VoxService {
                 'voxes' => self::featuredVoxes(),
                 'vox_type' => 'to-take',
                 'answered' => $answered_arr,
-                'real_questions' => $vox->questions->count(),
+                'real_questions' => $vox->questionsCount(),
                 'total_questions' => $total_questions,
                 'first_question_num' => $first_question_num,
                 'answered_without_skip_count' => $answered_without_skip_count,

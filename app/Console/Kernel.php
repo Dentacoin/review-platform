@@ -2467,13 +2467,13 @@ UNCONFIRMED TRANSACTIONS
             
             foreach($voxes as $survey) {
 
-                if($survey->type == 'normal' && empty($survey->translation_langs) && $survey->processingForTranslations->isEmpty()) {
+                if(empty($survey->translation_langs) && $survey->processingForTranslations->isEmpty()) {
                     $without_translations[] = $survey->id;
                 }
 
                 // if there are duplicated questions order
                 if($survey->questions->isNotEmpty()) {
-                    $count_qs = $survey->questions->count();
+                    $count_qs = $survey->questionsCount();
 
                     for ($i=1; $i <= $count_qs ; $i++) {
                         $voxQuestionsCount = VoxQuestion::with('translations')

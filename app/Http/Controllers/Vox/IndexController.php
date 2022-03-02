@@ -64,6 +64,7 @@ class IndexController extends FrontController {
 			->where('type', 'normal')
 			->get();
 
+			//if there are no available surveys
 			if(!$this->user->notRestrictedVoxesList($not_taken_voxes)->count()) {
 				//get latest blog posts from VOX blog database
 				$allVoxesAreTaken = true;
@@ -126,20 +127,13 @@ class IndexController extends FrontController {
 		}
 
 		$seos = PageSeo::find(2);
-        $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
-
-		$voxCategories = VoxCategory::with('translations')
-		->whereHas('voxes')
-		->get()
-		->pluck('name', 'id')
-		->toArray();
 
         $arr = array(
 			'vip_access_text' => $vip_access_text,
 			'vip_access_seconds' => $vip_access_seconds,
         	'all_taken' => $allVoxesAreTaken,
         	'latest_blog_posts' => $latest_blog_posts,
-            'is_warning_message_shown' => $is_warning_message_shown,
+            'is_warning_message_shown' => StopTransaction::find(1)->show_warning_text,
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,
@@ -150,7 +144,7 @@ class IndexController extends FrontController {
 			'filters' => $filters,
 			'taken' => $takenVoxesByUser,
         	'voxes' => $voxList,
-        	'vox_categories' => $voxCategories,
+        	'vox_categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
         	'js' => [
         		'home.js',
         	],
@@ -254,14 +248,14 @@ class IndexController extends FrontController {
 
 		if( $featured_voxes->count() < 9 ) {
 
-			$arr_v = [];
+			$featured_voxes_ids = [];
 			foreach ($featured_voxes as $fv) {
-				$arr_v[] = $fv->id;
+				$featured_voxes_ids[] = $fv->id;
 			}
 
 			$swiper_voxes = Vox::with(['translations', 'categories.category', 'categories.category.translations'])
 			->where('type', 'normal')
-			->whereNotIn('id', $arr_v)
+			->whereNotIn('id', $featured_voxes_ids)
 			->orderBy('launched_at', 'desc')
 			->take( 9 - $featured_voxes->count() )
 			->get();
@@ -306,7 +300,7 @@ class IndexController extends FrontController {
 				}
 			}
 
-			$total_questions = $first->questions->count() + 3;
+			$total_questions = $first->questionsCount() + 3; //because of added demographic q's
 			$seos = PageSeo::find(13);
 
 			return $this->ShowVoxView('welcome', array(
