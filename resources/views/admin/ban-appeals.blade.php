@@ -129,8 +129,8 @@
                                                 @endif
 				                    		</td>
 				                    		<td>
-				                    			<a href="{{ $item->getImageUrl() }}" data-lightbox="banappeal{{ $item->id }}">
-				                    				<img src="{{ $item->getImageUrl(true) }}" style="max-width: 30px;">
+				                    			<a href="{{ url('cms/images/appeals/'.$cur_item->id) }}" data-lightbox="banappeal{{ $item->id }}">
+				                    				<img src="{{ url('cms/images/appeals/'.$cur_item->id.'/1') }}" style="max-width: 30px;">
 				                    			</a>
 				                    		</td>
 				                    		<td style="word-break: break-all;">
