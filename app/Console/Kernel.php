@@ -2126,54 +2126,7 @@ UNCONFIRMED TRANSACTIONS
             echo 'Remove pdf and png stats files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->dailyAt('10:00');
-
-
-        $schedule->call(function () {
-            echo 'Alert devs for suspicious files'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-            $files = GeneralHelper::getDirContents(storage_path().'/app/public/');
-            $suspiciousFiles = [];
-
-            foreach($files as $file) {
-                if(!empty($file)) {
-                    $file_mime = exec('file -b --mime-type '.$file);
-
-                    // dd($file_mime);
-                    if(!in_array($file_mime, ['inode/x-empty', 'application/zip', 'application/pdf', 'application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
-                        // if(!in_array($file_mime, ['text/plain', 'text/x-php', 'inode/x-empty',        'text/html',              'application/zip', 'application/pdf', 'application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
-                        $suspiciousFiles[$file_mime] = $file;
-                        // dd($file, $file_mime);
-                    }
-                }
-            }
-
-            if(!empty($suspiciousFiles)) {
-                $mtext = 'Files:
-
-                ';
-
-                foreach ($suspiciousFiles as $mime => $sf) {
-                    $mtext .= $sf.' ( Mime type - '.$mime.')
-                    ';
-                }
-            } else {
-                $mtext = 'No suspicious files found';
-            }
-            
-            Mail::raw($mtext, function ($message) {
-                $sender = config('mail.from.address');
-                $sender_name = config('mail.from.name');
-
-                $message->from($sender, $sender_name);
-                $message->to('gergana@youpluswe.com');
-                $message->to('miroslav.nedelchev@dentacoin.com');
-                $message->subject('Suspicious files uploaded in TRP server');
-            });
-
-            echo 'Alert devs for suspicious files!'.PHP_EOL.PHP_EOL.PHP_EOL;
-            
-        })->cron('00 10,20 * * *');
-
+        
 
         $schedule->call(function () {
 
