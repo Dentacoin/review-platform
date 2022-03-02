@@ -2326,18 +2326,27 @@ UNCONFIRMED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Remove support uploaded files'.PHP_EOL.PHP_EOL.PHP_EOL;
+            echo 'Remove uploaded files'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $files = glob(storage_path().'/app/public/support-contact/*');
+            $supportFiles = glob(storage_path().'/app/private/support-contact/*');
 
-            foreach ($files as $file) {
+            foreach ($supportFiles as $supportFile) {
 
-                if (Carbon::now()->addMonths(-6)->timestamp > filectime($file)) {
-                    unlink($file);
+                if (Carbon::now()->addMonths(-6)->timestamp > filectime($supportFile)) {
+                    unlink($supportFile);
                 }
             }
 
-            echo 'Remove support uploaded files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            $banAppealsFiles = glob(storage_path().'/app/private/appeals/*');
+
+            foreach ($banAppealsFiles as $banAppealFile) {
+
+                if (Carbon::now()->addYears(-2)->timestamp > filectime($banAppealFile)) {
+                    unlink($banAppealFile);
+                }
+            }
+
+            echo 'Remove uploaded files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->dailyAt('10:00');
 
