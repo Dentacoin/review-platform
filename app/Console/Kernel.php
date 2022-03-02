@@ -2122,11 +2122,21 @@ UNCONFIRMED TRANSACTIONS
                     rmdir($file_png);
                 }
             }
+            
+            $files_gdpr = glob(storage_path().'/app/public/gdpr/*');
+
+            foreach ($files_gdpr as $file_gdpr) {
+                
+                if (Carbon::now()->addDays(-1)->timestamp > filectime($file_gdpr)) {
+                    array_map('unlink', glob($file_gdpr.'/*'));
+                    rmdir($file_gdpr);
+                }
+            }
 
             echo 'Remove pdf and png stats files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->dailyAt('10:00');
-        
+
 
         $schedule->call(function () {
 
