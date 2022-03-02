@@ -25,6 +25,9 @@
                             <div class="row">
                                 @if($type == 'trp')
                                     <div class="col-md-8">
+                                        <a href="{{ url('cms/logs/'.$type) }}?date={{ date('Y-m-d') }}" class="btn btn-{{ !request('date') || request('date') == date('Y-m-d') ? 'primary' : 'info' }}">
+                                            Today
+                                        </a>
                                         @foreach($logDates as $logDate)
                                             <a href="{{ url('cms/logs/'.$type) }}?date={{ date('Y-m-d', $logDate->timestamp) }}" class="btn btn-{{ request('date') == date('Y-m-d', $logDate->timestamp) ? 'primary' : 'info' }}">
                                                 {{ date('d-m-Y', $logDate->timestamp) }}
