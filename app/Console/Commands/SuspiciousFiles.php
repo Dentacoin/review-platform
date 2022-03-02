@@ -68,7 +68,7 @@ class SuspiciousFiles extends Command{
                     'video/webm'
                 ] )) {
                     // if(!in_array($file_mime, ['text/plain', 'text/x-php', 'inode/x-empty',        'text/html',              'application/zip', 'application/pdf', 'application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
-                    $suspiciousFiles[$file_mime] = $file;
+                    $suspiciousFiles[$file] = $file_mime;
                     // dd($file, $file_mime);
                 }
             }
@@ -79,8 +79,8 @@ class SuspiciousFiles extends Command{
 
             ';
 
-            foreach ($suspiciousFiles as $mime => $sf) {
-                $mtext .= $sf.' ( Mime type - '.$mime.')
+            foreach ($suspiciousFiles as $path => $mime) {
+                $mtext .= $path.' ( Mime type - '.$mime.')
                 ';
             }
         } else {
