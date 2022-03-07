@@ -260,6 +260,7 @@ return [
         'GoogleMaps' => GoogleMaps\Facade\GoogleMapsFacade::class,
         'SSH' => Collective\Remote\RemoteFacade::class,
         'GeneralHelper' => App\Helpers\GeneralHelper::class,
+        'VoxHelper' => App\Helpers\VoxHelper::class,
         'Carbon' => Carbon\Carbon::class,
     ],
 

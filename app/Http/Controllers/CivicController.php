@@ -22,7 +22,6 @@ class CivicController extends BaseController {
 			$c->jwtToken = Request::input('jwtToken');
 			$data = Request::input('data');
 
-			$hash = '';
 			$cardInfo = [];
 			$fields = [];
 			if(!empty( $data['data'] )) {

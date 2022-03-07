@@ -15,16 +15,30 @@
 			{!! trans('trp.page.invite.popup.success.title') !!}
 		</p>
 		<p>
+			@php
+				$addDentistReward = App\Models\Reward::getReward('patient_add_dentist');	
+			@endphp
+
 			@if(!empty($user))
-				{!! nl2br(trans('trp.page.invite.popup.success.text', [ 'name' => '<span id="inv_dent_name">[Clinic/Dentist Name]</span>' ,'amount' => '<span>'.App\Models\Reward::getReward('patient_add_dentist').' DCN</span>'])) !!}
+				{!! nl2br(trans('trp.page.invite.popup.success.text', [ 
+					'name' => '<span id="inv_dent_name">[Clinic/Dentist Name]</span>',
+					'amount' => '<span>'.$addDentistReward.' DCN</span>'
+				])) !!}
 			@else
-				{!! nl2br(trans('trp.page.invite.popup.success.text.no-user', [ 'name' => '<span id="inv_dent_name">[Clinic/Dentist Name]</span>' ,'amount' => '<span>'.App\Models\Reward::getReward('patient_add_dentist').' DCN</span>'])) !!}
+				{!! nl2br(trans('trp.page.invite.popup.success.text.no-user', [
+					'name' => '<span id="inv_dent_name">[Clinic/Dentist Name]</span>',
+					'amount' => '<span>'.$addDentistReward.' DCN</span>'
+				])) !!}
 			@endif
 		</p>
 		@if(!empty($user))
-			<a href="javascript:;" class="button close-and-scroll">{!! trans('trp.page.invite.popup.success.button-back') !!}</a>
+			<a href="javascript:;" class="button close-and-scroll">
+				{!! trans('trp.page.invite.popup.success.button-back') !!}
+			</a>
 		@else
-			<a href="javascript:;" class="button close-popup open-dentacoin-gateway patient-login">{!! trans('trp.page.invite.popup.success.sign-up') !!}</a>
+			<a href="javascript:;" class="button close-popup open-dentacoin-gateway patient-login">
+				{!! trans('trp.page.invite.popup.success.sign-up') !!}
+			</a>
 		@endif
 	</div>
 </div>

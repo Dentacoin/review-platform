@@ -90,15 +90,18 @@ class FrontController extends BaseController {
             Redirect::to(getLangUrl('page-not-found'))->send();
         }
         // Fck FB
-        if( Request::getHost() == 'vox.dentacoin.com' && Request::server('HTTP_REFERER') && Request::isMethod('get') && request()->url() != 'https://vox.dentacoin.com/en/registration' && request()->url() != 'https://vox.dentacoin.com/en/login') {
+        if( 
+            Request::getHost() == 'vox.dentacoin.com' 
+            && Request::server('HTTP_REFERER') 
+            && Request::isMethod('get') && request()->url() != 'https://vox.dentacoin.com/en/registration' 
+            && request()->url() != 'https://vox.dentacoin.com/en/login'
+        ) {
             Redirect::to( str_replace('vox.', 'dentavox.', Request::url() ) )->send();
         }
 
         $this->trackEvents = [];
 
-        //$this->user = Auth::guard('web')->user();
         $this->middleware(function ($request, $next) {
-
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
@@ -111,18 +114,7 @@ class FrontController extends BaseController {
                 return redirect(getLangUrl('/'));
             }
 
-            if (!empty($this->user) && !$this->user->is_dentist && session('intended') && !$this->user->isBanned('vox')) {
-                $intended = session()->pull('intended');
-                
-                if( 'https://'.Request::getHost().'/'.request()->path() != trim($intended, '/') ) {
-                    Redirect::to($intended)->send();
-                } else {
-                    session([
-                        'intended' => null
-                    ]);
-                }
-            }
-
+            //when not logged user made daily poll -> give reward when log in 
             if(!empty($this->user) && Cookie::get('daily_poll')){
                 $cv = json_decode(Cookie::get('daily_poll'), true);
                 $given_reward = false;
@@ -159,6 +151,7 @@ class FrontController extends BaseController {
                 }
             }
 
+            //when not logged user invite new dentist -> give reward when log in 
             if(!empty($this->user) && session('invite_new_dentist')) {
                 $new_dentist = User::find(session('invite_new_dentist'));
 
@@ -166,7 +159,7 @@ class FrontController extends BaseController {
                     $new_dentist->invited_by = $this->user->id;
                     $new_dentist->save();
 
-                    if($new_dentist->status == 'added_approved' || $new_dentist->status == 'approved') {
+                    if(in_array($new_dentist->status, ['added_approved', 'approved'])) {
                         $reward = new DcnReward();
                         $reward->user_id = $this->user->id;
                         $reward->reward = Reward::getReward('patient_add_dentist');
@@ -188,25 +181,30 @@ class FrontController extends BaseController {
                 session()->pull('invite_new_dentist');
             }
 
+            //after login actions
             if(!empty($this->user) && session('login-logged')!=$this->user->id) {
 
-                //after login actions
-
-                if($this->user->is_dentist) {
+                //dentist guided tour after first login in trp
+                if($this->user->is_dentist && Request::getHost() == 'reviews.dentacoin.com') {
                     $gt_exist = UserGuidedTour::where('user_id', $this->user->id)->first();
 
                     if(!empty($gt_exist)) {
-
                         if(empty($gt_exist->first_login_trp) && mb_strpos( Request::getHost(), 'vox' )===false) {
                             $gt_exist->first_login_trp = true;
                             $gt_exist->save();
 
                             session(['first_guided_tour' => true]);
 
-                        } else if(empty($gt_exist->login_after_first_review) && mb_strpos( Request::getHost(), 'vox' )===false && empty(session('first_guided_tour')) && empty($this->user->widget_activated) && $this->user->dentist_fb_page->isEmpty() && $this->user->reviews_in_standard()->count() == 1 ) {
+                        } else if(
+                            empty($gt_exist->login_after_first_review) 
+                            && mb_strpos( Request::getHost(), 'vox' )===false 
+                            && empty(session('first_guided_tour')) 
+                            && empty($this->user->widget_activated) 
+                            && $this->user->dentist_fb_page->isEmpty() 
+                            && $this->user->reviews_in_standard()->count() == 1 
+                        ) {
 
                             $date = null;
-
                             foreach ($this->user->reviews_in_standard() as $review) {
                                 $date = $review->created_at;
                             }
@@ -224,7 +222,6 @@ class FrontController extends BaseController {
                             }
                         }
                     } else {
-
                         $gt = new UserGuidedTour;
                         $gt->user_id = $this->user->id;
 
@@ -235,6 +232,16 @@ class FrontController extends BaseController {
                         }
 
                         $gt->save();
+                    }
+                }
+
+                //don't notify user when ban expires and is logged in
+                if( !$this->user->isBanned('vox') && !$this->user->isBanned('trp') && $this->user->bans->isNotEmpty() ) {
+                    $last = $this->user->bans->last();
+                    if(!$last->notified) {
+                        $last->notified = true;
+                        $last->save();
+                        session(['unbanned' => true]);
                     }
                 }
 
@@ -253,15 +260,6 @@ class FrontController extends BaseController {
                             'type' => $this->user->is_dentist ? 'dentist' : 'patient',
                         ],
                     ]);
-                }
-
-                if( !$this->user->isBanned('vox') && !$this->user->isBanned('trp') && $this->user->bans->isNotEmpty() ) {
-                    $last = $this->user->bans->last();
-                    if(!$last->notified) {
-                        $last->notified = true;
-                        $last->save();
-                        session(['unbanned' => true]);
-                    }
                 }
             }
 
@@ -297,7 +295,18 @@ class FrontController extends BaseController {
                 Cookie::queue(Cookie::forget('first-login-recommendation'));
             }
 
-            if(!empty($this->user) && !empty(Cookie::get('marketing_cookies')) && empty(Cookie::get('first-login-recommendation')) && (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com' ) && empty($this->user->first_login_recommendation) && $this->user->filledVoxesCount() >= 5) {
+
+            //recommend dentavox
+            if(
+                !empty($this->user) 
+                && !empty(Cookie::get('marketing_cookies')) 
+                && empty(Cookie::get('first-login-recommendation')) 
+                && (
+                    Request::getHost() == 'dentavox.dentacoin.com' 
+                    || Request::getHost() == 'urgent.dentavox.dentacoin.com') 
+                && empty($this->user->first_login_recommendation) 
+                && $this->user->filledVoxesCount() >= 5
+            ) {
                 Cookie::queue('first-login-recommendation', true, 1440, null, null, false, false);
                 $this->user->first_login_recommendation = true;
                 $this->user->save();
@@ -333,7 +342,8 @@ class FrontController extends BaseController {
     }
 
     public function ShowVoxView($page, $params=array(), $statusCode=null) {
-
+        
+        //twerk avatar when user WAS logged (welcome survey page)
         if( session('login-logged') && $this->user && !Cookie::get('prev-login') && !empty(Cookie::get('functionality_cookies')) ) {
             Cookie::queue('prev-login', $this->user->id, 60*24*31);
         }
@@ -353,8 +363,8 @@ class FrontController extends BaseController {
 
         $this->PrepareViewData($page, $params, 'vox');
 
+        //show optimism popup
         $params['optimismPopup'] = false;
-
         if(
             !empty($this->user) 
             && empty($this->user->optimism_popup) 
@@ -371,7 +381,6 @@ class FrontController extends BaseController {
             'm' => trans('vox.common.gender.m'),
             'f' => trans('vox.common.gender.f'),
         ];
-        $params['years'] = range( date('Y'), date('Y')-90 );
         $params['header_questions'] = VoxAnswer::getCount();
         $params['users_count'] = User::getCount('vox');
 
@@ -396,7 +405,6 @@ class FrontController extends BaseController {
         }
 
         ///Daily Polls
-
         $daily_polls = Poll::with('translations')
         ->where('launched_at', date('Y-m-d') )
         ->whereIn('status', ['open', 'closed'])
@@ -573,15 +581,15 @@ class FrontController extends BaseController {
         $params['canonical'] = !empty($params['canonical']) ? $params['canonical'] : getLangUrl($this->current_page);
         $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='trp' ? '/img-trp/socials-cover.jpg' : '/img-vox/logo-text.png');
 
-        if(Request::getHost() == 'urgent.reviews.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com') {
-            $params['without_banner'] = session('withoutBanner');
-        } else {
-            if(date('m') != 12) {
-                $params['without_banner'] = true;
-            } else {
-                $params['without_banner'] = session('withoutBanner');
-            }
-        }
+        // if(Request::getHost() == 'urgent.reviews.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com') {
+        //     $params['without_banner'] = session('withoutBanner');
+        // } else {
+        //     if(date('m') != 12) {
+        //         $params['without_banner'] = true;
+        //     } else {
+        //         $params['without_banner'] = session('withoutBanner');
+        //     }
+        // }
         
         if(isset($_SERVER['HTTP_USER_AGENT'])) {
 

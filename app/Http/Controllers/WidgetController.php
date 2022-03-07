@@ -27,6 +27,7 @@ class WidgetController extends BaseController {
         App::setLocale( $locale );
     }
 
+    //old widgets
     public function widget($locale,$user_id,$hash,$mode) {
         $user = User::find($user_id);
         if( !empty($user) && !empty($hash) && $user->get_widget_token()==$hash ) {
@@ -47,6 +48,7 @@ class WidgetController extends BaseController {
         return null;
     }    
 
+    //new widgets
     public function widget_new($locale=null,$user_id,$hash) {
         $user = User::find($user_id);
         if( !empty($user) && !empty($hash) && $user->get_widget_token()==$hash && !empty(request('layout'))) {

@@ -9,8 +9,6 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 
-use App\Models\TransactionScammersByBalance;
-use App\Models\TransactionScammersByDay;
 use App\Models\DcnTransaction;
 use App\Models\SupportContact;
 use App\Models\BanAppeal;
@@ -131,11 +129,43 @@ class AdminController extends BaseController {
         
         if($params['admin']->role=='support') {
             foreach ($menu as $key => $value) {
-                if(in_array($key, ['users','ips','whitelist','blacklist','transactions','email_validations','trp','vox','support','rewards','invites','ban_appeals']) ) {
+                if(in_array($key, [
+                    'users',
+                    'ips',
+                    'whitelist',
+                    'blacklist',
+                    'transactions',
+                    'email_validations',
+                    'trp',
+                    'vox',
+                    'support',
+                    'rewards',
+                    'invites',
+                    'ban_appeals'
+                ]) ) {
                     if(isset($menu[$key]['subpages'])) {
-
                         foreach ($menu[$key]['subpages'] as $sk => $sv) {
-                            if(in_array($sk, ['anonymous_users','users_stats','incomplete-registrations','lead-magnet','paid-reports','users_stats','questions','faq','testimonials','scrape-google-dentists','add','scales','faq-ios','badges','explorer','export-survey-data','polls-explorer','recommendations','tests','history']) || ($sk == 'categories' && $key != 'support')) {
+                            if(in_array($sk, [
+                                'anonymous_users',
+                                'users_stats',
+                                'incomplete-registrations',
+                                'lead-magnet',
+                                'paid-reports',
+                                'users_stats',
+                                'questions',
+                                'faq',
+                                'testimonials',
+                                'scrape-google-dentists',
+                                'add',
+                                'scales',
+                                'faq-ios',
+                                'explorer',
+                                'export-survey-data',
+                                'polls-explorer',
+                                'recommendations',
+                                'tests',
+                                'history'
+                            ]) || ($sk == 'categories' && $key != 'support')) {
                                 unset( $menu[$key]['subpages'][$sk] );
                             }
                         }
@@ -152,7 +182,6 @@ class AdminController extends BaseController {
                     unset($menu[$key]);
                 }
                 if(isset($menu[$key]['subpages'])) {
-
                     foreach ($menu[$key]['subpages'] as $sk => $sv) {
                         if($sk == 'history') {
                             unset( $menu[$key]['subpages'][$sk] );
@@ -202,7 +231,6 @@ class AdminController extends BaseController {
         $params['counters']['orders'] = Order::whereNull('is_send')->count();
 
         $params['cache_version'] = '20220228';
-        //dd($params['counters']);
 
         if($this->current_page!='home' && !isset($menu[$this->current_page])) {
             return redirect('cms');

@@ -54,14 +54,14 @@ class VoxController extends FrontController {
 
 		if( $featured_voxes->count() < 9 ) {
 
-			$arr_v = [];
+			$featured_voxes_ids = [];
 			foreach ($featured_voxes as $fv) {
-				$arr_v[] = $fv->id;
+				$featured_voxes_ids[] = $fv->id;
 			}
 
 			$swiper_voxes = Vox::with(['translations', 'categories.category', 'categories.category.translations'])
 			->where('type', 'normal')
-			->whereNotIn('id', $arr_v)
+			->whereNotIn('id', $featured_voxes_ids)
 			->orderBy('launched_at', 'desc')
 			->take( 9 - $featured_voxes->count() )
 			->get();
@@ -88,7 +88,10 @@ class VoxController extends FrontController {
 
         return ServicesVox::getNextQuestionFunction($this->admin, $this->user, false, $this->country_id);
     }
-	
+
+	/**
+     * Remove holiday banner
+     */
 	public function removeBanner() {
 		session([
 			'withoutBanner' => true

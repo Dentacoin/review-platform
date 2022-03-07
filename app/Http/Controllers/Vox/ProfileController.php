@@ -41,13 +41,7 @@ class ProfileController extends FrontController {
 
             $user = Auth::guard('web')->user();
 
-            if(
-                $user->is_dentist 
-                && $user->status!='approved'
-                && $user->status!='added_by_clinic_claimed' 
-                && $user->status!='added_by_dentist_claimed' 
-                && $user->status!='test'
-            ) {
+            if($user->is_dentist && !in_array($user->status, ['approved', 'added_by_clinic_claimed', 'added_by_dentist_claimed', 'test'])) {
                 return redirect(getLangUrl('/'));
             }
 
@@ -245,7 +239,7 @@ class ProfileController extends FrontController {
                     return Response::json( [
                         'success' => false,
                         'without_image' => true,
-                    ] );
+                    ]);
                 }
 
                 $this->user->website = Request::input('link');
@@ -253,7 +247,7 @@ class ProfileController extends FrontController {
 
                 return Response::json( [
                     'success' => true,
-                ] );
+                ]);
             }
         }
     }
