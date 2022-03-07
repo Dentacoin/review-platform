@@ -152,19 +152,24 @@ class AdminsController extends AdminController {
                 ->withInput()
                 ->withErrors($validator);
             } else {
+                
                 $item->username = $this->request->input('username');
                 if(!empty( $this->request->input('password') )) {
                     $item->password = bcrypt($this->request->input('password'));
                 }
-                $item->name = $this->request->input('name');
+
                 $item->email = $this->request->input('email');
-                $item->comments = $this->request->input('comments');
-                $item->role = $this->request->input('role');
-                $item->lang_from = $this->request->input('lang_from');
-                $item->lang_to = $this->request->input('lang_to');
-                $item->text_domain = !empty($this->request->input('text_domain')) ? implode(',', $this->request->input('text_domain')) : '';
-                $item->email_template_type = $this->request->input('email_template_type');
                 $item->user_id = $this->request->input('user_id');
+
+                if($this->request->has('name')) { // if ! edit my profile
+                    $item->name = $this->request->input('name');
+                    $item->comments = $this->request->input('comments');
+                    $item->role = $this->request->input('role');
+                    $item->lang_from = $this->request->input('lang_from');
+                    $item->lang_to = $this->request->input('lang_to');
+                    $item->text_domain = !empty($this->request->input('text_domain')) ? implode(',', $this->request->input('text_domain')) : '';
+                    $item->email_template_type = $this->request->input('email_template_type');
+                }
                 $item->save();
 
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated') );
@@ -341,4 +346,13 @@ class AdminsController extends AdminController {
         return $this->showView('upload-file');
     }
 
+    public function profile() {
+
+        if( !empty($this->user) ) {      
+            return $this->showView('admins-edit', array(
+                'item' => $this->user,
+                'my_profile' => true,
+            ));
+        }
+    }
 }

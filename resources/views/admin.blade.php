@@ -74,6 +74,7 @@
                         </button>
                     </div>
 
+                    {{-- if admin role --}}
                     @if(!empty(App\Models\TransactionScammersByBalance::where('checked', '!=', 1)->count()))
                         <span class="label label-danger blink" style="margin-top: 20px;display: inline-block;">Transaction scammers by ballance</span>
 
@@ -106,13 +107,11 @@
                             </a>
                             <ul class="dropdown-menu animated fadeInLeft">
                                 <li class="arrow"></li>
+                                <li><a href="{{ url('cms/admins/profile') }}">My profile</a></li>
                                 <li><a href="{{ url('cms/logout') }}">{{ trans('admin.logout') }}</a></li>
                             </ul>
                         </li>
                     </ul>
-
-
-                        
 
                     <!-- end header navigation right -->
                 </div>
