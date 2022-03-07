@@ -15,6 +15,7 @@ use App\Models\ScrapeDentist;
 use App\Models\EmailTemplate;
 use App\Models\AnonymousUser;
 use App\Models\WalletAddress;
+use App\Models\VoxAnswerOld;
 use App\Models\InvalidEmail;
 use App\Models\DentistClaim;
 use App\Models\VoxQuestion;
@@ -27,6 +28,7 @@ use App\Models\Blacklist;
 use App\Models\VoxAnswer;
 use App\Models\DcnReward;
 use App\Models\UserLogin;
+use App\Models\UserPhoto;
 use App\Models\VoxScale;
 use App\Models\GasPrice;
 use App\Models\UserBan;
@@ -59,9 +61,9 @@ class YouTubeController extends FrontController {
      * recover token from admin for youtube video reviews
      */
     public function test() {
-        
+
         if(!empty($this->admin)) {
-            
+
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
