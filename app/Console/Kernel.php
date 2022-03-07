@@ -2129,7 +2129,9 @@ UNCONFIRMED TRANSACTIONS
                 
                 if (Carbon::now()->addDays(-1)->timestamp > filectime($file_gdpr)) {
                     array_map('unlink', glob($file_gdpr.'/*'));
-                    rmdir($file_gdpr);
+                    if(is_dir($file_gdpr)) {
+                        rmdir($file_gdpr);
+                    }
                 }
             }
 
