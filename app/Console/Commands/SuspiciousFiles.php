@@ -54,6 +54,7 @@ class SuspiciousFiles extends Command{
 
                 // dd($file_mime);
                 if(!in_array($file_mime, [
+                    'text/html',
                     'inode/x-empty', 
                     'application/zip', 
                     'application/pdf', 
@@ -83,19 +84,17 @@ class SuspiciousFiles extends Command{
                 $mtext .= $path.' ( Mime type - '.$mime.')
                 ';
             }
-        } else {
-            $mtext = 'No suspicious files found';
+            Mail::raw($mtext, function ($message) {
+                $sender = config('mail.from.address');
+                $sender_name = config('mail.from.name');
+    
+                $message->from($sender, $sender_name);
+                $message->to('gergana@youpluswe.com');
+                $message->to('miroslav.nedelchev@dentacoin.com');
+                $message->subject('Suspicious files uploaded in TRP server');
+            });
         }
         
-        Mail::raw($mtext, function ($message) {
-            $sender = config('mail.from.address');
-            $sender_name = config('mail.from.name');
-
-            $message->from($sender, $sender_name);
-            $message->to('gergana@youpluswe.com');
-            $message->to('miroslav.nedelchev@dentacoin.com');
-            $message->subject('Suspicious files uploaded in TRP server');
-        });
 
         echo 'Check for suspicious uploaded files - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
