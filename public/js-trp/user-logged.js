@@ -1511,6 +1511,7 @@ $(document).ready(function(){
                     $('#review-confirmed').show();
                     $('#review-confirmed').find('.ask-dentist-submit-review').attr('href', $('#review-confirmed').find('.ask-dentist-submit-review').attr('original-href') + data.review_id);
                     $('#review-submit-button').hide();
+                    $('.profile-rating .button').remove();
 
                     that.find('.question:not(.review-desc)').hide();
                     that.find('.review-desc').find('.popup-title').hide();
