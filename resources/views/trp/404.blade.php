@@ -24,7 +24,14 @@
 												<img class="has-review-image" src="{{ url('img-trp/patient-review.svg') }}">
 											@endif
 											<div class="slider-image-wrapper">
-												<img class="slider-real-image" src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getNames(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}"> 
+												<img 
+													class="slider-real-image" 
+													src="{{ $dentist->getImageUrl(true) }}" 
+													alt="{{ trans('trp.alt-tags.reviews-for', [ 
+														'name' => $dentist->getNames(), 
+														'location' => $dentist->getLocation() 
+													]) }}"
+												/> 
 												@if($dentist->is_partner)
 													<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}" />
 												@endif
@@ -35,9 +42,7 @@
 										    		<div class="img">
 										    			<img src="img-trp/map-pin.png">
 										    		</div>
-													{{ $dentist->city_name ? $dentist->city_name.', ' : '' }}
-													{{ $dentist->state_name ? $dentist->state_name.', ' : '' }} 
-													{{ $dentist->country->name }} 
+													{{ $dentist->getLocation() }}
 										    		<!-- <span>(2 km away)</span> -->
 										    	</div>
 										    	@if( $time = $dentist->getWorkHoursText() )

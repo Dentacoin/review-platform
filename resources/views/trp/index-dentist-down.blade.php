@@ -2,54 +2,72 @@
 	<div class="container section-dentist-info">
 		<div class="flex">
 			<div class="col tac">
-				<img src="{{ url('img-trp/dentacoin-attract-new-patients-icon.png') }}" alt="{{ trans('trp.alt-tags.attract-new-patients') }}">
+				<img src="{{ url('img-trp/attract-new-patients.svg') }}" alt="{{ trans('trp.alt-tags.attract-new-patients') }}">
 				<div class="info-padding">
 					<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-title')) !!}</h3>
-					<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-description')) !!}</p>
+					<p>
+						Follow the blockchain trend and get noticed by digital natives who care about their dental health.
+						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-1-description')) !!} --}}
+					</p>
 				</div>
 			</div>
 			<div class="col tac">
-				<img src="{{ url('img-trp/dentacoin-get-more-reviews-icon.png') }}" alt="{{ trans('trp.alt-tags.more-reviews') }}">   
+				<img src="{{ url('img-trp/stimulate-feedback.svg') }}" alt="{{ trans('trp.alt-tags.more-reviews') }}">   
 				<div class="info-padding"> 			
-					<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-2-title')) !!}</h3>
-					<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-2-description')) !!}</p>
-				</div>
-			</div>
-		</div>
-
-		<div class="flex">
-			<div class="col tac">
-				<img src="{{ url('img-trp/dentacoin-better-google-ranking-icon.png') }}" alt="{{ trans('trp.alt-tags.better-google-ranking') }}">
-				<div class="info-padding">
-					<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-3-title')) !!}</h3>
-					<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-3-description')) !!}</p>
+					<h3>
+						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-2-title')) !!} --}}
+						Stimulate feedback
+					</h3>
+					<p>
+						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-2-description')) !!} --}}
+						Reward your patients for their honest input with motivating DCN incentives at no cost for you.
+					</p>
 				</div>
 			</div>
 			<div class="col tac">
-				<img src="{{ url('img-trp/dentacoin-better-online-reputation-icon.png') }}" alt="{{ trans('trp.alt-tags.better-online-reputation') }}">
+				<img src="{{ url('img-trp/rank-higher-google.svg') }}" alt="{{ trans('trp.alt-tags.better-google-ranking') }}">
 				<div class="info-padding">
-					<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-4-title')) !!}</h3>
-					<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-4-description')) !!}</p>
+					<h3>
+						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-3-title')) !!} --}}
+						Rank higher on Google
+					</h3>
+					<p>
+						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-3-description')) !!} --}}
+						Boost your online reputation and climb to the top of search results with our SEO-optimized platform.
+					</p>
+				</div>
+				<a href="javascript:;" class="magnet-popup" id="open-magnet" data-url="{{ getLangUrl('lead-magnet-session') }}">
+					{{-- {{ trans('trp.page.index-dentist.button-lead-magnet') }} --}}
+					Get your reputation score now!
+				</a>
+			</div>
+			<div class="col tac">
+				<img src="{{ url('img-trp/access-all-apps.svg') }}" alt="{{ trans('trp.alt-tags.better-online-reputation') }}">
+				<div class="info-padding">
+					<h3>
+						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-4-title')) !!} --}}
+						Access All Apps
+					</h3>
+					<p>
+						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-4-description')) !!} --}}
+						By creating your Trusted Reviews profile, you get immediate access to all Dentacoin Apps.
+					</p>
 				</div>
 			</div>
-		</div>
-
-		<div class="tac button-wrap">
-			<a href="javascript:;" class="button button-sign-up-dentist open-dentacoin-gateway dentist-register">
-				{!! nl2br(trans('trp.page.index-dentist.signup')) !!}
-			</a>
-		</div>
-
-		<div class="tac">
-			<a href="javascript:;" class="button button-yellow magnet-popup" id="open-magnet" data-url="{{ getLangUrl('lead-magnet-session') }}">{{ trans('trp.page.index-dentist.button-lead-magnet') }}</a>
 		</div>
 	</div>
 </div>
 
 <div class="testimonials-section">
 	<div class="container tac">
-		<h2>{!! nl2br(trans('trp.page.index-dentist.testimonial.title')) !!}</h2>
-		<span>{!! nl2br(trans('trp.page.index-dentist.testimonial.subtitle')) !!}</span>
+		<h2 class="mont">
+			{{-- {!! nl2br(trans('trp.page.index-dentist.testimonial.title')) !!} --}}
+			Trusted by <n>2600+</n> Dental Practices
+		</h2>
+		<h4>
+			{{-- {!! nl2br(trans('trp.page.index-dentist.testimonial.subtitle')) !!} --}}
+			Dentacoin Trusted Reviews enables dental clinics and solo practicing dentists to harness the power of patient feedback and to build better patient relations.
+		</h4>
 	</div>
 
 	@if($testimonials->isNotEmpty())
@@ -57,11 +75,15 @@
 	    	<div class="flickity-testimonial">
 	    		@foreach($testimonials as $testim)
 		    		<div class="testimonial">
-		    			<div class="testimonial-inner">
-			    			<img src="{{ $testim->getImageUrl() }}">
-			    			<h4>{!! nl2br($testim->description) !!}</h4>
-			    			<p class="name">{!! nl2br($testim->name) !!}</p>
-			    			<p>{!! nl2br($testim->job) !!}</p>
+		    			<div class="testimonial-inner flex">
+							<div>
+			    				<img src="{{ $testim->getImageUrl() }}">
+							</div>
+							<div>
+								<span>{!! nl2br($testim->description) !!}</span>
+								<p class="name">{!! nl2br($testim->name) !!}</p>
+								<p>{!! nl2br($testim->job) !!}</p>
+							</div>
 			    		</div>
 		    		</div>
 		    	@endforeach
@@ -71,77 +93,53 @@
 </div>
 
 <div class="container section-how">
-
-	<h2 class="tac">
-		{!! nl2br(trans('trp.page.index-dentist.how-works-title')) !!}
-	</h2>
-
-	<div class="clearfix mobile-flickity">
+	<div class="flex">
 		<div class="left">
-			<div class="how-block flex flex-center">
-    			<span class="how-number">01</span>
+			<h2 class="mont">
+				{{-- {!! nl2br(trans('trp.page.index-dentist.how-works-title')) !!} --}}
+				How to Launch Your <span class="mont">FREE</span> Listing
+			</h2>
+			<div class="how-block flex flex-mobile flex-center">
+    			<span class="how-number mont">1</span>
     			<p>
-    				{!! nl2br(trans('trp.page.index-dentist.step-1', [
+					Create your dentist / clinic profile and wait for our verification email.
+    				{{-- {!! nl2br(trans('trp.page.index-dentist.step-1', [
 						'link' => '<a href="javascript:;" class="open-dentacoin-gateway dentist-register">',
 						'endlink' => '</a>',
-					])) !!}
+					])) !!} --}}
     			</p>
     		</div>
-			<div class="how-block flex flex-center">
-    			<span class="how-number">02</span>
+			<div class="how-block flex flex-mobile flex-center">
+    			<span class="how-number mont">2</span>
     			<p>
-    				{!! nl2br(trans('trp.page.index-dentist.step-2')) !!}
+    				{{-- {!! nl2br(trans('trp.page.index-dentist.step-2')) !!} --}}
+					Invite your patients to leave a review straight from your profile.
     			</p>
     		</div>
-			<div class="how-block flex flex-center">
-    			<span class="how-number">03</span>
+			<div class="how-block flex flex-mobile flex-center">
+    			<span class="how-number mont">3</span>
     			<p>
-    				{!! nl2br(trans('trp.page.index-dentist.step-3')) !!}
+    				{{-- {!! nl2br(trans('trp.page.index-dentist.step-3')) !!} --}}
+					Set up a <a href="https://wallet.dentacoin.com/" target="_blank">Dentacoin Wallet</a> and earn DCN for each verified review.
     			</p>
-    		</div>
-		</div>
-		<div class="right">		    			
-			<div class="how-block flex flex-center">
-    			<span class="how-number">04</span>
+    		</div>	    			
+			<div class="how-block flex flex-mobile flex-center">
+    			<span class="how-number mont">4</span>
     			<p>
-    				{!! nl2br(trans('trp.page.index-dentist.step-4', [
+    				{{-- {!! nl2br(trans('trp.page.index-dentist.step-4', [
 						'link' => '<a href="https://wallet.dentacoin.com/" target="_blank">',
 						'endlink' => '</a>',
-					])) !!}
+					])) !!} --}}
+					Embed Trusted Reviews widget on your website or Facebook page.
     			</p>
     		</div>
-			<div class="how-block flex flex-center">
-    			<span class="how-number">05</span>
-    			<p>
-    				{!! nl2br(trans('trp.page.index-dentist.step-5')) !!}
-    			</p>
-    		</div>
-			<div class="how-block flex flex-center">
-    			<span class="how-number">06</span>
-    			<p>
-    				{!! nl2br(trans('trp.page.index-dentist.step-6')) !!}
-    			</p>
-    		</div>
+			<a href="javascript::" class="blue-button button-sign-up-dentist open-dentacoin-gateway dentist-register">
+				{{-- {!! nl2br(trans('trp.page.index-dentist.create-listing')) !!} --}}
+				List your practice
+			</a>
 		</div>
-	</div>
-
-	<div class="tac">
-		<a href="javascript::" class="button button-sign-up-dentist open-dentacoin-gateway dentist-register">{!! nl2br(trans('trp.page.index-dentist.create-listing')) !!}</a>
-	</div>
-</div>
-
-<div class="section-learn">
-	<div class="container flex">
-		<div class="col">
-			<img src="{{ url('img-trp/dentacoin-patients-rely-on-only-reviews.png') }}" alt="{{ trans('trp.alt-tags.patients-rely-reviews') }}">
+		<div class="right">
+			<img src="{{ url('img-trp/launch-listing-dentist.png') }}"/>
 		</div>
-		<div class="col">
-    		<h2>
-    			{!! nl2br(trans('trp.page.index-dentist.cta')) !!}
-    		</h2>
-    		<a href="javascript:;" class="button button-yellow button-sign-up-dentist open-dentacoin-gateway dentist-register">
-    			{!! nl2br(trans('trp.page.index-dentist.signup')) !!}
-    		</a>
-    	</div>
 	</div>
 </div>

@@ -1,0 +1,269 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+@import 'trp-colors';
+
+.search-form {
+	background-color: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 3px 4px 0px #9f9f9f;
+    position: relative;
+	padding: 9px 85px 9px 0px;
+
+	@media #{$phone} {
+		padding: 14px 20px 25px;
+		flex-direction: column;
+	}
+	
+	.input-wrapper {
+		position: relative;
+		display: flex;
+		flex: 1;
+		align-items: center;
+		padding-left: 19px;
+		border-right: 1px solid #888888;
+
+		@media #{$tablet} {
+			padding-left: 10px;
+		}
+
+		@media #{$phone} {
+			width: 100%;
+			padding-left: 0px;
+			border-right: none;
+			border-bottom: 1px solid #dddddd;
+			margin-bottom: 13px;
+		}
+
+		&.search-dentist-wrapper {
+			min-width: 360px;
+
+			@media #{$pc} {
+				min-width: 270px;
+			}
+
+			@media #{$tablet} {
+				min-width: 210px;
+			}
+
+			@media #{$phone} {
+				min-width: auto;
+			}
+		}
+
+		&:not(.search-dentist-wrapper) {
+			@media #{$tablet} {
+				width: 140px;
+			}
+
+			@media #{$phone} {
+				width: 100%;
+			}
+		}
+	}
+
+	input[type="text"] {
+		font-size: 16px;
+		border: none;
+		padding-left: 10px;
+		height: 55px;
+		max-width: 100%;
+		width: 100%;
+
+		@media #{$tablet} {
+			height: 35px;
+		}
+
+		@media #{$phone} {
+			font-size: 14px;
+			height: 40px;
+		}
+
+		&:focus {
+			outline: none;
+		}
+
+		&::placeholder {
+			color: #8c8c8c;
+		}
+
+		&:last-child {
+			border-right: none;
+		}
+	}
+
+	label {
+		position: relative;
+		font-size: 16px;
+		color: #888888;
+		border: 1px solid #cccccc;
+		margin-left: 18px;
+		display: flex;
+		width: 162px;
+		padding: 16px 18px 16px 12px;
+		border-radius: 5px;
+		cursor: pointer;
+		box-shadow: 0px 3px 4px 1px #e5e5e5;
+
+		@media #{$tablet} {
+			padding: 12px 18px 12px 12px;
+			margin-left: 10px;
+		}
+
+		@media #{$phone} {
+			width: 100%;
+			text-align: left;
+    		display: flex;
+			margin-left: 0px;
+			padding: 15px 18px 15px 12px;
+			margin-bottom: 24px;
+			margin-top: 10px;
+		}
+
+		&.active {
+			border-color: $stars_color;
+			border-width: 2px;
+			
+			.checked-partner {
+				display: block;
+			}
+		}
+
+		img {
+			max-width: 16px;
+			margin-right: 6px;
+		}
+
+		.checked-partner {
+			display: none;
+			position: absolute;
+			background-color: #14cab8;
+			color: white;
+			top: 0;
+			right: 0;
+			font-size: 13px;
+			width: 16px;
+			height: 16px;
+			text-align: center;
+			line-height: 14px;
+			border-bottom-left-radius: 5px;
+		}
+
+		input {
+			display: none;
+		}
+	}
+
+	button {
+		background-color: $stars_color;
+		position: absolute;
+		right: 0px;
+		top: 0px;
+		height: 100%;
+		cursor: pointer;
+		width: 72px;
+		border-top-right-radius: 5px;
+		border-bottom-right-radius: 5px;
+		font-size: 0px;
+
+		@media #{$phone} {
+			position: static;
+			width: 100%;
+			height: auto;
+			display: block;
+			font-size: 18px;
+
+			text-transform: uppercase;
+			font-weight: bold;
+			color: white;
+			padding: 13px 20px;
+			border-radius: 30px;
+		}
+
+		img {
+			max-width: 30px;
+
+			@media #{$phone} {
+				display: none;
+			}
+		}
+	}
+}
+
+.results {
+	position: absolute;
+    top: 101%;
+    right: 0px;
+    left: 0px;
+    padding: 20px;
+    z-index: 10000;
+    background-color: white;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    @media #{$phone} {
+		text-align: left;
+	}
+
+    .result-title {
+    	color: #777777;
+    	border-bottom: 1px solid #9dcbe5;
+    	padding-bottom: 8px;
+    	margin-bottom: 8px;
+    	display: inline-block;
+    }
+
+    a {
+    	display: block;
+    	padding: 3px 12px;
+    	margin-bottom: 4px;
+    	font-size: 14px;
+
+    	@media #{$phone} {
+    		padding-left: 0px;
+    	}
+
+    	&.special {
+    		color: #126585;
+    	}
+
+    	&.active,
+    	&:hover {
+    		background-color: #d8eaf5;
+    	}
+    }
+
+    .results-type {
+    	margin-bottom: 25px;
+
+    	&:last-child {
+    		margin-bottom: 0px;
+    	}
+    }
+
+    .ratings {
+	    margin-top: 0px;
+	    float: right;
+
+	    @media #{$phone} {
+	    	display: none;
+	    }
+
+	    .stars {
+	        background: url('../img-trp/stars-gray.png') 50% 50% no-repeat;
+	        background-size: contain;
+
+	        .bar {
+	            background: url('../img-trp/stars-black.png') 0% 50% no-repeat;
+	            background-size: cover;
+	        }
+	    }
+
+	    .rating {
+			vertical-align: top;
+	    }
+	}
+}

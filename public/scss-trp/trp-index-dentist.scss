@@ -1,0 +1,558 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+.welcome-dentist-title-section {
+	padding-top: 118px;
+    text-align: center;
+	max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+
+	@media #{$phone} {
+		padding-left: 12px;
+		padding-right: 12px;
+		padding-top: 80px;
+	}
+	
+	h1 {
+		font-weight: 800;
+		color: #332255;
+		text-transform: capitalize;
+		margin-bottom: 20px;
+
+		@media #{$phone} {
+			margin-bottom: 10px;
+		}
+	}
+
+	h3 {
+		color: #332255;
+		margin-bottom: 30px;
+	}
+}
+
+.welcome-dentist-section {
+    background: url(../img-trp/welcome-dentist-background.jpg) 50% 0% no-repeat;
+    background-size: cover;
+    position: relative;
+    padding-bottom: 53px;
+    padding-top: 40px;
+
+	@media #{$phone} {
+		padding-bottom: 30px;
+    	padding-top: 160px;
+	}
+
+	.signin-form-wrapper {
+	
+		form {
+			position: relative;
+			padding: 50px;
+			background-color: white;
+			box-shadow: -8px -8px 17px 0px rgba(109,109,109,0.3);
+			margin-top: 0px;
+			max-width: 460px;
+			margin-left: auto;
+			border-radius: 40px;
+	
+			@media #{$pc} {
+				padding: 50px 30px;
+				max-width: 420px;
+			}
+	
+			@media #{$tablet} {
+				padding: 30px 20px;
+				max-width: 345px;
+			}
+	
+			@media #{$phone} {
+				margin: 0 auto;
+			}
+	
+			.modern-field {
+				margin-bottom: 27px;
+
+				@media #{$tablet} {
+					margin-bottom: 26px;
+				}
+			}
+	
+			input[type="submit"] {
+				margin-bottom: 25px;
+				font-size: 20px;
+				padding: 12px 37px;
+				text-transform: uppercase;
+				cursor: pointer;
+
+				@media #{$tablet} {
+					margin-bottom: 35px;
+					font-size: 20px;
+					width: 100%;
+				}
+			}
+		}
+	
+		.have-account {
+			text-align: center;
+			color: #332255;
+			font-size: 18px;
+
+			@media #{$tablet} {
+				font-size: 16px;
+			}
+	
+			a {
+				font-weight: bold;
+				font-size: 18px;
+				color: #0084d1;
+
+				@media #{$tablet} {
+					font-size: 16px;
+				}
+	
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+}
+
+.section-dentist-info-wrap {
+    background: white;
+    position: relative;
+    z-index: 10;
+}
+
+.section-dentist-info {
+	@media #{$phone} {
+		padding: 0px;
+	}
+
+    h2 {
+    	color: #332255;
+    	font-weight: bold;
+    	margin-bottom: 60px;
+    	margin-top: 80px;
+
+		@media #{$tablet} {
+			margin-top: 50px;
+		}
+
+		@media #{$phone} {
+			margin-top: 44px;
+			margin-bottom: 20px;
+		}
+    }
+
+	h3 {
+		margin-top: 20px;
+		margin-bottom: 10px;
+		font-weight: bold;
+		color: #0564c6;
+
+		@media #{$pc} {
+			font-size: 21px;
+		}
+	}
+
+	.flex {
+		@media #{$tablet} {
+			flex-flow: row wrap;
+		}
+
+		.col {
+			@media #{$tablet} {
+				flex: none;
+				width: 50%;
+				margin-bottom: 50px;
+			}
+
+			@media #{$phone} {
+				width: 100%;
+				padding-top: 35px;
+				padding-bottom: 45px;
+				margin-bottom: 0px;
+				padding-left: 10px;
+    			padding-right: 10px
+			}
+
+			&:nth-child(2n) {
+				@media #{$phone} {
+					background-color: #f2f6ff;
+				}
+			}
+		}
+	}
+
+    .info-padding {
+		padding: 0px 9px;
+
+    	@media #{$tablet} {
+    		padding: 0px 20px;
+    	}
+
+    	@media #{$phone} {
+    		padding: 0px 10px;
+    	}
+    }
+
+	p {
+		font-size: 20px;
+		color: #332255;
+
+		@media #{$pc} {
+			font-size: 18px;
+		}
+
+		@media #{$phone} {
+			margin-bottom: 0px;
+		}
+	}
+
+	img {
+		max-height: 112px;
+
+		@media #{$pc} {
+			max-height: 92px;
+		}
+
+		@media #{$phone} {
+			max-height: 108px;
+		}
+	}
+
+	a {
+		font-size: 20px;
+		color: #0084d1;
+		margin-top: 17px;
+		display: block;
+		border-bottom: 1px dashed;
+		padding-bottom: 9px;
+
+		@media #{$pc} {
+			font-size: 17px;
+		}
+
+		@media #{$tablet} {
+			display: inline-block;
+		}
+	}
+}
+
+.testimonials-section {
+	background: url(../img-trp/testimonials-background.jpg) 50% 50% no-repeat;
+	background-size: cover;
+    padding-bottom: 40px;
+    position: relative;
+	margin-top: 50px;
+    padding-top: 50px;
+
+	@media #{$tablet} {
+		margin-top: 0px;
+	}
+
+    @media #{$phone} {
+    	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#0c81bf+0,0096c8+42,0096c8+57,0c81bf+100 */
+		background: rgb(12,129,191); /* Old browsers */
+		background: -moz-linear-gradient(top,  rgba(12,129,191,1) 0%, rgba(0,150,200,1) 42%, rgba(0,150,200,1) 57%, rgba(12,129,191,1) 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(top,  rgba(12,129,191,1) 0%,rgba(0,150,200,1) 42%,rgba(0,150,200,1) 57%,rgba(12,129,191,1) 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to bottom,  rgba(12,129,191,1) 0%,rgba(0,150,200,1) 42%,rgba(0,150,200,1) 57%,rgba(12,129,191,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0c81bf', endColorstr='#0c81bf',GradientType=0 ); /* IE6-9 */
+
+		padding-top: 30px;
+    }
+
+	h2 {
+		font-weight: bold;
+		color: white;
+		text-transform: uppercase;
+		margin-bottom: 15px;
+
+		@media #{$phone} {
+			font-size: 24px;
+    		line-height: 34px;
+		}
+
+		n {
+			font-size: 42px;
+			color: #0085d2;
+			background-color: white;
+			border-radius: 15px;
+			padding: 3px 15px;
+
+			@media #{$phone} {
+				font-size: 24px;
+				border-radius: 10px;
+			}
+		}
+	}
+
+	h4 {
+		display: block;
+		font-weight: bold;
+		color: white;
+	    padding: 0px 170px;
+	    margin-bottom: 40px;
+		line-height: 35px;
+		
+		@media #{$pc} {
+			padding: 0px 150px;
+		}
+
+		@media #{$tablet} {
+			padding: 0px 40px;
+			line-height: 32px;
+		}
+
+	    @media #{$phone} {
+			line-height: 25px;
+	    	padding-left: 0px;
+	    	padding-right: 0px;
+	    	margin-bottom: 30px;
+	    }
+	}
+
+	.testimonial {
+		width: 100%;
+
+		.testimonial-inner {
+			align-items: center;
+			max-width: 775px;
+			margin: 0 auto;
+			border: 2px solid #14cab8;
+			border-radius: 50px;
+			padding: 30px 50px;
+
+			@media #{$tablet} {
+				flex-direction: column;
+				max-width: 585px;
+				padding: 20px 40px 30px;
+			}
+
+			@media #{$phone} {
+				max-width: 100%;
+				padding: 10px 20px 30px;
+				text-align: center;
+			}
+
+			img {
+				max-width: 156px;
+				border-radius: 50%;
+				margin-right: 20px;
+
+				@media #{$tablet} {
+					max-width: 106px;
+					margin-right: 0px;
+					margin-bottom: 20px;
+				}
+
+				@media #{$phone} {
+					max-width: 156px;
+					margin-right: auto;
+					margin-left: auto;
+					display: block;
+					margin-bottom: 20px;
+				}
+			}
+
+			span {
+				font-size: 20px;
+				color: white;
+				margin-bottom: 22px;
+				display: block;
+
+				@media #{$phone} {
+					font-size: 18px;
+				}
+			}
+
+			p {
+				font-size: 16px;
+				color: white;
+
+				&.name {
+					font-size: 20px;
+					font-weight: bold;
+					margin-bottom: 5px;
+
+					@media #{$phone} {
+						font-size: 18px;
+					}
+				}
+			}
+		}
+	}
+
+	.flickity-prev-next-button {
+		@media #{$phone} {
+    		top: 30%;
+    	}
+    }
+
+    .flickity-button {
+    	color: #6fb6d4 !important;
+    }
+}
+
+.section-how {
+	padding-top: 85px;
+
+	@media #{$pc} {
+		padding-top: 55px;
+	}
+
+	@media #{$tablet} {
+		padding-top: 35px;
+	}
+
+	@media #{$phone} {
+		padding-top: 85px;
+	}
+
+	.left {
+		@media #{$phone} {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+
+		h2 {
+			margin-bottom: 60px;
+			max-width: 630px;
+			color: #0564c6;
+			font-weight: bold;
+	
+			@media #{$pc} {
+				margin-bottom: 40px;
+			}
+	
+			@media #{$phone} {
+				font-size: 24px;
+				text-transform: uppercase;
+			}
+	
+			span {
+				font-size: 32px;
+				font-weight: bold;
+				color: white;
+				background-color: #0564c6;
+				padding: 5px 15px;
+				border-radius: 12px;
+	
+				@media #{$phone} {
+					font-size: 24px;
+					padding: 1px 15px;
+					border-radius: 7px;
+				}
+			}
+		}
+
+		.how-block {
+			margin-bottom: 5px;
+	
+			@media #{$tablet} {
+				margin-bottom: 15px;
+			}
+	
+			p {
+				font-size: 20px;
+				color: #332255;
+				
+				@media #{$pc} {
+					font-size: 18px;
+				}
+
+				a {
+					font-size: 20px;
+					color: #0084d1;
+					font-weight: bold;
+					text-decoration: underline;
+					transition: all 0.3s ease;
+
+					@media #{$pc} {
+						font-size: 18px;
+					}
+
+					&:hover {
+						text-decoration: none;
+						color: #0564c6;
+						transition: all 0.3s ease;
+					}
+				}
+			}
+
+			.how-number {
+				margin-right: 20px;
+				font-size: 32px;
+				background-color: #0084d1;
+				color: white;
+				min-width: 47px;
+				width: 47px;
+				height: 47px;
+				text-align: center;
+				line-height: 47px;
+				border-radius: 50%;
+		
+				@media #{$pc} {
+					font-size: 28px;
+					min-width: 37px;
+					width: 37px;
+					height: 37px;
+					line-height: 37px;
+				}
+		
+				@media #{$phone} {
+					font-size: 20px;
+					min-width: 30px;
+					width: 30px;
+					height: 30px;
+					line-height: 30px;
+				}
+			}
+		}
+	
+		.blue-button {
+			text-transform: uppercase;
+			margin-top: 45px;
+
+			@media #{$tablet} {
+				margin-top: 15px;
+			}
+
+			@media #{$phone} {
+				padding: 12px 43px;
+				width: 100%;
+    			text-align: center;
+			}
+		}
+	}
+
+	.right {
+
+		img {
+			max-width: 460px;
+			display: block;
+
+			@media #{$pc} {
+				max-width: 380px;
+			}
+
+			@media #{$phone} {
+				width: 340px;
+				max-width: 100%;
+    			margin-top: 30px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+	}
+}
+
+.tablet-fixes {
+	input {
+		@media #{$tablet} {
+			min-width: unset !important;
+		}
+	}
+}

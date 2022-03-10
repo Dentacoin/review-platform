@@ -1,4 +1,5 @@
 var ajax_is_running = false;
+
 jQuery(document).ready(function($){
 
 	$('.signin-form-wrapper form').submit( function(e) {
@@ -28,11 +29,9 @@ jQuery(document).ready(function($){
 	        	$('.form-register .next-step[data-current-step="first"]').trigger('click');
 	        });
     	}
-		
-    } );
+    });
 
     if( $('#dentist-email').val() ) {
-
     	if(dentacoin_down && !user_id) {
     		showPopup('failed-popup');
     	} else {
@@ -42,91 +41,67 @@ jQuery(document).ready(function($){
 
 	$(window).scroll( function() {
 		if (!$('#to-append').hasClass('appended')) {
+			$('#to-append').addClass('appended');
 			$.ajax({
 	            type: "POST",
 	            url: lang + '/index-dentist-down/',
 	            success: function(ret) {
-	            	if (!$('#to-append').hasClass('appended')) {
-	            		$.getScript(window.location.origin+'/js/flickity.min.js');
-	            		$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
-	            		$('#to-append').append(ret);
-	            		$('#to-append').addClass('appended');
+					$.getScript(window.location.origin+'/js/flickity.min.js');
+					$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
+					$('#to-append').append(ret);
+					
+					handlePopups();
+					
+					var $carousel = $('.flickity-testimonial');
 
-	            		handlePopups();
-	            		
-	            		var $carousel = $('.flickity-testimonial');
-
-						$('.testimonial img').on('load', function() {
-							$carousel.flickity({
-						    	autoPlay: true,
-								wrapAround: true,
-								cellAlign: 'left',
-								pageDots: false,
-								groupCells: 1,
-								adaptiveHeight: true,
-							});
+					$('.testimonial img').on('load', function() {
+						$carousel.flickity({
+							autoPlay: true,
+							wrapAround: true,
+							cellAlign: 'left',
+							pageDots: false,
+							groupCells: 1,
+							adaptiveHeight: true,
 						});
+					});
 
-						setTimeout( function() {
-							$carousel.flickity({
-						    	autoPlay: true,
-								wrapAround: true,
-								cellAlign: 'left',
-								pageDots: false,
-								groupCells: 1,
-								adaptiveHeight: true,
-							});
-						}, 1000);
-
-						$('#open-magnet').click( function() {
-							gtag('event', 'Open', {
-								'event_category': 'LeadMagnet',
-								'event_label': 'Popup',
-							});
+					setTimeout( function() {
+						$carousel.flickity({
+							autoPlay: true,
+							wrapAround: true,
+							cellAlign: 'left',
+							pageDots: false,
+							groupCells: 1,
+							adaptiveHeight: true,
 						});
+					}, 1000);
 
-						$('.magnet-popup').click( function() {
-							var that = $(this);
-				
-							$.ajax({
-								type: "GET",
-								url: that.attr('data-url'),
-								dataType: 'json',
-								success: function(ret) {
-									if(ret.session) {
-										window.location.href = ret.url;
-									} else {
-										showPopup('popup-lead-magnet');
-									}
-								},
-								error: function(ret) {
-									console.log('error');
+					$('#open-magnet').click( function() {
+						gtag('event', 'Open', {
+							'event_category': 'LeadMagnet',
+							'event_label': 'Popup',
+						});
+					});
+
+					$('.magnet-popup').click( function() {
+						var that = $(this);
+			
+						$.ajax({
+							type: "GET",
+							url: that.attr('data-url'),
+							dataType: 'json',
+							success: function(ret) {
+								if(ret.session) {
+									window.location.href = ret.url;
+								} else {
+									showPopup('popup-lead-magnet');
 								}
-							});
-							
+							},
+							error: function(ret) {
+								console.log('error');
+							}
 						});
-
-						if ($(window).innerWidth() < 768) {
-							$('.mobile-flickity .left').children().appendTo('.mobile-flickity');
-							$('.mobile-flickity .left').remove();
-							$('.mobile-flickity .right').children().appendTo('.mobile-flickity');
-							$('.mobile-flickity .right').remove();
-
-							setTimeout( function() {
-		            			var $slider = $('.mobile-flickity');
-								$slider.flickity({
-							    	//autoPlay: true,
-									wrapAround: true,
-									cellAlign: 'left',
-									pageDots: true,
-									prevNextButtons: false,
-									groupCells: 1,
-									adaptiveHeight: true,
-								});
-							}, 1000);
-						}
-	            	}
-	                
+					});
 	            },
 	            error: function(ret) {
 	                console.log('error');
@@ -134,5 +109,4 @@ jQuery(document).ready(function($){
 	        });
 		}
 	});
-    
 });

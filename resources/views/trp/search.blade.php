@@ -203,7 +203,13 @@
 							<a href="{{ $dentist->getLink() }}" class="result-container dentist clearfix" {!! $dentist->address ? 'lat="'.$dentist->lat.'" lon="'.$dentist->lon.'"' : '' !!} dentist-id="{{ $dentist->id }}">
 								<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
 									@if($dentist->hasimage)
-										<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getNames(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
+										<img 
+											src="{{ $dentist->getImageUrl(true) }}" 
+											alt="{{ trans('trp.alt-tags.reviews-for', [ 
+												'name' => $dentist->getNames(), 
+												'location' => $dentist->getLocation() 
+											]) }}"
+											style="display: none !important;"/> 
 									@endif
 									@if($dentist->is_partner)
 										<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}">

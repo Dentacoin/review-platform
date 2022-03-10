@@ -946,12 +946,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return getLangUrl('dentist/'.$this->slug, null, isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'https://urgent.reviews.dentacoin.com/' : 'https://reviews.dentacoin.com/');
     }
 
+    public function getLocation() {
+        return ($this->city_name ? $this->city_name.', ' : '').($this->state_name ? $this->state_name.', ' : '').($this->country->name);
+    }
+
     public function parseCategories($categories) {
         return array_intersect_key( $categories, array_flip( array_intersect_key(config('categories'), array_flip( $this->categories->pluck('category_id')->toArray() ) ) ) );
     }
 
     public function getImageUrl($thumb = false) {
-        return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+        if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
+            return url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+        } else {
+            return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+        }
     }
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/avatars/'.($this->id%100);

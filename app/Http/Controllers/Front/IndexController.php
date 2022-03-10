@@ -371,7 +371,7 @@ class IndexController extends FrontController {
 		$claim_user = !empty($claim_id) ? User::find($claim_id) : null;
 
 		return $this->ShowView('index-dentist', array(
-			//'extra_body_class' => 'white-header',
+			'extra_body_class' => 'white-header',
 			'claim_user' => $claim_user,
 			'js' => [
 				'address.js',

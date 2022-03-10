@@ -243,7 +243,7 @@
 
     		<div class="view-profile clearfix">
 				<div class="avatar">
-					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" width="130" height="130">
+					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => $item->getLocation()  ]) }}" width="130" height="130">
 					@if($item->is_clinic && $item->branches->isNotEmpty() && $item->id == $item->mainBranchClinic->id)
 						<div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
 					@endif 
@@ -314,9 +314,7 @@
 							<div class="img">
 								<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}" width="11" height="14">
 							</div>
-							{{ $item->city_name ? $item->city_name.', ' : '' }}
-							{{ $item->state_name ? $item->state_name.', ' : '' }} 
-							{{ $item->country->name }} 
+							{{ $item->getLocation() }}
 							<!-- <span class="gray-text">(2 km away)</span> -->
 						</a>
 						@if( $time = $item->getWorkHoursText() )

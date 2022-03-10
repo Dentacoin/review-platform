@@ -1,14 +1,16 @@
 <div class="popup fixed-popup invite-new-dentist-popup active removable" id="invite-new-dentist-popup" scss-load="trp-popup-invite-new-dentist">
+	<img class="popup-image" src="{{ url('img-trp/invite-popup-image.png') }}"/>
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
 			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>
-		<h2>
-			{!! trans('trp.page.invite.popup.title') !!}
+		<h2 class="mont">
+			Invite Your Dentist to Trusted Reviews
+			{{-- {!! trans('trp.page.invite.popup.title') !!} --}}
 		</h2>
-		<h4 class="popup-title">
-			{!! trans('trp.page.invite.subtitle') !!}
-		</h4>
+		<h5>
+			All real entries will be rewarded with <b>{{ App\Models\Reward::getReward('patient_add_dentist') }} DCN</b>.
+		</h5>
 		<form class="invite-new-dentist-form address-suggester-wrapper-input" action="{{ getLangUrl('invite-new-dentist') }}" method="post">
 			{!! csrf_field() !!}
 
@@ -21,7 +23,6 @@
 				    	<input class="type-radio" type="radio" name="mode" id="mode-dentist1" value="dentist">
 				    	{!! nl2br(trans('trp.page.invite.mode.dentist')) !!}
 				  	</label>
-				  	<span>{!! nl2br(trans('trp.page.invite.mode.dentist.hint')) !!}</span>
 				</div>
 				<div class="radio-label col">
 				  	<label for="mode-clinic2">
@@ -31,7 +32,6 @@
 				    	<input class="type-radio" type="radio" name="mode" id="mode-clinic2" value="clinic">
 				    	{!! nl2br(trans('trp.page.invite.mode.clinic')) !!}
 				  	</label>
-				  	<span>{!! nl2br(trans('trp.page.invite.mode.clinic.description')) !!}</span>
 				</div>
 			</div>
 
@@ -84,6 +84,13 @@
 		    </div>
 
 			<div class="modern-field alert-after">
+				<input type="text" name="fb" id="dentist-fb" class="modern-input" autocomplete="off">
+				<label for="dentist-fb">
+					<span>Facebook page:</span>
+				</label>
+			</div>
+
+			<div class="modern-field alert-after">
 				<input type="text" name="website" id="dentist-website1" class="modern-input" autocomplete="off">
 				<label for="dentist-website1">
 					<span>{!! nl2br(trans('trp.page.invite.website')) !!}</span>
@@ -97,10 +104,9 @@
 				</label>
 			</div>
 
-			<p class="invite-reward">{!! nl2br(trans('trp.page.invite.reward', ['amount' => App\Models\Reward::getReward('patient_add_dentist')])) !!}</p>
-
 			<div class="tac">
-				<input type="submit" value="{!! nl2br(trans('trp.page.invite.submit')) !!}" class="button next"/>
+				<input type="submit" value="Send Invite" class="blue-button next"/>
+				{{-- <input type="submit" value="{!! nl2br(trans('trp.page.invite.submit')) !!}" class="button next"/> --}}
 			</div>
 
 			<div class="alert alert-success" style="display: none;"></div>

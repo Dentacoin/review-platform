@@ -1,83 +1,62 @@
 @if(empty($user))
 
-	<div class="info-section">
-		<div class="container">
-			<h2 class="gbb">{!! nl2br(trans('trp.page.index.hint')) !!}</h2>
-
-			<div class="info-box flex flex-mobile">
-				<div class="info-icon">
-					<img src="{{ url('img-trp/dentacoin-find-the-best-dentist-icon.png') }}" alt="{{ trans('trp.alt-tags.best-dentist') }}">
-				</div>
-				<div class="info-text">
-					<h3>{!! nl2br(trans('trp.page.index.intro-title-1')) !!}</h3>
-					<p>{!! nl2br(trans('trp.page.index.intro-description-1')) !!}</p>
-				</div>
-			</div>
-			<div class="info-box flex flex-mobile">
-				<div class="info-icon">
-					<img src="{{ url('img-trp/dentacoin-make-your-voice-heard-icon.png') }}" alt="{{ trans('trp.alt-tags.make-voice-heard') }}">
-				</div>
-				<div class="info-text">
-					<h3>{!! nl2br(trans('trp.page.index.intro-title-2')) !!}</h3>
-					<p>{!! nl2br(trans('trp.page.index.intro-description-2')) !!}</p>
-				</div>
-			</div>
-			<div class="info-box flex flex-mobile">
-				<div class="info-icon">
-					<img src="{{ url('img-trp/dentacoin-get-rewarded-icon.png') }}" alt="{{ trans('trp.alt-tags.get-rewarded') }}">
-				</div>
-				<div class="info-text">
-					<h3>{!! nl2br(trans('trp.page.index.intro-title-3')) !!}</h3>
-					<p>{!! nl2br(trans('trp.page.index.intro-description-3')) !!}</p>
-				</div>
-			</div>
-			<div class="tac">
-				<a href="javascript:;" class="button button-sign-up-patient open-dentacoin-gateway patient-register">{!! nl2br(trans('trp.page.index.intro-button')) !!}</a>
-			</div>
-		</div>
-	</div>
-
 	<div class="add-practice">
 		<div class="container">
 			<div class="flex flex-mobile">
 				<div class="col">
 					<div class="practice-image">
-						<img class="pc-practice-img" src="{{ url('img-trp/dentacoin-trusted-reviews-add-practice-icon.png') }}" alt="{{ trans('trp.alt-tags.add-practice') }}">
+						<img 
+							class="pc-practice-img" 
+							src="{{ url('img-trp/dentacoin-trusted-reviews-add-practice-icon.png') }}" 
+							alt="{{ trans('trp.alt-tags.add-practice') }}"
+						/>
+					</div>
+					<div class="mobile-practice-img">
+						<img src="{{ url('img-trp/dentacoin-trusted-reviews-add-practice-icon.png') }}" alt="{{ trans('trp.alt-tags.add-practice') }}"/>
 					</div>
 				</div>
 				<div class="col">
-					<h2>{!! nl2br(trans('trp.page.index.first-rated-dentist.title')) !!}</h2>
-					<div class="mobile-practice-img">
-						<img src="{{ url('img-trp/dentacoin-trusted-reviews-add-practice-icon.png') }}" alt="{{ trans('trp.alt-tags.add-practice') }}">
-					</div>
-					<p class="practice-subtitle">{!! nl2br(trans('trp.page.index.first-rated-dentist.subtitle')) !!}</p>
-					<p>
+					{{-- <h2>{!! nl2br(trans('trp.page.index.first-rated-dentist.title')) !!}</h2> --}}
+					<h2 class="mont">BECOME A TOP-RATED DENTIST</h2>
+					<h4>
+						{!! nl2br(trans('trp.page.index.first-rated-dentist.subtitle')) !!}
+					</h4>
+					<ul>
+						<li><span class="circle"></span>Attract new patients and build relationships of trust</li>
+						<li><span class="circle"></span>Get to the top of search results and reach more patients</li>
+						<li><span class="circle"></span>Learn from patient feedback and achieve excellence</li>
+					</ul>
+					{{-- <p>
 						{!! nl2br(trans('trp.page.index.first-rated-dentist.description')) !!}
-					</p>
+					</p> --}}
 					<div class="tac-tablet">
-						<a href="{{ getLangUrl('welcome-dentist') }}" class="button button-yellow">
-							{!! nl2br(trans('trp.page.index.first-rated-dentist.button')) !!}
+						<a href="{{ getLangUrl('welcome-dentist') }}" class="transparent-white-button">
+							{{-- {!! nl2br(trans('trp.page.index.first-rated-dentist.button')) !!} --}}
+							LIST YOUR PRACTICE
 						</a>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 
-	<div class="front-info">
-		<div class="third">
-			<div class="container">
-				<div class="how-works">
-					<div class="fixed-width">
-						<h2>
-							{!! nl2br(trans('trp.page.index.usp-3-title')) !!}
-						</h2>
-						<p>
-							{!! nl2br(trans('trp.page.index.usp-3-content')) !!}
-						</p>
-					</div>
-				</div>
+	<div class="how-works-section">
+		<div class="container flex">
+			<div class="col">
+				<h2 class="mont">
+					{!! nl2br(trans('trp.page.index.usp-3-title')) !!}
+				</h2>
+				<p>
+					{{-- {!! nl2br(trans('trp.page.index.usp-3-content')) !!} --}}
+
+					Dentacoin Trusted Reviews is the first Blockchain-based platform for dental treatment reviews, developed by the <a href="https://dentacoin.com/" class="text" target="_blank">Dentacoin Foundation</a>. It rewards Patients for sharing their valuable feedback, and Dentists - for actively  improving their dental care services. They both receive Dentacoin (DCN) - the cryptocurrency created especially for the dental industry.
+					<br/><br/>
+					The DCN tokens collected can be stored in a digital wallet, exchanged to other currencies or used to pay for dental services in <a href="https://dentacoin.com/partner-network" class="text" target="_blank">multiple partner venues</a> across the world.
+				</p>
+			</div>
+			
+			<div class="col">
+				<img src="{{ url('img-trp/how-it-works.png') }}"/>
 			</div>
 		</div>
 	</div>

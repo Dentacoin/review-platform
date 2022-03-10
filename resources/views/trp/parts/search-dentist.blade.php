@@ -8,7 +8,14 @@
     @endif
     <div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}"  style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
         @if($dentist->hasimage)
-            <img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getNames(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
+            <img 
+            src="{{ $dentist->getImageUrl(true) }}"
+            alt="{{ trans('trp.alt-tags.reviews-for', [ 
+                'name' => $dentist->getNames(), 
+                'location' => $dentist->getLocation() 
+            ]) }}" 
+            style="display: none !important;"
+            /> 
         @endif
         @if(($for_branch || $main_clinic ) && $dentist->id == $dentist->mainBranchClinic->id)
             <div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
@@ -31,9 +38,7 @@
             <div class="img">
                 <img src="{{ url('img-trp/map-pin.png') }}" width="11" height="14">
             </div>
-            {{ $dentist->city_name ? $dentist->city_name.', ' : '' }}
-            {{ $dentist->state_name ? $dentist->state_name.', ' : '' }} 
-            {{ $dentist->country->name }} 
+            {{ $dentist->getLocation() }}
         </div>
         @if( $time = $dentist->getWorkHoursText() )
             <div class="p">

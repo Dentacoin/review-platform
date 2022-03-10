@@ -2,24 +2,6 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-@font-face {
-  font-family: 'Calibri';
-  src: url("../fonts/Calibri-Bold.woff2") format("woff2"), url("../fonts/Calibri-Bold.woff") format("woff");
-  font-weight: 700;
-  font-style: bold;
-  font-display: swap; }
-@font-face {
-  font-family: 'Calibri';
-  src: url("../fonts/Calibri.woff2") format("woff2"), url("../fonts/Calibri.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap; }
-@font-face {
-  font-family: 'Calibri';
-  src: url("../fonts/Calibri-Light.woff2") format("woff2"), url("../fonts/Calibri-Light.woff") format("woff");
-  font-weight: 300;
-  font-style: bold;
-  font-display: swap; }
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -40,11 +22,14 @@ time, mark, audio, video {
   font-size: inherit;
   font: inherit;
   vertical-align: baseline;
-  font-family: 'Calibri', sans-serif;
+  font-family: 'Lato', sans-serif;
   font-size: 16px;
   line-height: normal;
   background-color: inherit;
   color: black; }
+
+.mont {
+  font-family: 'Montserrat', sans-serif; }
 
 i {
   font-style: italic; }
@@ -90,42 +75,47 @@ html {
 .relative {
   position: relative; }
 
-.h1,
 h1 {
-  font-size: 50px; }
-  @media screen and (max-width: 768px) {
-    .h1,
+  font-size: 45px; }
+  @media screen and (max-width: 998px) {
     h1 {
-      font-size: 30px; } }
-
-.h1 {
-  color: #126585; }
+      font-size: 40px; } }
+  @media screen and (max-width: 768px) {
+    h1 {
+      font-size: 28px; } }
 
 h2 {
-  font-size: 35px;
-  font-weight: 300;
-  color: #38393b;
-  margin-bottom: 30px; }
+  font-size: 32px; }
+  @media screen and (max-width: 1200px) {
+    h2 {
+      font-size: 30px; } }
+  @media screen and (max-width: 998px) {
+    h2 {
+      font-size: 28px; } }
   @media screen and (max-width: 768px) {
     h2 {
       font-size: 24px; } }
 
-.h2 {
-  font-size: 35px;
-  font-weight: 300;
-  color: #126585; }
-  @media screen and (max-width: 768px) {
-    .h2 {
-      font-size: 25px; } }
-
 h3 {
-  font-size: 30px; }
+  font-size: 26px; }
+  @media screen and (max-width: 998px) {
+    h3 {
+      font-size: 24px; } }
   @media screen and (max-width: 768px) {
     h3 {
-      font-size: 18px; } }
+      font-size: 22px; } }
 
 h4 {
+  font-size: 22px; }
+  @media screen and (max-width: 1200px) {
+    h4 {
+      font-size: 19px; } }
+
+h5 {
   font-size: 20px; }
+  @media screen and (max-width: 1200px) {
+    h5 {
+      font-size: 18px; } }
 
 .tac {
   text-align: center; }
@@ -292,7 +282,7 @@ h4 {
   margin-right: auto; }
 
 .container {
-  width: 1170px;
+  width: 1120px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
@@ -303,7 +293,7 @@ h4 {
       width: 980px; } }
   @media screen and (max-width: 998px) {
     .container {
-      width: 760px; } }
+      width: 750px; } }
   @media screen and (max-width: 768px) {
     .container {
       width: 100%;
@@ -446,13 +436,16 @@ h4 {
   .fixed-popup .alert#password-validator, .fixed-popup .alert.ajax-alert,
   .site-content .alert#password-validator,
   .site-content .alert.ajax-alert {
+    border: none;
+    padding: 0px;
+    color: #ff5959;
+    padding-left: 10px;
     margin-bottom: 20px;
-    font-size: 14px;
-    padding: 10px 20px 10px 50px; }
+    font-size: 14px; }
     .fixed-popup .alert#password-validator:before, .fixed-popup .alert.ajax-alert:before,
     .site-content .alert#password-validator:before,
     .site-content .alert.ajax-alert:before {
-      font-size: 20px; }
+      display: none; }
   .fixed-popup .alert#password-validator,
   .site-content .alert#password-validator {
     margin-top: -20px; }
@@ -531,48 +524,109 @@ body.popup-visible {
     background-color: #f7f7f7;
     transition: all 0.3s ease; }
 
-.ratings {
-  margin-top: 20px; }
-  .ratings .stars {
-    width: 74px;
-    height: 14px;
-    display: inline-block;
-    background: url("../img-trp/stars-gray.png") 50% 50% no-repeat;
-    background-size: contain; }
-    .ratings .stars .bar {
-      background: url("../img-trp/stars-blue.png") 0% 50% no-repeat;
-      background-size: cover;
-      height: 14px; }
-  .ratings .rating {
-    font-size: 12px;
-    font-weight: 300; }
-  .ratings.big .stars {
-    width: 186px;
-    height: 35px;
-    background: url("../img-trp/stars-gray-big.png") 50% 50% no-repeat;
-    background-size: contain; }
-    .ratings.big .stars .bar {
-      background: url("../img-trp/stars-blue-big.png") 0% 50% no-repeat;
-      background-size: cover;
-      height: 35px; }
-  .ratings.biggest .stars {
-    width: 230px;
-    height: 43px;
-    background: url("../img-trp/stars-gray-big.png") 50% 50% no-repeat;
-    background-size: contain; }
-    .ratings.biggest .stars .bar {
-      background: url("../img-trp/stars-blue-big.png") 0% 50% no-repeat;
-      background-size: cover;
-      height: 43px; }
-  .ratings.average .stars {
-    width: 132px;
-    height: 25px;
-    background: url("../img-trp/stars-gray-average.png") 50% 50% no-repeat;
-    background-size: contain; }
-    .ratings.average .stars .bar {
-      background: url("../img-trp/stars-blue-average.png") 0% 50% no-repeat;
-      background-size: cover;
-      height: 25px; }
+.blue-button {
+  background-color: #0084d1;
+  border: 2px solid #0084d1;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 14px 43px;
+  display: inline-block;
+  border-radius: 40px;
+  transition: all 0.3s ease; }
+  .blue-button:hover {
+    background-color: white;
+    color: #0084d1;
+    transition: all 0.3s ease; }
+
+.white-button {
+  background-color: white;
+  border: 2px solid #0564c6;
+  color: #0564c6;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 14px 43px;
+  display: inline-block;
+  border-radius: 40px;
+  transition: all 0.3s ease; }
+  .white-button:hover {
+    background-color: #0564c6;
+    color: white;
+    transition: all 0.3s ease; }
+
+.transparent-white-button {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 14px 43px;
+  display: inline-block;
+  border-radius: 40px;
+  transition: all 0.3s ease; }
+  @media screen and (max-width: 998px) {
+    .transparent-white-button {
+      font-size: 18px; } }
+  .transparent-white-button:hover {
+    background-color: white;
+    color: #0564c6;
+    transition: all 0.3s ease; }
+
+.transparent-blue-button {
+  background-color: transparent;
+  border: 2px solid #0564c6;
+  color: #0564c6;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 14px 43px;
+  display: inline-block;
+  border-radius: 40px;
+  transition: all 0.3s ease; }
+  .transparent-blue-button:hover {
+    background-color: #0564c6;
+    color: white;
+    transition: all 0.3s ease; }
+
+.ratings .stars {
+  width: 94px;
+  height: 16px;
+  display: inline-block;
+  background: url("../img-trp/small-stars-empty.png") 50% 50% no-repeat;
+  background-size: contain; }
+  .ratings .stars .bar {
+    background: url("../img-trp/small-stars-full.png") 0% 50% no-repeat;
+    background-size: cover;
+    height: 16px; }
+.ratings .rating {
+  font-size: 12px;
+  font-weight: 300; }
+.ratings.big .stars {
+  width: 186px;
+  height: 35px;
+  background: url("../img-trp/stars-gray-big.png") 50% 50% no-repeat;
+  background-size: contain; }
+  .ratings.big .stars .bar {
+    background: url("../img-trp/stars-blue-big.png") 0% 50% no-repeat;
+    background-size: cover;
+    height: 35px; }
+.ratings.biggest .stars {
+  width: 230px;
+  height: 43px;
+  background: url("../img-trp/stars-gray-big.png") 50% 50% no-repeat;
+  background-size: contain; }
+  .ratings.biggest .stars .bar {
+    background: url("../img-trp/stars-blue-big.png") 0% 50% no-repeat;
+    background-size: cover;
+    height: 43px; }
+.ratings.average .stars {
+  width: 132px;
+  height: 25px;
+  background: url("../img-trp/stars-gray-average.png") 50% 50% no-repeat;
+  background-size: contain; }
+  .ratings.average .stars .bar {
+    background: url("../img-trp/stars-blue-average.png") 0% 50% no-repeat;
+    background-size: cover;
+    height: 25px; }
 
 .input {
   display: block;
@@ -748,17 +802,11 @@ textarea.input {
       margin-bottom: 15px; } }
   .modern-field + .ajax-alert {
     margin-top: -20px; }
-    @media screen and (max-width: 768px) {
-      .modern-field + .ajax-alert {
-        margin-top: -10px; } }
   .modern-field p {
     font-size: 14px;
     font-weight: 300;
     color: #888888;
     padding-left: 10px; }
-    @media screen and (max-width: 998px) {
-      .modern-field p {
-        font-size: 12px; } }
   .modern-field .modern-input,
   .modern-field span,
   .modern-field label {
@@ -782,12 +830,8 @@ textarea.input {
     overflow-x: hidden;
     background-color: white;
     /* Hack to make "rows" attribute apply in Firefox. */ }
-    @media screen and (max-width: 998px) {
-      .modern-field .modern-input {
-        font-size: 14px;
-        height: 45px; } }
     .modern-field .modern-input.has-error {
-      border-color: rgba(255, 0, 0, 0.2); }
+      border-color: #ff5959; }
     .modern-field .modern-input:-webkit-autofill {
       background-color: transparent !important; }
     .modern-field .modern-input.disabled {
@@ -807,7 +851,6 @@ textarea.input {
     transition: width 0.4s ease;
     height: 3px; }
   .modern-field .modern-input + label > span {
-    font-weight: 300;
     margin: 0;
     position: absolute;
     color: #888888;
@@ -818,10 +861,6 @@ textarea.input {
     background-color: white;
     -webkit-transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
     transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease; }
-    @media screen and (max-width: 998px) {
-      .modern-field .modern-input + label > span {
-        font-size: 14px;
-        top: -37px; } }
   .modern-field textarea.modern-input + label > span {
     top: -86px; }
 @keyframes appear {
@@ -831,14 +870,15 @@ textarea.input {
     width: 100%; }
   .modern-field.active .modern-input {
     padding-top: 5px;
-    border-color: #126585; }
+    border-color: #14cab8; }
     .modern-field.active .modern-input.has-error {
       border-color: rgba(255, 0, 0, 0.2); }
   .modern-field.active textarea.modern-input {
     padding-top: 15px; }
   .modern-field.active .modern-input + label > span {
     top: -73px;
-    color: #126585; }
+    color: #0084d1;
+    font-size: 14px; }
     @media screen and (max-width: 998px) {
       .modern-field.active .modern-input + label > span {
         top: -60px; } }
