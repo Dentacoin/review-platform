@@ -1549,7 +1549,7 @@ class VoxService {
                 $answered_arr[] = $i;
             }
 
-            return Response::json( array(
+            return Response::json([
                 'welcome_vox' => $welcome_vox,
                 'related_voxes' => $related_voxes,
                 'suggested_voxes' => $suggested_voxes,
@@ -1568,7 +1568,7 @@ class VoxService {
                 'countries' => ['' => '-'] + Country::with('translations')->get()->pluck('name', 'id')->toArray(),
                 'country_id' => $user->country_id ?? self::getCountryIdByIp() ?? '',
                 'birth_years' => $birth_years,
-            ) );
+            ]);
         } else {
             $seos = PageSeo::find(15);
             $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
@@ -1578,7 +1578,7 @@ class VoxService {
 
             return [
                 'view' => 'vox',
-                'params' => array(
+                'params' => [
                     'welcome_vox' => $welcome_vox,
                     'related_voxes' => $related_voxes,
                     'suggested_voxes' => $suggested_voxes,
@@ -1617,7 +1617,7 @@ class VoxService {
                     'social_description' => $social_description,
                     'testmode' => $testmode,
                     'isAdmin' => $isAdmin,
-                ),
+                ],
             ];
         }
     }

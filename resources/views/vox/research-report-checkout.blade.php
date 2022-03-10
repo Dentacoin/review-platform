@@ -2,6 +2,13 @@
 
 @section('content')
     
+
+    <div class="checkout-container"> <!-- 800px -->
+        <a class="back-home" href="{{ getLangUrl('dental-industry-reports/'.$item->slug) }}">
+            Back
+        </a>
+    </div>
+
     <div class="main-title tac">
         <h1>Your order</h1>
     </div>

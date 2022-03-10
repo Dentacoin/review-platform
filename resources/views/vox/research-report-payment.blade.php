@@ -34,6 +34,7 @@
             <a href="javascript:;" class="invoice blue-text-link">Do you need a company invoice?</a>
         </p>
         <form class="checkout-form company-form" method="post" action="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/payment/'.$order->id.'/') }}">
+            {!! csrf_field() !!}
             <div class="modern-field alert-after">
                 <input type="text" name="company-name" id="company-name" value="{{ $order->company_name ?? '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                 <label for="company-name">
@@ -84,6 +85,15 @@
                 
                 <div class="tac">
                     <a class="blue-button new-style red-button" href="https://www.paypal.com/paypalme/dentacoinbv" target="_blank">Go to paypal</a>
+                </div>
+
+                <div class="alert-crypto flex flex-center">
+                    <div>
+                        <img src="{{ url('new-vox-img/warning-sign.png') }}" width="51"/>
+                    </div>
+                    <div>
+                        Please send an email with the payment proof to <span class="blue-text-link">dentavox@dentacoin.com</span> with a subject: <span class="blue-text-link">Order #{{ $order->id }}</span>
+                    </div>
                 </div>
             </div>
         @else

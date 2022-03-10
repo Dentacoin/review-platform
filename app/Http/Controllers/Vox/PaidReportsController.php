@@ -62,8 +62,6 @@ class PaidReportsController extends FrontController {
 			return redirect( getLangUrl('page-not-found') );
 		}
 
-		$seos = PageSeo::find(37);
-
 		$item = PaidReport::whereTranslationLike('slug', $slug)
 		->where('status', 'published')
 		->first();
@@ -71,6 +69,13 @@ class PaidReportsController extends FrontController {
 		if(empty($item)) {
 			return redirect( getLangUrl('page-not-found') );
 		}
+
+		$seos = PageSeo::find(37);
+
+		$seo_title = str_replace(':title', $item->title, $seos->seo_title);
+        $seo_description = str_replace(':title', $item->title, $seos->seo_description);
+        $social_title = str_replace(':title', $item->title, $seos->social_title);
+        $social_description = str_replace(':title', $item->title, $seos->social_description);
 
 		$view_params = [
 			'item' => $item,
@@ -81,10 +86,10 @@ class PaidReportsController extends FrontController {
             	'paid-reports.js'
             ],
 			'social_image' => $seos->getImageUrl(),
-            'seo_title' => $seos->seo_title,
-            'seo_description' => $seos->seo_description,
-            'social_title' => $seos->social_title,
-            'social_description' => $seos->social_description,
+            'seo_title' => $seo_title,
+            'seo_description' => $seo_description,
+            'social_title' => $social_title,
+            'social_description' => $social_description,
 		];
 
 		if($item->photos->isNotEmpty()) {
@@ -158,7 +163,7 @@ class PaidReportsController extends FrontController {
 					$curl = curl_init();
 					curl_setopt_array($curl, array(
 						CURLOPT_RETURNTRANSFER => 1,
-						CURLOPT_URL => "https://api.coingecko.com/api/v3/coins/".(request('payment-method') == 'ether' ? 'etherium' : request('payment-method')),
+						CURLOPT_URL => "https://api.coingecko.com/api/v3/coins/".(request('payment-method') == 'ether' ? 'ethereum' : request('payment-method')),
 						CURLOPT_SSL_VERIFYPEER => 0
 					));
 					curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -171,7 +176,10 @@ class PaidReportsController extends FrontController {
 					}
 				}
 
-				$only_price = $price ? sprintf('%.0F', $item->price / $price) : $item->price;
+				// dd($price);
+
+				$only_price = $price ? sprintf('%.4F', $item->price / $price) : $item->price;
+				$only_price = $only_price > 1 ? round($only_price) : $only_price;
 				$price_with_currency = (request('payment-method') == 'paypal' ? '$ ' : '' ).$only_price.(request('payment-method') != 'paypal' ? ' '.strtoupper($resp->symbol) : '' );
 
 				if(empty(session('report_order'))) {
