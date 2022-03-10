@@ -108,8 +108,6 @@ class PaidReportsController extends FrontController {
 			return redirect( getLangUrl('page-not-found') );
 		}
 		
-		$seos = PageSeo::find(38);
-		
 		$item = PaidReport::whereTranslationLike('slug', $slug)
 		->where('status', 'published')
 		->first();
@@ -232,12 +230,18 @@ class PaidReportsController extends FrontController {
 			}
 		}
 
+		$seos = PageSeo::find(38);
+		$seo_title = str_replace(':title', $item->title, $seos->seo_title);
+        $seo_description = str_replace(':title', $item->title, $seos->seo_description);
+        $social_title = str_replace(':title', $item->title, $seos->social_title);
+        $social_description = str_replace(':title', $item->title, $seos->social_description);
+
 		return $this->ShowVoxView('research-report-checkout', array(
 			'social_image' => $seos->getImageUrl(),
-            'seo_title' => $seos->seo_title,
-            'seo_description' => $seos->seo_description,
-            'social_title' => $seos->social_title,
-            'social_description' => $seos->social_description,
+            'seo_title' => $seo_title,
+            'seo_description' => $seo_description,
+            'social_title' => $social_title,
+            'social_description' => $social_description,
 			'item' => $item,
 			'order' => $order,
             'css' => [
@@ -306,13 +310,17 @@ class PaidReportsController extends FrontController {
 		}
 
 		$seos = PageSeo::find(39);
+		$seo_title = str_replace(':title', $item->title, $seos->seo_title);
+        $seo_description = str_replace(':title', $item->title, $seos->seo_description);
+        $social_title = str_replace(':title', $item->title, $seos->social_title);
+        $social_description = str_replace(':title', $item->title, $seos->social_description);
 
 		return $this->ShowVoxView('research-report-payment', array(
 			'social_image' => $seos->getImageUrl(),
-            'seo_title' => $seos->seo_title,
-            'seo_description' => $seos->seo_description,
-            'social_title' => $seos->social_title,
-            'social_description' => $seos->social_description,
+            'seo_title' => $seo_title,
+            'seo_description' => $seo_description,
+            'social_title' => $social_title,
+            'social_description' => $social_description,
 			'order' => $order,
 			'item' => $item,
             'countries' => Country::with('translations')->get(),
