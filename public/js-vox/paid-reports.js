@@ -177,4 +177,30 @@ $(document).ready(function(){
         }
     }
 
+    $('[name="invoice"]').change( function() {
+        if($(this).val() == 'yes') {
+            $('.company-european-union-wrapper').removeClass('hide');;
+        } else {
+            $('.company-european-union-wrapper').addClass('hide');
+            $('[name="company-european-union"]').prop('checked', false);
+            $('[name="company-european-union"]').removeAttr('checked');
+            $('[name="company-european-union"]').closest('label').removeClass('active');
+            $('[name="vat"]').prop('checked', false);
+            $('[name="vat"]').removeAttr('checked');
+            $('[name="vat"]').closest('label').removeClass('active');
+            $('.vat-wrapper').addClass('hide');
+        }
+    });
+
+    $('[name="company-european-union"]').change( function() {
+        if($(this).val() == 'yes') {
+            $('.vat-wrapper').removeClass('hide');
+        } else {
+            $('[name="vat"]').prop('checked', false);
+            $('[name="vat"]').removeAttr('checked');
+            $('[name="vat"]').closest('label').removeClass('active');
+            $('.vat-wrapper').addClass('hide');
+        }
+    });
+
 });

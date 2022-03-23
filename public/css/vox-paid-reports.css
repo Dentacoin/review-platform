@@ -1043,6 +1043,10 @@ img {
     min-width: 51px;
     margin-right: 15px; }
 
+.company-european-union-wrapper.hide,
+.vat-wrapper.hide {
+  display: none; }
+
 .footer-expander footer {
   bottom: 0px;
   opacity: 1; }

@@ -25,7 +25,7 @@
                     
                     <div class="tags">
                         @foreach($item->languages as $lang)
-                            <span>English | </span>
+                            <span>{{ App\Models\PaidReport::$langs[$lang] }} | </span>
                         @endforeach
                         <span>{{ date('F Y', $item->launched_at->timestamp) }} | </span>
                         @foreach($item->download_format as $format)

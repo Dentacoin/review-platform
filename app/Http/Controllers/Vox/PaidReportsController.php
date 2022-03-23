@@ -119,6 +119,9 @@ class PaidReportsController extends FrontController {
 		if(Request::isMethod('post')) {
 			$validator = Validator::make(Request::all(), [
                 'name' => array('required', 'min:3'),
+                'invoice' => array('required'),
+                'company-european-union' => array('required_if:invoice,yes'),
+                'vat' => array('required_if:company-european-union,yes'),
                 'email' => array('required', 'email'),
                 'email-confirm' => array('required', 'email', 'same:email'),
                 'payment-method' =>  array('required', 'in:'.implode(',',array_keys(config('payment-methods')))),
@@ -156,6 +159,8 @@ class PaidReportsController extends FrontController {
 					
 				$price = null;
 
+				$itemPrice = request('invoice') && request('company-european-union') && request('vat') ? ($item->price + ($item->price * 0.21)) : $item->price;
+
 				if(request('payment-method') != 'paypal') {
 
 					$curl = curl_init();
@@ -174,9 +179,7 @@ class PaidReportsController extends FrontController {
 					}
 				}
 
-				// dd($price);
-
-				$only_price = $price ? sprintf('%.7F', $item->price / $price) : $item->price;
+				$only_price = $price ? sprintf('%.7F', $itemPrice / $price) : $itemPrice;
 				$only_price = $only_price > 1 ? round($only_price) : $only_price;
 				$price_with_currency = (request('payment-method') == 'paypal' ? '$ ' : '' ).$only_price.(request('payment-method') != 'paypal' ? ' '.strtoupper($resp->symbol) : '' );
 
@@ -195,6 +198,9 @@ class PaidReportsController extends FrontController {
 				$new_order->payment_method = request('payment-method');
 				$new_order->price = $only_price;
 				$new_order->price_with_currency = $price_with_currency;
+				$new_order->invoice = request('invoice') == 'yes' ? 1 : null;
+				$new_order->company_european_union = request('company-european-union') == 'yes' ? 1 : null;
+				$new_order->company_vat = request('vat') == 'yes' ? 1 : null;
 				$new_order->save();
 
 				if(empty(session('report_order'))) {

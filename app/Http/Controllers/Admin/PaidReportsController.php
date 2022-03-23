@@ -11,31 +11,12 @@ use App\Models\PaidReport;
 use App\Helpers\AdminHelper;
 use Carbon\Carbon;
 
-use Validator;
 use Response;
 use Request;
 use Image;
-use Route;
 use Auth;
 
 class PaidReportsController extends AdminController {
-
-    public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
-        parent::__construct($request, $route, $locale);
-
-        $this->statuses = [
-            'draft' => 'Draft',
-            'published' => 'Published',
-        ];
-
-        $this->languages = [
-            'en' => 'English',
-        ];
-
-        $this->formats = [
-            'pdf' => 'PDF',
-        ];
-    }
 
     public function list() {
 
@@ -78,7 +59,7 @@ class PaidReportsController extends AdminController {
 
     	return $this->showView('paid-reports', array(
             'reports' => $reports,
-            'statuses' => $this->statuses,
+            'statuses' => PaidReport::$statuses,
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
@@ -167,9 +148,9 @@ class PaidReportsController extends AdminController {
         }
 
         return $this->showView('paid-reports-form', array(
-	        'statuses' => $this->statuses,
-	        'languages' => $this->languages,
-	        'formats' => $this->formats,
+	        'statuses' => PaidReport::$statuses,
+	        'languages' => PaidReport::$langs,
+	        'formats' => PaidReport::$formats,
         ));
     }
 
@@ -294,9 +275,9 @@ class PaidReportsController extends AdminController {
 
 	        return $this->showView('paid-reports-form', array(
 	            'item' => $item,
-                'statuses' => $this->statuses,
-                'languages' => $this->languages,
-                'formats' => $this->formats,
+                'statuses' => PaidReport::$statuses,
+                'languages' => PaidReport::$langs,
+                'formats' => PaidReport::$formats,
 	        ));
 	    } else {
             return redirect('cms/vox/paid-reports/');

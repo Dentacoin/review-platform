@@ -49,6 +49,84 @@
             </label>
         </div>
 
+        <div class="request-row radios-row alert-after">
+            <div class="target-label">
+                Do you need a company invoice? 
+            </div>
+            <div class="modern-radios">
+                <div class="radio-label">
+                      <label for="invoice-yes" class="{{ $order && $order->invoice ? 'active' : '' }}">
+                        <span class="modern-radio">
+                            <span></span>
+                        </span>
+                        <input class="type-radio" type="radio" name="invoice" id="invoice-yes" value="yes" {!! $order && $order->invoice ? 'checked="checked"' : '' !!}>
+                        Yes
+                      </label>
+                </div>
+                <div class="radio-label">
+                      <label for="invoice-no" class="{{ $order && !$order->invoice ? 'active' : '' }}">
+                        <span class="modern-radio">
+                            <span></span>
+                        </span>
+                        <input class="type-radio" type="radio" name="invoice" id="invoice-no" value="no" {!! $order && !$order->invoice ? 'checked="checked"' : '' !!}>
+                        No						    	
+                      </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="request-row radios-row alert-after company-european-union-wrapper {{ $order && $order->invoice ? '' : 'hide' }}">
+            <div class="target-label">
+                Is your company registered within the European Union?
+            </div>
+            <div class="modern-radios">
+                <div class="radio-label">
+                      <label for="european-union-yes" class="{{ $order && $order->invoice && $order->company_european_union ? 'active' : '' }}">
+                        <span class="modern-radio">
+                            <span></span>
+                        </span>
+                        <input class="type-radio" type="radio" name="company-european-union" id="european-union-yes" value="yes" {!! $order && $order->invoice && $order->company_european_union ? 'checked="checked"' : '' !!}>
+                        Yes
+                      </label>
+                </div>
+                <div class="radio-label">
+                      <label for="european-union-no" class="{{ $order && $order->invoice && !$order->company_european_union ? 'active' : '' }}">
+                        <span class="modern-radio">
+                            <span></span>
+                        </span>
+                        <input class="type-radio" type="radio" name="company-european-union" id="european-union-no" value="no" {!! $order && $order->invoice && !$order->company_european_union ? 'checked="checked"' : '' !!}>
+                        No						    	
+                      </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="request-row radios-row alert-after vat-wrapper {{ $order && $order->invoice && $order->company_european_union ? '' : 'hide' }}">
+            <div class="target-label">
+                Is your company VAT-registered?
+            </div>
+            <div class="modern-radios">
+                <div class="radio-label">
+                      <label for="vat-yes" class="{{ $order && $order->invoice && $order->company_european_union && $order->company_vat ? 'active' : '' }}">
+                        <span class="modern-radio">
+                            <span></span>
+                        </span>
+                        <input class="type-radio" type="radio" name="vat" id="vat-yes" value="yes" {!! $order && $order->invoice && $order->company_european_union && $order->company_vat ? 'checked="checked"' : '' !!}>
+                        Yes
+                      </label>
+                </div>
+                <div class="radio-label">
+                      <label for="vat-no" class="{{ $order && $order->invoice && $order->company_european_union && !$order->company_vat ? 'active' : '' }}">
+                        <span class="modern-radio">
+                            <span></span>
+                        </span>
+                        <input class="type-radio" type="radio" name="vat" id="vat-no" value="no" {!! $order && $order->invoice && $order->company_european_union && !$order->company_vat ? 'checked="checked"' : '' !!}>
+                        No						    	
+                      </label>
+                </div>
+            </div>
+        </div>
+
         <div class="modern-field alert-after">
             <select name="payment-method" id="payment-method" class="modern-input">
                 <option>Select payment method:</option>

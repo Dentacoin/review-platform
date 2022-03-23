@@ -51,6 +51,15 @@
 		                                    {{ $order->name }}
 		                                </td>
 		                                <td>
+											@if($order->invoice)
+												- With invoice<br/>
+											@endif
+											@if($order->company_european_union)
+												- Registered within the European Union <br/>
+											@endif
+											@if($order->company_vat)
+												- VAT-registered <br/>
+											@endif
                                             @if($order->company_name)
 		                                        Company Name: {{ $order->company_name }} <br/>
 		                                        Reg №: {{ $order->company_number }} <br/>
@@ -58,7 +67,11 @@
 		                                        Address: {{ $order->address }} <br/>
 		                                        VAT: {{ $order->vat }} <br/>
                                             @else
-                                                -
+												@if($order->invoice)
+													Missing company details!
+												@else
+													-
+												@endif
                                             @endif
 		                                </td>
 		                                <td>

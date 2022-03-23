@@ -30,10 +30,14 @@
 
     <div class="checkout-container">
         <p class="order-description">
-            Thank you for your interest! Once the payment is received, you will get the report via email: <b>{{ $order->email }}</b> within 2 working days.
-            <a href="javascript:;" class="invoice blue-text-link">Do you need a company invoice?</a>
+            @if(!$order->invoice)
+                Thank you for your interest! Once the payment is received, you will get the report via email: <b>{{ $order->email }}</b> within 2 working days.
+                <a href="javascript:;" class="invoice blue-text-link">Do you need a company invoice?</a>
+            @else
+                Please fill out your company invoice details and proceed with the payment. Once the payment is received, you will get the report via email: <b>{{ $order->email }}</b> within 2 working days.
+            @endif
         </p>
-        <form class="checkout-form company-form" method="post" action="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/payment/'.$order->id.'/') }}">
+        <form class="checkout-form company-form" method="post" action="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/payment/'.$order->id.'/') }}" {!! $order->invoice ? 'style="display:block;"' : '' !!}>
             {!! csrf_field() !!}
             <div class="modern-field alert-after">
                 <input type="text" name="company-name" id="company-name" value="{{ $order->company_name ?? '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
@@ -65,12 +69,15 @@
                     <span>Address:</span>
                 </label>
             </div>
-            <div class="modern-field alert-after">
-                <input type="text" name="vat" id="vat" value="{{ $order->vat ?? '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
-                <label for="vat">
-                    <span>VAT:</span>
-                </label>
-            </div>
+            @if($order->invoice && $order->company_european_union && !$order->company_vat)
+            @else
+                <div class="modern-field alert-after">
+                    <input type="text" name="vat" id="vat" value="{{ $order->vat ?? '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                    <label for="vat">
+                        <span>VAT:</span>
+                    </label>
+                </div>
+            @endif
             <div class="tac">
                 <button type="submit" href="javascript:;" class="blue-button new-style red-button">Submit</button>
             </div>

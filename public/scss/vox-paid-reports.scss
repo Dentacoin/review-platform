@@ -1513,6 +1513,11 @@ img {
     }
 }
 
+.company-european-union-wrapper.hide,
+.vat-wrapper.hide {
+    display: none;
+}
+
 .footer-expander {
     footer {
         bottom: 0px;

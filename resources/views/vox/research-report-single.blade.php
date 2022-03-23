@@ -21,7 +21,7 @@
                         @foreach($item->languages as $lang)
                             <div class="tag">
                                 <img src="{{ url('new-vox-img/en.svg') }}" width="36" height="36"/>
-                                English
+                                {{ App\Models\PaidReport::$langs[$lang] }}
                             </div>
                         @endforeach
                     @endif
