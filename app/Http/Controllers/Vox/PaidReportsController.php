@@ -72,10 +72,10 @@ class PaidReportsController extends FrontController {
 
 		$seos = PageSeo::find(37);
 
-		$seo_title = str_replace(':title', $item->title, $seos->seo_title);
-        $seo_description = str_replace(':title', $item->title, $seos->seo_description);
-        $social_title = str_replace(':title', $item->title, $seos->social_title);
-        $social_description = str_replace(':title', $item->title, $seos->social_description);
+		$seo_title = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->seo_title);
+        $seo_description = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->seo_description);
+        $social_title = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->social_title);
+        $social_description = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->social_description);
 
 		$view_params = [
 			'item' => $item,
@@ -176,7 +176,7 @@ class PaidReportsController extends FrontController {
 
 				// dd($price);
 
-				$only_price = $price ? sprintf('%.4F', $item->price / $price) : $item->price;
+				$only_price = $price ? sprintf('%.7F', $item->price / $price) : $item->price;
 				$only_price = $only_price > 1 ? round($only_price) : $only_price;
 				$price_with_currency = (request('payment-method') == 'paypal' ? '$ ' : '' ).$only_price.(request('payment-method') != 'paypal' ? ' '.strtoupper($resp->symbol) : '' );
 
@@ -231,10 +231,10 @@ class PaidReportsController extends FrontController {
 		}
 
 		$seos = PageSeo::find(38);
-		$seo_title = str_replace(':title', $item->title, $seos->seo_title);
-        $seo_description = str_replace(':title', $item->title, $seos->seo_description);
-        $social_title = str_replace(':title', $item->title, $seos->social_title);
-        $social_description = str_replace(':title', $item->title, $seos->social_description);
+		$seo_title = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->seo_title);
+        $seo_description = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->seo_description);
+        $social_title = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->social_title);
+        $social_description = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->social_description);
 
 		return $this->ShowVoxView('research-report-checkout', array(
 			'social_image' => $seos->getImageUrl(),
@@ -310,10 +310,10 @@ class PaidReportsController extends FrontController {
 		}
 
 		$seos = PageSeo::find(39);
-		$seo_title = str_replace(':title', $item->title, $seos->seo_title);
-        $seo_description = str_replace(':title', $item->title, $seos->seo_description);
-        $social_title = str_replace(':title', $item->title, $seos->social_title);
-        $social_description = str_replace(':title', $item->title, $seos->social_description);
+		$seo_title = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->seo_title);
+        $seo_description = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->seo_description);
+        $social_title = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->social_title);
+        $social_description = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->social_description);
 
 		return $this->ShowVoxView('research-report-payment', array(
 			'social_image' => $seos->getImageUrl(),

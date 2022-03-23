@@ -2080,8 +2080,17 @@ class VoxService {
                         } else {
 
                             UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->delete();
+                            
+                            $ban_info = 'Vox answers:';
+
+                            foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->orderBy('id', 'desc')->take(10)->get() as $va) {
+                                $ban_info .= ' <br/>Q ID: '.$va->question_id.'; Answer: '.$va->answer.'; Created: '.$va->created_at.';';
+                            }
                                 
                             $ban = $user->banUser('vox', 'mistakes', $vox->id, $question->id, $a);
+                            $new_ban = $ban['ban'];
+                            $new_ban->ban_info = $ban_info;
+                            $new_ban->save();
 
                             $ret['ban'] = true;
                             $ret['ban_duration'] = $ban['days'];

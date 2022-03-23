@@ -43,7 +43,7 @@
                 <div class="main-inner">
                     <h4>{{ $item->main_title }}</h4>
                     <h4 class="gray-title">{{ $item->title }}</h4>
-                    <p class="date">Pub Month: July 2021</p>
+                    <p class="date">Pub Month: {{ date('F Y', $item->launched_at->timestamp) }}</p>
                     
                     @if(!empty($item->checklists))
                         <div class="main-checklists">

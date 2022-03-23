@@ -714,16 +714,17 @@ UNCONFIRMED TRANSACTIONS
             $alerts = [];
 
             foreach($platformAddresses as $platformAddress) {
-                $alerts[] = [
-                    'currency' => 'DCN',
-                    'address' => $platformAddress['address'],
-                    'url' => 'https://api.etherscan.io//api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => $platformAddress['limit_dcn']
-                ];
+                // $alerts[] = [
+                //     'currency' => 'DCN',
+                //     'address' => $platformAddress['address'],
+                //     'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
+                //     'limit' => $platformAddress['limit_dcn']
+                // ];
+
                 $alerts[] = [
                     'currency' => 'ETH',
                     'address' => $platformAddress['address'],
-                    'url' => 'https://api'.($platformAddress['optimism'] ? '-optimism' : '').'.etherscan.io//api?module=account&action=balance&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'url' => 'https://api'.($platformAddress['optimism'] ? '-optimistic' : '').'.etherscan.io/api?module=account&action=balance&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => $platformAddress['limit_eth']
                 ];
             }
@@ -2137,7 +2138,7 @@ UNCONFIRMED TRANSACTIONS
 
             echo 'Remove pdf and png stats files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('10:00');
+        })->cron('00 09,19 * * *');
 
 
         $schedule->call(function () {
