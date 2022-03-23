@@ -229,9 +229,10 @@ $phone: "screen and (max-width: 768px)";
 	    	}
 
 	    	@media #{$tablet} {
-	    		position: static;
-	    		top: auto;
+	    		top: -162px;
 	    		max-width: 370px;
+				left: 50%;
+				transform: translateX(-50%);
 	    	}
 
 	    	@media #{$phone} {
@@ -271,6 +272,10 @@ $phone: "screen and (max-width: 768px)";
 		@media #{$pc} {
 			padding-top: 30px;
 			margin-bottom: 20px;
+		}
+		
+		@media #{$tablet} {
+			padding-top: 180px;
 		}
 
 		@media #{$phone} {

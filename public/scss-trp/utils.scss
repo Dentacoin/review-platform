@@ -9,31 +9,40 @@ $phone: "screen and (max-width: 768px)";
    License: none (public domain)
 */
 
-// @font-face {
-//     font-family: 'Calibri';
-//     src: url('../fonts/Calibri-Bold.woff2') format('woff2'),
-//          url('../fonts/Calibri-Bold.woff') format('woff');
-//     font-weight: 700;
-//     font-style: bold;
-//     font-display: swap;
-// }
-// @font-face {
-//     font-family: 'Calibri';
-//     src: url('../fonts/Calibri.woff2') format('woff2'),
-//          url('../fonts/Calibri.woff') format('woff');
-//     font-weight: 400;
-//     font-style: normal;
-//     font-display: swap;
-// }
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/Lato-Black.woff2') format('woff2'),
+         url('../fonts/Lato-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: bold;
+    font-display: swap;
+}
 
-// @font-face {
-//     font-family: 'Calibri';
-//     src: url('../fonts/Calibri-Light.woff2') format('woff2'),
-//          url('../fonts/Calibri-Light.woff') format('woff');
-//     font-weight: 300;
-//     font-style: bold;
-//     font-display: swap;
-// }
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/Lato-Bold.woff2') format('woff2'),
+         url('../fonts/Lato-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: bold;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/Lato-Regular.woff2') format('woff2'),
+         url('../fonts/Lato-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/Lato-Light.woff2') format('woff2'),
+         url('../fonts/Lato-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: bold;
+    font-display: swap;
+}
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -129,6 +138,26 @@ h1 {
 	@media #{$phone} {
 		font-size: 28px;
     }
+
+	.subtitle {
+		text-align: center;
+		color: white;
+		background-color: #0084d1;
+		display: inline-block;
+		font-size: 45px;
+		font-weight: 800;
+		padding: 5px 33px 8px;
+		border-radius: 11px;
+		margin-top: 10px;
+
+		@media #{$tablet} {
+			font-size: 40px;
+		}
+	
+		@media #{$phone} {
+			font-size: 28px;
+		}
+	}
 }
 
 h2 {
@@ -697,6 +726,7 @@ body.popup-visible {
     display: inline-block;
     border-radius: 40px;
 	transition: all 0.3s ease;
+	cursor: pointer;
 
 	&:hover {
 		background-color: white;
@@ -715,6 +745,7 @@ body.popup-visible {
     display: inline-block;
     border-radius: 40px;
 	transition: all 0.3s ease;
+	cursor: pointer;
 
 	&:hover {
 		background-color: $title_color;
@@ -733,6 +764,7 @@ body.popup-visible {
     display: inline-block;
     border-radius: 40px;
 	transition: all 0.3s ease;
+	cursor: pointer;
 
 	@media #{$tablet} {
 		font-size: 18px;
@@ -755,6 +787,11 @@ body.popup-visible {
     display: inline-block;
     border-radius: 40px;
 	transition: all 0.3s ease;
+	cursor: pointer;
+
+	@media #{$tablet} {
+		font-size: 18px;
+	}
 
 	&:hover {
 		background-color: $title_color;
@@ -1016,6 +1053,32 @@ textarea.input {
 	    }
 	}
 
+	&.active {
+		.checkbox-square {
+			font-size: 16px;
+    		line-height: 14px;
+			color: #0084d1;
+
+			@media #{$phone} {
+				line-height: 13px;
+			}
+		}
+	}
+
+	&.agree-label {
+		a {
+			color: black;
+			font-size: 16px;
+			color: #126585;
+		}
+	}
+
+	&.disabled {
+		.checkbox-square {
+			background-color: #eeeeee;
+		}
+	}
+
 	input {
 		display: none;
 	}
@@ -1023,13 +1086,12 @@ textarea.input {
 	.checkbox-square {
 		width: 17px;
 		height: 17px;
-		border: 1px solid #126585;
+		border: 1px solid #cac9cd;
 		display: inline-block;
 		background-color: white;
-		color: #126585;
+		color: black;
 		line-height: 26px;
 		text-align: center;
-		border-radius: 20%;
 		font-weight: bold;
 		margin-right: 5px;
 		font-size: 0px;
@@ -1041,31 +1103,12 @@ textarea.input {
 		}
 	}
 
-	&.active {
-		.checkbox-square {
-			font-size: 13px;
-			line-height: 18px;
-
-			@media #{$phone} {
-				line-height: 13px;
-			}
-		}
-	}
-
 	a {
 		color: #38a2e5;
 		font-size: 14px;
 
 		&:hover {
 			text-decoration: underline;
-		}
-	}
-
-	&.agree-label {
-		a {
-			color: black;
-			font-size: 16px;
-			color: #126585;
 		}
 	}
 }

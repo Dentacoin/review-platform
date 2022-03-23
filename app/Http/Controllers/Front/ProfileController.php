@@ -828,16 +828,23 @@ class ProfileController extends FrontController {
                     }
 
                     $newuser = new User;
-                    $newuser->name = Request::input('name');
                     $newuser->email = Request::input('email');
                     $newuser->status = !empty($this->user) ? 'added_by_clinic_unclaimed' : 'added_by_clinic_new';
-                    $newuser->country_id = $current_user->country_id;
-                    $newuser->address = $current_user->address;
                 } else {
                     $newuser = new User;
-                    $newuser->name = Request::input('name');
                     $newuser->status = 'dentist_no_email';
                 }
+                
+                $newuser->name = Request::input('name');
+                $newuser->country_id = $current_user->country_id;
+                $newuser->address = $current_user->address;
+                $newuser->zip = $current_user->zip;
+                $newuser->state_name = $current_user->state_name;
+                $newuser->state_slug = $current_user->state_slug;
+                $newuser->city_name = $current_user->city_name;
+                $newuser->lat = $current_user->lat;
+                $newuser->lon = $current_user->lon;
+                $newuser->custom_lat_lon = $current_user->custom_lat_lon;
 
                 $newuser->platform = 'trp';                    
                 $newuser->gdpr_privacy = true;

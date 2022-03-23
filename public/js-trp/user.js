@@ -92,7 +92,7 @@ $(document).ready(function(){
             $('#profile-map').attr('inited', 'done');
             $('.info-address').hide();
 
-            prepareMapFucntion( function() {
+            prepareMapFunction( function() {
                     
                 var profile_map = new google.maps.Map(document.getElementById('profile-map'), {
                     center: {

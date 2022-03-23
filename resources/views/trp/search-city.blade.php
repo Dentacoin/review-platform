@@ -2,51 +2,42 @@
 
 @section('content')
 
-	<div class="page-c">
-		<div class="black-overflow" style="display: none;"></div>
-
-		<div class="search-gradient-wave green-gradient">
-			<div class="home-search-form">
-			    @include('trp.parts.search-form')			
-			</div>
-	    	<h1 class="white-title">
-	    		@if($all_cities->isNotEmpty())
-		    		{!! nl2br(trans('trp.page.search.city-title', [
-			            'country' => $all_cities->first()->state_name.', '.$country->name,
-			        ])) !!}
-			    @endif
-	    	</h1>
+	<div class="search-title">
+		<div class="container">
+			<h1 class="mont">Find The Best Dental Care in
+				<span class="mont subtitle">{{ $state_slug ? $stateName.', ' : '' }}{{ $country->name }}</span>
+			</h1>
 		</div>
+	</div>
 
-	    <div class="countries-wrapper container">
-		    <div class="countries">
-		    	@if(count($cities_name))
-			    	<div class="flex">
-			    		<div class="col">
-					    	@foreach($cities_name as $key => $cuser)
-					    		@if(!is_object($cuser))
-					    			<span class="letter">{{ $cuser }}</span>
-					    		@else
-					    			<a href="{{ getLangUrl( str_replace([' ', "'"], ['-', ''], 'dentists/'.strtolower($cuser->city_name).'-'.($cuser->state_slug == 'ega' ? '' : $cuser->state_slug.'-').$cuser->country->slug)) }}">{{ $cuser->city_name }}</a>
-					    		@endif
-					    		@if( $total_rows > 8 && in_array($key, $breakpoints) && !$loop->last)
-					    			</div>
-					    			<div class="col">
-					    		@endif
+	<div class="country-all-practices">
+		<div class="container flex flex-center flex-mobile space-between">
+			<a href="{{ getLangUrl('dentists/'.$country->slug) }}" class="show-all">SHOW ALL PRACTICES</a>
+			<p class="country-dentists">({{ $countryCount }} results)</p>
+		</div>
+	</div>
 
-					    	@endforeach
-					    </div>
-				    </div>
-			    @else
-		    		<div class="alert alert-info">
-		    			{!! nl2br(trans('trp.page.search.no-results-dentist',[
-		    				'link' => '<a href="'.getLangUrl('dentist-listings-by-country').'">',
-		    				'endlink' => '</a>',
-		    			])) !!}
-		    		</div>
-		    		<br/>
-			    @endif
-		    </div>
+	<div class="countries-wrapper cities-wrapper">
+		<div class="container">
+			@foreach($cities as $letter => $city)
+				<div class="letters-country-section" letter="{{ $letter }}">
+					<p class="letter">{{ $letter }}</p>
+
+					<div class="flex flex-mobile">
+						@foreach($city as $c)
+							<div class="country">
+								<a 
+									class="country-button" 
+									href="{{ getLangUrl( str_replace([' ', "'"], ['-', ''], 'dentists/'.strtolower($c['city_name']).'-'.($c['state_slug'] == 'ega' ? '' : $c['state_slug'].'-').$country->slug)) }}" 
+								>
+									{{ $c['city_name'] }}
+									<span>({{ $c['cnt'] }} results)</span>
+								</a>
+							</div>
+						@endforeach
+					</div>
+				</div>
+			@endforeach
 		</div>
 	</div>
 

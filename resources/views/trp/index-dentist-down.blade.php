@@ -4,9 +4,9 @@
 			<div class="col tac">
 				<img src="{{ url('img-trp/attract-new-patients.svg') }}" alt="{{ trans('trp.alt-tags.attract-new-patients') }}">
 				<div class="info-padding">
-					<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-title')) !!}</h3>
+					<h4>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-title')) !!}</h4>
 					<p>
-						Follow the blockchain trend and get noticed by digital natives who care about their dental health.
+						Follow the blockchain trend and get noticed by digital natives who care about their oral health.
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-1-description')) !!} --}}
 					</p>
 				</div>
@@ -14,26 +14,26 @@
 			<div class="col tac">
 				<img src="{{ url('img-trp/stimulate-feedback.svg') }}" alt="{{ trans('trp.alt-tags.more-reviews') }}">   
 				<div class="info-padding"> 			
-					<h3>
+					<h4>
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-2-title')) !!} --}}
 						Stimulate feedback
-					</h3>
+					</h4>
 					<p>
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-2-description')) !!} --}}
-						Reward your patients for their honest input with motivating DCN incentives at no cost for you.
+						Reward your patients for their honest input with DCN incentives at no cost for you.
 					</p>
 				</div>
 			</div>
 			<div class="col tac">
 				<img src="{{ url('img-trp/rank-higher-google.svg') }}" alt="{{ trans('trp.alt-tags.better-google-ranking') }}">
 				<div class="info-padding">
-					<h3>
+					<h4>
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-3-title')) !!} --}}
 						Rank higher on Google
-					</h3>
+					</h4>
 					<p>
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-3-description')) !!} --}}
-						Boost your online reputation and climb to the top of search results with our SEO-optimized platform.
+						Climb to the top of search results with our SEO-optimized patient review platform.
 					</p>
 				</div>
 				<a href="javascript:;" class="magnet-popup" id="open-magnet" data-url="{{ getLangUrl('lead-magnet-session') }}">
@@ -44,10 +44,10 @@
 			<div class="col tac">
 				<img src="{{ url('img-trp/access-all-apps.svg') }}" alt="{{ trans('trp.alt-tags.better-online-reputation') }}">
 				<div class="info-padding">
-					<h3>
+					<h4>
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-4-title')) !!} --}}
 						Access All Apps
-					</h3>
+					</h4>
 					<p>
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-4-description')) !!} --}}
 						By creating your Trusted Reviews profile, you get immediate access to all Dentacoin Apps.
@@ -130,7 +130,7 @@
 						'link' => '<a href="https://wallet.dentacoin.com/" target="_blank">',
 						'endlink' => '</a>',
 					])) !!} --}}
-					Embed Trusted Reviews widget on your website or Facebook page.
+					Embed Trusted Reviews widget on your website.
     			</p>
     		</div>
 			<a href="javascript::" class="blue-button button-sign-up-dentist open-dentacoin-gateway dentist-register">

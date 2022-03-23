@@ -61,7 +61,24 @@ class YouTubeController extends FrontController {
      * recover token from admin for youtube video reviews
      */
     public function test() {
+        // $users = User::where('status', 'dentist_no_email')->whereNull('country_id')->get();
+        
+        // foreach($users as $user) {
+        //     if($user->invitor) {
 
+        //         $user->country_id = $user->invitor->country_id;
+        //         $user->city_id = $user->invitor->city_id;
+        //         $user->zip = $user->invitor->zip;
+        //         $user->state_name = $user->invitor->state_name;
+        //         $user->state_slug = $user->invitor->state_slug;
+        //         $user->city_name = $user->invitor->city_name;
+        //         $user->address = $user->invitor->address;
+        //         $user->lat = $user->invitor->lat;
+        //         $user->lon = $user->invitor->lon;
+        //         $user->custom_lat_lon = $user->invitor->custom_lat_lon;
+        //         $user->save();
+        //     }
+        // }
         if(!empty($this->admin)) {
 
             $client = new \Google_Client();

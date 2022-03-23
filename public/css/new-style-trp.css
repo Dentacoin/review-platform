@@ -2,6 +2,30 @@
    v2.0 | 20110126
    License: none (public domain)
 */
+@font-face {
+  font-family: 'Lato';
+  src: url("../fonts/Lato-Black.woff2") format("woff2"), url("../fonts/Lato-Black.woff") format("woff");
+  font-weight: 900;
+  font-style: bold;
+  font-display: swap; }
+@font-face {
+  font-family: 'Lato';
+  src: url("../fonts/Lato-Bold.woff2") format("woff2"), url("../fonts/Lato-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: bold;
+  font-display: swap; }
+@font-face {
+  font-family: 'Lato';
+  src: url("../fonts/Lato-Regular.woff2") format("woff2"), url("../fonts/Lato-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; }
+@font-face {
+  font-family: 'Lato';
+  src: url("../fonts/Lato-Light.woff2") format("woff2"), url("../fonts/Lato-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: bold;
+  font-display: swap; }
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -83,6 +107,22 @@ h1 {
   @media screen and (max-width: 768px) {
     h1 {
       font-size: 28px; } }
+  h1 .subtitle {
+    text-align: center;
+    color: white;
+    background-color: #0084d1;
+    display: inline-block;
+    font-size: 45px;
+    font-weight: 800;
+    padding: 5px 33px 8px;
+    border-radius: 11px;
+    margin-top: 10px; }
+    @media screen and (max-width: 998px) {
+      h1 .subtitle {
+        font-size: 40px; } }
+    @media screen and (max-width: 768px) {
+      h1 .subtitle {
+        font-size: 28px; } }
 
 h2 {
   font-size: 32px; }
@@ -533,7 +573,8 @@ body.popup-visible {
   padding: 14px 43px;
   display: inline-block;
   border-radius: 40px;
-  transition: all 0.3s ease; }
+  transition: all 0.3s ease;
+  cursor: pointer; }
   .blue-button:hover {
     background-color: white;
     color: #0084d1;
@@ -548,7 +589,8 @@ body.popup-visible {
   padding: 14px 43px;
   display: inline-block;
   border-radius: 40px;
-  transition: all 0.3s ease; }
+  transition: all 0.3s ease;
+  cursor: pointer; }
   .white-button:hover {
     background-color: #0564c6;
     color: white;
@@ -563,7 +605,8 @@ body.popup-visible {
   padding: 14px 43px;
   display: inline-block;
   border-radius: 40px;
-  transition: all 0.3s ease; }
+  transition: all 0.3s ease;
+  cursor: pointer; }
   @media screen and (max-width: 998px) {
     .transparent-white-button {
       font-size: 18px; } }
@@ -581,7 +624,11 @@ body.popup-visible {
   padding: 14px 43px;
   display: inline-block;
   border-radius: 40px;
-  transition: all 0.3s ease; }
+  transition: all 0.3s ease;
+  cursor: pointer; }
+  @media screen and (max-width: 998px) {
+    .transparent-blue-button {
+      font-size: 18px; } }
   .transparent-blue-button:hover {
     background-color: #0564c6;
     color: white;
@@ -758,18 +805,30 @@ textarea.input {
   cursor: pointer; }
   .checkbox-label.has-error i {
     color: rgba(255, 0, 0, 0.6); }
+  .checkbox-label.active .checkbox-square {
+    font-size: 16px;
+    line-height: 14px;
+    color: #0084d1; }
+    @media screen and (max-width: 768px) {
+      .checkbox-label.active .checkbox-square {
+        line-height: 13px; } }
+  .checkbox-label.agree-label a {
+    color: black;
+    font-size: 16px;
+    color: #126585; }
+  .checkbox-label.disabled .checkbox-square {
+    background-color: #eeeeee; }
   .checkbox-label input {
     display: none; }
   .checkbox-label .checkbox-square {
     width: 17px;
     height: 17px;
-    border: 1px solid #126585;
+    border: 1px solid #cac9cd;
     display: inline-block;
     background-color: white;
-    color: #126585;
+    color: black;
     line-height: 26px;
     text-align: center;
-    border-radius: 20%;
     font-weight: bold;
     margin-right: 5px;
     font-size: 0px; }
@@ -778,21 +837,11 @@ textarea.input {
         width: 14px;
         height: 14px;
         line-height: 23px; } }
-  .checkbox-label.active .checkbox-square {
-    font-size: 13px;
-    line-height: 18px; }
-    @media screen and (max-width: 768px) {
-      .checkbox-label.active .checkbox-square {
-        line-height: 13px; } }
   .checkbox-label a {
     color: #38a2e5;
     font-size: 14px; }
     .checkbox-label a:hover {
       text-decoration: underline; }
-  .checkbox-label.agree-label a {
-    color: black;
-    font-size: 16px;
-    color: #126585; }
 
 .modern-field {
   margin-bottom: 25px;
@@ -1083,28 +1132,9 @@ header {
       cursor: pointer; }
     header .header-info .transparent-blue-button {
       font-size: 18px;
-      padding: 7px 16px;
+      padding: 8px 16px;
       font-weight: normal;
       margin-right: 3px; }
-    header .header-info .header-buttons-wrapper .header-text-link {
-      font-size: 18px;
-      color: #555555;
-      padding: 5px 9px;
-      transition: all 0.3s ease; }
-      header .header-info .header-buttons-wrapper .header-text-link:first-child {
-        position: relative; }
-        header .header-info .header-buttons-wrapper .header-text-link:first-child::after {
-          content: '';
-          position: absolute;
-          right: 0px;
-          top: 55%;
-          transform: translateY(-50%);
-          width: 2px;
-          height: 16px;
-          background-color: #555555; }
-      header .header-info .header-buttons-wrapper .header-text-link:hover {
-        color: #0564c6;
-        transition: all 0.3s ease; }
     header .header-info .button-dentists {
       color: white;
       border: 1px solid white;
@@ -1179,6 +1209,51 @@ header {
         display: block; } }
     header .mobile-menu img {
       display: block; }
+  header .header-buttons-wrapper .header-text-link {
+    font-size: 18px;
+    color: #555555;
+    padding: 5px 9px;
+    transition: all 0.3s ease; }
+    header .header-buttons-wrapper .header-text-link:first-child {
+      position: relative; }
+      header .header-buttons-wrapper .header-text-link:first-child::after {
+        content: '';
+        position: absolute;
+        right: 0px;
+        top: 55%;
+        transform: translateY(-50%);
+        width: 2px;
+        height: 16px;
+        background-color: #555555; }
+    header .header-buttons-wrapper .header-text-link:hover {
+      color: #0564c6;
+      transition: all 0.3s ease; }
+  header .menu-primary-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: 10;
+    background-color: white;
+    text-align: center;
+    padding: 70px 20px 20px; }
+    header .menu-primary-container.active {
+      display: block; }
+    header .menu-primary-container .close-menu {
+      max-width: 20px;
+      display: block;
+      position: absolute;
+      z-index: 100;
+      right: 28px;
+      top: 19px; }
+      header .menu-primary-container .close-menu img {
+        width: 20px; }
+  @media screen and (max-width: 768px) {
+    header .transparent-blue-button {
+      margin-bottom: 20px;
+      padding: 8px 20px; } }
 
 body.logged-in .home-search-form {
   top: 160px; }
@@ -1470,12 +1545,10 @@ footer {
       @media screen and (max-width: 998px) {
         footer .footer-logo p {
           font-size: 15px; } }
-  footer .footer-text {
-    flex: 2; }
-    @media screen and (max-width: 768px) {
-      footer .footer-text {
-        order: 2;
-        width: 100%; } }
+  @media screen and (max-width: 768px) {
+    footer .footer-text {
+      order: 2;
+      width: 100%; } }
   footer .footer-menu {
     margin-bottom: 20px;
     margin-top: 6px; }
@@ -1489,8 +1562,8 @@ footer {
     footer .footer-menu a {
       font-size: 16px;
       font-weight: 600;
-      padding-right: 20px;
-      padding-left: 18px;
+      padding-right: 12px;
+      padding-left: 8px;
       border-right: 1px solid white;
       color: white;
       transition: all 0.3s ease; }

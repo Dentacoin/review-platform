@@ -245,7 +245,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         });
     }
     public function reviews_in() {
-        return $this->reviews_in_dentist->merge($this->reviews_in_clinic)
+        return $this->reviews_in_dentist
+        ->merge($this->reviews_in_clinic)
         ->sortByDesc(function ($review, $key) {
             if($review->verified) {
                 return 1000000 + $review->id;

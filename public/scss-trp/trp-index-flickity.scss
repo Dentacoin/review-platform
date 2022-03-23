@@ -17,22 +17,43 @@ $phone: "screen and (max-width: 768px)";
 		margin-top: 45px;
 	}
 
-	.slider-right {
-		background: url(../img-trp/slider-arrow-right-active.svg) 50% 50% no-repeat;
+	.slider-left {
+		background: url(../img-trp/slider-arrow-left-inactive.svg) 50% 50% no-repeat;
 		width: 50px;
     	height: 50px;
+
+		@media #{$tablet} {
+			width: 40px;
+			height: 40px;
+			margin-bottom: -40px;
+		}
 
 		@media #{$phone} {
 			display: none;
 		}
+
+		&.active {
+			background-image: url(../img-trp/slider-arrow-left-active.svg);
+		}
 	}
-	.slider-left {
-		background: url(../img-trp/slider-arrow-left-active.svg) 50% 50% no-repeat;
+
+	.slider-right {
+		background: url(../img-trp/slider-arrow-right-inactive.svg) 50% 50% no-repeat;
 		width: 50px;
     	height: 50px;
 
+		@media #{$tablet} {
+			width: 40px;
+			height: 40px;
+			margin-bottom: -40px;
+		}
+
 		@media #{$phone} {
 			display: none;
+		}
+
+		&.active {
+			background-image: url(../img-trp/slider-arrow-right-active.svg);
 		}
 	}
 
@@ -80,23 +101,22 @@ $phone: "screen and (max-width: 768px)";
 		.slider-wrapper {
 			display: flex;
 			flex-direction: column;
-			max-width: 355px;
+			width: 348px;
 			padding: 0px;
 			margin: 0px 11px;
 			float: left;
 
 			@media #{$pc} {
-				max-width: 308px;
+				width: 301px;
 			}
 
 			@media #{$tablet} {
-				max-width: 353px;
+				width: 348px;
 			}
 
 			@media #{$phone} {
-				max-width: 320px;
-				margin-left: 0px;
-				margin-right: 10px;
+				width: 320px;
+				margin: 0px 5px;
 			}
 
 			&:hover {
@@ -152,6 +172,10 @@ $phone: "screen and (max-width: 768px)";
 						font-size: 15px;
 						font-weight: bold;
 
+						@media #{$pc} {
+							width: 180px;
+						}
+
 						@media #{$phone} {
 							width: 195px;
 						}
@@ -176,6 +200,7 @@ $phone: "screen and (max-width: 768px)";
 				}
 
 				.slider-container {
+					min-height: 230px;
 					padding: 30px;
 					padding-top: 56px;
 					padding-bottom: 20px;
@@ -201,6 +226,10 @@ $phone: "screen and (max-width: 768px)";
 						font-size: 20px;
 						font-weight: 900;
 						color: #332255;
+
+						@media #{$pc} {
+							font-size: 18px;
+						}
 					}
 
 					.p {
@@ -228,6 +257,8 @@ $phone: "screen and (max-width: 768px)";
 					.review-content {
 						font-size: 15px;
 						color: #555555;
+						height: 40px;
+						overflow: hidden;
 					}
 				}
 			}

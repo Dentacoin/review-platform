@@ -27,109 +27,14 @@ class IndexController extends FrontController {
      * Index page view for not logged users and for patients
      */
 	public function home($locale=null) {
-		if(!empty($this->user) && $this->user->isBanned('trp')) {
-			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
-		}
-
-		if(!empty($this->user) && $this->user->is_dentist) {
-			return redirect( $this->user->getLink() );
-		}
-
-		if(Request::isMethod('post')) {
-
-			$validator = Validator::make(Request::all(), [
-	            'dentists-city' => array('required'),
-	        ]);
-
-	        if ($validator->fails()) {
-
-	            $msg = $validator->getMessageBag()->toArray();
-	            $ret = array(
-	                'success' => false,
-	                'messages' => array()
-	            );
-
-	            foreach ($msg as $field => $errors) {
-	                $ret['messages'][$field] = implode(', ', $errors);
-	            }
-
-	            return Response::json( $ret );
-	        } else {
-
-				$info = \GoogleMaps::load('geocoding')
-		        ->setParam ([
-		            'address'    => Request::input('dentists-city'),
-		        ])->get();
-
-		        if (!empty($info)) {
-	        		$info = json_decode($info);
-	        		$components = $info->results[0]->address_components;
-
-		        	$ret = [];
-
-			        $country_fields = [
-			            'country',
-			        ];
-
-			        foreach ($country_fields as $sf) {
-			            if( empty($ret['country_name']) ) {
-			                foreach ($components as $ac) {
-			                    if( in_array($sf, $ac->types) ) {
-			                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-			                        $cname = iconv('ASCII', 'UTF-8', $cname);
-			                        $ret['country_name'] = $cname;
-			                        break;
-			                    }
-			                }
-			            } else {
-			                break;
-			            }
-			        }
-
-			        $city_fields = [
-			            'locality',
-			        ];
-
-			        foreach ($city_fields as $cf) {
-			            if( empty($ret['city_name']) ) {
-			                foreach ($components as $ac) {
-			                    if( in_array($cf, $ac->types) ) {
-			                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-			                        $cname = iconv('ASCII', 'UTF-8', $cname);
-			                        $ret['city_name'] = $cname;
-			                        break;
-			                    }
-			                }
-			            } else {
-			                break;
-			            }
-			        }
-
-			        if (!empty($ret['country_name']) && !empty($ret['city_name'])) {
-			        	
-			        	$final_info = GeneralHelper::validateAddress($ret['country_name'], $ret['city_name']);
-
-				        if(!empty(Request::input('change-city'))) {
-				        	$this->user->address = $ret['city_name'].','.$ret['country_name'];
-							$this->user->save();
-				        }
-
-				        Cookie::queue('dentists_city', json_encode($final_info), 60*24*31);
-
-			            return Response::json([
-							'success' => true
-						]);
-			        } else {
-			        	return Response::json([
-							'success' => false
-						]);
-			        }
-		        }
+		if(!empty($this->user)) {
+			if($this->user->isBanned('trp')) {
+				return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+			}
+			if($this->user->is_dentist) {
+				return redirect( $this->user->getLink() );
 			}
 		}
-
-		$city_cookie = json_decode(Cookie::get('dentists_city'), true);
-		//dd($city_cookie);
 
 		$featured = User::where('is_dentist', 1)
 		->whereIn('status', config('dentist-statuses.shown_with_link'))
@@ -140,114 +45,55 @@ class IndexController extends FrontController {
 
 		$homeDentists = collect();
 
+		$city_id = null;
 		if(!empty($this->city_id)) {
 			$city_id = City::with('translations')->find($this->city_id);
-		} else {
-			$city_id = null;
 		}
 
-		if (!empty($city_cookie)) {
-			if( $homeDentists->count() < 12 ) {
+		if( !empty($this->user) ) {
+			if( $homeDentists->count() < 12 && $this->user->city_name ) {
 				$addMore = clone $featured;
-				$addMore = $addMore->where('city_name', 'LIKE', $city_cookie['city_name'])
+				$addMore = $addMore->where('city_name', 'LIKE', $this->user->city_name)
 				->take( 12 - $homeDentists->count() )
 				->get();
 				$homeDentists = $homeDentists->concat($addMore);
 			}
 
-			if( $homeDentists->count() < 12 ) {
+			if( $homeDentists->count() < 12 && $this->user->state_name ) {
 				$addMore = clone $featured;
-				$addMore = $addMore->where('state_name', 'LIKE', $city_cookie['state_name'])
-				->take( 12 - $homeDentists->count() )
+				$addMore = $addMore->where('state_name', 'LIKE', $this->user->state_name)
 				->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+				->take( 12 - $homeDentists->count() )
 				->get();
 				$homeDentists = $homeDentists->concat($addMore);
 			}
 
-			if( $homeDentists->count() < 12 ) {
-				$country_n = $city_cookie['country_name'];
-				$country = Country::with('translations')
-				->whereHas('translations', function ($query) use ($country_n) {
-	                $query->where('name', 'LIKE', $country_n);
-	            })->first();
-
-				if(!empty($country)) {
-					$addMore = clone $featured;
-					$addMore = $addMore->where('country_id', $country->id)
-					->take( 12 - $homeDentists->count() )
-					->whereNotIn('id', $homeDentists->pluck('id')
-					->toArray())
-					->get();
-					$homeDentists = $homeDentists->concat($addMore);
-				}
+			if( $homeDentists->count() < 12 && $this->user->country_id ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('country_id', $this->user->country_id)
+				->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+				->take( 12 - $homeDentists->count() )
+				->get();
+				$homeDentists = $homeDentists->concat($addMore);
 			}
+		}
 
-		} else {
+		if( $homeDentists->count() < 12 && $city_id ) {
+			$addMore = clone $featured;
+			$addMore = $addMore->where('city_name', 'LIKE', $city_id->name)
+			->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+			->take( 12 - $homeDentists->count() )
+			->get();
+			$homeDentists = $homeDentists->concat($addMore);
+		}
 
-			if( !empty($this->user) ) {
-				if( $homeDentists->count() < 12 && $this->user->city_name ) {
-					$addMore = clone $featured;
-					$addMore = $addMore->where('city_name', 'LIKE', $this->user->city_name)
-					->take( 12 - $homeDentists->count() )
-					->get();
-					$homeDentists = $homeDentists->concat($addMore);
-				}
-
-				if( $homeDentists->count() < 12 && $this->user->state_name ) {
-					$addMore = clone $featured;
-					$addMore = $addMore->where('state_name', 'LIKE', $this->user->state_name)
-					->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-					->take( 12 - $homeDentists->count() )
-					->get();
-					$homeDentists = $homeDentists->concat($addMore);
-				}
-
-				if( $homeDentists->count() < 12 && $this->user->country_id ) {
-					$addMore = clone $featured;
-					$addMore = $addMore->where('country_id', $this->user->country_id)
-					->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-					->take( 12 - $homeDentists->count() )
-					->get();
-					$homeDentists = $homeDentists->concat($addMore);
-				}
-
-				if( $homeDentists->count() < 12 && $city_id ) {
-					$addMore = clone $featured;
-					$addMore = $addMore->where('city_name', 'LIKE', $city_id->name)
-					->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-					->take( 12 - $homeDentists->count() )
-					->get();
-					$homeDentists = $homeDentists->concat($addMore);
-				}
-
-				if( $homeDentists->count() < 12 && $this->country_id ) {
-					$addMore = clone $featured;
-					$addMore = $addMore->where('country_id', $this->country_id)
-					->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-					->take( 12 - $homeDentists->count() )
-					->get();
-					$homeDentists = $homeDentists->concat($addMore);				
-				}
-
-			} else {
-
-				if( $homeDentists->count() < 12 && $city_id ) {
-					$addMore = clone $featured;
-					$addMore = $addMore->where('city_name', 'LIKE', $city_id->name)
-					->take( 12 - $homeDentists->count() )
-					->get();
-					$homeDentists = $homeDentists->concat($addMore);
-				}
-
-				if( $homeDentists->count() < 12 && $this->country_id ) {
-					$addMore = clone $featured;
-					$addMore = $addMore->where('country_id', $this->country_id)
-					->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-					->take( 12 - $homeDentists->count() )
-					->get();
-					$homeDentists = $homeDentists->concat($addMore);				
-				}
-			}
+		if( $homeDentists->count() < 12 && $this->country_id ) {
+			$addMore = clone $featured;
+			$addMore = $addMore->where('country_id', $this->country_id)
+			->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+			->take( 12 - $homeDentists->count() )
+			->get();
+			$homeDentists = $homeDentists->concat($addMore);				
 		}
 
 		if( $homeDentists->count() <= 2) {
@@ -262,51 +108,33 @@ class IndexController extends FrontController {
 			$strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
 			$completed_strength = $this->user->getStrengthCompleted('trp');
 		}
-		
-		if(!empty($city_cookie)) {
-			$current_city = $city_cookie['city_name'];
-		} else {
-			if(!empty($this->user)) {
-				//by user profile
-				if(!empty($this->user->city_name)) {
-					$current_city = $this->user->city_name;
-				} else if(!empty($this->user->city_id)) {
-					$current_city = $this->user->city->name;
-				} else {
-					if(!empty($this->user->country_id)) {
-						$current_city = $this->user->country->name;
-					} else {
-						$current_city = \GeoIP::getLocation()->country;
-					}
-				}
-			} else {
-				//by IP
-				if($city_id) {
-					$current_city = \GeoIP::getLocation()->city;
-				} else {
-					$current_city = \GeoIP::getLocation()->country;
-				}
-			}
-		}
 
-		$seos = PageSeo::find(20);		
+		$seos = PageSeo::find(20);
+
+		$countriesAlphabetically = [];//create a new array
+        foreach(Country::has('dentists')->with(['dentists','translations'])->get() as $item) {
+            $countriesAlphabetically[$item->name[0]][] = [
+				'name' => $item->name,
+				'dentist_count' => $item->dentists->count(),
+				'id' => $item->id,
+				'code' => $item->code,
+			];
+        }
 
 		$params = array(
 			'countries' => Country::with('translations')->get(),
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
 			'featured' => $homeDentists,
-			'city_cookie' => $city_cookie,
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,
             'seo_description' => $seos->seo_description,
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
-			'current_city' => $current_city,
+			'countriesAlphabetically' => $countriesAlphabetically,
 			'js' => [
 				'index.js',
                 'search.js',
-                'address.js',
 			],
 			'css' => [
                 'trp-index.css',
@@ -315,8 +143,8 @@ class IndexController extends FrontController {
 
 		if (!empty($this->user)) {
 			$params['extra_body_class'] = 'strength-pb';
-			$params['css'][] = 'flickity.min.css';
-			$params['js'][] = '../js/flickity.min.js';
+			$params['css'][] = 'flickity.min.css'; //because of strength scale
+			$params['js'][] = '../js/flickity.min.js'; //because of strength scale
 		}
 
 		return $this->ShowView('index', $params);	

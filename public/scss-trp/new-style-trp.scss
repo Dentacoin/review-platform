@@ -75,39 +75,9 @@ header {
 
 		.transparent-blue-button {
 			font-size: 18px;
-			padding: 7px 16px;
+			padding: 8px 16px;
 			font-weight: normal;
 			margin-right: 3px;
-		}
-
-		.header-buttons-wrapper {
-
-			.header-text-link {
-				font-size: 18px;
-				color: #555555;
-				padding: 5px 9px;
-				transition: all 0.3s ease;
-
-				&:first-child {
-					position: relative;
-
-					&::after {
-						content: '';
-						position: absolute;
-						right: 0px;
-						top: 55%;
-						transform: translateY(-50%);
-						width: 2px;
-						height: 16px;
-						background-color: #555555;
-					}
-				}
-
-				&:hover {
-					color: $title_color;
-					transition: all 0.3s ease;
-				}
-			}
 		}
 
 		.button-dentists {
@@ -210,6 +180,72 @@ header {
 
 		img {
 			display: block
+		}
+	}
+
+	.header-buttons-wrapper {
+		.header-text-link {
+			font-size: 18px;
+			color: #555555;
+			padding: 5px 9px;
+			transition: all 0.3s ease;
+
+			&:first-child {
+				position: relative;
+
+				&::after {
+					content: '';
+					position: absolute;
+					right: 0px;
+					top: 55%;
+					transform: translateY(-50%);
+					width: 2px;
+					height: 16px;
+					background-color: #555555;
+				}
+			}
+
+			&:hover {
+				color: $title_color;
+				transition: all 0.3s ease;
+			}
+		}
+	}
+
+	.menu-primary-container {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 100%;
+		z-index: 10;
+		background-color: white;
+		text-align: center;
+		padding: 70px 20px 20px;
+
+		&.active {
+			display: block;
+		}
+
+		.close-menu {
+			max-width: 20px;
+			display: block;
+			position: absolute;
+			z-index: 100;
+			right: 28px;
+			top: 19px;
+
+			img {
+				width: 20px;
+			}
+		}
+	}
+
+	.transparent-blue-button {
+		@media #{$phone} {
+			margin-bottom: 20px;
+			padding: 8px 20px;
 		}
 	}
 }
@@ -653,7 +689,6 @@ footer {
 	}
 
 	.footer-text {
-		flex: 2;
 
 		@media #{$phone} {
 			order: 2;
@@ -677,8 +712,8 @@ footer {
 		a {
 			font-size: 16px;
 			font-weight: 600;
-			padding-right: 20px;
-			padding-left: 18px;
+			padding-right: 12px;
+			padding-left: 8px;
 			border-right: 1px solid white;
 			color: white;
 			transition: all 0.3s ease;

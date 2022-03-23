@@ -4,7 +4,7 @@ var showPopup = null;
 var closePopup = null;
 var handlePopups = null;
 var ajax_is_running = false;
-var prepareMapFucntion;
+var prepareMapFunction;
 var mapsLoaded = false;
 var mapsWaiting = [];
 var initMap;
@@ -24,7 +24,7 @@ var id_counter=0;
 var dentacoin_down = false;
 var handleActivePopupFunctions;
 
-jQuery(document).ready(function($){
+jQuery(document).ready(function($) {
 
     $.ajax( {
 		url: 'https://dentacoin.com',
@@ -54,6 +54,14 @@ jQuery(document).ready(function($){
 		    dentacoin_down = true;
 		},
 		timeout: 5000
+	});
+
+	$('.mobile-menu').click( function() {
+		$('.menu-primary-container').addClass('active');
+	});
+
+	$('.close-menu').click( function() {
+		$('.menu-primary-container').removeClass('active');
 	});
 
 	//To be deleted
@@ -158,10 +166,12 @@ jQuery(document).ready(function($){
 	});
 
     var loadMapScript = function() {
-    	if (!map_loaded && typeof google === 'undefined' ) {
-    		$.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
-	    		map_loaded = true;
-    		} );
+		var second_stop = false;
+    	if (!map_loaded && typeof google === 'undefined' && !second_stop) {
+			second_stop = true;
+			$.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
+				map_loaded = true;
+    		});
     	}
     }
 
@@ -424,7 +434,7 @@ jQuery(document).ready(function($){
 				} );
 				
 			} else if(id == 'map-results-popup') {
-				prepareMapFucntion( function() {    
+				prepareMapFunction( function() {    
 					var search_map = new google.maps.Map(document.getElementById('search-map'), {
 						center: {
 							lat: parseFloat($('#search-map').attr('lat')), 
@@ -937,11 +947,11 @@ jQuery(document).ready(function($){
 		    $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
 		});
 
-		$('#search-input, .address-suggester-input').click( function() {
+		$('.address-suggester-input').click( function() {
 	    	loadMapScript();
 	    });
 
-	    $('#search-input').on('focus keyup', function() {
+	    $('.search-form input').on('focus keyup', function() {
 	    	loadMapScript();
 	    });
 
@@ -1129,10 +1139,15 @@ jQuery(document).ready(function($){
 	        );
 	    } );
 
-		$('.special-checkbox').change( function() {
-			$(this).closest('label').toggleClass('active');
-			$(this).closest('label').removeClass('has-error');		
-	        $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
+		$('.special-checkbox, .checkbox').change( function() {
+			if($(this).attr('type') == 'checkbox') {
+				$(this).closest('label').toggleClass('active');
+				$(this).closest('label').removeClass('has-error').removeClass('jump-it');		
+				$('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
+			} else {
+				$(this).closest('label').parent().find('label').removeClass('active');
+				$(this).closest('label').addClass('active');
+			}
 		});
 
 		$('.tab').click( function() {
@@ -1160,9 +1175,7 @@ jQuery(document).ready(function($){
 	                console.log('error');
 	            }
 	        });
-	        
 	    });
-
 	}
 	handleActivePopupFunctions();
 
@@ -1777,7 +1790,7 @@ jQuery(document).ready(function($){
 //Maps stuff
 //
 
-prepareMapFucntion = function( callback ) {
+prepareMapFunction = function( callback ) {
     if(mapsLoaded) {
         callback();
     } else {

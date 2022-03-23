@@ -9,6 +9,7 @@ jQuery(document).ready(function($){
 	if($('.slider-wrapper').length) {
 		var max_h = 0;
 		var width = 0;
+		
 		$('.slider-wrapper').each( function() {
 			width+=$(this).outerWidth();
 			if($(this).outerHeight() > max_h) {
@@ -20,36 +21,57 @@ jQuery(document).ready(function($){
 			$(this).css('height', max_h);
 		});
 
-		$('.index-slider').css('width', width + ($('.slider-wrapper').length * 40));
+		$('.index-slider').css('width', width + (
+			$('.slider-wrapper').length * (
+				parseInt($('.slider-wrapper').css('margin-left')) + parseInt($('.slider-wrapper').css('margin-right'))
+			) 
+		));
 
-		$('.slider-right').click( function(e) {
+		$('.slider-left').click( function(e) {
 			e.preventDefault();
 
-			var scroll = $('.index-slider');
-			var place = (scroll.find('.slider-wrapper').outerWidth(true));
-			var left = parseFloat( scroll.css('left') ) - place;
-			var newleft = Math.ceil(left / place) * place;
-			scroll.animate({
-				left:Math.max( -(scroll.outerWidth() - scroll.parent().width()) , newleft)
-			}, 300);
-		});
-
-		$('.slider-left').click( function() {
+			$('.slider-right').addClass('active');
 			var scroll = $('.index-slider');
 			var place = (scroll.find('.slider-wrapper').outerWidth(true));
 			var left = parseFloat( scroll.css('left') ) + place;
 			// var newleft = Math.ceil(left / place) * place;
+
+			console.log(scroll.offset().left);
+
+			if(scroll.offset().left > -310) {
+				$(this).removeClass('active');
+			}
+
 			scroll.animate({
 				left:Math.min( 0, left)
 			}, 300);
 		});
+
+		$('.slider-right').click( function(e) {
+			e.preventDefault();
+
+			$('.slider-left').addClass('active');
+			var scroll = $('.index-slider');
+			var place = (scroll.find('.slider-wrapper').outerWidth(true));
+			var left = parseFloat( scroll.css('left') ) - place;
+			var newleft = Math.ceil(left / place) * place;
+
+			console.log(scroll.offset().left);
+			if(scroll.offset().left < -2800) {
+				$(this).removeClass('active');
+			}
+
+			scroll.animate({
+				left:Math.max( -(scroll.outerWidth() - scroll.parent().width()) , newleft)
+			}, 300);
+		});
 	}
 
-	// if( window.location.hash == '#invite-form' ) {
-    //     $('html, body').animate({
-    //         scrollTop: $(".invite-new-dentist-wrapper").offset().top - $('.header').height()
-    //     }, 500);
-	// }
+	$('.scroll-to-search').click( function() {
+		$('html, body').animate({
+			scrollTop: 0
+		}, 500);
+	});
 
 	$(window).scroll( function() {
 		if (!$('#to-append').hasClass('appended')) {
@@ -61,7 +83,9 @@ jQuery(document).ready(function($){
 					$('#to-append').append(ret);
 
 					if($('.to-append-image').length) {
-						$('.to-append-image').append('<img src="'+$('.to-append-image').attr('data-src')+'"/>');
+						$('.to-append-image').each( function() {
+							$(this).append('<img src="'+$(this).attr('data-src')+'" alt="'+$(this).attr('data-alt')+'"/>');
+						});
 					}
 
 					handlePopups();	                

@@ -36,13 +36,14 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-		{{-- <link rel="preload" href="{{ url('fonts/Calibri-Light.woff2') }}" as="font" crossorigin>
-		<link rel="preload" href="{{ url('fonts/Calibri-Bold.woff2') }}" as="font" crossorigin>
-		<link rel="preload" href="{{ url('fonts/Calibri.woff2') }}" as="font" crossorigin> --}}
+		<link rel="preload" href="{{ url('fonts/Lato-Black.woff2') }}" as="font" crossorigin>
+		<link rel="preload" href="{{ url('fonts/Lato-Bold.woff2') }}" as="font" crossorigin>
+		<link rel="preload" href="{{ url('fonts/Lato-Regular.woff2') }}" as="font" crossorigin>
+		<link rel="preload" href="{{ url('fonts/Lato-Light.woff2') }}" as="font" crossorigin>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
 		
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
 		@if($user)
@@ -139,22 +140,7 @@
 									@endif
 								</a>
 	                        @else
-	                        	@if($current_page!='welcome-dentist')
-									<a href="{{ getLangUrl('welcome-dentist') }}" class="transparent-blue-button">
-										{{-- {!! trans('trp.header.for-dentists') !!} --}}
-										List your practice
-									</a>
-								@endif
-								<div class="header-buttons-wrapper">
-									<a href="javascript:;" class="header-text-link open-dentacoin-gateway {{ $current_page!='welcome-dentist' ? 'patient-login' : 'dentist-login' }}">
-										{{ trans('trp.header.login') }}
-									</a>
-									@if($current_page!='welcome-dentist')
-										<a href="javascript:;" class="header-text-link open-dentacoin-gateway {{ $current_page!='welcome-dentist' ? 'patient-register' : 'dentist-register' }}">
-											{{ trans('trp.header.signin') }}
-										</a>
-									@endif
-								</div>
+								@include('trp.parts.header-buttons')
 	                        @endif
 	                        @if(!empty($admin) && count(config('langs.trp')) > 1 && $current_page != 'dentists')
 		                        <div class="lang-wrapper">
@@ -174,12 +160,11 @@
 						</a>
 				    </div>
 			    </div>
-				<div class="menu-primary-container" style="display: none;">
-					<ul id="menu-primary" class="primary-menu">
-						<li id="menu-item-20" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-20">
-							<a href="https://moni-colors.com/about-us/">За фирмата</a>
-						</li>
-					</ul>
+				<div class="menu-primary-container">
+					<a href="javascript:;" class="close-menu">
+						<img src="{{ url('img-trp/close-menu.svg') }}"/>
+					</a>
+					@include('trp.parts.header-buttons')
 				</div>
 		    </div>
 		    @if(!empty($user) && $user->is_clinic)
@@ -205,6 +190,7 @@
 				<div class="footer-text tac">
 					<div class="footer-menu">
 						<a href="{{ getLangUrl('faq') }}">{{ trans('trp.footer.faq') }}</a>
+						<a href="https://support.dentacoin.com/" target="_blank">Help Center</a>
 						<a href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('trp.footer.privacy-policy') }}</a>
 						<a href="https://dentacare.dentacoin.com/" target="_blank">{{ trans('trp.footer.dentacare') }}</a>
 						<a href="https://dentavox.dentacoin.com/" target="_blank">{{ trans('trp.footer.vox') }}</a>

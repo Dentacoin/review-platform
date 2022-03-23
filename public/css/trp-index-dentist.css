@@ -104,14 +104,11 @@
     .section-dentist-info h2 {
       margin-top: 44px;
       margin-bottom: 20px; } }
-.section-dentist-info h3 {
+.section-dentist-info h4 {
   margin-top: 20px;
   margin-bottom: 10px;
   font-weight: bold;
   color: #0564c6; }
-  @media screen and (max-width: 1200px) {
-    .section-dentist-info h3 {
-      font-size: 21px; } }
 @media screen and (max-width: 998px) {
   .section-dentist-info .flex {
     flex-flow: row wrap; } }
@@ -140,11 +137,8 @@
     .section-dentist-info .info-padding {
       padding: 0px 10px; } }
 .section-dentist-info p {
-  font-size: 20px;
+  font-size: 18px;
   color: #332255; }
-  @media screen and (max-width: 1200px) {
-    .section-dentist-info p {
-      font-size: 18px; } }
   @media screen and (max-width: 768px) {
     .section-dentist-info p {
       margin-bottom: 0px; } }
@@ -157,12 +151,12 @@
     .section-dentist-info img {
       max-height: 108px; } }
 .section-dentist-info a {
-  font-size: 20px;
+  font-size: 18px;
   color: #0084d1;
   margin-top: 17px;
-  display: block;
+  display: inline-block;
   border-bottom: 1px dashed;
-  padding-bottom: 9px; }
+  padding-bottom: 3px; }
   @media screen and (max-width: 1200px) {
     .section-dentist-info a {
       font-size: 17px; } }
@@ -215,7 +209,6 @@
           border-radius: 10px; } }
   .testimonials-section h4 {
     display: block;
-    font-weight: bold;
     color: white;
     padding: 0px 170px;
     margin-bottom: 40px;
@@ -290,7 +283,14 @@
     .testimonials-section .flickity-prev-next-button {
       top: 30%; } }
   .testimonials-section .flickity-button {
-    color: #6fb6d4 !important; }
+    width: 48px;
+    height: 48px; }
+    .testimonials-section .flickity-button.previous {
+      background: url(../img-trp/testimonial-slider-left.svg) 50% 50% no-repeat; }
+    .testimonials-section .flickity-button.next {
+      background: url(../img-trp/testimonial-slider-right.svg) 50% 50% no-repeat; }
+    .testimonials-section .flickity-button svg {
+      display: none; }
 
 .section-how {
   padding-top: 85px; }

@@ -5,21 +5,50 @@ use App\Http\Controllers\FrontController;
 
 use App\Helpers\GeneralHelper;
 
+use App\Models\Continent;
 use App\Models\Country;
 use App\Models\PageSeo;
 use App\Models\User;
 
 use Request;
+use Route;
 use App;
 
 class DentistsController extends FrontController {
 
+    public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
+        parent::__construct($request, $route, $locale);
+
+        // Argentina - 1
+        // Austria - 15
+        // Belgium - 22
+        // Brazil - 31
+        // Canada - 39
+        // China - 45
+        // Ethiopia - 69
+        // Germany - 81
+        // India - 101
+        // Malaysia - 132
+        // Mexico - 141
+        // Nigeria - 160
+        // Pakistan - 166
+        // Russia - 181
+        // Switzerland - 212
+        // United Arab Emirates - 230
+        // USA - 232
+        // Venezuela - 237
+        $this->countriesWithStates = [1, 15, 22, 31, 39, 45, 69, 81, 101, 132, 141, 160, 166, 181, 212, 230, 232, 237];
+    }
+
     private function getCorrectedQuery($query, $filter) {
+
         $query = trim(urldecode($query));
+        $replacedSymbolsQuery = mb_strtolower(str_replace([',', "'", ' ', '.'], ['', '', '-', ''], $query ));
+
         if(!empty($filter)) {
-            $corrected_query = mb_strtolower(str_replace([',', "'", ' ', '.'], ['', '', '-'. ''], $query )).'/'.$filter;
+            $corrected_query = $replacedSymbolsQuery.'/'.$filter;
         } else {
-            $corrected_query = 'dentists/'.mb_strtolower(str_replace([',',  "'", ' ', '.'], ['', '', '-', ''], $query ));
+            $corrected_query = 'dentists/'.$replacedSymbolsQuery;
         }
 
         return $corrected_query;
@@ -34,150 +63,145 @@ class DentistsController extends FrontController {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
 
+        App::setLocale( 'en' );
         $this->current_page = 'dentists';
 
         if (empty($query)) {
             return redirect( getLangUrl('page-not-found') );
         }
-        if($query == 'north-macedonia') {
-            return redirect( getLangUrl('dentists/macedonia'), 301);
-        }
 
-        if($query == 'india' && $filter == 'all-results') {
-            return redirect( getLangUrl('dentists/india/'), 301);
+        if($query == 'north-macedonia') {
+            return redirect( getLangUrl('dentists/macedonia/'), 301);
         }
-        // $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
+        
         $corrected_query = $this->getCorrectedQuery($query, $filter);
+        $canonical = $corrected_query;
+
         if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
             return redirect( getLangUrl($corrected_query) );
         }
 
-        $items = User::where('is_dentist', 1)
+        $items = User::with(['categories', 'country.translations'])->where('is_dentist', 1)
         ->whereIn('status', config('dentist-statuses.shown_with_link'))
         ->whereNull('self_deleted');
 
-        $mode = 'map';
         $formattedAddress = $query;
         $country_search = false;
 
-        if($query=='worldwide') {
-            request()->merge(['partner' => 1]);
-            $lat = 30;
-            $lon = 0;
-        } else if($filter == 'all-results') {
-            $items = $items->where(function($q) use ($query) {
-                $q->where('name', 'LIKE', '%'.$query.'%')
-                ->orWhere(function ($queryy) use ($query) {
-                    $queryy->where('name_alternative', 'LIKE', '%'.$query.'%')
-                    ->orWhere('slug', 'LIKE', '%'.$query.'%');
-                });
-            });
-            $mode = 'name';
-        } else {
+        if(empty($lat) || empty($lon)) {
+            $query = str_replace('-', ' ', $query);
 
-            if(empty($lat) || empty($lon)) {
-                $query = str_replace('-', ' ', $query);
+            $geores = \GoogleMaps::load('geocoding')
+            ->setParam ([
+                'address' => $query,
+            ])->get();
 
-                $geores = \GoogleMaps::load('geocoding')
-                ->setParam ([
-                    'address'    => $query,
-                ])->get();
+            $geores = json_decode($geores);
 
-                $geores = json_decode($geores);
-                if(!empty($geores->results[0]->geometry->location)) {
+            if(!empty($geores->results[0]->geometry->location)) {
+                
+                $parsedAddress = GeneralHelper::parseAddress( $geores->results[0]->address_components );
 
-                    $parsedAddress = GeneralHelper::parseAddress( $geores->results[0]->address_components );
+                $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
+                $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
+                $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
 
-                    $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
-                    $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
-                    $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
+                $lat = $geores->results[0]->geometry->location->lat;
+                $lon = $geores->results[0]->geometry->location->lng;
+            }
+        }
 
-                    $lat = $geores->results[0]->geometry->location->lat;
-                    $lon = $geores->results[0]->geometry->location->lng;
-                }
+        if(empty($lat) || empty($lon)) {
+            return redirect( getLangUrl('page-not-found') );
+        }
+
+        $corrected_query = $this->getCorrectedQuery(!empty($formattedAddress) && $formattedAddress != 'Ega Denmark ' ? $formattedAddress : $query, $filter);
+        $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
+        $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
+
+        if (
+            (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) 
+            && App::getLocale().'/'.$corrected_query != 'en/dentists/federal-capital-territory-nigeria' 
+        ) {
+
+            $geores = \GoogleMaps::load('geocoding')
+            ->setParam ([
+                'latlng' => $lat.','.$lon,
+            ])->get();
+
+            $geores = json_decode($geores);
+            if(!empty($geores->results[0]->geometry->location)) {
+
+                $parsedAddress = GeneralHelper::parseAddress( $geores->results[0]->address_components );
+                $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
+                $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
+                $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
             }
 
-            if(empty($lat) || empty($lon)) {
-                return redirect( getLangUrl('page-not-found') );
-            }
-
-            $corrected_query = $this->getCorrectedQuery(!empty($formattedAddress) && $formattedAddress != 'Ega Denmark ' ? $formattedAddress : $query, $filter);
+            $corrected_query = $this->getCorrectedQuery($formattedAddress, $filter);
             $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
             $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
 
-            if ((urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) && App::getLocale().'/'.$corrected_query != 'en/dentists/federal-capital-territory-nigeria' ) {
-                $geores = \GoogleMaps::load('geocoding')
-                ->setParam ([
-                    'latlng'    => $lat.','.$lon,
-                ])->get();
+            if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
+                
+                if( $geores->results && $geores->results[0]->place_id ) {
 
-                $geores = json_decode($geores);
-                if(!empty($geores->results[0]->geometry->location)) {
+                    $geores = \GoogleMaps::load('geocoding')
+                    ->setParam ([
+                        'address' => $geores->results[0]->formatted_address,
+                    ])->get();
 
-                    $parsedAddress = GeneralHelper::parseAddress( $geores->results[0]->address_components );
-                    $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
-                    $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
-                    $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
-                }
+                    $geores = json_decode($geores);
+                    if(!empty($geores->results[0]->geometry->location)) {
 
-                $corrected_query = $this->getCorrectedQuery($formattedAddress, $filter);
-                $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
-                $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
-                if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
-                    
-                    if( $geores->results && $geores->results[0]->place_id ) {
+                        $parsedAddress = GeneralHelper::parseAddress( $geores->results[0]->address_components );
+                        $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
+                        $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
+                        $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
+                    }
 
-                        $geores = \GoogleMaps::load('geocoding')
-                        ->setParam ([
-                            'address'    => $geores->results[0]->formatted_address,
-                        ])->get();
+                    $corrected_query = $this->getCorrectedQuery($formattedAddress, $filter);
+                    $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
+                    $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
 
-                        $geores = json_decode($geores);
-                        if(!empty($geores->results[0]->geometry->location)) {
-
-                            $parsedAddress = GeneralHelper::parseAddress( $geores->results[0]->address_components );
-                            $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
-                            $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
-                            $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
-                        }
-
-                        $corrected_query = $this->getCorrectedQuery($formattedAddress, $filter);
-                        $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
-                        $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
-                        if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
-                            return redirect( getLangUrl($corrected_query) );
-                        }
-                    } else {
+                    if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
                         return redirect( getLangUrl($corrected_query) );
                     }
-                }
-            }
-            
-            if ((empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) || $query == 'ireland' || !empty($parsedAddress['country_name']) && $parsedAddress['country_name'] == 'North Macedonia') {
-                $country_n = !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'] : $query;
-                if ($country_n == 'Vietnam') {
-                    $country = Country::find(238);
-                } else if($country_n == 'South Korea' || $country_n == 'North Korea') {
-                    $country = Country::find(116);
-                } else if($country_n == 'Iran') {
-                    $country = Country::find(103);
-                } else if($country_n == 'Czechia') {
-                    $country = Country::find(58);
-                } else if($country_n == 'North Macedonia') {
-                    $country = Country::find(129);
                 } else {
-                    $country = Country::with('translations')->whereHas('translations', function ($query) use ($country_n) {
-                        $query->where('name', 'LIKE', $country_n);
-                    })->first();
+                    return redirect( getLangUrl($corrected_query) );
                 }
-
-                $items->where('country_id', $country->id);
-                $country_search = true;
-            } else {
-                list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
-                $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
-                $items->whereBetween('lon', [$lon-$range_lon, $lon+$range_lon]);
             }
+        }
+        
+        if (
+            (empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) 
+            || $query == 'ireland' 
+            || (!empty($parsedAddress['country_name']) && $parsedAddress['country_name'] == 'North Macedonia')) {
+
+            $countriesWithDiffNames = [
+                'North Macedonia' => 129,
+                'South Korea' => 116,
+                'North Korea' => 116,
+                'Vietnam' => 238,
+                'Czechia' => 58,
+                'Iran' => 103,
+            ];
+            
+            $country_n = !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'] : $query;
+            if(array_key_exists($country_n, $countriesWithDiffNames)) {
+                $country = Country::find($countriesWithDiffNames[$country_n]);
+            } else {
+                $country = Country::with('translations')->whereHas('translations', function ($query) use ($country_n) {
+                    $query->where('name', 'LIKE', $country_n);
+                })->first();
+            }
+
+            $items->where('country_id', $country->id);
+            $country_search = true;
+        } else {
+            list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
+            $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
+            $items->whereBetween('lon', [$lon-$range_lon, $lon+$range_lon]);
         }
 
         $nonCannonicalUrl = true;
@@ -193,32 +217,163 @@ class DentistsController extends FrontController {
             }
         }
 
-        $page = max(1, $page);
-        $ppp = 12;
-        $sort = 'rating';
-        $stars = null;
-        $searchCategories = null;
-        $partner = null;
-        $orders = [
-            'rating',
-            'reviews',
-        ];
-        $order_to_field = [
-            'rating' => 'avg_rating',
-            'reviews' => 'ratings',
-        ];
-        if( Request::input('sort') && in_array( Request::input('sort'), $orders ) ) {
-            $sort = Request::input('sort');
-        } else {
-            $sort = 'rating';
-        }
-        $items = $items->orderBy($order_to_field[$sort], 'DESC');
+        
+        
+        $dentists = $items;
+        $dentists = $dentists->get();
 
-        if( Request::input('stars') ) {
-            $stars = Request::input('stars');
-            $items = $items->where('avg_rating', '>=', Request::input('stars'));
+        $dentistSpecialications = [];
+        $dentistTypes = [
+            'all' => $dentists->count(),
+            'is_dentist' => 0,
+            'is_clinic' => 0,
+            'is_partner' => 0,
+            'top_dentist_month' => 0,
+        ];
+        $dentistRatings = [
+            5 => 0,
+            4 => 0,
+            3 => 0,
+            2 => 0,
+            1 => 0,
+            0 => 0,
+        ];
+        $dentistAvailability = [
+            'early_morning' => 0,
+            'morning' => 0,
+            'afternoon' => 0,
+            'evening' => 0,
+        ];
+        
+        foreach($dentists as $dentist) {
+            if($dentist->categories->isNotEmpty()) {
+                foreach($dentist->categories as $cat) {
+
+                    if(!isset($dentistSpecialications[$cat->category_id])) {
+                        $dentistSpecialications[$cat->category_id] = 0;
+                    }
+                    $dentistSpecialications[$cat->category_id] += 1;
+                }
+            }
+
+            if($dentist->is_clinic) {
+                $dentistTypes['is_clinic'] += 1;
+            } else if($dentist->is_dentist) {
+                $dentistTypes['is_dentist'] += 1;
+            }
+            if($dentist->is_partner) {
+                $dentistTypes['is_partner'] += 1;
+            }
+            if($dentist->top_dentist_month) {
+                $dentistTypes['top_dentist_month'] += 1;
+            }
+
+            foreach($dentistRatings as $k => $r) {
+                $d_rating = round($dentist->avg_rating);
+                if($d_rating >= $k) {
+                    $dentistRatings[$k] += 1;
+                }
+            }
+
+            $workHours = is_array($dentist->work_hours) ? $dentist->work_hours : json_decode($dentist->work_hours, true);
+
+            if($workHours) {
+                foreach($dentistAvailability as $k => $availability ) {
+
+                    foreach($workHours as $workHour) {
+                        if($k == 'early_morning') {
+                            if(intval($workHour[0]) < 10) {
+                                $dentistAvailability[$k] += 1;
+                                break;
+                            }
+                        } else if($k == 'morning') {
+                            if(intval($workHour[0]) < 12) {
+                                $dentistAvailability[$k] += 1;
+                                break;
+                            }
+                        } else if($k == 'afternoon') {
+                            if(intval($workHour[0]) > 12) {
+                                $dentistAvailability[$k] += 1;
+                                break;
+                            }
+                        } else if($k == 'evening') {
+                            if(intval($workHour[0]) > 17) {
+                                $dentistAvailability[$k] += 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
-        if( !empty($filter) && $filter != 'all-results') {
+
+        //------ FILTERS ----------
+
+        $requestTypes = Request::input('types');
+        //search for type
+        if(!empty($requestTypes)) {
+
+            foreach($requestTypes as $requestType) {
+                if($requestType == 'top_dentist_month') {
+                    $items = $items->whereNotNull($requestType);
+                } else if(in_array($requestType, ['is_dentist', 'is_clinic']) && in_array('is_dentist', $requestTypes) && in_array('is_clinic', $requestTypes)) {
+                    //show dentists and clinics
+                    $items = $items->where('is_dentist', 1);
+                } else if($requestType == 'is_dentist' && !in_array('is_clinic', $requestTypes)) {
+                    //show only clinics
+                    $items = $items->where($requestType, 1)->where('is_clinic', 0);
+                } else if($requestType != 'all') {
+                    $items = $items->where($requestType, 1);
+                }
+            }
+        }
+
+        $requestRatings = Request::input('ratings');
+        //search for rating
+        if(!empty($requestRatings)) {
+
+            $stars = 5;
+            foreach($requestRatings as $requestRating) {
+                if($requestRating < $stars) {
+                    $stars = $requestRating;
+                }
+            }
+            $items = $items->where('avg_rating', '>=', $stars);
+        }
+
+        $orders = [
+            'name_asc' => 'Name (A-Z)',
+            'name_desc' => 'Name (Z-A)',
+            'avg_rating_desc' => 'Stars (highest first)',
+            'avg_rating_asc' => 'Stars (lowest first)',
+            'ratings_desc' => 'Most reviews',
+            'ratings_asc' => 'Least reviews',
+        ];
+
+        //order dentists by
+        $requestOrder = Request::input('order');
+        // $orderByField = 'ratings';
+        // $orderBy = 'desc';
+
+        if($requestOrder && array_key_exists($requestOrder, $orders)) {
+            $field = explode('_', $requestOrder);
+            if(count($field) > 2) {
+                $items = $items->orderBy('avg_rating', $field[2]);
+
+                // $orderByField = 'avg_rating';
+                // $orderBy = $field[2];
+            } else {
+                $items = $items->orderBy($field[0], $field[1]);
+
+                // $orderByField = $field[0];
+                // $orderBy = $field[1];
+            }
+        } else {
+            $items = $items->orderBy('avg_rating', 'DESC');
+        }
+
+        $searchCategories = null;
+        if( !empty($filter)) {
             $searchCategories = explode('-', $filter);
 
             foreach($searchCategories as $k => $v) {
@@ -236,102 +391,78 @@ class DentistsController extends FrontController {
             }
         }
 
-        if( Request::input('partner') ) {
-            $partner = true;
-            $items = $items->where('is_partner', true);
-        }
+        $items = $items->get();
 
-        $items = $items->with('country.translations')->get(); //->take($ppp)->skip( ($page-1)*$ppp )
+        $requestAvailability = Request::input('availability');
 
-        $order_by = $order_to_field[$sort];
-        $items = $items->sortByDesc(function ($dentist, $key) use ($order_by, $sort) {
-            $sort_option = $sort == 'rating' ? $dentist->$order_by : round($dentist->$order_by);
+        if(!empty($requestAvailability)) {
+            $itemsWithAvailability = collect();
 
-            if($dentist->featured) {
-                return 100000 + $sort_option;
-            } else {
+            foreach($items as $item) {
+                $workHours = is_array($item->work_hours) ? $item->work_hours : json_decode($item->work_hours, true);
 
-                if($dentist->$order_by) {
-                    return 10000 + $sort_option;
-                } else {
-                    if($dentist->is_partner) {
-                        return 1 + $sort_option;
-                    } else {
-                        return -1;
+                if($workHours) {
+                    foreach($requestAvailability as $availability ) {
+
+                        foreach($workHours as $workHour) {
+                            if($availability == 'early_morning') {
+                                if(intval($workHour[0]) < 10) {
+                                    $itemsWithAvailability[] = $item;
+                                    break;
+                                }
+                            } else if($availability == 'morning') {
+                                if(intval($workHour[0]) < 12) {
+                                    $itemsWithAvailability[] = $item;
+                                    break;
+                                }
+                            } else if($availability == 'afternoon') {
+                                if(intval($workHour[0]) > 12) {
+                                    $itemsWithAvailability[] = $item;
+                                    break;
+                                }
+                            } else if($availability == 'evening') {
+                                if(intval($workHour[0]) > 17) {
+                                    $itemsWithAvailability[] = $item;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
-        });
-
-        $zoom = $country_search ? 5 : ($query=='worldwide' ? 1 : 13);
-        $size = $query=='worldwide' ? '670x288' : '670x188';
-
-        $bounds_lon = null;
-        $bounds_lat = null;
-        $bounds_zoom = null;
-
-        if (!$country_search && $query!='worldwide' ) {
-            $max_lon = -300;
-            $min_lon = 999;
-            $max_lat = -300;
-            $min_lat = 999;
-
-            foreach ($items as $val) {
-                if ($max_lon < $val->lon ) {
-                    $max_lon = $val->lon;
-                }
-                if ($min_lon > $val->lon ) {
-                    $min_lon = $val->lon;
-                }
-                if ($max_lat < $val->lat ) {
-                    $max_lat = $val->lat;
-                }
-                if ($min_lat > $val->lat ) {
-                    $min_lat = $val->lat;
-                }
-            }
-
-            if (!empty($lon) && $max_lon < $lon ) {
-                $max_lon = $lon;
-            }
-            if (!empty($lon) && $min_lon > $lon ) {
-                $min_lon = $lon;
-            }
-            if (!empty($lat) && $max_lat < $lat ) {
-                $max_lat = $lat;
-            }
-            if (!empty($lat) && $min_lat > $lat ) {
-                $min_lat = $lat;
-            }
-
-            $bounds_lon = ($max_lon + $min_lon) / 2;
-            $bounds_lat = ($max_lat + $min_lat) / 2;
-
-            $bounds_zoom = 8;
+            
+            $items = collect();
+            $items = $items->concat((object)$itemsWithAvailability);
         }
 
-        $staticmap = 'https://maps.googleapis.com/maps/api/staticmap?center='.($bounds_lat ? $bounds_lat : $lat).','.($bounds_lon ? $bounds_lon : $lon).'&zoom='.($bounds_zoom ? $bounds_zoom : $zoom).'&size='.$size.'&maptype=roadmap&key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk';
-        $i=1;
-        $foundOnMap = false;
-        foreach ($items->where('address', '!=', '')->slice(0, 10) as $item) {
-            $foundOnMap = true;
-            $staticmap .= '&markers=color:blue%7Clabel:'.($i).'%7C'.$item->lat.','.$item->lon;
-            $i++;
-        }
-        if(!$foundOnMap) {
-            $staticmap = null;
-        }
+        // $items = $items->sortByDesc(function ($dentist, $key) use ($orderByField, $orderBy) {
+        //     $sort_option = 0;
+        //     // $letterNumbersDesc = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5, 'f' => 6, 'g' => 7, 'h' => 8, 'i' => 9, 'j' => 10, 'k' => 11, 'l' => 12, 'm' => 13, 'n' => 14, 'o' => 15, 'p' => 16, 'q' => 17, 'r' => 18, 's' => 19, 't' => 20, 'u' => 21, 'v' => 22, 'w' => 23, 'x' => 24, 'y' => 25, 'z' => 26];
 
-        $social_image = '';
+        //     // $letterNumbersAsc = ['a' => 26, 'b' => 25, 'c' => 24, 'd' => 23, 'e' => 22, 'f' => 21, 'g' => 20, 'h' => 19, 'i' => 18, 'j' => 17, 'k' => 16, 'l' => 15, 'm' => 14, 'n' => 13, 'o' => 12, 'p' => 11, 'q' => 10, 'r' => 9, 's' => 8, 't' => 7, 'u' => 6, 'v' => 5, 'w' => 4, 'x' => 3, 'y' => 2, 'z' => 1];
 
-        $search_title = '';
+        //     // if($orderByField == 'name') {
+        //     //     $sort_option = $orderBy == 'desc' ? $letterNumbersDesc[strtolower($dentist->$orderByField[0])] : $letterNumbersAsc[strtolower($dentist->$orderByField[0])];
+        //     // } else {
+        //     //     $sort_option = $dentist->$orderByField;
+        //     // }
+
+        //     if($dentist->featured) {
+        //         return 100000 + $sort_option;
+        //     } else {
+        //         if($dentist->$orderByField) {
+        //             return 10000 + $sort_option;
+        //         } else {
+        //             if($dentist->is_partner) {
+        //                 return 1 + $sort_option;
+        //             } else {
+        //                 return -1;
+        //             }
+        //         }
+        //     }
+        // });
+
         if (!empty($query)) {
-            //dd('with filter eg worldwide, gen dentists');
-
-            $search_title = trans('trp.page.search.all-results.title', [
-                'name' => $formattedAddress,
-            ]);
-
             $seos = PageSeo::find(26);
 
             $seo_title = str_replace(':location', $formattedAddress, $seos->seo_title);
@@ -344,72 +475,76 @@ class DentistsController extends FrontController {
 
             $social_image = $seos->getImageUrl();
 
-            if($query=='worldwide') {
-                $search_title = trans('trp.page.search.location.title-worldwide', [
-                    'location' => $formattedAddress,
-                ]);
-            } else {
-                $search_title = trans('trp.page.search.location.title', [
-                    'location' => $formattedAddress,
-                ]);
-            }
+            $search_title = trans('trp.page.search.location.title', [
+                'location' => '<span class="mont subtitle">'.$formattedAddress.'</span>',
+            ]);
         }
 
         if (!empty($filter)) {
-            if($filter == 'all-results') {
-
-                $seos = PageSeo::find(34);
-
-                $seo_title = str_replace(':name', $formattedAddress, $seos->seo_title);
-                $seo_description = str_replace(':name', $formattedAddress, $seos->seo_description);
-                $seo_description = str_replace(':results_number', $items->count(), $seo_description);
-
-                $social_title = str_replace(':name', $formattedAddress, $seos->social_title);
-                $social_description = str_replace(':name', $formattedAddress, $seos->social_description);
-                $social_description = str_replace(':results_number', $items->count(), $social_description);
-
-                $search_title = trans('trp.page.search.all-results.title', [
-                    'name' => $formattedAddress,
-                ]);
-            } else {
-                $searchCategories = explode('-', $filter);
-                foreach($searchCategories as $k => $v) {
-                    if($v=='implants' || $v=='dentists') {
-                        $searchCategories[($k-1)] = $searchCategories[($k-1)].'-'.$v;
-                        unset($searchCategories[$k]);
-                    }
+            $searchCategories = explode('-', $filter);
+            foreach($searchCategories as $k => $v) {
+                if($v=='implants' || $v=='dentists') {
+                    $searchCategories[($k-1)] = $searchCategories[($k-1)].'-'.$v;
+                    unset($searchCategories[$k]);
                 }
-                $categoryNames = [];
-                foreach ($searchCategories as $slug) {
-                    if(array_key_exists($slug, $this->categories_dentists)) {
-                        $categoryNames[] = $this->categories_dentists[$slug];
-                    }
+            }
+            $categoryNames = [];
+            foreach ($searchCategories as $slug) {
+                if(array_key_exists($slug, $this->categories_dentists)) {
+                    $categoryNames[] = $this->categories_dentists[$slug];
                 }
+            }
 
-                $seos = PageSeo::find(27);
+            $seos = PageSeo::find(27);
 
-                $seo_title = str_replace(':location', $formattedAddress, $seos->seo_title);
-                $seo_title = str_replace(':category', implode(', ', $categoryNames), $seo_title);
+            $seo_title = str_replace(':location', $formattedAddress, $seos->seo_title);
+            $seo_title = str_replace(':category', implode(', ', $categoryNames), $seo_title);
 
-                $seo_description = str_replace(':location', $formattedAddress, $seos->seo_description);
-                $seo_description = str_replace(':category', implode(', ', $categoryNames), $seo_description);
-                $seo_description = str_replace(':results_number', $items->count(), $seo_description);
+            $seo_description = str_replace(':location', $formattedAddress, $seos->seo_description);
+            $seo_description = str_replace(':category', implode(', ', $categoryNames), $seo_description);
+            $seo_description = str_replace(':results_number', $items->count(), $seo_description);
 
-                $social_title = str_replace(':location', $formattedAddress, $seos->social_title);
-                $social_title = str_replace(':category', implode(', ', $categoryNames), $social_title);
+            $social_title = str_replace(':location', $formattedAddress, $seos->social_title);
+            $social_title = str_replace(':category', implode(', ', $categoryNames), $social_title);
 
-                $social_description = str_replace(':location', $formattedAddress, $seos->social_description);
-                $social_description = str_replace(':category', implode(', ', $categoryNames), $social_description);
-                $social_description = str_replace(':results_number', $items->count(), $social_description);
+            $social_description = str_replace(':location', $formattedAddress, $seos->social_description);
+            $social_description = str_replace(':category', implode(', ', $categoryNames), $social_description);
+            $social_description = str_replace(':results_number', $items->count(), $social_description);
 
-                $social_image = $seos->getImageUrl();
+            $social_image = $seos->getImageUrl();
 
-                $search_title = trans('trp.page.search.location.category.title', [
-                    'location' => $formattedAddress,
-                    'category' => implode(', ', $categoryNames),
-                ]);
+            $search_title = trans('trp.page.search.location.category.title', [
+                'location' => '<span class="mont subtitle">'.$formattedAddress.'</span>',
+                'category' => implode(', ', $categoryNames),
+            ]);
+        }
+
+        $pageTitle = '';
+
+        if(!empty($parsedAddress)) {
+            if(!empty($parsedAddress['city_name'])) {
+                $pageTitle .= $parsedAddress['city_name'].',';
+            }
+
+            if(!empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) {
+                $country = Country::whereHas('translations', function ($query) use ($parsedAddress) {
+                    $query->where('name', 'LIKE', $parsedAddress['country_name']);
+                })->first();
+
+                if(!empty($country) && !in_array($country->id, $this->countriesWithStates)) {
+
+                } else {
+                    $pageTitle .= $parsedAddress['state_name'].',';
+                }
+            }
+
+            if(!empty($parsedAddress['country_name'])) {
+                $pageTitle .= $parsedAddress['country_name'];
             }
         }
+
+        $pageTitle = implode(', ', explode(',', $pageTitle));
+
 		return $this->ShowView('search', [
             'search_title' => !empty($search_title) ? $search_title : null,
             'seo_title' => !empty($seo_title) ? $seo_title : null,
@@ -417,32 +552,66 @@ class DentistsController extends FrontController {
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
             'social_image' => !empty($social_image) ? $social_image : null,
+            
+            'dentistSpecialications' => $dentistSpecialications,
+            'dentistTypes' => $dentistTypes,
+            'requestTypes' => $requestTypes,
+            'types' => [
+                'all' => 'All',
+                'is_dentist' => 'Dentists',
+                'is_clinic' => 'Clinics',
+                'is_partner' => 'Dentacoin Partners',
+                'top_dentist_month' => 'Top Dentists',
+            ],
+            'dentistRatings' => $dentistRatings,
+            'requestRatings' => $requestRatings,
+            'ratings' => [
+                5 => 'Above 4 stars',
+                4 => 'Above 3 stars',
+                3 => 'Above 2 stars',
+                2 => 'Above 1 stars',
+            ],
+
+            'languages' => [
+                'en' => 'English',
+                'gr' => 'German',
+                'it' => 'Italian',
+                'es' => 'Spanish',
+                'fr' => 'French',
+            ],
+
+            'experiences' => [
+                'under_five' => 'Less than 5 years',
+                'under_ten' => '5-10 years',
+                'over_ten' => '10+ years',
+            ],
+            
+            'dentistAvailability' => $dentistAvailability,
+            'requestAvailability' => $requestAvailability,
+            'availabilities' => [
+                'early_morning' => 'Early morning • Starts before 10 am',
+                'morning' => 'Morning • Starts before 12 pm',
+                'afternoon' => 'Afternoon • Starts after 12 pm',
+                'evening' => 'Evening • Starts after 5 pm',
+            ],
+
+            'requestOrder' => $requestOrder,
+            'orders' => $orders,
+
+            'pageTitle' => $pageTitle,
             'formattedAddress' => $formattedAddress,
-            'canonical' => getLangUrl((empty($filter) ? 'dentists/' : '').str_replace([' ', "'"], ['-', ''], $query).(!empty($filter) ? '/'.$filter : '')),
-            'worldwide' => $query=='worldwide',
-            'zoom' => $query=='worldwide' ? 2 : 13,
-            'mode' => $mode,
-            'staticImageUrl' => $staticmap,
-            'query' => $query,
+            'canonical' => $canonical,
             'lat' => !empty($lat) ? $lat : 0,
             'lon' => !empty($lon) ? $lon : 0,
+            'query' => $corrected_query,
 			'items' => $items,
             'searchCategories' => $searchCategories,
-            'stars' => $stars,
-            'sort' => $sort,
-            'partner' => $partner,
-            'ppp' => $ppp,
-            'page_num' => $page,
-            'orders' => $orders,
-            'is_ajax' => $ajax,
-            'noIndex' => $nonCannonicalUrl || !$items->count(),            
-            'countries' => Country::with('translations')->get(),
+            'noIndex' => $nonCannonicalUrl || !$items->count(),
             'css' => [
                 'trp-search.css',
             ],
             'js' => [
-                'search.js',
-                'address.js'
+                'search-results.js',
             ],
             'jscdn' => [
                 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
@@ -461,62 +630,34 @@ class DentistsController extends FrontController {
      */
     public function country($locale=null) {
 
-        if(!empty($this->user) && $this->user->isBanned('trp')) {
-            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
-        }
+        $continentDentists = [];
+		$countriesAlphabetically = [];//create a new array
+        $countAllDentists = 0;
+        $countries = Country::has('dentists')->with(['translations','dentists'])->get();
 
-        $dentists = User::where('is_dentist', 1)
-        ->whereNull('self_deleted')
-        ->whereIn('status', config('dentist-statuses.shown_with_link'))
-        ->whereNotNull('country_id')
-        ->whereNotNull('city_name')
-        ->groupBy('country_id')
-        ->get()
-        ->pluck('country_id');
+        foreach( $countries as $item) {
+            $countriesAlphabetically[$item->name[0]][] = [
+				'name' => $item->name,
+				'slug' => $item->slug,
+				'dentist_count' => $item->dentists->count(),
+				'id' => $item->id,
+				'code' => $item->code,
+				'continent' => $item->continent_id,
+			];
 
-        $dentist_countries = Country::whereIn('id', $dentists )->get();
-
-        $countries_groups = [];
-        $letter = null;
-        $letters = [];
-        $total_rows = 0;
-
-        foreach ($dentist_countries as $country) {
-            $letter = $country->name[0];
-            if(empty( $letters[$letter] )) {
-                $total_rows++;
-                $total_rows++;
-                $letters[$letter] = true;
-                $countries_groups[$total_rows] = $letter;
+            if(!isset($continentDentists[$item->continent_id])) {
+                $continentDentists[$item->continent_id] = 0; 
             }
-
-            $total_rows++;
-            $countries_groups[$total_rows] = $country;
+            $continentDentists[$item->continent_id] += $item->dentists->count();
+            $countAllDentists+=$item->dentists->count();
         }
-
-        $row_length = ceil($total_rows / 4);
-        $breakpoints = [];
-        $p=1;
-        foreach ($countries_groups as $key => $dc) {
-            //echo  $key.' - '.$row_length*$p.'<br/>'; 
-            if($key > $row_length*$p ) {
-                $breakpoints[] = $key;
-                $p++;   
-            }
-        }
-
-        $all_dentists = User::where('is_dentist', 1)
-        ->whereIn('status', config('dentist-statuses.shown_with_link'))
-        ->whereNotNull('country_id')
-        ->whereNotNull('city_name')
-        ->get();
 
         $seos = PageSeo::find(28);
 
         $seo_title = $seos->seo_title;
 
-        $seo_description = str_replace(':countries_number', count($dentist_countries), $seos->seo_description);
-        $seo_description = str_replace(':listings_number', count($all_dentists), $seo_description);
+        $seo_description = str_replace(':countries_number', $countries->count(), $seos->seo_description);
+        $seo_description = str_replace(':listings_number', $countAllDentists, $seo_description);
 
         $social_title = $seos->social_title;
         $social_description = $seos->social_description;
@@ -527,112 +668,14 @@ class DentistsController extends FrontController {
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
             'social_image' => $seos->getImageUrl(),
-            'countries_groups' => $countries_groups,
-            'breakpoints' => $breakpoints,
+            'continents' => Continent::where('id', '!=', 7)->get(),
+            'countriesAlphabetically' => $countriesAlphabetically,
+            'continentDentists' => $continentDentists,
             'css' => [
                 'trp-search-dentists.css',
             ],
             'js' => [
-                'search.js'
-            ],
-        ));
-    }
-
-    /**
-     * search dentist by city
-     */
-    public function city($locale=null, $country_slug, $state_slug) {
-
-        if(!empty($this->user) && $this->user->isBanned('trp')) {
-            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
-        }
-
-        $country = Country::where('slug', 'like', $country_slug )->first();
-
-        if(empty($country)) {
-            return redirect('page-not-found');
-        }
-
-        $cities_name = User::where('is_dentist', 1)
-        ->whereNull('self_deleted')
-        ->whereIn('status', config('dentist-statuses.shown_with_link'))
-        ->where('country_id', $country->id)
-        ->where('state_slug', 'like', $state_slug)
-        ->whereNotNull('city_name')
-        ->groupBy('city_name')
-        ->orderBy('city_name', 'asc')
-        ->get();
-
-        $all_dentists = User::where('is_dentist', 1)
-        ->whereNull('self_deleted')
-        ->whereIn('status', config('dentist-statuses.shown_with_link'))
-        ->where('country_id', $country->id)
-        ->where('state_slug', 'like', $state_slug)
-        ->whereNotNull('city_name')
-        ->count();
-
-        $cities_groups = [];
-        $letter = null;
-        $letters = [];
-        $total_rows = 0;
-
-        foreach ($cities_name as $user) {
-            $letter = $user->city_name[0];
-            if(empty( $letters[$letter] )) {
-                $total_rows++;
-                $total_rows++;
-                $letters[$letter] = true;
-                $cities_groups[$total_rows] = $letter;
-            }
-
-            $total_rows++;
-            $cities_groups[$total_rows] = $user;
-        }
-
-        $row_length = ceil($total_rows / 4); //19
-        $breakpoints = [];
-        $p=1;
-
-        // echo 'Total: '.$total_rows.'<br/>';
-        // var_dump($cities_groups);
-        foreach ($cities_groups as $key => $dc) {
-//             echo  $key.' - '.$row_length*$p.'
-// '; 
-            if($key >= $row_length*$p ) {
-                $breakpoints[] = $key;
-                $p++;   
-            }
-        }
-
-        $seos = PageSeo::find(30);
-
-        $seo_title = str_replace(':country', $country->name, $seos->seo_title);
-
-        $seo_description = str_replace(':country', $country->name, $seos->seo_description);
-        $seo_description = str_replace(':cities_number', count($cities_name), $seo_description);
-
-        $social_title = str_replace(':country', $country->name, $seos->social_title);
-
-        $social_description = str_replace(':country', $country->name, $seos->social_description);
-        $social_description = str_replace(':results_number', $all_dentists, $social_description);
-
-        return $this->ShowView('search-city', array(
-            'seo_title' => !empty($seo_title) ? $seo_title : null,
-            'seo_description' => !empty($seo_description) ? $seo_description : null,
-            'social_title' => !empty($social_title) ? $social_title : null,
-            'social_description' => !empty($social_description) ? $social_description : null,
-            'social_image' => $seos->getImageUrl(),
-            'all_cities' => $cities_name,
-            'cities_name' => $cities_groups,
-            'breakpoints' => $breakpoints,
-            'country' => $country,
-            'total_rows' => $total_rows,
-            'noIndex' => !count($cities_groups),
-            'css' => [
-                'trp-search-dentists.css',
-            ],
-            'js' => [
-                'search.js'
+                'search-dentist-by.js'
             ],
         ));
     }
@@ -646,93 +689,157 @@ class DentistsController extends FrontController {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
 
+        $countryWithStates = Country::with('translations')
+        ->whereIn('id', $this->countriesWithStates)
+        ->where('slug', 'like', $country_slug )
+        ->first();
+
         $country = Country::with('translations')
         ->where('slug', 'like', $country_slug )
         ->first();
+
+        //if country exists
+        if(empty($country)) {
+            return redirect('page-not-found');
+        }
+
+        //if country doesn't have states
+        if(empty($countryWithStates)) {
+            return $this->city($locale, $country_slug);
+        } else {
+            $usersStates = User::select(['state_name', 'state_slug'])
+            ->where('is_dentist', 1)
+            ->whereNull('self_deleted')
+            ->whereIn('status', config('dentist-statuses.shown_with_link'))
+            ->where('country_id', $country->id)
+            ->whereNotNull('state_name')
+            ->whereNotNull('city_name')
+            ->groupBy('state_name')
+            ->orderBy('state_name', 'asc')
+            ->get()
+            ->toArray();
+
+            $states = [];
+            foreach($usersStates as $state) {
+                $states[$state['state_name'][0]][] = $state;
+            }
+    
+            $all_dentists = User::where('is_dentist', 1)
+            ->whereNull('self_deleted')
+            ->whereIn('status', config('dentist-statuses.shown_with_link'))
+            ->where('country_id', $country->id)
+            ->whereNotNull('state_name')
+            ->whereNotNull('city_name')
+            ->count();
+    
+            $seos = PageSeo::find(29);
+            $seo_title = str_replace(':country', $country->name, $seos->seo_title);
+            $seo_description = str_replace(':country', $country->name, $seos->seo_description);
+            $seo_description = str_replace(':states_number', count($states), $seo_description);
+            $social_title = str_replace(':country', $country->name, $seos->social_title);
+            $social_description = str_replace(':country', $country->name, $seos->social_description);
+            $social_description = str_replace(':results_number', $all_dentists, $social_description);
+    
+            $main_title = trans('trp.page.search.city-title', [ 'country' => $country->name]);
+    
+            return $this->ShowView('search-state', array(            
+                'seo_title' => !empty($seo_title) ? $seo_title : null,
+                'seo_description' => !empty($seo_description) ? $seo_description : null,
+                'social_title' => !empty($social_title) ? $social_title : null,
+                'social_description' => !empty($social_description) ? $social_description : null,
+                'social_image' => $seos->getImageUrl(),
+                'states' => $states,
+                'country' => $country,
+                'main_title' => $main_title,
+                'noIndex' => !count($states),
+                'css' => [
+                    'trp-search-dentists.css',
+                ],
+            ));
+        }
+    }
+
+    /**
+     * search dentist by city
+     */
+    public function city($locale=null, $country_slug, $state_slug=null) {
+
+        if(!empty($this->user) && $this->user->isBanned('trp')) {
+            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+        }
+
+        $country = Country::where('slug', 'like', $country_slug )->first();
 
         if(empty($country)) {
             return redirect('page-not-found');
         }
 
-        $states = User::where('is_dentist', 1)
+        $userCities = User::selectRaw('city_name, state_name, state_slug, COUNT(city_name) as cnt')
+        ->where('is_dentist', 1)
         ->whereNull('self_deleted')
         ->whereIn('status', config('dentist-statuses.shown_with_link'))
         ->where('country_id', $country->id)
-        ->whereNotNull('state_name')
-        ->whereNotNull('city_name')
-        ->groupBy('state_name')
-        ->orderBy('state_name', 'asc')
+        ->whereNotNull('city_name');
+        if(!empty($state_slug)) {
+            $userCities = $userCities->where('state_slug', 'like', $state_slug);
+        }
+        $userCities = $userCities->groupBy('city_name')
+        ->orderBy('city_name', 'asc')
         ->get();
+
+        $stateName = $userCities->first()->state_name;
+        $userCities = $userCities->toArray();
+
+        if(!empty($state_slug)) {
+            $countryCount = User::where('is_dentist', 1)
+            ->whereNull('self_deleted')
+            ->whereIn('status', config('dentist-statuses.shown_with_link'))
+            ->where('country_id', $country->id)
+            ->where('state_slug', 'like', $state_slug)
+            ->whereNotNull('state_name')
+            ->whereNotNull('city_name')
+            ->count();
+        } else {
+            $countryCount = $country->dentists->count();
+        }
+
+        $cities = [];
+        foreach($userCities as $city) {
+            $cities[$city['city_name'][0]][] = $city;
+        }
 
         $all_dentists = User::where('is_dentist', 1)
         ->whereNull('self_deleted')
         ->whereIn('status', config('dentist-statuses.shown_with_link'))
-        ->where('country_id', $country->id)
-        ->whereNotNull('state_name')
-        ->whereNotNull('city_name')
+        ->where('country_id', $country->id);
+        if(!empty($state_slug)) {
+            $all_dentists = $all_dentists->where('state_slug', 'like', $state_slug);
+        }
+        $all_dentists = $all_dentists->whereNotNull('city_name')
         ->count();
 
-        $states_groups = [];
-        $letter = null;
-        $letters = [];
-        $total_rows = 0;
-
-        foreach ($states as $user) {
-            $letter = $user->state_name[0];
-            if(empty( $letters[$letter] )) {
-                $total_rows++;
-                $total_rows++;
-                $letters[$letter] = true;
-                $states_groups[$total_rows] = $letter;
-            }
-
-            $total_rows++;
-            $states_groups[$total_rows] = $user;
-        }
-
-        $row_length = ceil($total_rows / 4); //19
-        $breakpoints = [];
-        $p=1;
-
-        foreach ($states_groups as $key => $dc) {
-
-            if($key >= $row_length*$p ) {
-                $breakpoints[] = $key;
-                $p++;   
-            }
-        }
-
-        $seos = PageSeo::find(29);
-
+        $seos = PageSeo::find(30);
         $seo_title = str_replace(':country', $country->name, $seos->seo_title);
-
         $seo_description = str_replace(':country', $country->name, $seos->seo_description);
-        $seo_description = str_replace(':states_number', count($states), $seo_description);
-
+        $seo_description = str_replace(':cities_number', count($cities), $seo_description);
         $social_title = str_replace(':country', $country->name, $seos->social_title);
-
         $social_description = str_replace(':country', $country->name, $seos->social_description);
         $social_description = str_replace(':results_number', $all_dentists, $social_description);
 
-        $main_title = trans('trp.page.search.city-title', [ 'country' => $country->name]);
-
-        return $this->ShowView('search-state', array(            
+        return $this->ShowView('search-city', array(
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
             'social_image' => $seos->getImageUrl(),
-            'states_name' => $states_groups,
-            'breakpoints' => $breakpoints,
+            'cities' => $cities,
             'country' => $country,
-            'total_rows' => $total_rows,
-            'main_title' => $main_title,
-            'noIndex' => !count($states_groups),
+            'stateName' => $stateName,
+            'state_slug' => $state_slug,
+            'countryCount' => $countryCount,
+            'noIndex' => !count($cities),
             'css' => [
                 'trp-search-dentists.css',
-            ],
-            'js' => [
-                'search.js'
             ],
         ));
     }

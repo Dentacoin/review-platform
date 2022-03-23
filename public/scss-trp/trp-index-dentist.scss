@@ -146,15 +146,11 @@ $phone: "screen and (max-width: 768px)";
 		}
     }
 
-	h3 {
+	h4 {
 		margin-top: 20px;
 		margin-bottom: 10px;
 		font-weight: bold;
 		color: #0564c6;
-
-		@media #{$pc} {
-			font-size: 21px;
-		}
 	}
 
 	.flex {
@@ -199,12 +195,8 @@ $phone: "screen and (max-width: 768px)";
     }
 
 	p {
-		font-size: 20px;
+		font-size: 18px;
 		color: #332255;
-
-		@media #{$pc} {
-			font-size: 18px;
-		}
 
 		@media #{$phone} {
 			margin-bottom: 0px;
@@ -224,12 +216,12 @@ $phone: "screen and (max-width: 768px)";
 	}
 
 	a {
-		font-size: 20px;
+		font-size: 18px;
 		color: #0084d1;
 		margin-top: 17px;
-		display: block;
+		display: inline-block;
 		border-bottom: 1px dashed;
-		padding-bottom: 9px;
+		padding-bottom: 3px;
 
 		@media #{$pc} {
 			font-size: 17px;
@@ -291,7 +283,6 @@ $phone: "screen and (max-width: 768px)";
 
 	h4 {
 		display: block;
-		font-weight: bold;
 		color: white;
 	    padding: 0px 170px;
 	    margin-bottom: 40px;
@@ -392,7 +383,20 @@ $phone: "screen and (max-width: 768px)";
     }
 
     .flickity-button {
-    	color: #6fb6d4 !important;
+		width: 48px;
+    	height: 48px;
+
+		&.previous {
+			background: url(../img-trp/testimonial-slider-left.svg) 50% 50% no-repeat;
+		}
+
+		&.next {
+			background: url(../img-trp/testimonial-slider-right.svg) 50% 50% no-repeat;
+		}
+
+		svg {
+			display: none;
+		}
     }
 }
 

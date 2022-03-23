@@ -8,9 +8,8 @@
   padding: 9px 85px 9px 0px; }
   @media screen and (max-width: 768px) {
     .search-form {
-      height: 35px;
-      padding-left: 8px;
-      padding-right: 8px; } }
+      padding: 14px 20px 25px;
+      flex-direction: column; } }
   .search-form .input-wrapper {
     position: relative;
     display: flex;
@@ -18,36 +17,120 @@
     align-items: center;
     padding-left: 19px;
     border-right: 1px solid #888888; }
+    @media screen and (max-width: 998px) {
+      .search-form .input-wrapper {
+        padding-left: 10px; } }
+    @media screen and (max-width: 768px) {
+      .search-form .input-wrapper {
+        width: 100%;
+        padding-left: 0px;
+        border-right: none;
+        border-bottom: 1px solid #dddddd;
+        margin-bottom: 13px; } }
     .search-form .input-wrapper.search-dentist-wrapper {
       min-width: 360px; }
+      @media screen and (max-width: 1200px) {
+        .search-form .input-wrapper.search-dentist-wrapper {
+          min-width: 270px; } }
+      @media screen and (max-width: 998px) {
+        .search-form .input-wrapper.search-dentist-wrapper {
+          min-width: 210px; } }
+      @media screen and (max-width: 768px) {
+        .search-form .input-wrapper.search-dentist-wrapper {
+          min-width: auto; } }
+    @media screen and (max-width: 998px) {
+      .search-form .input-wrapper:not(.search-dentist-wrapper) {
+        width: 140px; } }
+    @media screen and (max-width: 768px) {
+      .search-form .input-wrapper:not(.search-dentist-wrapper) {
+        width: 100%; } }
+  .search-form .fake-input {
+    height: 55px;
+    line-height: 55px;
+    color: #888888;
+    margin-left: 10px;
+    cursor: text;
+    text-align: left;
+    width: 100%; }
+    @media screen and (max-width: 998px) {
+      .search-form .fake-input {
+        height: 35px; } }
+    @media screen and (max-width: 768px) {
+      .search-form .fake-input {
+        font-size: 14px;
+        height: 40px; } }
   .search-form input[type="text"] {
     font-size: 16px;
     border: none;
     padding-left: 10px;
-    height: 55px; }
+    height: 55px;
+    max-width: 100%;
+    width: 100%; }
+    @media screen and (max-width: 998px) {
+      .search-form input[type="text"] {
+        height: 35px; } }
     @media screen and (max-width: 768px) {
       .search-form input[type="text"] {
-        font-size: 14px; } }
+        font-size: 14px;
+        height: 40px; } }
     .search-form input[type="text"]:focus {
       outline: none; }
     .search-form input[type="text"]::placeholder {
       color: #8c8c8c; }
     .search-form input[type="text"]:last-child {
       border-right: none; }
+  .search-form .jump-it {
+    animation: jump 6s;
+    animation-iteration-count: infinite; }
+@keyframes jump {
+  0% {
+    transform: scale(1); }
+  6% {
+    transform: scale(1.1); }
+  9% {
+    transform: scale(1); }
+  12% {
+    transform: scale(1.1); }
+  15% {
+    transform: scale(1); }
+  18% {
+    transform: scale(1.1); }
+  21% {
+    transform: scale(1); }
+  24% {
+    transform: scale(1.1); }
+  27% {
+    transform: scale(1); } }
   .search-form label {
     position: relative;
     font-size: 16px;
     color: #888888;
-    border: 2px solid white;
+    border: 1px solid #cccccc;
     margin-left: 18px;
     display: flex;
     width: 162px;
     padding: 16px 18px 16px 12px;
     border-radius: 5px;
-    cursor: pointer; }
+    cursor: pointer;
+    box-shadow: 0px 3px 4px 1px #e5e5e5; }
+    @media screen and (max-width: 998px) {
+      .search-form label {
+        padding: 12px 5px 12px;
+        margin-left: 10px;
+        font-size: 14px;
+        width: 126px; } }
+    @media screen and (max-width: 768px) {
+      .search-form label {
+        width: 100%;
+        text-align: left;
+        display: flex;
+        margin-left: 0px;
+        padding: 15px 18px 15px 12px;
+        margin-bottom: 24px;
+        margin-top: 10px; } }
     .search-form label.active {
       border-color: #14cab8;
-      box-shadow: 0px 3px 4px 0px #d5d5d5; }
+      border-width: 2px; }
       .search-form label.active .checked-partner {
         display: block; }
     .search-form label img {
@@ -77,187 +160,605 @@
     cursor: pointer;
     width: 72px;
     border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px; }
+    border-bottom-right-radius: 5px;
+    font-size: 0px; }
+    @media screen and (max-width: 768px) {
+      .search-form button {
+        position: static;
+        width: 100%;
+        height: auto;
+        display: block;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: white;
+        padding: 13px 20px;
+        border-radius: 30px; } }
     .search-form button img {
       max-width: 30px; }
+      @media screen and (max-width: 768px) {
+        .search-form button img {
+          display: none; } }
 
-.results {
+.dentists-names-results {
   position: absolute;
   top: 101%;
-  right: 0px;
   left: 0px;
-  padding: 20px;
   z-index: 10000;
   background-color: white;
   border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px; }
+  border-bottom-right-radius: 5px;
+  width: 580px;
+  max-height: 338px;
+  overflow-y: auto;
+  box-shadow: 0px 3px 4px 0px #9f9f9f; }
+  @media screen and (max-width: 1200px) {
+    .dentists-names-results {
+      width: 510px; } }
   @media screen and (max-width: 768px) {
-    .results {
-      text-align: left; } }
-  .results .result-title {
-    color: #777777;
-    border-bottom: 1px solid #9dcbe5;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
-    display: inline-block; }
-  .results a {
+    .dentists-names-results {
+      top: 55px;
+      width: 100%; } }
+  .dentists-names-results .info {
+    font-size: 14px;
+    color: #0084d1;
+    padding: 15px 10px 15px;
+    border-bottom: 1px solid #bebebe;
+    margin-right: 20px;
+    margin-left: 20px;
+    text-align: left; }
+    .dentists-names-results .info.error {
+      border-bottom: none;
+      padding-bottom: 0px; }
+    .dentists-names-results .info b {
+      font-size: 14px;
+      color: #0084d1; }
+  .dentists-names-results .dentist-results {
+    margin-top: 23px;
+    margin-bottom: 20px; }
+  .dentists-names-results .list {
+    margin-top: 16px;
+    margin-bottom: 16px; }
+  .dentists-names-results .dentist-button {
     display: block;
-    padding: 3px 12px;
-    margin-bottom: 4px;
-    font-size: 14px; }
+    padding-left: 20px;
+    padding-bottom: 7px;
+    padding-top: 6px;
+    transition: all 0.3s ease; }
+    .dentists-names-results .dentist-button.active, .dentists-names-results .dentist-button:hover {
+      background-color: #e2ebff;
+      transition: all 0.3s ease; }
+    .dentists-names-results .dentist-button .result-image-dentist {
+      width: 50px; }
+      @media screen and (max-width: 768px) {
+        .dentists-names-results .dentist-button .result-image-dentist {
+          width: 40px; } }
+      .dentists-names-results .dentist-button .result-image-dentist img {
+        display: block;
+        border-radius: 50%;
+        position: relative;
+        z-index: 1; }
+    .dentists-names-results .dentist-button .result-name-dentist {
+      flex: 1;
+      text-align: left;
+      margin-left: 10px; }
+      .dentists-names-results .dentist-button .result-name-dentist p {
+        font-weight: 800;
+        color: #332255;
+        margin-bottom: 6px;
+        margin-top: 4px;
+        text-transform: capitalize; }
+        @media screen and (max-width: 768px) {
+          .dentists-names-results .dentist-button .result-name-dentist p {
+            margin-bottom: 0px;
+            margin-top: 0px; } }
+        .dentists-names-results .dentist-button .result-name-dentist p span {
+          color: #0084d1;
+          font-size: 16px; }
+      .dentists-names-results .dentist-button .result-name-dentist span {
+        font-size: 14px;
+        color: #555555; }
+    .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper {
+      display: flex;
+      background-color: #0084d1;
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+      border-top-left-radius: 13px;
+      border-bottom-left-radius: 13px;
+      padding: 4px 10px; }
+      .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper img {
+        width: 13px;
+        margin-right: 4px; }
+      .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper span {
+        color: white;
+        font-size: 13px;
+        margin-right: 3px; }
+        @media screen and (max-width: 768px) {
+          .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper span {
+            display: none; } }
+    .dentists-names-results .dentist-button .team-dentist {
+      margin-left: 60px;
+      margin-top: 13px;
+      position: relative; }
+      .dentists-names-results .dentist-button .team-dentist:before {
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: 59px;
+        top: -34px;
+        background-color: #aaaaaa;
+        left: -36px; }
+      .dentists-names-results .dentist-button .team-dentist:after {
+        content: '';
+        position: absolute;
+        top: 24px;
+        width: 36px;
+        height: 1px;
+        background-color: #aaaaaa;
+        left: -36px; }
+      .dentists-names-results .dentist-button .team-dentist .result-image-dentist {
+        width: 40px; }
+      .dentists-names-results .dentist-button .team-dentist .result-name-dentist p {
+        font-weight: normal; }
+
+.dentists-countries-results {
+  display: none;
+  position: absolute;
+  top: 101%;
+  left: 360px;
+  width: 580px;
+  z-index: 10000;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0px 3px 4px 0px #9f9f9f; }
+  @media screen and (max-width: 1200px) {
+    .dentists-countries-results {
+      left: 270px;
+      width: 510px; } }
+  @media screen and (max-width: 998px) {
+    .dentists-countries-results {
+      left: 210px; } }
+  @media screen and (max-width: 768px) {
+    .dentists-countries-results {
+      top: 109px;
+      left: 0;
+      width: 100%; } }
+  .dentists-countries-results .info {
+    display: none;
+    font-size: 14px;
+    color: #0084d1;
+    padding: 15px 10px 15px;
+    text-align: left; }
+  .dentists-countries-results .dentists-countries-results-wrapper {
+    max-height: 375px;
+    overflow-y: auto; }
+  .dentists-countries-results .browse-country {
+    width: 100%;
+    background-color: #f2f6ff;
+    color: #1f90d5;
+    font-size: 14px;
+    padding: 9px 22px;
+    text-align: left;
+    display: block;
+    text-decoration: underline;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; }
+  .dentists-countries-results .letters-country-section {
+    padding: 0px 4px;
+    border-bottom: 1px solid #bebebe;
+    padding-bottom: 16px;
+    margin-top: 15px; }
+    .dentists-countries-results .letters-country-section .letter {
+      color: #0084d1;
+      font-weight: 800;
+      text-align: left;
+      padding-left: 20px;
+      margin-bottom: 10px; }
+    .dentists-countries-results .letters-country-section .flex {
+      flex-flow: row wrap; }
+      .dentists-countries-results .letters-country-section .flex .country {
+        width: 50%;
+        text-align: left;
+        margin-bottom: 7px; }
+        .dentists-countries-results .letters-country-section .flex .country a {
+          padding: 5px 20px;
+          display: inline-block;
+          border-radius: 20px;
+          color: #555555;
+          transition: all 0.3s ease; }
+          .dentists-countries-results .letters-country-section .flex .country a:hover {
+            background-color: #f2f6ff;
+            transition: all 0.3s ease; }
+          .dentists-countries-results .letters-country-section .flex .country a span {
+            color: #aaaaaa; }
+
+.dentists-cities-results {
+  display: none;
+  position: absolute;
+  top: 101%;
+  left: 607px;
+  width: 410px;
+  z-index: 10000;
+  overflow-y: auto;
+  max-height: 375px;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0px 3px 4px 0px #9f9f9f; }
+  @media screen and (max-width: 1200px) {
+    .dentists-cities-results {
+      left: 491px;
+      width: 460px; } }
+  @media screen and (max-width: 998px) {
+    .dentists-cities-results {
+      left: 369px;
+      width: 379px; } }
+  @media screen and (max-width: 768px) {
+    .dentists-cities-results {
+      left: 0px;
+      width: 100%;
+      top: 163px; } }
+  .dentists-cities-results .info {
+    display: none;
+    font-size: 14px;
+    color: #0084d1;
+    padding: 15px 10px 5px;
+    text-align: left; }
+  .dentists-cities-results .dentists-cities-results-wrapper {
+    padding: 6px; }
+  .dentists-cities-results .locations-results .result-city-wrapper {
+    text-align: left;
+    margin-bottom: 7px; }
+    .dentists-cities-results .locations-results .result-city-wrapper a {
+      display: inline-block;
+      padding: 5px 20px;
+      border-radius: 20px;
+      color: #555555;
+      transition: all 0.3s ease;
+      text-transform: capitalize; }
+      .dentists-cities-results .locations-results .result-city-wrapper a:hover {
+        background-color: #f2f6ff;
+        transition: all 0.3s ease; }
+      .dentists-cities-results .locations-results .result-city-wrapper a span {
+        color: #0082d1; }
+  .dentists-cities-results .browse-city {
+    width: 100%;
+    background-color: #f2f6ff;
+    color: #1f90d5;
+    font-size: 14px;
+    padding: 9px 22px;
+    text-align: left;
+    display: block;
+    text-decoration: underline;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; }
+
+.search-title {
+  text-align: center;
+  padding-top: 100px;
+  padding-bottom: 30px;
+  background-color: #e2ebff; }
+  @media screen and (max-width: 768px) {
+    .search-title {
+      padding-top: 90px; } }
+  .search-title h1 {
+    color: #332255;
+    font-weight: 800; }
     @media screen and (max-width: 768px) {
-      .results a {
-        padding-left: 0px; } }
-    .results a.special {
-      color: #126585; }
-    .results a.active, .results a:hover {
-      background-color: #d8eaf5; }
-  .results .results-type {
+      .search-title h1 {
+        font-size: 20px; } }
+    @media screen and (max-width: 768px) {
+      .search-title h1 span {
+        font-size: 20px; } }
+
+.search-filters {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 35px; }
+  @media screen and (max-width: 768px) {
+    .search-filters .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: static; } }
+  .search-filters .quick-search-country-wrapper {
+    max-width: 208px;
+    margin: 0px auto 20px;
+    border-bottom: 1px solid #bebebe;
+    display: flex;
+    align-items: center;
+    padding-bottom: 3px; }
+    @media screen and (max-width: 768px) {
+      .search-filters .quick-search-country-wrapper {
+        border: 1px solid #0084d1;
+        margin-left: 0px;
+        max-width: none;
+        margin-bottom: 0px;
+        border-radius: 21px;
+        padding-bottom: 3px; } }
+    .search-filters .quick-search-country-wrapper img {
+      margin-left: 40px;
+      margin-right: 8px;
+      margin-bottom: -3px; }
+      @media screen and (max-width: 768px) {
+        .search-filters .quick-search-country-wrapper img {
+          margin-left: 18px;
+          margin-right: 5px; } }
+    .search-filters .quick-search-country-wrapper input {
+      height: 30px;
+      max-width: 140px; }
+      @media screen and (max-width: 768px) {
+        .search-filters .quick-search-country-wrapper input {
+          height: 37px;
+          max-width: 160px; } }
+      .search-filters .quick-search-country-wrapper input:focus {
+        outline: none; }
+  @media screen and (max-width: 768px) {
+    .search-filters .hidden-mobile-filters {
+      display: none; } }
+  .search-filters .hidden-mobile-filters.open {
+    display: block;
+    text-align: left;
+    position: fixed;
+    top: 0;
+    height: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    z-index: 1000; }
+    .search-filters .hidden-mobile-filters.open .close-filter {
+      display: inline-block;
+      text-align: left;
+      padding: 26px 14px; }
+      .search-filters .hidden-mobile-filters.open .close-filter img {
+        max-width: 37px; }
+    .search-filters .hidden-mobile-filters.open h3 {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      color: #0564c6;
+      font-weight: 900; }
+      .search-filters .hidden-mobile-filters.open h3 img {
+        margin-right: 7px;
+        max-width: 24px;
+        margin-top: 3px; }
+  .search-filters .hidden-mobile-filters .close-filter,
+  .search-filters .hidden-mobile-filters h3 {
+    display: none; }
+  .search-filters .open-country-filters {
+    display: none;
+    width: 96px;
+    background-color: #e2ebff;
+    border: 1px solid #0084d1;
+    padding: 10px 10px;
+    border-radius: 21px;
+    align-items: center; }
+    @media screen and (max-width: 768px) {
+      .search-filters .open-country-filters {
+        display: flex; } }
+    .search-filters .open-country-filters img {
+      max-width: 20px;
+      margin-right: 5px;
+      margin-top: 2px; }
+  .search-filters .continents-filter {
     margin-bottom: 25px; }
-    .results .results-type:last-child {
-      margin-bottom: 0px; }
-  .results .ratings {
-    margin-top: 0px;
-    float: right; }
     @media screen and (max-width: 768px) {
-      .results .ratings {
-        display: none; } }
-    .results .ratings .stars {
-      background: url("../img-trp/stars-gray.png") 50% 50% no-repeat;
-      background-size: contain; }
-      .results .ratings .stars .bar {
-        background: url("../img-trp/stars-black.png") 0% 50% no-repeat;
-        background-size: cover; }
-    .results .ratings .rating {
-      vertical-align: top; }
+      .search-filters .continents-filter {
+        border-bottom: 1px solid #bebebe;
+        padding: 0px 15px 15px; } }
+    .search-filters .continents-filter .continent {
+      font-size: 18px;
+      color: #332255;
+      padding: 8px 15px 10px;
+      background-color: #f2f6ff;
+      display: inline-block;
+      border-radius: 22px;
+      margin-right: 3px;
+      border: 1px solid #f2f6ff;
+      transition: all 0.3s ease; }
+      @media screen and (max-width: 998px) {
+        .search-filters .continents-filter .continent {
+          font-size: 16px;
+          margin-right: 2px; } }
+      @media screen and (max-width: 768px) {
+        .search-filters .continents-filter .continent {
+          margin-bottom: 14px;
+          margin-right: 8px; } }
+      .search-filters .continents-filter .continent.active {
+        border-color: #0084d1;
+        color: #0084d1;
+        text-decoration: underline;
+        background-color: #e2ebff;
+        transition: all 0.3s ease; }
+        @media screen and (max-width: 768px) {
+          .search-filters .continents-filter .continent.active {
+            text-decoration: none; } }
+      .search-filters .continents-filter .continent:hover {
+        color: #0084d1;
+        border-color: #0084d1;
+        transition: all 0.3s ease; }
+      .search-filters .continents-filter .continent:last-child {
+        margin-right: 0px; }
+  @media screen and (max-width: 768px) {
+    .search-filters .countries-letters-wrapper {
+      padding: 0px 15px; } }
+  .search-filters .countries-letters-wrapper .countries-letter {
+    font-size: 18px;
+    color: #332255;
+    padding: 0px 7px;
+    transition: all 0.3s ease; }
+    @media screen and (max-width: 768px) {
+      .search-filters .countries-letters-wrapper .countries-letter {
+        font-size: 16px;
+        display: inline-block;
+        margin-bottom: 10px; } }
+    .search-filters .countries-letters-wrapper .countries-letter.active {
+      transition: all 0.3s ease;
+      text-decoration: underline;
+      color: #0084d1; }
+      @media screen and (max-width: 768px) {
+        .search-filters .countries-letters-wrapper .countries-letter.active {
+          background-color: #f2f6ff;
+          padding: 6px 10px 9px;
+          border-radius: 50%; } }
+    .search-filters .countries-letters-wrapper .countries-letter:hover {
+      color: #0084d1;
+      transition: all 0.3s ease; }
+
+.country-all-practices {
+  padding: 32px 0px; }
+  .country-all-practices .show-all {
+    text-transform: uppercase;
+    color: #0084d1;
+    font-size: 18px;
+    text-decoration: underline;
+    padding-left: 77px; }
+    @media screen and (max-width: 768px) {
+      .country-all-practices .show-all {
+        padding-left: 0px; } }
+  .country-all-practices .country-dentists {
+    padding-right: 77px;
+    font-size: 18px;
+    color: #52a7dd; }
+    @media screen and (max-width: 768px) {
+      .country-all-practices .country-dentists {
+        padding-right: 0px; } }
+
+.countries-wrapper {
+  box-shadow: 0 0 24px 0px #c5c5c5;
+  min-height: calc(100vh - 588px); }
+  .countries-wrapper .continent-title-wrapper {
+    display: none;
+    background-color: #0084d1;
+    padding: 16px 0px; }
+    .countries-wrapper .continent-title-wrapper .continent-title {
+      font-size: 30px;
+      color: white;
+      font-weight: 700;
+      padding-left: 77px;
+      text-transform: uppercase; }
+      @media screen and (max-width: 768px) {
+        .countries-wrapper .continent-title-wrapper .continent-title {
+          padding-left: 0px; } }
+    .countries-wrapper .continent-title-wrapper .continent-dentists {
+      padding-right: 77px;
+      color: white;
+      font-size: 18px; }
+      @media screen and (max-width: 768px) {
+        .countries-wrapper .continent-title-wrapper .continent-dentists {
+          padding-right: 0px;
+          font-size: 0px; } }
+      .countries-wrapper .continent-title-wrapper .continent-dentists span {
+        font-size: 18px;
+        color: white;
+        font-weight: bold; }
+        .countries-wrapper .continent-title-wrapper .continent-dentists span:after {
+          content: ')'; }
+        .countries-wrapper .continent-title-wrapper .continent-dentists span:before {
+          content: '('; }
+  .countries-wrapper .letters-country-section {
+    padding: 35px 64px;
+    border-bottom: 1px solid #bebebe; }
+    @media screen and (max-width: 1200px) {
+      .countries-wrapper .letters-country-section {
+        padding: 35px 0px 35px 20px; } }
+    @media screen and (max-width: 768px) {
+      .countries-wrapper .letters-country-section {
+        padding: 20px 0px; } }
+    .countries-wrapper .letters-country-section:last-child {
+      border-bottom: none; }
+    .countries-wrapper .letters-country-section .letter {
+      font-size: 30px;
+      font-weight: 900;
+      color: #0084d1;
+      margin-bottom: 15px;
+      margin-left: 12px; }
+    .countries-wrapper .letters-country-section .flex {
+      flex-flow: row wrap; }
+      .countries-wrapper .letters-country-section .flex .country {
+        width: 25%; }
+        @media screen and (max-width: 998px) {
+          .countries-wrapper .letters-country-section .flex .country {
+            width: 33.3%; } }
+        @media screen and (max-width: 768px) {
+          .countries-wrapper .letters-country-section .flex .country {
+            width: 50%; } }
+        .countries-wrapper .letters-country-section .flex .country a {
+          font-size: 18px;
+          color: #555555;
+          padding: 6px 13px 8px;
+          border-radius: 20px;
+          display: inline-block;
+          float: left;
+          clear: both;
+          transition: all 0.3s ease; }
+          .countries-wrapper .letters-country-section .flex .country a.active, .countries-wrapper .letters-country-section .flex .country a:hover {
+            background-color: #f2f6ff;
+            transition: all 0.3s ease; }
+          .countries-wrapper .letters-country-section .flex .country a span {
+            font-size: 18px;
+            color: #aaaaaa; }
+  .countries-wrapper.chosen-continent .continent-title-wrapper {
+    display: block; }
+  .countries-wrapper.chosen-continent .container {
+    display: flex;
+    flex-flow: row wrap; }
+  .countries-wrapper.chosen-continent .letters-country-section {
+    width: 25%;
+    padding-right: 20px; }
+    @media screen and (max-width: 998px) {
+      .countries-wrapper.chosen-continent .letters-country-section {
+        width: 33.3%; } }
+    @media screen and (max-width: 768px) {
+      .countries-wrapper.chosen-continent .letters-country-section {
+        width: 100%; } }
+    .countries-wrapper.chosen-continent .letters-country-section .flex .country {
+      width: 100%; }
+  .countries-wrapper.cities-wrapper {
+    min-height: calc(100vh - 421px); }
+    .countries-wrapper.cities-wrapper .letters-country-section .flex .country {
+      width: 100%; }
+      .countries-wrapper.cities-wrapper .letters-country-section .flex .country a {
+        float: none;
+        display: flex;
+        justify-content: space-between; }
 
 .site-content {
-  min-height: calc(100vh - 147px); }
+  min-height: calc(100vh - 127px); }
   @media screen and (max-width: 768px) {
     .site-content {
       min-height: calc(100vh - 292px); } }
-  .site-content .home-search-form {
-    position: relative;
-    padding-top: 14px;
-    left: auto;
-    transform: none;
-    top: auto;
-    z-index: 1002;
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px; }
-    @media screen and (max-width: 1200px) {
-      .site-content .home-search-form {
-        width: 620px; } }
-    @media screen and (max-width: 998px) {
-      .site-content .home-search-form {
-        width: 450px; } }
-    @media screen and (max-width: 768px) {
-      .site-content .home-search-form {
-        width: 100%;
-        padding-top: 60px;
-        padding-left: 10px;
-        padding-right: 10px; } }
-    .site-content .home-search-form form {
-      height: 35px;
-      margin-bottom: 20px; }
-      .site-content .home-search-form form input[type="submit"] {
-        margin-top: 3px; }
-      .site-content .home-search-form form i {
-        line-height: 35px; }
 
-.search-gradient-wave {
-  position: relative; }
-  .search-gradient-wave:before {
-    content: '';
-    background: #09aadf;
-    background: -moz-linear-gradient(top, #09aadf 0%, #1492da 100%);
-    background: -webkit-linear-gradient(top, #09aadf 0%, #1492da 100%);
-    background: linear-gradient(to bottom, #09aadf 0%, #1492da 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#09aadf', endColorstr='#1492da',GradientType=0 );
-    height: 91px;
-    bottom: -91px;
-    width: 100%;
-    left: 0;
-    right: 0;
-    position: absolute; }
-  .search-gradient-wave:after {
-    content: '';
-    background: url(../img-trp/index-bottom-gradient.svg) 50% 0% no-repeat;
-    background-size: cover;
-    height: 130px;
-    bottom: -220px;
-    width: 100%;
-    left: 0;
-    right: 0;
-    position: absolute; }
-
-h1 {
-  color: white;
-  font-weight: bold;
+.scroll-up {
+  background-color: #0084d1;
+  width: 70px;
+  height: 70px;
+  display: block;
   text-align: center;
-  margin-bottom: 30px; }
+  border-radius: 50%;
+  position: fixed;
+  bottom: 140px;
+  right: 20px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10; }
   @media screen and (max-width: 768px) {
-    h1 {
-      text-align: left;
-      padding: 0px 20px; } }
-
-.countries-wrapper {
-  position: relative;
-  z-index: 100; }
-  .countries-wrapper .countries {
-    background-color: white;
-    padding: 70px 115px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.16); }
-    @media screen and (max-width: 998px) {
-      .countries-wrapper .countries {
-        padding: 30px; } }
-    .countries-wrapper .countries .col {
-      padding-left: 20px; }
-      @media screen and (max-width: 768px) {
-        .countries-wrapper .countries .col {
-          padding-left: 0px; } }
-      .countries-wrapper .countries .col:first-child {
-        padding-left: 0px; }
-    .countries-wrapper .countries span {
-      display: block;
-      font-weight: bold;
-      font-size: 45px;
-      height: 80px; }
-      @media screen and (max-width: 1200px) {
-        .countries-wrapper .countries span {
-          font-size: 35px; } }
-      @media screen and (max-width: 998px) {
-        .countries-wrapper .countries span {
-          height: 50px; } }
-    .countries-wrapper .countries .show-all-dentists {
-      font-size: 25px;
-      margin-bottom: 20px; }
-      @media screen and (max-width: 1200px) {
-        .countries-wrapper .countries .show-all-dentists {
-          font-size: 21px; } }
-    .countries-wrapper .countries a {
-      font-size: 20px;
-      height: 40px;
-      display: block;
-      line-height: 0.8;
-      width: 220px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis; }
-      @media screen and (max-width: 1200px) {
-        .countries-wrapper .countries a {
-          font-size: 16px;
-          width: 172.5px; } }
-      @media screen and (max-width: 998px) {
-        .countries-wrapper .countries a {
-          height: 30px;
-          width: 160px; } }
-      @media screen and (max-width: 768px) {
-        .countries-wrapper .countries a {
-          height: 25px;
-          width: 100%; } }
-      .countries-wrapper .countries a:hover {
-        color: #0fb0e5; }
+    .scroll-up {
+      width: 50px;
+      height: 50px;
+      bottom: 88px;
+      right: 16px; } }
+  .scroll-up img {
+    max-width: 28px;
+    transform: rotate(-90deg);
+    display: inline-block;
+    transform-origin: center center;
+    margin-top: 12px; }
+    @media screen and (max-width: 768px) {
+      .scroll-up img {
+        max-width: 18px;
+        margin-top: 8px; } }

@@ -958,6 +958,17 @@ class DentistController extends FrontController {
         $claim_user = !empty($claim_id) ? User::find($claim_id) : null;
         $view_params['claim_user'] = $claim_user;
         
+		$countriesAlphabetically = [];//create a new array
+        foreach(Country::has('dentists')->get() as $item) {
+            $countriesAlphabetically[$item->name[0]][] = [
+                'name' => $item->name,
+				'dentist_count' => $item->dentists->count(),
+				'id' => $item->id,
+				'code' => $item->code,
+			];
+        }
+        $view_params['countriesAlphabetically'] = $countriesAlphabetically;
+        
         return $this->ShowView('user', $view_params);
     }
 
