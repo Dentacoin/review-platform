@@ -85,7 +85,7 @@ class PaidReportsController extends FrontController {
             'js' => [
             	'paid-reports.js'
             ],
-			'social_image' => $seos->getImageUrl(),
+			'social_image' => $item->getImageUrl('social'),
             'seo_title' => $seo_title,
             'seo_description' => $seo_description,
             'social_title' => $social_title,
@@ -243,7 +243,7 @@ class PaidReportsController extends FrontController {
         $social_description = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->social_description);
 
 		return $this->ShowVoxView('research-report-checkout', array(
-			'social_image' => $seos->getImageUrl(),
+			'social_image' => $item->getImageUrl('social'),
             'seo_title' => $seo_title,
             'seo_description' => $seo_description,
             'social_title' => $social_title,
@@ -322,7 +322,7 @@ class PaidReportsController extends FrontController {
         $social_description = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->social_description);
 
 		return $this->ShowVoxView('research-report-payment', array(
-			'social_image' => $seos->getImageUrl(),
+			'social_image' => $item->getImageUrl('social'),
             'seo_title' => $seo_title,
             'seo_description' => $seo_description,
             'social_title' => $social_title,
