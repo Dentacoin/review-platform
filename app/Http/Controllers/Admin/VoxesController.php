@@ -33,6 +33,7 @@ use App\Exports\Export;
 use App\Imports\Import;
 use Carbon\Carbon;
 
+use Validator;
 use Response;
 use Request;
 use Image;
@@ -195,7 +196,32 @@ class VoxesController extends AdminController {
             $newvox = new Vox;
             $this->saveOrUpdate($newvox);
 
-            Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.added'));
+            $validator = Validator::make($this->request->all(), [
+                'slug-en' => array('required'),
+                'title-en' => array('required'),
+            ], [], [
+                'slug-en' => 'slug',
+                'title-en' => 'title',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect('cms/'.$this->current_page.'/edit/'.$newvox->id)
+                ->withInput()
+                ->withErrors($validator);
+            }
+
+            $slug = $this->request->input('slug-en');
+            $vox_with_same_slug = Vox::where('id', '!=', $newvox->id)
+            ->whereHas('translations', function ($queryy) use ($slug) {
+                $queryy->where('slug', 'LIKE', $slug);
+            })->first();
+
+            if($vox_with_same_slug) {
+                Request::session()->flash('error-message', 'Slug duplicated!');
+            } else {
+                Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.added'));
+            }
+
             return redirect('cms/'.$this->current_page.'/edit/'.$newvox->id);
         }
 
@@ -416,6 +442,20 @@ class VoxesController extends AdminController {
 
                 $this->saveOrUpdate($item);
 
+                $validator = Validator::make($this->request->all(), [
+                    'slug-en' => array('required'),
+                    'title-en' => array('required'),
+                ], [], [
+                    'slug-en' => 'slug',
+                    'title-en' => 'title',
+                ]);
+    
+                if ($validator->fails()) {
+                    return redirect('cms/'.$this->current_page.'/edit/'.$item->id)
+                    ->withInput()
+                    ->withErrors($validator);
+                }
+
                 $slug = $this->request->input('slug-en');
                 $vox_with_same_slug = Vox::where('id', '!=', $item->id)
                 ->whereHas('translations', function ($queryy) use ($slug) {
@@ -423,9 +463,9 @@ class VoxesController extends AdminController {
                 })->first();
 
                 if($vox_with_same_slug) {
-                    Request::session()->flash('error-message', 'Slug duplicated!!!!!');
+                    Request::session()->flash('error-message', 'Slug duplicated!');
                 } else if($item->has_stats && $item->stats_questions->isEmpty()) {
-                    Request::session()->flash('error-message', 'Missing stats questions');
+                    Request::session()->flash('error-message', 'Missing stats questions!');
                 } else {
                     Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated'));
                 }
