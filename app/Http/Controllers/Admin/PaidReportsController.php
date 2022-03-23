@@ -179,6 +179,17 @@ class PaidReportsController extends AdminController {
             $img = Image::make( Input::file('photo-social') )->orientate();
             $report->addImage($img, 'social');
         }
+        
+        if( Input::file('photo-all-reports') ) {
+
+            if (!in_array(Input::file('photo-all-reports')->getMimeType(), $extensions)) {
+                $this->request->session()->flash('error-message', 'File extension not supported' );
+                return redirect('cms/vox/paid-reports');
+            }
+                
+            $img = Image::make( Input::file('photo-all-reports') )->orientate();
+            $report->addImage($img, 'all-reports');
+        }
 
         if(!empty(Input::file('gallery'))) {
 

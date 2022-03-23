@@ -16,7 +16,7 @@
     <div class="checkout-section">        
         <div class="flex checkout-container"> <!-- 800px -->
             <div class="main-image-wrapper col">
-                <img class="main-image" src="{{ $item->getImageUrl('social') }}"/>
+                <img class="main-image" src="{{ $item->getImageUrl('all-reports') }}"/>
                 <img class="small-bubble" src="{{ url('new-vox-img/small-bubble.png') }}" />
             </div>
             <div class="col">

@@ -13,7 +13,7 @@
         <div class="main-section flex">
             <div class="main-image-wrapper col">
                 <p class="blue-background">{{ trans('vox.page.paid-reports.latest-report') }}</p>
-                <img class="main-image" src="{{ $item->getImageUrl('social') }}"/>
+                <img class="main-image" src="{{ $item->getImageUrl('all-reports') }}"/>
                 <img class="small-bubble" src="{{ url('new-vox-img/small-bubble.png') }}" />
             </div>
             <div class="col">
@@ -50,8 +50,8 @@
                         <div class="swiper-slide">
                             <div class="slider-inner">
                                 <div class="slide-padding">
-                                    <a href="{{ getLangUrl('dental-industry-reports/'.$report->slug) }}" class="cover" style="background-image: url('{{ $report->getImageUrl('social') }}');">
-                                        <img src="{{ $report->getImageUrl('social') }}" alt="{{ $report->main_title }} {{ $report->title }}" style="display: none !important;"> 
+                                    <a href="{{ getLangUrl('dental-industry-reports/'.$report->slug) }}" class="cover" style="background-image: url('{{ $report->getImageUrl('all-reports') }}');">
+                                        <img src="{{ $report->getImageUrl('all-reports') }}" alt="{{ $report->main_title }} {{ $report->title }}" style="display: none !important;"> 
                                     </a>
                                     <div class="vox-header clearfix">
                                         <h4 class="report-title bold">{{ $report->main_title }} {{ $report->title }}</h4>

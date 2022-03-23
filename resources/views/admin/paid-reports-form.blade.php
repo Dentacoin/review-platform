@@ -154,6 +154,13 @@
                             <div class="form-group">
                                 <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">All reports page image</label>
                                 <div class="col-md-10">
+                                    {{ Form::file('photo-all-reports', ['id' => 'photo-all-reports', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">Social image</label>
+                                <div class="col-md-10">
                                     {{ Form::file('photo-social', ['id' => 'photo-social', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
                                 </div>
                             </div>
@@ -162,14 +169,20 @@
                                 <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">&nbsp;</label>
                                 @if(!empty($item) && $item->hasimage)
                                     <div class="form-group">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             Single page image<br/>
                                             <a target="_blank" href="{{ $item->getImageUrl() }}">
                                                 <img src="{{ $item->getImageUrl() }}" style="width: 100%;" />
                                             </a>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             All reports page image<br/>
+                                            <a target="_blank" href="{{ $item->getImageUrl('all-reports') }}">
+                                                <img src="{{ $item->getImageUrl('all-reports') }}" style="width: 100%;" />
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            Social image<br/>
                                             <a target="_blank" href="{{ $item->getImageUrl('social') }}">
                                                 <img src="{{ $item->getImageUrl('social') }}" style="width: 100%;" />
                                             </a>
