@@ -49,6 +49,22 @@
             </label>
         </div>
 
+        <div class="modern-field alert-after">
+            <select name="payment-method" id="payment-method" class="modern-input">
+                <option>{{ trans('vox.page.paid-reports.order-select-payment-method') }}</option>
+                @foreach(config('payment-methods') as $key => $pm)
+                    <option value="{{ $key }}" {!! $order && $order->payment_method == $key ? 'selected="selected"' : '' !!}>{{ $pm }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="modern-field alert-after">
+            <input type="text" name="name" id="name" value="{{ $order ? $order->name : '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+            <label for="name">
+                <span>{{ trans('vox.page.paid-reports.order-name') }}</span>
+            </label>
+        </div>
+
         <div class="request-row radios-row alert-after">
             <div class="target-label">
                 {{ trans('vox.page.paid-reports.order-need-invoice') }} 
@@ -125,22 +141,6 @@
                       </label>
                 </div>
             </div>
-        </div>
-
-        <div class="modern-field alert-after">
-            <select name="payment-method" id="payment-method" class="modern-input">
-                <option>{{ trans('vox.page.paid-reports.order-select-payment-method') }}</option>
-                @foreach(config('payment-methods') as $key => $pm)
-                    <option value="{{ $key }}" {!! $order && $order->payment_method == $key ? 'selected="selected"' : '' !!}>{{ $pm }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="modern-field alert-after">
-            <input type="text" name="name" id="name" value="{{ $order ? $order->name : '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
-            <label for="name">
-                <span>{{ trans('vox.page.paid-reports.order-name') }}</span>
-            </label>
         </div>
 
         @if(empty($user))
