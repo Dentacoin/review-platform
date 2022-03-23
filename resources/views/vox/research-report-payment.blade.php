@@ -37,14 +37,14 @@
                     'email' => '<b>'.$order->email.'</b>',
                 ]) !!}
                 
-                <a href="javascript:;" class="invoice blue-text-link">{{ trans('vox.page.paid-reports.button-invoice') }}</a>
             @else
                 {!! trans('vox.page.paid-reports.payment-description-with-invoice', [
                     'email' => '<b>'.$order->email.'</b>',
-                ]) !!}
+                    ]) !!}
             @endif
+            <br/><a href="javascript:;" class="invoice blue-text-link">{{ trans('vox.page.paid-reports.button-invoice') }}</a>
         </p>
-        <form class="checkout-form company-form" method="post" action="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/payment/'.$order->id.'/') }}" {!! $order->invoice ? 'style="display:block;"' : '' !!}>
+        <form class="checkout-form company-form {!! $order->invoice ? 'active' : '' !!}" method="post" action="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/payment/'.$order->id.'/') }}">
             {!! csrf_field() !!}
             <div class="modern-field alert-after">
                 <input type="text" name="company-name" id="company-name" value="{{ $order->company_name ?? '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
