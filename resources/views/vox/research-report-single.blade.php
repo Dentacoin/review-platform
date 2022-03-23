@@ -7,7 +7,7 @@
         <img class="blue-circle" src="{{ url('new-vox-img/blue-circle-corner.png') }}"/>
         <div class="paid-container"> <!-- 800px -->
             <a class="back-home" href="{{ getLangUrl('dental-industry-reports/') }}">
-                Back
+                {{ trans('vox.daily-polls.popup.back') }}
             </a>
         </div>
             
@@ -27,13 +27,13 @@
                     @endif
                     <div class="tag">
                         <img src="{{ url('new-vox-img/page.svg') }}" width="36" height="36"/>
-                        {{ $item->pages_count }} pages
+                        {{ trans('vox.page.paid-reports.pages-count', ['count' => $item->pages_count]) }}
                     </div>
                     @if(!empty($item->download_format))
                         @foreach($item->download_format as $format)
                             <div class="tag">
                                 <img src="{{ url('new-vox-img/pdf.svg') }}" width="36" height="36"/>
-                                Download as .{{ $format }}
+                                {{ trans('vox.page.paid-reports.download-as') }} .{{ $format }}
                             </div>
                         @endforeach
                     @endif
@@ -43,7 +43,7 @@
                 <div class="main-inner">
                     <h4>{{ $item->main_title }}</h4>
                     <h4 class="gray-title">{{ $item->title }}</h4>
-                    <p class="date">Pub Month: {{ date('F Y', $item->launched_at->timestamp) }}</p>
+                    <p class="date">{{ trans('vox.page.paid-reports.pub-month', ['month' => date('F Y', $item->launched_at->timestamp)]) }}</p>
                     
                     @if(!empty($item->checklists))
                         <div class="main-checklists">
@@ -61,19 +61,19 @@
                             @foreach($item->languages as $lang)
                                 <div class="tag">
                                     <img src="{{ url('new-vox-img/en.svg') }}" width="36" height="36"/>
-                                    English
+                                    {{ App\Models\PaidReport::$langs[$lang] }}
                                 </div>
                             @endforeach
                         @endif
                         <div class="tag">
                             <img src="{{ url('new-vox-img/page.svg') }}" width="36" height="36"/>
-                            {{ $item->pages_count }} pages
+                            {{ trans('vox.page.paid-reports.pages-count', ['count' => $item->pages_count]) }}
                         </div>
                         @if(!empty($item->download_format))
                             @foreach($item->download_format as $format)
                                 <div class="tag">
                                     <img src="{{ url('new-vox-img/pdf.svg') }}" width="36" height="36"/>
-                                    Download as .{{ $format }}
+                                    {{ trans('vox.page.paid-reports.download-as') }} .{{ $format }}
                                 </div>
                             @endforeach
                         @endif
@@ -85,7 +85,9 @@
                             <p class="discount-price">$ {{ $item->price }}</p>
                         </div>
                         <div class="order-button-wrap">
-                            <a href="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/checkout/') }}" class="blue-button new-style red-button order-button"><img src="{{ url('new-vox-img/cart.svg') }}"/>Order</a>
+                            <a href="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/checkout/') }}" class="blue-button new-style red-button order-button">
+                                <img src="{{ url('new-vox-img/cart.svg') }}"/>{{ trans('vox.page.paid-reports.order') }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -101,7 +103,7 @@
         <div class="accordions">
             <div class="accordion">
                 <a href="javascript:;" class="accordion-title">
-                    TABLE OF CONTENTS
+                    {{ trans('vox.page.paid-reports.table-of-contents-title') }}
 
                     <div class="accordion-buttons">
                         <img class="plus" src="{{ url('new-vox-img/plus-image.png') }}" width="46" height="46"/>
@@ -123,7 +125,7 @@
             </div>
             <div class="accordion">
                 <a href="javascript:;" class="accordion-title">
-                    METHODOLOGY
+                    {{ trans('vox.page.paid-reports.methodology-title') }}
 
                     <div class="accordion-buttons">
                         <img class="plus" src="{{ url('new-vox-img/plus-image.png') }}" width="46" height="46"/>
@@ -136,7 +138,7 @@
             </div>
             <div class="accordion">
                 <a href="javascript:;" class="accordion-title">
-                    SUMMARY
+                    {{ trans('vox.page.paid-reports.summary-title') }}
 
                     <div class="accordion-buttons">
                         <img class="plus" src="{{ url('new-vox-img/plus-image.png') }}" width="46" height="46"/>
@@ -151,7 +153,7 @@
 
         @if($item->photos->isNotEmpty())
             <div class="sample-pages-wrapper">
-                <h3>SAMPLE PAGES</h3>
+                <h3>{{ trans('vox.page.paid-reports.sample-pages-title') }}</h3>
 
                 <div class="sample-pages">
                     <div class="flex">
@@ -172,8 +174,8 @@
     <div class="save-banner">
         <div class="index-container flex flex-center">
             <div class="column">
-                <h2>SAVE UP TO</h2>
-                <p>The most affordable prices<br/>compared to average<br/>industry costs</p>
+                <h2>{{ trans('vox.page.paid-reports.banner-title') }}</h2>
+                <p>{!! trans('vox.page.paid-reports.banner-subtitle') !!}</p>
             </div>
             <div class="column">
                 <img class="perc-off" src="{{ url('new-vox-img/80perc-off.png') }}"/>
@@ -181,15 +183,17 @@
             <div class="column">
                 <p class="checklist">
                     <img class="check" src="{{ url('new-vox-img/check-white.png') }}"/>
-                    Payable via PayPal or crypto
+                    {{ trans('vox.page.paid-reports.banner-checklist-1') }}
                 </p>
                 <p class="checklist">
                     <img class="check" src="{{ url('new-vox-img/check-white.png') }}"/>
-                    Accepted cryptocurrencies: DCN, BTC and ETH
+                    {{ trans('vox.page.paid-reports.banner-checklist-2') }}
                 </p>
                 
                 <div class="tac">
-                    <a href="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/checkout/') }}" class="blue-button new-style white-button with-cart"><img src="{{ url('new-vox-img/cart-red.svg') }}"/>Order</a>
+                    <a href="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/checkout/') }}" class="blue-button new-style white-button with-cart">
+                        <img src="{{ url('new-vox-img/cart-red.svg') }}"/>{{ trans('vox.page.paid-reports.order') }}
+                    </a>
                 </div>
             </div>
         </div>
