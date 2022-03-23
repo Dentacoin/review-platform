@@ -36,13 +36,13 @@
                 {!! trans('vox.page.paid-reports.payment-description-without-invoice', [
                     'email' => '<b>'.$order->email.'</b>',
                 ]) !!}
-                
+                <br/><a href="javascript:;" class="invoice blue-text-link">{{ trans('vox.page.paid-reports.button-invoice') }}</a>
             @else
                 {!! trans('vox.page.paid-reports.payment-description-with-invoice', [
                     'email' => '<b>'.$order->email.'</b>',
-                    ]) !!}
+                ]) !!}
+                <br/><a href="javascript:;" class="invoice blue-text-link">{{ trans('vox.page.paid-reports.button-invoice-see') }}</a>
             @endif
-            <br/><a href="javascript:;" class="invoice blue-text-link">{{ trans('vox.page.paid-reports.button-invoice') }}</a>
         </p>
         <form class="checkout-form company-form {!! $order->invoice ? 'active' : '' !!}" method="post" action="{{ getLangUrl('dental-industry-reports/'.$item->slug.'/payment/'.$order->id.'/') }}">
             {!! csrf_field() !!}

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vox;
 
 use App\Http\Controllers\FrontController;
 
+use App\Models\PaidReport;
 use App\Models\Vox;
 
 use App;
@@ -33,6 +34,14 @@ class SitemapController extends FrontController {
 				$links[] = $vox->getStatsList();
 			}
 		}
+
+		// $paidReports = PaidReport::where('status', 'published')->get();
+
+		// if($paidReports->isNotEmpty()) {
+		// 	foreach ($paidReports as $paidReport) {
+		// 		$links[] = getLangUrl('dental-industry-reports/'.$paidReport->slug);
+		// 	}
+		// }
 
 		$content = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">';
 		foreach ($links as $link) {
