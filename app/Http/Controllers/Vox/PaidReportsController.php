@@ -120,6 +120,7 @@ class PaidReportsController extends FrontController {
             'seo_description' => $seo_description,
             'social_title' => $social_title,
             'social_description' => $social_description,
+			'canonical' => getLangUrl('dental-industry-reports/'.$slug),
 		];
 
 		if($item->photos->isNotEmpty()) {
@@ -287,6 +288,7 @@ class PaidReportsController extends FrontController {
             'social_title' => $social_title,
             'social_description' => $social_description,
             'countries' => Country::with('translations')->get(),
+			'canonical' => getLangUrl('dental-industry-reports/'.$slug),
 			'item' => $item,
 			'order' => $order,
             'css' => [
@@ -405,6 +407,7 @@ class PaidReportsController extends FrontController {
             'seo_description' => $seo_description,
             'social_title' => $social_title,
             'social_description' => $social_description,
+			'canonical' => getLangUrl('dental-industry-reports/'.$slug),
 			'infoText' => $infoText,
 			'order' => $order,
 			'item' => $item,
