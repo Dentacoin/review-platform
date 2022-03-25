@@ -36,7 +36,7 @@
                 {!! trans('vox.page.paid-reports.payment-description-without-invoice', [
                     'email' => '<b>'.$order->email.'</b>',
                 ]) !!}
-                <br/><a href="javascript:;" class="invoice blue-text-link">{{ trans('vox.page.paid-reports.button-invoice') }}</a>
+                {{-- <br/><a href="javascript:;" class="invoice blue-text-link">{{ trans('vox.page.paid-reports.button-invoice') }}</a> --}}
             @else
                 {!! trans('vox.page.paid-reports.payment-description-with-invoice', [
                     'email' => '<b>'.$order->email.'</b>',
