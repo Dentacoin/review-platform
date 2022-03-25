@@ -1094,22 +1094,50 @@ header {
       transition: all 0.3s ease; } }
   header.fixed-header {
     background-color: #e2ebff;
-    box-shadow: 0px 1px 7px 1px #a9a9a9; }
+    box-shadow: 0px 1px 7px 1px #a9a9a9;
+    padding-top: 5px;
+    padding-bottom: 5px; }
     @media screen and (max-width: 768px) {
       header.fixed-header {
-        padding-top: 5px;
-        padding-bottom: 5px;
         transition: all 0.3s ease; }
+        header.fixed-header .mobile-menu {
+          padding: 7px 0px; } }
+    header.fixed-header .header-info .transparent-blue-button {
+      font-size: 16px;
+      background-color: #0084d1;
+      border-color: #0084d1;
+      color: white; }
+    header.fixed-header .header-buttons-wrapper .header-text-link {
+      font-size: 16px; }
+    header.fixed-header .logo {
+      width: 142px; }
+      @media screen and (max-width: 768px) {
         header.fixed-header .logo {
           width: 33px;
           height: 24px;
-          padding-top: 37px; }
-        header.fixed-header .mobile-menu {
-          padding: 7px 0px; } }
+          padding-top: 37px; } }
+    header.fixed-header.header-down {
+      display: none; }
   header .navbar-header {
     display: flex;
     align-items: center;
     justify-content: space-between; }
+  header .container {
+    width: 1290px; }
+    @media screen and (max-width: 1300px) {
+      header .container {
+        width: 1120px; } }
+    @media screen and (max-width: 1200px) {
+      header .container {
+        width: 980px; } }
+    @media screen and (max-width: 998px) {
+      header .container {
+        width: 750px; } }
+    @media screen and (max-width: 768px) {
+      header .container {
+        width: 100%;
+        padding-left: 10px;
+        padding-right: 10px; } }
   header .logo {
     width: 174px;
     padding-top: 50px;
@@ -1272,8 +1300,8 @@ body.logged-in .main-top {
       padding-bottom: 210px; } }
 body.white-header header.fixed-header {
   background-color: white; }
-body.page-welcome-dentist header .header-info .header-buttons-wrapper .header-text-link:first-child:after {
-  display: none; }
+body.page-welcome-dentist header .header-buttons-wrapper .header-text-link:first-child:after {
+  display: none !important; }
 body.blur header,
 body.blur footer,
 body.blur .site-content {
@@ -1512,11 +1540,22 @@ footer {
     background-color: #f7f7f7; }
   footer .container {
     display: flex;
-    align-items: flex-start; }
+    align-items: flex-start;
+    width: 1290px; }
+    @media screen and (max-width: 1300px) {
+      footer .container {
+        width: 1120px; } }
+    @media screen and (max-width: 1200px) {
+      footer .container {
+        width: 980px; } }
+    @media screen and (max-width: 998px) {
+      footer .container {
+        width: 750px; } }
     @media screen and (max-width: 768px) {
       footer .container {
         padding: 0px;
-        flex-direction: column; } }
+        flex-direction: column;
+        width: 100%; } }
   footer .footer-logo {
     flex: 1; }
     @media screen and (max-width: 768px) {
@@ -1661,25 +1700,34 @@ footer {
   display: none;
   overflow-y: auto; }
   .popup.active {
-    display: block; }
+    display: flex; }
   @media screen and (max-width: 768px) {
     .popup {
       overflow-y: scroll; } }
   .popup .popup-inner {
+    background-color: white;
+    overflow-x: hidden;
     position: absolute;
     left: 50%;
     top: 60px;
     transform: translateX(-50%);
-    background-color: transparent;
-    margin-bottom: 60px; }
+    margin-bottom: 60px;
+    box-shadow: 0 0 19px -2px rgbaa(0, 0, 0, 0.8);
+    width: 870px;
+    padding: 55px 70px;
+    border-radius: 40px; }
     @media screen and (max-width: 998px) {
       .popup .popup-inner {
         left: 0;
         right: 0;
         top: 0px;
         height: 100%;
+        width: 100%;
         transform: none;
         margin-bottom: 0px; } }
+    @media screen and (max-width: 768px) {
+      .popup .popup-inner {
+        padding: 20px 20px; } }
     @media screen and (max-width: 998px) {
       .popup .popup-inner .popup-pc-buttons {
         display: none; } }
@@ -1710,8 +1758,27 @@ footer {
       position: absolute;
       left: 20px;
       top: 20px; }
+    .popup .popup-inner h2 {
+      text-align: center;
+      font-size: 35px;
+      margin-bottom: 25px;
+      color: #0564c6;
+      font-weight: 900; }
+      @media screen and (max-width: 768px) {
+        .popup .popup-inner h2 {
+          font-size: 26px;
+          margin-top: 60px;
+          margin-bottom: 40px; } }
     .popup .popup-inner h4 {
       margin-bottom: 35px; }
+    .popup .popup-inner h5 {
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 40px; }
+      .popup .popup-inner h5 b {
+        font-size: 24px;
+        font-weight: 800;
+        text-transform: uppercase; }
     .popup .popup-inner .dcn-review-reward {
       position: absolute;
       left: 20px;
@@ -1754,254 +1821,198 @@ footer {
         background-color: black;
         top: 50%;
         margin-left: 10px; } }
-
-@media screen and (max-width: 998px) {
-  .popup-with-background.fixed-popup {
-    min-height: unset;
-    height: 100vh; } }
-.popup-with-background.fixed-popup .popup-inner {
-  width: 1135px;
-  padding: 100px;
-  padding-left: 45px;
-  background-image: url("../img-trp/popup-left-blue.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  margin-bottom: 0px;
-  margin-bottom: 0px;
-  top: 50%;
-  transform: translateY(-50%) translateX(-50%);
-  height: 60%;
-  display: flex; }
-  @media screen and (max-width: 1200px) {
-    .popup-with-background.fixed-popup .popup-inner {
-      width: 970px; } }
-  @media screen and (max-width: 998px) {
-    .popup-with-background.fixed-popup .popup-inner {
-      width: 100%;
-      padding: 20px 100px;
-      background-image: url("../img-trp/popup-left-blue-tablet.png");
-      background-position: 50% 80%;
-      text-align: center;
-      padding: 0px;
-      height: 100%;
-      top: 0;
-      transform: none; }
-      .popup-with-background.fixed-popup .popup-inner:after {
-        content: '';
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 17%;
-        background: #01a4da; } }
-  .popup-with-background.fixed-popup .popup-inner > div {
-    background-color: transparent; }
-    @media screen and (max-width: 998px) {
-      .popup-with-background.fixed-popup .popup-inner > div {
-        height: 50%;
-        justify-content: flex-end;
-        flex-direction: column;
-        padding: 20px; } }
-  .popup-with-background.fixed-popup .popup-inner .icon {
-    margin-right: 50px; }
-    @media screen and (max-width: 998px) {
-      .popup-with-background.fixed-popup .popup-inner .icon {
-        position: fixed;
-        margin-right: 0px;
-        bottom: 20%;
-        padding: 0px;
-        display: block;
-        height: auto; } }
-    @media screen and (max-width: 768px) {
-      .popup-with-background.fixed-popup .popup-inner .icon img {
-        width: 150px; } }
-  .popup-with-background.fixed-popup .popup-inner .content .h1 {
-    color: black;
-    font-weight: bold;
-    margin-bottom: 35px; }
-    @media screen and (max-width: 768px) {
-      .popup-with-background.fixed-popup .popup-inner .content .h1 {
-        font-size: 35px; } }
-  @media screen and (max-width: 768px) {
-    .popup-with-background.fixed-popup .popup-inner .content h3 {
-      font-size: 20px; } }
-
-.fixed-popup .popup-inner {
-  background-color: white;
-  width: 970px;
-  border-radius: 5px;
-  padding: 20px 100px;
-  overflow-x: hidden; }
-  @media screen and (max-width: 998px) {
-    .fixed-popup .popup-inner {
-      width: 100%;
-      border-radius: 0px;
-      height: 100%; } }
-  @media screen and (max-width: 768px) {
-    .fixed-popup .popup-inner {
-      padding: 20px 20px; } }
-  .fixed-popup .popup-inner h2 {
-    color: #777777;
-    text-align: center;
-    margin-bottom: 55px; }
-    @media screen and (max-width: 768px) {
-      .fixed-popup .popup-inner h2 {
-        margin-top: 60px;
-        margin-bottom: 40px; } }
-  .fixed-popup .popup-inner .popup-title {
-    background-color: #eee;
-    margin-right: -100px;
-    margin-left: -100px;
-    padding: 12px 100px 15px;
-    color: #333333; }
-    @media screen and (max-width: 768px) {
-      .fixed-popup .popup-inner .popup-title {
-        margin-right: -20px;
-        margin-left: -20px;
-        padding: 12px 10px 15px;
-        font-size: 16px;
-        text-align: center; } }
-    .fixed-popup .popup-inner .popup-title.sticky-q {
-      position: fixed;
-      top: 0;
-      width: calc(100% + 0px);
-      right: 20px; }
-    .fixed-popup .popup-inner .popup-title .blue {
-      color: #126585;
-      font-size: 20px; }
+    .popup .popup-inner .blue-button {
+      text-transform: uppercase;
+      padding: 10px 76px;
+      cursor: pointer; }
+    .popup .popup-inner .popup-title {
+      background-color: #eee;
+      margin-right: -100px;
+      margin-left: -100px;
+      padding: 12px 100px 15px;
+      color: #333333; }
       @media screen and (max-width: 768px) {
-        .fixed-popup .popup-inner .popup-title .blue {
-          font-size: 16px; } }
-  .fixed-popup .popup-inner .hidden {
-    display: none; }
-    @media screen and (max-width: 998px) {
-      .fixed-popup .popup-inner .hidden {
-        display: none; } }
-  .fixed-popup .popup-inner .option-span {
-    display: block;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 24px; }
-    .fixed-popup .popup-inner .option-span b {
-      color: #116587;
-      margin-right: 5px;
-      font-size: 18px; }
-  .fixed-popup .popup-inner .popup-desc {
-    margin-top: -20px;
-    font-size: 18px; }
-    @media screen and (max-width: 768px) {
-      .fixed-popup .popup-inner .popup-desc {
-        font-size: 16px; } }
-  .fixed-popup .popup-inner .popup-tabs.colorful-tabs {
-    display: block;
-    position: relative;
-    text-align: center;
-    margin-top: -25px; }
-    .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col {
-      position: relative;
-      font-size: 20px;
-      min-width: 110px;
-      background-color: #dae2eb;
-      display: inline-block;
-      margin-right: -10px;
-      text-align: center;
-      padding: 5px 29px;
-      font-weight: 300;
-      border-radius: 4px;
-      color: #4b607d;
-      border: 1px solid white;
-      transition: all 0.3s ease; }
+        .popup .popup-inner .popup-title {
+          margin-right: -20px;
+          margin-left: -20px;
+          padding: 12px 10px 15px;
+          font-size: 16px;
+          text-align: center; } }
+      .popup .popup-inner .popup-title.sticky-q {
+        position: fixed;
+        top: 0;
+        width: calc(100% + 0px);
+        right: 20px; }
+      .popup .popup-inner .popup-title .blue {
+        color: #126585;
+        font-size: 20px; }
+        @media screen and (max-width: 768px) {
+          .popup .popup-inner .popup-title .blue {
+            font-size: 16px; } }
+    .popup .popup-inner .hidden {
+      display: none; }
       @media screen and (max-width: 998px) {
-        .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col {
-          font-size: 16px;
-          padding: 5px 18px; } }
+        .popup .popup-inner .hidden {
+          display: none; } }
+    .popup .popup-inner .option-span {
+      display: block;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 24px; }
+      .popup .popup-inner .option-span b {
+        color: #116587;
+        margin-right: 5px;
+        font-size: 18px; }
+    .popup .popup-inner .popup-desc {
+      margin-top: -20px;
+      font-size: 18px; }
       @media screen and (max-width: 768px) {
-        .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col {
-          margin-right: auto;
-          margin-left: auto;
-          padding: 5px 10px;
-          min-width: auto;
-          width: 280px;
-          display: block; } }
-      .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col:first-child {
-        margin-right: -10px; }
-        @media screen and (max-width: 768px) {
-          .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col:first-child {
-            margin-right: auto; } }
-      .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col:last-child {
-        margin-left: 0px; }
-        @media screen and (max-width: 768px) {
-          .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col:last-child {
-            margin-left: auto; } }
-      .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col.active {
-        background-image: url("../img-trp/button-gradient.png");
-        background-size: cover;
-        color: white;
-        transition: all 0.3s ease; }
-        @media screen and (max-width: 768px) {
-          .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col.active {
-            transition: all 0.3s ease;
-            min-width: auto; } }
-        .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col.active:hover {
-          color: white; }
-      .fixed-popup .popup-inner .popup-tabs.colorful-tabs .col:hover {
-        background-color: #e9e9e9;
-        color: #4b607d; }
-  .fixed-popup .popup-inner .popup-tabs {
-    margin-top: 45px;
-    margin-bottom: 30px; }
-    @media screen and (max-width: 768px) {
-      .fixed-popup .popup-inner .popup-tabs {
-        margin-top: 25px;
-        margin-bottom: 20px; } }
-    .fixed-popup .popup-inner .popup-tabs a {
+        .popup .popup-inner .popup-desc {
+          font-size: 16px; } }
+    .popup .popup-inner .popup-tabs.colorful-tabs {
+      display: block;
+      position: relative;
       text-align: center;
-      font-size: 20px;
-      border-radius: 5px;
-      border: 1px solid #126585;
-      color: #126585;
-      padding: 10px;
-      transition: all 0.3s ease; }
-      @media screen and (max-width: 768px) {
-        .fixed-popup .popup-inner .popup-tabs a {
-          font-size: 16px;
-          padding: 10px 8px; } }
-      .fixed-popup .popup-inner .popup-tabs a p {
-        color: #126585; }
-        @media screen and (max-width: 768px) {
-          .fixed-popup .popup-inner .popup-tabs a p {
-            font-size: 12px; } }
-      .fixed-popup .popup-inner .popup-tabs a.active, .fixed-popup .popup-inner .popup-tabs a:hover {
-        background-color: #126585;
-        color: white;
+      margin-top: -25px; }
+      .popup .popup-inner .popup-tabs.colorful-tabs .col {
+        position: relative;
+        font-size: 20px;
+        min-width: 110px;
+        background-color: #dae2eb;
+        display: inline-block;
+        margin-right: -10px;
+        text-align: center;
+        padding: 5px 29px;
+        font-weight: 300;
+        border-radius: 4px;
+        color: #4b607d;
+        border: 1px solid white;
         transition: all 0.3s ease; }
-        .fixed-popup .popup-inner .popup-tabs a.active p, .fixed-popup .popup-inner .popup-tabs a:hover p {
-          color: white; }
-      .fixed-popup .popup-inner .popup-tabs a:first-child {
-        margin-right: 15px; }
+        @media screen and (max-width: 998px) {
+          .popup .popup-inner .popup-tabs.colorful-tabs .col {
+            font-size: 16px;
+            padding: 5px 18px; } }
         @media screen and (max-width: 768px) {
-          .fixed-popup .popup-inner .popup-tabs a:first-child {
-            margin-right: 4px; } }
-      .fixed-popup .popup-inner .popup-tabs a:last-child {
-        margin-left: 15px; }
+          .popup .popup-inner .popup-tabs.colorful-tabs .col {
+            margin-right: auto;
+            margin-left: auto;
+            padding: 5px 10px;
+            min-width: auto;
+            width: 280px;
+            display: block; } }
+        .popup .popup-inner .popup-tabs.colorful-tabs .col:first-child {
+          margin-right: -10px; }
+          @media screen and (max-width: 768px) {
+            .popup .popup-inner .popup-tabs.colorful-tabs .col:first-child {
+              margin-right: auto; } }
+        .popup .popup-inner .popup-tabs.colorful-tabs .col:last-child {
+          margin-left: 0px; }
+          @media screen and (max-width: 768px) {
+            .popup .popup-inner .popup-tabs.colorful-tabs .col:last-child {
+              margin-left: auto; } }
+        .popup .popup-inner .popup-tabs.colorful-tabs .col.active {
+          background-image: url("../img-trp/button-gradient.png");
+          background-size: cover;
+          color: white;
+          transition: all 0.3s ease; }
+          @media screen and (max-width: 768px) {
+            .popup .popup-inner .popup-tabs.colorful-tabs .col.active {
+              transition: all 0.3s ease;
+              min-width: auto; } }
+          .popup .popup-inner .popup-tabs.colorful-tabs .col.active:hover {
+            color: white; }
+        .popup .popup-inner .popup-tabs.colorful-tabs .col:hover {
+          background-color: #e9e9e9;
+          color: #4b607d; }
+    .popup .popup-inner .popup-tabs {
+      margin-top: 45px;
+      margin-bottom: 30px; }
+      @media screen and (max-width: 768px) {
+        .popup .popup-inner .popup-tabs {
+          margin-top: 25px;
+          margin-bottom: 20px; } }
+      .popup .popup-inner .popup-tabs a {
+        text-align: center;
+        font-size: 20px;
+        border-radius: 5px;
+        border: 1px solid #126585;
+        color: #126585;
+        padding: 10px;
+        transition: all 0.3s ease; }
         @media screen and (max-width: 768px) {
-          .fixed-popup .popup-inner .popup-tabs a:last-child {
-            margin-left: 4px; } }
-  .fixed-popup .popup-inner .search-dentist {
-    margin-top: 40px;
-    margin-bottom: 30px;
-    position: relative; }
-    .fixed-popup .popup-inner .search-dentist:not(.iconn) input {
-      width: 100%;
-      height: 40px;
-      padding-left: 45px; }
-    .fixed-popup .popup-inner .search-dentist:not(.iconn) img {
-      position: absolute;
-      top: 11px;
-      left: 20px;
-      max-width: 18px; }
-  .fixed-popup .popup-inner .search-dentist-form {
-    margin-bottom: 40px; }
+          .popup .popup-inner .popup-tabs a {
+            font-size: 16px;
+            padding: 10px 8px; } }
+        .popup .popup-inner .popup-tabs a p {
+          color: #126585; }
+          @media screen and (max-width: 768px) {
+            .popup .popup-inner .popup-tabs a p {
+              font-size: 12px; } }
+        .popup .popup-inner .popup-tabs a.active, .popup .popup-inner .popup-tabs a:hover {
+          background-color: #126585;
+          color: white;
+          transition: all 0.3s ease; }
+          .popup .popup-inner .popup-tabs a.active p, .popup .popup-inner .popup-tabs a:hover p {
+            color: white; }
+        .popup .popup-inner .popup-tabs a:first-child {
+          margin-right: 15px; }
+          @media screen and (max-width: 768px) {
+            .popup .popup-inner .popup-tabs a:first-child {
+              margin-right: 4px; } }
+        .popup .popup-inner .popup-tabs a:last-child {
+          margin-left: 15px; }
+          @media screen and (max-width: 768px) {
+            .popup .popup-inner .popup-tabs a:last-child {
+              margin-left: 4px; } }
+    .popup .popup-inner .search-dentist {
+      margin-top: 40px;
+      margin-bottom: 30px;
+      position: relative; }
+      .popup .popup-inner .search-dentist:not(.iconn) input {
+        width: 100%;
+        height: 40px;
+        padding-left: 45px; }
+      .popup .popup-inner .search-dentist:not(.iconn) img {
+        position: absolute;
+        top: 11px;
+        left: 20px;
+        max-width: 18px; }
+    .popup .popup-inner .step-tabs .step {
+      text-align: center;
+      margin-right: 110px; }
+      .popup .popup-inner .step-tabs .step .border {
+        background: #bebebe;
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        border: none;
+        border-radius: 50%; }
+        .popup .popup-inner .step-tabs .step .border span {
+          width: 36px;
+          height: 36px;
+          display: inline-block;
+          border-radius: 50%;
+          margin-top: 2px;
+          margin-right: 0px;
+          background-color: white;
+          line-height: 34px;
+          font-size: 18px;
+          color: #bebebe; }
+      .popup .popup-inner .step-tabs .step p {
+        font-size: 14px;
+        color: #bebebe;
+        margin-top: 5px; }
+      .popup .popup-inner .step-tabs .step.active .border {
+        background: #14cab8;
+        background: linear-gradient(112deg, #14cab8 0%, #0564c6 100%); }
+        .popup .popup-inner .step-tabs .step.active .border span {
+          color: #14cab8; }
+      .popup .popup-inner .step-tabs .step.active p {
+        color: #14cab8; }
+      .popup .popup-inner .step-tabs .step:last-child {
+        margin-right: 0px; }
+    .popup .popup-inner .search-dentist-form {
+      margin-bottom: 40px; }
 
 .mobile-buttons {
   display: none; }

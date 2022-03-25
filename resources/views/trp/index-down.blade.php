@@ -12,7 +12,8 @@
 						/>
 					</div>
 					<div class="mobile-practice-img">
-						<img src="{{ url('img-trp/dentacoin-trusted-reviews-add-practice-icon.png') }}" alt="{{ trans('trp.alt-tags.add-practice') }}"/>
+						<img src="{{ url('img-trp/dentacoin-trusted-reviews-add-practice-icon.png') }}" alt="Banner image of smiling female dentist on Dentacoin Trusted Reviews"/>
+						{{-- {{ trans('trp.alt-tags.add-practice') }} --}}
 					</div>
 				</div>
 				<div class="col">
@@ -26,9 +27,6 @@
 						<li><span class="circle"></span>Get to the top of search results and reach more patients</li>
 						<li><span class="circle"></span>Learn from patient feedback and achieve excellence</li>
 					</ul>
-					{{-- <p>
-						{!! nl2br(trans('trp.page.index.first-rated-dentist.description')) !!}
-					</p> --}}
 					<div class="tac-tablet">
 						<a href="{{ getLangUrl('welcome-dentist') }}" class="transparent-white-button">
 							{{-- {!! nl2br(trans('trp.page.index.first-rated-dentist.button')) !!} --}}
@@ -56,7 +54,7 @@
 			</div>
 			
 			<div class="col">
-				<img src="{{ url('img-trp/how-it-works.png') }}"/>
+				<img src="{{ url('img-trp/how-it-works.png') }}" alt="Smiling male dentist and female patient on Dentacoin Trusted Reviews"/>
 			</div>
 		</div>
 	</div>

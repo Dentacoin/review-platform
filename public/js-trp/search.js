@@ -313,7 +313,12 @@ jQuery(document).ready(function($){
 			
 			city = city.replace($('#search-dentist-city').val().toLowerCase(), '<span>'+$('#search-dentist-city').val().toLowerCase()+'</span>');
 
-			var city_name = prediction.description.split(',')[0]
+			if(prediction.description.split(',').length > 2) {
+				var city_name = prediction.description.split(',')[0]+', '+prediction.description.split(',')[1];
+			} else {
+				var city_name = prediction.description.split(',')[0];
+			}
+			
 			$('.dentists-cities-results-wrapper .locations-results').append('\
 				<div class="result-city-wrapper">\
 					<a class="city-button" href="javascript:;" city-name="'+city_name+'">'+city+'</a>\

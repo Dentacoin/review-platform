@@ -3,11 +3,8 @@ $tablet: "screen and (max-width: 998px)";
 $phone: "screen and (max-width: 768px)";
 
 .welcome-dentist-title-section {
-	padding-top: 118px;
+	padding-top: 70px;
     text-align: center;
-	max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
 
 	@media #{$phone} {
 		padding-left: 12px;
@@ -18,22 +15,52 @@ $phone: "screen and (max-width: 768px)";
 	h1 {
 		font-weight: 800;
 		color: #332255;
-		text-transform: capitalize;
 		margin-bottom: 20px;
 
 		@media #{$phone} {
 			margin-bottom: 10px;
+		}
+
+		br {
+			@media #{$phone} {
+				display: none;
+			}
 		}
 	}
 
 	h3 {
 		color: #332255;
 		margin-bottom: 30px;
+		font-size: 24px;
+
+		@media #{$phone} {
+			font-size: 20px;
+		}
+
+		br {
+			@media #{$phone} {
+				display: none;
+			}
+		}
+	}
+
+	.mobile-button {
+		display: none;
+
+		@media #{$phone} {
+			display: block;
+		}
+
+		a {
+			text-transform: uppercase;
+			padding: 11px 50px;
+			margin-bottom: 25px;
+		}
 	}
 }
 
 .welcome-dentist-section {
-    background: url(../img-trp/welcome-dentist-background.jpg) 50% 0% no-repeat;
+    background: url(../img-trp/dentist-patient-img-1920.jpg) 50% 0% no-repeat;
     background-size: cover;
     position: relative;
     padding-bottom: 53px;
@@ -41,14 +68,18 @@ $phone: "screen and (max-width: 768px)";
 
 	@media #{$phone} {
 		padding-bottom: 30px;
-    	padding-top: 160px;
+    	padding-top: 230px;
+		background-image: url(../img-trp/welcome-dentist-mobile.jpg);
 	}
 
 	.signin-form-wrapper {
-	
+		@media #{$phone} {
+			display: none;
+		}
+
 		form {
 			position: relative;
-			padding: 50px;
+			padding: 37px 42px 25px;
 			background-color: white;
 			box-shadow: -8px -8px 17px 0px rgba(109,109,109,0.3);
 			margin-top: 0px;
@@ -56,14 +87,8 @@ $phone: "screen and (max-width: 768px)";
 			margin-left: auto;
 			border-radius: 40px;
 	
-			@media #{$pc} {
-				padding: 50px 30px;
-				max-width: 420px;
-			}
-	
 			@media #{$tablet} {
-				padding: 30px 20px;
-				max-width: 345px;
+				max-width: 375px;
 			}
 	
 			@media #{$phone} {
@@ -71,23 +96,17 @@ $phone: "screen and (max-width: 768px)";
 			}
 	
 			.modern-field {
-				margin-bottom: 27px;
-
-				@media #{$tablet} {
-					margin-bottom: 26px;
-				}
+				margin-bottom: 22px;
 			}
 	
 			input[type="submit"] {
-				margin-bottom: 25px;
+				margin-bottom: 15px;
 				font-size: 20px;
-				padding: 12px 37px;
+				padding: 12px 47px;
 				text-transform: uppercase;
 				cursor: pointer;
 
 				@media #{$tablet} {
-					margin-bottom: 35px;
-					font-size: 20px;
 					width: 100%;
 				}
 			}
@@ -97,10 +116,6 @@ $phone: "screen and (max-width: 768px)";
 			text-align: center;
 			color: #332255;
 			font-size: 18px;
-
-			@media #{$tablet} {
-				font-size: 16px;
-			}
 	
 			a {
 				font-weight: bold;
@@ -134,15 +149,16 @@ $phone: "screen and (max-width: 768px)";
     	color: #332255;
     	font-weight: bold;
     	margin-bottom: 60px;
-    	margin-top: 80px;
+		margin-top: 65px;
 
 		@media #{$tablet} {
 			margin-top: 50px;
 		}
 
 		@media #{$phone} {
-			margin-top: 44px;
-			margin-bottom: 20px;
+			padding: 0px 40px 30px;
+			margin-top: 25px;
+			margin-bottom: 10px;
 		}
     }
 
@@ -151,6 +167,10 @@ $phone: "screen and (max-width: 768px)";
 		margin-bottom: 10px;
 		font-weight: bold;
 		color: #0564c6;
+		
+		@media #{$phone} {
+			font-size: 20px;
+		}
 	}
 
 	.flex {
@@ -168,13 +188,13 @@ $phone: "screen and (max-width: 768px)";
 			@media #{$phone} {
 				width: 100%;
 				padding-top: 35px;
-				padding-bottom: 45px;
+				padding-bottom: 25px;
 				margin-bottom: 0px;
 				padding-left: 10px;
     			padding-right: 10px
 			}
 
-			&:nth-child(2n) {
+			&:nth-child(3) {
 				@media #{$phone} {
 					background-color: #f2f6ff;
 				}
@@ -299,9 +319,11 @@ $phone: "screen and (max-width: 768px)";
 
 	    @media #{$phone} {
 			line-height: 25px;
-	    	padding-left: 0px;
-	    	padding-right: 0px;
 	    	margin-bottom: 30px;
+
+			font-size: 20px;
+			font-weight: bold;
+			padding: 0px 10px;
 	    }
 	}
 
@@ -535,7 +557,7 @@ $phone: "screen and (max-width: 768px)";
 	.right {
 
 		img {
-			max-width: 460px;
+			max-width: 450px;
 			display: block;
 
 			@media #{$pc} {

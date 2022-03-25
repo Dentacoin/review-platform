@@ -1,4 +1,5 @@
 <div class="popup fixed-popup active removable" id="popup-lead-magnet" scss-load="trp-popup-lead-magnet">
+	<img class="popup-image" src="{{ url('img-trp/invite-popup-image.png') }}"/>
 	<div class="popup-inner inner-white">
 		<div class="loader-mask">
 		    <div class="loader">
@@ -17,20 +18,30 @@
 		<div class="popup-mobile-buttons">
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
-		<h2>
-			{!! nl2br(trans('trp.popup.popup-lead-magnet.title')) !!}
+		<h2 class="mont">
+			{{-- {!! nl2br(trans('trp.popup.popup-lead-magnet.title')) !!} --}}
+			Discover your online reputation strength
 		</h2>
 
-		<div class="popup-tabs colorful-tabs flex flex-mobile">
-			<span class="active col" style="z-index: 3">
-				1
-			</span>
-			<span class="col second-step" style="z-index: 2">
-				2
-			</span>
-			<span class="col" style="z-index: 1">
-				3
-			</span>
+		<div class="step-tabs flex flex-center flex-text-center flex-mobile">
+			<div class="step active">
+				<span class="border">
+					<span>1</span>
+				</span>
+				<p>Practice info</p>
+			</div>
+			<div class="step">
+				<span class="border">
+					<span>2</span>
+				</span>
+				<p>Current state</p>
+			</div>
+			<div class="step">
+				<span class="border">
+					<span>3</span>
+				</span>
+				<p>Your score</p>
+			</div>
 		</div>
 
 		{!! Form::open(array('method' => 'post', 'class' => 'lead-magnet-form-step2', 'id' => 'lead-magnet-form-step2', 'url' => getLangUrl('lead-magnet-step2') )) !!}

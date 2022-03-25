@@ -7,59 +7,6 @@ $phone: "screen and (max-width: 768px)";
 	&.active {
 		display: flex;
 	}
-	
-	.popup-inner {
-        box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
-		width: 870px;
-		padding: 55px 70px;
-		border-radius: 40px;
-
-		h2 {
-			font-size: 35px;
-			margin-bottom: 25px;
-			color: #0564c6;
-			font-weight: 900;
-
-			@media #{$phone} {
-				font-size: 26px;
-			}
-		}
-
-		h5 {
-			font-weight: bold;
-			text-align: center;
-			margin-bottom: 40px;
-
-			b {
-				font-size: 24px;
-				font-weight: 800;
-				text-transform: uppercase;
-			}
-		}
-
-		.popup-title {
-			padding: 12px 60px 15px;
-			font-size: 23px;
-			font-weight: 300;
-			text-align: center;
-
-			@media #{$tablet} {
-				font-size: 18px;
-			}
-
-			@media #{$phone} {
-				font-size: 16px;
-				padding: 12px 10px 15px;
-				font-weight: normal;
-			}
-		}
-
-		.blue-button {
-			text-transform: uppercase;
-			padding: 10px 76px;
-			cursor: pointer;
-		}
-	}
 }
 
 .invite-new-dentist-success-popup.fixed-popup {

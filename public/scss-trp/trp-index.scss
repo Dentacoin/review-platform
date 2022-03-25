@@ -16,6 +16,10 @@ $phone: "screen and (max-width: 768px)";
 		padding-bottom: 40px;
 	}
 
+	@media screen and (max-height: 750px) {
+		padding-top: 110px;
+	}
+
 	@media #{$phone} {
 		padding-top: 80px;
 	}

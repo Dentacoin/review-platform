@@ -6,6 +6,9 @@
   @media screen and (max-width: 998px) {
     .flickity-oval {
       margin-top: 60px; } }
+  @media screen and (max-height: 750px) {
+    .flickity-oval {
+      margin-top: 41px; } }
   @media screen and (max-width: 768px) {
     .flickity-oval {
       margin-top: 45px; } }

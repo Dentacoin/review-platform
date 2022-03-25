@@ -2,7 +2,8 @@
 	<div class="container section-dentist-info">
 		<div class="flex">
 			<div class="col tac">
-				<img src="{{ url('img-trp/attract-new-patients.svg') }}" alt="{{ trans('trp.alt-tags.attract-new-patients') }}">
+				<img src="{{ url('img-trp/attract-new-patients.svg') }}" alt="Attract new patients on Dentacoin Trusted Reviews icon">
+				{{-- {{ trans('trp.alt-tags.attract-new-patients') }} --}}
 				<div class="info-padding">
 					<h4>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-title')) !!}</h4>
 					<p>
@@ -12,7 +13,8 @@
 				</div>
 			</div>
 			<div class="col tac">
-				<img src="{{ url('img-trp/stimulate-feedback.svg') }}" alt="{{ trans('trp.alt-tags.more-reviews') }}">   
+				<img src="{{ url('img-trp/stimulate-feedback.svg') }}" alt="Stimulate patient feedback on Dentacoin Trusted Reviews icon">
+				{{-- {{ trans('trp.alt-tags.more-reviews') }}  --}}
 				<div class="info-padding"> 			
 					<h4>
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-2-title')) !!} --}}
@@ -25,7 +27,8 @@
 				</div>
 			</div>
 			<div class="col tac">
-				<img src="{{ url('img-trp/rank-higher-google.svg') }}" alt="{{ trans('trp.alt-tags.better-google-ranking') }}">
+				<img src="{{ url('img-trp/rank-higher-google.svg') }}" alt="Rank higher on Google with Dentacoin Trusted Reviews icon">
+				{{-- {{ trans('trp.alt-tags.better-google-ranking') }} --}}
 				<div class="info-padding">
 					<h4>
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-3-title')) !!} --}}
@@ -42,7 +45,8 @@
 				</a>
 			</div>
 			<div class="col tac">
-				<img src="{{ url('img-trp/access-all-apps.svg') }}" alt="{{ trans('trp.alt-tags.better-online-reputation') }}">
+				<img src="{{ url('img-trp/access-all-apps.svg') }}" alt="Access all Dentacoin Apps by signing up on Trusted Reviews icon">
+				{{-- {{ trans('trp.alt-tags.better-online-reputation') }} --}}
 				<div class="info-padding">
 					<h4>
 						{{-- {!! nl2br(trans('trp.page.index-dentist.usp.step-4-title')) !!} --}}
@@ -139,7 +143,7 @@
 			</a>
 		</div>
 		<div class="right">
-			<img src="{{ url('img-trp/launch-listing-dentist.png') }}"/>
+			<img src="{{ url('img-trp/launch-listing-dentist.png') }}" alt="Smiling female dental assistant showing how to launch your free listing on Trusted Reviews"/>
 		</div>
 	</div>
 </div>

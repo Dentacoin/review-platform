@@ -88,10 +88,12 @@
 
 			<div class="flex flex-text-center">
 				<div class="info-box">
-					<div class="info-icon to-append-image" data-src="https://urgent.reviews.dentacoin.com/img-trp/dentacoin-find-the-best-dentist-icon.png" data-alt="{{ trans('trp.alt-tags.best-dentist') }}">
+					<div class="info-icon to-append-image" data-src="https://urgent.reviews.dentacoin.com/img-trp/dentacoin-find-the-best-dentist-icon.png" data-alt="Find the best dentist on Dentacoin Trusted Reviews icon">
+						{{-- {{ trans('trp.alt-tags.best-dentist') }} --}}
 					</div>
 					<div class="info-text">
-						<h3>{!! nl2br(trans('trp.page.index.intro-title-1')) !!}</h3>
+						{{-- <h3>{!! nl2br(trans('trp.page.index.intro-title-1')) !!}</h3> --}}
+						<h3>Find the best dentist</h3>
 						{{-- <p>{!! nl2br(trans('trp.page.index.intro-description-1')) !!}</p> --}}
 						<p>Browse dentist ratings and choose the best provider in your area.</p>
 						<a href="javascript:;" class="white-button scroll-to-search">Search now</a>
@@ -99,7 +101,8 @@
 					</div>
 				</div>
 				<div class="info-box">
-					<div class="info-icon to-append-image" data-src="https://urgent.reviews.dentacoin.com/img-trp/dentacoin-make-your-voice-heard-icon.png" data-alt="{{ trans('trp.alt-tags.make-voice-heard') }}">
+					<div class="info-icon to-append-image" data-src="https://urgent.reviews.dentacoin.com/img-trp/dentacoin-make-your-voice-heard-icon.png" data-alt="Review your dentist on Dentacoin Trusted Reviews icon">
+						{{-- {{ trans('trp.alt-tags.make-voice-heard') }} --}}
 					</div>
 					<div class="info-text">
 						{{-- <h3>{!! nl2br(trans('trp.page.index.intro-title-2')) !!}</h3> --}}
@@ -110,7 +113,8 @@
 					</div>
 				</div>
 				<div class="info-box">
-					<div class="info-icon to-append-image" data-src="https://urgent.reviews.dentacoin.com/img-trp/dentacoin-get-rewarded-icon.png" data-alt="{{ trans('trp.alt-tags.get-rewarded') }}">
+					<div class="info-icon to-append-image" data-src="https://urgent.reviews.dentacoin.com/img-trp/dentacoin-get-rewarded-icon.png" data-alt="Get rewarded for your Dentacoin Trusted Reviews icon">
+						{{-- {{ trans('trp.alt-tags.get-rewarded') }} --}}
 					</div>
 					<div class="info-text">
 						{{-- <h3>{!! nl2br(trans('trp.page.index.intro-title-3')) !!}</h3> --}}

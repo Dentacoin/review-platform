@@ -22,21 +22,47 @@ header {
 	&.fixed-header {
 		background-color: #e2ebff;
 		box-shadow: 0px 1px 7px 1px #a9a9a9;
+		padding-top: 5px;
+		padding-bottom: 5px;
 
 		@media #{$phone} {
-			padding-top: 5px;
-			padding-bottom: 5px;
 			transition: all 0.3s ease;
-
-			.logo {
-				width: 33px;
-				height: 24px;
-				padding-top: 37px;
-			}
 	
 			.mobile-menu {
 				padding: 7px 0px;
 			}
+		}
+
+		.header-info {
+			.transparent-blue-button {
+				font-size: 16px;
+				background-color: #0084d1;
+				border-color: #0084d1;
+    			color: white;
+			}
+		}
+
+		.header-buttons-wrapper {
+			.header-text-link {
+				font-size: 16px;
+			}
+		}
+
+		.logo {
+			width: 142px;
+
+			@media #{$phone} {
+				width: 33px;
+				height: 24px;
+				padding-top: 37px;
+			}
+		}
+
+		&.header-down {
+
+			// .open-menu {
+				display: none;
+			// }
 		}
 	}
 
@@ -44,6 +70,26 @@ header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+	}
+
+	.container {
+		width: 1290px;
+
+		@media screen and (max-width: 1300px) {
+			width: 1120px;
+		}
+
+		@media #{$pc} {
+			width: 980px;
+		}
+		@media #{$tablet} {
+			width: 750px;
+		}
+		@media #{$phone} {
+			width: 100%;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
 	}
 
 	.logo {
@@ -289,13 +335,11 @@ body {
 
 	&.page-welcome-dentist {
 		header {
-			.header-info {
-				.header-buttons-wrapper {
-					.header-text-link {
-						&:first-child {
-							&:after {
-								display: none;
-							}
+			.header-buttons-wrapper {
+				.header-text-link {
+					&:first-child {
+						&:after {
+							display: none !important;
 						}
 					}
 				}
@@ -643,10 +687,23 @@ footer {
 	.container {
 		display: flex;
 		align-items: flex-start;
+		width: 1290px;
+
+		@media screen and (max-width: 1300px) {
+			width: 1120px;
+		}
+
+		@media #{$pc} {
+			width: 980px;
+		}
+		@media #{$tablet} {
+			width: 750px;
+		}
 
 		@media #{$phone} {
 			padding: 0px;
 			flex-direction: column;
+			width: 100%;
 		}
 	}
 
@@ -841,7 +898,7 @@ footer {
 	overflow-y: auto;
 
 	&.active {
-		display: block;
+		display: flex;
 	}
 
 	@media #{$phone} {
@@ -849,20 +906,31 @@ footer {
 	}
 
 	.popup-inner {
+		
+		background-color: white;
+		overflow-x: hidden;
 		position: absolute;
 		left: 50%;
 		top: 60px;
     	transform: translateX(-50%);
-		background-color: transparent;
 		margin-bottom: 60px;
+		box-shadow: 0 0 19px -2px rgbaa(0,0,0,0.8);
+		width: 870px;
+		padding: 55px 70px;
+		border-radius: 40px;
 
 		@media #{$tablet} {
 			left: 0;
 			right: 0;
 	    	top: 0px;
 	    	height: 100%;
+	    	width: 100%;
 	    	transform: none;
 	    	margin-bottom: 0px;
+	    }
+
+	    @media #{$phone} {
+	    	padding: 20px $popup_padding_mobile;
 	    }
 
 	    .popup-pc-buttons {
@@ -913,8 +981,34 @@ footer {
 			top: 20px;
 		}
 
+		h2 {
+			text-align: center;
+			font-size: 35px;
+			margin-bottom: 25px;
+			color: #0564c6;
+			font-weight: 900;
+
+			@media #{$phone} {
+				font-size: 26px;
+	    		margin-top: 60px;
+	    		margin-bottom: 40px;
+			}
+		}
+
 		h4 {
 			margin-bottom: 35px;
+		}
+
+		h5 {
+			font-weight: bold;
+			text-align: center;
+			margin-bottom: 40px;
+
+			b {
+				font-size: 24px;
+				font-weight: 800;
+				text-transform: uppercase;
+			}
 		}
 
 		.dcn-review-reward {
@@ -978,133 +1072,11 @@ footer {
 				}
 			}
 		}
-	}
-}
 
-.popup-with-background.fixed-popup {
-    @media #{$tablet} {
-        min-height: unset;
-        height: 100vh;
-    }
- 
-    .popup-inner {
-        width: 1135px;
-        padding: 100px;
-        padding-left: 45px;
-        background-image: url('../img-trp/popup-left-blue.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        margin-bottom: 0px;
-
-        margin-bottom: 0px;
-	    top: 50%;
-	    transform: translateY(-50%) translateX(-50%);
-	    height: 60%;
-	    display: flex;
- 
-        @media #{$pc} {
-            width: 970px;
-        }
- 
-        @media #{$tablet} {
-            width: 100%;
-            padding: 20px 100px;
-            background-image: url('../img-trp/popup-left-blue-tablet.png');
-            background-position: 50% 80%;
-            text-align: center;
-            padding: 0px;
-		    height: 100%;
-		    top: 0;
-		    transform: none;
-
-            &:after {
-            	content: '';
-            	position: fixed;
-            	bottom: 0;
-            	left: 0;
-            	right: 0;
-            	height: 17%;
-            	background: #01a4da;
-            }
-        }
- 
-        & > div {
-            background-color: transparent;
-
-        	@media #{$tablet} {
-			    height: 50%;
-			    justify-content: flex-end;
-			    flex-direction: column;
-			    padding: 20px;
-			}
-        }
- 
-        .icon {
-            margin-right: 50px;
- 
-            @media #{$tablet} {
-                position: fixed;
-			    margin-right: 0px;
-			    bottom: 20%;
-			    padding: 0px;
-			    display: block;
-			    height: auto;
-            }
- 
-            img {
-                @media #{$phone} {
-                    width: 150px;
-                }
-            }
-        }
- 
-        .content {
-            .h1 {
-                color: black;
-                font-weight: bold;
-                margin-bottom: 35px;
- 
-                @media #{$phone} {
-                    font-size: 35px;
-                }
-            }
- 
-            h3 {
-                @media #{$phone} {
-                    font-size: 20px;
-                }
-            }
-        }
-    }
-}
-
-.fixed-popup {
-	.popup-inner {
-		background-color: white;
-		width: 970px;
-		border-radius: 5px;
-		padding: 20px $popup_padding;
-		overflow-x: hidden;
-
-		@media #{$tablet} {
-	    	width: 100%;
-	    	border-radius: 0px;
-	    	height: 100%;
-	    }
-
-	    @media #{$phone} {
-	    	padding: 20px $popup_padding_mobile;
-	    }
-
-		h2 {
-			color: #777777;
-			text-align: center;
-			margin-bottom: 55px;
-
-			@media #{$phone} {
-	    		margin-top: 60px;
-	    		margin-bottom: 40px;
-	    	}
+		.blue-button {
+			text-transform: uppercase;
+			padding: 10px 76px;
+			cursor: pointer;
 		}
 
 		.popup-title {
@@ -1321,6 +1293,60 @@ footer {
 					top: 11px;
 					left: 20px;
 					max-width: 18px;
+				}
+			}
+		}
+
+		.step-tabs {
+			.step {
+				text-align: center;
+				margin-right: 110px;
+
+				.border {
+					background: #bebebe;
+					width: 40px;
+					height: 40px;
+					display: inline-block;
+					border: none;
+					border-radius: 50%;
+
+					span {
+						width: 36px;
+						height: 36px;
+						display: inline-block;
+						border-radius: 50%;
+						margin-top: 2px;
+						margin-right: 0px;
+						background-color: white;
+						line-height: 34px;
+						font-size: 18px;
+						color: #bebebe;
+					}
+				}
+
+				p {
+					font-size: 14px;
+					color: #bebebe;
+					margin-top: 5px;
+				}
+
+				&.active {
+					.border {
+						background: rgba(20,202,184, 1);
+						background: linear-gradient(112deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
+
+						span {
+							color: #14cab8;
+						}
+					}
+
+					p {
+						color: #14cab8;
+					}
+				}
+
+				&:last-child {
+					margin-right: 0px;
 				}
 			}
 		}

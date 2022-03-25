@@ -1,9 +1,6 @@
 .welcome-dentist-title-section {
-  padding-top: 118px;
-  text-align: center;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto; }
+  padding-top: 70px;
+  text-align: center; }
   @media screen and (max-width: 768px) {
     .welcome-dentist-title-section {
       padding-left: 12px;
@@ -12,17 +9,35 @@
   .welcome-dentist-title-section h1 {
     font-weight: 800;
     color: #332255;
-    text-transform: capitalize;
     margin-bottom: 20px; }
     @media screen and (max-width: 768px) {
       .welcome-dentist-title-section h1 {
         margin-bottom: 10px; } }
+    @media screen and (max-width: 768px) {
+      .welcome-dentist-title-section h1 br {
+        display: none; } }
   .welcome-dentist-title-section h3 {
     color: #332255;
-    margin-bottom: 30px; }
+    margin-bottom: 30px;
+    font-size: 24px; }
+    @media screen and (max-width: 768px) {
+      .welcome-dentist-title-section h3 {
+        font-size: 20px; } }
+    @media screen and (max-width: 768px) {
+      .welcome-dentist-title-section h3 br {
+        display: none; } }
+  .welcome-dentist-title-section .mobile-button {
+    display: none; }
+    @media screen and (max-width: 768px) {
+      .welcome-dentist-title-section .mobile-button {
+        display: block; } }
+    .welcome-dentist-title-section .mobile-button a {
+      text-transform: uppercase;
+      padding: 11px 50px;
+      margin-bottom: 25px; }
 
 .welcome-dentist-section {
-  background: url(../img-trp/welcome-dentist-background.jpg) 50% 0% no-repeat;
+  background: url(../img-trp/dentist-patient-img-1920.jpg) 50% 0% no-repeat;
   background-size: cover;
   position: relative;
   padding-bottom: 53px;
@@ -30,50 +45,41 @@
   @media screen and (max-width: 768px) {
     .welcome-dentist-section {
       padding-bottom: 30px;
-      padding-top: 160px; } }
+      padding-top: 230px;
+      background-image: url(../img-trp/welcome-dentist-mobile.jpg); } }
+  @media screen and (max-width: 768px) {
+    .welcome-dentist-section .signin-form-wrapper {
+      display: none; } }
   .welcome-dentist-section .signin-form-wrapper form {
     position: relative;
-    padding: 50px;
+    padding: 37px 42px 25px;
     background-color: white;
     box-shadow: -8px -8px 17px 0px rgba(109, 109, 109, 0.3);
     margin-top: 0px;
     max-width: 460px;
     margin-left: auto;
     border-radius: 40px; }
-    @media screen and (max-width: 1200px) {
-      .welcome-dentist-section .signin-form-wrapper form {
-        padding: 50px 30px;
-        max-width: 420px; } }
     @media screen and (max-width: 998px) {
       .welcome-dentist-section .signin-form-wrapper form {
-        padding: 30px 20px;
-        max-width: 345px; } }
+        max-width: 375px; } }
     @media screen and (max-width: 768px) {
       .welcome-dentist-section .signin-form-wrapper form {
         margin: 0 auto; } }
     .welcome-dentist-section .signin-form-wrapper form .modern-field {
-      margin-bottom: 27px; }
-      @media screen and (max-width: 998px) {
-        .welcome-dentist-section .signin-form-wrapper form .modern-field {
-          margin-bottom: 26px; } }
+      margin-bottom: 22px; }
     .welcome-dentist-section .signin-form-wrapper form input[type="submit"] {
-      margin-bottom: 25px;
+      margin-bottom: 15px;
       font-size: 20px;
-      padding: 12px 37px;
+      padding: 12px 47px;
       text-transform: uppercase;
       cursor: pointer; }
       @media screen and (max-width: 998px) {
         .welcome-dentist-section .signin-form-wrapper form input[type="submit"] {
-          margin-bottom: 35px;
-          font-size: 20px;
           width: 100%; } }
   .welcome-dentist-section .signin-form-wrapper .have-account {
     text-align: center;
     color: #332255;
     font-size: 18px; }
-    @media screen and (max-width: 998px) {
-      .welcome-dentist-section .signin-form-wrapper .have-account {
-        font-size: 16px; } }
     .welcome-dentist-section .signin-form-wrapper .have-account a {
       font-weight: bold;
       font-size: 18px;
@@ -96,19 +102,23 @@
   color: #332255;
   font-weight: bold;
   margin-bottom: 60px;
-  margin-top: 80px; }
+  margin-top: 65px; }
   @media screen and (max-width: 998px) {
     .section-dentist-info h2 {
       margin-top: 50px; } }
   @media screen and (max-width: 768px) {
     .section-dentist-info h2 {
-      margin-top: 44px;
-      margin-bottom: 20px; } }
+      padding: 0px 40px 30px;
+      margin-top: 25px;
+      margin-bottom: 10px; } }
 .section-dentist-info h4 {
   margin-top: 20px;
   margin-bottom: 10px;
   font-weight: bold;
   color: #0564c6; }
+  @media screen and (max-width: 768px) {
+    .section-dentist-info h4 {
+      font-size: 20px; } }
 @media screen and (max-width: 998px) {
   .section-dentist-info .flex {
     flex-flow: row wrap; } }
@@ -121,12 +131,12 @@
   .section-dentist-info .flex .col {
     width: 100%;
     padding-top: 35px;
-    padding-bottom: 45px;
+    padding-bottom: 25px;
     margin-bottom: 0px;
     padding-left: 10px;
     padding-right: 10px; } }
 @media screen and (max-width: 768px) {
-  .section-dentist-info .flex .col:nth-child(2n) {
+  .section-dentist-info .flex .col:nth-child(3) {
     background-color: #f2f6ff; } }
 .section-dentist-info .info-padding {
   padding: 0px 9px; }
@@ -223,9 +233,10 @@
     @media screen and (max-width: 768px) {
       .testimonials-section h4 {
         line-height: 25px;
-        padding-left: 0px;
-        padding-right: 0px;
-        margin-bottom: 30px; } }
+        margin-bottom: 30px;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 0px 10px; } }
   .testimonials-section .testimonial {
     width: 100%; }
     .testimonials-section .testimonial .testimonial-inner {
@@ -392,7 +403,7 @@
         width: 100%;
         text-align: center; } }
   .section-how .right img {
-    max-width: 460px;
+    max-width: 450px;
     display: block; }
     @media screen and (max-width: 1200px) {
       .section-how .right img {

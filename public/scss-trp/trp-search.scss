@@ -6,12 +6,28 @@ $phone: "screen and (max-width: 768px)";
 
 .search-results-title {
 	background-color: #e2ebff;
-    padding: 120px 0px 50px;
+    padding: 110px 0px 50px;
 	text-align: center;
+
+	@media #{$phone} {
+		padding: 85px 0px 28px;
+	}
 
 	h1 {
 		color: #332255;
 		font-weight: 800;
+
+		@media #{$phone} {
+			font-size: 20px;
+		}
+
+		.subtitle {
+			@media #{$phone} {
+				font-size: 20px;
+				padding: 5px 15px 6px;
+				border-radius: 14px;
+			}
+		}
 	}
 }
 
@@ -27,9 +43,49 @@ form {
 	padding: 30px 0px;
     box-shadow: 0 0 24px 0px #c5c5c5;
 
+	@media #{$tablet} {
+		padding: 15px 0px;
+	}
+
 	.results-count {
 		h4 {
 			color: #51a8de;
+
+			@media #{$tablet} {
+				font-size: 17px;
+			}
+
+			&.hidden-mobile {
+				display: block;
+				
+				@media #{$phone} {
+					display: none;
+				}
+			}
+
+			&.show-mobile {
+				display: none;
+
+				@media #{$phone} {
+					display: block;
+				}
+			}
+		}
+	}
+
+	.container-filters {
+		padding: 0px 100px;
+
+		@media screen and (max-width: 1350px) {
+			padding: 0px 40px;
+		}
+
+		@media #{$tablet} {
+			font-size: 17px;
+		}
+
+		@media #{$phone} {
+			padding: 0px 15px;
 		}
 	}
 
@@ -37,6 +93,7 @@ form {
 
 		@media #{$tablet} {
 			display: none;
+			padding: 15px;
 			position: fixed;
 			z-index: 10000000;
 			background: white;
@@ -44,6 +101,50 @@ form {
 			bottom: 0;
 			left: 0;
 			width: 100%;
+			text-align: center;
+		}
+
+		@media #{$phone} {
+			text-align: left;
+		}
+
+		&.open {
+			display: block;
+
+			.hidden-mobile-filters {
+				display: block;
+			}
+		}
+
+		.hidden-mobile-filters {
+			display: none;
+			text-align: left;
+
+			.close-filter {
+				display: inline-block;
+				text-align: left;
+				padding: 26px 14px;
+
+				img {
+					max-width: 37px;
+				}
+			}
+
+			h3 {
+				margin-bottom: 30px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 28px;
+				color: #0564c6;
+				font-weight: 900;
+
+				img {
+					margin-right: 7px;
+					max-width: 24px;
+					margin-top: 3px;
+				}
+			}
 		}
 	}
 
@@ -53,6 +154,10 @@ form {
 
 		@media #{$tablet} {
 			display: block;
+		}
+
+		&.smaller {
+			width: auto;
 		}
 
 		a {
@@ -89,6 +194,11 @@ form {
 		transition: all 0.3s ease;
 		position: relative;
 		cursor: pointer;
+		font-weight: bold;
+
+		@media #{$phone} {
+			margin-bottom: 20px;
+		}
 
 		&.active {
 			border-color: #0084d1;
@@ -104,6 +214,10 @@ form {
 
 			.filter-options {
 				display: block;
+
+				@media #{$phone} {
+					display: none;
+				}
 			}
 
 			.caret-down {
@@ -126,10 +240,10 @@ form {
 		}
 
 		.caret-down {
-			background-image: url(../new-vox-img/caret-down.png);
+			background-image: url(../img-trp/caret-down-new.png);
 			background-color: transparent;
-			width: 8px;
-			height: 4px;
+			width: 7px;
+			height: 6px;
 			position: absolute;
 			right: 13px;
 			top: 50%;
@@ -150,8 +264,21 @@ form {
 			min-width: 250px;
 			top: 103%;
 
+			@media #{$phone} {
+				position: fixed;
+				z-index: 100000000;
+				top: 206px;
+				left: 15px;
+				right: 15px;
+				width: auto;
+			}
+
 			&.longer {
 				min-width: 390px;
+
+				@media #{$phone} {
+					min-width: none;
+				}
 			}
 
 			::-webkit-scrollbar {
@@ -294,10 +421,19 @@ form {
 			justify-content: end;
 			align-items: center;
 
+			@media #{$phone} {
+				justify-content: space-between;
+			}
+
 			.blue-button {
 				font-size: 18px;
 				font-weight: normal;
 				padding: 1px 14px 5px;
+				font-weight: normal;
+
+				@media #{$phone} {
+					padding: 1px 24px 5px;
+				}
 			}
 
 			.clear-filters {
@@ -305,6 +441,7 @@ form {
 				font-size: 18px;
 				margin-right: 8px;
 				display: inline-block;
+				font-weight: normal;
 
 				&:hover {
 					text-decoration: underline;
@@ -328,6 +465,25 @@ form {
 			left: -3px;
 			top: 50%;
 			transform: translateY(-50%);
+		}
+	}
+
+	.break-mobile {
+		@media #{$tablet} {
+			display: block;
+			border-top: 1px solid #bebebe;
+			margin-top: 30px;
+			padding-top: 30px;
+
+			.sort-by-title {
+				&:before {
+					display: none;
+				}
+			}
+		}
+
+		@media #{$phone} {
+			margin-top: 10px;
 		}
 	}
 }
@@ -404,7 +560,7 @@ form {
 			}
 
 			@media #{$tablet} {
-				padding: 32px 35px;
+				padding: 20px 35px;
 			}
 
 			&:hover,
@@ -425,8 +581,9 @@ form {
 				min-width: 138px;
 				position: relative;
 
-				@media #{$tablet} {
+				@media #{$phone} {
 					margin-right: 0px;
+					text-align: left;
 				}
 
 				.avatar {
@@ -458,7 +615,7 @@ form {
 					font-weight: bold;
 					margin-bottom: 5px;
 
-					@media #{$tablet} {
+					@media #{$phone} {
 						position: absolute;
 						width: 220px;
 						top: 14px;
@@ -473,7 +630,7 @@ form {
 				}
 
 				.ratings {
-					@media #{$tablet} {
+					@media #{$phone} {
 						position: absolute;
 						left: 124px;
 						top: 50px;
@@ -484,7 +641,7 @@ form {
 						margin-left: auto;
 						margin-right: auto;
 
-						@media #{$tablet} {
+						@media #{$phone} {
 							display: inline-block;
 						}
 					}
@@ -495,7 +652,7 @@ form {
 						margin-top: 6px;
 						display: block;
 
-						@media #{$tablet} {
+						@media #{$phone} {
 							display: inline-block;
 							vertical-align: top;
 							margin-top: 0px;
@@ -513,7 +670,7 @@ form {
 					justify-content: space-between;
 					width: 100%;
 
-					@media #{$tablet} {
+					@media #{$phone} {
 						display: block;
 					}
 
@@ -530,10 +687,10 @@ form {
 						align-items: center;
 						min-width: 83px;
 
-						@media #{$tablet} {
+						@media #{$phone} {
 							position: absolute;
 							left: 160px;
-							top: 108px;
+							top: 98px;
 						}
 	
 						&.open {
@@ -562,6 +719,10 @@ form {
 					}
 
 					@media #{$tablet} {
+						padding-right: 190px;
+					}
+
+					@media #{$phone} {
 						padding-right: 0px;
 					}
 
@@ -602,9 +763,58 @@ form {
 
 					@media #{$tablet} {
 						opacity: 1;
+						font-size: 18px;
+						padding: 13px 22px;
+						right: 30px;
+					}
+
+					@media #{$phone} {
 						position: static;
+						margin-top: 10px;
 					}
 				}
+			}
+		}
+
+		.no-dentist-found {
+			display: flex;
+			background-color: #f0f5ff;
+			align-items: center;
+			padding: 25px 45px 0px;
+
+			@media #{$phone} {
+				flex-direction: column;
+    			text-align: center;
+				padding: 30px 30px 85px;
+			}
+
+			img {
+				margin-right: 30px;
+				max-width: 145px;
+
+				@media #{$phone} {
+					margin-right: 0px;
+				}
+			}
+
+			p {
+				font-size: 20px;
+    			color: #332255;
+				margin-bottom: 10px;
+				margin-top: -20px;
+
+				@media #{$phone} {
+					font-size: 18px;
+					font-weight: 800;
+					margin-top: 0px;
+				}
+			}
+
+			.text-link {
+				font-size: 18px;
+				color: #0084d1;
+				text-decoration: underline;
+				font-weight: bold;
 			}
 		}
 	}
@@ -824,6 +1034,173 @@ body {
 
 		&.active {
 			background-color: #0fb0e5;
+		}
+	}
+}
+
+#map-results-popup {
+	position: fixed;
+    top: 60px;
+    background-color: white;
+    z-index: 1000;
+    height: 100%;
+    left: 0;
+    width: 100%;
+    display: none;
+
+	.close-map {
+		width: 88px;
+		background-color: #e2ebff;
+		border: 1px solid #0084d1;
+		padding: 9px 10px;
+		border-radius: 21px;
+		align-items: center;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+		top: 10px;
+		z-index: 100;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		img {
+			margin-right: 3px;
+		}
+	}
+
+	.maps-results-mobile {
+		position: relative;
+		height: 100%;
+		width: 100%;
+
+		#search-map-mobile {
+			width: 100%;
+			height: 100%;
+			background: transparent;
+		}
+	}
+
+	.mobile-map-results {
+		position: relative;
+		margin-top: -300px;
+		height: 242px;
+		overflow-y: hidden;
+		overflow-x: scroll;
+		background: transparent;
+		// padding-bottom: 30px;
+		padding-top: 10px;
+
+		.mobile-map-inner {
+			position: absolute;
+			width: 12120px;
+			height: 100%;
+
+			.result-container {
+				padding: 16px 25px;
+				margin: 0px 10px;
+				float: left;
+				width: 300px;
+				background-color: white;
+				border-radius: 12px;
+				box-shadow: 0 0 13px 0px #717171;
+
+				.avatar {
+					width: 80px;
+					height: 80px;
+					border-radius: 50%;
+					z-index: 10;
+					position: relative;
+				}
+
+				.ratings {
+					margin-left: 5px;
+
+					.stars {
+						vertical-align: middle;
+					}
+				}
+
+				.partner {
+					background-color: #0084d1;
+					color: white;
+					margin-left: -20px;
+					text-align: center;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					padding-top: 3px;
+					padding-bottom: 4px;
+					border-top-right-radius: 30px;
+					border-bottom-right-radius: 30px;
+					font-size: 14px;
+
+					img {
+						margin-right: 3px;
+					}
+				}
+
+				.working-time {
+					font-size: 12px;
+					display: flex;
+					align-items: center;
+					margin-left: 5px;
+					margin-top: 7px;
+
+					&.open {
+						color: #0084d1;
+					}
+
+					&.closed {
+						color: #ff6a6a;
+					}
+
+					img {
+						max-width: 19px;
+						margin-right: 2px;
+					}
+				}
+
+				p, .dentist-title h4 {
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+
+				.dentist-info {
+					margin-top: 15px;
+
+					h4 {
+						font-size: 16px;
+						color: #332255;
+						font-weight: 800;
+						margin-bottom: 10px;
+					}
+
+					p {
+						font-size: 14px;
+						color: #555555;
+						margin-bottom: 10px;
+					}
+
+					.button-submit {
+						font-weight: bold;
+						color: #0084d1;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						background-color: #f2f6ff;
+						padding: 3px 10px 5px;
+						border-radius: 30px;
+
+						span {
+							color: #0084d1;
+						}
+					}
+				}
+			}
 		}
 	}
 }

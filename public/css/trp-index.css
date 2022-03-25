@@ -6,6 +6,9 @@
   @media screen and (max-width: 998px) {
     .flickity-oval {
       margin-top: 60px; } }
+  @media screen and (max-height: 750px) {
+    .flickity-oval {
+      margin-top: 41px; } }
   @media screen and (max-width: 768px) {
     .flickity-oval {
       margin-top: 45px; } }
@@ -635,6 +638,9 @@
     .home-section {
       padding-top: 130px;
       padding-bottom: 40px; } }
+  @media screen and (max-height: 750px) {
+    .home-section {
+      padding-top: 110px; } }
   @media screen and (max-width: 768px) {
     .home-section {
       padding-top: 80px; } }

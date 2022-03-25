@@ -475,9 +475,11 @@ class DentistsController extends FrontController {
 
             $social_image = $seos->getImageUrl();
 
-            $search_title = trans('trp.page.search.location.title', [
-                'location' => '<span class="mont subtitle">'.$formattedAddress.'</span>',
-            ]);
+            // $search_title = trans('trp.page.search.location.title', [
+            //     'location' => '<span class="mont subtitle">'.$formattedAddress.'</span>',
+            // ]);
+            
+            $search_title = 'Find The Best Dental Experts in <span class="mont subtitle">'.$formattedAddress.'</span>';
         }
 
         if (!empty($filter)) {
@@ -513,10 +515,13 @@ class DentistsController extends FrontController {
 
             $social_image = $seos->getImageUrl();
 
-            $search_title = trans('trp.page.search.location.category.title', [
-                'location' => '<span class="mont subtitle">'.$formattedAddress.'</span>',
-                'category' => implode(', ', $categoryNames),
-            ]);
+            //The Best general...
+            $search_title = 'The Best '.implode(', ', $categoryNames).' in <span class="mont subtitle">'.$formattedAddress.'</span>';
+
+            // $search_title = trans('trp.page.search.location.category.title', [
+            //     'location' => '<span class="mont subtitle">'.$formattedAddress.'</span>',
+            //     'category' => implode(', ', $categoryNames),
+            // ]);
         }
 
         $pageTitle = '';

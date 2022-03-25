@@ -437,11 +437,22 @@
 
 .search-results-title {
   background-color: #e2ebff;
-  padding: 120px 0px 50px;
+  padding: 110px 0px 50px;
   text-align: center; }
+  @media screen and (max-width: 768px) {
+    .search-results-title {
+      padding: 85px 0px 28px; } }
   .search-results-title h1 {
     color: #332255;
     font-weight: 800; }
+    @media screen and (max-width: 768px) {
+      .search-results-title h1 {
+        font-size: 20px; } }
+    @media screen and (max-width: 768px) {
+      .search-results-title h1 .subtitle {
+        font-size: 20px;
+        padding: 5px 15px 6px;
+        border-radius: 14px; } }
 
 @media screen and (max-width: 998px) {
   form .container {
@@ -450,24 +461,83 @@
 .filters-section {
   padding: 30px 0px;
   box-shadow: 0 0 24px 0px #c5c5c5; }
+  @media screen and (max-width: 998px) {
+    .filters-section {
+      padding: 15px 0px; } }
   .filters-section .results-count h4 {
     color: #51a8de; }
+    @media screen and (max-width: 998px) {
+      .filters-section .results-count h4 {
+        font-size: 17px; } }
+    .filters-section .results-count h4.hidden-mobile {
+      display: block; }
+      @media screen and (max-width: 768px) {
+        .filters-section .results-count h4.hidden-mobile {
+          display: none; } }
+    .filters-section .results-count h4.show-mobile {
+      display: none; }
+      @media screen and (max-width: 768px) {
+        .filters-section .results-count h4.show-mobile {
+          display: block; } }
+  .filters-section .container-filters {
+    padding: 0px 100px; }
+    @media screen and (max-width: 1350px) {
+      .filters-section .container-filters {
+        padding: 0px 40px; } }
+    @media screen and (max-width: 998px) {
+      .filters-section .container-filters {
+        font-size: 17px; } }
+    @media screen and (max-width: 768px) {
+      .filters-section .container-filters {
+        padding: 0px 15px; } }
   @media screen and (max-width: 998px) {
     .filters-section .filters-wrapper {
       display: none;
+      padding: 15px;
       position: fixed;
       z-index: 10000000;
       background: white;
       top: 0;
       bottom: 0;
       left: 0;
-      width: 100%; } }
+      width: 100%;
+      text-align: center; } }
+  @media screen and (max-width: 768px) {
+    .filters-section .filters-wrapper {
+      text-align: left; } }
+  .filters-section .filters-wrapper.open {
+    display: block; }
+    .filters-section .filters-wrapper.open .hidden-mobile-filters {
+      display: block; }
+  .filters-section .filters-wrapper .hidden-mobile-filters {
+    display: none;
+    text-align: left; }
+    .filters-section .filters-wrapper .hidden-mobile-filters .close-filter {
+      display: inline-block;
+      text-align: left;
+      padding: 26px 14px; }
+      .filters-section .filters-wrapper .hidden-mobile-filters .close-filter img {
+        max-width: 37px; }
+    .filters-section .filters-wrapper .hidden-mobile-filters h3 {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      color: #0564c6;
+      font-weight: 900; }
+      .filters-section .filters-wrapper .hidden-mobile-filters h3 img {
+        margin-right: 7px;
+        max-width: 24px;
+        margin-top: 3px; }
   .filters-section .mobile-filters-wrapper {
     width: 204px;
     display: none; }
     @media screen and (max-width: 998px) {
       .filters-section .mobile-filters-wrapper {
         display: block; } }
+    .filters-section .mobile-filters-wrapper.smaller {
+      width: auto; }
     .filters-section .mobile-filters-wrapper a {
       width: 96px;
       background-color: #e2ebff;
@@ -494,7 +564,11 @@
     border: 1px solid #f2f6ff;
     transition: all 0.3s ease;
     position: relative;
-    cursor: pointer; }
+    cursor: pointer;
+    font-weight: bold; }
+    @media screen and (max-width: 768px) {
+      .filters-section .filter {
+        margin-bottom: 20px; } }
     .filters-section .filter.active {
       border-color: #0084d1;
       background-color: #e2ebff;
@@ -506,6 +580,9 @@
       transition: all 0.3s ease; }
       .filters-section .filter:hover .filter-options {
         display: block; }
+        @media screen and (max-width: 768px) {
+          .filters-section .filter:hover .filter-options {
+            display: none; } }
       .filters-section .filter:hover .caret-down {
         background-position-y: 100%; }
       .filters-section .filter:hover .filter-order-active-text {
@@ -517,10 +594,10 @@
       color: #332255;
       background-color: transparent; }
     .filters-section .filter .caret-down {
-      background-image: url(../new-vox-img/caret-down.png);
+      background-image: url(../img-trp/caret-down-new.png);
       background-color: transparent;
-      width: 8px;
-      height: 4px;
+      width: 7px;
+      height: 6px;
       position: absolute;
       right: 13px;
       top: 50%;
@@ -538,8 +615,19 @@
       box-shadow: 0px 0px 4px 0px #b3b3b3;
       min-width: 250px;
       top: 103%; }
+      @media screen and (max-width: 768px) {
+        .filters-section .filter .filter-options {
+          position: fixed;
+          z-index: 100000000;
+          top: 206px;
+          left: 15px;
+          right: 15px;
+          width: auto; } }
       .filters-section .filter .filter-options.longer {
         min-width: 390px; }
+        @media screen and (max-width: 768px) {
+          .filters-section .filter .filter-options.longer {
+            min-width: none; } }
       .filters-section .filter .filter-options ::-webkit-scrollbar {
         width: 5px;
         border-radius: 15px; }
@@ -637,15 +725,23 @@
       display: flex;
       justify-content: end;
       align-items: center; }
+      @media screen and (max-width: 768px) {
+        .filters-section .filter .filter-buttons {
+          justify-content: space-between; } }
       .filters-section .filter .filter-buttons .blue-button {
         font-size: 18px;
         font-weight: normal;
-        padding: 1px 14px 5px; }
+        padding: 1px 14px 5px;
+        font-weight: normal; }
+        @media screen and (max-width: 768px) {
+          .filters-section .filter .filter-buttons .blue-button {
+            padding: 1px 24px 5px; } }
       .filters-section .filter .filter-buttons .clear-filters {
         color: #888888;
         font-size: 18px;
         margin-right: 8px;
-        display: inline-block; }
+        display: inline-block;
+        font-weight: normal; }
         .filters-section .filter .filter-buttons .clear-filters:hover {
           text-decoration: underline; }
   .filters-section .sort-by-title {
@@ -662,6 +758,17 @@
       left: -3px;
       top: 50%;
       transform: translateY(-50%); }
+  @media screen and (max-width: 998px) {
+    .filters-section .break-mobile {
+      display: block;
+      border-top: 1px solid #bebebe;
+      margin-top: 30px;
+      padding-top: 30px; }
+      .filters-section .break-mobile .sort-by-title:before {
+        display: none; } }
+  @media screen and (max-width: 768px) {
+    .filters-section .break-mobile {
+      margin-top: 10px; } }
 
 .results-wrapper {
   background: white;
@@ -716,7 +823,7 @@
           padding: 14px 20px; } }
       @media screen and (max-width: 998px) {
         .results-wrapper .dentist-results .result-container {
-          padding: 32px 35px; } }
+          padding: 20px 35px; } }
       .results-wrapper .dentist-results .result-container:hover, .results-wrapper .dentist-results .result-container.active {
         background-color: #f9fbff;
         transition: all 0.3s ease; }
@@ -727,9 +834,10 @@
         margin-right: 23px;
         min-width: 138px;
         position: relative; }
-        @media screen and (max-width: 998px) {
+        @media screen and (max-width: 768px) {
           .results-wrapper .dentist-results .result-container .dentist-image-wrapper {
-            margin-right: 0px; } }
+            margin-right: 0px;
+            text-align: left; } }
         .results-wrapper .dentist-results .result-container .dentist-image-wrapper .avatar {
           width: 108px;
           height: 108px;
@@ -755,7 +863,7 @@
           font-size: 14px;
           font-weight: bold;
           margin-bottom: 5px; }
-          @media screen and (max-width: 998px) {
+          @media screen and (max-width: 768px) {
             .results-wrapper .dentist-results .result-container .dentist-image-wrapper .partner {
               position: absolute;
               width: 220px;
@@ -765,7 +873,7 @@
           .results-wrapper .dentist-results .result-container .dentist-image-wrapper .partner img {
             max-width: 17px;
             margin-right: 5px; }
-        @media screen and (max-width: 998px) {
+        @media screen and (max-width: 768px) {
           .results-wrapper .dentist-results .result-container .dentist-image-wrapper .ratings {
             position: absolute;
             left: 124px;
@@ -774,7 +882,7 @@
           display: block;
           margin-left: auto;
           margin-right: auto; }
-          @media screen and (max-width: 998px) {
+          @media screen and (max-width: 768px) {
             .results-wrapper .dentist-results .result-container .dentist-image-wrapper .ratings .stars {
               display: inline-block; } }
         .results-wrapper .dentist-results .result-container .dentist-image-wrapper .ratings .rating {
@@ -782,7 +890,7 @@
           font-weight: 300;
           margin-top: 6px;
           display: block; }
-          @media screen and (max-width: 998px) {
+          @media screen and (max-width: 768px) {
             .results-wrapper .dentist-results .result-container .dentist-image-wrapper .ratings .rating {
               display: inline-block;
               vertical-align: top;
@@ -794,7 +902,7 @@
           align-items: center;
           justify-content: space-between;
           width: 100%; }
-          @media screen and (max-width: 998px) {
+          @media screen and (max-width: 768px) {
             .results-wrapper .dentist-results .result-container .dentist-info .dentist-title {
               display: block; } }
           .results-wrapper .dentist-results .result-container .dentist-info .dentist-title h4 {
@@ -807,11 +915,11 @@
             display: flex;
             align-items: center;
             min-width: 83px; }
-            @media screen and (max-width: 998px) {
+            @media screen and (max-width: 768px) {
               .results-wrapper .dentist-results .result-container .dentist-info .dentist-title .working-time {
                 position: absolute;
                 left: 160px;
-                top: 108px; } }
+                top: 98px; } }
             .results-wrapper .dentist-results .result-container .dentist-info .dentist-title .working-time.open {
               color: #0084d1; }
             .results-wrapper .dentist-results .result-container .dentist-info .dentist-title .working-time.closed {
@@ -828,6 +936,9 @@
             .results-wrapper .dentist-results .result-container .dentist-info p {
               padding-right: 130px; } }
           @media screen and (max-width: 998px) {
+            .results-wrapper .dentist-results .result-container .dentist-info p {
+              padding-right: 190px; } }
+          @media screen and (max-width: 768px) {
             .results-wrapper .dentist-results .result-container .dentist-info p {
               padding-right: 0px; } }
           .results-wrapper .dentist-results .result-container .dentist-info p.text-link {
@@ -859,7 +970,44 @@
           @media screen and (max-width: 998px) {
             .results-wrapper .dentist-results .result-container .dentist-info .button-submit {
               opacity: 1;
-              position: static; } }
+              font-size: 18px;
+              padding: 13px 22px;
+              right: 30px; } }
+          @media screen and (max-width: 768px) {
+            .results-wrapper .dentist-results .result-container .dentist-info .button-submit {
+              position: static;
+              margin-top: 10px; } }
+    .results-wrapper .dentist-results .no-dentist-found {
+      display: flex;
+      background-color: #f0f5ff;
+      align-items: center;
+      padding: 25px 45px 0px; }
+      @media screen and (max-width: 768px) {
+        .results-wrapper .dentist-results .no-dentist-found {
+          flex-direction: column;
+          text-align: center;
+          padding: 30px 30px 85px; } }
+      .results-wrapper .dentist-results .no-dentist-found img {
+        margin-right: 30px;
+        max-width: 145px; }
+        @media screen and (max-width: 768px) {
+          .results-wrapper .dentist-results .no-dentist-found img {
+            margin-right: 0px; } }
+      .results-wrapper .dentist-results .no-dentist-found p {
+        font-size: 20px;
+        color: #332255;
+        margin-bottom: 10px;
+        margin-top: -20px; }
+        @media screen and (max-width: 768px) {
+          .results-wrapper .dentist-results .no-dentist-found p {
+            font-size: 18px;
+            font-weight: 800;
+            margin-top: 0px; } }
+      .results-wrapper .dentist-results .no-dentist-found .text-link {
+        font-size: 18px;
+        color: #0084d1;
+        text-decoration: underline;
+        font-weight: bold; }
   .results-wrapper .maps-results {
     max-width: 40%;
     max-height: 700px;
@@ -1013,3 +1161,124 @@ body .sort-wrapper {
     margin: 0px 2px; }
     .pagination li.active {
       background-color: #0fb0e5; }
+
+#map-results-popup {
+  position: fixed;
+  top: 60px;
+  background-color: white;
+  z-index: 1000;
+  height: 100%;
+  left: 0;
+  width: 100%;
+  display: none; }
+  #map-results-popup .close-map {
+    width: 88px;
+    background-color: #e2ebff;
+    border: 1px solid #0084d1;
+    padding: 9px 10px;
+    border-radius: 21px;
+    align-items: center;
+    display: inline-block;
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    z-index: 100;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+    #map-results-popup .close-map img {
+      margin-right: 3px; }
+  #map-results-popup .maps-results-mobile {
+    position: relative;
+    height: 100%;
+    width: 100%; }
+    #map-results-popup .maps-results-mobile #search-map-mobile {
+      width: 100%;
+      height: 100%;
+      background: transparent; }
+  #map-results-popup .mobile-map-results {
+    position: relative;
+    margin-top: -300px;
+    height: 242px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    background: transparent;
+    padding-top: 10px; }
+    #map-results-popup .mobile-map-results .mobile-map-inner {
+      position: absolute;
+      width: 12120px;
+      height: 100%; }
+      #map-results-popup .mobile-map-results .mobile-map-inner .result-container {
+        padding: 16px 25px;
+        margin: 0px 10px;
+        float: left;
+        width: 300px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 13px 0px #717171; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .avatar {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          z-index: 10;
+          position: relative; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .ratings {
+          margin-left: 5px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .ratings .stars {
+            vertical-align: middle; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .partner {
+          background-color: #0084d1;
+          color: white;
+          margin-left: -20px;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding-top: 3px;
+          padding-bottom: 4px;
+          border-top-right-radius: 30px;
+          border-bottom-right-radius: 30px;
+          font-size: 14px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .partner img {
+            margin-right: 3px; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .working-time {
+          font-size: 12px;
+          display: flex;
+          align-items: center;
+          margin-left: 5px;
+          margin-top: 7px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .working-time.open {
+            color: #0084d1; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .working-time.closed {
+            color: #ff6a6a; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .working-time img {
+            max-width: 19px;
+            margin-right: 2px; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container p, #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-title h4 {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info {
+          margin-top: 15px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info h4 {
+            font-size: 16px;
+            color: #332255;
+            font-weight: 800;
+            margin-bottom: 10px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info p {
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 10px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info .button-submit {
+            font-weight: bold;
+            color: #0084d1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f2f6ff;
+            padding: 3px 10px 5px;
+            border-radius: 30px; }
+            #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info .button-submit span {
+              color: #0084d1; }

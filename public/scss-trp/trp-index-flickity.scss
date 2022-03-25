@@ -13,6 +13,10 @@ $phone: "screen and (max-width: 768px)";
 		margin-top: 60px;
 	}
 
+	@media screen and (max-height: 750px) {
+		margin-top: 41px;
+	}
+
 	@media #{$phone} {
 		margin-top: 45px;
 	}
