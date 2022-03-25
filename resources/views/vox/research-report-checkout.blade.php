@@ -75,7 +75,7 @@
                         <option 
                             value="{{ $country->id }}" 
                             code="{{ $country->code }}" 
-                            {!! $order->country_id ? ($order->country_id == $country->id ? 'selected="selected"' : '') : ($country_id==$country->id ? 'selected="selected"' : '') !!}
+                            {!! $order && $order->country_id ? ($order->country_id == $country->id ? 'selected="selected"' : '') : ($country_id==$country->id ? 'selected="selected"' : '') !!}
                         >
                             {{ $country->name }}
                         </option>
