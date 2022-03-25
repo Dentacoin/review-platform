@@ -1303,12 +1303,24 @@ footer {
 				margin-right: 110px;
 
 				.border {
+					position: relative;
 					background: #bebebe;
 					width: 40px;
 					height: 40px;
 					display: inline-block;
 					border: none;
 					border-radius: 50%;
+
+					&:after {
+						content: '';
+						width: 151px;
+						height: 2px;
+						background-color: #bebebe;
+						position: absolute;
+						top: 50%;
+						transform: translateY(-50%);
+						left: 100%;
+					}
 
 					span {
 						width: 36px;
@@ -1347,6 +1359,12 @@ footer {
 
 				&:last-child {
 					margin-right: 0px;
+
+					.border {
+						&:after {
+							display: none;
+						}
+					}
 				}
 			}
 		}

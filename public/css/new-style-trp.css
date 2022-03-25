@@ -1981,12 +1981,22 @@ footer {
       text-align: center;
       margin-right: 110px; }
       .popup .popup-inner .step-tabs .step .border {
+        position: relative;
         background: #bebebe;
         width: 40px;
         height: 40px;
         display: inline-block;
         border: none;
         border-radius: 50%; }
+        .popup .popup-inner .step-tabs .step .border:after {
+          content: '';
+          width: 151px;
+          height: 2px;
+          background-color: #bebebe;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          left: 100%; }
         .popup .popup-inner .step-tabs .step .border span {
           width: 36px;
           height: 36px;
@@ -2011,6 +2021,8 @@ footer {
         color: #14cab8; }
       .popup .popup-inner .step-tabs .step:last-child {
         margin-right: 0px; }
+        .popup .popup-inner .step-tabs .step:last-child .border:after {
+          display: none; }
     .popup .popup-inner .search-dentist-form {
       margin-bottom: 40px; }
 

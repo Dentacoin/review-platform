@@ -32,9 +32,6 @@
         #popup-lead-magnet .popup-inner .first-form .checkbox-label {
           margin-top: -10px;
           padding: 0px; } }
-  @media screen and (max-width: 768px) {
-    #popup-lead-magnet .popup-inner .popup-tabs.colorful-tabs {
-      display: flex; } }
   #popup-lead-magnet .popup-inner .modern-field .modern-input {
     border-width: 1px;
     border-radius: 8px; }
