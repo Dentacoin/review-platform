@@ -12,18 +12,52 @@ use App\Models\Order;
 use Validator;
 use Response;
 use Request;
+use Route;
 use Mail;
 
 class PaidReportsController extends FrontController {
+
+    public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
+        parent::__construct($request, $route, $locale);
+
+		$this->europeanUnionCountries = [
+			15, //Austria
+			22, //Belgium
+			34, //Bulgaria
+			55, //Croatia
+			57, //Cyprus
+			58, //Czech Republic
+			59, //Denmark
+			68, //Estonia
+			73, //Finland
+			74, //France
+			81, //Germany
+			84, //Greece
+			99, //Hungary
+			105, //Ireland
+			108, //Italy
+			120, //Latvia
+			126, //Lithuania
+			127, //Luxembourg
+			135, //Malta
+			175, //Poland
+			176, //Portugal
+			180, //Romania
+			199, //Slovakia
+			200, //Slovenia
+			205, //Spain
+			211 //Sweden
+		];
+
+		$this->alwaysWithVATCountries = [
+			154
+		];
+    }
     
 	/**
      * All paid reports page
      */
 	public function home($locale=null) {
-
-		if(empty($this->admin)) {
-			return redirect( getLangUrl('page-not-found') );
-		}
 
 		$seos = PageSeo::find(36);
 
@@ -57,10 +91,6 @@ class PaidReportsController extends FrontController {
      * Single report page
      */
 	public function singleReport($locale=null, $slug) {
-
-		if(empty($this->admin)) {
-			return redirect( getLangUrl('page-not-found') );
-		}
 
 		$item = PaidReport::whereTranslationLike('slug', $slug)
 		->where('status', 'published')
@@ -104,9 +134,6 @@ class PaidReportsController extends FrontController {
      * Paid report checkout page
      */
 	public function reportCheckout($locale=null, $slug) {
-		if(empty($this->admin)) {
-			return redirect( getLangUrl('page-not-found') );
-		}
 		
 		$item = PaidReport::whereTranslationLike('slug', $slug)
 		->where('status', 'published')
@@ -157,44 +184,13 @@ class PaidReportsController extends FrontController {
 					return Response::json( $ret );
 				}
 
-				$europeanUnionCountries = [
-					15, //Austria
-					22, //Belgium
-					34, //Bulgaria
-					55, //Croatia
-					57, //Cyprus
-					58, //Czech Republic
-					59, //Denmark
-					68, //Estonia
-					73, //Finland
-					74, //France
-					81, //Germany
-					84, //Greece
-					99, //Hungary
-					105, //Ireland
-					108, //Italy
-					120, //Latvia
-					126, //Lithuania
-					127, //Luxembourg
-					135, //Malta
-					175, //Poland
-					176, //Portugal
-					180, //Romania
-					199, //Slovakia
-					200, //Slovenia
-					205, //Spain
-					211 //Sweden
-				];
-
-				$alwaysWithVATCountries = [
-					154
-				];
+				
 
 				$withVAT = false;
 
 				if(
-					in_array(request('company-country'), $alwaysWithVATCountries )
-					|| (in_array(request('company-country'), $europeanUnionCountries ) && request('invoice') == 'yes' && request('vat') == 'no')
+					in_array(request('company-country'), $this->alwaysWithVATCountries )
+					|| (in_array(request('company-country'), $this->europeanUnionCountries ) && request('invoice') == 'yes' && request('vat') == 'no')
 				) {
 					$withVAT = true;
 				}
@@ -307,10 +303,6 @@ class PaidReportsController extends FrontController {
      */
     public function reportPayment($locale=null, $slug, $order_id) {
 
-		if(empty($this->admin)) {
-			return redirect( getLangUrl('page-not-found') );
-		}
-
 		$item = PaidReport::whereTranslationLike('slug', $slug)
 		->where('status', 'published')
 		->first();
@@ -356,6 +348,51 @@ class PaidReportsController extends FrontController {
 			}
 		}
 
+		$infoText = '';
+		
+		if(
+			(in_array($order->country_id, $this->alwaysWithVATCountries ) && $order->invoice)
+			|| (in_array($order->country_id, $this->europeanUnionCountries ) && $order->invoice && !$order->company_vat)
+			) {
+			// На следващата страница излиза цена с VAT плюс място за данни за фактура, ако:
+			// са избрали Netherlands и искат фактура
+			// са избрали някоя друга ЕС държава* и са казали, че искат фактура, НО нямат VAT номер
+			$infoText = trans('vox.page.paid-reports.payment-info-with-invoice', [
+				'email' => '<b>'.$order->email.'</b>',
+			]);
+
+		} else if(in_array($order->country_id, $this->alwaysWithVATCountries ) && !$order->invoice) {
+
+			// На следващата страница излиза цена с VAT без място за данни за фактура, ако:
+			// са избрали Netherlands и не искат фактура
+
+			$infoText = trans('vox.page.paid-reports.payment-info-netherlands-without-invoice', [
+				'email' => '<b>'.$order->email.'</b>',
+			]);
+
+		} else if(
+			($order->invoice && !$order->company_vat)
+			|| (in_array($order->country_id, $this->europeanUnionCountries ) && $order->invoice && $order->company_vat)
+		) {
+			// На следващата страница излиза цена без VAT плюс място за данни за фактура, ако:
+			// са избрали, която и да е друга държава, искат фактура, но нямат VAT
+			// са избрали някоя друга ЕС държава* и са казали, че искат фактура и имат VAT
+
+			$infoText = trans('vox.page.paid-reports.payment-info-with-invoice-no-vat', [
+				'email' => '<b>'.$order->email.'</b>',
+			]);
+
+		} else if(!$order->invoice) {
+
+			// На следващата страница излиза цена без VAT без място за данни за фактура, ако:
+			// са избрали някоя друга ЕС държава* и са казали, че НЕ искат фактура
+			// са избрали, която и да е друга държава и не искат фактура
+
+			$infoText = trans('vox.page.paid-reports.payment-info-without-invoice', [
+				'email' => '<b>'.$order->email.'</b>',
+			]);
+		}
+
 		$seos = PageSeo::find(39);
 		$seo_title = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->seo_title);
         $seo_description = str_replace([':title', ':main_title'], [$item->title, $item->main_title], $seos->seo_description);
@@ -368,6 +405,7 @@ class PaidReportsController extends FrontController {
             'seo_description' => $seo_description,
             'social_title' => $social_title,
             'social_description' => $social_description,
+			'infoText' => $infoText,
 			'order' => $order,
 			'item' => $item,
             'css' => [

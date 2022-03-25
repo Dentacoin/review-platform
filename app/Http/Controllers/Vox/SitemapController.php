@@ -35,13 +35,13 @@ class SitemapController extends FrontController {
 			}
 		}
 
-		// $paidReports = PaidReport::where('status', 'published')->get();
+		$paidReports = PaidReport::where('status', 'published')->get();
 
-		// if($paidReports->isNotEmpty()) {
-		// 	foreach ($paidReports as $paidReport) {
-		// 		$links[] = getLangUrl('dental-industry-reports/'.$paidReport->slug);
-		// 	}
-		// }
+		if($paidReports->isNotEmpty()) {
+			foreach ($paidReports as $paidReport) {
+				$links[] = getLangUrl('dental-industry-reports/'.$paidReport->slug);
+			}
+		}
 
 		$content = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">';
 		foreach ($links as $link) {
