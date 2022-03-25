@@ -64,6 +64,25 @@
                 <span>{{ trans('vox.page.paid-reports.order-name') }}</span>
             </label>
         </div>
+        
+        <div class="modern-field">
+            <select name="company-country" id="company-country" class="modern-input country-select">
+                @if(!$country_id)
+                    <option>-</option>
+                @endif
+                @if(!empty($countries))
+                    @foreach( $countries as $country )
+                        <option 
+                            value="{{ $country->id }}" 
+                            code="{{ $country->code }}" 
+                            {!! $order->country_id ? ($order->country_id == $country->id ? 'selected="selected"' : '') : ($country_id==$country->id ? 'selected="selected"' : '') !!}
+                        >
+                            {{ $country->name }}
+                        </option>
+                    @endforeach
+                @endif
+            </select>
+        </div>
 
         <div class="request-row radios-row alert-after">
             <div class="target-label">
@@ -91,52 +110,26 @@
             </div>
         </div>
 
-        <div class="request-row radios-row alert-after company-european-union-wrapper {{ $order && $order->invoice ? '' : 'hide' }}">
-            <div class="target-label">
-                {{ trans('vox.page.paid-reports.order-company-european-union') }}
-            </div>
-            <div class="modern-radios">
-                <div class="radio-label">
-                      <label for="european-union-yes" class="{{ $order && $order->invoice && $order->company_european_union ? 'active' : '' }}">
-                        <span class="modern-radio">
-                            <span></span>
-                        </span>
-                        <input class="type-radio" type="radio" name="company-european-union" id="european-union-yes" value="yes" {!! $order && $order->invoice && $order->company_european_union ? 'checked="checked"' : '' !!}>
-                        {{ trans('vox.page.paid-reports.radio-yes') }}
-                      </label>
-                </div>
-                <div class="radio-label">
-                      <label for="european-union-no" class="{{ $order && $order->invoice && !$order->company_european_union ? 'active' : '' }}">
-                        <span class="modern-radio">
-                            <span></span>
-                        </span>
-                        <input class="type-radio" type="radio" name="company-european-union" id="european-union-no" value="no" {!! $order && $order->invoice && !$order->company_european_union ? 'checked="checked"' : '' !!}>
-                        {{ trans('vox.page.paid-reports.radio-no') }}						    	
-                      </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="request-row radios-row alert-after vat-wrapper {{ $order && $order->invoice && $order->company_european_union ? '' : 'hide' }}">
+        <div class="request-row radios-row alert-after vat-wrapper {{ $order && $order->invoice ? '' : 'hide' }}">
             <div class="target-label">
                 {{ trans('vox.page.paid-reports.order-company-vat') }}
             </div>
             <div class="modern-radios">
                 <div class="radio-label">
-                      <label for="vat-yes" class="{{ $order && $order->invoice && $order->company_european_union && $order->company_vat ? 'active' : '' }}">
+                      <label for="vat-yes" class="{{ $order && $order->invoice && $order->company_vat ? 'active' : '' }}">
                         <span class="modern-radio">
                             <span></span>
                         </span>
-                        <input class="type-radio" type="radio" name="vat" id="vat-yes" value="yes" {!! $order && $order->invoice && $order->company_european_union && $order->company_vat ? 'checked="checked"' : '' !!}>
+                        <input class="type-radio" type="radio" name="vat" id="vat-yes" value="yes" {!! $order && $order->invoice && $order->company_vat ? 'checked="checked"' : '' !!}>
                         {{ trans('vox.page.paid-reports.radio-yes') }}
                       </label>
                 </div>
                 <div class="radio-label">
-                      <label for="vat-no" class="{{ $order && $order->invoice && $order->company_european_union && !$order->company_vat ? 'active' : '' }}">
+                      <label for="vat-no" class="{{ $order && $order->invoice && !$order->company_vat ? 'active' : '' }}">
                         <span class="modern-radio">
                             <span></span>
                         </span>
-                        <input class="type-radio" type="radio" name="vat" id="vat-no" value="no" {!! $order && $order->invoice && $order->company_european_union && !$order->company_vat ? 'checked="checked"' : '' !!}>
+                        <input class="type-radio" type="radio" name="vat" id="vat-no" value="no" {!! $order && $order->invoice && !$order->company_vat ? 'checked="checked"' : '' !!}>
                         {{ trans('vox.page.paid-reports.radio-no') }}						    	
                       </label>
                 </div>

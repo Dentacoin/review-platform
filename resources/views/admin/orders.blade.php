@@ -54,9 +54,6 @@
 											@if($order->invoice)
 												- With invoice<br/>
 											@endif
-											@if($order->company_european_union)
-												- Registered within the European Union <br/>
-											@endif
 											@if($order->company_vat)
 												- VAT-registered <br/>
 											@endif

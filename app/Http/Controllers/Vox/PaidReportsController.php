@@ -120,8 +120,8 @@ class PaidReportsController extends FrontController {
 			$validator = Validator::make(Request::all(), [
                 'name' => array('required', 'min:3'),
                 'invoice' => array('required'),
-                'company-european-union' => array('required_if:invoice,yes'),
-                'vat' => array('required_if:company-european-union,yes'),
+                'company-country' => array('required'),
+                'vat' => array('required_if:invoice,yes'),
                 'email' => array('required', 'email'),
                 'email-confirm' => array('required', 'email', 'same:email'),
                 'payment-method' =>  array('required', 'in:'.implode(',',array_keys(config('payment-methods')))),
@@ -156,10 +156,52 @@ class PaidReportsController extends FrontController {
 
 					return Response::json( $ret );
 				}
-					
+
+				$europeanUnionCountries = [
+					15, //Austria
+					22, //Belgium
+					34, //Bulgaria
+					55, //Croatia
+					57, //Cyprus
+					58, //Czech Republic
+					59, //Denmark
+					68, //Estonia
+					73, //Finland
+					74, //France
+					81, //Germany
+					84, //Greece
+					99, //Hungary
+					105, //Ireland
+					108, //Italy
+					120, //Latvia
+					126, //Lithuania
+					127, //Luxembourg
+					135, //Malta
+					175, //Poland
+					176, //Portugal
+					180, //Romania
+					199, //Slovakia
+					200, //Slovenia
+					205, //Spain
+					211 //Sweden
+				];
+
+				$alwaysWithVATCountries = [
+					154
+				];
+
+				$withVAT = false;
+
+				if(
+					in_array(request('company-country'), $alwaysWithVATCountries )
+					|| (in_array(request('company-country'), $europeanUnionCountries ) && request('invoice') == 'yes' && request('vat') == 'no')
+				) {
+					$withVAT = true;
+				}
+				
 				$price = null;
 
-				$itemPrice = request('invoice') && request('company-european-union') && request('vat') ? ($item->price + ($item->price * 0.21)) : $item->price;
+				$itemPrice = $withVAT ? ($item->price + ($item->price * 0.21)) : $item->price;
 
 				if(request('payment-method') != 'paypal') {
 
@@ -196,10 +238,10 @@ class PaidReportsController extends FrontController {
 				$new_order->email = request('email');
 				$new_order->name = request('name');
 				$new_order->payment_method = request('payment-method');
+				$new_order->country_id = request('company-country');
 				$new_order->price = $only_price;
 				$new_order->price_with_currency = $price_with_currency;
 				$new_order->invoice = request('invoice') == 'yes' ? 1 : null;
-				$new_order->company_european_union = request('company-european-union') == 'yes' ? 1 : null;
 				$new_order->company_vat = request('vat') == 'yes' ? 1 : null;
 				$new_order->save();
 
@@ -227,7 +269,7 @@ class PaidReportsController extends FrontController {
 			    return Response::json( [
 					'success' => true,
 					'link' => getLangUrl('dental-industry-reports/'.$slug.'/payment/'.$new_order->id)
-				] );
+				]);
 			}
 		} else {
 			$order = null;
@@ -248,6 +290,7 @@ class PaidReportsController extends FrontController {
             'seo_description' => $seo_description,
             'social_title' => $social_title,
             'social_description' => $social_description,
+            'countries' => Country::with('translations')->get(),
 			'item' => $item,
 			'order' => $order,
             'css' => [
@@ -282,7 +325,6 @@ class PaidReportsController extends FrontController {
 			$validator = Validator::make(Request::all(), [
                 'company-name' => array('required'),
                 'company-number' => array('required'),
-                'company-country' =>  array('required'),
 				'address' =>  array('required'),
             ]);
 
@@ -303,7 +345,6 @@ class PaidReportsController extends FrontController {
 
 				$order->company_name = request('company-name');
 				$order->company_number = request('company-number');
-				$order->country_id = request('company-country');
 				$order->address = request('address');
 				$order->vat = request('vat');
 				$order->save();
@@ -329,7 +370,6 @@ class PaidReportsController extends FrontController {
             'social_description' => $social_description,
 			'order' => $order,
 			'item' => $item,
-            'countries' => Country::with('translations')->get(),
             'css' => [
             	'vox-paid-reports.css'
             ],

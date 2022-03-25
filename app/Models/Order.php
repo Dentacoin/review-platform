@@ -19,7 +19,6 @@ class Order extends Model {
         'price',
         'price_with_currency',
         'invoice',
-        'company_european_union',
         'company_vat',
         'company_name',
         'company_number',

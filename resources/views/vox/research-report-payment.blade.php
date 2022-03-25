@@ -58,31 +58,13 @@
                     <span>{{ trans('vox.page.paid-reports.invoice.reg-number') }}</span>
                 </label>
             </div>
-            <div class="modern-field">
-                <select name="company-country" id="company-country" class="modern-input country-select">
-                    @if(!$country_id)
-                        <option>-</option>
-                    @endif
-                    @if(!empty($countries))
-                        @foreach( $countries as $country )
-                            <option 
-                                value="{{ $country->id }}" 
-                                code="{{ $country->code }}" 
-                                {!! $order->country_id ? ($order->country_id == $country->id ? 'selected="selected"' : '') : ($country_id==$country->id ? 'selected="selected"' : '') !!}
-                            >
-                                {{ $country->name }}
-                            </option>
-                        @endforeach
-                    @endif
-                </select>
-            </div>
             <div class="modern-field alert-after">
                 <input type="text" name="address" id="address" value="{{ $order->address ?? '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                 <label for="address">
                     <span>{{ trans('vox.page.paid-reports.invoice.address') }}</span>
                 </label>
             </div>
-            @if($order->invoice && $order->company_european_union && !$order->company_vat)
+            @if($order->invoice && !$order->company_vat)
             @else
                 <div class="modern-field alert-after">
                     <input type="text" name="vat" id="vat" value="{{ $order->vat ?? '' }}" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
