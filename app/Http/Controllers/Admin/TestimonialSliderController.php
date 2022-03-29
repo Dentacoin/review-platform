@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\DentistTestimonial;
+use App\Helpers\GeneralHelper;
 use App\Exports\Export;
 use App\Imports\Import;
 
@@ -68,15 +69,18 @@ class TestimonialSliderController extends AdminController {
 
             if( Request::file('image') && Request::file('image')->isValid() ) {
 
-                $extensions = ['image/jpeg', 'image/png'];
-
-                if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
-                    $this->request->session()->flash('error-message', 'File extension not supported' );
-                    return redirect('cms/vox/paid-reports');
-                }
+                $allowedExtensions = array('jpg', 'jpeg', 'png');
+                $allowedMimetypes = ['image/jpeg', 'image/png'];
                 
-                $img = Image::make( Input::file('image') )->orientate();
-                $newtestimonial->addImage($img);
+                $checkFile = GeneralHelper::checkFile(Input::file('image'), $allowedExtensions, $allowedMimetypes);
+
+                if(isset($checkFile['success'])) {
+                    $img = Image::make( Input::file('image') )->orientate();
+                    $newtestimonial->addImage($img);
+                } else {
+                    Request::session()->flash('error-message', $checkFile['error']);
+                    return redirect('cms/trp/testimonials/edit/'.$newtestimonial->id);
+                }
             }
 
             $this->request->session()->flash('success-message', trans('Testimonial added') );
@@ -143,22 +147,25 @@ class TestimonialSliderController extends AdminController {
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
 
-            $extensions = ['image/jpeg', 'image/png'];
+            $allowedExtensions = array('jpg', 'jpeg', 'png');
+            $allowedMimetypes = ['image/jpeg', 'image/png'];
+            
+            $checkFile = GeneralHelper::checkFile(Input::file('image'), $allowedExtensions, $allowedMimetypes);
 
-            if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
+            if(isset($checkFile['success'])) {
+                $img = Image::make( Input::file('image') )->orientate();
+                $item->addImage($img);
+
+                return Response::json([
+                    'success' => true,
+                    'thumb' => $item->getImageUrl(),
+                    'name' => ''
+                ]);
+            } else {
                 return Response::json([
                     'success' => false,
                 ]);
-            }
-
-            $img = Image::make( Input::file('image') )->orientate();
-            $item->addImage($img);
-
-            return Response::json([
-                'success' => true,
-                'thumb' => $item->getImageUrl(),
-                'name' => ''
-            ]);
+            }            
         }
     }
 

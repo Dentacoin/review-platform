@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Input;
 use App\Models\PaidReportPhoto;
 use App\Models\PaidReport;
 
+use App\Helpers\GeneralHelper;
 use App\Helpers\AdminHelper;
 use Carbon\Carbon;
 
@@ -156,54 +157,64 @@ class PaidReportsController extends AdminController {
 
     private function addImages($report) {
         
-        $extensions = ['image/jpeg', 'image/png'];
+        $allowedExtensions = array('jpg', 'jpeg', 'png');
+        $allowedMimetypes = ['image/jpeg', 'image/png'];
 
         if( Input::file('photo') ) {
 
-            if (!in_array(Input::file('photo')->getMimeType(), $extensions)) {
-                $this->request->session()->flash('error-message', 'File extension not supported' );
+            $checkFile = GeneralHelper::checkFile(Input::file('photo'), $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['success'])) {
+                $img = Image::make( Input::file('photo') )->orientate();
+                $report->addImage($img);
+            } else {
+                $this->request->session()->flash('error-message', $checkFile['error'] );
                 return redirect('cms/vox/paid-reports');
             }
-                
-            $img = Image::make( Input::file('photo') )->orientate();
-            $report->addImage($img);
         }
         
         if( Input::file('photo-social') ) {
 
-            if (!in_array(Input::file('photo-social')->getMimeType(), $extensions)) {
-                $this->request->session()->flash('error-message', 'File extension not supported' );
+            $checkFile = GeneralHelper::checkFile(Input::file('photo-social'), $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['success'])) {
+                $img = Image::make( Input::file('photo-social') )->orientate();
+                $report->addImage($img, 'social');
+            } else {
+                $this->request->session()->flash('error-message', $checkFile['error'] );
                 return redirect('cms/vox/paid-reports');
             }
-                
-            $img = Image::make( Input::file('photo-social') )->orientate();
-            $report->addImage($img, 'social');
         }
         
         if( Input::file('photo-all-reports') ) {
 
-            if (!in_array(Input::file('photo-all-reports')->getMimeType(), $extensions)) {
-                $this->request->session()->flash('error-message', 'File extension not supported' );
+            $checkFile = GeneralHelper::checkFile(Input::file('photo-all-reports'), $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['success'])) {
+                $img = Image::make( Input::file('photo-all-reports') )->orientate();
+                $report->addImage($img, 'all-reports');
+            } else {
+                $this->request->session()->flash('error-message', $checkFile['error'] );
                 return redirect('cms/vox/paid-reports');
             }
-                
-            $img = Image::make( Input::file('photo-all-reports') )->orientate();
-            $report->addImage($img, 'all-reports');
         }
 
         if(!empty(Input::file('gallery'))) {
 
             foreach(Input::file('gallery') as $k => $sp) {
-    
-                if (!in_array($sp->getMimeType(), $extensions)) {
-                    $this->request->session()->flash('error-message', 'File extension not supported' );
+
+                $checkFile = GeneralHelper::checkFile($sp, $allowedExtensions, $allowedMimetypes);
+
+                if(isset($checkFile['success'])) {
+                    $sample_page = new PaidReportPhoto;
+                    $sample_page->paid_report_id = $report->id;
+                    $sample_page->save();
+                    $img = Image::make( $sp )->orientate();
+                    $sample_page->addImage($img);
+                } else {
+                    $this->request->session()->flash('error-message', $checkFile['error'] );
                     return redirect('cms/vox/paid-reports');
-                }
-                $sample_page = new PaidReportPhoto;
-                $sample_page->paid_report_id = $report->id;
-                $sample_page->save();
-                $img = Image::make( $sp )->orientate();
-                $sample_page->addImage($img);
+                }                
             }
         }
     }

@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\PageSeo;
 
+use App\Helpers\GeneralHelper;
 use App\Exports\Export;
 use App\Imports\Import;
 
@@ -111,8 +112,18 @@ class PagesSeoController extends AdminController {
                     }
 
                     if( Request::file('image') && Request::file('image')->isValid() ) {
-                        $img = Image::make( Input::file('image') )->orientate();
-                        $item->addImage($img);
+                        $allowedExtensions = array('jpg', 'jpeg', 'png');
+                        $allowedMimetypes = ['image/jpeg', 'image/png'];
+                        
+                        $checkFile = GeneralHelper::checkFile(Input::file('photo'), $allowedExtensions, $allowedMimetypes);
+
+                        if(isset($checkFile['success'])) {
+                            $img = Image::make( Input::file('image') )->orientate();
+                            $item->addImage($img);
+                        } else {
+                            Request::session()->flash('error-message', $checkFile['error']);
+                            return redirect('cms/pages/'.$item->platform.'/edit/'.$item->id);
+                        }
                     }
 
                     Request::session()->flash('success-message', 'Page Edited');

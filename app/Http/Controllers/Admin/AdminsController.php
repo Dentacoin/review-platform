@@ -321,31 +321,6 @@ class AdminsController extends AdminController {
         return redirect('cms/admins/messages');
     }
 
-    public function uploadFile() {
-
-        if( Auth::guard('admin')->user()->id != 1 ) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-        
-        if(Request::isMethod('post')) {
-
-            foreach($_FILES['file']['name'] as $k => $file) {
-                $file_name = explode('.', $file)[0];
-                $gallery = UserPhoto::find($file_name);
-
-                if(!empty($gallery)) {
-
-                    $img = Image::make( Input::file('file')[$k] )->orientate();
-                    $gallery->addImage($img);
-                }
-
-            }
-        }
-
-        return $this->showView('upload-file');
-    }
-
     public function profile() {
 
         if( !empty($this->user) ) {      

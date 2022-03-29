@@ -50,9 +50,4 @@ class SupportContact extends Model {
     public function oldContactReply() {
         return $this->hasOne('App\Models\SupportContact', 'id', 'replied_support_id');
     }
-
-    // public function getFileUrl($thumb = false) {
-    //     //depricated; check /app/Http/Controllers/Admin/ImagesControler::getImage()
-    //     return url('/storage/support-contact/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.'.$this->file_extension).'?rev='.$this->updated_at->timestamp;
-    // }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
 
+use App\Helpers\GeneralHelper;
 use App\Helpers\AdminHelper;
 
 use App\Models\Meeting;
@@ -130,14 +131,33 @@ class MeetingsController extends AdminController {
                     $item->website_url = $this->request->input('website_url');
                     $item->save();
 
+                    $allowedExtensions = array('jpg', 'jpeg', 'png');
+                    $allowedMimetypes = ['image/jpeg', 'image/png'];
+
                     if( Input::file('photo') ) {
-                        $img = Image::make( Input::file('photo') )->orientate();
-                        $item->addImage($img);
+                        
+                        $checkFile = GeneralHelper::checkFile(Input::file('photo'), $allowedExtensions, $allowedMimetypes);
+
+                        if(isset($checkFile['success'])) {
+                            $img = Image::make( Input::file('photo') )->orientate();
+                            $item->addImage($img);
+                        } else {
+                            Request::session()->flash('error-message', $checkFile['error']);
+                            return redirect('cms/meetings/edit/'.$id);
+                        }
                     }
 
                     if( Input::file('website-photo') ) {
-                        $img = Image::make( Input::file('website-photo') )->orientate();
-                        $item->addWebsiteImage($img);
+
+                        $checkFile = GeneralHelper::checkFile(Input::file('website-photo'), $allowedExtensions, $allowedMimetypes);
+
+                        if(isset($checkFile['success'])) {
+                            $img = Image::make( Input::file('website-photo') )->orientate();
+                            $item->addWebsiteImage($img);
+                        } else {
+                            Request::session()->flash('error-message', $checkFile['error']);
+                            return redirect('cms/meetings/edit/'.$id);
+                        }
                     }
                 }
 	        }

@@ -627,8 +627,16 @@ class ProfileController extends FrontController {
                 $invitation->save();
 
                 if( Request::input('avatar') ) {
-                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
-                    $invitation->addImage($img);
+                    $allowedExtensions = array('jpg', 'jpeg', 'png');
+                    $allowedMimetypes = ['image/jpeg', 'image/png'];
+
+                    $image = GeneralHelper::decode_base64_image(Request::input('avatar'));
+                    $checkFile = GeneralHelper::checkFile($image, $allowedExtensions, $allowedMimetypes);
+
+                    if(isset($checkFile['success'])) {
+                        $img = Image::make( $image )->orientate();
+                        $invitation->addImage($img);
+                    }
                 }
 
                 return Response::json([
@@ -846,8 +854,16 @@ class ProfileController extends FrontController {
                 $newuser->save();
 
                 if( Request::input('avatar') ) {
-                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
-                    $newuser->addImage($img);
+                    $allowedExtensions = array('jpg', 'jpeg', 'png');
+                    $allowedMimetypes = ['image/jpeg', 'image/png'];
+
+                    $image = GeneralHelper::decode_base64_image(Request::input('avatar'));
+                    $checkFile = GeneralHelper::checkFile($image, $allowedExtensions, $allowedMimetypes);
+
+                    if(isset($checkFile['success'])) {
+                        $img = Image::make( $image )->orientate();
+                        $newuser->addImage($img);
+                    }
                 }
                 
                 $newteam = new UserTeam;
@@ -934,9 +950,12 @@ class ProfileController extends FrontController {
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
 
-            $extensions = ['image/jpeg', 'image/png'];
+            $allowedExtensions = array('jpg', 'jpeg', 'png');
+            $allowedMimetypes = ['image/jpeg', 'image/png'];
 
-            if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
+            $checkFile = GeneralHelper::checkFile(Input::file('image'), $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['error'])) {
                 return Response::json( [
                     'success' => false,
                 ]);
@@ -987,8 +1006,17 @@ class ProfileController extends FrontController {
         }
 
         if( Request::input('avatar') ) {
-            $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
-            $this->user->addImage($img);
+
+            $allowedExtensions = array('jpg', 'jpeg', 'png');
+            $allowedMimetypes = ['image/jpeg', 'image/png'];
+
+            $image = GeneralHelper::decode_base64_image(Request::input('avatar'));
+            $checkFile = GeneralHelper::checkFile($image, $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['success'])) {
+                $img = Image::make( $image )->orientate();
+                $this->user->addImage($img);
+            }
         }
 
         $validator_arr = [];
@@ -1375,9 +1403,12 @@ class ProfileController extends FrontController {
 
         if(Request::file('image') && Request::file('image')->isValid()) {
 
-            $extensions = ['image/jpeg', 'image/png'];
+            $allowedExtensions = array('jpg', 'jpeg', 'png');
+            $allowedMimetypes = ['image/jpeg', 'image/png'];
 
-            if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
+            $checkFile = GeneralHelper::checkFile(Input::file('image'), $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['error'])) {
                 return Response::json( [
                     'success' => false,
                 ]);
@@ -1386,6 +1417,7 @@ class ProfileController extends FrontController {
             $dapic = new UserPhoto;
             $dapic->user_id = $this->user->id;
             $dapic->save();
+
             $img = Image::make( Input::file('image') )->orientate();
             $dapic->addImage($img);
 
@@ -1875,8 +1907,17 @@ class ProfileController extends FrontController {
             }
 
             if( Request::input('avatar') ) {
-                $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
-                $this->user->addImage($img);
+
+                $allowedExtensions = array('jpg', 'jpeg', 'png');
+                $allowedMimetypes = ['image/jpeg', 'image/png'];
+
+                $image = GeneralHelper::decode_base64_image(Request::input('avatar'));
+                $checkFile = GeneralHelper::checkFile($image, $allowedExtensions, $allowedMimetypes);
+
+                if(isset($checkFile['success'])) {
+                    $img = Image::make( $image )->orientate();
+                    $this->user->addImage($img);
+                }
             }
 
             $validator = Validator::make(Request::all(), [

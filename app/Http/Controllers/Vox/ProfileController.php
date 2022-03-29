@@ -178,9 +178,12 @@ class ProfileController extends FrontController {
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
 
-            $extensions = ['image/jpeg', 'image/png'];
+            $allowedExtensions = array('jpg', 'jpeg', 'png');
+            $allowedMimetypes = ['image/jpeg', 'image/png'];
 
-            if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
+            $checkFile = GeneralHelper::checkFile(Input::file('image'), $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['error'])) {
                 return Response::json([
                     'success' => false,
                 ]);
@@ -212,8 +215,17 @@ class ProfileController extends FrontController {
             }
 
             if( Request::input('avatar') ) {
-                $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
-                $this->user->addImage($img);
+
+                $allowedExtensions = array('jpg', 'jpeg', 'png');
+                $allowedMimetypes = ['image/jpeg', 'image/png'];
+
+                $image = GeneralHelper::decode_base64_image(Request::input('avatar'));
+                $checkFile = GeneralHelper::checkFile($image, $allowedExtensions, $allowedMimetypes);
+
+                if(isset($checkFile['success'])) {
+                    $img = Image::make( $image )->orientate();
+                    $this->user->addImage($img);
+                }
             }
 
             $validator = Validator::make(Request::all(), [
