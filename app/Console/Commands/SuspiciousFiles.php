@@ -69,8 +69,14 @@ class SuspiciousFiles extends Command{
                     'video/webm'
                 ] )) {
                     // if(!in_array($file_mime, ['text/plain', 'text/x-php', 'inode/x-empty',        'text/html',              'application/zip', 'application/pdf', 'application/octet-stream', 'inode/directory', 'video/x-matroska', 'image/jpeg', 'image/webp', 'image/png', 'video/mp4', 'video/quicktime', 'video/webm'] )) {
-                    $suspiciousFiles[$file] = $file_mime;
+                    $suspiciousFiles[$file] = ' ( Mime type - '.$file_mime.')';
                     // dd($file, $file_mime);
+                }
+
+                $file_name = exec('basename '.$file);
+
+                if (mb_strpos($file_name, '.php') !== false) {
+                    $suspiciousFiles[$file] = ' extension with .php';
                 }
             }
         }
@@ -80,8 +86,8 @@ class SuspiciousFiles extends Command{
 
             ';
 
-            foreach ($suspiciousFiles as $path => $mime) {
-                $mtext .= $path.' ( Mime type - '.$mime.')
+            foreach ($suspiciousFiles as $path => $info) {
+                $mtext .= $path.$info.'
                 ';
             }
             Mail::raw($mtext, function ($message) {
