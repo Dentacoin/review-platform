@@ -553,7 +553,7 @@ class GeneralHelper {
             try {
                 $file_mimetype = $file->getMimeType();
             } catch (\Exception $e) {
-                $file_mimetype = false;
+                $file_mimetype = $file->getClientMimeType();
             }
 
             //checking file mimetype
