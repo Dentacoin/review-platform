@@ -510,7 +510,7 @@ class GeneralHelper {
             if (!in_array($mime_type, $allowedMimetypes)) {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                     '1. Image mime type: '.$mime_type.';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
 
@@ -529,7 +529,7 @@ class GeneralHelper {
             if( $file_with_php !== false) { //strpos(file_get_contents($file),'<?php') !== false || 
                 // do stuff
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                     '2. Image with <? in content: '.file_get_contents($file).';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
 
@@ -542,7 +542,7 @@ class GeneralHelper {
             if (!in_array(strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION)), $allowedExtensions)) {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                     '3. Image extension: '.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION).';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
 
@@ -561,7 +561,7 @@ class GeneralHelper {
             if (!$file_mimetype || !in_array($file->getMimeType(), $allowedMimetypes)) {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                     '4. Image mime type: '.$file->getMimeType().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
                 
@@ -574,7 +574,7 @@ class GeneralHelper {
             if ($file->getError()) {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                     '5. Image with error: '.$file->getError().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
 
@@ -591,7 +591,7 @@ class GeneralHelper {
         } else {
 
             file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                 '6. Image without width/height: Height('.$img->height().'), Width('.$img->width().');'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
             );
 
@@ -604,7 +604,7 @@ class GeneralHelper {
         if (!in_array($img->mime(), $allowedMimetypes)) {
 
             file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                 '7. Image mime type: '.$img->mime().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
             );
 
