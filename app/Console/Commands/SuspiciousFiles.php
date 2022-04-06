@@ -75,7 +75,7 @@ class SuspiciousFiles extends Command{
 
                 $file_name = exec('basename '.$file);
 
-                if (mb_strpos($file_name, '.php') !== false) {
+                if (mb_strpos(strtolower($file_name), '.php') !== false) {
                     $suspiciousFiles[$file] = ' extension with .php';
                 }
             }
