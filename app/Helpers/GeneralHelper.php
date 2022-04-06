@@ -515,7 +515,7 @@ class GeneralHelper {
                 );
 
                 return [
-                    'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                    'error' => '1. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
                 ];
             }
         } else {
@@ -534,7 +534,7 @@ class GeneralHelper {
                 );
 
                 return [
-                    'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                    'error' => '2. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
                 ];
             }
             
@@ -547,7 +547,7 @@ class GeneralHelper {
                 );
 
                 return [
-                    'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                    'error' => '3. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
                 ];
             }
 
@@ -566,7 +566,7 @@ class GeneralHelper {
                 );
                 
                 return [
-                    'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                    'error' => '4. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
                 ];
             }
 
@@ -579,7 +579,7 @@ class GeneralHelper {
                 );
 
                 return [
-                    'error' => 'There is error with one or more of the files, please try with other files. Please try again.'
+                    'error' => '4. There is error with one or more of the files, please try with other files. Please try again.'
                 ];
             }
         }
@@ -596,7 +596,7 @@ class GeneralHelper {
             );
 
             return [
-                'error' => 'There is error with one or more of the files, please try with other files. Please try again.'
+                'error' => '6. There is error with one or more of the files, please try with other files. Please try again.'
             ];
         }
 
@@ -609,7 +609,7 @@ class GeneralHelper {
             );
 
             return [
-                'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                'error' => '7. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
             ];
         }
 
