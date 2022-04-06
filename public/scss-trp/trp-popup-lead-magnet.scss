@@ -4,47 +4,75 @@ $phone: "screen and (max-width: 768px)";
 
 #popup-lead-magnet {
     .popup-inner {
-        padding: 30px 0px;
+        padding: 50px 0px 40px;
+        width: 730px;
+        min-width: 730px;
 
-        .button {
-            padding: 12px 49px;
-            background-color: #0cafd4;
-            -webkit-appearance: none;
+        @media #{$pc} {
+            width: 660px;
+            min-width: 660px;
         }
 
-        .first-form {
-            border-top: 3px solid;
-            border-color: #eeeeee;
-            padding-top: 30px;
+	    @media #{$phone} {
+	    	width: 100%;
+            min-width: auto;
+            padding-bottom: 10px;
+	    }
+
+        .close-popup:not(.button) {
+            top: 18px;
+        }
+
+        h2 {
+            font-size: 30px;
+
+            @media #{$pc} {
+                font-size: 27px;
+            }
+        }
+
+        form {
+            box-shadow: 0px -12px 13px -8px #dcdcdc;
+            padding: 50px 50px 0px;
+            min-height: 516px;
+            position: relative;
 
             @media #{$phone} {
-                padding-top: 20px;
+                padding: 30px 15px 0px;
             }
 
-            .modern-field {
-                padding: 0px 20px;
+            .loader-lead-magnet {
+                position: absolute;
+                z-index: 1000;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+    
+                video {
+                    width: 330px;
+                    margin: 60px auto 0;
 
-                @media #{$phone} {
-                    padding: 0px;
+                    @media #{$phone} {
+                        width: 240px;
+                    }
                 }
-            }
 
-            .ajax-alert {
-                margin-right: 20px;
-                margin-left: 20px;
+                p {
+                    font-size: 20px;
+                    color: #332255;
+                    margin-top: 20px;
 
-                @media #{$phone} {
-                    margin-left: 0px;
-                    margin-right: 0px;
+                    @media #{$phone} {
+                        padding: 0px 40px;
+                    }
                 }
             }
 
             .checkbox-label {
-                text-align: left;
-                padding: 0px 20px;
-                margin-top: -20px;
-                margin-bottom: 30px;
-
+                margin-bottom: 45px;
+    
                 @media #{$phone} {
                     margin-top: -10px;
                     padding: 0px;
@@ -52,19 +80,12 @@ $phone: "screen and (max-width: 768px)";
             }
         }
 
-        .modern-field {
-            .modern-input {
-                border-width: 1px;
-                border-radius: 8px;
-            }
-        }
-
         .flickity-magnet {
-            margin: 0px -130px;
+            margin: -10px -50px 0px;
 
             @media #{$phone} {
-                   margin: 0px -20px;
-               }
+                margin: 0px;
+            }
 
             .flickity-viewport {
 
@@ -81,24 +102,38 @@ $phone: "screen and (max-width: 768px)";
                     label {
                         text-align: left;
                         display: block;
-                        padding: 10px 14px;
+                        padding: 18px 22px;
                         padding-right: 23px;
-                        margin: 1px auto;
+                        margin: 1px auto 15px;
                         border: 1px solid #d6d6d7;
-                        border-radius: 8px;
+                        border-radius: 4px;
                         font-size: 18px;
-                        color: #333;
+                        color: #332255;
+                        font-weight: bold;
                         cursor: pointer;
-                        margin-bottom: 15px;
                         position: relative;
+                        box-shadow: 0px 0px 4px 0px #d6d6d7;
+
+                        @media #{$phone} {
+                            font-size: 16px;
+                            padding: 16px 22px;
+                            margin-bottom: 18px;
+                        }
 
                         &.disabled-label {
                             background-color: #f7f7f7;
                         }
 
-                        @media #{$phone} {
-                            font-size: 16px;
-                            padding: 10px;
+                        &.active {
+                            border-color: #14cab8;
+                        }
+
+                        &:hover {
+                            background-color: #f7f7f7;
+
+                            @media #{$phone} {
+                                background-color: white;
+                            }
                         }
 
                         input {
@@ -123,7 +158,6 @@ $phone: "screen and (max-width: 768px)";
                                 width: 14px;
                                 height: 14px;
                                 line-height: 23px;
-                            
                             }
                         }
 
@@ -138,48 +172,7 @@ $phone: "screen and (max-width: 768px)";
                             }
                         }
 
-                        .modern-radio {
-                            min-width: 26px;
-                            width: 26px;
-                            height: 26px;
-                            border-color: #979797;
-                            background-color: #ebebeb;
-                            margin-right: 9px;
-                            border-radius: 50%;
-                            border: 1px solid #ccc;
-                            display: inline-block;
-                            position: relative;
-                            vertical-align: middle;
-
-                            @media #{$phone} {
-                                min-width: 20px;
-                                width: 20px;
-                                height: 20px;
-                                margin-right: 5px;
-                            }
-
-                            span {
-                                position: absolute;
-                                border-radius: 50%;
-                                top: 50%;
-                                left: 50%;
-                                transform: translateX(-50%) translateY(-50%);
-                                width: 14px;
-                                height: 14px;
-
-                                @media #{$phone} {
-                                    width: 11px;
-                                    height: 11px;
-                                }
-                            }
-                        }
-
                         &.active {
-                            .modern-radio {
-                                span {
-                                    background-color: #126585;
-                                }
-                            }
                             
                             .checkbox-square {
                                 border-color: #126585;
@@ -203,33 +196,32 @@ $phone: "screen and (max-width: 768px)";
                 }
 
                 .answer-question {
-                    padding: 20px 130px;
-                    background-color: #eeeeee;
+                    margin-bottom: 45px;
 
                     @media #{$phone} {
-                        padding: 10px 20px;
-                        min-height: 103px;
+                        margin-bottom: 15px;
+                        margin-top: 40px;
                     }
 
                     h4 {
-                        font-weight: bold;
-                        text-align: center;
+                        font-weight: 800;
+                        color: #332255;
 
                         @media #{$phone} {
-                            font-size: 19px;
+                            font-size: 20px;
                         }
                     }
                 }
 
                 .buttons-list {
                     margin-top: 20px;
-                    padding: 0px 130px;
+                    width: 525px;
                     display: inline-block;
                     position: relative;
-                    width: auto;
 
                     @media #{$phone} {
-                        padding: 0px 20px;
+                        width: 100%;
+                        margin-top: 0px;
                     }
                 }
 
@@ -238,33 +230,21 @@ $phone: "screen and (max-width: 768px)";
                 }
             }
 
-            #magnet-submit {
-                // .loader {
-                // 	display: inline-block;
-
-                // 	i {
-                // 		font-size: 20px;
-                // 		color: white;
-                // 		margin-left: 10px;
-                // 	}
-                // }
-            }
-
             .alert {
-                margin: 0px 130px;
+                margin: 0px 130px 20px;
 
                 @media #{$phone} {
-                    margin: 0px 20px;
+                    margin: 0px 20px 20px;
                 }
             }
 
             .flickity-page-dots {
                 bottom: auto;
-                top: 60px;
+                top: 50px;
                 background: transparent;
 
                 @media #{$phone} {
-                    top: 80px;
+                    top: 0px;
                 }
 
                 &:after {
@@ -281,22 +261,21 @@ $phone: "screen and (max-width: 768px)";
 
                 .dot {
                     margin: 0px 3px;
-                    border: 1px solid #979797;
+                    border: 1px solid #bfbfbf;
                     opacity: 1;
-                    width: 12px;
-                    height: 12px;
+                    width: 17px;
+                    height: 17px;
                     background: transparent;
 
                     &.is-selected {
-                        background-color: #126585;
+                        border-color: #0085d2;
+                        background-color: #0085d2;
                     }
                 }
             }
 
             .flickity-prev-next-button {
                 display: none !important;
-                top: 50px;
-                background: transparent;
             }
         }
     }

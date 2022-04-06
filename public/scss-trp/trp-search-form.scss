@@ -132,66 +132,17 @@ $phone: "screen and (max-width: 768px)";
 	}
 
 	label {
-		position: relative;
-		font-size: 16px;
-		color: #888888;
-		border: 1px solid #cccccc;
 		margin-left: 18px;
-		display: flex;
 		width: 162px;
-		padding: 16px 18px 16px 12px;
-		border-radius: 5px;
-		cursor: pointer;
-		box-shadow: 0px 3px 4px 1px #e5e5e5;
 
 		@media #{$tablet} {
-			padding: 12px 5px 12px;
 			margin-left: 10px;
-			font-size: 14px;
-			width: 126px;
+			width: 128px;
 		}
 
 		@media #{$phone} {
 			width: 100%;
-			text-align: left;
-    		display: flex;
 			margin-left: 0px;
-			padding: 15px 18px 15px 12px;
-			margin-bottom: 24px;
-			margin-top: 10px;
-		}
-
-		&.active {
-			border-color: $stars_color;
-			border-width: 2px;
-			
-			.checked-partner {
-				display: block;
-			}
-		}
-
-		img {
-			max-width: 16px;
-			margin-right: 6px;
-		}
-
-		.checked-partner {
-			display: none;
-			position: absolute;
-			background-color: #14cab8;
-			color: white;
-			top: 0;
-			right: 0;
-			font-size: 13px;
-			width: 16px;
-			height: 16px;
-			text-align: center;
-			line-height: 14px;
-			border-bottom-left-radius: 5px;
-		}
-
-		input {
-			display: none;
 		}
 	}
 

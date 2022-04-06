@@ -50,6 +50,7 @@ header {
 
 		.logo {
 			width: 142px;
+			transition: all 0.3s ease;
 
 			@media #{$phone} {
 				width: 33px;
@@ -98,6 +99,7 @@ header {
 		display: block;
 		background: url('../img-trp/logo-blue.png') no-repeat 50% 50%;
 		background-size: contain;
+		transition: all 0.3s ease;
 
 		@media #{$phone} {
 			background-image: url('../img-trp/trp-logo-small.png');
@@ -121,7 +123,7 @@ header {
 
 		.transparent-blue-button {
 			font-size: 18px;
-			padding: 8px 16px;
+			padding: 5px 16px 8px;
 			font-weight: normal;
 			margin-right: 3px;
 		}
@@ -905,19 +907,59 @@ footer {
 	    overflow-y: scroll;
 	}
 
-	.popup-inner {
-		
-		background-color: white;
-		overflow-x: hidden;
+	.popup-wrapper {
 		position: absolute;
 		left: 50%;
 		top: 60px;
-    	transform: translateX(-50%);
+		transform: translateX(-50%);
+		background: transparent;
+		align-items: center;
+
+		@media #{$phone} {
+			width: 100%;
+    		top: 10px;
+		}
+
+		.popup-image {
+			max-width: 760px;
+			margin-right: -210px;
+			margin-left: -280px;
+			width: 100%;
+
+			@media #{$pc} {
+				max-width: 580px;
+				margin-right: -260px;
+				margin-left: -80px;
+			}
+
+			@media #{$tablet} {
+				display: none;
+			}
+
+			@media #{$phone} {
+				display: none;
+				max-width: 400px;
+				margin-right: auto;
+				margin-left: auto;
+				margin-bottom: -76px;
+			}
+		}
+	}
+
+	.popup-inner {
+		position: relative;
+		background-color: white;
+		overflow-x: hidden;
+		// position: absolute;
+		// left: 50%;
+		// top: 60px;
+    	// transform: translateX(-50%);
 		margin-bottom: 60px;
-		box-shadow: 0 0 19px -2px rgbaa(0,0,0,0.8);
+		box-shadow: 0 0 19px -2px rgba(0,0,0,0.8);
 		width: 870px;
 		padding: 55px 70px;
 		border-radius: 40px;
+		z-index: 1000;
 
 		@media #{$tablet} {
 			left: 0;
@@ -929,40 +971,8 @@ footer {
 	    	margin-bottom: 0px;
 	    }
 
-	    @media #{$phone} {
-	    	padding: 20px $popup_padding_mobile;
-	    }
-
-	    .popup-pc-buttons {
-	    	@media #{$tablet} {
-	    		display: none;
-	    	}
-	    }
-
 	    .popup-mobile-buttons {
 	    	display: none;
-
-	    	@media #{$tablet} {
-	    		display: block;
-	    	}
-
-	    	.close-popup {
-	    		top: 40px;
-				left: 20px;
-				right: unset !important;
-				color: #777777;
-			}
-
-			.share-popup {
-	    		top: 40px;
-				right: 20px;
-				left: unset;
-				color: #126585;
-
-				i {
-					color: #126585;
-				}
-			}
 	    }
 
 		.close-popup:not(.button) {
@@ -989,9 +999,9 @@ footer {
 			font-weight: 900;
 
 			@media #{$phone} {
-				font-size: 26px;
-	    		margin-top: 60px;
-	    		margin-bottom: 40px;
+				font-size: 28px;
+				font-weight: 800;
+				padding: 0px 20px;
 			}
 		}
 
@@ -1298,9 +1308,15 @@ footer {
 		}
 
 		.step-tabs {
+			margin-bottom: 25px;
+
 			.step {
 				text-align: center;
 				margin-right: 110px;
+
+				@media #{$phone} {
+					margin-right: 40px;
+				}
 
 				.border {
 					position: relative;
@@ -1320,6 +1336,10 @@ footer {
 						top: 50%;
 						transform: translateY(-50%);
 						left: 100%;
+
+						@media #{$phone} {
+							width: 80px;
+						}
 					}
 
 					span {
@@ -1330,9 +1350,10 @@ footer {
 						margin-top: 2px;
 						margin-right: 0px;
 						background-color: white;
-						line-height: 34px;
+						line-height: 36px;
 						font-size: 18px;
 						color: #bebebe;
+						font-weight: 900;
 					}
 				}
 
@@ -1345,7 +1366,7 @@ footer {
 				&.active {
 					.border {
 						background: rgba(20,202,184, 1);
-						background: linear-gradient(112deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
+						background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
 
 						span {
 							color: #14cab8;
@@ -1354,6 +1375,32 @@ footer {
 
 					p {
 						color: #14cab8;
+					}
+				}
+
+				&.completed {
+					.border {
+						background: rgba(20,202,184, 1);
+						background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
+
+						&::before {
+							content: '✓';
+							color: white;
+							font-size: 18px;
+							line-height: 38px;
+						}
+
+						&::after {
+							background-color: #14cab8;
+						}
+
+						span {
+							display: none;
+						}
+					}
+
+					p {
+						color: #4b607d;
 					}
 				}
 

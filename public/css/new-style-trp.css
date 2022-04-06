@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -580,6 +581,21 @@ body.popup-visible {
     color: #0084d1;
     transition: all 0.3s ease; }
 
+.green-button {
+  background-color: #14cab8;
+  border: 2px solid #14cab8;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 14px 43px;
+  display: inline-block;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+  cursor: pointer; }
+  .green-button:hover {
+    opacity: 0.8;
+    transition: all 0.3s ease; }
+
 .white-button {
   background-color: white;
   border: 2px solid #0564c6;
@@ -795,10 +811,55 @@ textarea.input {
   .radio-label label.active i:before {
     content: "\f192"; }
 
+.green-checkbox {
+  position: relative;
+  font-size: 16px;
+  color: #888888;
+  border: 1px solid #cccccc;
+  display: flex;
+  padding: 16px 18px 16px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0px 3px 4px 1px #e5e5e5; }
+  @media screen and (max-width: 998px) {
+    .green-checkbox {
+      padding: 12px 5px 12px;
+      font-size: 14px; } }
+  @media screen and (max-width: 768px) {
+    .green-checkbox {
+      text-align: left;
+      margin-left: 0px;
+      padding: 15px 18px 15px 12px;
+      margin-bottom: 24px;
+      margin-top: 10px; } }
+  .green-checkbox.active {
+    border-color: #14cab8;
+    border-width: 2px; }
+    .green-checkbox.active span {
+      display: block; }
+  .green-checkbox img {
+    max-width: 16px;
+    margin-right: 6px; }
+  .green-checkbox span {
+    display: none;
+    position: absolute;
+    background-color: #14cab8;
+    color: white;
+    top: 0;
+    right: 0;
+    font-size: 13px;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 14px;
+    border-bottom-left-radius: 5px; }
+  .green-checkbox input {
+    display: none; }
+
 .checkbox-label {
   display: block;
   min-width: 150px;
-  text-align: center;
+  text-align: left;
   font-size: 16px;
   font-weight: normal;
   color: #333333;
@@ -812,10 +873,33 @@ textarea.input {
     @media screen and (max-width: 768px) {
       .checkbox-label.active .checkbox-square {
         line-height: 13px; } }
-  .checkbox-label.agree-label a {
-    color: black;
-    font-size: 16px;
-    color: #126585; }
+  .checkbox-label.agree-label {
+    display: flex;
+    align-items: center;
+    color: #888888; }
+    .checkbox-label.agree-label div {
+      color: #888888; }
+    .checkbox-label.agree-label .checkbox-square {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      margin-right: 12px;
+      border-radius: 4px;
+      border: 2px solid #cac9cd; }
+      @media screen and (max-width: 768px) {
+        .checkbox-label.agree-label .checkbox-square {
+          width: 30px;
+          height: 30px;
+          min-width: 30px; } }
+    .checkbox-label.agree-label.active .checkbox-square {
+      font-size: 22px;
+      line-height: 26px; }
+    .checkbox-label.agree-label.has-error .checkbox-square {
+      border-color: #ff5959; }
+    .checkbox-label.agree-label a {
+      text-decoration: underline;
+      font-size: 16px;
+      color: #0084d1; }
   .checkbox-label.disabled .checkbox-square {
     background-color: #eeeeee; }
   .checkbox-label input {
@@ -848,7 +932,7 @@ textarea.input {
   position: relative; }
   @media screen and (max-width: 768px) {
     .modern-field {
-      margin-bottom: 15px; } }
+      margin-bottom: 20px; } }
   .modern-field + .ajax-alert {
     margin-top: -20px; }
   .modern-field p {
@@ -867,7 +951,8 @@ textarea.input {
   .modern-field .modern-input:focus {
     outline: 0; }
   .modern-field .modern-input {
-    padding-left: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     font-size: 17px;
     height: 58px;
     font-weight: 300;
@@ -928,9 +1013,6 @@ textarea.input {
     top: -73px;
     color: #0084d1;
     font-size: 14px; }
-    @media screen and (max-width: 998px) {
-      .modern-field.active .modern-input + label > span {
-        top: -60px; } }
   .modern-field.active textarea.modern-input + label > span {
     top: -111px; }
   .modern-field.active .search-icon {
@@ -1110,7 +1192,8 @@ header {
     header.fixed-header .header-buttons-wrapper .header-text-link {
       font-size: 16px; }
     header.fixed-header .logo {
-      width: 142px; }
+      width: 142px;
+      transition: all 0.3s ease; }
       @media screen and (max-width: 768px) {
         header.fixed-header .logo {
           width: 33px;
@@ -1143,7 +1226,8 @@ header {
     padding-top: 50px;
     display: block;
     background: url("../img-trp/logo-blue.png") no-repeat 50% 50%;
-    background-size: contain; }
+    background-size: contain;
+    transition: all 0.3s ease; }
     @media screen and (max-width: 768px) {
       header .logo {
         background-image: url("../img-trp/trp-logo-small.png");
@@ -1160,7 +1244,7 @@ header {
       cursor: pointer; }
     header .header-info .transparent-blue-button {
       font-size: 18px;
-      padding: 8px 16px;
+      padding: 5px 16px 8px;
       font-weight: normal;
       margin-right: 3px; }
     header .header-info .button-dentists {
@@ -1704,18 +1788,47 @@ footer {
   @media screen and (max-width: 768px) {
     .popup {
       overflow-y: scroll; } }
-  .popup .popup-inner {
-    background-color: white;
-    overflow-x: hidden;
+  .popup .popup-wrapper {
     position: absolute;
     left: 50%;
     top: 60px;
     transform: translateX(-50%);
+    background: transparent;
+    align-items: center; }
+    @media screen and (max-width: 768px) {
+      .popup .popup-wrapper {
+        width: 100%;
+        top: 10px; } }
+    .popup .popup-wrapper .popup-image {
+      max-width: 760px;
+      margin-right: -210px;
+      margin-left: -280px;
+      width: 100%; }
+      @media screen and (max-width: 1200px) {
+        .popup .popup-wrapper .popup-image {
+          max-width: 580px;
+          margin-right: -260px;
+          margin-left: -80px; } }
+      @media screen and (max-width: 998px) {
+        .popup .popup-wrapper .popup-image {
+          display: none; } }
+      @media screen and (max-width: 768px) {
+        .popup .popup-wrapper .popup-image {
+          display: none;
+          max-width: 400px;
+          margin-right: auto;
+          margin-left: auto;
+          margin-bottom: -76px; } }
+  .popup .popup-inner {
+    position: relative;
+    background-color: white;
+    overflow-x: hidden;
     margin-bottom: 60px;
-    box-shadow: 0 0 19px -2px rgbaa(0, 0, 0, 0.8);
+    box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
     width: 870px;
     padding: 55px 70px;
-    border-radius: 40px; }
+    border-radius: 40px;
+    z-index: 1000; }
     @media screen and (max-width: 998px) {
       .popup .popup-inner {
         left: 0;
@@ -1725,29 +1838,8 @@ footer {
         width: 100%;
         transform: none;
         margin-bottom: 0px; } }
-    @media screen and (max-width: 768px) {
-      .popup .popup-inner {
-        padding: 20px 20px; } }
-    @media screen and (max-width: 998px) {
-      .popup .popup-inner .popup-pc-buttons {
-        display: none; } }
     .popup .popup-inner .popup-mobile-buttons {
       display: none; }
-      @media screen and (max-width: 998px) {
-        .popup .popup-inner .popup-mobile-buttons {
-          display: block; } }
-      .popup .popup-inner .popup-mobile-buttons .close-popup {
-        top: 40px;
-        left: 20px;
-        right: unset !important;
-        color: #777777; }
-      .popup .popup-inner .popup-mobile-buttons .share-popup {
-        top: 40px;
-        right: 20px;
-        left: unset;
-        color: #126585; }
-        .popup .popup-inner .popup-mobile-buttons .share-popup i {
-          color: #126585; }
     .popup .popup-inner .close-popup:not(.button) {
       position: absolute;
       right: 33px;
@@ -1766,9 +1858,9 @@ footer {
       font-weight: 900; }
       @media screen and (max-width: 768px) {
         .popup .popup-inner h2 {
-          font-size: 26px;
-          margin-top: 60px;
-          margin-bottom: 40px; } }
+          font-size: 28px;
+          font-weight: 800;
+          padding: 0px 20px; } }
     .popup .popup-inner h4 {
       margin-bottom: 35px; }
     .popup .popup-inner h5 {
@@ -1977,52 +2069,75 @@ footer {
         top: 11px;
         left: 20px;
         max-width: 18px; }
-    .popup .popup-inner .step-tabs .step {
-      text-align: center;
-      margin-right: 110px; }
-      .popup .popup-inner .step-tabs .step .border {
-        position: relative;
-        background: #bebebe;
-        width: 40px;
-        height: 40px;
-        display: inline-block;
-        border: none;
-        border-radius: 50%; }
-        .popup .popup-inner .step-tabs .step .border:after {
-          content: '';
-          width: 151px;
-          height: 2px;
-          background-color: #bebebe;
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          left: 100%; }
-        .popup .popup-inner .step-tabs .step .border span {
-          width: 36px;
-          height: 36px;
+    .popup .popup-inner .step-tabs {
+      margin-bottom: 25px; }
+      .popup .popup-inner .step-tabs .step {
+        text-align: center;
+        margin-right: 110px; }
+        @media screen and (max-width: 768px) {
+          .popup .popup-inner .step-tabs .step {
+            margin-right: 40px; } }
+        .popup .popup-inner .step-tabs .step .border {
+          position: relative;
+          background: #bebebe;
+          width: 40px;
+          height: 40px;
           display: inline-block;
-          border-radius: 50%;
-          margin-top: 2px;
-          margin-right: 0px;
-          background-color: white;
-          line-height: 34px;
-          font-size: 18px;
-          color: #bebebe; }
-      .popup .popup-inner .step-tabs .step p {
-        font-size: 14px;
-        color: #bebebe;
-        margin-top: 5px; }
-      .popup .popup-inner .step-tabs .step.active .border {
-        background: #14cab8;
-        background: linear-gradient(112deg, #14cab8 0%, #0564c6 100%); }
-        .popup .popup-inner .step-tabs .step.active .border span {
+          border: none;
+          border-radius: 50%; }
+          .popup .popup-inner .step-tabs .step .border:after {
+            content: '';
+            width: 151px;
+            height: 2px;
+            background-color: #bebebe;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 100%; }
+            @media screen and (max-width: 768px) {
+              .popup .popup-inner .step-tabs .step .border:after {
+                width: 80px; } }
+          .popup .popup-inner .step-tabs .step .border span {
+            width: 36px;
+            height: 36px;
+            display: inline-block;
+            border-radius: 50%;
+            margin-top: 2px;
+            margin-right: 0px;
+            background-color: white;
+            line-height: 36px;
+            font-size: 18px;
+            color: #bebebe;
+            font-weight: 900; }
+        .popup .popup-inner .step-tabs .step p {
+          font-size: 14px;
+          color: #bebebe;
+          margin-top: 5px; }
+        .popup .popup-inner .step-tabs .step.active .border {
+          background: #14cab8;
+          background: linear-gradient(156deg, #14cab8 0%, #0564c6 100%); }
+          .popup .popup-inner .step-tabs .step.active .border span {
+            color: #14cab8; }
+        .popup .popup-inner .step-tabs .step.active p {
           color: #14cab8; }
-      .popup .popup-inner .step-tabs .step.active p {
-        color: #14cab8; }
-      .popup .popup-inner .step-tabs .step:last-child {
-        margin-right: 0px; }
-        .popup .popup-inner .step-tabs .step:last-child .border:after {
-          display: none; }
+        .popup .popup-inner .step-tabs .step.completed .border {
+          background: #14cab8;
+          background: linear-gradient(156deg, #14cab8 0%, #0564c6 100%); }
+          .popup .popup-inner .step-tabs .step.completed .border::before {
+            content: '✓';
+            color: white;
+            font-size: 18px;
+            line-height: 38px; }
+          .popup .popup-inner .step-tabs .step.completed .border::after {
+            background-color: #14cab8; }
+          .popup .popup-inner .step-tabs .step.completed .border span {
+            display: none; }
+        .popup .popup-inner .step-tabs .step.completed p {
+          color: #4b607d; }
+        .popup .popup-inner .step-tabs .step:last-child {
+          margin-right: 0px; }
+          .popup .popup-inner .step-tabs .step:last-child .border:after {
+            display: none; }
     .popup .popup-inner .search-dentist-form {
       margin-bottom: 40px; }
 

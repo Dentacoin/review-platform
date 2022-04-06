@@ -966,34 +966,38 @@ jQuery(document).ready(function($) {
 
 	        ajax_is_running = true;
 
-	        var that = $(this);
-	        $('.loader').fadeIn();
-	        $('.loader-mask').fadeIn();
-	        $('.loader-text').fadeIn();
-	        //$('#magnet-submit').append('<div class="loader"><i></i></div>');
+			let that = $(this);
+			let active_step = that.closest('.popup-inner').find('.step-tabs').find('.step.active');
+			active_step.removeClass('active').addClass('completed');
+			active_step.next().addClass('active');
 
-	        $.post( 
-	            $(this).attr('action'), 
-	            $(this).serialize() , 
-	            function( data ) {
-	                if(data.success) {
-	                    fbq('track', 'TRPMagnetComplete');
+	        $('.loader-lead-magnet').fadeIn();
+			$('.loader-lead-magnet video')[0].play();
+	    	$('.loader-lead-magnet video')[0].removeAttribute("controls");
 
-	                    gtag('event', 'SeeScore', {
-	                        'event_category': 'LeadMagnet',
-	                        'event_label': 'ReplyToReviews',
-	                    });
-
-	                    window.location.href = data.url;
-	                } else {
-	                	console.log('error');
-	                }
-	                ajax_is_running = false;
-	            }, "json"
-	        );
-
-	        return false;
-	    } );
+			setTimeout( function() {
+				$.post( 
+					that.attr('action'), 
+					that.serialize() , 
+					function( data ) {
+						console.log(data);
+						if(data.success) {
+							fbq('track', 'TRPMagnetComplete');
+							
+							gtag('event', 'SeeScore', {
+								'event_category': 'LeadMagnet',
+								'event_label': 'ReplyToReviews',
+							});
+							
+							window.location.href = data.url;
+						} else {
+							console.log('error');
+						}
+						ajax_is_running = false;
+					}, "json"
+				);
+			}, 5000);
+	    });
 
 	    $('.lead-magnet-radio').change( function() {
 	    	$(this).closest('.answer-radios-magnet').find('label').removeClass('active');
@@ -1105,8 +1109,9 @@ jQuery(document).ready(function($) {
 	                    that.closest('.magnet-content').next().show();
 	                    that.closest('.magnet-content').hide();
 
-	                    that.closest('.popup-inner').find('.colorful-tabs').find('.col').removeClass('active');
-	                    that.closest('.popup-inner').find('.colorful-tabs').find('.second-step').addClass('active');
+						let active_step = that.closest('.popup-inner').find('.step-tabs').find('.step.active');
+	                    active_step.removeClass('active').addClass('completed');
+						active_step.next().addClass('active');
 
 	                    var $carousel = $('.flickity-magnet');
 

@@ -36,7 +36,7 @@
 			autocomplete="off"
 		/>
 	</div>
-	<label for="partner">
+	<label class="green-checkbox" for="partner">
 		<img src="{{ url('img-trp/mini-logo-black.svg') }}"/>
 		DCN Accepted
 		<span class="checked-partner">✓</span>

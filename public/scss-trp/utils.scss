@@ -735,6 +735,24 @@ body.popup-visible {
 	}
 }
 
+.green-button {
+	background-color: #14cab8;
+    border: 2px solid #14cab8;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 14px 43px;
+    display: inline-block;
+    border-radius: 40px;
+	transition: all 0.3s ease;
+	cursor: pointer;
+
+	&:hover {
+		opacity: 0.8;
+		transition: all 0.3s ease;
+	}
+}
+
 .white-button {
 	background-color: white;
     border: 2px solid $title_color;
@@ -1038,10 +1056,68 @@ textarea.input {
 	}
 }
 
+.green-checkbox {
+	position: relative;
+	font-size: 16px;
+	color: #888888;
+	border: 1px solid #cccccc;
+	display: flex;
+	padding: 16px 18px 16px 12px;
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: 0px 3px 4px 1px #e5e5e5;
+
+	@media #{$tablet} {
+		padding: 12px 5px 12px;
+		font-size: 14px;
+	}
+
+	@media #{$phone} {
+		text-align: left;
+		margin-left: 0px;
+		padding: 15px 18px 15px 12px;
+		margin-bottom: 24px;
+		margin-top: 10px;
+	}
+
+	&.active {
+		border-color: $stars_color;
+		border-width: 2px;
+		
+		span {
+			display: block;
+		}
+	}
+
+	img {
+		max-width: 16px;
+		margin-right: 6px;
+	}
+
+	span {
+		display: none;
+		position: absolute;
+		background-color: #14cab8;
+		color: white;
+		top: 0;
+		right: 0;
+		font-size: 13px;
+		width: 16px;
+		height: 16px;
+		text-align: center;
+		line-height: 14px;
+		border-bottom-left-radius: 5px;
+	}
+
+	input {
+		display: none;
+	}
+}
+
 .checkbox-label {
 	display: block;
 	min-width: 150px;
-	text-align: center;
+	text-align: left;
     font-size: 16px;
     font-weight: normal;
 	color: #333333;
@@ -1066,10 +1142,46 @@ textarea.input {
 	}
 
 	&.agree-label {
+		display: flex;
+		align-items: center;
+		color: #888888;
+
+		div {
+			color: #888888;
+		}
+
+		.checkbox-square {
+			width: 32px;
+			height: 32px;
+			min-width: 32px;
+			margin-right: 12px;
+			border-radius: 4px;
+			border: 2px solid #cac9cd;
+
+			@media #{$phone} {
+				width: 30px;
+				height: 30px;
+				min-width: 30px;
+			}
+		}
+
+		&.active {
+			.checkbox-square {
+				font-size: 22px;
+				line-height: 26px;
+			}
+		}
+
+		&.has-error {
+			.checkbox-square {
+				border-color: #ff5959;
+			}
+		}
+
 		a {
-			color: black;
+			text-decoration: underline;
 			font-size: 16px;
-			color: #126585;
+			color: #0084d1;
 		}
 	}
 
@@ -1118,7 +1230,7 @@ textarea.input {
 	position: relative;
 
 	@media #{$phone} {
-		margin-bottom: 15px;
+		margin-bottom: 20px;
 	}
 
 	& + .ajax-alert {
@@ -1155,7 +1267,8 @@ textarea.input {
 	}
 
 	.modern-input {
-		padding-left: 20px;
+		padding-left: 10px;
+		padding-right: 10px;
 		font-size: 17px;
 		height: 58px;
 		font-weight: 300;
@@ -1255,9 +1368,9 @@ textarea.input {
 			color: #0084d1;
 			font-size: 14px;
 
-			@media #{$tablet} {				
-	    		top: -60px;
-			}
+			// @media #{$tablet} {				
+	    	// 	top: -60px;
+			// }
 		}
 
 		textarea.modern-input+label>span {

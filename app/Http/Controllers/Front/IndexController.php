@@ -392,7 +392,6 @@ class IndexController extends FrontController {
 		$session['answers']['answer-3'] = Request::input('answer-3');
 		$session['answers']['answer-4'] = !empty(Request::input('answer-4')) ? Request::input('answer-4') : '';
 		$session['answers']['answer-5'] = Request::input('answer-5');
-
 		$session['points'] = [
 			'total_points' => $total_points,
 			'review_collection' => $review_collection,
@@ -412,10 +411,10 @@ class IndexController extends FrontController {
 
 		if (!empty($lead)) {
 			$lead->answers = json_encode($answers_arr);
-			$lead->total = round(($total_points / 15) * 100);
-			$lead->review_collection = round(($review_collection / 12) * 100);
-			$lead->review_volume = round(($review_volume / 9) * 100);
-			$lead->impact = round(($impact / 9) * 100);
+			$lead->total = $total_points ? round(($total_points / 15) * 100) : 0;
+			$lead->review_collection = $review_collection ? round(($review_collection / 12) * 100) : 0;
+			$lead->review_volume = $review_volume ? round(($review_volume / 9) * 100) : 0;
+			$lead->impact = $impact ? round(($impact / 9)  * 100) : 0;
 			$lead->save();
 		}
 
@@ -477,7 +476,7 @@ class IndexController extends FrontController {
 	                $country_rating += $c_review->rating;
 	            }
 
-	            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
+	            $avg_country_rating = $country_rating && $country_reviews->count() ? number_format($country_rating / $country_reviews->count(), 2) : 0;
 	            $country_reviews = $country_reviews->count();
             }
 
@@ -534,32 +533,6 @@ class IndexController extends FrontController {
 	            'session' => false,
 	        ] );
     	}
-    }
-
-
-    public function getCurrentLocation($locale=null) {
-
-		if(!empty(request('latitude')) && !empty(request('longitude'))){
-			//send request and receive json data by latitude and longitude
-			$url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.trim(request('latitude')).','.trim(request('longitude')).'&sensor=false&key=apikey';
-			$json = @file_get_contents($url);
-			$data = json_decode($json);
-			$status = $data->status;
-
-			dd($status);
-			
-			//if request status is successful
-			if($status == "OK"){
-				//get address from json data
-				$location = $data->results[0]->formatted_address;
-			} else{
-				$location =  '';
-			}
-
-			return Response::json([
-	            'location' => $location,
-	        ]);
-		}
     }
 
     /**

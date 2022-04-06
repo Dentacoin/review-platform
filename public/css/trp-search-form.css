@@ -102,55 +102,16 @@
   27% {
     transform: scale(1); } }
   .search-form label {
-    position: relative;
-    font-size: 16px;
-    color: #888888;
-    border: 1px solid #cccccc;
     margin-left: 18px;
-    display: flex;
-    width: 162px;
-    padding: 16px 18px 16px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0px 3px 4px 1px #e5e5e5; }
+    width: 162px; }
     @media screen and (max-width: 998px) {
       .search-form label {
-        padding: 12px 5px 12px;
         margin-left: 10px;
-        font-size: 14px;
-        width: 126px; } }
+        width: 128px; } }
     @media screen and (max-width: 768px) {
       .search-form label {
         width: 100%;
-        text-align: left;
-        display: flex;
-        margin-left: 0px;
-        padding: 15px 18px 15px 12px;
-        margin-bottom: 24px;
-        margin-top: 10px; } }
-    .search-form label.active {
-      border-color: #14cab8;
-      border-width: 2px; }
-      .search-form label.active .checked-partner {
-        display: block; }
-    .search-form label img {
-      max-width: 16px;
-      margin-right: 6px; }
-    .search-form label .checked-partner {
-      display: none;
-      position: absolute;
-      background-color: #14cab8;
-      color: white;
-      top: 0;
-      right: 0;
-      font-size: 13px;
-      width: 16px;
-      height: 16px;
-      text-align: center;
-      line-height: 14px;
-      border-bottom-left-radius: 5px; }
-    .search-form label input {
-      display: none; }
+        margin-left: 0px; } }
   .search-form button {
     background-color: #14cab8;
     position: absolute;

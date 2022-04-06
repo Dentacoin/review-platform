@@ -34,6 +34,7 @@ $phone: "screen and (max-width: 768px)";
 	h2 {
 		margin-bottom: 2px;
 		color: $title_color;
+		font-weight: bold;
 
 		@media #{$phone} {
 			margin-bottom: 5px;
@@ -402,6 +403,7 @@ $phone: "screen and (max-width: 768px)";
 		color: $title_color;
 		margin-bottom: 30px;
 		margin-top: 50px;
+		font-weight: bold;
 
 		@media #{$tablet} {
 			margin-top: 10px;
