@@ -520,9 +520,14 @@ class GeneralHelper {
             }
         } else {
             // if contains php tag
-            if( strpos(file_get_contents($file),'<?') !== false) { //strpos(file_get_contents($file),'<?php') !== false || 
-                // do stuff
+            try {
+                $file_with_php = strpos(file_get_contents($file),'<?');
+            } catch (\Exception $e) {
+                $file_with_php = false;
+            }
 
+            if( $file_with_php !== false) { //strpos(file_get_contents($file),'<?php') !== false || 
+                // do stuff
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
                     file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                     '2. Image with <? in content: '.file_get_contents($file).';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
