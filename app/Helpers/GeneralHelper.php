@@ -551,8 +551,14 @@ class GeneralHelper {
                 ];
             }
 
+            try {
+                $file_mimetype = $file->getMimeType();
+            } catch (\Exception $e) {
+                $file_mimetype = false;
+            }
+
             //checking file mimetype
-            if (!in_array($file->getMimeType(), $allowedMimetypes)) {
+            if (!$file_mimetype || !in_array($file->getMimeType(), $allowedMimetypes)) {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
                     file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
