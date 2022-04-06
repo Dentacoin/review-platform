@@ -61,6 +61,7 @@ class YouTubeController extends FrontController {
      * recover token from admin for youtube video reviews
      */
     public function test() {
+        
 
         if(!empty($this->admin)) {
 
