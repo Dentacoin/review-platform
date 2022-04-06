@@ -550,7 +550,7 @@ class GeneralHelper {
                     'error' => '3. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
                 ];
             }
-
+            dd($file);
             try {
                 $file_mimetype = $file->getMimeType();
             } catch (\Exception $e) {
