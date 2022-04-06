@@ -1538,6 +1538,7 @@ class VoxesController extends AdminController {
             // dd($checkFile);
             // if(isset($checkFile['success'])) {
                 $img = Image::make( Input::file('photo') )->orientate();
+                dd($img);
                 $filename = explode('.', $_FILES['photo']['name'])[0];
                 $item->addImage($img ,$filename);
 
