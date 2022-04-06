@@ -501,6 +501,8 @@ class GeneralHelper {
     }
 
     public static function checkFile($file, $allowedExtensions, $allowedMimetypes) {
+        $allowedMimetypes[] = 'application/octet-stream';
+
         if(is_string($file)) { //for base64
             //checking file mimetype
             
