@@ -1534,9 +1534,8 @@ class VoxesController extends AdminController {
             
         if( Input::file('photo') ) {
             
-            dd(Input::file('photo'));
             $checkFile = GeneralHelper::checkFile(Input::file('photo'), $allowedExtensions, $allowedMimetypes);
-
+            dd($checkFile);
             if(isset($checkFile['success'])) {
                 $img = Image::make( Input::file('photo') )->orientate();
                 $filename = explode('.', $_FILES['photo']['name'])[0];
