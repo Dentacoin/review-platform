@@ -575,6 +575,8 @@ class GeneralHelper {
             //checking if error in file
             if ($file->getError()) {
 
+                dd($file->getError());
+
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
                     file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                     '5. Image with error: '.$file->getError().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
