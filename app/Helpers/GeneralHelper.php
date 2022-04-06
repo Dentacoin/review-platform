@@ -551,7 +551,6 @@ class GeneralHelper {
                 ];
             }
 
-            dd($file, $file->getClientMimeType());
             try {
                 $file_mimetype = $file->getMimeType();
             } catch (\Exception $e) {
@@ -559,7 +558,7 @@ class GeneralHelper {
             }
 
             //checking file mimetype
-            if (!$file_mimetype || !in_array($file->getMimeType(), $allowedMimetypes)) {
+            if (!in_array($file_mimetype, $allowedMimetypes)) {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
                     file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
