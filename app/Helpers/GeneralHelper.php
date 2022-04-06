@@ -573,19 +573,19 @@ class GeneralHelper {
             }
 
             //checking if error in file
-            if ($file->getError()) {
+            // if ($file->getError()) {
 
-                dd($file->getError());
+            //     dd($file->getError());
 
-                file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
-                    '5. Image with error: '.$file->getError().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
-                );
+            //     file_put_contents( base_path().'/storage/logs/upload-file.log', 
+            //         file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+            //         '5. Image with error: '.$file->getError().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
+            //     );
 
-                return [
-                    'error' => '4. There is error with one or more of the files, please try with other files. '.($file->getError())
-                ];
-            }
+            //     return [
+            //         'error' => '4. There is error with one or more of the files, please try with other files. '.($file->getError())
+            //     ];
+            // }
         }
 
         $img = Image::make( $file )->orientate();
