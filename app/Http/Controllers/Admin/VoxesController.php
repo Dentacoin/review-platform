@@ -1533,7 +1533,7 @@ class VoxesController extends AdminController {
         $allowedMimetypes = ['image/jpeg', 'image/png'];
             
         if( Input::file('photo') ) {
-            
+            dd(Input::file('photo')->getClientMimeType());
             $checkFile = GeneralHelper::checkFile(Input::file('photo'), $allowedExtensions, $allowedMimetypes);
             dd($checkFile);
             if(isset($checkFile['success'])) {

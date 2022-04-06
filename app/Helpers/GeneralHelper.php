@@ -555,7 +555,6 @@ class GeneralHelper {
             } catch (\Exception $e) {
                 $file_mimetype = false;
             }
-            dd($file, $file_mimetype);
 
             //checking file mimetype
             if (!$file_mimetype || !in_array($file->getMimeType(), $allowedMimetypes)) {
