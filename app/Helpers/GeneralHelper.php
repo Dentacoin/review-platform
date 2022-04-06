@@ -566,7 +566,7 @@ class GeneralHelper {
                 );
                 
                 return [
-                    'error' => '4. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                    'error' => '4. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'.($file_mimetype)
                 ];
             }
 
