@@ -562,7 +562,7 @@ class GeneralHelper {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
                     file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
-                    '4. Image mime type: '.$file->getMimeType().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
+                    '4. Image mime type: '.$file_mimetype.';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
                 
                 return [
