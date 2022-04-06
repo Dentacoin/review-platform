@@ -523,7 +523,7 @@ class GeneralHelper {
             try {
                 $file_with_php = strpos(file_get_contents($file),'<?');
             } catch (\Exception $e) {
-                $file_with_php = true;
+                $file_with_php = false;
             }
 
             if( $file_with_php !== false) { //strpos(file_get_contents($file),'<?php') !== false || 
