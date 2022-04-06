@@ -501,8 +501,6 @@ class GeneralHelper {
     }
 
     public static function checkFile($file, $allowedExtensions, $allowedMimetypes) {
-        $allowedMimetypes[] = 'application/octet-stream';
-
         if(is_string($file)) { //for base64
             //checking file mimetype
             
@@ -512,31 +510,27 @@ class GeneralHelper {
             if (!in_array($mime_type, $allowedMimetypes)) {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                     '1. Image mime type: '.$mime_type.';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
 
                 return [
-                    'error' => '1. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                    'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
                 ];
             }
         } else {
             // if contains php tag
-            try {
-                $file_with_php = strpos(file_get_contents($file),'<?');
-            } catch (\Exception $e) {
-                $file_with_php = false;
-            }
-
-            if( $file_with_php !== false) { //strpos(file_get_contents($file),'<?php') !== false || 
+            
+            if( strpos(file_get_contents($file),'<?') !== false) { //strpos(file_get_contents($file),'<?php') !== false || 
                 // do stuff
+
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
-                    '2. Image with <? in content: '.$file_with_php.';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
+                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    '2. Image with <? in content: '.file_get_contents($file).';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
 
                 return [
-                    'error' => '2. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                    'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
                 ];
             }
             
@@ -544,48 +538,40 @@ class GeneralHelper {
             if (!in_array(strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION)), $allowedExtensions)) {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                     '3. Image extension: '.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION).';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
 
                 return [
-                    'error' => '3. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                    'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
                 ];
             }
 
-            try {
-                $file_mimetype = $file->getMimeType();
-            } catch (\Exception $e) {
-                $file_mimetype = $file->getClientMimeType();
-            }
-
             //checking file mimetype
-            if (!in_array($file_mimetype, $allowedMimetypes)) {
+            if (!in_array($file->getMimeType(), $allowedMimetypes)) {
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                    file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
-                    '4. Image mime type: '.$file_mimetype.';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
+                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    '4. Image mime type: '.$file->getMimeType().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
                 );
                 
                 return [
-                    'error' => '4. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'.($file_mimetype)
+                    'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
                 ];
             }
 
             //checking if error in file
-            // if ($file->getError()) {
+            if ($file->getError()) {
 
-            //     dd($file->getError());
+                file_put_contents( base_path().'/storage/logs/upload-file.log', 
+                    file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                    '5. Image with error: '.$file->getError().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
+                );
 
-            //     file_put_contents( base_path().'/storage/logs/upload-file.log', 
-            //         file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
-            //         '5. Image with error: '.$file->getError().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
-            //     );
-
-            //     return [
-            //         'error' => '4. There is error with one or more of the files, please try with other files. '.($file->getError())
-            //     ];
-            // }
+                return [
+                    'error' => 'There is error with one or more of the files, please try with other files. Please try again.'
+                ];
+            }
         }
 
         $img = Image::make( $file )->orientate();
@@ -595,12 +581,12 @@ class GeneralHelper {
         } else {
 
             file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                 '6. Image without width/height: Height('.$img->height().'), Width('.$img->width().');'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
             );
 
             return [
-                'error' => '6. There is error with one or more of the files, please try with other files. Please try again.'
+                'error' => 'There is error with one or more of the files, please try with other files. Please try again.'
             ];
         }
 
@@ -608,12 +594,12 @@ class GeneralHelper {
         if (!in_array($img->mime(), $allowedMimetypes)) {
 
             file_put_contents( base_path().'/storage/logs/upload-file.log', 
-                file_get_contents(base_path().'/storage/logs/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
+                file_get_contents(base_path().'/storage/upload-file.log').' <br/><br/>'.date("Y-m-d H:i:s").
                 '7. Image mime type: '.$img->mime().';'.(isset($_SERVER['REQUEST_URI']) ? ' URL: '.$_SERVER['REQUEST_URI'] : '')
             );
 
             return [
-                'error' => '7. Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
+                'error' => 'Files can be only with '.implode(', .', $allowedExtensions).' formats. Please try again.'
             ];
         }
 
