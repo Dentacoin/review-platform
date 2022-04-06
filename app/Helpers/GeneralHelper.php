@@ -581,7 +581,7 @@ class GeneralHelper {
                 );
 
                 return [
-                    'error' => '4. There is error with one or more of the files, please try with other files. Please try again.'
+                    'error' => '4. There is error with one or more of the files, please try with other files. '.($file->getError())
                 ];
             }
         }
