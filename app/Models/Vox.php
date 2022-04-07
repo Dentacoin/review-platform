@@ -300,7 +300,7 @@ class Vox extends Model {
 
     public function addImage($img, $name) {
         $extensions = ['image/jpeg', 'image/png'];
-        dd($img->mime());
+        
         if (in_array($img->mime(), $extensions)) {
             $to = $this->getImagePath(false, $name);
             $to_thumb = $this->getImagePath(true, $name);

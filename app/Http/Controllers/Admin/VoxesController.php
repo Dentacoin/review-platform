@@ -1534,26 +1534,26 @@ class VoxesController extends AdminController {
             
         if( Input::file('photo') ) {
             
-            // $checkFile = GeneralHelper::checkFile(Input::file('photo'), $allowedExtensions, $allowedMimetypes);
+            $checkFile = GeneralHelper::checkFile(Input::file('photo'), $allowedExtensions, $allowedMimetypes);
 
-            // if(isset($checkFile['success'])) {
+            if(isset($checkFile['success'])) {
                 $img = Image::make( Input::file('photo') )->orientate();
                 $filename = explode('.', $_FILES['photo']['name'])[0];
                 $item->addImage($img ,$filename);
 
                 $history_info.= 'New photo<br/>';
-            // } else {
-            //     if(!empty($history_info)) {
-            //         $vox_history = new VoxHistory;
-            //         $vox_history->admin_id = $this->user->id;
-            //         $vox_history->vox_id = $item->id;
-            //         $vox_history->info = $history_info;
-            //         $vox_history->save();
-            //     }
+            } else {
+                if(!empty($history_info)) {
+                    $vox_history = new VoxHistory;
+                    $vox_history->admin_id = $this->user->id;
+                    $vox_history->vox_id = $item->id;
+                    $vox_history->info = $history_info;
+                    $vox_history->save();
+                }
                 
-            //     $this->request->session()->flash('error-message', $checkFile['error'] );
-            //     return redirect('cms/vox/edit/'.$item->id);
-            // }
+                $this->request->session()->flash('error-message', $checkFile['error'] );
+                return redirect('cms/vox/edit/'.$item->id);
+            }
         }
         if( Input::file('photo-social') ) {
 
