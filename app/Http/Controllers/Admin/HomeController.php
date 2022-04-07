@@ -26,6 +26,7 @@ class HomeController extends AdminController {
         if(Request::isMethod('post')) {
 
             $google2fa = new Google2FA();
+            dd($google2fa->generateSecretKey());
             if(Request::input('kyc_code')) {
 
                 if($google2fa->verifyKey(env('GOOGLE_AUTHENTICATOR_APP_SALT'), Request::input('kyc_code'))) {
