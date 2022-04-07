@@ -111,7 +111,7 @@ class AdminsController extends AdminController {
     }
 
     public function edit( $id ) {
-
+        
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
@@ -136,7 +136,7 @@ class AdminsController extends AdminController {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin']) ) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
+            return redirect('cms/home');
         }
         
         $item = Admin::find($id);
@@ -323,11 +323,45 @@ class AdminsController extends AdminController {
 
     public function profile() {
 
-        if( !empty($this->user) ) {      
+        if( !empty($this->user) ) {
             return $this->showView('admins-edit', array(
                 'item' => $this->user,
                 'my_profile' => true,
             ));
+        }
+    }
+
+    public function updateProfile() {
+
+        $item = $this->user;
+        
+        if(!empty($item)) {
+        	$validator = Validator::make($this->request->all(), [
+                'username' => array('required', 'string'),
+                'email' => array('email'),
+            ]);
+
+            if ($validator->fails()) {
+                return redirect('cms/admins/profile')
+                ->withInput()
+                ->withErrors($validator);
+            } else {
+                
+                $item->username = $this->request->input('username');
+                if(!empty( $this->request->input('password') )) {
+                    $item->password = bcrypt($this->request->input('password'));
+                }
+
+                $item->email = $this->request->input('email');
+                $item->user_id = $this->request->input('user_id');
+
+                $item->save();
+
+                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated') );
+                return redirect('cms/admins/profile');
+            }
+        } else {
+            return redirect('cms/admins/profile');
         }
     }
 }

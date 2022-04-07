@@ -52,6 +52,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('admins/messages',									'AdminsController@messagesList');
 	Route::post('admins/add-message',								'AdminsController@addMessage');
 	Route::get('admins/profile', 									'AdminsController@profile');
+	Route::post('admins/update-profile', 							'AdminsController@updateProfile');
 	Route::any('read-admin-message/{id}', 							'AdminsController@readMessage');
 
 	Route::any('upload-file', 										'AdminsController@uploadFile');
