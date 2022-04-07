@@ -708,32 +708,6 @@ class IndexController extends FrontController {
     	}
     }
 
-
-    public function getCurrentLocation($locale=null) {
-
-		if(!empty(request('latitude')) && !empty(request('longitude'))){
-			//send request and receive json data by latitude and longitude
-			$url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.trim(request('latitude')).','.trim(request('longitude')).'&sensor=false&key=apikey';
-			$json = @file_get_contents($url);
-			$data = json_decode($json);
-			$status = $data->status;
-
-			dd($status);
-			
-			//if request status is successful
-			if($status == "OK"){
-				//get address from json data
-				$location = $data->results[0]->formatted_address;
-			} else{
-				$location =  '';
-			}
-
-			return Response::json([
-	            'location' => $location,
-	        ]);
-		}
-    }
-
     /**
      * get popups content
      */
