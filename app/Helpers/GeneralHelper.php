@@ -501,6 +501,7 @@ class GeneralHelper {
     }
 
     public static function checkFile($file, $allowedExtensions, $allowedMimetypes) {
+
         if(is_string($file)) { //for base64
             //checking file mimetype
             
@@ -569,7 +570,7 @@ class GeneralHelper {
                 );
 
                 return [
-                    'error' => 'There is error with one or more of the files, please try with other files. Please try again.'
+                    'error' => 'There is error with one or more of the files, please try with other files.'
                 ];
             }
         }
@@ -586,7 +587,7 @@ class GeneralHelper {
             );
 
             return [
-                'error' => 'There is error with one or more of the files, please try with other files. Please try again.'
+                'error' => 'There is error with one or more of the files, please try with other files.'
             ];
         }
 
