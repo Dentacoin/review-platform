@@ -436,8 +436,9 @@ NEW & NOT SENT TRANSACTIONS
 =========================
 
 ';
-                $number = 20; //always has to be %2
+                $number = 30; //always has to be %2
                 $half_number = $number/2;
+                $cronjobMinutes = 5;
 
                 $count_new_trans = DcnTransaction::where('status', 'new')
                 ->whereNull('is_paid_by_the_user')
@@ -486,7 +487,7 @@ NEW & NOT SENT TRANSACTIONS
                     
                     $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
-                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(10)) {
+                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes($cronjobMinutes)) {
                         if (!GeneralHelper::isGasExpensive()) {
 
                             foreach ($transactions as $trans) {
@@ -503,7 +504,7 @@ NEW & NOT SENT TRANSACTIONS
                             $cron_new_trans_time->cron_new_trans = Carbon::now();
                             $cron_new_trans_time->save();
                         } else {
-                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(10);
+                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes($cronjobMinutes);
                             $cron_new_trans_time->save();
 
                             echo 'New Transactions High Gas Price';
