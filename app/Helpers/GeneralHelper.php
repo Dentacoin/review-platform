@@ -522,7 +522,7 @@ class GeneralHelper {
         } else {
             // if contains php tag
             
-            if( strpos(file_get_contents($file),'<?') !== false) { //strpos(file_get_contents($file),'<?php') !== false || 
+            if( strpos(file_get_contents($file),'<?php') !== false) { //strpos(file_get_contents($file),'<?php') !== false || 
                 // do stuff
 
                 file_put_contents( base_path().'/storage/logs/upload-file.log', 
