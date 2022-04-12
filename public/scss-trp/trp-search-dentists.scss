@@ -308,12 +308,14 @@ $phone: "screen and (max-width: 768px)";
 				color: white;
 				font-weight: bold;
 
-				&:after {
-					content: ')';
-				}
+				@media #{$phone} {
+					&:after {
+						content: ')';
+					}
 
-				&:before {
-					content: '(';
+					&:before {
+						content: '(';
+					}
 				}
 			}
 		}
@@ -408,24 +410,6 @@ $phone: "screen and (max-width: 768px)";
 			.flex {
 				.country {
 					width: 100%;
-				}
-			}
-		}
-	}
-
-	&.cities-wrapper {
-		min-height: calc(100vh - 421px);
-
-		.letters-country-section {
-			.flex {
-				.country {
-					width: 100%;
-
-					a {
-						float: none;
-						display: flex;
-    					justify-content: space-between;
-					}
 				}
 			}
 		}

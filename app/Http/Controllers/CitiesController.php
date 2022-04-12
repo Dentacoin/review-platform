@@ -14,17 +14,28 @@ use Request;
 
 class CitiesController extends BaseController {
 
-	public function getUsername() {
+	public function searchDentists() {
 
 		$ret = [];
-		
-		$searchUserName = trim(Request::input('username'));
-		$searchSplitedUsername = preg_split('/\s+/', $searchUserName, -1, PREG_SPLIT_NO_EMPTY);
-		$searchCountryID = Request::input('country_id');
-		$searchCountryName = Request::input('country_name');
-		$searchCity = Request::input('city');
-		$searchForPartner = Request::input('is_partner');
 
+		$forForm = Request::input('submit-form') ?? false;
+
+		if($forForm) {
+			$searchUserName = trim(Request::input('dentist-name'));
+			$searchSplitedUsername = preg_split('/\s+/', $searchUserName, -1, PREG_SPLIT_NO_EMPTY);
+			$searchCountryID = Request::input('search-country-id');
+			$searchCountryName = Request::input('dentist-country');
+			$searchCity = Request::input('dentist-city');
+			$searchForPartner = Request::input('partner');
+		} else {
+			$searchUserName = trim(Request::input('username'));
+			$searchSplitedUsername = preg_split('/\s+/', $searchUserName, -1, PREG_SPLIT_NO_EMPTY);
+			$searchCountryID = Request::input('country_id');
+			$searchCountryName = Request::input('country_name');
+			$searchCity = Request::input('city');
+			$searchForPartner = Request::input('is_partner');
+		}
+		
 		//remove dr from search query, because dr is in another field
 		if ($this->searchWordInString('dr. ', $searchUserName) || $this->searchWordInString('dr ', $searchUserName)) {
 
@@ -105,6 +116,7 @@ class CitiesController extends BaseController {
 		})->whereIn('status', config('dentist-statuses.shown'))
 		->whereNull('self_deleted')
 		->orderBy('is_partner', 'desc');
+		
 		if($searchForPartner) {
 			$dentistsAndClinics->where('is_partner', 1);
 		}
@@ -164,7 +176,6 @@ class CitiesController extends BaseController {
 				foreach($searchSplitedUsername as $splitedName) {
 					$highlited_name = str_ireplace( $splitedName , '<span>'.$splitedName.'</span>', $highlited_name);
 				}
-				
 
 				if($user->status=='dentist_no_email') {
 					$teamMembersCount++;

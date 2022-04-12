@@ -7,7 +7,11 @@
 
 	<h4 class="step-title">{!! nl2br(trans('trp.popup.popup-invite.step2-title')) !!}</h4>
 
-	{!! Form::open(array('method' => 'post', 'class' => 'invite-patient-copy-paste-form-emails', 'url' => getLangUrl('profile/invite-copypaste-emails') )) !!}
+	{!! Form::open([
+		'method' => 'post', 
+		'class' => 'invite-patient-copy-paste-form-emails', 
+		'url' => getLangUrl('profile/invite-copypaste-emails') 
+	]) !!}
 		{!! csrf_field() !!}
 
 		<div class="checkboxes-wrapper">
@@ -33,7 +37,11 @@
 
 	<h4 class="step-title">{!! nl2br(trans('trp.popup.popup-invite.step3-title')) !!}</h4>
 
-	{!! Form::open(array('method' => 'post', 'class' => 'invite-patient-copy-paste-form-names', 'url' => getLangUrl('profile/invite-copypaste-names') )) !!}
+	{!! Form::open([
+		'method' => 'post', 
+		'class' => 'invite-patient-copy-paste-form-names', 
+		'url' => getLangUrl('profile/invite-copypaste-names') 
+	]) !!}
 		{!! csrf_field() !!}
 
 		<div class="checkboxes-wrapper">
@@ -66,7 +74,11 @@
 
 	<h4 class="step-title">{!! nl2br(trans('trp.popup.popup-invite.step4-title')) !!}</h4>
 
-	{!! Form::open(array('method' => 'post', 'class' => 'invite-patient-copy-paste-form-final', 'url' => getLangUrl('profile/invite-copypaste-final') )) !!}
+	{!! Form::open([
+		'method' => 'post', 
+		'class' => 'invite-patient-copy-paste-form-final', 
+		'url' => getLangUrl('profile/invite-copypaste-final') 
+	]) !!}
 		{!! csrf_field() !!}
 
 		<div class="chosen-patient-info flex flex-center">

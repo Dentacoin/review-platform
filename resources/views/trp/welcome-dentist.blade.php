@@ -27,7 +27,6 @@
 	    <div class="signin-form-wrapper">
 	    	<div class="container">
 	    		<form class="signin-form tablet-fixes">
-
 					<div class="form-inner">
 						<div class="modern-field">
 							<input type="email" name="email" id="dentist-mail" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
@@ -62,7 +61,6 @@
 							'endlink' => '</a>',
 						])) !!}					
 					</p>
-
 	    		</form>
 	    	</div>
 	    </div>

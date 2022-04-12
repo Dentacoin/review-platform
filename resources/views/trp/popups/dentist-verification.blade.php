@@ -31,7 +31,11 @@
 				<h4 class="popup-title">
 					{{ trans('trp.popup.verification-popup.show-team') }}
 				</h4>
-				{!! Form::open(array('method' => 'post', 'class' => 'invite-dentist-form', 'url' => getLangUrl('invite-dentist') )) !!}
+				{!! Form::open([
+					'method' => 'post', 
+					'class' => 'invite-dentist-form', 
+					'url' => getLangUrl('invite-dentist') 
+				]) !!}
 					{!! csrf_field() !!}
 
 					<input type="hidden" name="last_user_id" value=""/>
@@ -58,7 +62,12 @@
 					<div class="alert alert-warning alert-warning-d" style="display: none; margin-top: 20px;"></div>
 				{!! Form::close() !!}
 
-				{!! Form::open(array('method' => 'post', 'files'=> true, 'class' => 'search-dentist-form add-team-member-form', 'url' => getLangUrl('profile/invite-new') )) !!}
+				{!! Form::open([
+					'method' => 'post', 
+					'files'=> true, 
+					'class' => 'search-dentist-form add-team-member-form', 
+					'url' => getLangUrl('profile/invite-new') 
+				]) !!}
 					{!! csrf_field() !!}
 
 					<input type="hidden" name="last_user_id" value=""/>
@@ -137,7 +146,11 @@
 				{!! Form::close() !!}
 			</div>
 
-			{!! Form::open(array('method' => 'post', 'class' => 'verification-form', 'url' => getLangUrl('verification-dentist') )) !!}
+			{!! Form::open([
+				'method' => 'post', 
+				'class' => 'verification-form', 
+				'url' => getLangUrl('verification-dentist') 
+			]) !!}
 				{!! csrf_field() !!}
 				
 				<input type="hidden" name="last_user_id" value=""/>

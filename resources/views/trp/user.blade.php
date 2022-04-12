@@ -59,7 +59,12 @@
     	<div class="profile-info col">
 
 			@if(!empty($user) && $user->id==$item->id)
-				{!! Form::open(array('method' => 'post', 'class' => 'edit-profile clearfix', 'style' => 'display: none;', 'url' => getLangUrl('profile/info') )) !!}
+				{!! Form::open([
+					'method' => 'post', 
+					'class' => 'edit-profile clearfix', 
+					'style' => 'display: none;', 
+					'url' => getLangUrl('profile/info') 
+				]) !!}
 					{!! csrf_field() !!}
 					
 					<div class="upload-image-wrapper">
@@ -687,7 +692,11 @@
 	    			</div>
 	    			@if(!empty($user) && $item->id==$user->id)
 		    			<div class="specialization" role="editor" style="display: none;">
-							{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
+							{{ Form::open([
+								'class' => 'edit-description', 
+								'method' => 'post', 
+								'url' => getLangUrl('profile/info') 
+							]) }}
 								{!! csrf_field() !!}
 								@foreach($categories as $k => $v)
 									<label class="checkbox-label {!! in_array($loop->index, $user->categories->pluck('category_id')->toArray()) ? 'active' : '' !!}" for="checkbox-{{ $k }}" >
@@ -722,7 +731,11 @@
 	    			</div>
 	    			@if(!empty($user) && $item->id==$user->id)
 		    			<div class="dentist-payments" role="editor" style="display: none;">
-							{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
+							{{ Form::open([
+								'class' => 'edit-description', 
+								'method' => 'post', 
+								'url' => getLangUrl('profile/info') 
+							]) }}
 								{!! csrf_field() !!}
 								@foreach(config('trp.accepted_payment') as $ap)
 									<label class="checkbox-label {!! in_array($ap, $user->accepted_payment) ? 'active' : '' !!}" for="checkbox-{{ $ap }}" >
@@ -756,9 +769,15 @@
 	    			</div>
 	    			@if(!empty($user) && $item->id==$user->id)
 		    			<div class="about-content" role="editor" id="edit-descr-container" style="display: none; padding: 5px;">
-							{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
+							{{ Form::open([
+								'class' => 'edit-description', 
+								'method' => 'post', 
+								'url' => getLangUrl('profile/info') 
+							]) }}
 								{!! csrf_field() !!}
-								<textarea class="input" name="description" id="dentist-description" placeholder="{!! nl2br(trans('trp.page.user.description-placeholder')) !!}">{{ $item->description }}</textarea>
+								<textarea class="input" name="description" id="dentist-description" placeholder="{!! nl2br(trans('trp.page.user.description-placeholder')) !!}">
+									{{ $item->description }}
+								</textarea>
 								<p class="symbols-wrapper"><span id="symbols-count">0</span> / max length 512</p>
 	                            <input type="hidden" name="field" value="description" />
 	                            <input type="hidden" name="json" value="1" />
@@ -774,7 +793,11 @@
 	    				<div class="gallery-flickity">
 			    			@if( (!empty($user) && $item->id==$user->id && $item->photos->count() < 10 ) )
 								<div class="slider-wrapper">
-									{{ Form::open(array('class' => 'gallery-add', 'method' => 'post', 'files' => true)) }}
+									{{ Form::open([
+										'class' => 'gallery-add', 
+										'method' => 'post', 
+										'files' => true
+									]) }}
 										<label for="add-gallery-photo" class="add-gallery-image slider-image cover image-label dont-count" guided-action="photos">
 											<div class="plus-gallery-image">
 												<img src="{{ url('img/plus.svg') }}"/>

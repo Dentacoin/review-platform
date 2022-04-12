@@ -464,7 +464,7 @@ h5 {
 	}
 }
 
-.fixed-popup,
+.popup,
 .site-content {
 	.alert {
 		border-radius: 10px;
@@ -840,15 +840,15 @@ body.popup-visible {
 
     &.big {
 	    .stars {
-	        width: 186px;
-	        height: 35px;
+			width: 169px;
+			height: 29px;
 	        background: url('../img-trp/stars-gray-big.png') 50% 50% no-repeat;
 	        background-size: contain;
 
 	        .bar {
 	            background: url('../img-trp/stars-blue-big.png') 0% 50% no-repeat;
 	            background-size: cover;
-	            height: 35px;
+				height: 29px;
 	        }
 	    }
     }	

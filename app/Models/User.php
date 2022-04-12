@@ -963,11 +963,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
     public function getImagePath($thumb = false) {
-        $folder = storage_path().'/app/public/avatars/'.($this->id%100);
-        if(!is_dir($folder)) {
-            mkdir($folder);
+        if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
+            return '/var/www/html/trp-urgent/public/new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png';
+        } else {
+            $folder = storage_path().'/app/public/avatars/'.($this->id%100);
+            if(!is_dir($folder)) {
+                mkdir($folder);
+            }
+            return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.jpg';
         }
-        return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.jpg';
     }
 
     public function addImage($img) {

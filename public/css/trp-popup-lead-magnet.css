@@ -1,71 +1,127 @@
-#popup-lead-magnet .popup-inner {
-  padding: 50px 0px 40px;
-  width: 730px;
-  min-width: 730px; }
-  @media screen and (max-width: 1200px) {
-    #popup-lead-magnet .popup-inner {
-      width: 660px;
-      min-width: 660px; } }
+.site-content {
+  min-height: calc(100vh - 127px);
+  background-color: #e2ebff; }
+
+.lead-magnet-questions-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 100px;
+  padding-bottom: 34px; }
+  @media screen and (max-width: 998px) {
+    .lead-magnet-questions-wrapper {
+      flex-direction: column; } }
   @media screen and (max-width: 768px) {
-    #popup-lead-magnet .popup-inner {
-      width: 100%;
-      min-width: auto;
-      padding-bottom: 10px; } }
-  #popup-lead-magnet .popup-inner .close-popup:not(.button) {
-    top: 18px; }
-  #popup-lead-magnet .popup-inner h2 {
-    font-size: 30px; }
+    .lead-magnet-questions-wrapper {
+      padding-top: 40px; } }
+  .lead-magnet-questions-wrapper .lead-magnet-image {
+    max-width: 760px;
+    margin-right: -210px;
+    margin-left: -110px;
+    width: 100%; }
     @media screen and (max-width: 1200px) {
-      #popup-lead-magnet .popup-inner h2 {
+      .lead-magnet-questions-wrapper .lead-magnet-image {
+        max-width: 580px;
+        margin-right: -260px;
+        margin-left: -80px; } }
+    @media screen and (max-width: 998px) {
+      .lead-magnet-questions-wrapper .lead-magnet-image {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: -120px;
+        transition: all 0.3s ease;
+        z-index: 0; }
+        .lead-magnet-questions-wrapper .lead-magnet-image.hide-image {
+          z-index: -1;
+          margin-bottom: -457px;
+          transition: all 0.3s ease; } }
+    @media screen and (max-width: 998px) and (max-width: 768px) {
+      .lead-magnet-questions-wrapper .lead-magnet-image.hide-image {
+        margin-bottom: -237px; } }
+
+    @media screen and (max-width: 768px) {
+      .lead-magnet-questions-wrapper .lead-magnet-image {
+        max-width: 400px;
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: -76px; } }
+    .lead-magnet-questions-wrapper .lead-magnet-image img {
+      max-width: 100%; }
+  .lead-magnet-questions-wrapper .lead-magnet-survey-box {
+    box-shadow: -8px 0 18px 17px rgba(68, 68, 68, 0.23);
+    position: relative;
+    padding: 40px 0px;
+    width: 730px;
+    background-color: white;
+    border-radius: 40px; }
+    @media screen and (max-width: 1200px) {
+      .lead-magnet-questions-wrapper .lead-magnet-survey-box {
+        width: 660px;
+        min-width: 660px; } }
+    @media screen and (max-width: 768px) {
+      .lead-magnet-questions-wrapper .lead-magnet-survey-box {
+        width: 100%;
+        min-width: auto;
+        padding-bottom: 10px; } }
+  .lead-magnet-questions-wrapper h2 {
+    font-size: 30px;
+    color: #0564c6;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 20px; }
+    @media screen and (max-width: 1200px) {
+      .lead-magnet-questions-wrapper h2 {
         font-size: 27px; } }
-  #popup-lead-magnet .popup-inner form {
+  .lead-magnet-questions-wrapper form {
     box-shadow: 0px -12px 13px -8px #dcdcdc;
     padding: 50px 50px 0px;
-    min-height: 516px;
-    position: relative; }
+    min-height: 583px;
+    position: relative;
+    background-color: transparent; }
     @media screen and (max-width: 768px) {
-      #popup-lead-magnet .popup-inner form {
+      .lead-magnet-questions-wrapper form {
         padding: 30px 15px 0px; } }
-    #popup-lead-magnet .popup-inner form .loader-lead-magnet {
+    .lead-magnet-questions-wrapper form .loader-lead-magnet {
       position: absolute;
       z-index: 1000;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      text-align: center; }
-      #popup-lead-magnet .popup-inner form .loader-lead-magnet video {
+      text-align: center;
+      background-color: white; }
+      .lead-magnet-questions-wrapper form .loader-lead-magnet video {
         width: 330px;
         margin: 60px auto 0; }
         @media screen and (max-width: 768px) {
-          #popup-lead-magnet .popup-inner form .loader-lead-magnet video {
+          .lead-magnet-questions-wrapper form .loader-lead-magnet video {
             width: 240px; } }
-      #popup-lead-magnet .popup-inner form .loader-lead-magnet p {
+      .lead-magnet-questions-wrapper form .loader-lead-magnet p {
         font-size: 20px;
         color: #332255;
         margin-top: 20px; }
         @media screen and (max-width: 768px) {
-          #popup-lead-magnet .popup-inner form .loader-lead-magnet p {
+          .lead-magnet-questions-wrapper form .loader-lead-magnet p {
             padding: 0px 40px; } }
-    #popup-lead-magnet .popup-inner form .checkbox-label {
+    .lead-magnet-questions-wrapper form .checkbox-label {
       margin-bottom: 45px; }
       @media screen and (max-width: 768px) {
-        #popup-lead-magnet .popup-inner form .checkbox-label {
+        .lead-magnet-questions-wrapper form .checkbox-label {
           margin-top: -10px;
           padding: 0px; } }
-  #popup-lead-magnet .popup-inner .flickity-magnet {
+  .lead-magnet-questions-wrapper .flickity-magnet {
     margin: -10px -50px 0px; }
     @media screen and (max-width: 768px) {
-      #popup-lead-magnet .popup-inner .flickity-magnet {
+      .lead-magnet-questions-wrapper .flickity-magnet {
         margin: 0px; } }
-    #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet {
+    .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet {
       width: 100%;
       text-align: center; }
-      #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet p {
+      .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet p {
         font-size: 18px;
         font-weight: 300;
         margin-bottom: 19px; }
-      #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label {
+      .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label {
         text-align: left;
         display: block;
         padding: 18px 22px;
@@ -80,22 +136,22 @@
         position: relative;
         box-shadow: 0px 0px 4px 0px #d6d6d7; }
         @media screen and (max-width: 768px) {
-          #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label {
+          .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label {
             font-size: 16px;
             padding: 16px 22px;
             margin-bottom: 18px; } }
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label.disabled-label {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.disabled-label {
           background-color: #f7f7f7; }
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label.active {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.active {
           border-color: #14cab8; }
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label:hover {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label:hover {
           background-color: #f7f7f7; }
           @media screen and (max-width: 768px) {
-            #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label:hover {
+            .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label:hover {
               background-color: white; } }
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label input {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label input {
           display: none; }
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label .checkbox-square {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label .checkbox-square {
           width: 17px;
           height: 17px;
           border: 1px solid #dddddd;
@@ -109,65 +165,65 @@
           margin-right: 5px;
           font-size: 0px; }
           @media screen and (max-width: 768px) {
-            #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label .checkbox-square {
+            .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label .checkbox-square {
               width: 14px;
               height: 14px;
               line-height: 23px; } }
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label i {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label i {
           font-size: 23px;
           vertical-align: middle;
           margin-right: 6px;
           color: #dddddd; }
           @media screen and (max-width: 768px) {
-            #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label i {
+            .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label i {
               font-size: 19px; } }
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label.active .checkbox-square {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.active .checkbox-square {
           border-color: #126585;
           font-size: 13px;
           line-height: 18px; }
           @media screen and (max-width: 768px) {
-            #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label.active .checkbox-square {
+            .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.active .checkbox-square {
               line-height: 13px; } }
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label.active i {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.active i {
           color: #126585; }
-          #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-radios-magnet label.active i:before {
+          .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.active i:before {
             content: '\f14a'; }
-    #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-question {
+    .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-question {
       margin-bottom: 45px; }
       @media screen and (max-width: 768px) {
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-question {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-question {
           margin-bottom: 15px;
           margin-top: 40px; } }
-      #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-question h4 {
+      .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-question h4 {
         font-weight: 800;
         color: #332255; }
         @media screen and (max-width: 768px) {
-          #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .answer-question h4 {
+          .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-question h4 {
             font-size: 20px; } }
-    #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .buttons-list {
+    .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .buttons-list {
       margin-top: 20px;
       width: 525px;
       display: inline-block;
       position: relative; }
       @media screen and (max-width: 768px) {
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .buttons-list {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .buttons-list {
           width: 100%;
           margin-top: 0px; } }
-    #popup-lead-magnet .popup-inner .flickity-magnet .flickity-viewport .button {
+    .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .button {
       margin-top: 20px; }
-    #popup-lead-magnet .popup-inner .flickity-magnet .alert {
+    .lead-magnet-questions-wrapper .flickity-magnet .alert {
       margin: 0px 130px 20px; }
       @media screen and (max-width: 768px) {
-        #popup-lead-magnet .popup-inner .flickity-magnet .alert {
+        .lead-magnet-questions-wrapper .flickity-magnet .alert {
           margin: 0px 20px 20px; } }
-    #popup-lead-magnet .popup-inner .flickity-magnet .flickity-page-dots {
+    .lead-magnet-questions-wrapper .flickity-magnet .flickity-page-dots {
       bottom: auto;
       top: 50px;
       background: transparent; }
       @media screen and (max-width: 768px) {
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-page-dots {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-page-dots {
           top: 0px; } }
-      #popup-lead-magnet .popup-inner .flickity-magnet .flickity-page-dots:after {
+      .lead-magnet-questions-wrapper .flickity-magnet .flickity-page-dots:after {
         content: '';
         position: absolute;
         width: 100%;
@@ -177,15 +233,15 @@
         left: 0px;
         right: 0px;
         z-index: 100; }
-      #popup-lead-magnet .popup-inner .flickity-magnet .flickity-page-dots .dot {
+      .lead-magnet-questions-wrapper .flickity-magnet .flickity-page-dots .dot {
         margin: 0px 3px;
         border: 1px solid #bfbfbf;
         opacity: 1;
         width: 17px;
         height: 17px;
         background: transparent; }
-        #popup-lead-magnet .popup-inner .flickity-magnet .flickity-page-dots .dot.is-selected {
+        .lead-magnet-questions-wrapper .flickity-magnet .flickity-page-dots .dot.is-selected {
           border-color: #0085d2;
           background-color: #0085d2; }
-    #popup-lead-magnet .popup-inner .flickity-magnet .flickity-prev-next-button {
+    .lead-magnet-questions-wrapper .flickity-magnet .flickity-prev-next-button {
       display: none !important; }

@@ -45,7 +45,12 @@
 				{!! nl2br(trans('trp.popup.add-team-popup.invite')) !!}
 			</p>
 
-			{!! Form::open(array('method' => 'post', 'files'=> true, 'class' => 'search-dentist-form add-team-member-form', 'url' => getLangUrl('profile/invite-new') )) !!}
+			{!! Form::open([
+				'method' => 'post', 
+				'files'=> true, 
+				'class' => 'search-dentist-form add-team-member-form', 
+				'url' => getLangUrl('profile/invite-new') 
+			]) !!}
 				{!! csrf_field() !!}
 				<input type="hidden" name="check-for-same" class="check-for-same"/>
 				

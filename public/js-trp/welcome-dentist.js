@@ -5,14 +5,17 @@ jQuery(document).ready(function($){
 	$('.signin-form-wrapper form').submit( function(e) {
 		e.preventDefault();
 
+		//if no connection with dcn server
 		if(dentacoin_down && !user_id) {
     		e.stopImmediatePropagation();
     		showPopup('failed-popup');
     	} else {
+			//open register popup
 			$.event.trigger({type: 'openDentistRegister'});
 
 			var that = $(this);
 			
+			//add fields to register popup form
 			$(document).on('dentacoinLoginGatewayLoaded', function (event) {
 				$('#dentist-register-email').val( that.find('input[name="email"]').val() );
 				$('#dentist-register-email').addClass('gateway-platform-border-color-important');
@@ -31,21 +34,17 @@ jQuery(document).ready(function($){
     	}
     });
 
-    if( $('#dentist-email').val() ) {
-    	if(dentacoin_down && !user_id) {
-    		showPopup('failed-popup');
-    	} else {
-			$.event.trigger({type: 'openDentistRegister'});
-		}
-    }
-
+	//load page down sections on sroll (google page speed)
 	$(window).scroll( function() {
 		if (!$('#to-append').hasClass('appended')) {
+
 			$('#to-append').addClass('appended');
+
 			$.ajax({
 	            type: "POST",
 	            url: lang + '/index-dentist-down/',
 	            success: function(ret) {
+
 					$.getScript(window.location.origin+'/js/flickity.min.js');
 					$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
 					$('#to-append').append(ret);
@@ -75,33 +74,6 @@ jQuery(document).ready(function($){
 							adaptiveHeight: true,
 						});
 					}, 1000);
-
-					$('#open-magnet').click( function() {
-						gtag('event', 'Open', {
-							'event_category': 'LeadMagnet',
-							'event_label': 'Popup',
-						});
-					});
-
-					$('.magnet-popup').click( function() {
-						var that = $(this);
-			
-						$.ajax({
-							type: "GET",
-							url: that.attr('data-url'),
-							dataType: 'json',
-							success: function(ret) {
-								if(ret.session) {
-									window.location.href = ret.url;
-								} else {
-									showPopup('popup-lead-magnet');
-								}
-							},
-							error: function(ret) {
-								console.log('error');
-							}
-						});
-					});
 	            },
 	            error: function(ret) {
 	                console.log('error');

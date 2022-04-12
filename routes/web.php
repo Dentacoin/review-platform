@@ -19,7 +19,7 @@ Route::get('cms/logout', 							'Auth\AuthenticateAdmin@getLogout');
 
 Route::get('cities/{id}/{empty?}', 					'CitiesController@getCities');
 Route::post('location', 							'CitiesController@getLocation');
-Route::post('user-name', 							'CitiesController@getUsername');
+Route::post('search-dentists', 						'CitiesController@searchDentists');
 Route::post('dentist-location', 					'CitiesController@getDentistLocation');
 Route::get('question-count', 						'CitiesController@getQuestions');
 Route::any('suggest-clinic/{id?}', 					'CitiesController@getClinic');

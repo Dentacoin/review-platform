@@ -13,13 +13,11 @@ use App\Models\Review;
 use App\Models\User;
 use App\Models\City;
 
-use App\Helpers\GeneralHelper;
 use Carbon\Carbon;
 
 use Validator;
 use Response;
 use Request;
-use Cookie;
 
 class IndexController extends FrontController {
 
@@ -121,7 +119,7 @@ class IndexController extends FrontController {
 			];
         }
 
-		$params = array(
+		$params = [
 			'countries' => Country::with('translations')->get(),
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
@@ -139,7 +137,7 @@ class IndexController extends FrontController {
 			'css' => [
                 'trp-index.css',
 			]
-        );
+		];
 
 		if (!empty($this->user)) {
 			$params['extra_body_class'] = 'strength-pb';
@@ -169,10 +167,10 @@ class IndexController extends FrontController {
 			$completed_strength = $this->user->getStrengthCompleted('trp');
 		}
 
-		$params = array(
+		$params = [
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
-        );
+		];
 
 		if (!empty($this->user)) {
 			$params['extra_body_class'] = 'strength-pb';
@@ -198,22 +196,22 @@ class IndexController extends FrontController {
 
 		$claim_user = !empty($claim_id) ? User::find($claim_id) : null;
 
-		return $this->ShowView('index-dentist', array(
+		return $this->ShowView('welcome-dentist', [
 			'extra_body_class' => 'white-header',
 			'claim_user' => $claim_user,
 			'js' => [
 				'address.js',
-				'index-dentist.js',
+				'welcome-dentist.js',
 			],
 			'css' => [
-				'trp-index-dentist.css',
+				'trp-welcome-dentist.css',
 			],
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,
             'seo_description' => $seos->seo_description,
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
-        ));	
+		]);	
 	}
 
 	/**
@@ -230,7 +228,7 @@ class IndexController extends FrontController {
 
     	$testimonials = DentistTestimonial::with('translations')->orderBy('id', 'desc')->get();
 
-		return $this->ShowView('index-dentist-down', array(
+		return $this->ShowView('welcome-dentist-down', array(
 			'testimonials' => $testimonials,
         ));	
 	}
@@ -322,7 +320,7 @@ class IndexController extends FrontController {
 
             return Response::json([
                 'success' => true,
-            ] );
+            ]);
         }
 	}
 
@@ -357,7 +355,6 @@ class IndexController extends FrontController {
 				'3' => 1,
 				'4' => 0,
 			],  
-
 		];
 
 		$total_points = 0;
@@ -425,8 +422,7 @@ class IndexController extends FrontController {
 		return Response::json([
             'success' => true,
             'total_points' => $lead->total,
-            'url' => getLangUrl('lead-magnet-results')
-        ] );
+        ]);
 	}
 
 	/**
@@ -455,7 +451,7 @@ class IndexController extends FrontController {
 	            }
 
 	            if (!empty($country_rating) && !empty($country_reviews->count())) {
-		            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
+		            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 1);
 		            $country_reviews = $country_reviews->count();
 	            } else {
 	            	$country_reviews = null;
@@ -476,7 +472,7 @@ class IndexController extends FrontController {
 	                $country_rating += $c_review->rating;
 	            }
 
-	            $avg_country_rating = $country_rating && $country_reviews->count() ? number_format($country_rating / $country_reviews->count(), 2) : 0;
+	            $avg_country_rating = $country_rating && $country_reviews->count() ? number_format($country_rating / $country_reviews->count(), 1) : 0;
 	            $country_reviews = $country_reviews->count();
             }
 
@@ -492,7 +488,7 @@ class IndexController extends FrontController {
 
     		$seos = PageSeo::find(25);
 
-	        return $this->ShowView('lead-magnet', array(
+	        return $this->ShowView('lead-magnet', [
 	        	'total_points' => $total_points,
 	        	'review_collection' => $review_collection,
 	        	'review_volume' => $review_volume,
@@ -508,13 +504,35 @@ class IndexController extends FrontController {
 	            'css' => [
 	            	'trp-lead-magnet.css'
 	            ],
-	        ));
+			]);
     	} else {
-    		if(!empty($this->user)) {
-    			return redirect( getLangUrl('/') );
-    		} else {
-    			return redirect( getLangUrl('welcome-dentist') );
-    		}    		
+			if((!empty($this->user) && $this->user->is_dentist) || empty($this->user)) {
+
+				$seos = PageSeo::find(25);
+
+				return $this->ShowView('lead-magnet', [
+					'social_image' => $seos->getImageUrl(),
+					'seo_title' => $seos->seo_title,
+					'seo_description' => $seos->seo_description,
+					'social_title' => $seos->social_title,
+					'social_description' => $seos->social_description,
+					'countries' => Country::with('translations')->get(),
+					'css' => [
+						'trp-popup-lead-magnet.css',
+						'flickity.min.css'
+					],
+					'js' => [
+						'../js/flickity.min.js',
+						'lead-magnet.js'
+					],
+				]);
+			} else {
+				if(!empty($this->user)) {
+					return redirect( getLangUrl('/') );
+				} else {
+					return redirect( getLangUrl('welcome-dentist') );
+				}   
+			}
     	}
     }
 
@@ -527,11 +545,11 @@ class IndexController extends FrontController {
     		return Response::json([
 	            'session' => true,
 	            'url' => getLangUrl('lead-magnet-results')
-	        ] );
+	        ]);
     	} else {
     		return Response::json([
 	            'session' => false,
-	        ] );
+	        ]);
     	}
     }
 
@@ -571,11 +589,6 @@ class IndexController extends FrontController {
 
 			return $this->ShowView('popups/invite-new-dentist-success', [
 				'user' => $this->user
-			]);
-		} else if(request('id') == 'popup-lead-magnet' && ((!empty($this->user) && $this->user->is_dentist) || empty($this->user))) {
-
-			return $this->ShowView('popups/lead-magnet', [
-				'countries' => Country::with('translations')->get(),
 			]);
 		}
 	}

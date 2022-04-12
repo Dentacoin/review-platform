@@ -101,7 +101,7 @@ class GeneralHelper {
                 "name" => $to_name,
                 "platform" => $item->platform,
                 "invite-patient" => getLangUrl( 'dentist/'.$user->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
-                "lead-magnet-link" => $user->getLink().'?'. http_build_query(['popup'=>'popup-lead-magnet']),
+                "lead-magnet-link" => getLangUrl('lead-magnet-results'),
                 "homepage" => getLangUrl('/', null, $domain),
                 "trp_profile" => $user->getLink(),
                 "town" => $user->city_name ? $user->city_name : 'your town',

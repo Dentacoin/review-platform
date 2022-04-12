@@ -193,33 +193,50 @@
             height: 40px;
             overflow: hidden; }
 
+.site-content {
+  min-height: calc(100vh - 127px);
+  background-color: #e2ebff; }
+
 .error-wrapper {
-  background-color: #f7f7f7;
-  padding-bottom: 50px; }
-  .error-wrapper > img {
-    width: 100%; }
-  .error-wrapper .blue-line {
-    width: 100%;
-    height: 40px;
-    background-color: #1cb8eb;
-    margin-bottom: -1px;
-    position: relative; }
-    @media screen and (max-width: 998px) {
-      .error-wrapper .blue-line {
-        height: 70px; } }
-  .error-wrapper .error-container {
-    margin-top: -17%; }
+  padding-bottom: 50px;
+  padding-top: 80px; }
+  @media screen and (max-width: 768px) {
+    .error-wrapper > .flex {
+      display: flex;
+      flex-direction: column; } }
+  .error-wrapper .error-image {
+    margin-right: 30px; }
     @media screen and (max-width: 768px) {
-      .error-wrapper .error-container {
-        margin-top: -12%; } }
-    .error-wrapper .error-container h2 {
-      text-align: center;
-      margin-bottom: 10px; }
+      .error-wrapper .error-image {
+        order: 2; } }
+    .error-wrapper .error-image img {
+      width: 100%; }
       @media screen and (max-width: 768px) {
-        .error-wrapper .error-container h2 {
-          font-size: 24px; } }
-  .error-wrapper .button {
-    font-size: 21px;
-    background-color: #46afda;
-    padding: 14px 59px;
-    margin-top: 10px; }
+        .error-wrapper .error-image img {
+          max-width: 300px;
+          margin: 0 auto;
+          display: block; } }
+  .error-wrapper h1 {
+    color: #332255;
+    font-weight: 900; }
+    @media screen and (max-width: 768px) {
+      .error-wrapper h1 {
+        text-align: center;
+        margin-bottom: 20px; } }
+  .error-wrapper .flickity-oval {
+    margin-top: 0px; }
+    .error-wrapper .flickity-oval > .flex {
+      margin-bottom: 30px; }
+      @media screen and (max-width: 768px) {
+        .error-wrapper .flickity-oval > .flex {
+          margin-bottom: 10px; } }
+      .error-wrapper .flickity-oval > .flex h3 {
+        color: #332255; }
+        @media screen and (max-width: 768px) {
+          .error-wrapper .flickity-oval > .flex h3 {
+            text-align: center; } }
+  .error-wrapper .blue-button {
+    margin-top: 40px; }
+    @media screen and (max-width: 768px) {
+      .error-wrapper .blue-button {
+        margin-top: -10px; } }

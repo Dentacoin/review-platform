@@ -2,14 +2,14 @@ $pc: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 998px)";
 $phone: "screen and (max-width: 768px)";
 
-.invite-new-dentist-popup.fixed-popup {
+.invite-new-dentist-popup {
 
 	&.active {
 		display: flex;
 	}
 }
 
-.invite-new-dentist-success-popup.fixed-popup {
+.invite-new-dentist-success-popup {
 	.popup-inner {
 		max-width: 740px;
 		text-align: center;

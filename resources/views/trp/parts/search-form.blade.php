@@ -1,4 +1,5 @@
-<form class="front-form search-form" method="POST" action="{{ getLangUrl('search-dentists') }}">
+<form class="search-form" method="POST" action="{{ url('search-dentists') }}">
+	{!! csrf_field() !!}
 	<div class="input-wrapper search-dentist-wrapper">
 		<img src="{{ url('img-trp/black-search.svg') }}" width="17" height="18"/>
 		<input 
@@ -13,7 +14,6 @@
 	</div>
 	<div class="input-wrapper">
 		<img src="{{ url('img-trp/world.svg') }}" width="16" height="16"/>
-		{{-- <p class="fake-input">Country</p> --}}
 		<input 
 			id="search-dentist-country" 
 			type="text" 
@@ -26,7 +26,6 @@
 	</div>
 	<div class="input-wrapper">
 		<img src="{{ url('img-trp/pin.svg') }}" width="12" height="15"/>
-		{{-- <p class="fake-input">City</p> --}}
 		<input 
 			id="search-dentist-city" 
 			type="text" 
@@ -46,6 +45,7 @@
 		Search
 		<img src="{{ url('img-trp/white-search.svg') }}"/>
 	</button>
+	<input type="hidden" name="submit-form" value="1"/>
 	<div class="dentists-names-results" style="display: none;">
 		<div class="dentists-results results-type">
 			<div class="list">

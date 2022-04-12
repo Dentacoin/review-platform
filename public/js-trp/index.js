@@ -6,6 +6,7 @@ var handlePopups;
 
 jQuery(document).ready(function($){
 
+	//set height and width to the slider
 	if($('.slider-wrapper').length) {
 		var max_h = 0;
 		var width = 0;
@@ -26,7 +27,8 @@ jQuery(document).ready(function($){
 				parseInt($('.slider-wrapper').css('margin-left')) + parseInt($('.slider-wrapper').css('margin-right'))
 			) 
 		));
-
+		
+		//button prev slide
 		$('.slider-left').click( function(e) {
 			e.preventDefault();
 
@@ -35,8 +37,6 @@ jQuery(document).ready(function($){
 			var place = (scroll.find('.slider-wrapper').outerWidth(true));
 			var left = parseFloat( scroll.css('left') ) + place;
 			// var newleft = Math.ceil(left / place) * place;
-
-			console.log(scroll.offset().left);
 
 			if(scroll.offset().left > -310) {
 				$(this).removeClass('active');
@@ -47,6 +47,7 @@ jQuery(document).ready(function($){
 			}, 300);
 		});
 
+		//button next slide
 		$('.slider-right').click( function(e) {
 			e.preventDefault();
 
@@ -73,6 +74,7 @@ jQuery(document).ready(function($){
 		}, 500);
 	});
 
+	//load page down sections on sroll (google page speed)
 	$(window).scroll( function() {
 		if (!$('#to-append').hasClass('appended')) {
 			$('#to-append').addClass('appended');

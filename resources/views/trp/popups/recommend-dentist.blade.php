@@ -23,7 +23,11 @@
 		<br/>
 		<br/>
 
-		{!! Form::open(array('method' => 'post', 'class' => 'recommend-dentist-form', 'url' => getLangUrl('recommend-dentist') )) !!}
+		{!! Form::open([
+			'method' => 'post', 
+			'class' => 'recommend-dentist-form', 
+			'url' => getLangUrl('recommend-dentist') 
+		]) !!}
 			{!! csrf_field() !!}
 
 			<div class="flex">

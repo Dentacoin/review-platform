@@ -4,25 +4,35 @@ var searchCityTO = null;
 var dentistNameSuggestions;
 var dentistLocationSuggestions;
 var autocomplete;
-var form_href;
 
 jQuery(document).ready(function($){
-
-	//
-	//Maps
-	//
 
 	prepareMapFunction( function() {
 
 		$('.search-form').submit( function(e) {
 			e.preventDefault();
 
-			var event = jQuery.Event("keyup");
-			event.which = 13; // # Some key code value
-			$('#search-input').trigger(event);
-			$('#search-dentist-name').trigger(event);
-			console.log(event);
-			return false;
+			dentistNameSuggestions(true);
+	
+			// if(ajax_is_running) {
+			// 	return;
+			// }
+	
+			// ajax_is_running = true;
+	
+			// let that = $(this);
+	
+			// $.post( 
+			// 	that.attr('action'), 
+			// 	that.serialize() , 
+			// 	function( data ) {
+			// 		if(data.success) {
+			// 		} else {
+			// 			console.log('error');
+			// 		}
+			// 		ajax_is_running = false;
+			// 	}, "json"
+			// );
 		});
 
 		$('#search-dentist-name').on( 'keyup focus', function(e) {
@@ -194,23 +204,33 @@ jQuery(document).ready(function($){
 		autocomplete = new google.maps.places.AutocompleteService();
 	});
 
-	dentistNameSuggestions = function() {
+	dentistNameSuggestions = function(forForm=false) {
 		$('.dentists-names-results').show();
 		$('.dentists-names-results .dentists-results').hide();
 		$('.dentists-names-results .dentists-results .list').html('');
 		$('.dentists-names-results .dentists-results .info').remove();
 
-		$.ajax( {
-			url: '/user-name',
-			type: 'POST',
-			data: {
+		let formData = null;
+		if(forForm) {
+			formData = new FormData($('.search-form')[0]);
+		} else {
+			formData = {
 				username: $('#search-dentist-name').val(),
 				country_id: $('#search-country-id').val(),
 				country_name: $('#search-dentist-country').val(),
 				city: $('#search-dentist-city').val(),
 				is_partner: $('#partner').is(':checked') ? 1 : 0,
-			},
+			}
+		}
+
+		$.ajax( {
+			url: '/search-dentists',
+			type: 'POST',
+			data: formData,
 			dataType: 'json',
+	        cache: false,
+	        contentType: forForm ? false : 'application/x-www-form-urlencoded; charset=UTF-8',
+	        processData: forForm ? false : true,
 			success: function( data ) {
 				$('.dentists-names-results .dentists-results').show();
 				$('.dentists-names-results .dentists-results .list').html('');

@@ -12,12 +12,12 @@
 
 	<div class="country-all-practices">
 		<div class="container flex flex-center flex-mobile space-between">
-			<a href="{{ getLangUrl('dentists/'.$country->slug) }}" class="show-all">SHOW ALL PRACTICES</a>
+			<a href="{{ getLangUrl('dentists/'.($state_slug ? $state_slug.'-' : '').$country->slug) }}" class="show-all">SHOW ALL PRACTICES</a>
 			<p class="country-dentists">({{ $countryCount }} results)</p>
 		</div>
 	</div>
 
-	<div class="countries-wrapper cities-wrapper">
+	<div class="countries-wrapper">
 		<div class="container">
 			@foreach($cities as $letter => $city)
 				<div class="letters-country-section" letter="{{ $letter }}">
@@ -31,7 +31,7 @@
 									href="{{ getLangUrl( str_replace([' ', "'"], ['-', ''], 'dentists/'.strtolower($c['city_name']).'-'.($c['state_slug'] == 'ega' ? '' : $c['state_slug'].'-').$country->slug)) }}" 
 								>
 									{{ $c['city_name'] }}
-									<span>({{ $c['cnt'] }} results)</span>
+									<span>({{ $c['cnt'] }})</span>
 								</a>
 							</div>
 						@endforeach

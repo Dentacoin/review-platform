@@ -4,47 +4,75 @@ $phone: "screen and (max-width: 768px)";
 
 @import 'trp-index-flickity';
 
+.site-content {
+	min-height: calc(100vh - 127px);
+	background-color: #e2ebff;
+}
+
 .error-wrapper {
-	background-color: #f7f7f7;
 	padding-bottom: 50px;
+	padding-top: 80px;
 
-	>img {
-		width: 100%;
-	}
-
-	.blue-line {
-		width: 100%;
-		height: 40px;
-		background-color: #1cb8eb;
-		margin-bottom: -1px;
-		position: relative;
-
-		@media #{$tablet} {
-			height: 70px;
+	>.flex {
+		@media #{$phone} {
+			display: flex;
+			flex-direction: column;
 		}
 	}
 
-	.error-container {
-		margin-top: -17%;
+	.error-image {
+		margin-right: 30px;
 
 		@media #{$phone} {
-			margin-top: -12%;
+			order: 2;
 		}
 
-		h2 {
-			text-align: center;
-			margin-bottom: 10px;
+		img {
+			width: 100%;
 
 			@media #{$phone} {
-				font-size: 24px;
+				max-width: 300px;
+				margin: 0 auto;
+				display: block;
 			}
 		}
 	}
 
-	.button {
-		font-size: 21px;
-	    background-color: #46afda;
-	    padding: 14px 59px;
-	    margin-top: 10px;
+	h1 {
+		color: #332255;
+		font-weight: 900;
+
+		@media #{$phone} {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+	}
+
+	.flickity-oval {
+		margin-top: 0px;
+
+		>.flex {
+			margin-bottom: 30px;
+
+			@media #{$phone} {
+				margin-bottom: 10px;
+			}
+
+			h3 {
+				color: #332255;
+
+				@media #{$phone} {
+					text-align: center;
+				}
+			}
+		}
+	}
+
+	.blue-button {
+		margin-top: 40px;
+
+		@media #{$phone} {
+			margin-top: -10px;
+		}
 	}
 }

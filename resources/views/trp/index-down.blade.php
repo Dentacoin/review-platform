@@ -49,7 +49,7 @@
 
 					Dentacoin Trusted Reviews is the first Blockchain-based platform for dental treatment reviews, developed by the <a href="https://dentacoin.com/" class="text" target="_blank">Dentacoin Foundation</a>. It rewards Patients for sharing their valuable feedback, and Dentists - for actively  improving their dental care services. They both receive Dentacoin (DCN) - the cryptocurrency created especially for the dental industry.
 					<br/><br/>
-					The DCN tokens collected can be stored in a digital wallet, exchanged to other currencies or used to pay for dental services in <a href="https://dentacoin.com/partner-network" class="text" target="_blank">multiple partner venues</a> across the world.
+					The DCN tokens collected can be stored in a digital wallet, exchanged to other currencies or used to pay for dental services in <a href="https://dentacoin.com/users#section-google-map" class="text" target="_blank">multiple partner venues</a> across the world.
 				</p>
 			</div>
 			

@@ -39,7 +39,7 @@
 						Climb to the top of search results with our SEO-optimized patient review platform.
 					</p>
 				</div>
-				<a href="javascript:;" class="magnet-popup" id="open-magnet" data-url="{{ getLangUrl('lead-magnet-session') }}">
+				<a href="{{ getLangUrl('lead-magnet-results') }}">
 					{{-- {{ trans('trp.page.index-dentist.button-lead-magnet') }} --}}
 					Get your reputation score now!
 				</a>

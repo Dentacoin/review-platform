@@ -71,7 +71,7 @@
                     <div>
                         <input 
                             type="checkbox" 
-                            class="special-checkbox" 
+                            class="special-checkbox filter-type" 
                             name="types[]" 
                             id="filter-dentists-{{$key}}" 
                             value="{{$key}}" 
@@ -263,3 +263,6 @@
         </div>
     </span>
 </span>
+<a href="javascript:;" class="filter clear-all-filters">
+    Clear Filters
+</a>

@@ -13,7 +13,10 @@
             {!! nl2br(trans('trp.popup.popup-wokring-time.title')) !!}
         </h2>
 
-		{!! Form::open(array('method' => 'post', 'url' => getLangUrl('add-working-hours') )) !!}
+		{!! Form::open([
+            'method' => 'post', 
+            'url' => getLangUrl('add-working-hours') 
+        ]) !!}
 			{!! csrf_field() !!}
 
 			<input type="hidden" name="last_user_id" value="">

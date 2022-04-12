@@ -74,6 +74,10 @@ class Review extends Model {
     public function downvotes() {
         return $this->hasMany('App\Models\ReviewDownvote', 'review_id', 'id');
     }
+    
+    public function toDentistFromClinic() {
+        return !empty($this->review_to_id) && $this->review_to_id == $this->clinic_id && !empty($this->dentist_id) && !empty($this->clinic_id);
+    }
 
     public function getDentist($current_dentist = null) {
         if($current_dentist) {

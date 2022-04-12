@@ -617,10 +617,11 @@
         font-size: 18px;
         color: white;
         font-weight: bold; }
-        .countries-wrapper .continent-title-wrapper .continent-dentists span:after {
-          content: ')'; }
-        .countries-wrapper .continent-title-wrapper .continent-dentists span:before {
-          content: '('; }
+        @media screen and (max-width: 768px) {
+          .countries-wrapper .continent-title-wrapper .continent-dentists span:after {
+            content: ')'; }
+          .countries-wrapper .continent-title-wrapper .continent-dentists span:before {
+            content: '('; } }
   .countries-wrapper .letters-country-section {
     padding: 35px 64px;
     border-bottom: 1px solid #bebebe; }
@@ -679,14 +680,6 @@
         width: 100%; } }
     .countries-wrapper.chosen-continent .letters-country-section .flex .country {
       width: 100%; }
-  .countries-wrapper.cities-wrapper {
-    min-height: calc(100vh - 421px); }
-    .countries-wrapper.cities-wrapper .letters-country-section .flex .country {
-      width: 100%; }
-      .countries-wrapper.cities-wrapper .letters-country-section .flex .country a {
-        float: none;
-        display: flex;
-        justify-content: space-between; }
 
 .site-content {
   min-height: calc(100vh - 127px); }

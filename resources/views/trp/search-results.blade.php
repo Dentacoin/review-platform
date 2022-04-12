@@ -28,7 +28,7 @@
 				@include('trp.parts.search-dentist-filters')
 			</div>
 			<div class="results-count">
-				<h4 class="hidden-mobile">({{ $items->count() }}) results found</h4>
+				<h4 class="hidden-mobile">{{ $items->count() }} results found</h4>
 				<h4 class="show-mobile">{{ $items->count() }} results</h4>
 			</div>
 			<div class="mobile-filters-wrapper {{ $items->isEmpty() ? 'smaller' : '' }}">

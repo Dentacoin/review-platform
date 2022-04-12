@@ -4,6 +4,7 @@ $(document).ready(function(){
         let map_container = popup ? $('#search-map-mobile') : $('#search-map');
 
         if(popup) {
+            //for mobile map popup
             var width = 0;
             var slider = $('.mobile-map-inner .result-container');
 
@@ -17,6 +18,8 @@ $(document).ready(function(){
                 ) 
             ));
         }
+
+        //init map
         let search_map = new google.maps.Map(popup ? document.getElementById('search-map-mobile') : document.getElementById('search-map'), {
             center: {
                 lat: parseFloat(map_container.attr('lat')), 
@@ -36,8 +39,10 @@ $(document).ready(function(){
             lng: parseFloat(map_container.attr('lon'))
         });
 
+        //dentists profiles
         $('.result-container[lat]').each( function() {
             if( !$(this).attr('lat') || !$(this).attr('lon') ) {
+                //if no address - return
                 return false;
             }
             var dentist_id = $(this).attr('dentist-id');
@@ -45,6 +50,7 @@ $(document).ready(function(){
                 lat: parseFloat($(this).attr('lat')), 
                 lng: parseFloat($(this).attr('lon'))
             };
+            //add pins
             mapMarkers[dentist_id] = new google.maps.Marker({
                 position: LatLon,
                 map: search_map,
@@ -53,19 +59,24 @@ $(document).ready(function(){
             });
     
             bounds.extend(LatLon);
-    
+            
+            //pins on mouseover
             google.maps.event.addListener(mapMarkers[dentist_id], 'mouseover', ( function() {
                 $('.result-container[dentist-id="'+this.id+'"]').addClass('active');
                 this.setIcon(images_path+'/map-pin-active.png');
             }).bind(mapMarkers[dentist_id]) );
     
+            //pins on mouseout
             google.maps.event.addListener(mapMarkers[dentist_id], 'mouseout', ( function() {
                 $('.result-container[dentist-id="'+this.id+'"]').removeClass('active');
                 this.setIcon(images_path+'/map-pin-inactive.png');
             }).bind(mapMarkers[dentist_id]) );
     
+            //pins on click
             google.maps.event.addListener(mapMarkers[dentist_id], 'click', ( function() {
+
                 if( $(window).width()<=998 ) {
+                    //for mobile and tablet
                     var container = $('.mobile-map-inner .result-container[dentist-id="'+this.id+'"]');
 
                     for(var i in mapMarkers) {
@@ -74,6 +85,7 @@ $(document).ready(function(){
     
                     this.setIcon(images_path+'/map-pin-active.png');
 
+                    //scroll to dentist profile
                     var st = 0;
                     var prev = container.prev();
                     while(prev.length) {
@@ -86,11 +98,14 @@ $(document).ready(function(){
                     }, 500);
 
                 } else {
+                    //for pc
                     var container = $('.result-container[dentist-id="'+this.id+'"]');
                     for(i=0;i<3;i++) {
+                        //add blinking effect to dentist profile
                         container.fadeTo('slow', 0).fadeTo('slow', 1);
                     }
     
+                    //scroll to dentist profile
                     var st = 0;
                     var prev = container.prev();
                     while(prev.length) {
@@ -100,8 +115,43 @@ $(document).ready(function(){
                     $('.dentist-results').animate({
                         scrollTop: st
                     }, 500);
+
+                    //zoom to map pin and show info popup
+                    var myLatLng = new google.maps.LatLng( container.attr('lat'), container.attr('lon') );
+                    search_map.panTo(myLatLng);
+                    search_map.setZoom(14);
+                    
+                    var infowindow = new google.maps.InfoWindow({
+                        content: container.find('.hidden-info-window').html()
+                    });
+                    infowindow.open({
+                        anchor: mapMarkers[dentist_id],
+                        search_map,
+                        shouldFocus: true,
+                    });
                 }
             }).bind(mapMarkers[dentist_id]) );
+
+            if( $(window).width()>998 ) {
+                //click on dentist profile
+                $(this).click( function() {
+                    var that = $(this);
+                    
+                    //zoom to map pin and show info popup
+                    var myLatLng = new google.maps.LatLng( $(this).attr('lat'), $(this).attr('lon') );
+                    search_map.panTo(myLatLng);
+                    search_map.setZoom(14);
+                    
+                    var infowindow = new google.maps.InfoWindow({
+                        content: that.find('.hidden-info-window').html()
+                    });
+                    infowindow.open({
+                        anchor: mapMarkers[dentist_id],
+                        search_map,
+                        shouldFocus: true,
+                    });
+                });
+            }
         });
     
         if( $('.result-container[lat]').length ) {
@@ -110,6 +160,7 @@ $(document).ready(function(){
             search_map.setZoom(12);
         }
     
+        //activate pin
         $('.result-container').off('mouseover').mouseover( function() {
             var dentist_id = $(this).attr('dentist-id');					
             if( mapMarkers[dentist_id] ) {
@@ -117,6 +168,7 @@ $(document).ready(function(){
             }
         });
     
+        //deactivate pin
         $('.result-container').off('mouseout').mouseout( function() {
             var dentist_id = $(this).attr('dentist-id');					
             if( mapMarkers[dentist_id] ) {
@@ -136,6 +188,7 @@ $(document).ready(function(){
     $('.open-map').click( function() {
 		$('body').addClass('popup-visible');
         
+        //fit map popup to screen
         if($('header').is(':visible')) {
             $('#map-results-popup').css('top', $('header').outerHeight());
             $('#map-results-popup .mobile-map-results').css('margin-top', '-300px');
@@ -155,10 +208,6 @@ $(document).ready(function(){
         $('#map-results-popup').hide();
     });
 
-	//
-	//Filters
-	//
-
 	$('.sort-by a').click( function() {
 		$(this).parent().find('a').removeClass('active');
 		$(this).addClass('active');
@@ -175,11 +224,6 @@ $(document).ready(function(){
             let params = $('.search-get-form').serialize();
             $('.search-get-form').attr('action', form_href+'/'+'?'+params );
         }
-        // $('.sort-by a').removeClass('active');
-        // $('.sort-by a[sort="rating"]').addClass('active');
-        // $('input[name="sort"]').val('rating');
-
-		// $('.search-get-form').attr('action', window.location.href.split('?')[0]);
     });
 
     $('.clear-all-filters').click( function() {
@@ -211,9 +255,25 @@ $(document).ready(function(){
         }
 	});
 
-    $('.filter-order').change( function() {
-        $(this).closest('.filter').find('.filter-order-active-text').html($(this).closest('label').attr('label-text'));
-    });
+    $('.filter-options .filter-type').change( function() {
+
+        if($('.filter-options .filter-type:checked').length) {
+
+            if($(this).is(':checked')) {
+                if($(this).val() == 'all') {
+                    $(this).closest('.filter').find('.checkbox-label').removeClass('active');
+                    $(this).closest('.checkbox-label').addClass('active');
+                    $(this).closest('.filter').find('input').not(this).prop('checked', false);
+                } else {
+                    $(this).closest('.filter').find('input[value="all"]').prop('checked', false);
+                    $(this).closest('.filter').find('input[value="all"]').closest('.checkbox-label').removeClass('active');
+                }
+            }
+        } else {
+            $(this).closest('.filter').find('input[value="all"]').prop('checked', true);
+            $(this).closest('.filter').find('input[value="all"]').closest('.checkbox-label').addClass('active');
+        }
+	});
 
     $('.special-checkbox').change( function() {
         if($(this).closest('.filter-options').find('label.active').length) {
@@ -222,11 +282,6 @@ $(document).ready(function(){
             $(this).closest('.filter').removeClass('active');
         }
     });
-
-	//
-	//Search Results
-	//
-	
 
 	$('.result-container [data-popup], .result-container [href]').click( function(e) {
 		e.stopPropagation();

@@ -606,7 +606,7 @@ $phone: "screen and (max-width: 768px)";
 		}
 
 		@media #{$phone} {
-			margin-top: 35px;
+			margin-top: 0px;
 		}
 	}
 }

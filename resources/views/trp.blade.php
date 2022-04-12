@@ -43,10 +43,11 @@
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		@if(true)
-			<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-		@else
+		
+		@if($current_page == 'lead-magnet-results')
 			<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500,700;800&display=swap" rel="stylesheet">
+		@else
+			<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
 		@endif
 		
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
@@ -422,6 +423,7 @@
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         	var images_path = '{{ url('img-trp') }}';
         	var all_images_path = '{{ url('img') }}';
+        	var lead_magnet_url = '{{ getLangUrl('lead-magnet-results') }}';
         </script>
     </body>
 </html>

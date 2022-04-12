@@ -907,6 +907,42 @@ footer {
 	    overflow-y: scroll;
 	}
 
+    ::-webkit-scrollbar {
+	    display: none;
+	}
+
+	::-webkit-scrollbar-track {
+	    display: none;
+	}
+
+	::-webkit-scrollbar-thumb {
+	    display: none;
+	} 
+
+	::-moz-scrollbar {
+	    display: none;
+	}
+
+	::-moz-scrollbar-track {
+	    display: none;
+	}
+
+	::-moz-scrollbar-thumb {
+	    display: none;
+	} 
+
+	::scrollbar {
+	    display: none;
+	}
+
+	::scrollbar-track {
+	    display: none;
+	}
+
+	::scrollbar-thumb {
+	    display: none;
+	} 
+
 	.popup-wrapper {
 		position: absolute;
 		left: 50%;
@@ -942,6 +978,23 @@ footer {
 				margin-right: auto;
 				margin-left: auto;
 				margin-bottom: -76px;
+			}
+		}
+	}
+
+	&.no-image {
+		.popup-inner {
+			left: 50%;
+			transform: translateX(-50%);
+			top: 30px;
+
+			@media #{$tablet} {
+				top: 0px;
+				border-radius: 0px;
+			}
+
+			@media #{$phone} {
+				padding: 35px 15px;
 			}
 		}
 	}
@@ -1307,117 +1360,119 @@ footer {
 			}
 		}
 
-		.step-tabs {
-			margin-bottom: 25px;
+		.search-dentist-form {
+			margin-bottom: 40px;
+		}
+	}
+}
 
-			.step {
-				text-align: center;
-				margin-right: 110px;
+
+
+.step-tabs {
+	margin-bottom: 25px;
+
+	.step {
+		text-align: center;
+		margin-right: 110px;
+
+		@media #{$phone} {
+			margin-right: 40px;
+		}
+
+		.border {
+			position: relative;
+			background: #bebebe;
+			width: 40px;
+			height: 40px;
+			display: inline-block;
+			border: none;
+			border-radius: 50%;
+
+			&:after {
+				content: '';
+				width: 151px;
+				height: 2px;
+				background-color: #bebebe;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				left: 100%;
 
 				@media #{$phone} {
-					margin-right: 40px;
+					width: 80px;
 				}
+			}
 
-				.border {
-					position: relative;
-					background: #bebebe;
-					width: 40px;
-					height: 40px;
-					display: inline-block;
-					border: none;
-					border-radius: 50%;
-
-					&:after {
-						content: '';
-						width: 151px;
-						height: 2px;
-						background-color: #bebebe;
-						position: absolute;
-						top: 50%;
-						transform: translateY(-50%);
-						left: 100%;
-
-						@media #{$phone} {
-							width: 80px;
-						}
-					}
-
-					span {
-						width: 36px;
-						height: 36px;
-						display: inline-block;
-						border-radius: 50%;
-						margin-top: 2px;
-						margin-right: 0px;
-						background-color: white;
-						line-height: 36px;
-						font-size: 18px;
-						color: #bebebe;
-						font-weight: 900;
-					}
-				}
-
-				p {
-					font-size: 14px;
-					color: #bebebe;
-					margin-top: 5px;
-				}
-
-				&.active {
-					.border {
-						background: rgba(20,202,184, 1);
-						background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
-
-						span {
-							color: #14cab8;
-						}
-					}
-
-					p {
-						color: #14cab8;
-					}
-				}
-
-				&.completed {
-					.border {
-						background: rgba(20,202,184, 1);
-						background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
-
-						&::before {
-							content: '✓';
-							color: white;
-							font-size: 18px;
-							line-height: 38px;
-						}
-
-						&::after {
-							background-color: #14cab8;
-						}
-
-						span {
-							display: none;
-						}
-					}
-
-					p {
-						color: #4b607d;
-					}
-				}
-
-				&:last-child {
-					margin-right: 0px;
-
-					.border {
-						&:after {
-							display: none;
-						}
-					}
-				}
+			span {
+				width: 36px;
+				height: 36px;
+				display: inline-block;
+				border-radius: 50%;
+				margin-top: 2px;
+				margin-right: 0px;
+				background-color: white;
+				line-height: 36px;
+				font-size: 18px;
+				color: #bebebe;
+				font-weight: 900;
 			}
 		}
 
-		.search-dentist-form {
-			margin-bottom: 40px;
+		p {
+			font-size: 14px;
+			color: #bebebe;
+			margin-top: 5px;
+		}
+
+		&.active {
+			.border {
+				background: rgba(20,202,184, 1);
+				background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
+
+				span {
+					color: #14cab8;
+				}
+			}
+
+			p {
+				color: #14cab8;
+			}
+		}
+
+		&.completed {
+			.border {
+				background: rgba(20,202,184, 1);
+				background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
+
+				&::before {
+					content: '✓';
+					color: white;
+					font-size: 18px;
+					line-height: 38px;
+				}
+
+				&::after {
+					background-color: #14cab8;
+				}
+
+				span {
+					display: none;
+				}
+			}
+
+			p {
+				color: #4b607d;
+			}
+		}
+
+		&:last-child {
+			margin-right: 0px;
+
+			.border {
+				&:after {
+					display: none;
+				}
+			}
 		}
 	}
 }

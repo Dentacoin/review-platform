@@ -104,7 +104,6 @@ jQuery(document).ready(function($) {
 			    ajax_is_running = false;
 			}
 		});
-
     });
 
 	handlePopups = function(id) {
@@ -158,7 +157,7 @@ jQuery(document).ready(function($) {
 		    			$(this).closest('.modern-field').addClass('active');
 		    		}
 		    	});
-	    	} , 0)
+	    	}, 0)
 	    }
     }
     modernFieldsUpdate();
@@ -240,7 +239,6 @@ jQuery(document).ready(function($) {
 			|| id == 'popup-existing-dentist' 
 			|| id == 'invite-new-dentist-popup'
 			|| id == 'invite-new-dentist-success-popup' 
-			|| id == 'popup-lead-magnet'
 		) {
 			$.ajax({
 	            type: "POST",
@@ -347,12 +345,6 @@ jQuery(document).ready(function($) {
 						} else if($('.popup.active').attr('id') == 'invite-new-dentist-success-popup') {
 
 		                	$('#inv_dent_name').html(event_res.dentist_name);
-
-						} else if($('.popup.active').attr('id') == 'popup-lead-magnet') {
-
-							$('#magnet-website').on('keyup keydown', function() {
-						        $(this).val($(this).val().toLowerCase());
-						    });
 						}
 
 						if ($('#'+id+'.active').length) {
@@ -607,10 +599,9 @@ jQuery(document).ready(function($) {
 							ajax_is_running = false;
 						}).bind(that), "json"
 					);  
-				} );
+				});
 
 		    } else if(id == 'popup-branch') {
-
 				loadUploadAvatarScript();
 				loadCroppie();
 			}
@@ -620,11 +611,13 @@ jQuery(document).ready(function($) {
 			if ($('.popup.active').length) {
 				$('body').addClass('popup-visible');
 			}
-		}
 
+			$('.close-popup').click( function() {
+				closePopup();
+			});
+		}
 		
 		if ($('#'+id+'.active').length) {
-
 			var scss_to_load = $('#'+id+'.active').attr('scss-load');
 			console.log(scss_to_load);
 			
@@ -737,9 +730,7 @@ jQuery(document).ready(function($) {
 	        }
 
 	        ajax_is_running = true;
-
 	        $(this).find('.member-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-
 	        that = $(this);
 
 	        $.post( 
@@ -830,7 +821,7 @@ jQuery(document).ready(function($) {
 	                $('.all-days-equal').hide();
 	            }
 	        }
-	    } );
+	    });
 
 	    $('.popup-wokring-time select').on('change click',  function() {
 	    	$(this).closest('.popup-desc').find('input').prop('checked', true);
@@ -877,7 +868,7 @@ jQuery(document).ready(function($) {
 					closePopup();
 				}
 			}
-		} );
+		});
 
 		$('.team-member-job').change( function() {
 	        if ($(this).val() == 'dentist') {
@@ -889,7 +880,7 @@ jQuery(document).ready(function($) {
 
 	    $('input[name="mode"]').change( function() {
 	        $(this).closest('.modern-radios').removeClass('has-error');
-	    } );
+	    });
 
 	    $('.invite-new-dentist-form .address-suggester-input').focus(function(e) {
 	        $('.invite-new-dentist-form .button').addClass('disabled');
@@ -957,195 +948,6 @@ jQuery(document).ready(function($) {
 	    	loadMapScript();
 	    });
 
-	    $('.lead-magnet-form-step2').submit( function(e) {
-	        e.preventDefault();
-
-	        if(ajax_is_running) {
-	            return;
-	        }
-
-	        ajax_is_running = true;
-
-			let that = $(this);
-			let active_step = that.closest('.popup-inner').find('.step-tabs').find('.step.active');
-			active_step.removeClass('active').addClass('completed');
-			active_step.next().addClass('active');
-
-	        $('.loader-lead-magnet').fadeIn();
-			$('.loader-lead-magnet video')[0].play();
-	    	$('.loader-lead-magnet video')[0].removeAttribute("controls");
-
-			setTimeout( function() {
-				$.post( 
-					that.attr('action'), 
-					that.serialize() , 
-					function( data ) {
-						console.log(data);
-						if(data.success) {
-							fbq('track', 'TRPMagnetComplete');
-							
-							gtag('event', 'SeeScore', {
-								'event_category': 'LeadMagnet',
-								'event_label': 'ReplyToReviews',
-							});
-							
-							window.location.href = data.url;
-						} else {
-							console.log('error');
-						}
-						ajax_is_running = false;
-					}, "json"
-				);
-			}, 5000);
-	    });
-
-	    $('.lead-magnet-radio').change( function() {
-	    	$(this).closest('.answer-radios-magnet').find('label').removeClass('active');
-	    	$(this).closest('label').addClass('active');
-	    });
-
-	    $('.lead-magnet-checkbox').change( function() {
-	    	$(this).closest('label').toggleClass('active');
-
-	        if ($(this).hasClass('disabler')) {
-	            if ($(this).prop('checked')) {
-
-	                $(this).closest('.buttons-list').find('.lead-magnet-checkbox').not(this).prop('disabled', true);
-	                $(this).closest('.buttons-list').find('.lead-magnet-checkbox').not(this).prop('checked', false);
-	                $(this).closest('.buttons-list').find('.magnet-label:not(.disabler-label)').addClass('disabled-label');
-	                $(this).closest('.buttons-list').find('.magnet-label:not(.disabler-label)').removeClass('active');
-	            } else {
-	                $(this).closest('.buttons-list').find('.lead-magnet-checkbox').not(this).prop('disabled', false);
-	                $(this).closest('.buttons-list').find('.magnet-label:not(.disabler-label)').removeClass('disabled-label');
-	            }
-	        }
-	    });
-
-	    $('.lead-magnet-radio').click( function() {
-	        if ($(this).attr('name') == 'answer-1') {
-	            gtag('event', 'Next', {
-	                'event_category': 'LeadMagnet',
-	                'event_label': 'Priority',
-	            });
-	        } else if ($(this).attr('name') == 'answer-2') {
-	            gtag('event', 'Next', {
-	                'event_category': 'LeadMagnet',
-	                'event_label': 'Tool',
-	            });
-	        } else if ($(this).attr('name') == 'answer-4') {
-	            gtag('event', 'Next', {
-	                'event_category': 'LeadMagnet',
-	                'event_label': 'Frequency',
-	            });
-	        }
-
-	        if ($(this).attr('name') == 'answer-5') {
-	            $(this).closest('form').find('button').trigger('click');
-	        } else {
-
-	            $('.flickity-magnet').flickity('next');
-	        }
-	    });
-
-	    $('.magnet-validator').click( function() {
-	    		
-		    if($(this).closest('.answer-radios-magnet').find('input:checked').length) {
-	            gtag('event', 'Next', {
-	                'event_category': 'LeadMagnet',
-	                'event_label': 'AskForReviews',
-	            });
-
-		    	if ($(this).hasClass('validator-skip')) {
-		    		if ($(this).closest('.answer-radios-magnet').find('input:checked').val() == '4') {
-		    			$('.flickity-magnet').flickity( 'select', 4 );
-		    		} else {
-		    			$('.flickity-magnet').flickity('next');
-		    		}
-		    	} else {
-		    		$('.flickity-magnet').flickity('next');
-		    	}    		
-	    	} else {
-	    		$(this).closest('.flickity-viewport').css('height', $(this).closest('.flickity-viewport').height() + 76);
-	    		$(this).closest('.answer-radios-magnet').find('.alert-warning').show();
-	    	}
-
-	    });
-
-	    $('#open-magnet').click( function() {
-	        gtag('event', 'Open', {
-	            'event_category': 'LeadMagnet',
-	            'event_label': 'Popup',
-	        });
-	    });
-
-	    $('.first-form-button').click( function(e) {
-	        e.preventDefault();
-
-	        if(ajax_is_running) {
-	            return;
-	        }
-	        ajax_is_running = true;
-	        var that = $(this);
-	        $.post( 
-	            $(this).attr('data-validator'), 
-	            $('#lead-magnet-form-step2').serialize(), 
-	            function( data ) {
-	                if(data.success) {
-
-	                    if (!Cookies.get('performance_cookies')) {
-	                        basic.cookies.set('performance_cookies', 1);
-	                    }
-	                    if (!Cookies.get('functionality_cookies')) {
-	                        basic.cookies.set('functionality_cookies', 1);
-	                    }
-	                    if (!Cookies.get('strictly_necessary_policy')) {
-	                        basic.cookies.set('strictly_necessary_policy', 1);
-	                    }
-
-	                    if ($('.dcn-privacy-policy-cookie').length) {
-	                        $('.dcn-privacy-policy-cookie').remove();
-	                    }
-
-	                    that.closest('.magnet-content').next().show();
-	                    that.closest('.magnet-content').hide();
-
-						let active_step = that.closest('.popup-inner').find('.step-tabs').find('.step.active');
-	                    active_step.removeClass('active').addClass('completed');
-						active_step.next().addClass('active');
-
-	                    var $carousel = $('.flickity-magnet');
-
-	                    $carousel.flickity({
-	                        //wrapAround: true,
-	                        adaptiveHeight: true,
-	                        draggable: false,
-	                        pageDots: true,
-	                    });
-
-	                    fbq('track', 'TRPMagnetStart');
-
-	                    gtag('event', 'RunTest', {
-	                        'event_category': 'LeadMagnet',
-	                        'event_label': 'ContactDetails',
-	                    });
-
-	                } else {
-	                    that.closest('form').find('.ajax-alert').remove();
-	                    for(var i in data.messages) {
-	                        that.closest('form').find('[name="'+i+'"]').addClass('has-error');
-	                        that.closest('form').find('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>'); 
-
-	                        if (that.closest('form').find('[name="'+i+'"]').closest('.agree-label').length) {
-	                            that.closest('form').find('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
-	                        }  
-	                    }
-	                }
-	                ajax_is_running = false;
-	            }, 
-	            "json"
-	        );
-	    } );
-
 		$('.special-checkbox, .checkbox').change( function() {
 			if($(this).attr('type') == 'checkbox') {
 				$(this).closest('label').toggleClass('active');
@@ -1163,26 +965,6 @@ jQuery(document).ready(function($) {
 			$('.tab-container').removeClass('active');
 			$('#'+ $(this).attr('data-tab')).addClass('active');
 		});
-
-		$('.magnet-popup').click( function() {
-	        var that = $(this);
-
-	        $.ajax({
-	            type: "GET",
-	            url: that.attr('data-url'),
-	            dataType: 'json',
-	            success: function(ret) {
-	                if(ret.session) {
-	                    window.location.href = ret.url;
-	                } else {
-	                    showPopup('popup-lead-magnet');
-	                }
-	            },
-	            error: function(ret) {
-	                console.log('error');
-	            }
-	        });
-	    });
 	}
 	handleActivePopupFunctions();
 
@@ -1206,7 +988,11 @@ jQuery(document).ready(function($) {
 		}
 	}
 	if(getUrlParameter('popup')) {
-		showPopup( getUrlParameter('popup') );
+		if(getUrlParameter('popup') == 'popup-lead-magnet') {
+			window.location.href = lead_magnet_url;
+		} else {
+			showPopup( getUrlParameter('popup') );
+		}
 	}
 
 	if(getUrlParameter('dcn-gateway-type') && dentacoin_down) {
@@ -1225,7 +1011,7 @@ jQuery(document).ready(function($) {
 
 		var lastScrollTop = 0;
 		function fix_header(e){
-			if ( ($('header').height() - 40 < $(window).scrollTop()) ) {
+			if ( ($('header').height() < $(window).scrollTop()) ) {
 				$('header').addClass('fixed-header');
 			} else {
 				$('header').removeClass('fixed-header');
@@ -1294,7 +1080,7 @@ jQuery(document).ready(function($) {
 		e.stopPropagation();
 		e.preventDefault();
 		window.location.href = $(this).attr('href');
-	} );
+	});
 
 	$('.button-sign-up-dentist').click( function() {
 		fbq('track', 'DentistInitiateRegistration');
@@ -1361,7 +1147,6 @@ jQuery(document).ready(function($) {
 		        }
 	        }
         }
-
 
         $('.tooltip-window').css('display', 'block');
 

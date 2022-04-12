@@ -43,7 +43,11 @@
 
 				<h4 class="step-title">{!! nl2br(trans('trp.popup.popup-invite.copypaste.step1-title')) !!}</h4>
 
-				{!! Form::open(array('method' => 'post', 'class' => 'invite-patient-copy-paste-form', 'url' => getLangUrl('profile/invite-copypaste') )) !!}
+				{!! Form::open([
+					'method' => 'post', 
+					'class' => 'invite-patient-copy-paste-form', 
+					'url' => getLangUrl('profile/invite-copypaste') 
+				]) !!}
 					{!! csrf_field() !!}
 
 					<textarea class="copypaste" id="copypaste" name="copypaste" placeholder="{!! trans('trp.popup.popup-invite.paste-file-placeholder') !!}"></textarea>
@@ -74,7 +78,11 @@
 			<br/>
 			<br/>
 
-			{!! Form::open(array('method' => 'post', 'class' => 'invite-patient-form', 'url' => getLangUrl('profile/invite') )) !!}
+			{!! Form::open([
+				'method' => 'post', 
+				'class' => 'invite-patient-form', 
+				'url' => getLangUrl('profile/invite') 
+			]) !!}
 				{!! csrf_field() !!}
 				<div class="flex">
 					<div class="col">
@@ -147,7 +155,12 @@
 
 				<h4 class="step-title">{!! nl2br(trans('trp.popup.popup-invite.file.step1-title')) !!}</h4>
 
-				{!! Form::open(array('method' => 'post', 'class' => 'invite-patient-file-form', 'url' => getLangUrl('profile/invite-file'), 'files' => 'true' )) !!}
+				{!! Form::open([
+					'method' => 'post', 
+					'class' => 'invite-patient-file-form', 
+					'url' => getLangUrl('profile/invite-file'), 
+					'files' => 'true'
+				]) !!}
 					{!! csrf_field() !!}
 
 					<label for="invite-file" class="label-file clearfix">
