@@ -150,6 +150,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('transactions/mass-bump', 					'TransactionsController@massbump');
 	Route::post('transactions/mass-stop', 					'TransactionsController@massstop');
 	Route::post('transactions/mass-pending', 				'TransactionsController@massPending');
+	Route::post('transactions/mass-complete', 				'TransactionsController@massComplete');
 	Route::get('transactions/bump-dont-retry', 				'TransactionsController@bumpDontRetry');
 	Route::get('transactions/start', 						'TransactionsController@allowWithdraw');
 	Route::get('transactions/stop', 						'TransactionsController@disallowWithdraw');

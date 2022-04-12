@@ -419,6 +419,37 @@ class TransactionsController extends AdminController {
         $transaction->save();
     }
 
+    public function massComplete() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        if( Request::input('ids') ) {
+
+            $transactions = DcnTransaction::where('status', 'unconfirmed')
+            ->whereIn('id', Request::input('ids'))
+            ->get();
+
+            foreach ($transactions as $trans) {
+                $dcn_history = new DcnTransactionHistory;
+                $dcn_history->transaction_id = $trans->id;
+                $dcn_history->admin_id = $this->user->id;
+                $dcn_history->status = 'completed';
+                $dcn_history->old_status = $trans->status;
+                $dcn_history->history_message = 'Completed by admin';
+                $dcn_history->save();
+
+                $trans->status = 'completed';
+                $trans->save();
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'All selected transactions are completed' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
     public function bumpDontRetry() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {

@@ -171,6 +171,7 @@
                                     <button type="submit" name="mass-bump" id="mass-bump" class="btn btn-primary" style="flex: 1">Bump/Approve transactions</button>
                                     <button type="submit" name="mass-stop" id="mass-stop" class="btn btn-danger" style="flex: 1">Stop/Reject transactions</button>
                                     <button type="submit" name="mass-pending" id="mass-pending" class="btn btn-warning" style="flex: 1">"Pending" transactions</button>
+                                    <button type="submit" name="mass-complete" id="mass-complete" class="btn btn-success" style="flex: 1">Complete transactions</button>
                                 </div>
                             @endif
                         </form>
