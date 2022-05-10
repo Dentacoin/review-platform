@@ -205,15 +205,18 @@
       display: flex;
       flex-direction: column; } }
   .error-wrapper .error-image {
+    width: 430px;
     margin-right: 30px; }
     @media screen and (max-width: 768px) {
       .error-wrapper .error-image {
-        order: 2; } }
+        width: 100%;
+        order: 2;
+        margin-right: 0px; } }
     .error-wrapper .error-image img {
       width: 100%; }
       @media screen and (max-width: 768px) {
         .error-wrapper .error-image img {
-          max-width: 300px;
+          max-width: 260px;
           margin: 0 auto;
           display: block; } }
   .error-wrapper h1 {

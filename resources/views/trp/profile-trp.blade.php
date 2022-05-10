@@ -27,10 +27,9 @@
 							@include('trp.parts.reviews', [
 								'review' => $review,
 								'is_dentist' => $is_dentist,
+								'hidden' => 0,
 								'for_profile' => true,
 								'current_dentist' => $review->getDentist(),
-								'my_upvotes' => false,
-								'my_downvotes' => false,
 							])
 						@endif
 					@endforeach

@@ -34,6 +34,11 @@ class IndexController extends FrontController {
 			}
 		}
 
+		//reset search results
+		session([
+			'results-url' => null
+		]);
+
 		$featured = User::where('is_dentist', 1)
 		->whereIn('status', config('dentist-statuses.shown_with_link'))
 		->whereNull('self_deleted')
@@ -132,7 +137,7 @@ class IndexController extends FrontController {
 			'countriesAlphabetically' => $countriesAlphabetically,
 			'js' => [
 				'index.js',
-                'search.js',
+                'search-form.js',
 			],
 			'css' => [
                 'trp-index.css',
@@ -226,7 +231,9 @@ class IndexController extends FrontController {
 			return redirect( getLangUrl('/') );
 		}
 
-    	$testimonials = DentistTestimonial::with('translations')->orderBy('id', 'desc')->get();
+    	$testimonials = DentistTestimonial::with('translations')
+		->orderBy('order_dentist', 'asc')
+		->get();
 
 		return $this->ShowView('welcome-dentist-down', array(
 			'testimonials' => $testimonials,
@@ -426,9 +433,47 @@ class IndexController extends FrontController {
 	}
 
 	/**
+     * Lead magnet survey page
+     */
+    public function leadMagnetSurvey($locale=null) {
+
+    	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points'])) {
+			return redirect( getLangUrl('review-score-results'));
+    	} else {
+			if((!empty($this->user) && $this->user->is_dentist) || empty($this->user)) {
+
+				$seos = PageSeo::find(25);
+
+				return $this->ShowView('lead-magnet', [
+					'social_image' => $seos->getImageUrl(),
+					'seo_title' => $seos->seo_title,
+					'seo_description' => $seos->seo_description,
+					'social_title' => $seos->social_title,
+					'social_description' => $seos->social_description,
+					'countries' => Country::with('translations')->get(),
+					'css' => [
+						'trp-popup-lead-magnet.css',
+						'flickity.min.css'
+					],
+					'js' => [
+						'../js/flickity.min.js',
+						'lead-magnet.js'
+					],
+				]);
+			} else {
+				if(!empty($this->user)) {
+					return redirect( getLangUrl('/') );
+				} else {
+					return redirect( getLangUrl('welcome-dentist') );
+				}   
+			}
+    	}
+    }
+
+	/**
      * Lead magnet results page view
      */
-    public function lead_magnet_results($locale=null) {
+    public function leadMagnetResults($locale=null) {
 
     	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points'])) {
 
@@ -507,25 +552,7 @@ class IndexController extends FrontController {
 			]);
     	} else {
 			if((!empty($this->user) && $this->user->is_dentist) || empty($this->user)) {
-
-				$seos = PageSeo::find(25);
-
-				return $this->ShowView('lead-magnet', [
-					'social_image' => $seos->getImageUrl(),
-					'seo_title' => $seos->seo_title,
-					'seo_description' => $seos->seo_description,
-					'social_title' => $seos->social_title,
-					'social_description' => $seos->social_description,
-					'countries' => Country::with('translations')->get(),
-					'css' => [
-						'trp-popup-lead-magnet.css',
-						'flickity.min.css'
-					],
-					'js' => [
-						'../js/flickity.min.js',
-						'lead-magnet.js'
-					],
-				]);
+				return redirect( getLangUrl('review-score-test'));
 			} else {
 				if(!empty($this->user)) {
 					return redirect( getLangUrl('/') );
@@ -544,13 +571,20 @@ class IndexController extends FrontController {
     	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points'])) {
     		return Response::json([
 	            'session' => true,
-	            'url' => getLangUrl('lead-magnet-results')
+	            'url' => getLangUrl('review-score-results')
 	        ]);
     	} else {
     		return Response::json([
 	            'session' => false,
 	        ]);
     	}
+    }
+
+    /**
+     * redirect lead magnet to new link
+     */
+    public function redirectPage($locale=null) {
+    	return redirect( getLangUrl('review-score-test'), 301);
     }
 
     /**

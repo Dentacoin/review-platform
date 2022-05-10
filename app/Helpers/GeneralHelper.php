@@ -101,12 +101,18 @@ class GeneralHelper {
                 "name" => $to_name,
                 "platform" => $item->platform,
                 "invite-patient" => getLangUrl( 'dentist/'.$user->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
-                "lead-magnet-link" => getLangUrl('lead-magnet-results'),
+                "lead-magnet-link" => getLangUrl('review-score-test'),
                 "homepage" => getLangUrl('/', null, $domain),
                 "trp_profile" => $user->getLink(),
                 "town" => $user->city_name ? $user->city_name : 'your town',
                 "country" => $user->country_id ? Country::find($user->country_id)->name : 'your country',
-                "unsubscribe" => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(self::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $to_email),'email_category' => $item->template->subscribe_category, 'platform' => $item->platform ))))]),
+                "unsubscribe" => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query([
+                    'fields' => urlencode(self::encrypt(json_encode([
+                        'email' => ($anonymous_email ? $anonymous_email : $to_email),
+                        'email_category' => $item->template->subscribe_category, 
+                        'platform' => $item->platform 
+                    ])))
+                ]),
                 "pageviews" => $pageviews,
                 "trp" => url('https://reviews.dentacoin.com/'),
                 "trp-dentist" => url('https://reviews.dentacoin.com/en/welcome-dentist/'),

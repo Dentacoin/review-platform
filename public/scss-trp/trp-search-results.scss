@@ -29,6 +29,10 @@ $phone: "screen and (max-width: 768px)";
 			}
 		}
 	}
+
+	h3 {
+		margin-top: 20px;
+	}
 }
 
 form {
@@ -744,6 +748,10 @@ form {
 					margin-bottom: 10px;
 					word-break: break-all;
 					display: inline-block;
+
+					@media #{$phone} {
+						display: block;
+					}
 				}
 
 				.socials {
@@ -752,6 +760,7 @@ form {
 						display: inline-block;
 						margin-right: 6px;
 						transition: all 0.3s ease;
+						background: transparent;
 					}
 				}
 
@@ -874,7 +883,24 @@ form {
 		width: 100%;
 		height: 100%;
 		background: transparent;
+		border-left: 1px solid #bebebe;
 	}
+}
+
+#search-in-map {
+	top: -1px !important;
+	background-color: white;
+	outline: none;
+	width: 100%;
+	left: -1px !important;
+	height: 40px;
+	border: 1px solid rgb(190, 190, 190);
+	padding: 0px 34px;
+	line-height: 40px;
+	background-image: url(../img-trp/gray-search.png);
+	background-repeat: no-repeat;
+	background-size: 16px;
+	background-position: 10px 50%;
 }
 
 #sort-popup {
@@ -1073,7 +1099,7 @@ body {
 		display: inline-block;
 		text-align: center;
 		position: absolute;
-		top: 10px;
+		top: 50px;
 		z-index: 100;
 		left: 50%;
 		transform: translateX(-50%);
@@ -1266,6 +1292,11 @@ body {
 			border-top-right-radius: 30px;
 			border-bottom-right-radius: 30px;
 			font-size: 14px;
+
+			img {
+				max-width: 17px;
+				margin-right: 5px;
+			}
 		}
 
 		.ratings {
@@ -1327,4 +1358,8 @@ body {
 		border-radius: 30px;
 		outline: none;
 	}
+}
+
+.pac-matched {
+	font-family: 'Lato' !important;
 }

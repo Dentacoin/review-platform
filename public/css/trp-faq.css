@@ -1,106 +1,141 @@
-.faq-title {
-  background-color: #01a5db;
-  padding-top: 100px;
-  text-align: center;
-  position: relative; }
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 0px; } }
+
+.faq-title-wrapper {
+  background-color: #e2ebff;
+  padding-top: 80px;
+  padding-bottom: 30px; }
   @media screen and (max-width: 768px) {
-    .faq-title {
-      padding-top: 80px;
-      padding-bottom: 30px; } }
-  .faq-title h1 {
-    font-weight: 900;
-    color: white; }
-  .faq-title::after {
-    content: '';
-    position: absolute;
-    bottom: -80px;
-    left: 0px;
-    background: url("../img-trp/oval-blue.png") no-repeat 50% 50%;
-    background-size: 100% 100%;
-    width: 100%;
-    height: 81px; }
+    .faq-title-wrapper .faq-image-wrapper {
+      display: flex;
+      flex-direction: column;
+      text-align: center; } }
+  @media screen and (max-width: 768px) {
+    .faq-title-wrapper .faq-image-wrapper .faq-image {
+      order: 2; } }
+  .faq-title-wrapper .faq-image-wrapper .faq-image img {
+    margin-right: 80px;
+    max-width: 220px; }
+    @media screen and (max-width: 1200px) {
+      .faq-title-wrapper .faq-image-wrapper .faq-image img {
+        margin-right: 40px; } }
     @media screen and (max-width: 768px) {
-      .faq-title::after {
-        height: auto;
-        top: 98%;
-        bottom: unset;
-        background-size: contain;
-        padding-top: 6%; } }
+      .faq-title-wrapper .faq-image-wrapper .faq-image img {
+        margin-right: 0px;
+        max-width: 200px; } }
+  .faq-title-wrapper .faq-image-wrapper h1 {
+    font-weight: 900;
+    color: #332255; }
+    @media screen and (max-width: 768px) {
+      .faq-title-wrapper .faq-image-wrapper h1 {
+        margin-bottom: 20px; } }
+  .faq-title-wrapper .faq-sections-title {
+    margin-top: 25px; }
+    @media screen and (max-width: 768px) {
+      .faq-title-wrapper .faq-sections-title {
+        display: flex;
+        overflow-y: scroll; } }
+    .faq-title-wrapper .faq-sections-title a {
+      border: 2px solid white;
+      text-align: center;
+      background-color: white;
+      margin-right: 17px;
+      border-radius: 7px;
+      padding: 30px 0px;
+      transition: all 0.3s ease; }
+      @media screen and (max-width: 768px) {
+        .faq-title-wrapper .faq-sections-title a {
+          width: 196px;
+          min-width: 196px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 25px 11px; } }
+      .faq-title-wrapper .faq-sections-title a:last-child {
+        margin-right: 0px; }
+      .faq-title-wrapper .faq-sections-title a img {
+        height: 60px; }
+      .faq-title-wrapper .faq-sections-title a p {
+        font-size: 20px;
+        font-weight: bold;
+        color: #332255;
+        margin-top: 12px; }
+        @media screen and (max-width: 768px) {
+          .faq-title-wrapper .faq-sections-title a p {
+            margin-top: 0px; } }
+      .faq-title-wrapper .faq-sections-title a.active, .faq-title-wrapper .faq-sections-title a:hover {
+        box-shadow: 0px 2px 19px -6px black;
+        border-color: #0084d1;
+        transition: all 0.3s ease; }
 
 .faq-wrapper {
-  background-color: #f7f7f7;
-  padding-top: 60px;
-  padding-bottom: 63px; }
+  padding: 40px 0px; }
   @media screen and (max-width: 768px) {
     .faq-wrapper {
-      padding-top: 10px;
+      padding-top: 20px;
       padding-bottom: 20px; } }
-  .faq-wrapper h2 {
-    padding-top: 37px;
-    font-weight: bold;
-    color: black; }
-
-.questions {
-  padding: 0px 15px; }
-  @media screen and (max-width: 768px) {
-    .questions {
-      padding: 0px; } }
-  .questions .question {
-    margin-bottom: 13px; }
-    .questions .question .question-title {
-      background-color: white;
-      border-bottom: 1px solid #dddddd;
-      padding-top: 19px;
-      padding-bottom: 19px;
-      padding-right: 60px;
-      padding-left: 25px;
-      position: relative;
-      display: block;
-      font-size: 20px; }
-      @media screen and (max-width: 768px) {
-        .questions .question .question-title {
-          font-size: 16px;
-          padding-top: 9px;
-          padding-bottom: 9px;
-          padding-right: 30px;
-          padding-left: 15px; } }
-      .questions .question .question-title span {
-        font-size: 20px;
-        color: #126585;
-        font-weight: bold;
-        margin-right: 8px; }
-        @media screen and (max-width: 768px) {
-          .questions .question .question-title span {
-            font-size: 16px; } }
-      .questions .question .question-title img {
-        position: absolute;
-        transition: all 0.3s ease;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 30px;
-        color: #000;
-        width: 16px; }
-        @media screen and (max-width: 768px) {
-          .questions .question .question-title img {
-            right: 10px; } }
-    .questions .question .question-description {
-      display: none;
-      padding: 25px; }
-      @media screen and (max-width: 768px) {
-        .questions .question .question-description {
-          padding: 15px; } }
-      .questions .question .question-description p {
-        color: #555555;
-        font-size: 20px;
-        font-weight: 300;
-        margin-bottom: 25px; }
-        @media screen and (max-width: 768px) {
-          .questions .question .question-description p {
-            font-size: 16px;
-            margin-bottom: 15px; } }
-        .questions .question .question-description p:last-child {
-          margin-bottom: 0px; }
-    .questions .question.active .question-title img {
-      transform: translateY(-50%) rotate(180deg); }
-    .questions .question.active .question-description {
+  .faq-wrapper .questions {
+    display: none; }
+    .faq-wrapper .questions.active {
       display: block; }
+    .faq-wrapper .questions .question {
+      margin-bottom: 45px; }
+      @media screen and (max-width: 768px) {
+        .faq-wrapper .questions .question {
+          margin-bottom: 30px; } }
+      .faq-wrapper .questions .question .question-title {
+        background-color: #e2ebff;
+        padding: 17px 80px 17px 30px;
+        position: relative;
+        display: block;
+        font-size: 26px;
+        font-weight: bold;
+        color: #0564c6;
+        border-radius: 7px; }
+        @media screen and (max-width: 998px) {
+          .faq-wrapper .questions .question .question-title {
+            font-size: 23px; } }
+        @media screen and (max-width: 768px) {
+          .faq-wrapper .questions .question .question-title {
+            font-size: 20px;
+            padding: 7px 45px 7px 15px;
+            border-radius: 0px; } }
+        .faq-wrapper .questions .question .question-title img {
+          position: absolute;
+          transition: all 0.3s ease;
+          top: 50%;
+          transform: translateY(-50%) rotate(90deg);
+          right: 30px;
+          color: #000;
+          width: 16px; }
+          @media screen and (max-width: 768px) {
+            .faq-wrapper .questions .question .question-title img {
+              right: 18px;
+              width: 11px; } }
+      .faq-wrapper .questions .question .question-description {
+        display: none;
+        padding: 30px; }
+        @media screen and (max-width: 768px) {
+          .faq-wrapper .questions .question .question-description {
+            padding: 15px;
+            padding-bottom: 25px; } }
+        .faq-wrapper .questions .question .question-description p {
+          color: #332255;
+          font-size: 20px; }
+          @media screen and (max-width: 768px) {
+            .faq-wrapper .questions .question .question-description p {
+              font-size: 18px; } }
+          .faq-wrapper .questions .question .question-description p a {
+            color: #332255;
+            font-size: 20px;
+            text-decoration: underline; }
+            @media screen and (max-width: 768px) {
+              .faq-wrapper .questions .question .question-description p a {
+                font-size: 18px; } }
+      .faq-wrapper .questions .question.active {
+        margin-bottom: 0px; }
+        .faq-wrapper .questions .question.active .question-title img {
+          transform: translateY(-50%) rotate(-90deg); }
+        .faq-wrapper .questions .question.active .question-description {
+          display: block; }

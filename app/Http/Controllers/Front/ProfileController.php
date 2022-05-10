@@ -1737,7 +1737,7 @@ class ProfileController extends FrontController {
                     ];
                 }
 
-                if(!empty($this->user->is_clinic) && ($this->user->team->isEmpty() || $this->user->invites_team_unverified->isEmpty() )) {
+                if(!empty($this->user->is_clinic) && ($this->user->team->isEmpty() || $this->user->notVerifiedTeamFromInvitation->isEmpty() )) {
 
                     $arr[] = [
                         'action' => 'team',
@@ -1866,60 +1866,6 @@ class ProfileController extends FrontController {
         return Response::json([
             'success' => false,
         ]);
-    }
-
-    /**
-     * Patient social profile form
-     */
-    public function socialProfile($locale=null) {
-
-        if(!empty($this->user)) {
-
-            if (request('link') && mb_strpos(mb_strtolower(request('link')), 'http') !== 0) {
-                request()->merge([
-                    'link' => 'http://'.request('link')
-                ]);
-            }
-
-            if( Request::input('avatar') ) {
-                $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
-                $this->user->addImage($img);
-            }
-
-            $validator = Validator::make(Request::all(), [
-                'link' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
-            ]);
-
-            if ($validator->fails()) {
-
-                $msg = $validator->getMessageBag()->toArray();
-                $ret = array(
-                    'success' => false,
-                    'messages' => array()
-                );
-
-                foreach ($msg as $field => $errors) {
-                    $ret['messages'][$field] = implode(', ', $errors);
-                }
-
-                return Response::json( $ret );
-            } else {
-
-                if(Request::has('avatar') && empty(Request::input('avatar'))) {
-                    return Response::json( [
-                        'success' => false,
-                        'without_image' => true,
-                    ] );
-                }
-
-                $this->user->website = Request::input('link');
-                $this->user->save();
-
-                return Response::json( [
-                    'success' => true,
-                ] );
-            }
-        }
     }
 
     private function sendInvite($email, $name, $for_bulk_invites) {

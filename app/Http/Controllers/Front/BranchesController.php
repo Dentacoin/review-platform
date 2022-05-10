@@ -53,7 +53,7 @@ class BranchesController extends FrontController {
                     'trp-search.css',
                 ],
                 'js' => [
-                    'search.js',
+                    'search-form.js',
                     'branch.js',
                     'address.js',
                 ],

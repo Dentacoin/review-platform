@@ -55,7 +55,7 @@ jQuery(document).ready(function($){
 
 					$('.testimonial img').on('load', function() {
 						$carousel.flickity({
-							autoPlay: true,
+							autoPlay: 6000,
 							wrapAround: true,
 							cellAlign: 'left',
 							pageDots: false,
@@ -66,7 +66,7 @@ jQuery(document).ready(function($){
 
 					setTimeout( function() {
 						$carousel.flickity({
-							autoPlay: true,
+							autoPlay: 6000,
 							wrapAround: true,
 							cellAlign: 'left',
 							pageDots: false,

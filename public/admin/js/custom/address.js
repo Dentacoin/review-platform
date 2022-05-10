@@ -50,7 +50,7 @@ jQuery(document).ready(function($){
 
 	initAddressSuggesters = function() {
 
-        prepareMapFunction( function() {
+        prepareMapFucntion( function() {
 
             $('.address-suggester').each( function() {
             	var conatiner = $(this).closest('.address-suggester-wrapper');
@@ -202,7 +202,7 @@ function trimChar (str, c) {
 }
 
 
-prepareMapFunction = function( callback ) {
+prepareMapFucntion = function( callback ) {
     if(mapsLoaded) {
         callback();
     } else {

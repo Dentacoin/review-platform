@@ -5,17 +5,82 @@ var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
 var galleryFlickty;
-var teamFlickity;
 var suggestDentist;
 var suggestClinic;
 var suggestedDentistClick;
 var suggestClinicClick;
-var aggregated_reviews;
 var editor;
 var fb_page_error;
 var load_maps = false;
 
 $(document).ready(function(){
+
+    $('.edit-field-button').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if($(this).closest('.socials-wrapper').length) {
+
+            let editWrap = $(this).closest('.socials-wrapper');
+            editWrap.find('.socials').hide();
+            editWrap.find('.edit-field').css('display', 'flex');
+
+        } else if($(this).closest('#team').length) {
+
+            $(this).closest('#team').find('.team-container').toggleClass('edit-mode');
+
+        } else {
+
+            let editWrap = $(this).closest('.edit-field');
+            editWrap.find('.edited-field').hide();
+            editWrap.find('.edit-field-button').hide();
+            console.log(editWrap.find('.edit-wrapper'));
+            editWrap.find('.edit-wrapper').show();
+        }
+    });
+
+    $('.work-hour-cb').change( function() {
+        var closed = $(this).is(':checked');
+        var texts = $(this).closest('.edit-working-hours-wrap').find('select');
+        if(closed) {
+            texts.addClass('grayed');
+            //texts.attr('disabled', 'disabled');
+        } else {
+            texts.removeClass('grayed');
+            //texts.prop("disabled", false);
+        }
+
+        if ($(this).attr('name') == 'day-1') {
+            if ($(this).is(':checked')) {
+                $('label[for="all-days-equal"]').show();
+            } else {
+                $('label[for="all-days-equal"]').hide();
+            }
+        }
+    });
+
+    $('.popup-wokring-time select').on('change click',  function() {
+        $(this).closest('.edit-working-hours-wrap').find('input').prop('checked', true);
+        $(this).closest('.edit-working-hours-wrap').find('select').removeClass('grayed');
+
+        if ($('#day-1').is(':checked')) {
+            $('.all-days-equal').show();
+        } else {
+            $('.all-days-equal').hide();
+        }
+    });
+
+    $('.all-days-equal').click( function() {
+        for (var i = 2; i<6; i++) {
+            if (!$('#day-'+i).is(':checked')) {
+                $('#day-'+i).click();
+            }
+            $('[name="work_hours['+i+'][0][0]"]').val($('[name="work_hours[1][0][0]"]').val());
+            $('[name="work_hours['+i+'][0][1]"]').val($('[name="work_hours[1][0][1]"]').val());
+            $('[name="work_hours['+i+'][1][0]"]').val($('[name="work_hours[1][1][0]"]').val());
+            $('[name="work_hours['+i+'][1][1]"]').val($('[name="work_hours[1][1][1]"]').val());
+        }
+    });
 
     var handleGalleryRemoved = function() {
     
@@ -42,8 +107,7 @@ $(document).ready(function(){
                     galleryFlickty.flickity( 'remove', $(this).closest('.slider-wrapper') );
                 }).bind(this)
             });
-
-        } );
+        });
     }
     handleGalleryRemoved();
 
@@ -119,89 +183,6 @@ $(document).ready(function(){
 
         return false;
     });
-
-    $('#clinic_dentists').change( function() {
-        $('.hidden-review-question').show();
-    });
-
-    $('#dentist_clinics').change( function() {
-        $(this).closest('.questions-wrapper').find('input[type="hidden"]').val('');
-        $(this).closest('.questions-wrapper').find('.bar').css('width', '0px');
-
-        if ($(this).val() == 'own') {
-            $('.questions-wrapper .question:not(.skippable):not(.question-treatments):not(.review-desc)').addClass('do-not-show');
-            $('.questions-wrapper .question.skippable').next().hide();
-            $('.questions-wrapper .question[q-id="4"]').removeClass('do-not-show');
-            $('.questions-wrapper .question[q-id="6"]').removeClass('do-not-show');
-            $('.questions-wrapper .question[q-id="7"]').removeClass('do-not-show');
-            $('.questions-wrapper .question:not(.skippable):not(.question-treatments):not(.review-desc)').addClass('hidden');
-            $('.questions-wrapper .question[q-id="4"]').removeClass('hidden');
-            $(this).closest('.questions-wrapper').addClass('team-dentist');
-        } else {
-            $('.questions-wrapper .question').removeClass('do-not-show');
-            $('.questions-wrapper .question:not(.skippable):not(.question-treatments):not(.review-desc)').addClass('hidden');
-            $(this).closest('.question').next().show();
-            $(this).closest('.questions-wrapper').removeClass('team-dentist');
-        }
-    });
-
-    $('#write-review-form .stars').mousemove( function(e) {
-        var rate = e.offsetX;
-        rate = Math.ceil( rate*5 / $(this).width() );
-
-        $(this).find('.bar').css('width', (rate*20)+'%' );
-    } ).click( function(e) {
-        var rate = e.offsetX;
-        rate = Math.ceil( rate*5 / $(this).width() );
-
-        $(this).find('input').val(rate).trigger('change');
-        $(this).closest('.review-answers').find('.rating-error').hide();
-        $(this).find('.bar').css('width', (rate*20)+'%' );
-        handleDCNreward();
-
-    } ).mouseout( function(e) {
-        var rate = parseInt($(this).find('input').val());
-        if(rate) {
-            $(this).find('.bar').css('width', (rate*20)+'%' );
-        } else {
-            $(this).find('.bar').css('width', 0 );
-        }
-    } );
-
-    $('.review-tabs a').click( function() {
-        $('.review-tabs a').removeClass('active');
-        $(this).addClass('active');
-        $('.review-type-content').hide();
-        $('#review-option-'+$(this).attr('data-type')).show();
-
-        if( $(this).attr('data-type')=='video' ) {
-            if($('.review-box').hasClass('hide-video-reviews')) {
-                $('#review-title').hide();
-            } else {
-                $('#review-title').show();
-            }
-            $('#review-reward-total').html( $('#review-reward-total').attr('video') );
-        } else {
-            $('#review-title').show();
-            $('#review-reward-total').html( $('#review-reward-total').attr('standard') );
-        }
-        handleDCNreward();
-    });
-
-    handleDCNreward = function() {
-        var total = 0;
-        var filled = 0;
-        
-        $('#submit-review-popup .stars input[type="hidden"]').each( function() {
-            total++;
-            if( parseInt( $(this).val() ) ) {
-                filled++;
-            }
-        } );
-
-        var reward = Math.ceil( filled/total*parseInt($('#review-reward-total').text()) );
-        $('#review-reward-so-far').html(reward);
-    }
     
     //
     //Popups
@@ -1035,39 +1016,13 @@ $(document).ready(function(){
         return false;
     });
 
-    $('.ask-dentist-submit-review').click( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-        var that = $(this);
-
-        $.get( 
-            $(this).attr('href'), 
-            function( data ) {
-                if(data.success) {
-                    $('.button-inner-white.button-ask').hide();
-                    $('.ask-dentist').closest('.alert').hide();
-                    $('.ask-success-alert').show();
-                    $('#review-confirmed').hide();                 
-
-                    gtag('event', 'Request', {
-                        'event_category': 'Reviews',
-                        'event_label': 'InvitesAsk',
-                    });
-                } else {
-                    console.log('error');
-                }
-            }
-        );
-    } );
-
     $('.team-container .delete-invite').click( function(e) {
         e.preventDefault();
         e.stopPropagation();
-        var r = confirm( $(this).attr('sure') );
+
+        var that = $(this);
+
+        var r = confirm( that.attr('sure') );
         if(!r) {
             return;
         }
@@ -1077,14 +1032,14 @@ $(document).ready(function(){
         }
         ajax_is_running = true;
 
-        var id = $(this).closest('.slider-wrapper').attr('invite-id');
+        var id = that.closest('.team').attr('invite-id');
         $.ajax( {
             url: lang + '/profile/invites/delete/'+id,
             type: 'GET',
             dataType: 'json',
             success: (function( data ) {
                 ajax_is_running = false;
-                teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
+                that.closest('.team').remove();
             }).bind(this)
         });
 
@@ -1385,12 +1340,14 @@ $(document).ready(function(){
 
     } );
 
-    $('.team-container .approve-buttons div').click( function(e) {
+    $('.team-container .action-buttons div').click( function(e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if( $(this).hasClass('no') ) {
-            var r = confirm( $(this).attr('sure') );
+        var that = $(this);
+
+        if( that.hasClass('reject-button') ) {
+            var r = confirm( that.attr('sure') );
             if(!r) {
                 return;
             }
@@ -1402,329 +1359,18 @@ $(document).ready(function(){
         ajax_is_running = true;
 
         $.get( 
-            $(this).attr('action'),
+            that.attr('action'),
             (function( data ) {
-                if( $(this).hasClass('yes') ) {
-                    $(this).closest('.slider-wrapper').removeClass('pending');
-                    $(this).closest('.slider-wrapper').find('.approve-buttons').remove();
+                if( that.hasClass('accept-button') ) {
+                    that.closest('.team').find('.action-buttons').remove();
                 } else {
-                    teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
+                    that.remove();
                 }
                 ajax_is_running = false;
             }).bind(this), "json"
         );
 
     } );
-
-    //Write review 
-
-    $('#write-review-form').submit( function(e) {
-        e.preventDefault();
-
-        $('#treatment-error').hide();
-        $('#review-crypto-error').hide();
-        $('#review-answer-error').hide();
-        $('#review-short-text').hide();
-        $('#review-error').hide();
-        $('#video-not-agree').hide();
-        $('#write-review-form .rating-error').hide();
-
-        var allgood = true;
-
-        var coun_vals = 0;
-
-        $(this).find('input[type="hidden"]').each( function() {
-            if ($(this).closest('.question').hasClass('hidden-review-question') && !$('#clinic_dentists').val()) {
-                console.log('Skip 4th question'); //don't check because it's 4th question and I didn't pick a dentist
-            } else if($(this).closest('.questions-wrapper').hasClass('team-dentist')) {
-                if($(this).val() != '' && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id') {
-                    coun_vals++;
-                }
-            } else {
-                if( !parseInt($(this).val()) && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id' ) {
-                    allgood = false;
-                    $(this).closest('.question').find('.rating-error').show();
-
-                    $('html, body').animate({
-                        scrollTop: $(this).closest('.question').offset().top - 20
-                    }, 500);
-                    return false;
-                }
-            }
-        } );
-
-        if ($(this).find('.questions-wrapper').hasClass('team-dentist') && coun_vals != 10) {
-            allgood = false;
-            return false;
-        }
-
-        if( $('#youtube_id').val().trim().length && !$('#video-agree').is(':checked')) {
-            allgood = false;
-            $('#video-not-agree').show();
-            $('html, body').animate({
-                scrollTop: $('.review-tabs').offset().top - 20
-            }, 500);
-        }
-
-        if( !$('.treatment').is(':checked') ) {
-            allgood = false;
-            $('#treatment-error').show();
-            $('html, body').animate({
-                scrollTop: $('.question-treatments').offset().top - 20
-            }, 500);
-
-        }
-
-        if( !$('#review-title').val().trim().length || (!$('#review-answer').val().trim().length && !$('#youtube_id').val().trim().length) ) {
-            allgood = false;
-            $('#review-answer-error').show();
-            $('html, body').animate({
-                scrollTop: $('.review-tabs').offset().top - 20
-            }, 500);
-
-        }
-
-        if(ajax_is_running || !allgood) {
-            return;
-        }
-        ajax_is_running = true;
-
-
-        var btn = $(this).find('[type="submit"]').first();
-        btn.attr('data-old', btn.html());
-        btn.html('<i></i> '+btn.attr('data-loading'));
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            function( data ) {
-
-                console.log(data, data.imgs_urls);
-                if(data.success) {
-
-                    if(data.social_profile) {
-                        showPopup('social-profile-popup');
-                    }
-
-                    $('#review-confirmed').show();
-                    $('#review-confirmed').find('.ask-dentist-submit-review').attr('href', $('#review-confirmed').find('.ask-dentist-submit-review').attr('original-href') + data.review_id);
-                    $('#review-submit-button').hide();
-
-                    that.find('.question:not(.review-desc)').hide();
-                    that.find('.review-desc').find('.popup-title').hide();
-                    that.find('.review-desc').find('.reviews-wrapper').hide();
-
-                    gtag('event', 'Submit', {
-                        'event_category': 'Reviews',
-                        'event_label': 'Reviews',
-                    });
-                } else {
-                    if(data.valid_input) {
-                        $('#review-crypto-error').show();
-                        $('#review-crypto-error span').html(data.message);
-
-                        $('html, body').animate({
-                            scrollTop: $('.review-tabs').offset().top - 20
-                        }, 500);    
-                    } else if(data.short_text) {
-                        $('#review-short-text').show();
-
-                        $('html, body').animate({
-                            scrollTop: $('.review-tabs').offset().top - 20
-                        }, 500);                        
-                    } else if(data.ban) {
-
-                        window.location.reload(); 
-
-                    } else if(data.redirect) {
-
-                        $('.sso img').remove();
-
-                        for( var i in data.imgs_urls) {
-                            $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
-                        }
-
-                        var ssoTotal = $('.sso-imgs').length;
-                        var ssoLoaded = 0;
-                        $('.sso-imgs').each( function() {
-                            if( $(this)[0].complete ) {
-                                ssoLoaded++;        
-                                if(ssoLoaded==ssoTotal) {
-                                    window.location.href = data.redirect;
-                                }   
-                            }
-                        } );
-                        var ssoLoaded = 0;
-                        $('.sso-imgs').on('load error', function() {
-                            ssoLoaded++;        
-                            if(ssoLoaded==ssoTotal) {
-                                window.location.href = data.redirect;
-                            }
-                        });
-                        
-                    } else {
-                        $('#review-error').show();
-
-                        $('html, body').animate({
-                            scrollTop: $('.review-tabs').offset().top - 20
-                        }, 500);
-                    }
-                }
-                
-                btn.html( btn.attr('data-old') );
-                ajax_is_running = false;
-            }, "json"
-        );          
-
-
-        return false;
-
-    } );
-
-
-    //Video reviews
-    if($('#myVideo').length) {
-        var player = videojs("myVideo", {
-            controls: false,
-            //width: 720,
-            //height: 405,
-            fluid: true,
-            plugins: {
-                record: {
-                    audio: true,
-                    video: true,
-                    maxLength: 736,
-                    debug: true
-                }
-            }
-        }, function(){
-            // print version information at startup
-            videojs.log('Using video.js', videojs.VERSION,
-                'with videojs-record', videojs.getPluginVersion('record'),
-                'and recordrtc', RecordRTC.version);
-        });
-        
-        $('#init-video').click( function() {
-            $('.myVideo-dimensions').show();
-            var hm = player.record().getDevice();
-        } );
-        $('#start-video').click( function() {
-            player.record().start();
-            $('#start-video').hide();
-            $('#stop-video').show();
-            $('#review-option-video .alert').hide();
-        } );
-        $('#stop-video').click( function() {
-            player.record().stop();
-            $('#wrapper').hide();
-
-        });
-
-        // error handling
-        player.on('deviceError', function() {       
-            console.log('device error:', player.deviceErrorCode);
-            if(player.deviceErrorCode.name && player.deviceErrorCode.name=="NotAllowedError") {
-                $('#video-denied').show();
-            } else {
-                $('#video-error').show();                
-            }
-        });
-
-        player.on('error', function(error) {
-            console.log('error:', error);
-            
-        });
-        player.on('startRecord', function() {
-            videoStart = Date.now();
-            console.log('started recording!');
-        });
-
-
-        // user clicked the record button and started recording
-        player.on('deviceReady', function() {
-            $('#init-video').hide();
-            $('#video-denied').hide();
-            $('#video-error').hide();
-            $('#start-video').show();
-            console.log('deviceReady!');
-        });
-
-        // user completed recording and stream is available
-        player.on('finishRecord', function() {
-            videoLength = Date.now() - videoStart;
-            console.log(videoLength);
-            if(false && videoLength<15000) {
-                videoLength = null;
-                videoStart = null;
-                $('#start-video').show();
-                $('#stop-video').hide();
-                $('#video-short').show();
-                return;
-            }
-            console.log('finished recording: ', player.recordedData, player.recordedData.video);
-
-            $('#stop-video').hide();
-            $('#video-progress').show();
-
-
-            var fd = new FormData();
-            var vd = player.recordedData.video ? player.recordedData.video : player.recordedData;
-            fd.append('qqfile', vd);
-            $.ajax({
-                xhr: function() {
-                    var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress", function(evt) {
-                        if (evt.lengthComputable) {
-                            var percentComplete = evt.loaded / evt.total * 100;
-                            //Do something with upload progress here
-                            $('#video-progress-percent').html(Math.ceil(percentComplete));
-                            console.log(percentComplete);
-                            if( Math.ceil(percentComplete)==100 ) {
-                                $('#video-progress').hide();
-                                $('#video-youtube').show();
-                            }
-                        }
-                        }, false);
-
-                    xhr.addEventListener("progress", function(evt) {
-                       if (evt.lengthComputable) {
-                            var percentComplete = evt.loaded / evt.total * 100;
-                            //Do something with download progress
-                            $('#video-progress-percent').html(Math.ceil(percentComplete));
-                            console.log(percentComplete);
-                            if( Math.ceil(percentComplete)==100 ) {
-                                $('#video-progress').hide();
-                                $('#video-youtube').show();
-                            }
-                       }
-                    }, false);
-
-                    return xhr;
-                },
-                type: 'POST',
-                url: lang + '/youtube',
-                data: fd,
-                processData: false,
-                contentType: false,
-                dataType: 'json'
-            }).done(function(responseJSON) {
-                if (responseJSON.url) {
-                    $('#video-uploaded').show();
-                    $('#video-youtube').hide();
-                    $('#youtube_id').val(responseJSON.url);
-                } else {
-                    $('#video-error').show();
-                    $('#start-video').show();
-                }
-            }).fail( function(error) {
-                console.log(error);
-                $('#video-error').show();
-                $('#start-video').show();
-            } );
-        });
-    }
 
     $('.current-social').click( function(e) {
         var elem = $(this).closest('.social-networks').find('.social-dropdown');
@@ -1769,7 +1415,7 @@ $(document).ready(function(){
                 } else {
                     $(this).addClass('inactive');
                 }
-            } )
+            });
         });
 
     });
@@ -1879,34 +1525,6 @@ $(document).ready(function(){
         var id = $(this).attr('review-id');
         showFullReview(id, $('#cur_dent_id').val());
     } );
-
-
-    $('.treatment').change( function() {
-        $(this).closest('label').toggleClass('active');
-
-        var duplicate_treatment = $(this).closest('.treatment-wrapper').find('.treatment[treatment="'+$(this).attr('treatment')+'"][category!="'+$(this).attr('category')+'"]');
-        if (duplicate_treatment.length) {
-            if (duplicate_treatment.closest('label').hasClass('active')) {
-                duplicate_treatment.closest('label').removeClass('active');
-                duplicate_treatment.removeAttr('checked');
-            } else {
-                duplicate_treatment.closest('label').addClass('active');
-                duplicate_treatment.attr('checked', 'checked');
-            }
-            
-        }
-
-        if ($(this).closest('.question').next().hasClass('hidden')) {
-            $(this).closest('.question').next().removeClass('hidden');
-        }
-
-        $('#treatment-error').hide();
-    });
-
-    $('.more-treatments').click( function() {
-        $(this).toggleClass('active');
-        $(this).closest('.treatment-wrapper').find('.treatments-hidden').toggleClass('active');
-    });
 
     $('.invite-again').click( function(e) {
         e.preventDefault();
@@ -2656,82 +2274,6 @@ $(document).ready(function(){
             }
         }
     });
-    
-    if($('.team-container .flickity').length && window.innerWidth > 768) {
-
-        var isFlickity = true;
-        // toggle Flickity on/off
-        $('.rearrange-team').click( function() {
-            if ( isFlickity ) {
-                // destroy Flickity
-                $('.team-container .slider-wrapper:not(.approved-team)').hide();
-                $('.team-container').addClass('rearranging-team');
-
-                $('.team-container .flickity').sortable({
-                    containment: "parent",
-                    update: function (event, ui) {
-                        console.log('update');
-                        setTimeout( function(){
-                            var ids = [];
-                            $('.team-container .approved-team').each( function() {
-                                ids.push( $(this).attr('team-id') );
-                            } )
-
-                            $.ajax({
-                                url     : $('.team-container').attr('team-reorder-link'),
-                                type    : 'POST',
-                                data    : {
-                                    list: ids,
-                                    _token: $('input[name="_token"]').val(),
-                                },
-                                dataType: 'json',
-                                success : function( res ) {
-                                    console.log('success');
-                                },
-                                error : function( data ) {
-                                    console.log('error');
-                                }
-                            });
-                        }, 0);
-                    }
-                });
-
-                teamFlickity.flickity('destroy');
-                isFlickity = false;
-                $(this).html($(this).attr('done-text'));
-
-            } else {
-                // init new Flickity
-
-                $('.team-container .slider-wrapper:not(.approved-team)').show();
-                $('.team-container').removeClass('rearranging-team');
-
-                if (window.innerWidth > 992) {
-                    var draggable_team = false;
-                } else {
-                    var draggable_team = true;
-                }
-
-                teamFlickity = $('.flickity').flickity({
-                    autoPlay: false,
-                    wrapAround: true,
-                    cellAlign: 'left',
-                    pageDots: false,
-                    freeScroll: true,
-                    groupCells: 1,
-                    draggable: draggable_team,
-                });
-
-                teamFlickity.resize();
-
-                isFlickity = true;
-                
-                $(this).html($(this).attr('rearrange-text'));
-
-            }
-        });
-    }
-
 
     $('.verify-review').click( function() {
         if(ajax_is_running) {
@@ -2740,7 +2282,7 @@ $(document).ready(function(){
         ajax_is_running = true;
 
         var that = $(this);
-        var review_id_param = $(this).closest('.review.review-wrapper').attr('review-id');
+        var review_id_param = $(this).closest('.written-review').attr('review-id');
 
         $.ajax({
             type: "POST",
@@ -2755,10 +2297,10 @@ $(document).ready(function(){
                 if(ret.success) {
 
                     if ($(window).outerWidth() <= 768) {
-                        that.closest('.review.review-wrapper').find('.trusted-sticker.mobile-sticker').show();
+                        that.closest('.written-review').find('.trusted-sticker.mobile-sticker').show();
 
                     } else {
-                        that.closest('.review.review-wrapper').find('.trusted-sticker:not(.mobile-sticker)').show();
+                        that.closest('.written-review').find('.trusted-sticker:not(.mobile-sticker)').show();
                     }
 
                     that.hide();

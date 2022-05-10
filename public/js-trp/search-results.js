@@ -25,10 +25,43 @@ $(document).ready(function(){
                 lat: parseFloat(map_container.attr('lat')), 
                 lng: parseFloat(map_container.attr('lon'))
             },
-            zoom: parseInt(map_container.attr('zoom')),
+            zoom: 13,
             backgroundColor: 'none',
-            mapTypeControl: popup ? false : true,
+            mapTypeControl: false, //view Satellite/Map
             fullscreenControl: false
+        });
+
+        //input search in map
+        var searchBox = new google.maps.places.SearchBox(document.getElementById('search-in-map'));
+        search_map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('search-in-map'));
+        google.maps.event.addListener(searchBox, 'places_changed', function() {
+            searchBox.set('map', null);
+            var places = searchBox.getPlaces();
+
+            var bounds = new google.maps.LatLngBounds();
+            var i, place;
+            for (i = 0; place = places[i]; i++) {
+                (function(place) {
+                    var marker = new google.maps.Marker({
+                        position: place.geometry.location
+                    });
+                    marker.bindTo('map', searchBox, 'map');
+                    google.maps.event.addListener(marker, 'map_changed', function() {
+                        if (!this.getMap()) {
+                            this.unbindAll();
+                        }
+                    });
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                }(place));
+            }
+            search_map.fitBounds(bounds);
+            searchBox.set('map', search_map);
+            search_map.setZoom(Math.min(search_map.getZoom(),12));
         });
 
         mapMarkers = {};
@@ -131,27 +164,31 @@ $(document).ready(function(){
                     });
                 }
             }).bind(mapMarkers[dentist_id]) );
+        });
 
-            if( $(window).width()>998 ) {
-                //click on dentist profile
-                $(this).click( function() {
-                    var that = $(this);
-                    
-                    //zoom to map pin and show info popup
-                    var myLatLng = new google.maps.LatLng( $(this).attr('lat'), $(this).attr('lon') );
-                    search_map.panTo(myLatLng);
-                    search_map.setZoom(14);
-                    
-                    var infowindow = new google.maps.InfoWindow({
-                        content: that.find('.hidden-info-window').html()
-                    });
-                    infowindow.open({
-                        anchor: mapMarkers[dentist_id],
-                        search_map,
-                        shouldFocus: true,
-                    });
-                });
-            }
+        $('.result-container.flex').click( function() { //click on dentist result
+            window.location.href = $(this).attr('dentist-link');
+        });
+
+        $('.d-address').click( function(e) { //click on dentist address
+            e.preventDefault();
+            e.stopPropagation();
+            
+            var dentistResult = $(this).closest('.result-container');
+            
+            //zoom to map pin and show info popup
+            var myLatLng = new google.maps.LatLng( dentistResult.attr('lat'), dentistResult.attr('lon') );
+            search_map.panTo(myLatLng);
+            search_map.setZoom(14);
+            
+            var infowindow = new google.maps.InfoWindow({
+                content: dentistResult.find('.hidden-info-window').html()
+            });
+            infowindow.open({
+                anchor: mapMarkers[dentistResult.attr('dentist-id')],
+                search_map,
+                shouldFocus: true,
+            });
         });
     
         if( $('.result-container[lat]').length ) {
@@ -175,7 +212,7 @@ $(document).ready(function(){
                 mapMarkers[dentist_id].setIcon(images_path+'/map-pin-inactive.png');	    		
             }
         });
-    
+        
         if(search_map.getZoom() > 16) {
             search_map.setZoom(16);
         }
@@ -221,8 +258,7 @@ $(document).ready(function(){
 
         if($(this).hasClass('clear-specializations')) {
             let form_href = $('.filter-options').closest('form').attr('no-specializations-href');
-            let params = $('.search-get-form').serialize();
-            $('.search-get-form').attr('action', form_href+'/'+'?'+params );
+            $('.search-get-form').attr('action', form_href );
         }
     });
 
@@ -231,8 +267,7 @@ $(document).ready(function(){
         $('.checkbox-label input[type="checkbox"]').prop('checked', false);
         $('.filter').removeClass('active');
         let form_href = $('.filter-options').closest('form').attr('no-specializations-href');
-        let params = $('.search-get-form').serialize();
-        $('.search-get-form').attr('action', form_href+'/'+'?'+params ).submit();
+        $('.search-get-form').attr('action', form_href ).submit();
     });
 
     $('.filter-options .specializations').change( function() {
@@ -246,12 +281,14 @@ $(document).ready(function(){
                 cats.push($(this).find('input').val());
             });
             
-            console.log(cats);
-            $(this).closest('form').attr('action', form_href+'/'+cats.join('-')+'?'+params );
+            // console.log(cats);
+            $(this).closest('form').attr('action', form_href+cats.join('-') );
+            // $(this).closest('form').attr('action', form_href+'/'+cats.join('-')+'?'+params );
             
         } else {
             let form_href = $('.filter-options').closest('form').attr('no-specializations-href');
-            $(this).closest('form').attr('action', form_href+'/'+'?'+params );
+            $(this).closest('form').attr('action', form_href );
+            // $(this).closest('form').attr('action', form_href+'/'+'?'+params );
         }
 	});
 
@@ -320,4 +357,23 @@ $(document).ready(function(){
             $(this).find('.filter-options').show();
         });
     }
+
+	$('.search-get-form').submit( function(e) {
+		e.preventDefault();
+
+		if (!$(this).attr('action')) {
+			$(this).attr('action', window.location.href.split('?')[0]);
+		}
+
+		if ($(this).find('input[name="sort"]').val() == 'rating') {
+			$(this).find('input[name="sort"]').val('');
+		}
+
+		var form_inputs = $(this).find(":input[value!='']").serialize();
+        // if ($(this).attr('action').indexOf("?") >= 0) {
+
+        // } else {
+            window.location.href = $(this).attr('action')+ (form_inputs ? '?' : '')+form_inputs;
+        // }
+	});
 });

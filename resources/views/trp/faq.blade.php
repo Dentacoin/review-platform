@@ -2,28 +2,39 @@
 
 @section('content')
 
-	<div class="faq-title">
+	<div class="faq-title-wrapper">
 		<div class="container">
-			<h1>
-				{!! nl2br(trans('trp.page.faq.title')) !!}
-			</h1>
-			{{-- <p style="color: white; margin-top: 20px; font-size: 20px;">
-				Trusted Reviews is the first Blockchain-based platform for detailed, verified and incentivized dental treatment reviews, developed by the Dentacoin Foundation.
-			</p> --}}
+			<div class="faq-image-wrapper flex flex-center">
+				<div class="faq-image">
+					<img src="{{ url('img-trp/faq-image.png') }}"/>
+				</div>
+				<div>
+					<h1 class="mont">
+						{!! nl2br(trans('trp.page.faq.title')) !!}
+					</h1>
+				</div>
+			</div>
+			<div class="faq-sections-title flex">
+				@foreach($content as $block)
+					<a class="faq-section col {{ $loop->index == 0 ? 'active' : '' }}" href="javascript:;" id="section-{{ $loop->iteration }}">
+						<img src="{{ url('img-trp/faq-'.strtolower(explode(' ',$block['title'])[0]).'.svg') }}"/>
+						<p>{{ $block['title'] }}</p>
+					</a>
+				@endforeach
+			</div>
 		</div>
 	</div>
 
 	<div class="faq-wrapper">
 		<div class="container">
 			@foreach($content as $block)
-				<h2>{{ $block['title'] }}</h2>
-				<div class="questions">
+				<div class="questions {{ $loop->index == 0 ? 'active' : '' }} section-{{ $loop->iteration }}">
 					@if(isset($block['questions']))
 						@foreach( $block['questions'] as $question )
 							<div class="question {{ $loop->first ? 'active' : '' }}">
 				                <a class="question-title" href="javascript:;">
-				                	<span>{{ str_pad($loop->iteration, 2, "0", STR_PAD_LEFT) }}</span>{{ $question[0] }}
-									<img src="{{ url('img/caret-black-down.png') }}"/>
+				                	{{ $question[0] }}
+									<img src="{{ url('img-trp/caret-green.svg') }}"/>
 				                </a>
 				                <div class="question-description clearfix">
 									<p>{!! nl2br($question[1]) !!}</p>

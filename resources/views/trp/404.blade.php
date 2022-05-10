@@ -15,7 +15,7 @@
 			</div>
 		</div>
 
-		<div class="error-container container">
+		<div class="error-container">
 			@include('trp.parts.flickity-dentists', [
 				'subtitle' => 'Were you looking for a dentist near you?',
 			])

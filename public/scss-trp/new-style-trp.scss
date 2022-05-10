@@ -116,11 +116,6 @@ header {
 			display: none;
 		}
 
-		img.fa-search {
-			margin-right: 10px;
-		    cursor: pointer;
-		}
-
 		.transparent-blue-button {
 			font-size: 18px;
 			padding: 5px 16px 8px;
@@ -157,35 +152,65 @@ header {
 			}
 		}
 
-		img:not(.fa-search) {
-			border-radius: 50%;
-			vertical-align: middle;
-			margin-left: 12px;
-			width: 45px;
-
-			@media #{$phone} {
-			    margin-left: 8px;
-    			width: 35px;
-    		}
-		}
-
 		.name {
 			color: white;
 		}
 
-		.profile-btn {
+		.search-dentists {
+			width: 40px;
+			height: 40px;
+			background-color: #14cab8;
+			text-align: center;
+			line-height: 40px;
+			border-radius: 4px;
+			margin-right: 8px;
+
+			img {
+				cursor: pointer;
+			}
+		}
+
+		.user-profile-info {
 			position: relative;
+			background-color: white;
+			padding: 2px 3px 2px 10px;
+			border-radius: 4px;
+			display: flex;
+			align-items: center;
+
+			span {
+				font-size: 18px;
+				color: #0564c6;
+				margin-right: 5px;
+
+				&.user-balance {
+					font-weight: bold;
+					margin-right: 0px;
+				}
+			}
+
+			img {
+				border-radius: 50%;
+				vertical-align: middle;
+				margin-left: 12px;
+				width: 36px;
+
+				// @media #{$phone} {
+				// 	margin-left: 8px;
+				// 	width: 35px;
+				// }
+			}
 
 			.profile-branches {
 				position: absolute;
-			    width: 25px;
-			    height: 25px;
-			    background-color: white;
-			    border-radius: 50%;
-			    padding: 5px;
-			    right: -5px;
-			    bottom: -5px;
-			    box-shadow: 0px 0px 7px 0px #898989;
+				width: 18px;
+				height: 18px;
+				background-color: white;
+				border-radius: 50%;
+				right: -5px;
+				bottom: -5px;
+				box-shadow: 0px 0px 7px 0px #898989;
+				text-align: center;
 
 			    @media #{$phone} {
 			    	width: 20px;
@@ -194,15 +219,19 @@ header {
 			    }
 
 			    img {
-			    	width: auto;
-				    margin-left: auto;
-				    vertical-align: initial;
+			    	width: 68%;
+					margin-left: auto;
+					vertical-align: initial;
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translateX(-50%) translateY(-50%);
 			    }
 			}
 
 			.notification {
-				width: 16px;
-				height: 16px;
+				width: 12px;
+				height: 12px;
 				border: 2px solid white;
 				border-radius: 50%;
 				background-color: #ff0000;
@@ -232,6 +261,8 @@ header {
 	}
 
 	.header-buttons-wrapper {
+		margin-bottom: 3px;
+		
 		.header-text-link {
 			font-size: 18px;
 			color: #555555;
@@ -593,16 +624,6 @@ body {
 				border-radius: 5px;
 			}
 		}
-
-		&.pending {
-			.slider-image {
-				opacity: 0.7;
-			}
-
-			.deleter {
-				display: none;
-			}
-		}
 	}
 
 	.flickity-prev-next-button {
@@ -672,7 +693,7 @@ footer {
     display: flex;
     position: relative;
     padding-top: 35px;
-    padding-bottom: 30px;
+    padding-bottom: 50px;
 
 	@media #{$phone} {
 		position: static;
@@ -949,6 +970,7 @@ footer {
 		top: 60px;
 		transform: translateX(-50%);
 		background: transparent;
+		display: flex;
 		align-items: center;
 
 		@media #{$phone} {
@@ -1028,7 +1050,7 @@ footer {
 	    	display: none;
 	    }
 
-		.close-popup:not(.button) {
+		.close-popup:not(.blue-button) {
 			position: absolute;
 			right: 33px;
 			top: 27px;
@@ -1477,6 +1499,30 @@ footer {
 	}
 }
 
+.share-button {
+	color: #0564c6;
+	font-size: 18px;
+	display: flex;
+	align-items: center;
+	margin-left: 20px;
+
+	@media #{$phone} {
+		position: absolute;
+		top: calc(100% + 20px);
+		right: 0px;
+		font-size: 16px;
+	}
+
+	img {
+		width: 36px;
+		margin-right: 5px;
+
+		@media #{$phone} {
+			width: 26px;
+		}
+	}
+}
+
 .mobile-buttons {
 	display: none;
 
@@ -1639,25 +1685,17 @@ footer {
 	display: none;
 	text-align: left;
     position: absolute;
-    background-color: white;
-    padding: 15px;
+	color: white;
+	background-color: #3d474d;
+	padding: 8px 15px 10px;
     max-width: 300px;
-    border: 1px solid #41afff;
-    z-index: 1002;
-    border-radius: 10px;
+	border: 1px solid #3d474d;
+	z-index: 10111;
+	border-radius: 5px;
+	font-size: 14px;
 
     @media #{$phone} {
-    	font-size: 14px;
-    	padding: 10px;
     	max-width: 200px;
-    }
-
-    &.dark-tooltip {
-		background-color: black;
-		color: white;
-		max-width: 150px;
-		font-size: 13px;
-		z-index: 10111;
     }
 
     &.top-tooltip {
@@ -1681,7 +1719,7 @@ footer {
 		height: 0;
 		border-style: solid;
 		border-width: 0 7.5px 7.5px 7.5px;
-		border-color: transparent transparent #41b0ff transparent;
+		border-color: transparent transparent #3d474d transparent;
     }
 }
 
@@ -2243,4 +2281,22 @@ footer {
 	    right: 10px;
 	    top: 10px;
 	}
+}
+
+.accept-button {
+	background-color: #14cab8;
+    color: white;
+    width: 72px;
+    height: 23px;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.reject-button {
+	background-color: #ff6e6e;
+    color: white;
+    width: 72px;
+    height: 23px;
+    text-align: center;
+    border-radius: 20px;
 }

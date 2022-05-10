@@ -2,7 +2,34 @@
 
 @section('content')
 
-@if(!empty($user) && $user->id==$item->id )
+@php
+	$videoReviewsCount = $item->reviews_in_video()->count();
+	$regularReviewsCount = $item->reviews_in_standard()->count();
+	$hasPatientInvites = !empty($user) && $user->id==$item->id && $user->patients_invites->isNotEmpty();
+	$hasPatientAsks = !empty($user) && $user->id==$item->id && $user->asks->isNotEmpty();
+
+	$hasTeamApproved = $item->teamApproved->isNotEmpty();
+	$hasNotVerifiedTeamFromInvitation = $item->notVerifiedTeamFromInvitation->isNotEmpty();
+
+	$workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id );
+	$workingTime = $item->getWorkHoursText();
+
+	$showAboutSection = $item->description || $item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id);
+	$showTeamSection = $item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $hasTeamApproved || $hasNotVerifiedTeamFromInvitation );
+	$showLocationsSection = ($item->lat && $item->lon) || $item->photos->isNotEmpty() || ( !empty($user) && $user->id==$item->id);
+
+	$week_days = [
+		1 => 'Mon',
+		'Tue',
+		'Wed',
+		'Thu',
+		'Fri',
+		'Sat',
+		'Sun',
+	];
+@endphp
+
+{{-- @if(!empty($user) && $user->id==$item->id )
 	<div class="guided-overflow-wrapper">
 		<div class="guided-tour-part guided-overflow-top"></div>
 		<div class="guided-tour-part guided-overflow-right">
@@ -32,19 +59,518 @@
 			</div>
 		</div>
 	</div>
-@endif
+@endif --}}
 
-<div class="black-overflow" style="display: none;">
-</div>
-<div class="home-search-form">
-	@include('trp.parts.search-form')
-</div>
+<div class="black-overflow" style="display: none;"></div>
 
-<div class="blue-background"></div>
+<div class="gray-line"></div>
 
-<div class="container edit-profile-wrapper">
+<div class="container">
 
-	<div class="information flex">
+	<div class="profile-wrapper">
+		<div class="profile-info-container">
+			<div class="profile-info flex">
+				<div class="avatar-wrapper">
+					<img class="avatar" src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [
+						'name' => $item->getNames(), 
+						'location' => $item->getLocation()
+					]) }}" width="150" height="150">
+					{{-- @if($item->is_clinic && $item->branches->isNotEmpty() && $item->id == $item->mainBranchClinic->id) --}}
+						<div class="main-clinic mont">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
+					{{-- @endif  --}}
+
+					{{-- @if(!empty($user) && $user->is_clinic && $item->is_clinic && $user->branches->isNotEmpty() && in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
+						<a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $item->id }}">
+							<div class="img">
+								<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
+							</div>
+							{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
+							{!! csrf_field() !!}
+						</a>
+					@else
+						@if($item->branches->isNotEmpty()) --}}
+							<a class="clinic-branches mont" href="{{ getLangUrl('branches/'.$item->slug) }}">
+								<img src="{{ url('img-trp/branches.svg') }}" width="24"/>
+								{{-- {!! nl2br(trans('trp.page.user.branch.see-branches')) !!} --}}
+								Check branches
+							</a>
+						{{-- @endif
+					@endif --}}
+					
+					@if(false)
+						<div class="visits-wrapper">
+							<span class="mont">
+								<img class="visit-icon" src="{{ url('img-trp/visits/on_site.svg') }}" width="25"/>
+								On-site visits
+							</span>
+							<span class="mont">
+								<img class="visit-icon" src="{{ url('img-trp/visits/virtual.svg') }}" width="25"/>
+								Virtual visits
+								<img class="visit-info tooltip-text" src="{{ url('img-trp/info-dark-gray.png') }}" text="Virtual visits are a great way to talk with your dentist using your phone or PC. This dental provider uses a third-party video service. Click on the button to schedule a video appointment.">
+							</span>
+						</div>
+					@endif
+				</div>
+				<div class="profile-details">
+					<div class="partner-wrapper flex flex-center {{ $item->is_partner ? 'space-between' : 'flex-text-end' }}">
+						@if($item->is_partner)
+							<div class="partner">
+								<img src="{{ url('img-trp/mini-logo-white.svg') }}">
+								Dentacoin Partner
+							</div>
+						@endif
+
+						<a href="javascript:;" class="share-button" data-popup="popup-share">
+							<img src="{{ url('img-trp/share-arrow-gray.svg') }}">
+							{!! nl2br(trans('trp.common.share')) !!}
+						</a>
+					</div>
+
+					{{-- edit title & name --}}
+					@if(!empty($user) && $item->id==$user->id)
+						<div class="edit-field">
+							<h1 class="mont edited-field" style="display: inline-block;">
+								{{ $item->getNames() }}
+							</h1>
+
+							<a class="edit-field-button">
+								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
+							</a>
+
+							<div class="edit-wrapper edit-name">
+								<div class="flex flex-center">
+
+									@if(!$user->is_clinic)
+										<div class="flex flex-column col">
+											{{ Form::select( 'title' , config('titles') , $user->title , array('class' => 'input') ) }}
+
+									@endif
+									
+									<input 
+									type="text" 
+									name="name" 
+									class="input dentist-name mont" 
+									placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" 
+									value="{{ $user->name }}"
+									>
+
+									@if(!$user->is_clinic)
+										</div>
+									@endif
+									<a href="javascript:;" class="save-field">
+										<img src="{{ url('img-trp/white-check.svg') }}" width="20" height="15"/>
+									</a>
+								</div>
+							</div>
+						</div>
+					@else
+						<h1 class="mont">{{ $item->getNames() }}</h1>
+					@endif
+
+					{{-- edit phone --}}
+					@if(!empty($user) && $item->id==$user->id)
+						<div class="edit-field">
+							<h3 class="edited-field alternative-name" style="display: inline-block;">
+								{{ $item->name_alternative ?? 'edit your alternative name' }}
+							</h3>
+
+							<a class="edit-field-button">
+								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
+							</a>
+
+							<div class="edit-wrapper">
+								<div class="flex flex-center">
+									<input 
+									type="text" 
+									name="name_alternative" 
+									class="input input-alternative" 
+									placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" 
+									value="{{ $user->name_alternative }}"
+									>
+									<a href="javascript:;" class="save-field">
+										<img src="{{ url('img-trp/white-check.svg') }}" width="20" height="15"/>
+									</a>
+								</div>
+							</div>
+						</div>
+					@else
+						@if( $item->name_alternative )
+							<h3 class="alternative-name">({{ $item->name_alternative }})</h3>
+						@endif
+					@endif
+
+					@if($workplace || $workingTime)
+						<div class="flex flex-center workplace-wrapper">
+							<div class="col">
+								@if($workplace)
+									<div class="workplace">
+										{!! $workplace !!}
+									</div>
+								@endif
+							</div>
+							<div>
+								@if($workingTime)
+									@if(str_contains($workingTime, 'Open now'))
+										<div class="working-time open">
+											<img src="{{ url('img-trp/clock-blue.svg') }}">
+											Open now
+
+											<div class="work-hours">
+												@foreach($week_days as $w => $week_day)
+													<div class="flex {{ date('w') == $w ? 'active' : '' }}">
+														<p class="month">
+															{{ $week_day }}
+														</p>
+														@if(array_key_exists($w, $item->work_hours))
+															<p>
+																@foreach($item->work_hours[$w] as $k => $work_hours)
+																	{{ $work_hours }}h {!! $loop->last ? '' : ' - ' !!}
+																@endforeach
+															</p>
+														@else
+															<p>Closed</p>
+														@endif
+													</div>
+												@endforeach
+											</div>
+
+											@if(!empty($user) && $item->id==$user->id)
+												<a class="edit-field-button">
+													<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
+												</a>
+											@endif
+										</div>
+									@else
+										<div class="working-time closed">
+											<img src="{{ url('img-trp/clock-red.svg') }}"/>
+											Closed now
+
+											@if(!empty($user) && $item->id==$user->id)
+												<a class="edit-field-button">
+													<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
+												</a>
+											@endif
+										</div>
+									@endif
+								@endif
+							</div>
+						</div>
+					@endif
+
+					<p class="dentist-address">{{ $item->getLocation() }}</p>
+					
+					{{-- edit address --}}
+					@if(!empty($user) && $item->id==$user->id)
+						<div class="edit-field">
+							<p class="dentist-address edited-field" style="display: inline-block;">
+								{{ $item->address ?? 'edit your address' }}
+							</p>
+
+							<a class="edit-field-button">
+								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
+							</a>
+
+							<div class="edit-wrapper address-suggester-wrapper-input">
+								<div class="flex flex-center">
+									<input 
+									type="text" 
+									name="address" 
+									class="input address-suggester-input" 
+									autocomplete="off" 
+									placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" 
+									value="{{ $user->address }}"
+									>
+									<a href="javascript:;" class="save-field">
+										<img src="{{ url('img-trp/white-check.svg') }}" width="20" height="15"/>
+									</a>
+								</div>
+								<div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">
+								</div>
+								<div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
+									{!! nl2br(trans('trp.common.check-address')) !!}
+								</div>
+								<div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
+									{!! nl2br(trans('trp.common.invalid-address')) !!}
+								</div>
+								<div class="alert alert-warning different-country-hint mobile" style="display: none; margin: -10px 0px 10px;">
+									{!! nl2br(trans('trp.page.user.invalid-country')) !!}
+								</div>
+							</div>
+						</div>
+					@else
+						@if($item->address)
+							<div class="dentist-address">
+								{{ $item->address }}
+							</div>
+						@endif
+					@endif
+					
+					{{-- edit phone --}}
+					@if(!empty($user) && $item->id==$user->id)
+						<div class="edit-field">
+							<p class="edited-field" style="display: inline-block;">
+								{{ $item->getFormattedPhone() ?? 'edit your phone number' }}
+							</p>
+
+							<a class="edit-field-button">
+								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
+							</a>
+
+							<div class="edit-wrapper">
+								<div class="flex flex-center phone-widget">
+									<span class="phone-code-holder">{{ $user->country_id ? '+'.$user->country->phone_code : '' }}</span>
+									<input 
+									type="tel" 
+									name="phone" 
+									class="input" 
+									placeholder="{!! nl2br(trans('trp.page.user.phone')) !!}" 
+									value="{{ $user->phone }}"
+									>
+									<a href="javascript:;" class="save-field">
+										<img src="{{ url('img-trp/white-check.svg') }}" width="20" height="15"/>
+									</a>
+								</div>
+							</div>
+						</div>
+					@else
+						@if( $item->phone )
+							<p>
+								<a href="tel:{{ $item->getFormattedPhone(true) }}">
+									{{ $item->getFormattedPhone() }}
+								</a>
+							</p>
+						@endif
+					@endif
+
+					{{-- edit website --}}
+					@if(!empty($user) && $item->id==$user->id)
+						<div class="edit-field">
+							<p class="edited-field" style="display: inline-block;">
+								<a class="blue-href" href="{{ $item->getWebsiteUrl() }}" target="_blank">
+									{{ $item->website }}
+								</a>
+							</p>
+
+							<a class="edit-field-button">
+								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
+							</a>
+
+							<div class="edit-wrapper">
+								<div class="flex">
+									<input 
+									type="text" 
+									name="website" 
+									class="input" 
+									placeholder="{!! nl2br(trans('trp.page.user.website')) !!}" 
+									value="{{ $user->website }}"
+									>
+									<a href="javascript:;" class="save-field">
+										<img src="{{ url('img-trp/white-check.svg') }}" width="20" height="15"/>
+									</a>
+								</div>
+							</div>
+						</div>
+					@else
+						@if( $item->website )
+							<p>
+								<a class="blue-href" href="{{ $item->getWebsiteUrl() }}" target="_blank">
+									{{ $item->website }}
+								</a>
+							</p>
+						@endif
+					@endif
+
+					{{-- edit socials --}}
+					
+					<div class="socials-wrapper">
+						@if( $item->socials || !empty($item->email))
+							<div class="socials">
+
+								@if(!empty($item->email))
+									<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
+										<img src="{{ url('img-trp/social-network/email.svg') }}" height="26"/>
+									</a>
+								@else
+									@if($item->branches->isNotEmpty())
+										<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : ($item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email) }}">
+											<img src="{{ url('img-trp/social-network/email.svg') }}" height="26"/>
+										</a>
+									@endif
+								@endif
+								
+								@if( $item->socials)
+									@foreach($item->socials as $k => $v)
+										<a class="social" href="{{ $v }}" target="_blank">
+											<img src="{{ url('img-trp/social-network/'.$k.'.svg') }}" height="26"/>
+										</a>
+									@endforeach
+								@endif
+
+								@if(!empty($user) && $item->id==$user->id)
+									<a class="edit-field-button">
+										<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>
+									</a>
+								@endif
+							</div>
+						@endif
+
+						@if(!empty($user) && $item->id==$user->id)
+							<div class="edit-field">
+								<div style="flex:1;">
+									<div class="email-wrapper">
+										<div class="flex email-wrap">
+											<div class="col social-networks">
+												<a href="javascript:;">
+													<img src="{{ url('img-trp/social-network/email.svg') }}"/>
+												</a>
+											</div>
+											<div class="col">
+												<input type="text" 
+												name="email_public" 
+												class="input" 
+												value="{{ !empty($user->email_public) ? $user->email_public : $user->email }}" 
+												placeholder="{!! nl2br(trans('trp.page.user.user-public-email')) !!}" 
+												maxlength="100" 
+												{!! !empty($user->email_public) ? '' : 'disabled' !!}>
+											</div>
+										</div>
+										<label class="checkbox-label label-public-email {!! !empty($user->email_public) ? '' : 'active' !!}" for="current-email">
+											<input 
+											type="checkbox" 
+											class="special-checkbox" 
+											id="current-email" 
+											cur-email="{{ $user->email }}" 
+											name="current-email" 
+											value="{!! !empty($user->email_public) ? '0' : '1' !!}" 
+											{!! !empty($user->email_public) ? '' : 'checked' !!}
+											
+											>
+											<div class="checkbox-square">✓</div>
+											{{-- {!! nl2br(trans('trp.page.user.user-registration-email')) !!} --}}
+											Use my registration email as a public email
+										</label>			    	
+									</div>
+									<div class="social-wrapper dont-count" guided-action="socials" style="padding: 5px; margin: -5px;">
+										@if(!empty($user->socials))
+											@foreach($user->socials as $k => $v)
+												<div class="flex social-wrap">
+													<div class="col social-networks">
+														<a href="javascript:;" class="current-social" cur-type="{{ $k }}">
+															<img src="{{ url('img-trp/social-network/'.config('trp.social_network')[$k].'.svg') }}" src-attr="{{ url('img-trp/social-network/') }}"/>
+														</a>
+													</div>
+													<div class="col">
+														<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+													</div>
+												</div>
+											@endforeach
+										@else
+											<div class="flex social-wrap">
+												<div class="col social-networks">
+													<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
+														<img src="{{ url('img-trp/social-network/'.array_values(config('trp.social_network'))[0].'.svg') }}" src-attr="{{ url('img-trp/social-network/') }}"/>
+													</a>
+													<div class="social-dropdown"> 
+														@foreach(config('trp.social_network') as $key => $sn)
+															<a href="javascript:;">
+																<img src="{{ url('img-trp/social-network/'.$sn.'.svg') }}" src-attr="{{ url('img-trp/social-network/') }}"/>
+															</a>
+														@endforeach
+													</div>
+												</div>
+												<div class="col">
+													<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
+												</div>
+											</div>
+										@endif
+										
+										@if(count($user->socials) != count(config('trp.social_network')))
+											<a href="javascript:;" class="add-social-profile">
+												+ Add another social link
+												{{-- {!! nl2br(trans('trp.page.user.add-social-profile')) !!} --}}
+											</a>
+										@endif
+									</div>
+								</div>
+								
+								<a href="javascript:;" class="save-field">
+									<img src="{{ url('img-trp/white-check.svg') }}" width="20" height="15"/>
+								</a>
+							</div>
+						@endif
+					</div>
+					
+					@if(false)
+						<div class="announcement-wrapper">
+							<h4>
+								<img src="{{ url('img-trp/announcement.svg') }}" width="16"/>New office safety precautions 
+								@if(!empty($user) && $item->id==$user->id)
+									<a class="edit-field-button">
+										<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
+									</a>
+								@endif
+							</h4>
+							<p class="announcement-title">
+								Message from the office of {{ $item->getNames() }}
+							</p>
+							<p>
+								<span 
+									class="announcement-description" 
+									short-text='"{{ substr('We are taking all precautions to protect our patients and staff at this time. We require patients and staff to wear masks in the office. We will be checking temperatures when patients come in. Family members accompanying the patient are advised to wait outside or in their car. We are also screening patients prior to their visit. Patients with respiratory symptoms are advised to schedule a video visit with Dr K.', 0, 150) }}.."' 
+									long-text='"{{ 'We are taking all precautions to protect our patients and staff at this time. We require patients and staff to wear masks in the office. We will be checking temperatures when patients come in. Family members accompanying the patient are advised to wait outside or in their car. We are also screening patients prior to their visit. Patients with respiratory symptoms are advised to schedule a video visit with Dr K.' }}"'
+								>
+									"{{ substr('We are taking all precautions to protect our patients and staff at this time. We require patients and staff to wear masks in the office. We will be checking temperatures when patients come in. Family members accompanying the patient are advised to wait outside or in their car. We are also screening patients prior to their visit. Patients with respiratory symptoms are advised to schedule a video visit with Dr K.', 0, 150) }}.."
+								</span>
+								<a href="javascript:;" class="show-full-announcement" short-text="show more" long-text="show less">show more</a>
+							</p>
+						</div>
+					@endif
+				</div>
+			</div>
+		</div>
+		<div class="profile-rating">
+
+			<div class="rating mont">
+				{{ number_format($item->avg_rating, 1) }}
+			</div>
+			<div class="ratings big">
+				<div class="stars">
+					<div class="bar" style="width: {{ $item->avg_rating/5*100 }}%;">
+					</div>
+				</div>
+			</div>
+			<div class="reviews-count">
+				({{ trans('trp.common.reviews-count', [ 'count' => intval($item->ratings)]) }})
+			</div>
+
+			@if(!empty($user) && $user->id==$item->id)
+			
+				@if( $regularReviewsCount )
+					<a href="javascript:;" class="white-button add-widget-button" data-popup-logged="popup-widget" reviews-guided-action="add">
+						{{-- {!! nl2br(trans('trp.page.user.widget')) !!} --}}
+						Add to website
+					</a>
+				@endif
+				<div style="padding: 5px;" guided-action="invite" class="dont-count">
+					<a href="javascript:;" class="blue-button" data-popup-logged="popup-invite">
+						{!! nl2br(trans('trp.page.user.invite')) !!}
+					</a>
+				</div>
+			@elseif( empty($user) || !$user->is_dentist )
+				<a href="javascript:;" class="blue-button" data-popup-logged="submit-review-popup">
+					{{-- {!! nl2br(trans('trp.page.user.submit-review')) !!} --}}
+					Write a review
+				</a>
+				@if(empty($is_trusted) && !$has_asked_dentist)
+					<a href="javascript:;" class="blue-button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
+						{!! nl2br(trans('trp.page.user.request-invite')) !!}
+					</a>
+				@endif
+			@endif		
+		</div>
+	</div>
+
+	{{-- <div class="information flex">
 		<a href="javascript:;" class="share-button" data-popup="popup-share">
 			<img src="{{ url('img-trp/share.svg') }}" width="16" height="18">
 			{!! nl2br(trans('trp.common.share')) !!}
@@ -249,9 +775,6 @@
     		<div class="view-profile clearfix">
 				<div class="avatar">
 					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => $item->getLocation()  ]) }}" width="130" height="130">
-					@if($item->is_clinic && $item->branches->isNotEmpty() && $item->id == $item->mainBranchClinic->id)
-						<div class="main-clinic">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
-					@endif 
 				</div>
 				<div class="media-right">
 					<div class="phone-styles">
@@ -298,7 +821,7 @@
 									{!! nl2br(trans('trp.page.user.invite')) !!}
 								</a>
 							</div>
-							@if( $item->reviews_in_standard()->count() )
+							@if( $regularReviewsCount )
 								<a href="javascript:;" class="button button-inner-white add-widget-button" data-popup-logged="popup-widget" reviews-guided-action="add" style="text-transform: initial;">
 									{!! nl2br(trans('trp.page.user.widget')) !!}
 								</a>
@@ -347,24 +870,6 @@
 									{{ $item->website }}
 								</span>
 							</a>
-						@endif
-						@if(!empty($user) && $user->is_clinic && $item->is_clinic && $user->branches->isNotEmpty() && in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
-							<a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $item->id }}">
-								<div class="img">
-									<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-								</div>
-								{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
-								{!! csrf_field() !!}
-							</a>
-						@else
-							@if($item->branches->isNotEmpty())
-								<a href="{{ getLangUrl('branches/'.$item->slug) }}" class="p clinic-branches">
-									<div class="img">
-										<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-									</div>
-									{!! nl2br(trans('trp.page.user.branch.see-branches')) !!}
-								</a>
-							@endif
 						@endif
 						@if($item->top_dentist_month)
 							<div class="top-dentist">
@@ -439,7 +944,7 @@
 						{!! nl2br(trans('trp.page.user.invite')) !!}
 					</a>
 				</div>
-				@if( $item->reviews_in_standard()->count() )
+				@if( $regularReviewsCount )
 					<div style="padding: 5px;display: inline-block;" reviews-guided-action="add">
 						<a href="javascript:;" class="button button-inner-white add-widget-button" data-popup-logged="popup-widget" style="text-transform: initial;">
 							{!! nl2br(trans('trp.page.user.widget')) !!}
@@ -458,411 +963,239 @@
 			@endif							
 
 		</div>
-    </div>
-
-    <div class="profile-tabs {!! $item->reviews_in_standard()->count() && $item->reviews_in_video()->count() && (!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty())) ? 'full-tabs' : '' !!}">
-    	@if( $item->reviews_in_standard()->count() )
-	    	<a class="tab" data-tab="reviews" href="javascript:;" style="z-index: 5;">
-	    		{!! nl2br(trans('trp.page.user.reviews')) !!}
-	    		
-	    		({{ $item->reviews_in_standard()->count() }})
-	    	</a>
-    	@endif
-    	@if( $item->reviews_in_video()->count() )
-	    	<a class="tab" data-tab="videos" href="javascript:;" style="z-index: 4;">
-	    		{!! nl2br(trans('trp.page.user.videos')) !!}
-	    		
-	    		({{ $item->reviews_in_video()->count() }})
-	    	</a>
-    	@endif
-		<a class="tab" data-tab="about" href="javascript:;" style="z-index: 3; {{ ($item->reviews_in_standard()->count() || $item->reviews_in_video()->count()) || (!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty())) ? '' : 'display:none;' }}">
-			{!! nl2br(trans('trp.page.user.about')) !!}
-		</a>
-
-    	@if(!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty()))
-    		<a class="tab {!! $patient_asks ? 'force-active' : '' !!}" data-tab="asks" href="javascript:;" style="z-index: 2;">
-    			{!! nl2br(trans('trp.page.user.my-patients')) !!}
-
-    			<span class="{!! $patient_asks ? 'active' : ''  !!}"></span>
-    		</a>
-    	@endif
-    </div>
+    </div> --}}
 </div>
 
-<div class="details-wrapper profile-reviews-space">
-	@if($item->reviews_in_standard()->isNotEmpty() )
-    	<div class="tab-container" id="reviews">
-    		<div class="container">
-	    		<h2 class="black-left-line section-title">
-	    			{!! nl2br(trans('trp.page.user.overview')) !!}
-	    		</h2>
-	    	</div>
-	    	<div class="review-chart {{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'with-three-columns' : '' }}">
-	    		<div class="chart-stars">
-		    		<img src="{{ url('img-trp/five-stars.png') }}">
-		    		<img src="{{ url('img-trp/four-stars.png') }}">
-		    		<img src="{{ url('img-trp/three-stars.png') }}">
-		    		<img src="{{ url('img-trp/two-stars.png') }}">
-		    		<img src="{{ url('img-trp/one-star.png') }}">
-		    	</div>
-		    	<div class="review-charts-wrapper">
-	    			<div id="reviews-chart" class="{{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'three-columns' : '' }}">
-	    				<div class="chart-outher">
-	    					@for($i=0;$i<=5;$i++)
-	    						<div class="chart-line"></div>
-	    					@endfor
-	    					@foreach($aggregated as $lab => $rat)
-	    						<div class="chart-parent">
-	    							<div class="chart tooltip-text" text="{{ number_format($rat,2) }}" to-height="{{ number_format($rat,2) }}"
-									 {{-- style="transition-delay: {{ $loop->iteration == 1 ? 0.5 : 0.5+ ($loop->iteration / 10) }}s;" --}}
-									 style="height: {{ ($phone ? 40 : 50) * number_format($rat,2) }}px;"
-									></div>
-	    							<div class="chart-label">{{ $lab }}</div>
-	    						</div>
-	    					@endforeach
-		    			</div>
-	    			</div>
-	    		</div>
-	    	</div>
-
-			<div id="append-section-reviews"></div>
-	    </div>
-	@endif
-
-	<div class="container"> 
-		@if( $item->reviews_in_video()->count() )
-	    	<div class="tab-container" id="videos">
-	    		<h2 class="black-left-line section-title">
-	    			{!! nl2br(trans('trp.page.user.reviews-video')) !!}	    			
-	    		</h2>
-
-	    		<div class="video-review-container flex">
-					@foreach($item->reviews_in_video() as $review)
-						@if($review->user)
-							<div class="video-review more review-wrapper" review-id="{{ $review->id }}">
-								<div class="video-image cover" style="background-image: url('https://img.youtube.com/vi/{{ $review->youtube_id }}/hqdefault.jpg');"></div>
-								<div class="video-review-title">
-									“{{ $review->title }}”
-								</div>
-								<div>
-									<div class="ratings">
-										<div class="stars">
-											<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
-											</div>
-										</div>
-										<span class="rating">
-											({{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating }})
-										</span>
-									</div>
-									@if($review->verified)
-										<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
-											{!! nl2br(trans('trp.common.trusted')) !!}
-											<img src="{{ url('img/info-white.svg') }}" width="15" height="15"/>
-										</div>
-									@endif
-								</div>
-								<div>
-									<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
-									<span class="review-date">{{ $review->user->name }}, {{ $review->created_at ? $review->created_at->toFormattedDateString() : '-' }} </span>
-								</div>
-								<div class="review-footer flex flex-mobile break-mobile">
-
-									@if($review->reply)
-										<a class="reply-button show-hide" href="javascript:;" alternative="▾ Show replies" >
-											▴ {!! nl2br(trans('trp.page.user.hire-replies')) !!}
-										</a>
-									@endif
-									<div class="col">
-										@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
-											<a class="reply-review" href="javascript:;">
-												<span>
-													{!! nl2br(trans('trp.page.user.reply')) !!}
-												</span>
-											</a>
-										@endif
-										
-										<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-											<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}">
-											<span>
-												{{ intval($review->upvotes) }}
-											</span>
-										</a>
-										<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes)) ? 'voted' : '' !!}" href="javascript:;">
-											<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}">
-											<span>
-												{{ intval($review->downvotes) }}
-											</span>
-										</a>
-
-										<a class="share-review" href="javascript:;" data-popup="popup-share" share-href="{{ $item->getLink() }}?review_id={{ $review->id }}">
-											<img src="{{ url('img-trp/share-review.png') }}">
-											<span>
-												{!! nl2br(trans('trp.common.share')) !!}
-											</span>
-										</a>
-									</div>
-								</div>
-								@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
-									<div class="review-replied-wrapper reply-form" style="display: none;">
-										<div class="review">
-											<div class="review-header">
-												<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-												<span class="review-name">{{ $item->getNames() }}</span>
-											</div>
-											<div class="review-content">
-												<form method="post" action="{{ $item->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
-													{!! csrf_field() !!}
-													<textarea class="input" name="reply" placeholder="{!! nl2br(trans('trp.page.user.reply-enter')) !!}"></textarea>
-													<button class="button" type="submit" name="">{!! nl2br(trans('trp.page.user.reply-submit')) !!}</button>
-													<div class="alert alert-warning" style="display: none;">
-														{!! nl2br(trans('trp.page.user.reply-error')) !!}
-													</div>
-												</form>
-											</div>
-										</div>
-									</div>
-								@elseif($review->reply)
-									<div class="review-replied-wrapper">
-										<div class="review">
-											<div class="review-header">
-												<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-												<span class="review-name">{{ $item->getNames() }}</span>
-												<span class="review-date">
-													{{ $review->replied_at ? $review->replied_at->toFormattedDateString() : '-' }}
-												</span>
-											</div>
-											<div class="review-content">
-												{!! nl2br($review->reply) !!}
-											</div>
-
-											<div class="review-footer">
-												<div class="col">
-													<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-														<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}">
-														<span>
-															{{ intval($review->upvotes_reply) }}
-														</span>
-													</a>
-													<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-														<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}">
-														<span>
-															{{ intval($review->downvotes_reply) }}
-														</span>
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-								@endif
-							</div>
-						@endif
-		    		@endforeach
-	    		</div>
-	    	</div>
+<div class="tab-titles">
+	<div class="container">
+		@if($showAboutSection)
+			<a class="tab-title active" data-tab="about" href="javascript:;">
+				{{-- {!! nl2br(trans('trp.page.user.about')) !!} --}}
+				About
+			</a>
+		@endif
+		@if($showTeamSection)
+			<a class="tab-title" data-tab="team" href="javascript:;">
+				Team
+			</a>
+		@endif
+		@if( $regularReviewsCount || $videoReviewsCount )
+			<a class="tab-title" data-tab="reviews" href="javascript:;">
+				{!! nl2br(trans('trp.page.user.reviews')) !!}
+			</a>
+		@endif
+		@if( $showLocationsSection )
+			<a class="tab-title" data-tab="locations" href="javascript:;">
+				Locations
+			</a>
 		@endif
 
-		<div class="tab-container" id="about">
-			<h2 class="black-left-line section-title">
-				{!! nl2br(trans('trp.page.user.about-who',[
-					'name' => $item->getNames()
-				])) !!}
-			</h2>
+		{{-- @if(!empty($user) && $user->id==$item->id && ($hasPatientInvites || $hasPatientAsks))
+			<a class="tab-title {!! $patient_asks ? 'force-active' : '' !!}" data-tab="asks" href="javascript:;">
+				{!! nl2br(trans('trp.page.user.my-patients')) !!}
 
-			<div class="about-container">
+				<span class="{!! $patient_asks ? 'active' : ''  !!}"></span>
+			</a>
+		@endif --}}
 
-				@if($item->top_dentist_month)
-					<div class="top-dentist">
-						<img src="{{ url('img-trp/top-dentist.png') }}">
-		    			<span>
-		    				{!! trans('trp.common.top-dentist') !!}: {{ $item->getLastTopDentistBadge() }}
-	    				</span>
-	    			</div>
-				@endif
-				@if($item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id))
-	    			<div class="specialization" role="presenter">
-						<img src="{{ url('img-trp/graduate-hat.png') }}">
-		    			<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.specialty-empty')) }}">
-		    				{{ $item->categories->isNotEmpty() ? implode(', ', $item->parseCategories($categories)) : nl2br(trans('trp.page.user.specialty-empty')) }}
-	    				</span>
-	    				@if(!empty($user) && $item->id==$user->id)
-	    					<a>
-	    						<img src="{{ url('img-trp/pencil.png') }}">
-	    					</a>
-	    				@endif
-	    			</div>
-	    			@if(!empty($user) && $item->id==$user->id)
-		    			<div class="specialization" role="editor" style="display: none;">
-							{{ Form::open([
-								'class' => 'edit-description', 
-								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
-							]) }}
-								{!! csrf_field() !!}
-								@foreach($categories as $k => $v)
-									<label class="checkbox-label {!! in_array($loop->index, $user->categories->pluck('category_id')->toArray()) ? 'active' : '' !!}" for="checkbox-{{ $k }}" >
-										<input type="checkbox" class="special-checkbox" id="checkbox-{{ $k }}" name="specialization[]" value="{{ $loop->index }}" {!! in_array($loop->index, $user->categories->pluck('category_id')->toArray()) ? 'checked="checked"' : '' !!}>
-										<div class="checkbox-square">✓</div>
-										{{ $v }}
-									</label>
-	                            @endforeach
-	                            <br/>
-	                            <input type="hidden" name="field" value="specialization" />
-	                            <input type="hidden" name="json" value="1" />
-								<button type="submit" class="button">
-									{!! nl2br(trans('trp.page.user.save')) !!}
-								</button>
-								<div class="alert alert-warning" style="display: none;">
-								</div>
-							{!! Form::close() !!}
-		    			</div>
-	    			@endif
-				@endif
-				@if(!empty($item->accepted_payment) || (!empty($user) && $item->id==$user->id))
-	    			<div class="dentist-payments" role="presenter">
-						<img src="{{ url('img/dollar.svg') }}"/>
-		    			<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.accepted-payment-empty')) }}">
-		    				{{ $item->accepted_payment ? $item->parseAcceptedPayment( $item->accepted_payment ) : nl2br(trans('trp.page.user.accepted-payment-empty')) }}
-	    				</span>
-	    				@if(!empty($user) && $item->id==$user->id)
-	    					<a>
-	    						<img src="{{ url('img-trp/pencil.png') }}">
-	    					</a>
-	    				@endif
-	    			</div>
-	    			@if(!empty($user) && $item->id==$user->id)
-		    			<div class="dentist-payments" role="editor" style="display: none;">
-							{{ Form::open([
-								'class' => 'edit-description', 
-								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
-							]) }}
-								{!! csrf_field() !!}
-								@foreach(config('trp.accepted_payment') as $ap)
-									<label class="checkbox-label {!! in_array($ap, $user->accepted_payment) ? 'active' : '' !!}" for="checkbox-{{ $ap }}" >
-										<input type="checkbox" class="special-checkbox" id="checkbox-{{ $ap }}" name="accepted_payment[]" value="{{ $ap }}" {!! in_array($ap, $user->accepted_payment) ? 'checked="checked"' : '' !!}>
-										<div class="checkbox-square">✓</div>
-										{!! trans('trp.accepted-payments.'.$ap) !!}
-									</label>
-	                            @endforeach
-	                            <br/>
-	                            <input type="hidden" name="field" value="accepted_payment" />
-	                            <input type="hidden" name="json" value="1" />
-								<button type="submit" class="button">
-									{!! nl2br(trans('trp.page.user.save')) !!}
-								</button>
-								<div class="alert alert-warning" style="display: none;">
-								</div>
-							{!! Form::close() !!}
-		    			</div>
-	    			@endif
-				@endif
-				@if($item->description || (!empty($user) && $item->id==$user->id) )
-	    			<div class="about-content" role="presenter">
-	    				<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.description-empty')) }}">
-		    				{!! $item->description ? nl2br($item->description) : nl2br(trans('trp.page.user.description-empty')) !!}
-		    			</span>
-	    				@if(!empty($user) && $item->id==$user->id)
-	    					<a class="dont-count guided-description" guided-action="description" style="padding: 10px; margin: -10px; margin-left: 0px;">
-	    						<img src="{{ url('img-trp/pencil.png') }}">
-	    					</a>
-	    				@endif
-	    			</div>
-	    			@if(!empty($user) && $item->id==$user->id)
-		    			<div class="about-content" role="editor" id="edit-descr-container" style="display: none; padding: 5px;">
-							{{ Form::open([
-								'class' => 'edit-description', 
-								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
-							]) }}
-								{!! csrf_field() !!}
-								<textarea class="input" name="description" id="dentist-description" placeholder="{!! nl2br(trans('trp.page.user.description-placeholder')) !!}">
-									{{ $item->description }}
-								</textarea>
-								<p class="symbols-wrapper"><span id="symbols-count">0</span> / max length 512</p>
-	                            <input type="hidden" name="field" value="description" />
-	                            <input type="hidden" name="json" value="1" />
-								<button type="submit" class="button skip-step">{!! nl2br(trans('trp.page.user.save')) !!}</button>
-								<div class="alert alert-warning" style="display: none;">
-								</div>
-							{!! Form::close() !!}
-		    			</div>
-	    			@endif
-				@endif
-				@if($item->photos->isNotEmpty() || (!empty($user) && $item->id==$user->id) )
-	       			<div class="gallery-slider {!! count($item->photos) > 2 ? 'with-arrows' : '' !!}">
-	    				<div class="gallery-flickity">
-			    			@if( (!empty($user) && $item->id==$user->id && $item->photos->count() < 10 ) )
-								<div class="slider-wrapper">
-									{{ Form::open([
-										'class' => 'gallery-add', 
-										'method' => 'post', 
-										'files' => true
-									]) }}
-										<label for="add-gallery-photo" class="add-gallery-image slider-image cover image-label dont-count" guided-action="photos">
-											<div class="plus-gallery-image">
-												<img src="{{ url('img/plus.svg') }}"/>
-												<span>{!! nl2br(trans('trp.page.user.reviews-image')) !!}</span>
-											</div>
-								    		<div class="loader">
-								    			<i></i>
-								    		</div>
-											<input type="file" name="image" id="add-gallery-photo" upload-url="{{ getLangUrl('profile/gallery') }}" sure-trans="{!! trans('trp.page.user.gallery-sure') !!}" accept="image/png,image/jpeg,image/jpg">
-										</label>
-									{!! Form::close() !!}
-								</div>			    				
-			    			@endif
-				            @foreach($item->photos as $photo)
-								<a href="{{ $photo->getImageUrl() }}" data-lightbox="user-gallery" class="slider-wrapper" photo-id="{{ $photo->id }}">
-									<div class="slider-image cover" style="background-image: url('{{ $photo->getImageUrl(true) }}')">
-										@if( (!empty($user) && $item->id==$user->id) )
-											<div class="delete-gallery delete-button" sure="{!! trans('trp.page.user.gallery-sure') !!}">
-												<img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
-											</div>
-										@endif
-									</div>
-								</a>
-							@endforeach
+		<a class="tab-title" data-tab="more-info" href="javascript:;">
+			More info
+		</a>
+	</div>
+</div>
+
+<div class="tab-sections">
+	<div class="container">
+
+		@if($showAboutSection)
+			<div class="tab-container" id="about">
+				<h2 class="mont">
+					About
+					{{-- {!! nl2br(trans('trp.page.user.about-who',[
+						'name' => $item->getNames()
+					])) !!} --}}
+				</h2>
+
+				<div class="tab-inner-section">
+					{{-- @if($item->top_dentist_month)
+						<div class="top-dentist">
+							<img src="{{ url('img-trp/top-dentist.png') }}">
+							<span>
+								{!! trans('trp.common.top-dentist') !!}: {{ $item->getLastTopDentistBadge() }}
+							</span>
 						</div>
-	    			</div>
-	    		@endif
-			</div>
-
-
-		    @if($item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty() ) )
-	    		<h2 class="black-left-line clearfix">
-	    			{!! nl2br(trans('trp.page.user.team')) !!}
-	    		</h2>
-
-	    		<div class="team-container {!! (!empty($user) && $item->id==$user->id ? count($item->team) : count($item->teamApproved)) + count($item->invites_team_unverified) > (!empty($user) && $item->id==$user->id ? 3 : 4) ? 'with-arrows' : '' !!}" {!! !empty($user) && $item->id==$user->id ? 'team-reorder-link="'.getLangUrl('reorder-teams').'"' : '' !!}>
-		    		<div class="flickity {{ !empty($user) && $item->id==$user->id && $item->team->isNotEmpty() && count($item->team) > 1 ? 'no-b-padding' : '' }}">
-		    			@if( (!empty($user) && $item->id==$user->id) )
-							<div class="slider-wrapper">
-								<a href="javascript:;" class="slider-image add-team-member dont-count" data-popup="add-team-popup" guided-action="team">
-									<div class="plus-team">
-										<img src="{{ url('img-trp/add-member.png') }}">
-										<span>
-											{!! nl2br(trans('trp.page.user.team-add')) !!}
-										</span>
-									</div>
+					@endif --}}
+					@if($item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id))
+						<h3>
+							Specialities
+						</h3>
+						<div class="specializations" role="presenter">
+							@foreach($item->categories as $specialization)
+								<span class="specialization">
+									{{ trans('trp.categories.'.config('categories.'.$specialization->category_id)) }}
+								</span>
+							@endforeach
+							{{-- <span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.specialty-empty')) }}">
+								{{ $item->categories->isNotEmpty() ? implode(', ', $item->parseCategories($categories)) : nl2br(trans('trp.page.user.specialty-empty')) }}
+							</span> --}}
+							@if(!empty($user) && $item->id==$user->id)
+								<a>
+									<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 								</a>
+							@endif
+						</div>
+						@if(!empty($user) && $item->id==$user->id)
+							<div class="specialization" role="editor" style="display: none;">
+								{{ Form::open([
+									'class' => 'edit-description', 
+									'method' => 'post', 
+									'url' => getLangUrl('profile/info') 
+								]) }}
+									{!! csrf_field() !!}
+									@foreach($categories as $k => $v)
+										<label class="checkbox-label {!! in_array($loop->index, $user->categories->pluck('category_id')->toArray()) ? 'active' : '' !!}" for="checkbox-{{ $k }}" >
+											<input type="checkbox" class="special-checkbox" id="checkbox-{{ $k }}" name="specialization[]" value="{{ $loop->index }}" {!! in_array($loop->index, $user->categories->pluck('category_id')->toArray()) ? 'checked="checked"' : '' !!}>
+											<div class="checkbox-square">✓</div>
+											{{ $v }}
+										</label>
+									@endforeach
+									<br/>
+									<input type="hidden" name="field" value="specialization" />
+									<input type="hidden" name="json" value="1" />
+									<button type="submit" class="button">
+										{!! nl2br(trans('trp.page.user.save')) !!}
+									</button>
+									<div class="alert alert-warning" style="display: none;">
+									</div>
+								{!! Form::close() !!}
 							</div>
 						@endif
-			        	@foreach( $item->teamApproved as $team)
-			        		@if($team->clinicTeam)
-								<a class="slider-wrapper approved-team {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : ($team->clinicTeam ? $team->clinicTeam->getLink() : 'javascript:;') }}" dentist-id="{{ $team->clinicTeam ? $team->clinicTeam->id : '' }}" {!! !empty($user) && $item->id==$user->id ? 'team-id="'.$team->id.'"' : '' !!}>
-									<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
-										@if( $team->clinicTeam->is_partner )
-											<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
-										@endif
-										@if( (!empty($user) && $item->id==$user->id) )
-											<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
-												<img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
-											</div>
-										@endif
+					@endif
+				</div>
+				
+				<div class="tab-inner-section">
+					@if($item->description || (!empty($user) && $item->id==$user->id) )
+						<h3>
+							Introduction
+						</h3>
+						<div class="about-content" role="presenter">
+							<span class="value-here description" empty-value="{{ nl2br(trans('trp.page.user.description-empty')) }}">
+								{!! $item->description ? nl2br($item->description) : nl2br(trans('trp.page.user.description-empty')) !!}
+							</span>
+							@if(!empty($user) && $item->id==$user->id)
+								<a class="dont-count guided-description" guided-action="description" style="padding: 10px; margin: -10px; margin-left: 0px;">
+									<img src="{{ url('img-trp/pencil.png') }}">
+								</a>
+							@endif
+						</div>
+						@if(!empty($user) && $item->id==$user->id)
+							<div class="about-content" role="editor" id="edit-descr-container" style="display: none; padding: 5px;">
+								{{ Form::open([
+									'class' => 'edit-description', 
+									'method' => 'post', 
+									'url' => getLangUrl('profile/info') 
+								]) }}
+									{!! csrf_field() !!}
+									<textarea class="input" name="description" id="dentist-description" placeholder="{!! nl2br(trans('trp.page.user.description-placeholder')) !!}">
+										{{ $item->description }}
+									</textarea>
+									<p class="symbols-wrapper"><span id="symbols-count">0</span> / max length 512</p>
+									<input type="hidden" name="field" value="description" />
+									<input type="hidden" name="json" value="1" />
+									<button type="submit" class="button skip-step">{!! nl2br(trans('trp.page.user.save')) !!}</button>
+									<div class="alert alert-warning" style="display: none;">
 									</div>
-								    <div class="slider-container">
-								    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
-									    <div class="ratings">
+								{!! Form::close() !!}
+							</div>
+						@endif
+					@endif
+					
+				</div>
+			</div>
+		@endif
+
+		@if($showTeamSection)
+			<div class="tab-container" id="team">
+				<h2 class="mont">
+					{!! nl2br(trans('trp.page.user.team')) !!} 
+					@if(!empty($user) && $item->id==$user->id)
+						<a class="edit-field-button">
+							<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>
+						</a>
+					@endif
+				</h2>
+
+				<div class="team-container">
+					@foreach( $item->teamApproved as $team)
+						@if($team->clinicTeam)
+							<a class="team approved-team" href="{{ !$team->clinicTeam || in_array($team->clinicTeam->status, ['dentist_no_email', 'added_new']) ? 'javascript:;' : $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
+								<div class="team-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
+									@if( (!empty($user) && $item->id==$user->id) )
+										<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
+											<img class="close-icon" src="{{ url('img-trp/close-icon-blue.png') }}"/>
+										</div>
+									@endif
+								</div>
+								<div class="team-info">
+									<h4>{{ $team->clinicTeam->getNames() }}</h4>
+									<p>{!! trans('trp.team-jobs.dentist') !!}</p>
+									<div class="ratings">
+										<div class="stars">
+											<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;"></div>
+										</div>
+										<span class="rating">
+											({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
+										</span>
+									</div>
+								</div>
+							</a>
+						@endif
+					@endforeach
+
+					@if($hasNotVerifiedTeamFromInvitation)
+						@foreach( $item->notVerifiedTeamFromInvitation as $invite)
+							<a class="team" href="javascript:;" invite-id="{{ $invite->id }}">
+								<div class="team-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
+									@if( (!empty($user) && $item->id==$user->id) )
+										<div class="delete-invite" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
+											<img class="close-icon" src="{{ url('img-trp/close-icon-blue.png') }}"/>
+										</div>
+									@endif
+								</div>
+								<div class="team-info">
+									{{-- ???????????????????????????????? --}}
+									{{-- @if(empty($invite->job))
+										<div class="not-verified">{!! nl2br(trans('trp.page.user.team-not-verified')) !!}</div>
+									@endif --}}
+									<h4>{{ $invite->invited_name }}</h4>
+									@if(empty($invite->job))
+										<p>{!! trans('trp.team-jobs.dentist') !!}</p>
+										<div class="ratings">
+											<div class="stars">
+												<div class="bar" style="width: 0%;">
+												</div>
+											</div>
+											<span class="rating">
+												({{ trans('trp.common.reviews-count', [ 'count' => '0']) }})
+											</span>
+										</div>
+									@else
+										<p>{!! trans('trp.team-jobs.'.$invite->job) !!}</p>
+									@endif
+								</div>
+							</a>
+						@endforeach
+					@endif
+
+					@if(!empty($user) && $item->id==$user->id)
+						@foreach( $item->teamUnapproved as $team)
+							@if($team->clinicTeam)
+								<a class="team pending" href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
+									<div class="team-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')"></div>
+									<div class="team-info">
+										<h4>{{ $team->clinicTeam->getNames() }}</h4>
+										<p>{!! trans('trp.team-jobs.dentist') !!}</p>
+										<div class="ratings">
 											<div class="stars">
 												<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
 												</div>
@@ -871,294 +1204,649 @@
 												({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
 											</span>
 										</div>
-										<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
-								    </div>
-								    @if($team->clinicTeam->status != 'dentist_no_email' && $team->clinicTeam->status != 'added_new')
-								    	<div class="flickity-buttons clearfix">
-								    		<div>
-								    			{!! nl2br(trans('trp.common.see-profile')) !!}
-								    		</div>
-								    		<div href="{{ $team->clinicTeam->getLink().'?popup-loged=submit-review-popup' }}">
-								    			{!! nl2br(trans('trp.common.submit-review')) !!}
-								    		</div>
-								    	</div>
-								    @endif
+										<div class="action-buttons flex">
+											<div class="accept-button" action="{{ getLangUrl('profile/dentists/accept/'.($team->clinicTeam->id)) }}">
+												{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
+											</div>
+											<div class="reject-button" 
+											action="{{ getLangUrl('profile/dentists/reject/'.($team->clinicTeam->id)) }}" 
+											sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
+												{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
+											</div>
+										</div>
+									</div>
 								</a>
 							@endif
 						@endforeach
-
-						@if($item->invites_team_unverified->isNotEmpty())
-				        	@foreach( $item->invites_team_unverified as $invite)
-								<a class="slider-wrapper no-upper" href="javascript:;" invite-id="{{ $invite->id }}">
-									<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
-										@if( (!empty($user) && $item->id==$user->id) )
-											<div class="delete-invite delete-button" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
-												<img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
-											</div>
-										@endif
-									</div>
-								    <div class="slider-container">
-								    	@if(empty($invite->job))
-								    		<div class="not-verified">{!! nl2br(trans('trp.page.user.team-not-verified')) !!}</div>
-								    	@endif
-								    	<h4>{{ $invite->invited_name }}</h4>
-								    	@if(empty($invite->job))
-										    <div class="ratings">
-												<div class="stars">
-													<div class="bar" style="width: 0%;">
-													</div>
-												</div>
-												<span class="rating">
-													({{ trans('trp.common.reviews-count', [ 'count' => '0']) }})
-												</span>
-											</div>
-											<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
-										@else
-											<p style="margin-top: 18px;color: #0fb0e5;">{!! trans('trp.team-jobs.'.$invite->job) !!}</p>
-										@endif
-								    </div>
-							    	<div class="flickity-buttons clearfix">
-							    	</div>
-								</a>
-							@endforeach
-						@endif
-
-						@if(!empty($user) && $item->id==$user->id)
-							@foreach( $item->teamUnapproved as $team)
-								@if($team->clinicTeam)
-									<a class="slider-wrapper pending " href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
-										<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
-											@if( $team->clinicTeam->is_partner )
-												<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
-											@endif
-										</div>
-									    <div class="slider-container">
-									    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
-										    <div class="ratings">
-												<div class="stars">
-													<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
-													</div>
-												</div>
-												<span class="rating">
-													({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
-												</span>
-											</div>
-											<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
-								    		<div class="approve-buttons clearfix">
-									    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.($team->clinicTeam->id)) }}">
-									    			{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
-									    		</div>
-									    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.($team->clinicTeam->id)) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
-									    			{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
-									    		</div>
-									    	</div>
-									    </div>
-								    	<div class="flickity-buttons clearfix">
-								    		<div>
-								    			{!! nl2br(trans('trp.common.see-profile')) !!}
-								    		</div>
-								    		<div href="{{ $team->clinicTeam->getLink().'?popup-loged=submit-review-popup'}}">
-								    			{!! nl2br(trans('trp.common.submit-review')) !!}
-								    		</div>
-								    	</div>
-									</a>
-								@endif
-							@endforeach
-						@endif
-					</div>
-				</div>
-
-    			@if(!empty($user) && $item->id==$user->id && $item->team->isNotEmpty() && count($item->team) > 1)
-    				<a href="javascript:;" class="rearrange-team button" done-text="{!! trans('trp.page.user.rearrange-team-done') !!}" rearrange-text="{!! trans('trp.page.user.rearrange-team') !!}">{!! trans('trp.page.user.rearrange-team') !!}</a>
-    			@endif
-		    @endif
-
-		    @if( ($item->lat && $item->lon) || ( !empty($user) && $user->id==$item->id) )
-				<h2 class="black-left-line">
-					{!! nl2br(trans('trp.page.user.how-to-find')) !!}
+					@endif
 					
+					@if( (!empty($user) && $item->id==$user->id) )
+						<a href="javascript:;" class="team add-team-member dont-count" guided-action="team">
+							@if(false)
+							{{-- data-popup="add-team-popup" --}}
+							@endif
+							<div class="disabled-prop">
+								<div class="team-image" style="background-image: url('{{ url('img-trp/add-icon.png') }}')"></div>
+								<div class="team-info">
+									<span class="add-team-text">Add team member</span>
+								</div>
+							</div>
+							<span class="comming-soon">
+								Coming soon...
+							</span>
+						</a>
+					@endif
+				</div>
+			</div>
+		@endif
+		
+		@if($regularReviewsCount || $videoReviewsCount )
+			<div class="tab-container" id="reviews">
+
+				<h2 class="mont">
+					{!! nl2br(trans('trp.page.user.reviews')) !!}
 				</h2>
 
-				@if( ($item->lat && $item->lon) )
-					@if($click_on_map)
-						<div class="info-address">
-							<img src="{{ url('img-trp/map-pin-active.png') }}">{{ $item->address }}, {{ $item->country->name }}
+				<div class="reviews-type-buttons">
+					@if($regularReviewsCount)
+						<a href="javascript:;" class="show-written-reviews active">
+							Written reviews
+						</a>
+					@endif
+					@if($videoReviewsCount)
+						<a href="javascript:;" class="show-video-reviews {{ !$regularReviewsCount ? 'active' : '' }}">
+							Video reviews
+						</a>
+					@endif
+				</div>
+
+				<div class="written-reviews-wrapper">
+					<div class="aggregated-rating-wrapper flex">
+						<div class="col">
+							<div class="rating mont">
+								{{ number_format($item->avg_rating, 1) }}
+							</div>
+							<div class="ratings big">
+								<div class="stars">
+									<div class="bar" style="width: {{ $item->avg_rating/5*100 }}%;">
+									</div>
+								</div>
+							</div>
+							<div class="reviews-count">
+								({{ trans('trp.common.reviews-count', [ 'count' => intval($item->ratings)]) }})
+							</div>
+						</div>
+						<div class="flex">
+							@foreach($aggregatedRating as $ratingLabel => $agg_rating)
+								<div class="overview-column">
+									<p>
+										{{-- @if(!$answer)
+											<img src="{{ url('img-trp/info-dark-gray.png') }}" class="tooltip-text" text="new"/>
+										@endif --}}
+										{{ $ratingLabel }}
+									</p>
+									<div class="ratings average">
+										{{-- <div class="stars {{ $answer ? '' : 'new' }}"> --}}
+										<div class="stars">
+											{{-- @if($answer) --}}
+												<div class="bar" style="width: {{ $agg_rating / 5 * 100 }}%;"></div>
+											{{-- @else
+												<div class="bar new" style="width: 0%;"></div>
+											@endif --}}
+										</div>
+									</div>
+								</div>
+							@endforeach
+						</div>
+					</div>
+
+					<div class="reviews-filter regular-review-tab">
+						<span>Filter by: </span>
+						<span href="javascript:;" class="filter">
+							<span class="label">Newest</span>
+							<div class="caret-down"></div>
+						
+							<div class="filter-options">
+								<label class="checkbox-label active" for="filter-newest">
+									<input type="radio" class="special-checkbox filter-type" name="filter" id="filter-newest" value="newest" checked="checked" label="Newest">
+									<div class="checkbox-square">✓</div>
+									Newest
+								</label>
+								<label class="checkbox-label" for="filter-oldest">
+									<input type="radio" class="special-checkbox filter-type" name="filter" id="filter-oldest" value="oldest" label="Oldest">
+									<div class="checkbox-square">✓</div>
+									Oldest
+								</label>
+								<label class="checkbox-label" for="filter-highest">
+									<input type="radio" class="special-checkbox filter-type" name="filter" id="filter-highest" value="highest" label="Highest rated">
+									<div class="checkbox-square">✓</div>
+									Highest rated
+								</label>
+								<label class="checkbox-label" for="filter-lowest">
+									<input type="radio" class="special-checkbox filter-type" name="filter" id="filter-lowest" value="lowest" label="Lowest rated">
+									<div class="checkbox-square">✓</div>
+									Lowest rated
+								</label>
+							</div>
+						</span>
+						<span href="javascript:;" class="filter">
+							<span class="label">All reviews</span>
+							<div class="caret-down"></div>
+						
+							<div class="filter-options">
+								<label class="checkbox-label active" for="type-all">
+									<input type="radio" class="special-checkbox filter-type" name="type" id="type-all" value="all" checked="checked" label="All reviews">
+									<div class="checkbox-square">✓</div>
+									All reviews
+								</label>
+								<label class="checkbox-label" for="type-trusted">
+									<input type="radio" class="special-checkbox filter-type" name="type" id="type-trusted" value="trusted" label="Trusted reviews">
+									<div class="checkbox-square">✓</div>
+									Trusted reviews
+								</label>
+							</div>
+						</span>
+						<div class="search-reviews-wrapper">
+							<img src="{{ url('img-trp/black-search.svg') }}" width="17" height="18">
+							<input type="text" name="search-review" id="search-review" placeholder="Quick search">
+						</div>
+
+						<p class="reviews-count">
+							{{ $item->ratings }} reviews
+						</p>
+					</div>
+
+					{{-- <div id="append-section-reviews"></div> --}}
+
+					@if($regularReviewsCount)
+						<div class="written-reviews regular-review-tab">
+							@foreach($item->reviews_in_standard() as $review)
+								@if($review->user)
+									@include('trp.parts.reviews', [
+										'review' => $review,
+										'hidden' => $loop->iteration > 10,
+										'is_dentist' => true,
+										'for_profile' => false,
+										'current_dentist' => $review->getDentist($item),
+									])
+
+									@if($loop->iteration == 10 && $regularReviewsCount>10)
+										<a href="javascript:;" class="show-more-reviews">
+											SHOW 10 more reviews
+										</a>
+									@endif
+								@endif
+							@endforeach
 						</div>
 					@endif
-					<div class="map-container" id="profile-map" lat="{{ $item->lat }}" lon="{{ $item->lon }}">
-						<img class="fake-map" src="{{ url('img-trp/not-loaded-map.png') }}">
-						<img class="fake-map mobile-map" src="{{ url('img-trp/not-loaded-map-mobile.png') }}">
+
+					@if($videoReviewsCount)
+						<div class="video-reviews video-review-tab {{ $videoReviewsCount > 2 ? 'video-reviews-flickity' : 'video-reviews-flex' }}" {!! $regularReviewsCount ? 'style="display:none;"' : '' !!}>
+							@foreach($item->reviews_in_video() as $review)
+								@if($review->user)
+									@include('trp.parts.reviews', [
+										'review' => $review,
+										'video' => true,
+										'hidden' => $loop->iteration > 10,
+										'is_dentist' => true,
+										'for_profile' => false,
+										'current_dentist' => $review->getDentist($item),
+									])
+								@endif
+							@endforeach
+						</div>
+					@endif
+
+					<div class="alert alert-info" id="no-reviews">Sorry, we couldn't find any reviews containing your search query.</div>
+				</div>
+			</div>
+		@endif
+		
+		@if( $showLocationsSection )
+			<div class="tab-container" id="locations">
+				<h2 class="mont">
+					Locations
+					{{-- {!! nl2br(trans('trp.page.user.about-who',[
+						'name' => $item->getNames()
+					])) !!} --}}
+
+					@if(!empty($user) && $item->id==$user->id)
+						<a class="edit-field-button" data-popup-logged="popup-wokring-time">
+							<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>
+						</a>
+					@endif
+				</h2>
+								
+
+				<div class="tab-inner-section location-section">
+					<div class="col">
+						@if( ($item->lat && $item->lon) )
+							<p class="map-address">{{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }}</p>
+							<div class="map-container" id="profile-map" lat="{{ $item->lat }}" lon="{{ $item->lon }}"></div>
+						@elseif(!empty($user) && $user->id==$item->id)
+							<div class="alert alert-info">
+								{!! nl2br(trans('trp.page.user.map-missing', [
+									'link' => '<a href="javascript:;" class="open-edit alert-edit">',
+									'endlink' => '</a>',
+								])) !!}
+							</div>
+						@endif
 					</div>
-				@else
-					<div class="alert alert-info">
-						{!! nl2br(trans('trp.page.user.map-missing', [
-							'link' => '<a href="javascript:;" class="open-edit alert-edit">',
-							'endlink' => '</a>',
-						])) !!}
-						
+					@if($item->photos->isNotEmpty() || (!empty($user) && $item->id==$user->id) )
+						<div class="gallery-slider col {!! count($item->photos) > 1 ? 'with-arrows' : '' !!}">
+							<div class="gallery-flickity">
+								{{-- @if( (!empty($user) && $item->id==$user->id && $item->photos->count() < 10 ) )
+									<div class="slider-wrapper">
+										{{ Form::open([
+											'class' => 'gallery-add', 
+											'method' => 'post', 
+											'files' => true
+										]) }}
+											<label for="add-gallery-photo" class="add-gallery-image slider-image cover image-label dont-count" guided-action="photos">
+												<div class="plus-gallery-image">
+													<img src="{{ url('img/plus.svg') }}"/>
+													<span>{!! nl2br(trans('trp.page.user.reviews-image')) !!}</span>
+												</div>
+												<div class="loader">
+													<i></i>
+												</div>
+												<input type="file" name="image" id="add-gallery-photo" upload-url="{{ getLangUrl('profile/gallery') }}" sure-trans="{!! trans('trp.page.user.gallery-sure') !!}" accept="image/png,image/jpeg,image/jpg">
+											</label>
+										{!! Form::close() !!}
+									</div>			    				
+								@endif --}}
+								@foreach($item->photos as $photo)
+									<a href="{{ $photo->getImageUrl() }}" data-lightbox="user-gallery" class="slider-wrapper" photo-id="{{ $photo->id }}">
+										<div class="slider-image cover" style="background-image: url('{{ $photo->getImageUrl(true) }}')">
+											@if( (!empty($user) && $item->id==$user->id) )
+												<div class="delete-gallery delete-button" sure="{!! trans('trp.page.user.gallery-sure') !!}">
+													<img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
+												</div>
+											@endif
+										</div>
+									</a>
+								@endforeach
+							</div>
+						</div>
+					@endif
+				</div>
+
+				@if($workingTime)
+					<div class="tab-inner-section">
+						<h3>Open hours</h3>
+
+						<div class="flex work-hours">
+							@foreach($week_days as $w => $week_day)
+								<div class="col {{ date('w') == $w ? 'active' : '' }}">
+									<p class="month">
+										{{ $week_day }}
+									</p>
+
+									@if( (!empty($user) && $item->id==$user->id) )
+										<div class="edit-working-hours-wrap">
+											{{ Form::select( 
+												'work_hours['.$w.'][0][0]', 
+												$hours,
+												!empty($user->work_hours[$w][0]) ? explode(':', $user->work_hours[$w][0])[0] : '' , 
+												array(
+													'class' => !empty($user->work_hours[$w]) ? 'input' : 'input grayed', 
+													'placeholder' => 'HH',
+												) 
+											) }}
+											{{ Form::select( 
+												'work_hours['.$w.'][0][1]', 
+												$minutes,
+												!empty($user->work_hours[$w][0]) ? explode(':', $user->work_hours[$w][0])[1] : '' , 
+												array(
+													'class' => !empty($user->work_hours[$w]) ? 'input' : 'input grayed', 
+													'placeholder' => 'MM',
+												) 
+											) }}
+											{{ Form::select( 
+												'work_hours['.$w.'][1][0]', 
+												$hours,
+												!empty($user->work_hours[$w][1]) ? explode(':', $user->work_hours[$w][1])[0] : '' , 
+												array(
+													'class' => !empty($user->work_hours[$w]) ? 'input' : 'input grayed', 
+													'placeholder' => 'HH',
+												) 
+											) }}
+											{{ Form::select( 
+												'work_hours['.$w.'][1][1]', 
+												$minutes,
+												!empty($user->work_hours[$w][1]) ? explode(':', $user->work_hours[$w][1])[1] : '' , 
+												array(
+													'class' => !empty($user->work_hours[$w]) ? 'input' : 'input grayed', 
+													'placeholder' => 'MM',
+												) 
+											) }}
+
+										</div>
+
+										<label class="checkbox-label" for="day-{{ $w }}"> 
+											{{ Form::checkbox( 'day-'.$w, 1, '', array( 'id' => 'day-'.$w, 'class' => 'special-checkbox work-hour-cb', !empty($user->work_hours[$w]) ? 'checked' : 'something' => 'checked' ) ) }}
+											<div class="checkbox-square">✓</div>
+											Closed
+										</label>
+
+										@if($w == 1)
+											<label class="checkbox-label" for="all-days-equal" style="display: none;"> 
+												{{ Form::checkbox( 'all-days-equal', 1, '', array( 'id' => 'all-days-equal', 'class' => 'special-checkbox all-days-equal') ) }}
+												<div class="checkbox-square">✓</div>
+												{{-- {!! nl2br(trans('trp.popup.popup-wokring-time.user-same-hours')) !!} --}}
+												Apply to all
+											</label>
+										@endif
+									@else
+										@if(array_key_exists($w, $item->work_hours))
+											<p>
+												@foreach($item->work_hours[$w] as $k => $work_hours)
+													{{ $work_hours }}h {!! $loop->last ? '' : ' - ' !!}
+												@endforeach
+											</p>
+										@else
+											<p>Closed</p>
+										@endif
+									@endif
+								</div>
+							@endforeach
+						</div>
+
+						@if( (!empty($user) && $item->id==$user->id) )
+							<input type="hidden" name="json" value="1" />
+							<input type="hidden" name="field" value="work_hours" />
+						@endif
 					</div>
 				@endif
-			@endif
+				
+				@if(!empty($item->accepted_payment) || (!empty($user) && $item->id==$user->id))
+					<div class="tab-inner-section">
+						<h3>Payment methods</h3>
+
+						<div class="dentist-payments" role="presenter">
+							
+							<div class="flex">
+								@foreach($item->accepted_payment as $acceptedPayment)
+									<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.accepted-payment-empty')) }}">
+										<img src="{{ url('img-trp/payment-methods/'.$acceptedPayment.'.svg') }}"/>
+										{{ trans('trp.accepted-payments.'.$acceptedPayment) }}
+									</span>
+								@endforeach
+								{{-- {{ $item->accepted_payment ? $item->parseAcceptedPayment( $item->accepted_payment ) : nl2br(trans('trp.page.user.accepted-payment-empty')) }} --}}
+							</div>
+							@if(!empty($user) && $item->id==$user->id)
+								<a>
+									<img src="{{ url('img-trp/pencil.png') }}">
+								</a>
+							@endif
+						</div>
+						{{-- @if(!empty($user) && $item->id==$user->id)
+							<div class="dentist-payments" role="editor" style="display: none;">
+								{{ Form::open([
+									'class' => 'edit-description', 
+									'method' => 'post', 
+									'url' => getLangUrl('profile/info') 
+								]) }}
+									{!! csrf_field() !!}
+									@foreach(config('trp.accepted_payment') as $ap)
+										<label class="checkbox-label {!! in_array($ap, $user->accepted_payment) ? 'active' : '' !!}" for="checkbox-{{ $ap }}" >
+											<input type="checkbox" class="special-checkbox" id="checkbox-{{ $ap }}" name="accepted_payment[]" value="{{ $ap }}" {!! in_array($ap, $user->accepted_payment) ? 'checked="checked"' : '' !!}>
+											<div class="checkbox-square">✓</div>
+											{!! trans('trp.accepted-payments.'.$ap) !!}
+										</label>
+									@endforeach
+									<br/>
+									<input type="hidden" name="field" value="accepted_payment" />
+									<input type="hidden" name="json" value="1" />
+									<button type="submit" class="button">
+										{!! nl2br(trans('trp.page.user.save')) !!}
+									</button>
+									<div class="alert alert-warning" style="display: none;">
+									</div>
+								{!! Form::close() !!}
+							</div>
+						@endif --}}
+					</div>
+				@endif
+			</div>
+		@endif
+
+		<div class="tab-container" id="more-info">
+			<h2 class="mont">
+				More info
+				{{-- {!! nl2br(trans('trp.page.user.about-who',[
+					'name' => $item->getNames()
+				])) !!} --}}
+			</h2>
+
+			<div class="tab-inner-section">
+				<h3>
+					Education and background
+				</h3>
+
+				<div class="education-wrapper">
+					•&nbsp;&nbsp;&nbsp;Medical School - Universidad Autónoma de Guadalajara Facultad de Medicina Guadalajara <br/>
+					•&nbsp;&nbsp;&nbsp;New York Medical College, Doctor of Medicine <br/>
+					•&nbsp;&nbsp;&nbsp;Icahn School of Medicine at Mount Sinai (Residency)
+				</div>
+			</div>
+
+			<div class="tab-inner-section flex">
+				<div>
+					<h3>
+						Experience
+					</h3>
+
+					<span class="bubble">
+						Less than 5 years
+					</span>
+				</div>
+				<div class="laguages-wrapper">
+					<h3>
+						Languages spoken <img src="{{ url('img-trp/info-dark-gray.png') }}" class="tooltip-text" text="Languages spoken in the dental practice."/>
+					</h3>
+
+					<span class="bubble">
+						English
+					</span>
+					<span class="bubble">
+						Spanish
+					</span>
+				</div>
+			</div>
 		</div>
 
-		@if(!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty()))
-			<div class="tab-container" id="asks">
+		{{-- <div class="tab-inner-section">
+			@if(!empty($user) && $user->id==$item->id && ($hasPatientInvites || $hasPatientAsks))
+				<div class="tab-container" id="asks">
 
-				@if($user->asks->isNotEmpty())
-		    		<h2 class="black-left-line section-title">
-		    			{!! nl2br(trans('trp.page.user.patient-requests')) !!} ({{ $user->asks->count() }})
-		    		</h2>
+					@if($hasPatientAsks)
+						<h2 class="mont">
+							{!! nl2br(trans('trp.page.user.patient-requests')) !!} ({{ $user->asks->count() }})
+						</h2>
 
-		    		<div class="asks-container">
+						<div class="asks-container">
 
-			        	<table class="table paging" num-paging="5">
-		            		<thead>
-		            			<tr>
-			            			<th style="width: 20%;">
-			            				{{ trans('trp.page.profile.asks.list-date') }}
-			            			</th>
-			            			<th style="width: 20%;">
-			            				{{ trans('trp.page.profile.asks.list-name') }}
-			            			</th>
-			            			<th style="width: 30%;">
-			            				{{ trans('trp.page.profile.asks.list-email') }}
-			            			</th>
-			            			<th style="width: 20%;">
-			            				{{ trans('trp.page.profile.asks.list-note') }}
-			            			</th>
-			            			<th style="width: 10%;">
-			            				{{ trans('trp.page.profile.asks.list-status') }}
-			            			</th>
-		            			</tr>
-		            		</thead>
-		            		<tbody>
-		            			@foreach( $user->asks->sortBy(function ($elm, $key) {
-								    return $elm['status']=='waiting' ? -1 : 1;
-								}) as $ask )
+							<table class="table paging" num-paging="5">
+								<thead>
+									<tr>
+										<th style="width: 20%;">
+											{{ trans('trp.page.profile.asks.list-date') }}
+										</th>
+										<th style="width: 20%;">
+											{{ trans('trp.page.profile.asks.list-name') }}
+										</th>
+										<th style="width: 30%;">
+											{{ trans('trp.page.profile.asks.list-email') }}
+										</th>
+										<th style="width: 20%;">
+											{{ trans('trp.page.profile.asks.list-note') }}
+										</th>
+										<th style="width: 10%;">
+											{{ trans('trp.page.profile.asks.list-status') }}
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach( $user->asks->sortBy(function ($elm, $key) {
+										return $elm['status']=='waiting' ? -1 : 1;
+									}) as $ask )
 
-									@if(!$ask->hidden && $ask->user)
-										<tr>
-											<td>
-												{{ $ask->created_at->toDateString() }}
-											</td>
-											<td>
-												{{ $ask->user ? $ask->user->name : "deleted user" }}
-											</td>
-											<td>
-												{{ $ask->user? $ask->user->email : 'deleted user' }}
-											</td>
-											<td>
-												@php
-													$askReview = \App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first();	
-												@endphp
-												@if(!empty($ask->review_id) || ($ask->on_review && !empty($ask->user) && !empty($askReview)))
-													<a review-id="{{ !empty($ask->review_id) ? $ask->review_id : $askReview->id }}" href="javascript:;" class="show-review">
-														See review
-													</a>
-												@else
-													Invite Request
-												@endif
-											</td>
-											<td>
-												@if($ask->status=='waiting')
-													<a class="btn btn-primary compact" href="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
-														<img src="{{ url('img/thumbs-up.svg') }}"/>
-														{{ trans('trp.page.profile.asks.accept') }}
-													</a>
-													<a class="btn btn-inactive compact" href="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
-														<img src="{{ url('img/thumbs-down.svg') }}"/>
-														{{ trans('trp.page.profile.asks.deny') }}
-													</a>
-												@else
-													<span class="label label-{{ $ask->status=='yes' ? 'success' : 'warning' }}">
-														{{ trans('trp.page.profile.asks.status-'.$ask->status) }}
-													</span>
-												@endif
-											</td>
-										</tr>
-									@endif
-		            			@endforeach
-		            		</tbody>
-		            	</table>
-					</div>
-				@endif
-
-				@if($user->patients_invites->isNotEmpty())
-		    		<h2 class="black-left-line section-title">
-		    			{!! nl2br(trans('trp.page.user.review-invitation')) !!} ({{ $user->patients_invites->count() }})
-		    		</h2>
-
-		    		<div class="asks-container">
-
-			        	<table class="table paging" num-paging="10">
-			        		<thead>
-			        			<tr>
-			            			<th style="width: 20%;">
-			            				{{ trans('trp.page.profile.invite.list-date') }}
-			            			</th>
-			            			<th style="width: 20%;">
-			            				{{ trans('trp.page.profile.invite.list-name') }}
-			            			</th>
-			            			<th style="width: 50%;">
-			            				{{ trans('trp.page.profile.invite.list-email') }}
-			            			</th>
-			            			<th style="width: 10%;">
-			            				{{ trans('trp.page.profile.invite.list-status') }}
-			            			</th>
-			        			</tr>
-			        		</thead>
-			        		<tbody>
-			        			@foreach( $user->patients_invites as $inv )
-									@if(!$inv->hidden)
-										<tr>
-											<td>
-												{{ $inv->created_at->toDateString() }}
-											</td>
-											<td>
-												{{ $inv->invited_name }}
-											</td>
-											<td>
-												{{ $inv->invited_email }}
-											</td>
-											<td>
-												@if($inv->invited_id)
-
-													@if(!empty($inv->hasReview($user->id)))
-														@if(!empty($inv->dentistInviteAgain($user->id)))
-															<a href="javascript:;" class="button invite-again" data-href="{{ getLangUrl('invite-patient-again') }}" inv-id="{{ $inv->id }}">{{ trans('trp.page.profile.invite.invite-again') }}</a><br>
-														@endif
-														<a review-id="{{ $inv->hasReview($user->id)->id }}" href="javascript:;" class="ask-review button">
-															{{ trans('trp.page.profile.invite.status-review') }}
+										@if(!$ask->hidden && $ask->user)
+											<tr>
+												<td>
+													{{ $ask->created_at->toDateString() }}
+												</td>
+												<td>
+													{{ $ask->user ? $ask->user->name : "deleted user" }}
+												</td>
+												<td>
+													{{ $ask->user? $ask->user->email : 'deleted user' }}
+												</td>
+												<td>
+													@php
+														$askReview = \App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first();	
+													@endphp
+													@if(!empty($ask->review_id) || ($ask->on_review && !empty($ask->user) && !empty($askReview)))
+														<a review-id="{{ !empty($ask->review_id) ? $ask->review_id : $askReview->id }}" href="javascript:;" class="show-review">
+															See review
 														</a>
+													@else
+														Invite Request
+													@endif
+												</td>
+												<td>
+													@if($ask->status=='waiting')
+														<a class="btn btn-primary compact" href="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
+															<img src="{{ url('img/thumbs-up.svg') }}"/>
+															{{ trans('trp.page.profile.asks.accept') }}
+														</a>
+														<a class="btn btn-inactive compact" href="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
+															<img src="{{ url('img/thumbs-down.svg') }}"/>
+															{{ trans('trp.page.profile.asks.deny') }}
+														</a>
+													@else
+														<span class="label label-{{ $ask->status=='yes' ? 'success' : 'warning' }}">
+															{{ trans('trp.page.profile.asks.status-'.$ask->status) }}
+														</span>
+													@endif
+												</td>
+											</tr>
+										@endif
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+					@endif
+
+					@if($hasPatientInvites)
+						<h2 class="black-left-line section-title">
+							{!! nl2br(trans('trp.page.user.review-invitation')) !!} ({{ $user->patients_invites->count() }})
+						</h2>
+
+						<div class="asks-container">
+
+							<table class="table paging" num-paging="10">
+								<thead>
+									<tr>
+										<th style="width: 20%;">
+											{{ trans('trp.page.profile.invite.list-date') }}
+										</th>
+										<th style="width: 20%;">
+											{{ trans('trp.page.profile.invite.list-name') }}
+										</th>
+										<th style="width: 50%;">
+											{{ trans('trp.page.profile.invite.list-email') }}
+										</th>
+										<th style="width: 10%;">
+											{{ trans('trp.page.profile.invite.list-status') }}
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach( $user->patients_invites as $inv )
+										@if(!$inv->hidden)
+											<tr>
+												<td>
+													{{ $inv->created_at->toDateString() }}
+												</td>
+												<td>
+													{{ $inv->invited_name }}
+												</td>
+												<td>
+													{{ $inv->invited_email }}
+												</td>
+												<td>
+													@if($inv->invited_id)
+
+														@if(!empty($inv->hasReview($user->id)))
+															@if(!empty($inv->dentistInviteAgain($user->id)))
+																<a href="javascript:;" class="button invite-again" data-href="{{ getLangUrl('invite-patient-again') }}" inv-id="{{ $inv->id }}">{{ trans('trp.page.profile.invite.invite-again') }}</a><br>
+															@endif
+															<a review-id="{{ $inv->hasReview($user->id)->id }}" href="javascript:;" class="ask-review button">
+																{{ trans('trp.page.profile.invite.status-review') }}
+															</a>
+														@else
+															<span class="label label-warning">
+																{{ trans('trp.page.profile.invite.status-no-review') }}
+															</span>
+														@endif
 													@else
 														<span class="label label-warning">
 															{{ trans('trp.page.profile.invite.status-no-review') }}
 														</span>
 													@endif
-												@else
-													<span class="label label-warning">
-														{{ trans('trp.page.profile.invite.status-no-review') }}
-													</span>
-												@endif
-											</td>
-										</tr>
-									@endif
-			        			@endforeach
-			        		</tbody>
-			        	</table>
-	    			</div>
-				@endif
+												</td>
+											</tr>
+										@endif
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+					@endif
+				</div>
+			@endif
+		</div> --}}
+
+		<div class="tab-container">
+			<h2 class="mont">
+				Highlights
+			</h2>
+
+			<div class="tab-inner-section flex hightlights-wrapper">
+
+				<a href="javascript:;" class="hightlight">
+					<div class="hightlight-image">
+						<img src="{{ url('img-trp/dentacoin-trusted-reviews-dentist-front-page.png') }}"/>
+					</div>
+					<p>Top Dentists of The Year 2021</p>
+				</a>
+
+				<a href="javascript:;" class="hightlight">
+					<div class="hightlight-image">
+						<img src="{{ url('img-trp/index-dentist-mobile.jpg') }}"/>
+					</div>
+					<p>Advance Dental Care & Implant Centre Joins Dentacoin Network!</p>
+				</a>
+
+				<a href="javascript:;" class="hightlight">
+					<div class="hightlight-image">
+						<img src="{{ url('img-trp/dentacoin-trusted-reviews-dentist-front-page.png') }}"/>
+					</div>
+					<p>Top Dentist with a Mission: Dr. Saif Siddiqui</p>
+				</a>
 			</div>
-		@endif
+		</div>
+
+		<input type="hidden" name="cur_dent_id" id="cur_dent_id" value="{{ $item->id }}">
 	</div>
-	<input type="hidden" name="cur_dent_id" id="cur_dent_id" value="{{ $item->id }}">
 </div>
 
-@if(!empty($user) && $item->id==$user->id)
+{{-- @if(!empty($user) && $item->id==$user->id)
 	<div class="strength-parent fixed">
 		@include('trp.parts.strength-scale')
 	</div>
-@endif
+@endif --}}
 
 @if(!empty($user))
 
@@ -1167,24 +1855,23 @@
 		@include('trp.popups.widget')
 		@include('trp.popups.invite')
 		@include('trp.popups.working-time')
-		@if(!empty(session('first_guided_tour')) || !empty(session('reviews_guided_tour')))
+		{{-- @if(!empty(session('first_guided_tour')) || !empty(session('reviews_guided_tour')))
 			@include('trp.popups.first-guided-tour')
-		@endif
+		@endif --}}
 		@if( $user->is_clinic )
-			@include('trp.popups.add-member')
+			{{-- @include('trp.popups.add-member') --}}
 		@else
-			@include('trp.popups.workplace')
+			{{-- @include('trp.popups.workplace') --}}
 		@endif
 	@else
 		@if(!empty($writes_review))
 			@include('trp.popups.recommend-dentist')
 		@endif
-		@include('trp.popups.submit-review')
 		@if(empty($is_trusted) && !$has_asked_dentist)
 			@include('trp.popups.ask-dentist')
 		@endif
 		@if(!$user->is_dentist)
-			@include('trp.popups.social-profile')
+			@include('trp.popups.submit-review')
 		@endif
 	@endif
 @elseif(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
@@ -1192,7 +1879,7 @@
 @endif
 @include('trp.popups.detailed-review')
 
-<div class="popup fixed-popup first-guided-tour-done-popup tour-popup" id="first-guided-tour-done">
+{{-- <div class="popup fixed-popup first-guided-tour-done-popup tour-popup" id="first-guided-tour-done">
 	<div class="popup-inner-tour tac">
 
 		<h2>{{ trans('trp.guided-tour.well-done') }}</h2>
@@ -1203,18 +1890,14 @@
 			</a>
 		</div>
 	</div>
-</div>
+</div> --}}
 
 <script type="application/ld+json">
 	{!! json_encode($schema, JSON_UNESCAPED_SLASHES) !!}
 </script>
 
 <script type="text/javascript">
-	var aggregated_reviews = {!! json_encode($aggregated, JSON_HEX_QUOT) !!};
-	var click_on_map = {!! $click_on_map !!};
 	var load_lightbox = {!! $load_lightbox !!};	
-	var load_flickity = {!! $load_flickity !!};
-	var dont_initialize_flickity = {!! $dont_initialize_flickity !!};	
 </script>
 
 @endsection

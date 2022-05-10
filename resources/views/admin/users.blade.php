@@ -131,6 +131,14 @@
                                     <option value="external" {!! 'external'==$registered_platform ? 'selected="selected"' : '' !!}>External</option>
                                 </select>
                             </div>
+
+                            <div class="col-md-2">
+                                <select class="form-control" name="wallet-address">
+                                    <option value="">Wallet Address</option>
+                                    <option value="with" {!! $wallet_address == 'with' ? 'selected="selected"' : '' !!}>With wallet address</option>
+                                    <option value="without" {!! $wallet_address == 'without' ? 'selected="selected"' : '' !!}>Without wallet address</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="row custom-row" style="margin-bottom: 10px;">
                             <div class="col-md-2" style="display: none;">

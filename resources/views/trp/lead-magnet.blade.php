@@ -102,10 +102,6 @@
 								</div>
 							</label>
 
-							<div class="alert alert-warning agree-cookies" style="display: none; margin-bottom: 20px;">
-								{!! trans('trp.popup.popup-lead-magnet.accept-cookies') !!}
-							</div>
-
 							<div class="alert magnet-alert" style="display: none; margin-top: 20px;">
 							</div>
 							<div class="tac">

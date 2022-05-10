@@ -39,10 +39,10 @@
 						Climb to the top of search results with our SEO-optimized patient review platform.
 					</p>
 				</div>
-				<a href="{{ getLangUrl('lead-magnet-results') }}">
+				{{-- <a href="{{ getLangUrl('review-score-test') }}"> --}}
 					{{-- {{ trans('trp.page.index-dentist.button-lead-magnet') }} --}}
-					Get your reputation score now!
-				</a>
+					{{-- Get your reputation score now!
+				</a> --}}
 			</div>
 			<div class="col tac">
 				<img src="{{ url('img-trp/access-all-apps.svg') }}" alt="Access all Dentacoin Apps by signing up on Trusted Reviews icon">
@@ -77,16 +77,16 @@
 	@if($testimonials->isNotEmpty())
     	<div class="container">
 	    	<div class="flickity-testimonial">
-	    		@foreach($testimonials as $testim)
+	    		@foreach($testimonials as $testimonial)
 		    		<div class="testimonial">
 		    			<div class="testimonial-inner flex">
 							<div>
-			    				<img src="{{ $testim->getImageUrl() }}">
+			    				<img src="{{ $testimonial->getImageUrl() }}" alt="{{ $testimonial->alt_image_text }}">
 							</div>
 							<div>
-								<span>{!! nl2br($testim->description) !!}</span>
-								<p class="name">{!! nl2br($testim->name) !!}</p>
-								<p>{!! nl2br($testim->job) !!}</p>
+								<span>{!! nl2br($testimonial->description) !!}</span>
+								<p class="name">{!! nl2br($testimonial->name) !!}</p>
+								<p>{!! nl2br($testimonial->job) !!}</p>
 							</div>
 			    		</div>
 		    		</div>

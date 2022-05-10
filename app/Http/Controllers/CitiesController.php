@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
 
+use App\Helpers\TrpHelper;
+
 use App\Models\VoxAnswer;
 use App\Models\Country;
 use App\Models\User;
@@ -20,25 +22,24 @@ class CitiesController extends BaseController {
 
 		$forForm = Request::input('submit-form') ?? false;
 
+		$searchUserName = trim(Request::input('dentist_name'));
+		$searchSplitedUsername = preg_split('/\s+/', $searchUserName, -1, PREG_SPLIT_NO_EMPTY);
+		$searchCountryID = Request::input('dentist_country_id');
+		$searchCountryName = Request::input('dentist_country_name');
+		$searchCity = Request::input('dentist_city');
+		$searchForPartner = Request::input('is_partner');
+
 		if($forForm) {
-			$searchUserName = trim(Request::input('dentist-name'));
-			$searchSplitedUsername = preg_split('/\s+/', $searchUserName, -1, PREG_SPLIT_NO_EMPTY);
-			$searchCountryID = Request::input('search-country-id');
-			$searchCountryName = Request::input('dentist-country');
-			$searchCity = Request::input('dentist-city');
-			$searchForPartner = Request::input('partner');
-		} else {
-			$searchUserName = trim(Request::input('username'));
-			$searchSplitedUsername = preg_split('/\s+/', $searchUserName, -1, PREG_SPLIT_NO_EMPTY);
-			$searchCountryID = Request::input('country_id');
-			$searchCountryName = Request::input('country_name');
-			$searchCity = Request::input('city');
-			$searchForPartner = Request::input('is_partner');
+			$redirectUrl = $this->getRedirectUrl(
+				urlencode(strtolower($searchUserName)), 
+				urlencode(strtolower($searchCountryID ?? $searchCountryName)), 
+				urlencode(strtolower($searchCity)), 
+				$searchForPartner
+			);
 		}
 		
 		//remove dr from search query, because dr is in another field
 		if ($this->searchWordInString('dr. ', $searchUserName) || $this->searchWordInString('dr ', $searchUserName)) {
-
 			$wordToBeRemoved = $this->searchWordInString('dr. ', $searchUserName) ? 'dr. ' : ($this->searchWordInString('dr. ', $searchUserName) ? 'dr ' : '');
 			$convertedUsername = str_replace($wordToBeRemoved, '', mb_strtolower($searchUserName));
 			
@@ -48,11 +49,12 @@ class CitiesController extends BaseController {
 			}
 			
 			request()->merge([
-				'username' => implode(' ', $newUsername)
+				'dentist_name' => implode(' ', $newUsername)
 			]);
+
+			$searchUserName = trim(Request::input('dentist_name'));
 		}
 
-		//first search for dentists & clinics with exact name field
 		$firstSearch = User::where('is_dentist', true)
 		->where(function($query) use ($searchUserName) {
 			$query->where('name', 'like', $searchUserName.'%')
@@ -68,7 +70,6 @@ class CitiesController extends BaseController {
 		$users = $firstSearch;
 
 		if($users->count() < 20) {
-
 			//second search for dentists & clinics with name that starts with the field
 			$secondSearch = User::where('is_dentist', true)
 			->whereNotIn('id', $users->pluck('id')->toArray())
@@ -84,7 +85,6 @@ class CitiesController extends BaseController {
 			$users = $users->concat($secondSearch->take(20-$users->count())->get());
 			
 			if($users->count() < 20) {
-
 				//then search for dentists & clinics with similar name field
 				$dentists = User::where('is_dentist', true)
 				->whereNotIn('id', $users->pluck('id')->toArray())
@@ -103,40 +103,32 @@ class CitiesController extends BaseController {
 				}
 				$users = $users->concat($dentists->take(20-$users->count())->get());
 			}
-		}
+		};
 
-		$dentistsAndClinics = User::where('is_dentist', true)
-		->where(function($query) use ($searchSplitedUsername) {
-			foreach ($searchSplitedUsername as $value) {
-				$query->where(function($q) use ($value) {
-					$q->orWhere('name', 'like', "%{$value}%")
-					->orWhere('name_alternative', 'like', "%{$value}%");
-				});
-			}
-		})->whereIn('status', config('dentist-statuses.shown'))
-		->whereNull('self_deleted')
-		->orderBy('is_partner', 'desc');
-		
+		//query for search with country/city
+		$dentistsAndClinics = TrpHelper::searchDentistsByName($searchSplitedUsername);
 		if($searchForPartner) {
 			$dentistsAndClinics->where('is_partner', 1);
 		}
 
-		$cityQuery = trim(explode(',', trim($searchCity))[0]);
+		$cityField = trim(explode(',', trim($searchCity))[0]);
 
 		if(!empty($searchCountryID) || !empty($searchCountryName)) { //search dentists in country
 			if(!empty($searchCountryID)) {
+				//by country ID
 				$countryName = Country::find($searchCountryID)->name;
 				$countryUsers = $dentistsAndClinics->where('country_id', $searchCountryID);
 				$searchCityCountry = !empty($searchCity) ? '<b>'.$searchCity.'</b>' : (in_array($searchCountryID, [232, 230])  ? 'the <b>'.$countryName.'</b>' : '<b>'.$countryName.'</b>');
 			} else {
+				//by country name
 				$countryUsers = $dentistsAndClinics->whereHas('country', function($query) use ($searchCountryName) {
-					$query->where('name', '%LIKE%', $searchCountryName);
+					$query->where('name', 'LIKE', '%'.$searchCountryName.'%');
 				});
 				$searchCityCountry = '<b>'.(!empty($searchCity) ? $searchCity : $searchCountryName).'</b>';
 			}
 			
 			if(!empty($searchCity)) { //search dentists in country AND in city
-				$countryUsers = $countryUsers->where('city_name', 'LIKE', '%'.$cityQuery.'%')
+				$countryUsers = $countryUsers->where('city_name', 'LIKE', '%'.$cityField.'%')
 				->take(20)
 				->get();
 			} else {
@@ -144,11 +136,19 @@ class CitiesController extends BaseController {
 			}
 
 			if($countryUsers->isEmpty()) {
-				if($users->isNotEmpty()) {
-					$ret['alert'] = 'We couldn’t find a dental provider matching your search in '.$searchCityCountry.', but we found following results:';
+				if($users->isNotEmpty()) { // if there are dentists by search name, but missing form search country/city
+					if($forForm) {
+						return Response::json($redirectUrl);
+					} else {
+						$ret['alert'] = 'We couldn’t find a dental provider matching your search in '.$searchCityCountry.', but we found following results:';
+					}
 				}
 			} else {
-				$users = $countryUsers;
+				if($forForm) {
+					return Response::json($redirectUrl);
+				} else {
+					$users = $countryUsers;
+				}
 			}
 		} else if(!empty($searchCity)) { //search dentists in city
 			$cityUsers = $dentistsAndClinics->where('city_name', 'LIKE', '%'.$searchCity.'%')
@@ -156,16 +156,32 @@ class CitiesController extends BaseController {
 			->get();
 
 			if($cityUsers->isEmpty()) {
-				if($users->isNotEmpty()) {
-					$ret['alert'] = 'We couldn’t find a dental provider matching your search in <b>'.$cityQuery.'</b>, but we found following results:';
+				if($users->isNotEmpty()) {// if there are dentists by search name, but missing form search city
+					if($forForm) {
+						return Response::json($redirectUrl);
+					} else {
+						$ret['alert'] = 'We couldn’t find a dental provider matching your search in <b>'.$cityField.'</b>, but we found following results:';
+					}
 				}
 			} else {
-				$users = $cityUsers;
+				if($forForm) {
+					return Response::json($redirectUrl);
+				} else {
+					$users = $cityUsers;
+				}
+			}
+		} else {
+			if($forForm) {
+				if($users->isNotEmpty()) {
+					return Response::json($redirectUrl);
+				} else {
+					$ret['alert'] = 'Sorry, we couldn’t find any matches. Check your search query for typos and try again.';
+					return Response::json($ret);
+				}
 			}
 		}
 
 		$user_list = [];
-
 		$teamMembersCount = 0;
 		
 		if($users->isNotEmpty()) {
@@ -210,6 +226,88 @@ class CitiesController extends BaseController {
 
 	private function searchWordInString($word, $string) {
 		return mb_strpos(mb_strtolower($string), $word) === 0;
+	}
+
+	private function getRedirectUrl($searchUserName, $searchCountry, $searchCity, $searchForPartner) {
+		if(!empty($searchUserName)) {
+			$params = [];
+	
+			if(!empty($searchCountry)) {
+				$params['country'] = $searchCountry;
+			}
+	
+			if(!empty($searchCity)) {
+				$params['city'] = $searchCity;
+			}
+	
+			if($searchForPartner) {
+				$params['types[]'] = 'is_partner';
+			}
+
+			if(!empty($params)) {
+				return [
+					'success' => true,
+					'redirect' => getLangUrl($searchUserName.'/all-results').'?'.http_build_query($params),
+				];
+			} else {
+				return [
+					'success' => true,
+					'redirect' => getLangUrl($searchUserName.'/all-results'),
+				];
+			}
+		} else {
+
+			if(!empty($searchCity) || !empty($searchCountry)) {
+
+				if(!empty($searchCountry)) {
+					//search by country
+					if(intval($searchCountry) > 0) {
+						$searchCountry = Country::find($searchCountry);
+						$searchCountry = $searchCountry ? $searchCountry->slug : '';
+					}
+				}
+
+				if(!empty($searchForPartner)) {
+
+					$params = [];
+					if(!empty($searchCountry)) {
+						$params['country'] = $searchCountry;
+					}
+					if(!empty($searchCity)) {
+						$params['city'] = $searchCity;
+					}
+					
+					return [
+						'success' => true,
+						'redirect' => getLangUrl(
+							'dentists/partners/'
+						).'?'.http_build_query($params),
+					];
+				} else {
+					return [
+						'success' => true,
+						'redirect' => getLangUrl(
+							'dentists/'.
+							($searchCity ?? '').
+							($searchCountry ? ($searchCity ? '-'.$searchCountry : $searchCountry) : '')
+						),
+					];
+				}
+			} else {
+				if(!empty($searchForPartner)) {
+					return [
+						'success' => true,
+						// 'redirect' => getLangUrl('dentists/worldwide'),
+						'redirect' => getLangUrl('dentists/partners'),
+					];
+				} else {
+					return [
+						'success' => true,
+						'redirect' => getLangUrl('page-not-found'),
+					];
+				}
+			}
+		}
 	}
 
 	public function getCities($id, $empty=false) {

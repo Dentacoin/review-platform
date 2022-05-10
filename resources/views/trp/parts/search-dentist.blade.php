@@ -2,6 +2,7 @@
     class="result-container dentist {{ !$forMap ? 'flex' : '' }}"
     {!! $dentist->address ? 'lat="'.$dentist->lat.'" lon="'.$dentist->lon.'"' : '' !!} 
     dentist-id="{{ $dentist->id }}"
+    dentist-link="{{ $dentist->getLink() }}"
 >
     @if($forMap)
         <div class="flex flex-mobile flex-center">
@@ -85,10 +86,10 @@
                 <span>></span>
             </a>
         @else
-            <p>{{ $dentist->city_name }}, {{ $dentist->country->name }}</p>
-            <p>{{ $dentist->address }}</p>
+            <p class="d-address">{{ $dentist->city_name }}, {{ $dentist->country->name }}</p>
+            <p class="d-address">{{ $dentist->address }}</p>
             <p>{{ $dentist->phone }}</p>
-            <a href="{{ $dentist->website }}?popup-loged=submit-review-popup" target="_blank" class="text-link">{{ $dentist->website }}</a>
+            <a href="{{ $dentist->getWebsiteUrl() }}?popup-loged=submit-review-popup" target="_blank" class="text-link">{{ $dentist->website }}</a>
 
             @if( $dentist->socials )
                 <div class="socials">

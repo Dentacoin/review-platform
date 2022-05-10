@@ -27,7 +27,8 @@ Disallow: /suggest-clinic/
 Disallow: /suggest-dentist/
 Disallow: /want-to-invite-dentist/
 Disallow: /lead-magnet-session/
-Disallow: /lead-magnet-results/
+Disallow: /review-score-test/
+Disallow: /review-score-results/
 ';
 		}
 

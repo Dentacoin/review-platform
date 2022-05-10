@@ -21,17 +21,20 @@ $phone: "screen and (max-width: 768px)";
 	}
 
 	.error-image {
+		width: 430px;
 		margin-right: 30px;
 
 		@media #{$phone} {
+			width: 100%;
 			order: 2;
+			margin-right: 0px;
 		}
 
 		img {
 			width: 100%;
 
 			@media #{$phone} {
-				max-width: 300px;
+				max-width: 260px;
 				margin: 0 auto;
 				display: block;
 			}

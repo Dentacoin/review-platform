@@ -68,10 +68,10 @@
 
 	<div id="to-append"></div>
 
-	@if(!empty($user))
+	{{-- @if(!empty($user))
 		<div class="strength-parent fixed">
 			@include('trp.parts.strength-scale')
 		</div>
-	@endif
+	@endif --}}
 
 @endsection

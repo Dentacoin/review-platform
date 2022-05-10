@@ -1,6 +1,6 @@
-<div class="popup fixed-popup invite-new-dentist-popup active removable" id="invite-new-dentist-popup" scss-load="trp-popup-invite-new-dentist">
+<div class="popup invite-new-dentist-popup active removable" id="invite-new-dentist-popup" scss-load="trp-popup-invite-new-dentist">
 	<img class="popup-image" src="{{ url('img-trp/invite-popup-image.png') }}"/>
-	<div class="popup-inner inner-white">
+	<div class="popup-inner">
 		<a href="javascript:;" class="close-popup">
 			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>

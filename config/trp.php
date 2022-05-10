@@ -106,6 +106,10 @@ return [
 		'marketing_specialist' => 'Marketing Specialist',
 		'other' => 'Other',
 	],
+	'limits_days' => [
+		'review' => 93, //3 months
+		'ask_dentist' => 30, //1 month
+	]
 ];
 
 ?>

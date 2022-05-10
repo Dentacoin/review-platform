@@ -5,16 +5,56 @@
 	<div class="search-results-title">
 		<div class="container">
 			<h1 class="mont">{!! $search_title !!}</h1>
+
+			@if($dentistsFromDifferentCountry)
+				<h3>
+					Unfortunately, we couldn't find any dental practices containing your search term in {{ urldecode($searchCity ? (ucwords($searchCity).', ') : '')}}{{urldecode($searchCountry)}}. You might want to check these, too:
+				</h3>
+			@endif
 		</div>
 	</div>
+
+	@php 
+		$noSpecializationsHref = '';
+
+		if($filter =='all-results') {
+			// $noSpecializationsHref = getLangUrl(str_replace('/all-results', '', $query));
+			$noSpecializationsHref = getLangUrl($query);
+		} else {
+			if(!empty($searchCategories)) {
+				
+				if(session('results-url')) {
+					$noSpecializationsHref = getLangUrl(session('results-url'));
+				} else {
+					$noSpecializationsHref = getLangUrl(str_replace(' ', '-', 'dentists/'.explode('/', $query)[0] ));
+				}
+			} else {
+				$noSpecializationsHref = getLangUrl(str_replace(' ', '-', $query ));
+			}
+		}
+
+		$specializationsHref = '';
+
+		if($filter =='all-results') {
+			$specializationsHref = getLangUrl(str_replace('/all-results', '', $query));
+		} else {
+			$specializationsHref = str_replace('/dentists', '', 
+				!empty($searchCategories) ? 
+				getLangUrl(str_replace(' ', '-', explode('/', $query)[0] )) 
+				: getLangUrl(str_replace(' ', '-', $query ))
+			);
+		}
+	@endphp
 	
 	<form 
 		method="get" 
 		class="filters-section search-get-form" 
-		no-specializations-href="{{ !empty($searchCategories) ? getLangUrl(str_replace(' ', '-', 'dentists/'.explode('/', $query)[0] )) : getLangUrl(str_replace(' ', '-', $query )) }}" 
-		specializations-href="{{ str_replace('/dentists', '', !empty($searchCategories) ? getLangUrl(str_replace(' ', '-', explode('/', $query)[0] )) : getLangUrl(str_replace(' ', '-', $query ))) }}" 
+		no-specializations-href="{{$noSpecializationsHref}}" 
+		specializations-href="{{$specializationsHref}}" 
 		action=""
 	>
+		<input type="hidden" name="country" value="{{ request('country') }}"/>
+		<input type="hidden" name="city" value="{{ request('city') }}"/>
 		<div class="container-filters flex flex-mobile flex-center space-between">
 			<div class="filters-wrapper">
 				<div class="hidden-mobile-filters">
@@ -71,6 +111,9 @@
 		<div class="col maps-results">
 			<div id="search-map" lat="{{ $lat }}" lon="{{ $lon }}"></div>
 		</div>
+	</div>
+	<div style="display: none;">
+		<input type="text" id="search-in-map" placeholder="Search in map"/>
 	</div>
 
 	@if($items->isNotEmpty())

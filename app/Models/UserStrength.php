@@ -36,7 +36,7 @@ class UserStrength extends Model {
 
                     if( $user->is_clinic) {
 
-                        if( $user->invites_team_unverified->isNotEmpty() || $user->team->isNotEmpty() ) {
+                        if( $user->notVerifiedTeamFromInvitation->isNotEmpty() || $user->team->isNotEmpty() ) {
                             $missing_info = false;
                         } else {
                             $missing_info = true;

@@ -7,7 +7,7 @@
 	</h2>
 
 	<div class="tac">
-		<div class="review-rating {{ $review->verified ? 'verified-review' : '' }}">
+		<div class="review-rating-new {{ $review->verified ? 'verified-review' : '' }}">
 			<span class="rating mont">
 				{{ number_format(!empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating, 1) }}
 			</span>
@@ -34,7 +34,7 @@
 				</h3>
 			@endif
 			
-			<a href="javascript:;" class="share-review" data-popup="popup-share">
+			<a href="javascript:;" class="share-button" data-popup="popup-share">
 				<img src="{{ url('img-trp/share-arrow.svg') }}"/>
 				Share
 			</a>
@@ -56,22 +56,22 @@
 		@endif
 	</div>
 	
-	@if(!empty($review->treatments) || !empty($review->toDentistFromClinic()))
+	@if(!empty($review->treatments) || !empty($review->reviewForDentistAndClinic()))
 		<div class="review-treatments flex">
 			@if(!empty($review->treatments))
-				<div class="treatments col {{ !empty($review->toDentistFromClinic()) ? 'with-border' : '' }}">
+				<div class="treatments col {{ !empty($review->reviewForDentistAndClinic()) ? 'with-border' : '' }}">
 					<h4>Dental services received:</h4>
 					@foreach($review->treatments as $t)
 						<span class="treatment">{!! App\Models\Review::handleTreatmentTooltips(trans('trp.treatments.'.$t)) !!}</span>
 					@endforeach
 				</div>
 			@endif
-			@if(!empty($review->toDentistFromClinic()))
+			@if(!empty($review->reviewForDentistAndClinic()))
 				<div class="review-dentist col">
-					<h4>Treating dentist:</h4>
+					<h4>{{ $review->dentist_id == $item->id ? 'Clinic' : 'Treating dentist' }}:</h4>
 					<div class="flex flex-mobile">
 						<div class="review-dentist-avatar" style="background-image: url('{{ $review->dentist->getImageUrl(true) }}');"></div>
-						<p>{{ $review->dentist->getNames() }}</p>
+						<p>{{ $review->dentist_id == $item->id ? $review->clinic->getNames() : $review->dentist->getNames() }}</p>
 					</div>
 				</div>
 			@endif
@@ -82,22 +82,106 @@
 		<h4>Rating breakdown:</h4>
 
 		<div class="overview-wrapper">
-			@foreach($review->answers as $answer)
-				@if((!empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7 )) ||
-					(!empty($review->team_doctor_rating) && ($item->id == $review->clinic_id)) ||
-					empty($review->team_doctor_rating)
-				)
-					<div class="overview-column">
-						<p>{{ $answer->question['label'] }}</p>
-						<div class="ratings big">
-							<div class="stars">
-								<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;">
+			@php
+				$reviewQuestions = App\Models\Question::orderBy('order', 'asc')->get();
+				$ratingForDentistQuestions = App\Models\Review::$ratingForDentistQuestions;
+				$oldRatingForDentistQuestions = App\Models\Review::$oldRatingForDentistQuestions;
+				$oldReview = $review->answers->first()->rating ? false : true; //old reviews had options, new have rating
+			@endphp
+
+			{{-- if review is for dentist that works in clinic show only 3 answers --}}
+			@if(!empty($review->team_doctor_rating) && ($item->id == $review->dentist_id))
+
+				@if($oldReview)
+
+					@foreach($reviewQuestions->whereIn('id', array_merge($ratingForDentistQuestions, $oldRatingForDentistQuestions)) as $question)
+						@php
+							$answer = $review->answers->where('question_id', $question->id)->first();
+						@endphp
+						<div class="overview-column">
+							<p>
+								@if(!$answer)
+									<img src="{{ url('img-trp/info-light.png') }}" class="tooltip-text" text="new"/>
+								@endif
+								{{ $question['label'] }}
+							</p>
+							<div class="ratings big">
+								<div class="stars {{ $answer ? '' : 'new' }}">
+									@if($answer)
+										<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;"></div>
+									@else
+										<div class="bar new" style="width: 0%;"></div>
+									@endif
 								</div>
 							</div>
 						</div>
-					</div>
+					@endforeach
+
+				@else
+
+					@foreach($reviewQuestions->whereIn('id', $ratingForDentistQuestions) as $question)
+						<div class="overview-column">
+							<p>
+								{{ $question['label'] }}
+							</p>
+							<div class="ratings big">
+								<div class="stars">
+									<div class="bar" style="width: {{ $review->answers->where('question_id', $question->id)->first()->rating / 5 * 100 }}%;"></div>
+								</div>
+							</div>
+						</div>
+					@endforeach
+
 				@endif
-			@endforeach
+
+			@else
+			
+				@if($oldReview)
+					{{-- @foreach($review->answers as $answer) --}}
+					@foreach($reviewQuestions as $question)
+						@php
+							$answer = $review->answers->where('question_id', $question->id)->first();
+						@endphp
+
+						<div class="overview-column">
+							<p>
+								@if(!$answer)
+									<img src="{{ url('img-trp/info-light.png') }}" class="tooltip-text" text="new"/>
+								@endif
+								{{ $question['label'] }}
+							</p>
+							<div class="ratings big">
+								<div class="stars {{ $answer ? '' : 'new' }}">
+									@if($answer)
+										<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;"></div>
+									@else
+										<div class="bar new" style="width: 0%;"></div>
+									@endif
+								</div>
+							</div>
+						</div>
+					
+					@endforeach
+					
+				@else
+					
+					@foreach($reviewQuestions->where('type', '!=', 'deprecated') as $question)
+						<div class="overview-column">
+							<p>
+								{{ $question['label'] }}
+							</p>
+							<div class="ratings big">
+								<div class="stars">
+									<div class="bar" style="width: {{ $review->answers->where('question_id', $question->id)->first()->rating / 5 * 100 }}%;"></div>
+								</div>
+							</div>
+						</div>
+					@endforeach
+
+				@endif
+
+			@endif
+			
 		</div>
 	</div>
 

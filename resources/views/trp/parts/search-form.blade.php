@@ -5,7 +5,7 @@
 		<input 
 			id="search-dentist-name" 
 			type="text" 
-			name="dentist-name" 
+			name="dentist_name" 
 			value="{{ !empty($query) ? $formattedAddress : '' }}" 
 			placeholder="Dentist / clinic name" 
 			autocomplete="off"
@@ -17,19 +17,19 @@
 		<input 
 			id="search-dentist-country" 
 			type="text" 
-			name="dentist-country" 
+			name="dentist_country_name" 
 			value="{{ !empty($query) ? $formattedAddress : '' }}" 
 			placeholder="Country" 
 			autocomplete="off"
 		/>
-		<input type="hidden" name="search-country-id" id="search-country-id"/>
+		<input type="hidden" name="dentist_country_id" id="search-country-id"/>
 	</div>
 	<div class="input-wrapper">
 		<img src="{{ url('img-trp/pin.svg') }}" width="12" height="15"/>
 		<input 
 			id="search-dentist-city" 
 			type="text" 
-			name="dentist-city" 
+			name="dentist_city" 
 			value="{{ !empty($query) ? $formattedAddress : '' }}" 
 			placeholder="City, State" 
 			autocomplete="off"
@@ -39,7 +39,7 @@
 		<img src="{{ url('img-trp/mini-logo-black.svg') }}"/>
 		DCN Accepted
 		<span class="checked-partner">✓</span>
-		<input class="checkbox" type="checkbox" name="partner" value="1" id="partner"/>
+		<input class="checkbox" type="checkbox" name="is_partner" value="1" id="partner"/>
 	</label>
 	<button type="submit">
 		Search

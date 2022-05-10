@@ -316,7 +316,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function suspiciousReasonAction() {
         return $this->hasMany('App\Models\UserAction', 'user_id', 'id')->whereIn('action', ['suspicious_admin'])->orderBy('id', 'desc');
     }
-    public function invites_team_unverified() {
+    public function notVerifiedTeamFromInvitation() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')
         ->whereNotNull('for_team')
         ->whereNull('invited_id')
@@ -492,7 +492,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if (!empty($user_ask)) {
             $days = $user_ask->created_at->diffInDays( Carbon::now() );
-            if($days>30) {
+
+            if($days>config('trp.limits_days.ask_dentist')) {
                 return true;
             } else {
                 return false;
@@ -502,7 +503,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
-    public function approvedPatientcanAskDentist($dentist_id) {
+    public function approvedPatientcanAskDentistForReview($dentist_id) {
 
         $lastReview = Review::where('user_id', $this->id)
         ->where(function($query) use ($dentist_id) {
@@ -511,16 +512,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         })->orderBy('id', 'desc')
         ->first();
 
-        $days = $lastReview->created_at->diffInDays( Carbon::now() );
+        if($lastReview) {
 
-        if ($this->canAskDentist($dentist_id)) {
-            if($days>30) {
-                return true;
+            $days = $lastReview->created_at->diffInDays( Carbon::now() );
+
+            if ($this->canAskDentist($dentist_id)) {
+                if($days>config('trp.limits_days.ask_dentist')) {
+                    return true;
+                } else {
+                    return config('trp.limits_days.ask_dentist') - $days;
+                }
             } else {
-                return false;
+                return config('trp.limits_days.review') - $days;
             }
         } else {
-            return false;
+            return true;
         }
     }
 
@@ -653,7 +659,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $review = $this->hasReviewTo($dentist_id);
             $days = $review->created_at->diffInDays( Carbon::now() );
 
-            if($days>93) {
+            if($days > config('trp.limits_days.review')) {
                 return false;
             } else {
                 $heAllowed = UserAsk::where('user_id', $this->id)
@@ -1023,44 +1029,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->avg_rating = $this->reviews_in()->count() ? $rating / $this->reviews_in()->count() : 0;
         $this->ratings = $this->reviews_in()->count();
         $this->save();
-    }
-
-    public function getReviewLimits() {
-        if( Auth::guard('admin')->user() ) {
-            return null;
-        }
-
-        $limits = config('limits.reviews');
-        
-        if($this->reviews_out->isEmpty()) {
-            return null;
-        }
-
-        $yearly = 0;
-        $quarterly = 0;
-        //$monthly = 0;
-        foreach ($this->reviews_out as $review) {
-            $days = $review->created_at->diffInDays( Carbon::now() );
-            if($days>365) {
-                break;
-            }
-            $yearly++;
-            // if($days>=31) {
-            //     $monthly++;
-            // }
-            if($days<=93) {
-                $quarterly++;
-            }
-        }
-
-        if($quarterly>=$limits['quarterly']) {
-            return 'quarterly';
-        }
-        if($yearly>=$limits['yearly']) {
-            return 'yearly';
-        }
-        
-        return null;
     }
 
     public function cantReviewDentist($dentist_id) {   

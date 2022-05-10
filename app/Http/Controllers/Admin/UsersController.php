@@ -359,6 +359,14 @@ class UsersController extends AdminController {
                 });
             }
         }
+        if(!empty(request('wallet-address'))) {
+            $wallet_address = request('wallet-address');
+            if($wallet_address == 'with') {
+                $users = $users->has('wallet_addresses');
+            } else if($wallet_address == 'without') {
+                $users = $users->doesntHave('wallet_addresses');
+            }
+        }
         if(!empty(request('search-address'))) {
             $dcn_address = request('search-address');
             $users = $users->whereHas('wallet_addresses', function ($query) use ($dcn_address) {
@@ -777,6 +785,7 @@ class UsersController extends AdminController {
             'search_status' => request('search-status'),
             'search_platform' => request('search-platform'),
             'registered_platform' => request('registered-platform'),
+            'wallet_address' => request('wallet-address'),
             'search_country' => request('search-country'),
             'search_review' => request('search-review'),
             'search_surveys_taken' => request('search-surveys-taken'),

@@ -474,12 +474,6 @@ class FrontController extends BaseController {
 
         $params['dark_mode'] = !empty($this->user) && $this->user->dark_mode ? true : false;
 
-        if(!empty($this->user) && !Request::isMethod('post')) {
-            $params['user_total_balance'] = $this->user->getTotalBalance();
-        } else {
-            $params['user_total_balance'] = 0;
-        }
-
         if(!isset($params['xframe'])) {
             return response()->view('vox.'.$page, $params, $statusCode ? $statusCode : 200)->header('X-Frame-Options', 'DENY');
         } else {
@@ -571,6 +565,12 @@ class FrontController extends BaseController {
         $params['admin'] = $this->admin;
         $params['user'] = $this->user;
         $params['is_ajax'] = !empty($params['is_ajax']) ? $params['is_ajax'] : false;
+
+        if(!empty($this->user) && !Request::isMethod('post')) {
+            $params['user_total_balance'] = $this->user->getTotalBalance();
+        } else {
+            $params['user_total_balance'] = 0;
+        }
 
         $params['seo_title'] = !empty($params['seo_title']) ? $params['seo_title'] : trans($text_domain.'.seo.'.$this->current_page.'.title');
         $params['seo_description'] = !empty($params['seo_description']) ? $params['seo_description'] : trans($text_domain.'.seo.'.$this->current_page.'.description');

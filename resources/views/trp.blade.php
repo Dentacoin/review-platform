@@ -44,7 +44,7 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		
-		@if($current_page == 'lead-magnet-results')
+		@if(in_array($current_page, ['review-score-results', 'dentist']))
 			<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500,700;800&display=swap" rel="stylesheet">
 		@else
 			<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
@@ -124,22 +124,21 @@
   				<div class="container">
 				    <div class="navbar-header">
 						<a class="logo" href="{{ getLangUrl('/') }}"></a>
-						<div class="header-info">								
-							@if($current_page=='dentist')
-								<img class="fa-search" src="{{ url('img/white-search.png') }}" width="24" height="24"/>
-							@endif
-
+						<div class="header-info">
+							
 	                        @if(!empty($user))
-								<a href="javascript:;" class="profile-btn header-avatar" id="header-avatar">
-									<span class="name">
-										{{ $user->getNames() }}
-									</span>
+								<a href="javascript:;" class="search-dentists">
+									<img class="fa-search" src="{{ url('img-trp/white-search.svg') }}" width="16" height="15"/>
+								</a>
+								<a href="javascript:;" class="user-profile-info header-avatar" id="header-avatar">
+									<span>Rewards: </span>
+									<span class="user-balance">{{ number_format($user_total_balance) }} DCN</span>
 									<img src="{{ $user->getImageUrl(true) }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
-									@if($user->is_clinic && $user->branches->isNotEmpty())
+									{{-- @if($user->is_clinic && $user->branches->isNotEmpty())
 										<div class="profile-branches">
 											<img src="{{ url('img-trp/swith-account-black.svg') }}"/>
 										</div>
-									@endif
+									@endif --}}
 									@if(!empty($has_review_notification))
 										<div class="notification"></div>
 									@endif
@@ -423,7 +422,7 @@
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         	var images_path = '{{ url('img-trp') }}';
         	var all_images_path = '{{ url('img') }}';
-        	var lead_magnet_url = '{{ getLangUrl('lead-magnet-results') }}';
+        	var lead_magnet_url = '{{ getLangUrl('review-score-test') }}';
         </script>
     </body>
 </html>

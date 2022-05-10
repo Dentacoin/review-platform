@@ -1212,6 +1212,5 @@ class VoxHelper {
         }
 
         return $results;
-    }    
-
+    }
 }
