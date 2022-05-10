@@ -41,3 +41,10 @@
 		</div>
 	@endif
 @endif
+
+<br/>
+<br/>
+
+@if($item->for_staking)
+	<p style="font-weight: bold; color: blue;">STAKING</p>
+@endif

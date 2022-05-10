@@ -167,8 +167,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('transactions/enable-retry', 				'TransactionsController@enableRetry');
 	Route::post('transactions/user-suspicious/{id}',		'TransactionsController@makeUserSuspicious');
 	Route::any('transactions/checked-by-admin/{id}',		'TransactionsController@checkedByAdmin');
-	Route::post('check-pending-trans', 						'TransactionsController@checkPendingTransactions');
-	Route::post('check-nodes', 								'TransactionsController@checkConnectedNodes');
 
 	Route::get('spending', 									'SpendingController@list');
 

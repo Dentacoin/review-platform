@@ -31,6 +31,7 @@ class DcnTransaction extends Model {
         'ip',
         'processing',
         'unconfirmed_retry',
+        'for_staking',
         'is_paid_by_the_user',
         'cronjob_unconfirmed',
     ];

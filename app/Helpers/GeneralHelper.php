@@ -434,6 +434,16 @@ class GeneralHelper {
         return false;
     }
 
+    public static function isStakingGasExpensive() {
+        $gas = GasPrice::find(1);
+
+        if($gas->gas_price > $gas->max_staking_gas_price) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static function encrypt($raw_text) {
         $length = openssl_cipher_iv_length(env('CRYPTO_METHOD'));
         $iv = openssl_random_pseudo_bytes($length);

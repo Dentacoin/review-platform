@@ -109,6 +109,12 @@
                                     Paid by user
                                 </label>
                             </div>
+                            <div class="col-md-1">
+                                <label for="paid-by-user" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
+                                    <input id="paid-by-user" type="checkbox" name="paid-by-user" value="1" {!! !empty($for_staking) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                    For staking
+                                </label>
+                            </div>
                             <div class="col-md-2">
                                 <select class="form-control" name="search-layer">
                                     <option value="">Transaction Layer Type</option>
@@ -248,32 +254,6 @@
                             <label class="col-md-2">Timerange (in days)</label>
                             <div class="col-md-4">
                                 <input class="form-control" type="number" name="timerange" value="{{ $withdrawal_conditions->timerange }}" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="server_pending_trans_check" class="col-md-2 control-label" style="text-align: left;">Check for server pending transactions</label>
-                            <div class="col-md-10">
-                                <input type="checkbox" name="server_pending_trans_check" value="1" id="server_pending_trans_check" {!! !empty($withdrawal_conditions->server_pending_trans_check) ? 'checked="checked"' : '' !!}>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2">Server Pending Transactions Count</label>
-                            <div class="col-md-4">
-                                <input class="form-control" type="number" id="count_pending_transactions" name="count_pending_transactions" value="{{ $withdrawal_conditions->count_pending_transactions }}" />
-                            </div>
-                            <a href="javascript:;" class="col-md-2 btn btn-primary" id="check-cur-pending-tx">check pending tx count</a>
-                            <div class="col-md-4" id="cur-pending-tx">
-                                
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="connected_nodes_check" class="col-md-2 control-label" style="text-align: left;">Check for connected nodes</label>
-                            <div class="col-md-4">
-                                <input type="checkbox" name="connected_nodes_check" value="1" id="connected_nodes_check" {!! !empty($withdrawal_conditions->connected_nodes_check) ? 'checked="checked"' : '' !!}>
-                            </div>
-                            <a href="javascript:;" class="col-md-2 btn btn-primary" id="check-cur-nodes">check connected nodes</a>
-                            <div class="col-md-4" id="cur-nodes">
-                                
                             </div>
                         </div>
                         <div class="form-group">
