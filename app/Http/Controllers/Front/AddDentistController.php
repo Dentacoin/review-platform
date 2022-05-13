@@ -140,7 +140,13 @@ class AddDentistController extends FrontController {
                 $newdentist->platform = 'trp';
                 $newdentist->status = 'added_new';
                 $newdentist->address = Request::input('address');
-                $newdentist->website = Request::input('website');
+
+                if(str_contains(strtolower(Request::input('website')), 'facebook.com')) {
+                    $newdentist->socials = ['facebook' => Request::input('website')];
+                } else {
+                    $newdentist->website = Request::input('website');
+                }
+
                 $newdentist->is_dentist = 1;
                 $newdentist->is_clinic = Request::input('mode')=='clinic' ? 1 : 0;
                 $newdentist->invited_by = $this->user ? $this->user->id : 0;
@@ -153,9 +159,6 @@ class AddDentistController extends FrontController {
 
                 return Response::json([
                     'success' => true,
-                	'message' => trans('trp.page.invite.success', [
-                        'name' => $newdentist->name
-                    ]),
                     'dentist_name' => $newdentist->name,
                 ]);
             }

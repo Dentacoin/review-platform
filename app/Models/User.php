@@ -2134,33 +2134,26 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
     public function getLastTopDentistBadge() {
 
-        $text = '';
+        $text = [];
         if(!empty($this->top_dentist_month)) {
-
-            $time = 0;
             foreach (explode(';', $this->top_dentist_month) as $badge) {
-                if($time < strtotime('01-'.explode(':', $badge)[1].'-'.explode(':', $badge)[0])) {
-                    $time = strtotime('01-'.explode(':', $badge)[1].'-'.explode(':', $badge)[0]);
-                    $text = trans('trp.months.'.config('months')[explode(':', $badge)[1]]).' '.explode(':', $badge)[0];
-                }
+                $text[] = trans('trp.months.'.config('months')[explode(':', $badge)[1]]).' '.explode(':', $badge)[0];
             }
         }
 
-        return $text;
+        return implode(', ',$text);
     }
 
     public function getLastTopDentistYearBadge() {
 
-        $time = 0;
+        $time = [];
         if(!empty($this->top_dentist_year)) {
             foreach (explode(';', $this->top_dentist_year) as $badge) {
-                if($time < $badge) {
-                    $time = $badge;
-                }
+                $time[] = $badge;
             }
         }
 
-        return $time;
+        return implode(', ',$time);
     }
 
 

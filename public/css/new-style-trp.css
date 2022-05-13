@@ -379,7 +379,6 @@ h5 {
   margin-top: 20px;
   background: white;
   color: #332255;
-  font-weight: bold;
   width: 100%; }
   @media screen and (max-width: 768px) {
     .popup .alert,

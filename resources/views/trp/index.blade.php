@@ -107,7 +107,7 @@
 					<div class="modern-field alert-after">
 						<input type="text" name="website" id="dentist-website1" class="modern-input" autocomplete="off">
 						<label for="dentist-website1">
-							<span>Facebook page/ {!! nl2br(trans('trp.page.invite.website')) !!}</span>
+							<span>Website / Facebook page:</span>
 						</label>
 					</div>
 
@@ -119,12 +119,33 @@
 					</div>
 
 					<div class="tac">
-						<input type="submit" value="Send Invite" class="blue-button next"/>
+						<button type="submit" class="blue-button">
+							<div class="loader"><i></i></div>
+							Send Invite
+						</button>
 						{{-- <input type="submit" value="{!! nl2br(trans('trp.page.invite.submit')) !!}" class="button next"/> --}}
 					</div>
 
 					<div class="alert alert-success" style="display: none;"></div>
 				</form>
+				<div class="success-invited-dentist">
+					<div class="tac">
+						<img src="{{ url('img-trp/check.png') }}" class="check-image"/>
+					</div>
+					<h2 class="mont">
+						Thanks for inviting your dentist!
+					</h2>
+					<p class="step-info">
+						@php
+							$addDentistReward = App\Models\Reward::getReward('patient_add_dentist');	
+						@endphp
+						You have successfully invited <span class="d-name"></span> to join Dentacoin Trusted Reviews. Once we verify the details you have provided, you'll receive your <span>{{ $addDentistReward }} DCN</span> reward.
+					</p>
+			
+					<div class="tac">
+						<a href="javascript:;" class="invite-new-dentist-again blue-button">Close</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	@else

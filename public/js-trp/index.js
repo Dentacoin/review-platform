@@ -124,6 +124,7 @@ jQuery(document).ready(function($){
 				$(this).find('.ajax-alert').remove();
 				$(this).find('.alert').hide();
 				$(this).find('.has-error').removeClass('has-error');
+				$(this).find('.blue-button').addClass('waiting');
 
 				if(ajax_is_running) {
 					return;
@@ -140,8 +141,12 @@ jQuery(document).ready(function($){
 							
 							that[0].reset();
 							that.find('.suggester-map-div').hide();
-							that.find('.alert-success').html('success').show();
-							// showPopup( 'invite-new-dentist-success-popup', data);
+							that.hide();
+							that.find('.mode-dentist-clinic label').removeClass('active');
+							that.find('.modern-field').removeClass('active');
+							that.find('.blue-button').removeClass('waiting');
+							$('.success-invited-dentist').find('.d-name').html(data.dentist_name);
+							$('.success-invited-dentist').show();
 
 							gtag('event', 'Invite', {
 								'event_category': 'InviteDentist',
@@ -165,6 +170,11 @@ jQuery(document).ready(function($){
 				);
 				return false;
 			}
-		} );
+		});
+
+		$('.invite-new-dentist-again').click( function() {
+			$('.success-invited-dentist').hide();
+			$('.invite-new-dentist-form').show();
+		});
 	}
 });

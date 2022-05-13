@@ -625,6 +625,22 @@
                                         ])
                                     </div>
                                 </div>
+
+                                @if(!empty($item->socials))
+                                    @foreach($item->socials as $k => $v)
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label" style="padding-top: 0px">
+                                                <img src="{{ url('img-trp/social-network/'.config('trp.social_network')[$k].'.svg') }}" src-attr="{{ url('img-trp/social-network/') }}" width="20"/>
+                                            </label>
+                                            <div class="col-md-{{ $item->is_dentist ? '7' : '10' }}" >
+                                                <a href="{{ $v }}" target="_blank">
+                                                    {{ $v }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">
                                         Facebook ID
