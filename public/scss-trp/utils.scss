@@ -552,6 +552,12 @@ h5 {
 				border-bottom-left-radius: 13px;
 				width: 44px;
 			}
+
+			&.alert-info {
+				&:before {
+    				height: 14px !important;
+				}
+			}
 		}
 
 		&.alert-warning {

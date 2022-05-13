@@ -438,6 +438,9 @@ h5 {
       border-top-left-radius: 13px;
       border-bottom-left-radius: 13px;
       width: 44px; }
+    .popup .alert.mobile.alert-info:before,
+    .site-content .alert.mobile.alert-info:before {
+      height: 14px !important; }
   .popup .alert.alert-warning,
   .site-content .alert.alert-warning {
     border-color: #f4c1c3; }
