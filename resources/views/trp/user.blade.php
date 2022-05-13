@@ -17,6 +17,7 @@
 	$showAboutSection = $item->description || $item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id);
 	$showTeamSection = $item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $hasTeamApproved || $hasNotVerifiedTeamFromInvitation );
 	$showLocationsSection = ($item->lat && $item->lon) || $item->photos->isNotEmpty() || ( !empty($user) && $user->id==$item->id);
+	$dentistWorkHours = $item->work_hours ? (is_array($item->work_hours) ? $item->work_hours : json_decode($item->work_hours, true)) : null;
 
 	$week_days = [
 		1 => 'Mon',
@@ -325,9 +326,9 @@
 														<p class="month">
 															{{ $week_day }}
 														</p>
-														@if($item->work_hours && array_key_exists($w, $item->work_hours))
+														@if($dentistWorkHours && array_key_exists($w, $dentistWorkHours))
 															<p>
-																@foreach($item->work_hours[$w] as $k => $work_hours)
+																@foreach($dentistWorkHours[$w] as $k => $work_hours)
 																	{{ $work_hours }} {!! $loop->last ? '' : ' - ' !!}
 																@endforeach
 															</p>
@@ -1551,9 +1552,9 @@
 											</div>
 										@endif
 										<div class="working-hours-wrap">
-											@if($item->work_hours && array_key_exists($w, $item->work_hours))
+											@if($dentistWorkHours && array_key_exists($w, $dentistWorkHours))
 												<p>
-													@foreach($item->work_hours[$w] as $k => $work_hours)
+													@foreach($dentistWorkHours[$w] as $k => $work_hours)
 														{{ $work_hours }} {!! $loop->last ? '' : ' - ' !!}
 													@endforeach
 												</p>
