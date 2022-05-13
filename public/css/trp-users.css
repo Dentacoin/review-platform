@@ -159,6 +159,7 @@
     .profile-wrapper .profile-info-container .avatar-wrapper {
       margin-right: 30px; }
       .profile-wrapper .profile-info-container .avatar-wrapper .avatar {
+        box-shadow: 0px 0px 10px 2px #f3f3f3;
         border-radius: 50%;
         margin-bottom: 10px; }
         @media screen and (max-width: 768px) {

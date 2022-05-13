@@ -113,7 +113,8 @@
             max-width: 86px;
             border-radius: 50%;
             height: auto;
-            display: block; }
+            display: block;
+            box-shadow: 0px 0px 10px 2px #f3f3f3; }
           .flickity-oval .flickity .slider-wrapper .slider-inner .slider-image-wrapper .partner {
             width: 220px;
             background-color: #0084d1;
