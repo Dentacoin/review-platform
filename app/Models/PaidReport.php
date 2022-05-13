@@ -48,6 +48,19 @@ class PaidReport extends Model {
         'deleted_at'
     ];
 
+	public static $langs = [
+		'en' => 'English',
+	];
+
+	public static $statuses = [
+        'draft' => 'Draft',
+        'published' => 'Published',
+	];
+    
+	public static $formats = [
+        'pdf' => 'PDF',
+	];
+
     public function photos() {
         return $this->hasMany('App\Models\PaidReportPhoto', 'paid_report_id', 'id');
     }

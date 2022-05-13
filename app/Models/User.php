@@ -987,7 +987,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function addImage($img) {
-
         $extensions = ['image/jpeg', 'image/png'];
 
         if (in_array($img->mime(), $extensions)) {

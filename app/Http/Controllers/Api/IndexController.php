@@ -279,19 +279,22 @@ class IndexController extends ApiController {
 
 	    	if(!empty($user)) {
 
-                $extensions = ['image/jpeg', 'image/png'];
+				$allowedExtensions = array('jpg', 'jpeg', 'png');
+				$allowedMimetypes = ['image/jpeg', 'image/png'];
 
-                if (!in_array(Input::file('avatar')->getMimeType(), $extensions)) {
+				$checkFile = GeneralHelper::checkFile(Input::file('avatar'), $allowedExtensions, $allowedMimetypes);
+
+				if(isset($checkFile['success'])) {
+					$user->addImage(Image::make( Input::file('avatar') )->orientate());
+					
+					return Response::json( [
+						'success' => true,
+					]);
+				} else {
 					return Response::json( [
 						'success' => false,
 					]);
 				}
-
-				$user->addImage(Image::make( request()->file('avatar') )->orientate());
-
-		    	return Response::json( [
-		            'success' => true,
-		        ]);
 	    	}
     	}
 

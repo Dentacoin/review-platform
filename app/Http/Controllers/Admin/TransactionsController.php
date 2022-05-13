@@ -82,6 +82,10 @@ class TransactionsController extends AdminController {
             $transactions = $transactions->whereNotNull('is_paid_by_the_user');
         }
 
+        if(!empty(request()->input('for-staking'))) {
+            $transactions = $transactions->where('for_staking', 1);
+        }
+
         if(!empty(request()->input('manual_check_admin'))) {
             $transactions = $transactions->whereNotNull('manual_check_admin');
         }
@@ -181,6 +185,7 @@ class TransactionsController extends AdminController {
             'search_from' => $this->request->input('search-from'),
             'search_email' =>  $this->request->input('search-email'),
             'paid_by_user' => $this->request->input('paid-by-user'),
+            'for_staking' => $this->request->input('for-staking'),
             'search_user_status' => $this->request->input('search-user-status'),
             'manual_check_admin' => $this->request->input('manual_check_admin'),
             'search_layer_type' => $this->request->input('search-layer'),
@@ -419,6 +424,37 @@ class TransactionsController extends AdminController {
         $transaction->save();
     }
 
+    public function massComplete() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        if( Request::input('ids') ) {
+
+            $transactions = DcnTransaction::where('status', 'unconfirmed')
+            ->whereIn('id', Request::input('ids'))
+            ->get();
+
+            foreach ($transactions as $trans) {
+                $dcn_history = new DcnTransactionHistory;
+                $dcn_history->transaction_id = $trans->id;
+                $dcn_history->admin_id = $this->user->id;
+                $dcn_history->status = 'completed';
+                $dcn_history->old_status = $trans->status;
+                $dcn_history->history_message = 'Completed by admin';
+                $dcn_history->save();
+
+                $trans->status = 'completed';
+                $trans->save();
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'All selected transactions are completed' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
     public function bumpDontRetry() {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
@@ -554,22 +590,6 @@ class TransactionsController extends AdminController {
 
         if(!empty(request('timerange'))) {
             $withdrawal_conditions->timerange = request('timerange');
-        }
-
-        if(!empty(request('server_pending_trans_check'))) {
-            $withdrawal_conditions->server_pending_trans_check = true;
-        } else {
-            $withdrawal_conditions->server_pending_trans_check = false;
-        }
-
-        if(!empty(request('count_pending_transactions'))) {
-            $withdrawal_conditions->count_pending_transactions = request('count_pending_transactions');
-        }
-
-        if(!empty(request('connected_nodes_check'))) {
-            $withdrawal_conditions->connected_nodes_check = true;
-        } else {
-            $withdrawal_conditions->connected_nodes_check = false;
         }
 
         if(!empty(request('daily_max_amount')) || request('daily_max_amount') === 0) {
@@ -764,56 +784,6 @@ class TransactionsController extends AdminController {
         return $this->showView('transactions-edit', array(
             'item' => $item,
         ));
-    }
-
-    public function checkPendingTransactions() {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_POST => 1,
-            CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-pending-transactions',
-            CURLOPT_SSL_VERIFYPEER => 0,
-        ));
-         
-        $resp = json_decode(curl_exec($curl));
-        curl_close($curl);
-
-        $pending_transactions = !empty($resp) ? $resp->success : 'Error';
-
-        return Response::json([
-            'data' => $pending_transactions
-        ]);
-    }
-
-    public function checkConnectedNodes() {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-        
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_POST => 1,
-            CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-connected-nodes',
-            CURLOPT_SSL_VERIFYPEER => 0,
-        ));
-         
-        $response = json_decode(curl_exec($curl));
-        curl_close($curl);
-
-        $connected_nodes = !empty($response) ? $response->success : 'Error';
-
-        return Response::json([
-            'data' => $connected_nodes
-        ]);
     }
 
     public function makeUserSuspicious($user_id) {

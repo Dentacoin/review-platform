@@ -18,6 +18,8 @@ class Order extends Model {
         'payment_info',
         'price',
         'price_with_currency',
+        'invoice',
+        'company_vat',
         'company_name',
         'company_number',
         'country_id',

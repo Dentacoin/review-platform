@@ -1549,7 +1549,7 @@ class VoxService {
                 $answered_arr[] = $i;
             }
 
-            return Response::json( array(
+            return Response::json([
                 'welcome_vox' => $welcome_vox,
                 'related_voxes' => $related_voxes,
                 'suggested_voxes' => $suggested_voxes,
@@ -1568,7 +1568,7 @@ class VoxService {
                 'countries' => ['' => '-'] + Country::with('translations')->get()->pluck('name', 'id')->toArray(),
                 'country_id' => $user->country_id ?? self::getCountryIdByIp() ?? '',
                 'birth_years' => $birth_years,
-            ) );
+            ]);
         } else {
             $seos = PageSeo::find(15);
             $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
@@ -1578,7 +1578,7 @@ class VoxService {
 
             return [
                 'view' => 'vox',
-                'params' => array(
+                'params' => [
                     'welcome_vox' => $welcome_vox,
                     'related_voxes' => $related_voxes,
                     'suggested_voxes' => $suggested_voxes,
@@ -1617,7 +1617,7 @@ class VoxService {
                     'social_description' => $social_description,
                     'testmode' => $testmode,
                     'isAdmin' => $isAdmin,
-                ),
+                ],
             ];
         }
     }
@@ -2080,8 +2080,17 @@ class VoxService {
                         } else {
 
                             UserSurveyWarning::where('user_id', $user->id)->where('action', 'wrong')->delete();
+                            
+                            $ban_info = 'Vox answers:';
+
+                            foreach(VoxAnswer::where('vox_id', $vox->id)->where('is_skipped', 0)->where('user_id', $user->id)->orderBy('id', 'desc')->take(10)->get() as $va) {
+                                $ban_info .= ' <br/>Q ID: '.$va->question_id.'; Answer: '.$va->answer.'; Created: '.$va->created_at.';';
+                            }
                                 
                             $ban = $user->banUser('vox', 'mistakes', $vox->id, $question->id, $a);
+                            $new_ban = $ban['ban'];
+                            $new_ban->ban_info = $ban_info;
+                            $new_ban->save();
 
                             $ret['ban'] = true;
                             $ret['ban_duration'] = $ban['days'];

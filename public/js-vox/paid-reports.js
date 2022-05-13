@@ -177,4 +177,15 @@ $(document).ready(function(){
         }
     }
 
+    $('[name="invoice"]').change( function() {
+        if($(this).val() == 'yes') {
+            $('.vat-wrapper').removeClass('hide');
+        } else {
+            $('[name="vat"]').prop('checked', false);
+            $('[name="vat"]').removeAttr('checked');
+            $('[name="vat"]').closest('label').removeClass('active');
+            $('.vat-wrapper').addClass('hide');
+        }
+    });
+
 });

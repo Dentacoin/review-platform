@@ -13,6 +13,7 @@ use App\Models\WithdrawalsCondition;
 use App\Models\ScrapeDentistResult;
 use App\Models\VoxQuestionAnswered;
 use App\Models\UserSurveyWarning;
+use App\Models\CronjobSecondRun;
 use App\Models\CronjobThirdRun;
 use App\Models\StopVideoReview;
 use App\Models\DcnTransaction;
@@ -398,11 +399,17 @@ PENDING TRANSACTIONS
                         $dcn_history->save();
 
                         if( $trans->user && !empty($trans->user->email) ) {
-                            $trans->user->sendTemplate( 20, [
+                            $params = [
                                 'transaction_amount' => $trans->amount,
                                 'transaction_address' => $trans->address,
                                 'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
-                            ], $trans->type=='vox' ? 'vox' : ( $trans->type=='trp' ? 'trp' : 'dentacoin') );
+                            ];
+
+                            if($trans->for_staking) {
+                                $trans->user->sendGridTemplate(141, $params, 'dentacoin');
+                            } else {
+                                $trans->user->sendTemplate( 20, $params, $trans->type=='vox' ? 'vox' : ( $trans->type=='trp' ? 'trp' : 'dentacoin') );
+                            }
                         }
 
                         echo 'COMPLETED!'.PHP_EOL;
@@ -426,9 +433,9 @@ PENDING TRANSACTIONS
                     CronjobRun::destroy($cron_running->id);
                 }
 
-                $cronjob_stars = new CronjobRun;
-                $cronjob_stars->started_at = Carbon::now();
-                $cronjob_stars->save();
+                $cronjob_starts = new CronjobRun;
+                $cronjob_starts->started_at = Carbon::now();
+                $cronjob_starts->save();
 
                 echo '
 NEW & NOT SENT TRANSACTIONS
@@ -436,15 +443,18 @@ NEW & NOT SENT TRANSACTIONS
 =========================
 
 ';
-                $number = 20; //always has to be %2
+                $number = 30; //always has to be %2
                 $half_number = $number/2;
+                $cronjobMinutes = 5;
 
                 $count_new_trans = DcnTransaction::where('status', 'new')
+                ->where('for_staking', 0)
                 ->whereNull('is_paid_by_the_user')
                 ->where('processing', 0)
                 ->count();
 
                 $count_not_sent_trans = DcnTransaction::where('status', 'not_sent')
+                ->where('for_staking', 0)
                 ->whereNull('is_paid_by_the_user')
                 ->where('processing', 0)
                 ->count();
@@ -467,6 +477,7 @@ NEW & NOT SENT TRANSACTIONS
                 }
 
                 $new_transactions = DcnTransaction::where('status', 'new')
+                ->where('for_staking', 0)
                 ->whereNull('is_paid_by_the_user')
                 ->where('processing', 0)
                 ->orderBy('id', 'asc')
@@ -474,6 +485,7 @@ NEW & NOT SENT TRANSACTIONS
                 ->get(); //
 
                 $not_sent_transactions = DcnTransaction::where('status', 'not_sent')
+                ->where('for_staking', 0)
                 ->whereNull('is_paid_by_the_user')
                 ->where('processing', 0)
                 ->orderBy('id', 'asc')
@@ -486,7 +498,7 @@ NEW & NOT SENT TRANSACTIONS
                     
                     $cron_new_trans_time = GasPrice::find(1); // 2021-02-16 13:43:00
 
-                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes(10)) {
+                    if ($cron_new_trans_time->cron_new_trans < Carbon::now()->subMinutes($cronjobMinutes)) {
                         if (!GeneralHelper::isGasExpensive()) {
 
                             foreach ($transactions as $trans) {
@@ -503,7 +515,7 @@ NEW & NOT SENT TRANSACTIONS
                             $cron_new_trans_time->cron_new_trans = Carbon::now();
                             $cron_new_trans_time->save();
                         } else {
-                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes(10);
+                            $cron_new_trans_time->cron_new_trans = Carbon::now()->subMinutes($cronjobMinutes);
                             $cron_new_trans_time->save();
 
                             echo 'New Transactions High Gas Price';
@@ -513,12 +525,68 @@ NEW & NOT SENT TRANSACTIONS
 
                 echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-                CronjobRun::destroy($cronjob_stars->id);
+                CronjobRun::destroy($cronjob_starts->id);
             } else {
                 echo 'New transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
 
         })->cron("* * * * *");
+
+
+        $schedule->call(function () {
+
+            $cron_running = CronjobSecondRun::first();
+
+            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
+
+                if(!empty($cron_running)) {
+                    CronjobSecondRun::destroy($cron_running->id);
+                }
+
+                $cronjob_starts = new CronjobSecondRun;
+                $cronjob_starts->started_at = Carbon::now();
+                $cronjob_starts->save();
+
+                echo '
+STAKING TRANSACTIONS
+
+=========================
+
+';
+
+                $transactions = DcnTransaction::where('status', 'new')
+                ->where('for_staking', 1)
+                ->whereNull('is_paid_by_the_user')
+                ->where('processing', 0)
+                ->orderBy('id', 'asc')
+                ->take(30)
+                ->get(); 
+                
+                if($transactions->isNotEmpty()) {
+                    if (!GeneralHelper::isStakingGasExpensive()) {
+                        foreach ($transactions as $trans) {
+                            $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT) . ': ' . str_pad($trans->amount, 10, ' ', STR_PAD_LEFT) . ' DCN ' . str_pad($trans->status, 15, ' ', STR_PAD_LEFT) . ' -> ' . $trans->address . ' || ' . $trans->tx_hash;
+                            echo $log . PHP_EOL;
+                        }
+
+                        Dcn::staking($transactions);
+
+                        foreach ($transactions as $trans) {
+                            echo 'NEW STATUS: ' . $trans->status . ' / ID ' . $trans->id . ' / ' . $trans->message . ' ' . $trans->tx_hash . PHP_EOL;
+                        }
+                    } else {
+                        echo 'Staking Transactions High Gas Price';
+                    }
+                }
+
+                echo 'Staking Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+                CronjobSecondRun::destroy($cronjob_starts->id);
+            } else {
+                echo 'Staking transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            }
+
+        })->cron("*/5 * * * *");
 
 
         $schedule->call(function () {
@@ -531,9 +599,9 @@ NEW & NOT SENT TRANSACTIONS
                     CronjobThirdRun::destroy($cron_running->id);
                 }
 
-                $cronjob_stars = new CronjobThirdRun;
-                $cronjob_stars->started_at = Carbon::now();
-                $cronjob_stars->save();
+                $cronjob_starts = new CronjobThirdRun;
+                $cronjob_starts->started_at = Carbon::now();
+                $cronjob_starts->save();
 
                 echo '
 UNCONFIRMED TRANSACTIONS
@@ -633,13 +701,19 @@ UNCONFIRMED TRANSACTIONS
                             $dcn_history->transaction_id = $trans->id;
                             $dcn_history->status = 'completed';
                             $dcn_history->save();
-
+                            
                             if( $trans->user && !empty($trans->user->email) ) {
-                                $trans->user->sendTemplate( 20, [
+                                $params = [
                                     'transaction_amount' => $trans->amount,
                                     'transaction_address' => $trans->address,
                                     'transaction_link' => config('transaction-links')[$trans->layer_type].$trans->tx_hash
-                                ], $trans->type=='vox' ? 'vox' : ( $trans->type=='trp' ? 'trp' : 'dentacoin') );
+                                ];
+
+                                if($trans->for_staking) {
+                                    $trans->user->sendGridTemplate(141, $params, 'dentacoin');
+                                } else {
+                                    $trans->user->sendTemplate( 20, $params, $trans->type=='vox' ? 'vox' : ( $trans->type=='trp' ? 'trp' : 'dentacoin') );
+                                }
                             }
                             $found = true;
                             echo 'COMPLETED!'.PHP_EOL;
@@ -660,7 +734,7 @@ UNCONFIRMED TRANSACTIONS
                     }
                 }
 
-                CronjobThirdRun::destroy($cronjob_stars->id);
+                CronjobThirdRun::destroy($cronjob_starts->id);
             } else {
                 echo 'Unconfirmed transactions cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
@@ -714,16 +788,17 @@ UNCONFIRMED TRANSACTIONS
             $alerts = [];
 
             foreach($platformAddresses as $platformAddress) {
-                $alerts[] = [
-                    'currency' => 'DCN',
-                    'address' => $platformAddress['address'],
-                    'url' => 'https://api.etherscan.io//api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
-                    'limit' => $platformAddress['limit_dcn']
-                ];
+                // $alerts[] = [
+                //     'currency' => 'DCN',
+                //     'address' => $platformAddress['address'],
+                //     'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
+                //     'limit' => $platformAddress['limit_dcn']
+                // ];
+
                 $alerts[] = [
                     'currency' => 'ETH',
                     'address' => $platformAddress['address'],
-                    'url' => 'https://api'.($platformAddress['optimism'] ? '-optimism' : '').'.etherscan.io//api?module=account&action=balance&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'url' => 'https://api'.($platformAddress['optimism'] ? '-optimistic' : '').'.etherscan.io/api?module=account&action=balance&address='.$platformAddress['address'].'&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => $platformAddress['limit_eth']
                 ];
             }
@@ -2137,7 +2212,7 @@ UNCONFIRMED TRANSACTIONS
 
             echo 'Remove pdf and png stats files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->dailyAt('10:00');
+        })->cron('00 09,19 * * *');
 
 
         $schedule->call(function () {
@@ -2169,6 +2244,7 @@ UNCONFIRMED TRANSACTIONS
 
             echo 'Max Gas Price Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
+            //for normal transactions
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_RETURNTRANSFER => 1,
@@ -2183,6 +2259,24 @@ UNCONFIRMED TRANSACTIONS
             if (!empty($resp) && isset($resp->success)) {
                 $gas = GasPrice::find(1);
                 $gas->max_gas_price = intval(number_format($resp->success / 1000000000));
+                $gas->save();
+            }
+            
+            //for staking transactions
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-max-gas-price-for-staking',
+                CURLOPT_SSL_VERIFYPEER => 0,
+                CURLOPT_POST => 1,
+            ));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            $resp = json_decode(curl_exec($curl));
+            curl_close($curl);
+
+            if (!empty($resp) && isset($resp->success)) {
+                $gas = GasPrice::find(1);
+                $gas->max_staking_gas_price = intval(number_format($resp->success / 1000000000));
                 $gas->save();
             }
 
@@ -2222,7 +2316,9 @@ UNCONFIRMED TRANSACTIONS
            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->groupBy('user_id')->get();
 
            foreach ($transactions as $trans) {
-               $user_transactions = DcnTransaction::where('user_id', $trans->user_id)->where('created_at', '>', Carbon::now()->addDays(-30))->get();
+               $user_transactions = DcnTransaction::where('user_id', $trans->user_id)
+               ->where('created_at', '>', Carbon::now()->addDays(-30))
+               ->get();
 
                foreach ($user_transactions as $user_trans) {
                    foreach ($user_transactions as $user_t) {
@@ -2236,7 +2332,10 @@ UNCONFIRMED TRANSACTIONS
                }
             }
 
-            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))->where('status', '!=', 'failed')->groupBy('user_id')->get();
+            $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))
+            ->where('status', '!=', 'failed')
+            ->groupBy('user_id')
+            ->get();
 
             foreach ($transactions as $trans) {
                 $user = User::withTrashed()->find($trans->user_id);
@@ -2366,44 +2465,6 @@ UNCONFIRMED TRANSACTIONS
             echo 'Translate surveys cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->everyMinute();
-
-
-        $schedule->call(function () {
-            echo 'Pending transactions on server check - START'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-            $withdrawal_conditions = WithdrawalsCondition::find(1);
-
-            if(!empty($withdrawal_conditions) && !$withdrawal_conditions->server_pending_trans_check) {
-
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                    CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_POST => 1,
-                    CURLOPT_URL => 'https://payment-server-info.dentacoin.com/get-pending-transactions',
-                    CURLOPT_SSL_VERIFYPEER => 0,
-                ));
-                
-                $resp = json_decode(curl_exec($curl));
-                curl_close($curl);
-
-                if(!empty($resp) && isset($resp->success) && $resp->success > 50) {
-                    $mtext = 'Check for pending transactions is disabled and there are '.$resp->success.' pending transactions';
-        
-                    Mail::raw($mtext, function ($message) {
-    
-                        $sender = config('mail.from.address');
-                        $sender_name = config('mail.from.name');
-    
-                        $message->from($sender, $sender_name);
-                        $message->to('petya.ivanova@dentacoin.com');
-                        $message->subject('Suspicious dentists deleted');
-                    });
-                }
-            }
-
-            echo 'Pending transactions on server check - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-            
-        })->dailyAt('10:00');
 
 
         $schedule->call(function () {

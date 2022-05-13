@@ -283,9 +283,22 @@ class BranchesController extends FrontController {
                 $newuser->slug = $newuser->makeSlug();
                 $newuser->save();
 
-                if( Request::input('avatar') ) {                    
-                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
-                    $newuser->addImage($img);
+                if( Request::input('avatar') ) {        
+                    
+                    $allowedExtensions = array('jpg', 'jpeg', 'png');
+                    $allowedMimetypes = ['image/jpeg', 'image/png'];
+
+                    $image = GeneralHelper::decode_base64_image(Request::input('avatar'));
+                    $checkFile = GeneralHelper::checkFile($image, $allowedExtensions, $allowedMimetypes);
+
+                    if(isset($checkFile['success'])) {
+                        $img = Image::make( $image )->orientate();
+                        $newuser->addImage($img);
+                    } else {
+                        return Response::json( [
+                            'success' => false,
+                        ]);
+                    }
                 }
                 
                 if(!empty(Request::input('clinic_specialization'))) {

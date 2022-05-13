@@ -230,9 +230,10 @@ class AdminController extends BaseController {
         $params['counters']['contact'] = $support_contacts;
         $params['counters']['orders'] = Order::whereNull('is_send')->count();
 
-        $params['cache_version'] = '20220228';
-
-        if($this->current_page!='home' && !isset($menu[$this->current_page])) {
+        $params['cache_version'] = '20220412';
+        
+        if($this->current_page == 'admins' && $this->current_subpage == 'admins') {
+        } else if($this->current_page!='home' && !isset($menu[$this->current_page])) {
             return redirect('cms');
         }
 

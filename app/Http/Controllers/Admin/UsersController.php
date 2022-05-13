@@ -844,12 +844,24 @@ class UsersController extends AdminController {
                 $newuser->website_notifications = ['dentacoin','trp','vox','assurance','jaws'];
                 $newuser->is_dentist = 1;
                 $newuser->is_clinic = Request::input('type')=='clinic' ? 1 : 0;
-
                 $newuser->save();
 
                 if( Request::input('avatar') ) {
-                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
-                    $newuser->addImage($img);
+
+                    $allowedExtensions = array('jpg', 'jpeg', 'png');
+                    $allowedMimetypes = ['image/jpeg', 'image/png'];
+
+                    $image = GeneralHelper::decode_base64_image(Request::input('avatar'));
+                
+                    $checkFile = GeneralHelper::checkFile($image, $allowedExtensions, $allowedMimetypes);
+
+                    if(isset($checkFile['success'])) {
+                        $img = Image::make( $image )->orientate();
+                        $newuser->addImage($img);
+                    } else {
+                        Request::session()->flash('error-message', $checkFile['error']);
+                        return redirect('cms/users/users/edit/'.$newuser->id);
+                    }
                 }
 
                 $newuser->slug = $newuser->makeSlug();
@@ -980,8 +992,21 @@ class UsersController extends AdminController {
                 // }
 
                 if( Request::input('avatar') ) {
-                    $img = Image::make( GeneralHelper::decode_base64_image(Request::input('avatar')) )->orientate();
-                    $item->addImage($img);
+
+                    $allowedExtensions = array('jpg', 'jpeg', 'png');
+                    $allowedMimetypes = ['image/jpeg', 'image/png'];
+
+                    $image = GeneralHelper::decode_base64_image(Request::input('avatar'));
+                
+                    $checkFile = GeneralHelper::checkFile($image, $allowedExtensions, $allowedMimetypes);
+
+                    if(isset($checkFile['success'])) {
+                        $img = Image::make( $image )->orientate();
+                        $item->addImage($img);
+                    } else {
+                        Request::session()->flash('error-message', $checkFile['error']);
+                        return redirect('cms/users/users/edit/'.$item->id);
+                    }
                 }
 
                 foreach ($this->fields as $key => $value) {
@@ -1745,8 +1770,16 @@ class UsersController extends AdminController {
                                     $newuser->save();
 
                                     if (!empty($row[9])) {
-                                        $img = Image::make( $row[9] )->orientate();
-                                        $newuser->addImage($img);
+
+                                        $allowedExtensions = array('jpg', 'jpeg', 'png');
+                                        $allowedMimetypes = ['image/jpeg', 'image/png'];
+                                    
+                                        $checkFile = GeneralHelper::checkFile($row[9], $allowedExtensions, $allowedMimetypes);
+
+                                        if(isset($checkFile['success'])) {
+                                            $img = Image::make( $row[9] )->orientate();
+                                            $newuser->addImage($img);
+                                        }
                                     }
 
                                     $newuser->generateSocialCover();

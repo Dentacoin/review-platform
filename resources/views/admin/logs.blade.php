@@ -55,7 +55,7 @@
                             {!! @file_get_contents( base_path().'\/../api/storage/logs/withdraw.log' ) !!}
                         @elseif($type == 'api-ban-appeals')
                             {!! @file_get_contents( base_path().'\/../api/storage/logs/ban-appeals.log' ) !!}
-                        @elseif($type == 'too-fast-bans')
+                        @elseif(in_array($type, ['too-fast-bans', 'upload-file']))
                             {!! @file_get_contents( base_path().'/storage/logs/'.$type.'.log' ) !!}
                         @else
                             {!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel'.($type == 'trp' ? '-'.(request('date') ?? date('Y-m-d')) : '').'.log' ) !!}

@@ -3,8 +3,8 @@
 @section('content')
 
     <div class="main-title tac">
-        <h1>DENTAL MARKET RESEARCH REPORTS</h1>
-        <p class="subtitle">based on genuine global data</p>
+        <h1>{{ trans('vox.page.paid-reports.title') }}</h1>
+        <p class="subtitle">{{ trans('vox.page.paid-reports.subtitle') }}</p>
         
 		<img class="blue-circle" src="{{ url('new-vox-img/blue-circle-corner.png') }}"/>
     </div>
@@ -12,12 +12,12 @@
     @if(!empty($item))
         <div class="main-section flex">
             <div class="main-image-wrapper col">
-                <p class="blue-background">LATEST REPORT</p>
-                <img class="main-image" src="{{ $item->getImageUrl('social') }}"/>
+                <p class="blue-background">{{ trans('vox.page.paid-reports.latest-report') }}</p>
+                <img class="main-image" src="{{ $item->getImageUrl('all-reports') }}"/>
                 <img class="small-bubble" src="{{ url('new-vox-img/small-bubble.png') }}" />
             </div>
             <div class="col">
-                <p class="blue-background">LATEST REPORT</p>
+                <p class="blue-background">{{ trans('vox.page.paid-reports.latest-report') }}</p>
                 <div class="main-inner">
                     <h4>{{ $item->main_title }}</h4>
                     <h4 class="gray-title">{{ $item->title }}</h4>
@@ -25,16 +25,18 @@
                     
                     <div class="tags">
                         @foreach($item->languages as $lang)
-                            <span>English | </span>
+                            <span>{{ App\Models\PaidReport::$langs[$lang] }} | </span>
                         @endforeach
                         <span>{{ date('F Y', $item->launched_at->timestamp) }} | </span>
                         @foreach($item->download_format as $format)
-                            <span>Download as .{{ $format }} | </span>
+                            <span>{{ trans('vox.page.paid-reports.download-as') }} .{{ $format }} | </span>
                         @endforeach
-                        <span>{{ $item->pages_count }} pages</span>
+                        <span>{{ trans('vox.page.paid-reports.pages-count', ['count' => $item->pages_count]) }}</span>
                     </div>
                     <br/>
-                    <a href="{{ getLangUrl('dental-industry-reports/'.$item->slug) }}" class="blue-button new-style with-arrow red-button">MORE INFO<img src="{{ url('new-vox-img/white-arrow-right.svg') }}"></a>
+                    <a href="{{ getLangUrl('dental-industry-reports/'.$item->slug) }}" class="blue-button new-style with-arrow red-button">
+                        {{ trans('vox.page.paid-reports.more-info') }}<img src="{{ url('new-vox-img/white-arrow-right.svg') }}">
+                    </a>
                 </div>
             </div>
         </div>
@@ -48,14 +50,14 @@
                         <div class="swiper-slide">
                             <div class="slider-inner">
                                 <div class="slide-padding">
-                                    <a href="{{ getLangUrl('dental-industry-reports/'.$report->slug) }}" class="cover" style="background-image: url('{{ $report->getImageUrl('social') }}');">
-                                        <img src="{{ $report->getImageUrl('social') }}" alt="{{ $report->main_title }} {{ $report->title }}" style="display: none !important;"> 
+                                    <a href="{{ getLangUrl('dental-industry-reports/'.$report->slug) }}" class="cover" style="background-image: url('{{ $report->getImageUrl('all-reports') }}');">
+                                        <img src="{{ $report->getImageUrl('all-reports') }}" alt="{{ $report->main_title }} {{ $report->title }}" style="display: none !important;"> 
                                     </a>
                                     <div class="vox-header clearfix">
                                         <h4 class="report-title bold">{{ $report->main_title }} {{ $report->title }}</h4>
                                         <div class="btns">
                                             <a class="opinion blue-button" href="{{ getLangUrl('dental-industry-reports/'.$report->slug) }}">
-                                                More info
+                                                {{ trans('vox.page.paid-reports.more-info') }}
                                             </a>
                                         </div>
                                     </div>
@@ -77,35 +79,37 @@
                 <img src="{{ url('new-vox-img/graphic.png') }}"/>
             </div>
             <div class="about-content">
-                <h3>ABOUT DENTAVOX:</h3>
+                <h3>{{ trans('vox.page.paid-reports.about-dentavox-title') }}</h3>
 
-                <p>DentaVox research has become the benchmark in modern dental industry research. Limited results from our global oral health surveys are and will remain available for free. The brand new detailed market research reports, however, go a big step further in helping researchers, media, dental professionals, suppliers and students to find detailed, trustworthy data and analysis on highly specific dental topics.</p>                    
+                <p>
+                    {{ trans('vox.page.paid-reports.about-dentavox-description') }}
+                </p>                    
             </div>
         </div>
     </div>
 
     <div class="benefits-wrapper index-container tac">
-        <h3>YOUR BENEFITS: </h3>
+        <h3>{{ trans('vox.page.paid-reports.benefits-title') }}</h3>
         <div class="flex">
             <div class="col">
                 <img src="{{ url('new-vox-img/Benefits-1.png') }}"/>
-                <h4>Respondents <br/>with verified <br/>identities</h4>
-                <p>by the trusted blockchain-based KYC provider Civic</p>
+                <h4>{!! trans('vox.page.paid-reports.benefits-subtitle-1') !!}</h4>
+                <p>{{ trans('vox.page.paid-reports.benefits-description-1') }}</p>
             </div>
             <div class="col">
                 <img src="{{ url('new-vox-img/Benefits-2.png') }}"/>
-                <h4>Answers given <br/>under full <br/>attention </h4>
-                <p>thanks to a smart system of checks, warnings, and bans </p>
+                <h4>{!! trans('vox.page.paid-reports.benefits-subtitle-2') !!}</h4>
+                <p>{{ trans('vox.page.paid-reports.benefits-description-2') }}</p>
             </div>
             <div class="col">
                 <img src="{{ url('new-vox-img/Benefits-3.png') }}"/>
-                <h4>International <br/>respondent <br/>base</h4>
-                <p>allowing for trustworthy all-sides view of the market</p>
+                <h4>{!! trans('vox.page.paid-reports.benefits-subtitle-3') !!}</h4>
+                <p>{{ trans('vox.page.paid-reports.benefits-description-3') }}</p>
             </div>
             <div class="col">
                 <img src="{{ url('new-vox-img/Benefits-4.png') }}"/>
-                <h4>In-depth analysis <br/>of the collected <br/>ANSWERS</h4>
-                <p>for data-driven conclusions by all dental market participants</p>
+                <h4>{!! trans('vox.page.paid-reports.benefits-subtitle-4') !!}</h4>
+                <p>{{ trans('vox.page.paid-reports.benefits-description-4') }}</p>
             </div>
         </div>
     </div>
@@ -113,8 +117,8 @@
     <div class="save-banner">
         <div class="index-container flex flex-center">
             <div class="column">
-                <h2>SAVE UP TO</h2>
-                <p>The most affordable prices<br/>compared to average<br/>industry costs</p>
+                <h2>{{ trans('vox.page.paid-reports.banner-title') }}</h2>
+                <p>{!! trans('vox.page.paid-reports.banner-subtitle') !!}</p>
             </div>
             <div class="column">
                 <img class="perc-off" src="{{ url('new-vox-img/80perc-off.png') }}"/>
@@ -122,15 +126,15 @@
             <div class="column">
                 <p class="checklist">
                     <img class="check" src="{{ url('new-vox-img/check-white.png') }}"/>
-                    Payable via PayPal or crypto
+                    {{ trans('vox.page.paid-reports.banner-checklist-1') }}
                 </p>
                 <p class="checklist">
                     <img class="check" src="{{ url('new-vox-img/check-white.png') }}"/>
-                    Accepted cryptocurrencies: DCN, BTC and ETH
-                </p>                
+                    {{ trans('vox.page.paid-reports.banner-checklist-2') }}
+                </p>
                 <div class="tac">
                     <a href="{!! $items->count() > 1 ? 'javascript:;' : getLangUrl('dental-industry-reports/'.$item->slug) !!}" class="blue-button new-style with-arrow white-button {!! $items->count() > 1 ? 'go-to-reports' : '' !!}">
-                        SEE REPORTS<img src="{{ url('new-vox-img/red-arrow-right.svg') }}">
+                        {{ trans('vox.page.paid-reports.see-reports') }}<img src="{{ url('new-vox-img/red-arrow-right.svg') }}">
                     </a>
                 </div>
             </div>

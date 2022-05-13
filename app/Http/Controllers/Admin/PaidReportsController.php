@@ -8,34 +8,16 @@ use Illuminate\Support\Facades\Input;
 use App\Models\PaidReportPhoto;
 use App\Models\PaidReport;
 
+use App\Helpers\GeneralHelper;
 use App\Helpers\AdminHelper;
 use Carbon\Carbon;
 
-use Validator;
 use Response;
 use Request;
 use Image;
-use Route;
 use Auth;
 
 class PaidReportsController extends AdminController {
-
-    public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
-        parent::__construct($request, $route, $locale);
-
-        $this->statuses = [
-            'draft' => 'Draft',
-            'published' => 'Published',
-        ];
-
-        $this->languages = [
-            'en' => 'English',
-        ];
-
-        $this->formats = [
-            'pdf' => 'PDF',
-        ];
-    }
 
     public function list() {
 
@@ -78,7 +60,7 @@ class PaidReportsController extends AdminController {
 
     	return $this->showView('paid-reports', array(
             'reports' => $reports,
-            'statuses' => $this->statuses,
+            'statuses' => PaidReport::$statuses,
             'total_count' => $total_count,
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
@@ -167,51 +149,72 @@ class PaidReportsController extends AdminController {
         }
 
         return $this->showView('paid-reports-form', array(
-	        'statuses' => $this->statuses,
-	        'languages' => $this->languages,
-	        'formats' => $this->formats,
+	        'statuses' => PaidReport::$statuses,
+	        'languages' => PaidReport::$langs,
+	        'formats' => PaidReport::$formats,
         ));
     }
 
     private function addImages($report) {
         
-        $extensions = ['image/jpeg', 'image/png'];
+        $allowedExtensions = array('jpg', 'jpeg', 'png');
+        $allowedMimetypes = ['image/jpeg', 'image/png'];
 
         if( Input::file('photo') ) {
 
-            if (!in_array(Input::file('photo')->getMimeType(), $extensions)) {
-                $this->request->session()->flash('error-message', 'File extension not supported' );
+            $checkFile = GeneralHelper::checkFile(Input::file('photo'), $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['success'])) {
+                $img = Image::make( Input::file('photo') )->orientate();
+                $report->addImage($img);
+            } else {
+                $this->request->session()->flash('error-message', $checkFile['error'] );
                 return redirect('cms/vox/paid-reports');
             }
-                
-            $img = Image::make( Input::file('photo') )->orientate();
-            $report->addImage($img);
         }
         
         if( Input::file('photo-social') ) {
 
-            if (!in_array(Input::file('photo-social')->getMimeType(), $extensions)) {
-                $this->request->session()->flash('error-message', 'File extension not supported' );
+            $checkFile = GeneralHelper::checkFile(Input::file('photo-social'), $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['success'])) {
+                $img = Image::make( Input::file('photo-social') )->orientate();
+                $report->addImage($img, 'social');
+            } else {
+                $this->request->session()->flash('error-message', $checkFile['error'] );
                 return redirect('cms/vox/paid-reports');
             }
-                
-            $img = Image::make( Input::file('photo-social') )->orientate();
-            $report->addImage($img, 'social');
+        }
+        
+        if( Input::file('photo-all-reports') ) {
+
+            $checkFile = GeneralHelper::checkFile(Input::file('photo-all-reports'), $allowedExtensions, $allowedMimetypes);
+
+            if(isset($checkFile['success'])) {
+                $img = Image::make( Input::file('photo-all-reports') )->orientate();
+                $report->addImage($img, 'all-reports');
+            } else {
+                $this->request->session()->flash('error-message', $checkFile['error'] );
+                return redirect('cms/vox/paid-reports');
+            }
         }
 
         if(!empty(Input::file('gallery'))) {
 
             foreach(Input::file('gallery') as $k => $sp) {
-    
-                if (!in_array($sp->getMimeType(), $extensions)) {
-                    $this->request->session()->flash('error-message', 'File extension not supported' );
+
+                $checkFile = GeneralHelper::checkFile($sp, $allowedExtensions, $allowedMimetypes);
+
+                if(isset($checkFile['success'])) {
+                    $sample_page = new PaidReportPhoto;
+                    $sample_page->paid_report_id = $report->id;
+                    $sample_page->save();
+                    $img = Image::make( $sp )->orientate();
+                    $sample_page->addImage($img);
+                } else {
+                    $this->request->session()->flash('error-message', $checkFile['error'] );
                     return redirect('cms/vox/paid-reports');
-                }
-                $sample_page = new PaidReportPhoto;
-                $sample_page->paid_report_id = $report->id;
-                $sample_page->save();
-                $img = Image::make( $sp )->orientate();
-                $sample_page->addImage($img);
+                }                
             }
         }
     }
@@ -294,9 +297,9 @@ class PaidReportsController extends AdminController {
 
 	        return $this->showView('paid-reports-form', array(
 	            'item' => $item,
-                'statuses' => $this->statuses,
-                'languages' => $this->languages,
-                'formats' => $this->formats,
+                'statuses' => PaidReport::$statuses,
+                'languages' => PaidReport::$langs,
+                'formats' => PaidReport::$formats,
 	        ));
 	    } else {
             return redirect('cms/vox/paid-reports/');

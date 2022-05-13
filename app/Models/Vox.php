@@ -281,7 +281,7 @@ class Vox extends Model {
     public function getImageUrl($thumb = false) {
         if($this->hasimage) {
             if(!empty($this->thumbnail_name)) {
-                return url('/storage/voxes/'.($this->id%100).'/'.$this->thumbnail_name.($thumb ? '-thumb' : '').'.jpg').'?rev=1'.$this->updated_at->timestamp;
+                return url('/storage/voxes/'.($this->id%100).'/'.str_replace([' ', "'"], ['-', ''], $this->thumbnail_name).($thumb ? '-thumb' : '').'.jpg').'?rev=1'.$this->updated_at->timestamp;
             } else {
                 return url('/storage/voxes/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev=1'.$this->updated_at->timestamp;
             }
@@ -300,7 +300,7 @@ class Vox extends Model {
 
     public function addImage($img, $name) {
         $extensions = ['image/jpeg', 'image/png'];
-
+        
         if (in_array($img->mime(), $extensions)) {
             $to = $this->getImagePath(false, $name);
             $to_thumb = $this->getImagePath(true, $name);

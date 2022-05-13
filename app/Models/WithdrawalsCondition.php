@@ -11,7 +11,6 @@ class WithdrawalsCondition extends Model {
         "min_vox_amount",
         "timerange",
         "count_pending_transactions",
-        "connected_nodes_check",
         "daily_max_amount",
         "is_optimism_activated"
     ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vox;
 
 use App\Http\Controllers\FrontController;
 
+use App\Models\PaidReport;
 use App\Models\Vox;
 
 use App;
@@ -31,6 +32,14 @@ class SitemapController extends FrontController {
 
 			if (!empty($vox->translate(App::getLocale(), true)->slug) && $vox->has_stats) {
 				$links[] = $vox->getStatsList();
+			}
+		}
+
+		$paidReports = PaidReport::where('status', 'published')->get();
+
+		if($paidReports->isNotEmpty()) {
+			foreach ($paidReports as $paidReport) {
+				$links[] = getLangUrl('dental-industry-reports/'.$paidReport->slug);
 			}
 		}
 

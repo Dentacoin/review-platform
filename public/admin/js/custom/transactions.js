@@ -57,64 +57,6 @@ $(document).ready(function(){
 			}
 		});
 	});
-
-	$('#check-cur-pending-tx').click( function() {		
-    	$.ajax( {
-			url: window.location.origin+'/cms/check-pending-trans/',
-			type: 'POST',
-			dataType: 'json',
-			success: function( data ) {
-				$('#cur-pending-tx').html(data.data);
-			},
-			error: function(data) {
-				console.log('error');
-			}
-		});
-	});
-
-	$('#check-cur-nodes').click( function() {		
-    	$.ajax( {
-			url: window.location.origin+'/cms/check-nodes/',
-			type: 'POST',
-			dataType: 'json',
-			success: function( data ) {
-				$('#cur-nodes').html(data.data);
-			},
-			error: function(data) {
-				console.log('error');
-			}
-		});
-	});
-
-	$('#server_pending_trans_check, #connected_nodes_check').change( function() {
-
-		var checked = $(this).is(':checked');
-		var is_pending = $(this).attr('id') == 'server_pending_trans_check' ? true : false;
-		if(checked) {
-			if(!confirm('Are you sure you want to '+(is_pending ? 'check for server pending transactions' : 'check for connected nodes')+'?')){         
-				$(this).removeAttr('checked');
-			} else {
-				if(is_pending) {
-					$('#count_pending_transactions').removeAttr("disabled");
-				}
-			}
-		} else {
-			if(!confirm('Are you sure you DON\'T want to '+(is_pending ? 'check for server pending transactions' : 'check for connected nodes')+'?')){
-				$(this).attr("checked", "checked");
-			} else {
-				if(is_pending) {
-					$('#count_pending_transactions').prop('disabled', 'disabled');
-				}
-			}
-		}
-	});
-
-	///on load page
-	if($('#server_pending_trans_check').is(':checked')) {
-		$('#count_pending_transactions').removeAttr("disabled");
-	} else {
-		$('#count_pending_transactions').prop('disabled', 'disabled');
-	}
 	
 	$('.make-user-suspicious').click( function() {
 		var action = $('#suspiciousUserModal form').attr('original-action') + '/' + $(this).attr('user-id');
