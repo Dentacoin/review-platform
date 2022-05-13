@@ -335,8 +335,8 @@ class DentistsController extends FrontController {
                 $items = $items->orderBy($field[0], $field[1]);
             }
         } else {
-            $requestOrder = 'avg_rating_desc';
-            $items = $items->orderBy('avg_rating', 'DESC');
+            $requestOrder = 'ratings_desc';
+            $items = $items->orderBy('ratings', 'DESC');
         }
 
         

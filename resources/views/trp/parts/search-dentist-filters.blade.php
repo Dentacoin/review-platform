@@ -232,13 +232,13 @@
         Sort by:
     </span>
     <span href="javascript:;" class="filter active">
-        <span class="filter-order-active-text">{{ empty($requestOrder) ? 'Stars (highest first)' : $orders[$requestOrder] }}</span>
+        <span class="filter-order-active-text">{{ empty($requestOrder) ? 'Most reviews' : $orders[$requestOrder] }}</span>
         <div class="caret-down"></div>
 
         <div class="filter-options">
             @foreach($orders as $key => $order)
                 @php
-                    $active = empty($requestOrder) && $key == 'avg_rating_desc' ? true : ($requestOrder == $key ? true : false);
+                    $active = empty($requestOrder) && $key == 'ratings_desc' ? true : ($requestOrder == $key ? true : false);
                 @endphp
 
                 <label class="checkbox-label {!! $active ? 'active' : '' !!}" for="order-{{$key}}" label-text="{{$order}}">
