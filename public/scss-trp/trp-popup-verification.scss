@@ -69,15 +69,6 @@ $phone: "screen and (max-width: 768px)";
         }
 
         #clinic-add-team {
-        	.popup-title {
-        		margin-right: -125px;
-    			margin-left: -125px;
-
-    			@media #{$tablet} {
-    				margin-right: -80px;
-    				margin-left: -80px;
-    			}
-        	}
 
         	form {
         		margin-bottom: 30px;

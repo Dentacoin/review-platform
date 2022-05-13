@@ -669,6 +669,7 @@ $phone: "screen and (max-width: 768px)";
             color: #332255;
             font-weight: 900;
             margin-bottom: 15px;
+            margin-top: 20px;
 
             @media #{$phone} {
                 margin-bottom: 25px;

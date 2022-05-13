@@ -6,10 +6,21 @@ $phone: "screen and (max-width: 768px)";
 .written-review {
     margin-bottom: 60px;
 
+    @media #{$phone} {
+        margin-bottom: 40px;
+        position: relative;
+    }
+
     &.video-review {
         width: 50%;
         margin-right: 50px;
         margin-bottom: 0px;
+
+        @media #{$phone} {
+            width: 100%;
+            margin-right: 0px;
+            margin-bottom: 20px;
+        }
     }
 
     &.hidden-review {
@@ -53,6 +64,10 @@ $phone: "screen and (max-width: 768px)";
             font-weight: bold;
             display: block;
             margin-bottom: 10px;
+
+            @media #{$phone} {
+                margin-bottom: 5px;
+            }
         }
 
         .review-title {
@@ -60,6 +75,10 @@ $phone: "screen and (max-width: 768px)";
             color: #332255;
             font-weight: 900;
             display: block;
+
+            @media #{$phone} {
+                font-size: 18px;
+            }
         }
 
         >div {
@@ -71,6 +90,11 @@ $phone: "screen and (max-width: 768px)";
             min-width: 120px;
             color: #888888;
 
+            @media #{$phone} {
+                top: 0px;
+                font-size: 14px;
+            }
+
             img {
                 width: 25px;
             }
@@ -81,6 +105,10 @@ $phone: "screen and (max-width: 768px)";
         display: flex;
         align-items: center;
         margin-bottom: 18px;
+
+        @media #{$phone} {
+            flex-flow: row wrap;
+        }
 
         .trusted-sticker {
             margin-left: 0px;
@@ -112,6 +140,10 @@ $phone: "screen and (max-width: 768px)";
     .review-content {
         font-size: 18px;
         color: #332255;
+
+        @media #{$phone} {
+            line-height: 29px;
+        }
 
         .more {
             color: #0084d1;

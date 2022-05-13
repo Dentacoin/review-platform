@@ -42,13 +42,6 @@
         .verification-popup .popup-inner .verification-content h4 {
           font-size: 16px;
           margin-bottom: 25px; } }
-  .verification-popup .popup-inner #clinic-add-team .popup-title {
-    margin-right: -125px;
-    margin-left: -125px; }
-    @media screen and (max-width: 998px) {
-      .verification-popup .popup-inner #clinic-add-team .popup-title {
-        margin-right: -80px;
-        margin-left: -80px; } }
   .verification-popup .popup-inner #clinic-add-team form {
     margin-bottom: 30px; }
     .verification-popup .popup-inner #clinic-add-team form .flex {

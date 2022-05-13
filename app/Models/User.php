@@ -794,7 +794,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if(!StopEmailValidation::find(1)->stopped) {
 
             $email_validation = EmailValidation::where('email', 'like', $email)->first();
-
             if(empty($email_validation)) {
                 $query_params = new \stdClass();
                 $query_params->email = $email;
@@ -962,22 +961,29 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getImageUrl($thumb = false) {
-        if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
-            return url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
-        } else {
-            return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
-        }
+        // if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
+        //     return $this->id == 37530 ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+        // } else {
+            // $avatar = $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+
+            if (!file_exists($this->getImagePath(storage_path().'/app/public/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg'))) {
+                $avatar = url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+            } else {
+                $avatar = url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg');
+            }
+            return $avatar;
+        // }
     }
     public function getImagePath($thumb = false) {
-        if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
-            return '/var/www/html/trp-urgent/public/new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png';
-        } else {
+        // if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
+        //     return '/var/www/html/trp-urgent/public/new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png';
+        // } else {
             $folder = storage_path().'/app/public/avatars/'.($this->id%100);
             if(!is_dir($folder)) {
                 mkdir($folder);
             }
             return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.jpg';
-        }
+        // }
     }
 
     public function addImage($img) {

@@ -1,4 +1,4 @@
-<div class="popup fixed-popup popup-existing-dentist active removable" id="popup-existing-dentist">
+<div class="popup fixed-popup popup-existing-dentist no-image active removable" id="popup-existing-dentist">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">

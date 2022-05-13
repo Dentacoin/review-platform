@@ -451,7 +451,8 @@
   font-size: 18px;
   color: #332255;
   font-weight: 900;
-  margin-bottom: 15px; }
+  margin-bottom: 15px;
+  margin-top: 20px; }
   @media screen and (max-width: 768px) {
     #submit-review-popup .treatments-wrapper .treatment-category {
       margin-bottom: 25px;

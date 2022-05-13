@@ -115,8 +115,9 @@
 
 							<div class="review-option-text review-type-content" style="">
 								<div class="modern-field active alert-after">
+									{{-- tooltip-text fixed-tooltip --}}
 									<textarea 
-										class="modern-input tooltip-text fixed-tooltip" 
+										class="modern-input" 
 										id="review-answer" 
 										name="answer" 
 										text="{{ nl2br(trans('trp.popup.submit-review-popup.last-question-tooltip')) }}"

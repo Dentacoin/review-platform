@@ -450,3 +450,158 @@ $phone: "screen and (max-width: 768px)";
 		}
 	}
 }
+
+
+
+//for logged
+
+.invite-new-dentist-background {
+	background-color: #e2ebff;
+	padding-bottom: 100px;
+}
+
+.invite-new-dentist-wrapper {
+	display: flex;
+    align-items: center;
+
+	>img {
+		@media #{$pc} {
+			max-width: 430px;
+		}
+
+		@media #{$tablet} {
+			display: none;
+		}
+	}
+
+	.invite-new-dentist-titles {
+		background-color: transparent;
+		position: relative;
+		z-index: 1;
+		transform: translateY(120px);
+		max-width: 670px;
+	    margin-left: auto;
+	    margin-right: auto;
+
+	    @media #{$phone} {
+	    	padding: 0px 45px;
+	    }
+	}
+
+	h2 {
+		text-align: center;
+		font-size: 35px;
+		color: #0564c6;
+		font-weight: 800;
+		margin-bottom: 25px;
+
+		@media #{$pc} {
+			font-size: 38px;
+		}
+
+		@media #{$phone} {
+			font-size: 28px;
+			margin-bottom: 20px;
+		}
+	}
+
+	h5 {
+		color: #332255;
+		font-weight: 900;
+		text-align: center;
+		margin-bottom: 40px;
+
+		@media #{$phone} {
+			margin-bottom: 30px;
+		}
+	}
+
+	.invite-new-dentist-form {
+		flex: 1;
+		background-color: white;
+		padding: 60px 90px;
+		box-shadow: 0 0 19px -2px rgba(0,0,0,0.8);
+		border-radius: 30px;
+		margin-left: -120px;
+
+		@media #{$pc} {
+			padding: 60px 50px;
+		}
+
+		@media #{$tablet} {
+			max-width: 100%;
+			margin-left: 0px;
+		}
+
+		@media #{$phone} {
+			max-width: 100%;
+			margin-left: 0px;
+		}
+	
+		.blue-button {
+			text-transform: uppercase;
+			padding: 14px 83px;
+	
+			@media #{$phone} {
+				padding: 13px 54px;
+			}
+		}
+	
+		.mode-dentist-clinic {
+			margin-bottom: 20px;
+			
+			@media #{$phone} {
+				margin-bottom: 0px;
+			}
+	
+			label {
+				flex: 1;
+				border-width: 2px;
+				text-transform: uppercase;
+    			font-weight: 800;
+				padding: 15px 18px 15px 12px;
+				display: flex;
+    			align-items: center;
+
+				&:first-child {
+					margin-right: 10px;
+				}
+
+                &.active {
+                    box-shadow: none;
+                    color: #0084d1;
+
+                    .active-image {
+                        display: block;
+                    }
+
+                    .inactive-image {
+                        display: none;
+                    }
+                }
+
+                img {
+                    max-width: 30px;
+					width: 30px;
+                    margin-right: 11px;
+                    vertical-align: -webkit-baseline-middle;
+
+                    &.active-image {
+                        display: none;
+                    }
+
+                    &.inactive-image {
+                        display: block;
+                    }
+                }
+			}
+
+		}
+	
+		.modern-field {
+			.modern-input {
+				background-color: white;
+			}
+		}
+	}
+}

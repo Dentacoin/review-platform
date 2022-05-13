@@ -432,8 +432,8 @@ h5 {
     .popup .alert.mobile:before,
     .site-content .alert.mobile:before {
       left: 9px;
-      width: 24px;
-      height: 24px; }
+      width: 24px !important;
+      height: 24px !important; }
     .popup .alert.mobile:after,
     .site-content .alert.mobile:after {
       border-top-left-radius: 13px;
@@ -457,13 +457,20 @@ h5 {
       background-color: #f4c1c3; }
   .popup .alert.alert-orange,
   .site-content .alert.alert-orange {
-    border-color: #f59c1a;
-    color: #f59c1a; }
+    border-color: #e4c1b0; }
     .popup .alert.alert-orange:before,
     .site-content .alert.alert-orange:before {
-      width: 22px;
-      height: 22px;
-      background: url("../img/alert-small-warning.png") no-repeat 0px 0px; }
+      width: 44px;
+      height: 44px;
+      background: url("../img/new-alert-orange.svg") no-repeat 0px 0px; }
+      @media screen and (max-width: 768px) {
+        .popup .alert.alert-orange:before,
+        .site-content .alert.alert-orange:before {
+          width: 24px;
+          height: 24px; } }
+    .popup .alert.alert-orange:after,
+    .site-content .alert.alert-orange:after {
+      background-color: #e4c1b0; }
   .popup .alert.alert-success,
   .site-content .alert.alert-success {
     border-color: #90fce6; }
@@ -692,6 +699,10 @@ body.popup-visible {
     color: white;
     transition: all 0.3s ease; }
 
+.disabled-button {
+  opacity: 0.5;
+  cursor: no-drop !important; }
+
 .ratings .stars {
   width: 94px;
   height: 16px;
@@ -730,6 +741,8 @@ body.popup-visible {
   height: 22px;
   background: url("../img-trp/stars-gray-average.png") 50% 50% no-repeat;
   background-size: contain; }
+  .ratings.average .stars.new {
+    background-image: url("../img-trp/stars-new-average.png"); }
   .ratings.average .stars .bar {
     background: url("../img-trp/stars-blue-average.png") 0% 50% no-repeat;
     background-size: cover;
@@ -758,9 +771,11 @@ body.popup-visible {
 textarea.input {
   width: 100%;
   padding-top: 10px;
-  height: 260px;
-  font: inherit;
-  font-size: 16px; }
+  height: 220px;
+  font-size: 16px;
+  color: #332255;
+  font-family: 'Lato', sans-serif;
+  line-height: 22px; }
   textarea.input::placeholder {
     font: inherit;
     font-size: 16px; }

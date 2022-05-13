@@ -37,29 +37,16 @@ $(document).ready(function(){
         });
     }
 
-    $('.header-info .fa-search').click( function() {
-        $('.home-search-form').show();
-        $(this).hide();
-        $('#search-input').focus();
-        $('.blue-background').addClass('extended');
-    });
-
     var flickityFunctions = function() {
-        if (window.innerWidth > 768) {
-            var draggable_gallery = false;
-        } else {
-            var draggable_gallery = true;
-        }
 
         if($('.gallery-flickity').length) {
-            $('.gallery-flickity').flickity({
+            var galleryFlickty = $('.gallery-flickity').flickity({
                 autoPlay: false,
                 wrapAround: true,
                 cellAlign: 'left',
-                pageDots: true,
                 freeScroll: true,
                 groupCells: 1,
-                draggable: draggable_gallery,
+                draggable: false,
             });
         }
 
@@ -68,10 +55,9 @@ $(document).ready(function(){
                 autoPlay: false,
                 wrapAround: true,
                 cellAlign: 'left',
-                pageDots: true,
                 freeScroll: true,
                 groupCells: 1,
-                draggable: draggable_gallery,
+                draggable: false,
             });
         }
     }
@@ -377,12 +363,22 @@ $(document).ready(function(){
     });
 
     $('.tab-title').click( function() {
-        // $('.tab-title').removeClass('active');
-        // $(this).addClass('active');
 
-        $('body, html').animate({
-            scrollTop: $('#'+$(this).attr('data-tab')).offset().top - $('header').outerHeight()
-        }, 500);
+        if(!$(this).hasClass('grayed')) {
+            $('.tab-title').removeClass('active');
+            $(this).addClass('active');
+        }
+
+        if($(this).hasClass('patients-tab')) {
+            $('.tab-sections').hide();
+            $('.asks-section').show();
+        } else {
+            $('.tab-sections').show();
+            $('.asks-section').hide();
+            $('body, html').animate({
+                scrollTop: $('#'+$(this).attr('data-tab')).offset().top - $('header').outerHeight()
+            }, 500);
+        }
     });
 
     $('.show-video-reviews').click( function() {

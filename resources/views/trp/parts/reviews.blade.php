@@ -64,12 +64,12 @@
                     {!! nl2br(trans('trp.page.profile.trp.show-entire')) !!}
                 </a>
             </div>
-            @if(!$is_dentist)
+            {{-- @if(!$is_dentist)
                 <a href="{{ $current_dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">=
                     <img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
                     {!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
                 </a>
-            @endif
+            @endif --}}
         @else
             <div class="review-content">
                 {!! nl2br($review->answer) !!}...
@@ -79,7 +79,7 @@
                 </a>
             </div>
 
-            <div class="review-footer flex flex-mobile break-mobile">
+            {{-- <div class="review-footer flex flex-mobile break-mobile">
                 <div class="col">
                     @if(!empty($user) && $user->id==$current_dentist->id && !$review->verified && !empty($user->trusted))
                         <a class="button verify-review" href="javascript:;">
@@ -95,7 +95,7 @@
                         </a>
                     @endif
                 </div>
-            </div>
+            </div> --}}
 
             @if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
                 <div class="review-replied-wrapper reply-form" style="display: none;">

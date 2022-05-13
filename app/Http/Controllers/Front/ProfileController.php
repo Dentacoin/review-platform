@@ -194,9 +194,8 @@ class ProfileController extends FrontController {
 
             return Response::json([
                 'success' => true,
-                'message' => trans('trp.page.profile.invite.success'),
                 'text' => $text,
-            ] );
+            ]);
         }
     }
 
@@ -214,7 +213,8 @@ class ProfileController extends FrontController {
             if ($validator->fails()) {
                 $ret = array(
                     'success' => false,
-                    'message' => trans('trp.page.profile.invite.copypaste.error'),
+                    // 'message' => trans('trp.page.profile.invite.copypaste.error'),
+                    'message' => 'Please, paste names and emails separated by commas or tabs.',
                 );
 
                 return Response::json( $ret );
@@ -229,8 +229,9 @@ class ProfileController extends FrontController {
                 if (count($rows[0]) <= 1) {
                     return Response::json([
                         'success' => false,
-                        'message' => trans('trp.page.profile.invite.copypaste.error'),
-                    ] );
+                        // 'message' => trans('trp.page.profile.invite.copypaste.error'),
+                        'message' => 'Please, paste names and emails separated by commas or tabs.',
+                    ]);
                 }
 
                 $reversedRows = [];
@@ -250,7 +251,7 @@ class ProfileController extends FrontController {
                         $reversedRows[$i][] = isset($row[$i]) ? trim($row[$i]) : '';
                     }
                 }
-
+                
                 if (session('bulk_invites')) {
                     session()->pull('bulk_invites');
                 }                
@@ -259,66 +260,7 @@ class ProfileController extends FrontController {
                 return Response::json([
                     'success' => true,
                     'info' => $reversedRows,
-                ] );
-            }
-        }
-    }
-
-    /**
-     * dentist invites patients from file and by copy/paste step 2 (merged method)
-     */
-    public function invite_copypaste_emails($locale=null) {
-
-        if(!empty($this->user) && $this->user->canInvite('trp') ) {
-
-            if(Request::Input('patient-emails')) {
-
-                $bulk_invites = session('bulk_invites');
-                $bulk_emails = $bulk_invites[Request::Input('patient-emails') - 1];
-
-                unset($bulk_invites[Request::Input('patient-emails') - 1]);
-
-                if (session('bulk_emails')) {
-                    session()->pull('bulk_emails');
-                }                
-                session(['bulk_emails' => $bulk_emails]);
-
-                $first_ten_emails = array_slice($bulk_emails, 0, 10);
-                $p_emails = implode(', ', $first_ten_emails);
-
-                return Response::json([
-                    'success' => true,
-                    'info' => $bulk_invites,
-                    'emails' => $p_emails,
-                ] );
-            }
-        }
-    }
-
-    /**
-     * dentist invites patients from file and by copy/paste step 3 (merged method)
-     */
-    public function invite_copypaste_names($locale=null) {
-
-        if(!empty($this->user) && $this->user->canInvite('trp') ) {
-
-            if(Request::Input('patient-names')) {
-
-                $bulk_invites = session('bulk_invites');
-                $bulk_names = $bulk_invites[Request::Input('patient-names') - 1];
-
-                if (session('bulk_names')) {
-                    session()->pull('bulk_names');
-                }                
-                session(['bulk_names' => $bulk_names]);
-
-                $first_ten_names = array_slice($bulk_names, 0, 10);
-                $p_names = implode(', ', $first_ten_names);
-
-                return Response::json([
-                    'success' => true,
-                    'names' => $p_names,
-                ] );
+                ]);
             }
         }
     }
@@ -330,9 +272,16 @@ class ProfileController extends FrontController {
 
         if(!empty($this->user) && $this->user->canInvite('trp') && $this->user->is_dentist ) {
 
-            if(session('bulk_names') && session('bulk_emails')) {
-                $emails = session('bulk_emails');
-                $names = session('bulk_names');
+            if(Request::Input('patient-emails')) {
+
+                if(Request::Input('patient-emails') == '1') {
+
+                    $emails = session('bulk_invites')[0];
+                    $names = session('bulk_invites')[1];
+                } else {
+                    $emails = session('bulk_invites')[1];
+                    $names = session('bulk_invites')[0];
+                }
 
                 $invalid = 0;
                 $invalid_emails = [];
@@ -377,22 +326,23 @@ class ProfileController extends FrontController {
                     $gtag_tracking = false;
                 } else if(!empty($invalid) && $invalid != count($emails)) {
                     if (empty($already_invited)) {
-                        $final_message = trans('trp.page.profile.invite.copypaste.unvalid-emails').'<br/>'.implode(',', $invalid_emails);
+                        // $final_message = trans('trp.page.profile.invite.copypaste.unvalid-emails').'<br/>'.implode(',', $invalid_emails);
+                        $final_message = 'Your review invites have been sent successfully to patients with valid emails. There were some unvalid emails, however, which were skipped:'.'<br/>'.implode(',', $invalid_emails);
                         $alert_color = 'orange';
                     } else {
-                        $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback').'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
+                        $final_message = 'Your review invites have been sent successfully to patients with valid emails. Some patients, however, were skipped either because they have already submitted feedback earlier this month or their emails were invalid:'.'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
+                        // $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback').'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
                         $alert_color = 'orange';
                     }
                 } else if(!empty($already_invited) && ($already_invited == count($emails))) {
-                    $final_message = trans('trp.page.profile.invite.copypaste.all-submitted-feedback').'<br/>'.implode(',', $already_invited_emails);
+                    // $final_message = trans('trp.page.profile.invite.copypaste.all-submitted-feedback').'<br/>'.implode(',', $already_invited_emails);
+                    $final_message = 'Sending your review invites has failed. You have already invited these patients to submit feedback earlier this month.'.'<br/>'.implode(',', $already_invited_emails);
                     $alert_color = 'warning';
                     $gtag_tracking = false;
                 } else if(!empty($already_invited) && $already_invited != count($emails)) {
-                    $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback-invalid-emails').'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
+                    // $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback-invalid-emails').'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
+                    $final_message = 'Your review invites have been sent successfully to patients with valid emails. Some patients, however, were skipped because they have already submitted feedback earlier this month:'.'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
                     $alert_color = 'orange';
-                } else {
-                    $final_message = trans('trp.page.profile.invite.success');
-                    $alert_color = 'success';
                 }
 
                 foreach ($emails as $key => $email) {
@@ -402,20 +352,18 @@ class ProfileController extends FrontController {
                     }
                 }
 
-                session()->pull('bulk_names');
-                session()->pull('bulk_emails');
-
                 return Response::json([
                     'success' => true,
                     'message' => $final_message,
                     'color' => $alert_color,
                     'gtag_tracking' => $gtag_tracking,
-                ] );
+                ]);
             } else {
                 return Response::json([
                     'success' => false,
-                    'message' => trans('trp.page.profile.invite.copypaste.failed'),
-                ] );
+                    // 'message' => trans('trp.page.profile.invite.copypaste.failed'),
+                    'message' => 'Something went wrong. Please, start over.',
+                ]);
             }
         }
     }
@@ -524,7 +472,7 @@ class ProfileController extends FrontController {
                 return Response::json([
                     'success' => true,
                     'info' => $reversedRows,
-                ] ); 
+                ]); 
             }
         }
     }
@@ -1000,40 +948,39 @@ class ProfileController extends FrontController {
 
         $validator_arr = [];
         foreach ($this->profile_fields as $key => $value) {
-            if( Request::input('field') && $key!=Request::input('field') ) {
-                continue;
+            if( Request::input('field') && $key==Request::input('field') ) {
+                $arr = [];
+                if (!empty($value['required'])) {
+                    $arr[] = 'required';
+                }
+                if (!empty($value['is_email'])) {
+                    $arr[] = 'email';
+                    $arr[] = 'unique:users,email,'.$this->user->id;
+                }
+                if (!empty($value['min'])) {
+                    $arr[] = 'min:'.$value['min'];
+                }
+                if (!empty($value['max'])) {
+                    $arr[] = 'max:'.$value['max'];
+                }
+                if (!empty($value['number'])) {
+                    $arr[] = 'numeric';
+                }
+                if (!empty($value['array'])) {
+                    $arr[] = 'array';
+                }
+                if (!empty($value['values'])) {
+                    $arr[] = 'in:'.implode(',', array_keys($value['values']) );
+                }
+                if (!empty($value['regex'])) {
+                    $arr[] = $value['regex'];
+                }
+    
+                if (!empty($arr)) {
+                    $validator_arr[$key] = $arr;
+                }
             }
 
-            $arr = [];
-            if (!empty($value['required'])) {
-                $arr[] = 'required';
-            }
-            if (!empty($value['is_email'])) {
-                $arr[] = 'email';
-                $arr[] = 'unique:users,email,'.$this->user->id;
-            }
-            if (!empty($value['min'])) {
-                $arr[] = 'min:'.$value['min'];
-            }
-            if (!empty($value['max'])) {
-                $arr[] = 'max:'.$value['max'];
-            }
-            if (!empty($value['number'])) {
-                $arr[] = 'numeric';
-            }
-            if (!empty($value['array'])) {
-                $arr[] = 'array';
-            }
-            if (!empty($value['values'])) {
-                $arr[] = 'in:'.implode(',', array_keys($value['values']) );
-            }
-            if (!empty($value['regex'])) {
-                $arr[] = $value['regex'];
-            }
-
-            if (!empty($arr)) {
-                $validator_arr[$key] = $arr;
-            }
         }
 
         if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
@@ -1145,44 +1092,27 @@ class ProfileController extends FrontController {
                 ]);
             }
 
-            // if($this->user->validateMyEmail() == true) {
-
-            //     if( Request::input('json') ) {
-            //         $ret = [
-            //             'success' => false,
-            //             'messages' => [
-            //                 'email' => trans('trp.common.invalid-email')
-            //             ]
-            //         ];
-            //         return Response::json($ret);
-            //     }
-
-            //     return redirect( getLangUrl('/') )
-            //     ->withInput()
-            //     ->withErrors([
-            //         'email' => trans('trp.common.invalid-email')
-            //     ]);
-            // }
-
             foreach ($this->profile_fields as $key => $value) {
                 if( Request::exists($key) || (Request::input('field')=='specialization' && $key=='specialization') || $key=='email_public' || (Request::input('field')=='accepted_payment' && $key=='accepted_payment') ) {
 
                     if($key=='work_hours') {
                         $wh = Request::input('work_hours');
-
+                        
                         foreach ($wh as $k => $v) {
-                            if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) || empty(Request::input('day-'.$k))) { 
+                            if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) || !empty(Request::input('day_'.$k))) { 
                                 unset($wh[$k]);
                                 continue;
                             }
 
-                            if( !empty($wh[$k][0]) && !empty(Request::input('day-'.$k))) {
+                            if( !empty($wh[$k][0]) && empty(Request::input('day_'.$k))) {
                                 $wh[$k][0] = implode(':', $wh[$k][0]);
                             }
-                            if( !empty($wh[$k][1]) && !empty(Request::input('day-'.$k)) ) {
+                            if( !empty($wh[$k][1]) && empty(Request::input('day_'.$k)) ) {
                                 $wh[$k][1] = implode(':', $wh[$k][1]);
                             }
                         }
+
+                        // dd($wh);
                         $this->user->$key = $wh;
                     } else if($value['type']=='specialization') {
                         UserCategory::where('user_id', $this->user->id)->delete();
@@ -1219,9 +1149,31 @@ class ProfileController extends FrontController {
             }
             
             if( Request::input('json') ) {
+                $inputs = Request::all();
+                unset($inputs['_token']);
+                unset($inputs['field']);
+                unset($inputs['json']);
+
+                if(isset($inputs['name'])) {
+                    $inputs['name'] = $this->user->getNames();
+                }
+
+                if(isset($inputs['phone'])) {
+                    $inputs['phone'] = $this->user->getFormattedPhone();
+                }
+
+                if(isset($inputs['avatar'])) {
+                    $inputs['avatar'] = $this->user->getImageUrl(true);
+                }
+
+                if(isset($inputs['current-email'])) {
+                    $inputs['current-email'] = $this->user->email;
+                }
+
                 $ret = [
                     'success' => true,
-                    'href' => getLangUrl('/')
+                    'href' => getLangUrl('/'),
+                    'inputs' => $inputs,
                 ];
 
                 if( Request::input('field') ) {
@@ -1353,6 +1305,7 @@ class ProfileController extends FrontController {
                 'reviews' => $this->user->is_dentist ? $this->user->reviews_in() : $this->user->reviews_out,
                 'css' => [
                     'trp-profile.css',
+                    'trp-reviews.css',
                 ],
                 'js' => [
                     'profile.js',

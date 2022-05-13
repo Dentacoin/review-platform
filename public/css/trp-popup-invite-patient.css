@@ -1,0 +1,506 @@
+#popup-invite .popup-image {
+  margin-right: -40px; }
+  @media screen and (max-width: 1200px) {
+    #popup-invite .popup-image {
+      margin-right: -110px; } }
+#popup-invite .popup-inner {
+  width: 100%;
+  padding: 50px 50px 30px;
+  max-width: 700px;
+  margin-bottom: 0px;
+  min-height: 700px; }
+  @media screen and (max-width: 768px) {
+    #popup-invite .popup-inner {
+      padding: 50px 15px 30px; } }
+  #popup-invite .popup-inner.success-invite {
+    padding: 86px 80px 47px; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .popup-inner.success-invite {
+        padding: 70px 15px; } }
+    #popup-invite .popup-inner.success-invite h2 {
+      font-size: 32px; }
+    #popup-invite .popup-inner.success-invite .check-image {
+      margin-bottom: 40px;
+      max-width: 125px; }
+      @media screen and (max-width: 768px) {
+        #popup-invite .popup-inner.success-invite .check-image {
+          max-width: 80px;
+          margin-bottom: 20px; } }
+    #popup-invite .popup-inner.success-invite .step-info {
+      font-size: 18px;
+      text-align: center;
+      color: #332255; }
+      #popup-invite .popup-inner.success-invite .step-info.last {
+        margin-bottom: 70px; }
+    #popup-invite .popup-inner.success-invite .invite-alert {
+      margin-top: 0px;
+      margin-bottom: 20px; }
+    #popup-invite .popup-inner.success-invite .white-button {
+      padding: 10px 76px; }
+      @media screen and (max-width: 768px) {
+        #popup-invite .popup-inner.success-invite .white-button {
+          padding: 10px 56px; } }
+    @media screen and (max-width: 768px) {
+      #popup-invite .popup-inner.success-invite .blue-button {
+        padding: 10px 37px; } }
+  #popup-invite .popup-inner .white-button {
+    border-width: 1px;
+    margin-right: 10px; }
+    #popup-invite .popup-inner .white-button.bulk-invite-back {
+      font-size: 36px;
+      font-weight: normal;
+      padding: 1px 34px;
+      vertical-align: top; }
+  #popup-invite .popup-inner .blue-button {
+    padding: 10px 57px; }
+  #popup-invite .popup-inner h2 {
+    font-size: 28px;
+    font-weight: 800; }
+  #popup-invite .popup-inner .popup-tabs {
+    margin-bottom: 40px; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .popup-inner .popup-tabs {
+        margin-bottom: 20px;
+        overflow-x: scroll;
+        margin-left: -15px;
+        margin-right: -15px;
+        padding-left: 15px;
+        padding-right: 15px; } }
+    #popup-invite .popup-inner .popup-tabs .popup-tabs-inner {
+      display: flex; }
+      @media screen and (max-width: 768px) {
+        #popup-invite .popup-inner .popup-tabs .popup-tabs-inner {
+          width: 600px; } }
+    #popup-invite .popup-inner .popup-tabs .popup-tab {
+      position: relative;
+      font-size: 16px;
+      padding: 8px 23px 10px;
+      background-color: #e2ebff;
+      border-radius: 22px;
+      margin-right: 15px;
+      border: 1px solid #3b9fdd;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      flex: 1;
+      text-align: center; }
+      #popup-invite .popup-inner .popup-tabs .popup-tab:last-child {
+        margin-right: 0px; }
+      #popup-invite .popup-inner .popup-tabs .popup-tab.active {
+        background-color: #0084d1;
+        color: white; }
+  #popup-invite .popup-inner .popup-desc {
+    color: #332255;
+    font-size: 18px; }
+  #popup-invite .popup-inner h5 {
+    text-align: left;
+    font-size: 18px;
+    font-weight: 900;
+    color: #332255;
+    margin-bottom: 15px; }
+  #popup-invite .popup-inner .blue-button {
+    text-transform: none; }
+#popup-invite .invite-content {
+  padding-bottom: 40px; }
+  #popup-invite .invite-content .invite-more-options {
+    margin-bottom: 45px; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .invite-content .invite-more-options {
+        margin-bottom: 25px; } }
+    #popup-invite .invite-content .invite-more-options .invite-hubapp {
+      flex: 2;
+      color: #332255; }
+    #popup-invite .invite-content .invite-more-options .preview-invite {
+      flex: 1;
+      color: #0084d1;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      max-width: 200px;
+      margin-left: auto; }
+      @media screen and (max-width: 768px) {
+        #popup-invite .invite-content .invite-more-options .preview-invite {
+          max-width: 100%;
+          margin-left: 0px;
+          justify-content: initial;
+          margin-top: 20px; } }
+      #popup-invite .invite-content .invite-more-options .preview-invite img {
+        max-width: 24px;
+        margin-right: 5px;
+        margin-bottom: -2px; }
+  #popup-invite .invite-content .checkboxes-wrapper {
+    width: 100%;
+    overflow: hidden;
+    overflow-x: auto;
+    margin-bottom: 30px;
+    -webkit-overflow-scrolling: touch; }
+    #popup-invite .invite-content .checkboxes-wrapper .checkboxes-inner {
+      display: flex; }
+      @media screen and (max-width: 768px) {
+        #popup-invite .invite-content .checkboxes-wrapper .checkboxes-inner {
+          flex-direction: column; } }
+    #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper {
+      margin-right: 40px;
+      flex: 1; }
+      @media screen and (max-width: 768px) {
+        #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper {
+          margin-right: 0px; } }
+      #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper:last-child {
+        margin-right: 0px; }
+        @media screen and (max-width: 768px) {
+          #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper:last-child {
+            margin-top: 20px; } }
+      #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper input {
+        display: none; }
+      #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio {
+        cursor: pointer;
+        position: relative;
+        margin-bottom: 20px;
+        flex: 1;
+        text-align: center;
+        background-color: #f0f6fd;
+        padding: 10px 0px;
+        color: #888888; }
+        #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio.active {
+          background-color: #2dcec3;
+          color: white; }
+        #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio:first-child {
+          margin-right: 2px;
+          border-top-left-radius: 20px;
+          border-bottom-left-radius: 20px; }
+        #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio:nth-child(2) {
+          border-top-right-radius: 20px;
+          border-bottom-right-radius: 20px; }
+      #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper .copypaste-box {
+        border: 1px solid #0084d1;
+        border-radius: 8px;
+        padding: 5px 0px;
+        max-height: 200px;
+        overflow-y: auto; }
+        #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper .copypaste-box p {
+          border-bottom: 1px solid #ebebeb;
+          color: #333;
+          padding: 4px 18px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis; }
+          #popup-invite .invite-content .checkboxes-wrapper .checkbox-wrapper .copypaste-box p:last-child {
+            border-bottom: none; }
+  #popup-invite .invite-content .label-file {
+    display: block;
+    width: 100%;
+    height: 55px;
+    border: 2px solid #cccccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer; }
+    #popup-invite .invite-content .label-file .browse {
+      width: 132px;
+      text-align: center;
+      background-color: #0084d1;
+      height: 55px;
+      margin-right: -1px;
+      color: white;
+      line-height: 55px;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      font-size: 20px; }
+      @media screen and (max-width: 768px) {
+        #popup-invite .invite-content .label-file .browse {
+          width: 112px; } }
+    #popup-invite .invite-content .label-file span {
+      flex: 1;
+      padding: 0px 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+    #popup-invite .invite-content .label-file input {
+      opacity: 0;
+      z-index: -1;
+      width: 1px;
+      position: absolute; }
+  #popup-invite .invite-content .file-info {
+    margin-bottom: 250px; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .invite-content .file-info {
+        margin-bottom: 40px;
+        margin-top: 10px; } }
+    #popup-invite .invite-content .file-info .download-sample {
+      color: #0084d1; }
+    #popup-invite .invite-content .file-info img {
+      width: 12px;
+      margin-right: 3px; }
+    #popup-invite .invite-content .file-info span {
+      display: block;
+      text-align: right;
+      color: #888888;
+      font-size: 14px; }
+  #popup-invite .invite-content .info {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center; }
+    #popup-invite .invite-content .info img {
+      margin-right: 5px; }
+  #popup-invite .invite-content .button {
+    padding: 12px 49px;
+    background-color: #0cafd4;
+    -webkit-appearance: none; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .invite-content .button {
+        width: 100%;
+        text-align: center; } }
+    #popup-invite .invite-content .button i {
+      color: white; }
+    #popup-invite .invite-content .button.button-inner-white {
+      background-color: white;
+      border-color: #0cafd4;
+      color: #0cafd4;
+      padding: 11px 77px; }
+    #popup-invite .invite-content .button[disabled="disabled"] {
+      background-color: #aaaaaa; }
+  #popup-invite .invite-content .whatsapp-button {
+    padding: 14px 29px;
+    padding-left: 70px;
+    padding-right: 60px;
+    margin-top: 20px;
+    display: inline-block;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    position: relative;
+    text-transform: inherit;
+    background-color: #0084d1;
+    border-radius: 30px; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .invite-content .whatsapp-button {
+        margin-top: 0px; } }
+    #popup-invite .invite-content .whatsapp-button img {
+      position: absolute;
+      background-color: transparent;
+      max-width: 65px;
+      top: 50%;
+      transform: translateY(-50%);
+      left: -30px; }
+  #popup-invite .invite-content .modern-field .modern-input {
+    border-width: 1px;
+    border-radius: 8px; }
+  #popup-invite .invite-content .final-button {
+    position: relative; }
+    #popup-invite .invite-content .final-button.waiting {
+      color: white; }
+      #popup-invite .invite-content .final-button.waiting .loader {
+        display: block; }
+    #popup-invite .invite-content .final-button .loader {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%); }
+      #popup-invite .invite-content .final-button .loader i {
+        border-radius: 50%;
+        display: block;
+        font-size: 15px;
+        width: 20px;
+        height: 20px;
+        text-indent: -9999em;
+        border-top: 3px solid #121212;
+        border-right: 3px solid white;
+        border-bottom: 3px solid white;
+        border-left: 3px solid white;
+        animation: load8 1.1s infinite linear; }
+  #popup-invite .invite-content .chosen-patient-info {
+    height: 62px;
+    border: 1px solid #d6d6d7;
+    border-radius: 8px;
+    margin-top: 25px; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .invite-content .chosen-patient-info {
+        height: auto; } }
+    #popup-invite .invite-content .chosen-patient-info .patient-info-label {
+      height: 100%;
+      min-width: 160px;
+      text-align: center;
+      align-items: center;
+      line-height: 60px;
+      text-transform: uppercase;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      background-color: #eeeeee; }
+      @media screen and (max-width: 768px) {
+        #popup-invite .invite-content .chosen-patient-info .patient-info-label {
+          line-height: 40px;
+          border-top-right-radius: 8px;
+          border-bottom-left-radius: 0px; } }
+    #popup-invite .invite-content .chosen-patient-info .patient-info-value {
+      height: 100%;
+      line-height: 60px;
+      margin: 0px 23px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px; }
+      @media screen and (max-width: 768px) {
+        #popup-invite .invite-content .chosen-patient-info .patient-info-value {
+          line-height: 50px;
+          margin: 0px 10px; } }
+  #popup-invite .invite-content form .input-flex {
+    align-items: center; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .invite-content form .input-flex {
+        display: flex; } }
+    #popup-invite .invite-content form .input-flex .code-wrapper {
+      flex: 1;
+      max-width: 68px;
+      text-align: center;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #eeeeee;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      border-right: none;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px; }
+      @media screen and (max-width: 998px) {
+        #popup-invite .invite-content form .input-flex .code-wrapper {
+          height: 45px; } }
+      @media screen and (max-width: 768px) {
+        #popup-invite .invite-content form .input-flex .code-wrapper {
+          max-width: 58px; } }
+    #popup-invite .invite-content form .input-flex .modern-field {
+      margin-bottom: 0px; }
+      #popup-invite .invite-content form .input-flex .modern-field .modern-input + label {
+        height: 0px; }
+      #popup-invite .invite-content form .input-flex .modern-field .modern-input {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px; }
+  #popup-invite .invite-content form #add-invite-image {
+    opacity: 0;
+    position: absolute;
+    z-index: -1; }
+  #popup-invite .invite-content form label[for="add-invite-image"] {
+    position: relative;
+    width: 100%;
+    height: 41px;
+    background-color: #126585;
+    display: block;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    line-height: 41px;
+    cursor: pointer; }
+  #popup-invite .invite-content form .col:first-child {
+    margin-left: 0px; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .invite-content form .col:first-child {
+        margin-right: 0px; } }
+  #popup-invite .invite-content form .col {
+    margin-left: 15px; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .invite-content form .col {
+        margin-left: 0px; } }
+  #popup-invite .invite-content form .add-dentist,
+  #popup-invite .invite-content form .add-patient {
+    color: #126585; }
+  #popup-invite .invite-content form .button {
+    margin-top: 25px;
+    padding: 12px 49px; }
+#popup-invite .first-alert {
+  margin-top: -110px; }
+  @media screen and (max-width: 768px) {
+    #popup-invite .first-alert {
+      margin-top: 0px; } }
+#popup-invite .whatsapp-image {
+  max-width: 260px;
+  display: block;
+  margin: -20px auto 20px; }
+  @media screen and (max-width: 768px) {
+    #popup-invite .whatsapp-image {
+      margin-bottom: 40px; } }
+#popup-invite .CodeMirror {
+  border: 1px solid #d6d6d7;
+  border-radius: 10px;
+  width: 100%;
+  height: 140px !important;
+  margin-bottom: 140px !important; }
+  @media screen and (max-width: 768px) {
+    #popup-invite .CodeMirror {
+      margin-bottom: 40px !important; } }
+  #popup-invite .CodeMirror pre.CodeMirror-line {
+    padding-left: 35px !important; }
+  #popup-invite .CodeMirror pre.CodeMirror-placeholder {
+    color: #afb0b9 !important;
+    padding-left: 35px !important; }
+#popup-invite .CodeMirror-gutters {
+  border-color: #ebebeb;
+  width: 28px !important;
+  left: 0px !important; }
+#popup-invite .CodeMirror-linenumber {
+  min-width: 15px !important; }
+#popup-invite .CodeMirror-gutter-wrapper {
+  left: 0px !important; }
+#popup-invite .sample-invite-wrapper p, #popup-invite .sample-invite-wrapper div, #popup-invite .sample-invite-wrapper a, #popup-invite .sample-invite-wrapper a strong {
+  font-family: arial,helvetica,sans-serif;
+  font-size: 14px;
+  line-height: 22px; }
+#popup-invite .sample-invite-wrapper a, #popup-invite .sample-invite-wrapper a strong {
+  text-decoration: none !important;
+  color: #1188E6; }
+#popup-invite .sample-invite-wrapper p {
+  margin: 0 !important;
+  padding: 0 !important; }
+#popup-invite .sample-invite-wrapper table.wrapper {
+  width: 100% !important;
+  table-layout: fixed !important;
+  -webkit-font-smoothing: antialiased !important;
+  -webkit-text-size-adjust: 100% !important;
+  -moz-text-size-adjust: 100% !important;
+  -ms-text-size-adjust: 100% !important; }
+#popup-invite .sample-invite-wrapper strong {
+  font-weight: bold; }
+#popup-invite .sample-invite-wrapper img.max-width {
+  max-width: 100% !important; }
+#popup-invite .sample-invite-wrapper .column.of-2 {
+  width: 50% !important; }
+#popup-invite .sample-invite-wrapper .column.of-3 {
+  width: 33.333% !important; }
+#popup-invite .sample-invite-wrapper .column.of-4 {
+  width: 25% !important; }
+@media screen and (max-width: 480px) {
+  #popup-invite .sample-invite-wrapper .preheader .rightColumnContent,
+  #popup-invite .sample-invite-wrapper .footer .rightColumnContent {
+    text-align: left !important; }
+  #popup-invite .sample-invite-wrapper .preheader .rightColumnContent div,
+  #popup-invite .sample-invite-wrapper .preheader .rightColumnContent span,
+  #popup-invite .sample-invite-wrapper .footer .rightColumnContent div,
+  #popup-invite .sample-invite-wrapper .footer .rightColumnContent span {
+    text-align: left !important; }
+  #popup-invite .sample-invite-wrapper .preheader .rightColumnContent,
+  #popup-invite .sample-invite-wrapper .preheader .leftColumnContent {
+    font-size: 80% !important;
+    padding: 5px 0 !important; }
+  #popup-invite .sample-invite-wrapper table.wrapper-mobile {
+    width: 100% !important;
+    table-layout: fixed; }
+  #popup-invite .sample-invite-wrapper img.max-width {
+    height: auto !important;
+    max-width: 100% !important; }
+  #popup-invite .sample-invite-wrapper a.bulletproof-button {
+    display: block !important;
+    width: auto !important;
+    font-size: 80%;
+    padding-left: 0 !important;
+    padding-right: 0 !important; }
+  #popup-invite .sample-invite-wrapper .columns {
+    width: 100% !important; }
+  #popup-invite .sample-invite-wrapper .column {
+    display: block !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important; }
+  #popup-invite .sample-invite-wrapper .social-icon-column {
+    display: inline-block !important; } }

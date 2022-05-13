@@ -7,7 +7,7 @@
 	<div class="container flex break-tablet">
 		<div class="flex-3">
 
-			<h2 class="page-title">
+			<h2 class="page-title" style="margin-bottom: 30px;">
 				<img src="{{ url('new-vox-img/profile-trp.png') }}" />
 				{!! nl2br(trans('trp.page.profile.trp.title')) !!}
 			</h2>

@@ -544,8 +544,8 @@ h5 {
 
 			&:before {
 				left: 9px;
-				width: 24px;
-				height: 24px;
+				width: 24px !important;
+				height: 24px !important;
 			}
 
 			&:after {
@@ -574,13 +574,21 @@ h5 {
 			}
 		}
 		&.alert-orange {
-			border-color: #f59c1a;
-			color: #f59c1a;
+			border-color: #e4c1b0;
 			
 			&:before {
-				width: 22px;
-				height: 22px;
-				background: url("../img/alert-small-warning.png") no-repeat 0px 0px;
+				width: 44px;
+				height: 44px;
+				background: url("../img/new-alert-orange.svg") no-repeat 0px 0px;
+			
+				@media #{$phone} {
+					width: 24px;
+					height: 24px;
+				}
+			}
+
+			&:after {
+				background-color: #e4c1b0;
 			}
 		}
 		&.alert-success {
@@ -872,6 +880,17 @@ body.popup-visible {
 	}
 }
 
+.disabled-button {
+	opacity: 0.5;
+	cursor: no-drop !important;
+
+	// &:hover {
+	// 	background-color: inherit !important;
+	// 	border-color: inherit !important;
+	// 	color: inherit !important;
+	// }
+}
+
 .ratings {
     .stars {
         width: 94px;
@@ -933,6 +952,10 @@ body.popup-visible {
 	        background: url('../img-trp/stars-gray-average.png') 50% 50% no-repeat;
 	        background-size: contain;
 
+			&.new {
+				background-image: url('../img-trp/stars-new-average.png');
+			}
+
 	        .bar {
 	            background: url('../img-trp/stars-blue-average.png') 0% 50% no-repeat;
 	            background-size: cover;
@@ -970,10 +993,12 @@ body.popup-visible {
 
 textarea.input {
 	width: 100%;
-	padding-top: 10px;
-	height: 260px;
-	font: inherit;
-	font-size: 16px;
+    padding-top: 10px;
+    height: 220px;
+    font-size: 16px;
+    color: #332255;
+    font-family: 'Lato', sans-serif;
+    line-height: 22px;
 
 	&::placeholder {
 		font: inherit;

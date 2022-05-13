@@ -53,11 +53,16 @@
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
 		@if($user)
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/trp-logged.css').'?ver='.$cache_version }}" />
+			<link rel="stylesheet" type="text/css" href="{{ url('/css/trp-search-form.css').'?ver='.$cache_version }}" />
 		@endif
 		
         @if(!empty($css) && is_array($css))
             @foreach($css as $file)
-				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
+			
+				@if(!empty($user) && $file == 'trp-search-form.css')
+				@else
+					<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
+				@endif
             @endforeach
         @endif
 
@@ -122,14 +127,16 @@
 		<header class="header">
 	       	<nav class="navbar navbar-default navbar-fixed-top">
   				<div class="container">
-				    <div class="navbar-header">
+				    <div class="navbar-header {{ !empty($user) ? '' : 'show-mobile-menu' }}">
 						<a class="logo" href="{{ getLangUrl('/') }}"></a>
 						<div class="header-info">
 							
 	                        @if(!empty($user))
-								<a href="javascript:;" class="search-dentists">
-									<img class="fa-search" src="{{ url('img-trp/white-search.svg') }}" width="16" height="15"/>
-								</a>
+								@if($current_page != 'index')
+									<a href="javascript:;" class="search-dentists">
+										<img class="fa-search" src="{{ url('img-trp/white-search.svg') }}" width="16" height="15"/>
+									</a>
+								@endif
 								<a href="javascript:;" class="user-profile-info header-avatar" id="header-avatar">
 									<span>Rewards: </span>
 									<span class="user-balance">{{ number_format($user_total_balance) }} DCN</span>
@@ -171,7 +178,8 @@
 					@include('trp.parts.header-buttons')
 				</div>
 		    </div>
-		    @if(!empty($user) && $user->is_clinic)
+		    @if(false)
+		    {{-- @if(!empty($user) && $user->is_clinic) --}}
 		    	@if($user->branches->isNotEmpty() && isset($clinicBranches))
 		    		<input type="hidden" id="clinic-branches" value="{{ $clinicBranches }}">
 		    	@endif
@@ -225,6 +233,19 @@
 
 		@if(false)
 			<div class="bottom-drawer">
+			</div>
+		@endif
+
+		@if(!empty($user))
+			<div class="search-results-popup" id="search-results-popup">
+				<div class="container">
+					<a href="javascript:;" class="close-search-popup">
+						<img src="{{ url('img-trp/close-icon.png') }}"/>
+					</a>
+
+					@include('trp.parts.search-form')
+
+				</div>
 			</div>
 		@endif
 
@@ -404,6 +425,10 @@
 		
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>
+
+		@if(!empty($user))
+			<script src="{{ url('/js-trp/search-form.js').'?ver='.$cache_version }}"></script>
+		@endif
 		
         @if(!empty($jscdn) && is_array($jscdn))
             @foreach($jscdn as $file)
@@ -413,7 +438,10 @@
 		
         @if(!empty($js) && is_array($js))
             @foreach($js as $file)
-                <script src="{{ url('/js-trp/'.$file).'?ver='.$cache_version }}"></script>
+				@if(!empty($user) && $file == 'search-form.js')
+				@else
+                	<script src="{{ url('/js-trp/'.$file).'?ver='.$cache_version }}"></script>
+				@endif
             @endforeach
         @endif
         

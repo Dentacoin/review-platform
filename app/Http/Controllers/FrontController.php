@@ -488,6 +488,20 @@ class FrontController extends BaseController {
         $params['clinicBranches'] = false;
         $params['has_review_notification'] = false;
         
+        if(!empty($this->user) && !isset($params['countriesAlphabetically'])) {
+            $countriesAlphabetically = [];//create a new array
+            foreach(Country::has('dentists')->with(['dentists','translations'])->get() as $item) {
+                $countriesAlphabetically[$item->name[0]][] = [
+                    'name' => $item->name,
+                    'dentist_count' => $item->dentists->count(),
+                    'id' => $item->id,
+                    'code' => $item->code,
+                ];
+            }
+
+            $params['countriesAlphabetically'] = $countriesAlphabetically;
+        }
+        
         if(!empty($this->user) && $this->user->is_clinic && $this->user->branches->isNotEmpty()) {
             $params['clinicBranches'] = [];
             foreach($this->user->branches as $branch) {

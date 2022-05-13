@@ -788,7 +788,8 @@
       align-items: center;
       padding: 14px 80px;
       border-bottom: 1px solid #bebebe;
-      transition: all 0.3s ease; }
+      transition: all 0.3s ease;
+      cursor: pointer; }
       @media screen and (max-width: 1350px) {
         .results-wrapper .dentist-results .result-container {
           padding: 14px 20px; } }

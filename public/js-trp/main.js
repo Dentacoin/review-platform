@@ -599,7 +599,7 @@ jQuery(document).ready(function($) {
 
 		$('.close-cur-popup').click( function() {
 			$(this).closest('.popup').removeClass('active');
-		})
+		});
 
 		$('.popup').click( function(e) {
 			if(!$(this).hasClass('first-guided-tour-popup')) {
@@ -620,58 +620,6 @@ jQuery(document).ready(function($) {
 	    $('input[name="mode"]').change( function() {
 	        $(this).closest('.modern-radios').removeClass('has-error');
 	    });
-
-	    $('.invite-new-dentist-form .address-suggester-input').focus(function(e) {
-	        $('.invite-new-dentist-form .button').addClass('disabled');
-	    });
-
-		$('.invite-new-dentist-form').submit( function(e) {
-	        e.preventDefault();
-
-	        if (!$(this).find('.button').hasClass('disabled')) {
-
-		        $(this).find('.ajax-alert').remove();
-		        $(this).find('.alert').hide();
-		        $(this).find('.has-error').removeClass('has-error');
-
-		        if(ajax_is_running) {
-		            return;
-		        }
-		        ajax_is_running = true;
-
-		        var that = $(this);
-
-		        $.post( 
-		            $(this).attr('action'), 
-		            $(this).serialize() , 
-		            (function( data ) {
-		                if(data.success) {
-		                	showPopup( 'invite-new-dentist-success-popup', data);
-
-		                    gtag('event', 'Invite', {
-								'event_category': 'InviteDentist',
-								'event_label': 'InvitedDentists',
-							});
-
-							that[0].reset();
-		                } else {
-		                    for(var i in data.messages) {
-		                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
-		                        $('[name="'+i+'"]').addClass('has-error');
-		                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
-		                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
-		                        }
-		                    }
-		                    $('.popup').animate({
-				                scrollTop: $('.has-error').first().offset().top
-				            }, 500);
-		                }
-		                ajax_is_running = false;
-		            }).bind(that), "json"
-		        );
-		        return false;
-		    }
-		} );
 
 	    $('.type-radio').change( function(e) {
 			$(this).closest('.mobile-radios').find('label').removeClass('active');
@@ -1336,6 +1284,17 @@ jQuery(document).ready(function($) {
 			});
 	    });
     }, 500);
+
+	
+	$('.search-dentists').click( function() {
+		$('.search-results-popup').addClass('active');
+	});
+
+	$('.search-results-popup').click( function(e) {
+		if( !$(e.target).closest('.search-form').length ) {
+			$('.search-results-popup').removeClass('active');
+		}
+	});
 
 });
 

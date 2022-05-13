@@ -71,6 +71,20 @@ header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+
+		&.show-mobile-menu {
+			.mobile-menu {
+				@media #{$phone} {
+					display: block;
+				}
+			}
+
+			.header-info {		
+				@media #{$phone} {
+					display: none;
+				}
+			}
+		}
 	}
 
 	.container {
@@ -111,10 +125,6 @@ header {
 	.header-info {
 		display: flex;
 		align-items: center;
-
-		@media #{$phone} {
-			display: none;
-		}
 
 		.transparent-blue-button {
 			font-size: 18px;
@@ -251,10 +261,6 @@ header {
 		display: none;
 		padding: 10px 0px;
 
-		@media #{$phone} {
-			display: block;
-		}
-
 		img {
 			display: block
 		}
@@ -390,7 +396,7 @@ body {
 	}
 
 	&.strength-pb {
-		padding-bottom: 130px;
+		// padding-bottom: 130px;
 	}
 }
 
@@ -1021,6 +1027,50 @@ footer {
 		}
 	}
 
+	&.with-image {
+		align-items: center;
+		justify-content: center;
+
+		.popup-image {
+			max-width: 760px;
+			margin-right: -140px;
+			background-color: transparent;
+	
+			@media #{$pc} {
+				margin-right: -110px;
+				max-width: 400px;
+
+				// max-width: 580px;
+				// margin-right: -260px;
+				// margin-left: -80px;
+			}
+	
+			@media #{$tablet} {
+				display: none;
+			}
+	
+			// @media #{$phone} {
+			// 	display: none;
+			// 	max-width: 400px;
+			// 	margin-right: auto;
+			// 	margin-left: auto;
+			// 	margin-bottom: -76px;
+			// }
+		}
+
+		.popup-inner {
+			@media #{$tablet} {
+				height: auto;
+			}
+
+			@media #{$phone} {
+				height: 100%;
+				border-radius: 0px;
+			}
+		}
+	}
+
+
 	.popup-inner {
 		position: relative;
 		background-color: white;
@@ -1050,10 +1100,15 @@ footer {
 	    	display: none;
 	    }
 
-		.close-popup:not(.blue-button) {
+		.close-popup:not(.blue-button):not(.white-button) {
 			position: absolute;
 			right: 33px;
 			top: 27px;
+
+			@media #{$phone} {
+				right: 23px;
+				top: 17px;
+			}
 
 			img {
 				max-width: 20px;
@@ -1164,38 +1219,6 @@ footer {
 			cursor: pointer;
 		}
 
-		.popup-title {
-			background-color: #eee;
-			margin-right: -$popup_padding;
-			margin-left: -$popup_padding;
-			padding: 12px $popup_padding 15px;
-			color: #333333;
-
-			@media #{$phone} {
-				margin-right: -$popup_padding_mobile;
-				margin-left: -$popup_padding_mobile;
-				padding: 12px 10px 15px;
-				font-size: 16px;
-				text-align: center;
-			}
-
-			&.sticky-q {
-				position: fixed;
-			    top: 0;
-			    width: calc(100% + 0px);
-    			right: 20px;
-			}
-
-			.blue {
-				color: #126585;
-				font-size: 20px;
-
-				@media #{$phone} {
-					font-size: 16px;
-				}
-			}
-		}
-
 		.hidden {
 			display: none;		
 		    
@@ -1216,149 +1239,6 @@ footer {
 	    		font-size: 18px;
 	    	}
 	    }
-
-		.popup-desc {
-			margin-top: -20px;
-			font-size: 18px;
-
-			@media #{$phone} {
-				font-size: 16px;
-			}
-		}
-
-		.popup-tabs.colorful-tabs {
-			display: block;
-		    position: relative;
-		    text-align: center;
-		    margin-top: -25px;
-
-			.col {
-				position: relative;
-				font-size: 20px;
-				min-width: 110px;
-				background-color: #dae2eb;
-				display: inline-block;
-				margin-right: -10px;
-				text-align: center;
-				padding: 5px 29px;
-				font-weight: 300;
-				border-radius: 4px;
-				color: #4b607d;
-			    border: 1px solid white;
-				transition: all 0.3s ease;
-
-				@media #{$tablet} {
-					font-size: 16px;
-					padding: 5px 18px;
-				}
-
-				@media #{$phone} {
-					margin-right: auto;
-					margin-left: auto;
-					padding: 5px 10px;
-					min-width: auto;
-					width: 280px;
-					display: block;
-				}
-
-				&:first-child {
-					margin-right: -10px;
-
-					@media #{$phone} {
-						margin-right: auto;
-					}
-				}
-
-				&:last-child {
-					margin-left: 0px;
-
-					@media #{$phone} {
-						margin-left: auto;
-					}
-				}
-
-				&.active {
-					background-image: url('../img-trp/button-gradient.png');
-					background-size: cover;
-					color: white;
-					transition: all 0.3s ease;
-
-					@media #{$phone} {
-					    transition: all 0.3s ease;
-					    min-width: auto;
-					}
-
-					&:hover {
-						color: white;
-					}
-				}
-
-				&:hover {
-					background-color: #e9e9e9;
-					color: #4b607d;
-				}
-			}
-		}
-
-		.popup-tabs {
-			margin-top: 45px;
-			margin-bottom: 30px;
-
-			@media #{$phone} {
-				margin-top: 25px;
-	    		margin-bottom: 20px;
-	    	}
-
-			a {
-				text-align: center;
-				font-size: 20px;
-				border-radius: 5px;
-				border: 1px solid #126585;
-				color: #126585;
-				padding: 10px;
-				transition: all 0.3s ease;
-
-				@media #{$phone} {
-					font-size: 16px;
-				    padding: 10px 8px;
-				}
-
-				p {
-					color: #126585;
-
-					@media #{$phone} {
-						font-size: 12px;
-					}
-				}
-
-				&.active,
-				&:hover {
-					background-color: #126585;
-					color: white;
-					transition: all 0.3s ease;
-
-					p {
-						color: white;
-					}
-				}
-
-				&:first-child {
-					margin-right: 15px;
-
-					@media #{$phone} {
-						margin-right: 4px;
-					}
-				}
-
-				&:last-child {
-					margin-left: 15px;
-
-					@media #{$phone} {
-						margin-left: 4px;
-					}
-				}
-			}
-		}
 
 		.search-dentist {
 			margin-top: 40px;
@@ -1388,7 +1268,41 @@ footer {
 	}
 }
 
+.search-results-popup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 130, 209, 0.88);
+	z-index: 1001;
+	display: none;
+	overflow-y: auto;
 
+	&.active {
+		display: block;
+	}
+
+	.container {
+		margin-top: 110px;
+
+		@media #{$phone} {
+			margin-top: 20px;
+		}
+	}
+
+	.close-search-popup {
+		margin-left: auto;
+		width: 35px;
+		display: block;
+		margin-bottom: 40px;
+
+		@media #{$phone} {
+			width: 25px;
+			margin-bottom: 20px;
+		}
+	}
+}
 
 .step-tabs {
 	margin-bottom: 25px;
@@ -1727,152 +1641,6 @@ footer {
 	background-color: transparent !important;
 }
 
-.invite-new-dentist-form {
-	max-width: 600px;
-	margin-left: auto;
-	margin-right: auto;
-
-	.button {
-		background-color: #46afda;
-	    padding: 13px 84px;
-
-	    @media #{$phone} {
-	        padding: 13px 54px;
-	    }
-	}
-
-	.modern-radios {
-		margin-bottom: 20px;
-
-		.radio-label {
-			label {
-				background-color: white;
-			}
-
-			&:first-child {
-				@media #{$phone} {
-					margin-right: 18px;
-				}
-			}
-		}
-	}
-
-	.modern-field {
-		.modern-input {
-			background-color: white;
-		}
-	}
-}
-
-.invite-new-dentist-wrapper {
-
-	@media screen and (max-width: 500px) {
-		margin-top: -50px;
-	}
-
-	@media screen and (max-width: 450px) {
-		margin-top: -90px;
-	}
-
-	&.white-invite {
-		margin-top: -140px;
-
-		.colorfull-wrapper {
-			background-color: #ffffff;
-
-			&:after {
-			    display: none;
-			}
-		}
-
-		h2 {
-			color: #2478d1;
-		}
-
-		h3 {
-			margin-bottom: 50px;
-			padding-bottom: 45px;
-			color: #38393b;
-		}
-	}
-
-
-	.invite-new-dentist-titles {
-		background-color: transparent;
-		position: relative;
-		z-index: 1;
-		transform: translateY(120px);
-		max-width: 670px;
-	    margin-left: auto;
-	    margin-right: auto;
-
-	    @media #{$phone} {
-	    	padding: 0px 45px;
-	    }
-	}
-
-	h2 {
-		text-align: center;
-		font-weight: bold;
-		font-size: 48px;
-		margin-bottom: 10px;
-
-		@media #{$pc} {
-			font-size: 38px;
-		}
-
-		@media #{$phone} {
-			font-size: 35px;
-			margin-bottom: 20px;
-		}
-	}
-
-	h3 {
-		text-align: center;
-		margin-bottom: 50px;
-		font-weight: 300;
-		font-size: 34px;
-
-		@media #{$pc} {
-			font-size: 28px;
-		}
-
-		@media #{$phone} {
-			font-size: 25px;
-			margin-bottom: 30px;
-		}
-	}
-
-	.colorfull-wrapper {
-		background-color: #f7f7f7;
-		position: relative;
-		padding: 120px 10px 70px;
-
-		@media #{$phone} {
-			padding-bottom: 30px;
-		}
-
-		&:after {
-			content: '';
-		    position: absolute;
-		    left: 0;
-		    bottom: 99.9%;
-		    background: url(../img-trp/oval-gray.png) no-repeat 50% 50%;
-		    background-size: 100% 100%;
-		    width: 100%;
-		    padding-top: 12%;
-		}
-	}
-}
-
-.green-gradient {
-	background: #24c7ca; /* Old browsers */
-	background: -moz-linear-gradient(top, #24c7ca 0%, #09aadf 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top, #24c7ca 0%,#09aadf 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom, #24c7ca 0%,#09aadf 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24c7ca', endColorstr='#09aadf',GradientType=0 ); /* IE6-9 */
-}
-
 .mobile-alert,
 #alert-name-dentist {
 	margin-bottom: 20px;
@@ -2161,12 +1929,17 @@ footer {
 }
 
 .cropper-container {
-	width: 180px !important;
-	height: 180px !important;
+	width: 150px !important;
+	height: 150px !important;
 	display: none;
 
+	@media #{$phone} {
+		width: 80px !important;
+		height: 80px !important;
+	}
+
 	.cr-viewport {
-		border: 2px dashed #777777 !important;
+		border: none !important;
 		background: transparent !important;
 	}
 
@@ -2290,6 +2063,7 @@ footer {
     height: 23px;
     text-align: center;
     border-radius: 20px;
+	display: inline-block;
 }
 
 .reject-button {
@@ -2299,4 +2073,5 @@ footer {
     height: 23px;
     text-align: center;
     border-radius: 20px;
+	display: inline-block;
 }

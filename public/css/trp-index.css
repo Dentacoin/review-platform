@@ -903,3 +903,106 @@
     @media screen and (max-width: 998px) {
       .how-works-section img {
         position: inherit; } }
+
+.invite-new-dentist-background {
+  background-color: #e2ebff;
+  padding-bottom: 100px; }
+
+.invite-new-dentist-wrapper {
+  display: flex;
+  align-items: center; }
+  @media screen and (max-width: 1200px) {
+    .invite-new-dentist-wrapper > img {
+      max-width: 430px; } }
+  @media screen and (max-width: 998px) {
+    .invite-new-dentist-wrapper > img {
+      display: none; } }
+  .invite-new-dentist-wrapper .invite-new-dentist-titles {
+    background-color: transparent;
+    position: relative;
+    z-index: 1;
+    transform: translateY(120px);
+    max-width: 670px;
+    margin-left: auto;
+    margin-right: auto; }
+    @media screen and (max-width: 768px) {
+      .invite-new-dentist-wrapper .invite-new-dentist-titles {
+        padding: 0px 45px; } }
+  .invite-new-dentist-wrapper h2 {
+    text-align: center;
+    font-size: 35px;
+    color: #0564c6;
+    font-weight: 800;
+    margin-bottom: 25px; }
+    @media screen and (max-width: 1200px) {
+      .invite-new-dentist-wrapper h2 {
+        font-size: 38px; } }
+    @media screen and (max-width: 768px) {
+      .invite-new-dentist-wrapper h2 {
+        font-size: 28px;
+        margin-bottom: 20px; } }
+  .invite-new-dentist-wrapper h5 {
+    color: #332255;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 40px; }
+    @media screen and (max-width: 768px) {
+      .invite-new-dentist-wrapper h5 {
+        margin-bottom: 30px; } }
+  .invite-new-dentist-wrapper .invite-new-dentist-form {
+    flex: 1;
+    background-color: white;
+    padding: 60px 90px;
+    box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
+    border-radius: 30px;
+    margin-left: -120px; }
+    @media screen and (max-width: 1200px) {
+      .invite-new-dentist-wrapper .invite-new-dentist-form {
+        padding: 60px 50px; } }
+    @media screen and (max-width: 998px) {
+      .invite-new-dentist-wrapper .invite-new-dentist-form {
+        max-width: 100%;
+        margin-left: 0px; } }
+    @media screen and (max-width: 768px) {
+      .invite-new-dentist-wrapper .invite-new-dentist-form {
+        max-width: 100%;
+        margin-left: 0px; } }
+    .invite-new-dentist-wrapper .invite-new-dentist-form .blue-button {
+      text-transform: uppercase;
+      padding: 14px 83px; }
+      @media screen and (max-width: 768px) {
+        .invite-new-dentist-wrapper .invite-new-dentist-form .blue-button {
+          padding: 13px 54px; } }
+    .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic {
+      margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic {
+          margin-bottom: 0px; } }
+      .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label {
+        flex: 1;
+        border-width: 2px;
+        text-transform: uppercase;
+        font-weight: 800;
+        padding: 15px 18px 15px 12px;
+        display: flex;
+        align-items: center; }
+        .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label:first-child {
+          margin-right: 10px; }
+        .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label.active {
+          box-shadow: none;
+          color: #0084d1; }
+          .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label.active .active-image {
+            display: block; }
+          .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label.active .inactive-image {
+            display: none; }
+        .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label img {
+          max-width: 30px;
+          width: 30px;
+          margin-right: 11px;
+          vertical-align: -webkit-baseline-middle; }
+          .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label img.active-image {
+            display: none; }
+          .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label img.inactive-image {
+            display: block; }
+    .invite-new-dentist-wrapper .invite-new-dentist-form .modern-field .modern-input {
+      background-color: white; }

@@ -6,7 +6,7 @@
 			id="search-dentist-name" 
 			type="text" 
 			name="dentist_name" 
-			value="{{ !empty($query) ? $formattedAddress : '' }}" 
+			{{-- value="{{ !empty($query) ? $formattedAddress : '' }}"  --}}
 			placeholder="Dentist / clinic name" 
 			autocomplete="off"
 		/>
@@ -18,7 +18,7 @@
 			id="search-dentist-country" 
 			type="text" 
 			name="dentist_country_name" 
-			value="{{ !empty($query) ? $formattedAddress : '' }}" 
+			{{-- value="{{ !empty($query) ? $formattedAddress : '' }}"  --}}
 			placeholder="Country" 
 			autocomplete="off"
 		/>
@@ -30,7 +30,7 @@
 			id="search-dentist-city" 
 			type="text" 
 			name="dentist_city" 
-			value="{{ !empty($query) ? $formattedAddress : '' }}" 
+			{{-- value="{{ !empty($query) ? $formattedAddress : '' }}"  --}}
 			placeholder="City, State" 
 			autocomplete="off"
 		/>

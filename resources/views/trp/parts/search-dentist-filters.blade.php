@@ -144,85 +144,89 @@
         </div>
     </div>
 </span>
-<span href="javascript:;" class="filter {{ !empty($requestAvailability) ? 'active' : '' }}">
-    More filters
-    <div class="caret-down"></div>
 
-    <div class="filter-options longer">
-        <div class="filter-inner">
-            <div class="filter-title">
-                Appointment types:
-            </div>
-            <label class="checkbox-label disabled" for="virtual-visit">
-                <input type="checkbox" class="special-checkbox" name="visits[]" id="virtual-visit" value="virtual" disabled="disabled">
-                <div class="checkbox-square">✓</div>
-                Virtual 
-            </label>
-            <label class="checkbox-label disabled" for="on--visit">
-                <input type="checkbox" class="special-checkbox" name="visits[]" id="on--visit" value="on-site" disabled="disabled">
-                <div class="checkbox-square">✓</div>
-                On-site visit
-            </label>
-            <div class="filter-title">
-                Languages spoken:
-            </div>
-            @foreach($languages as $key => $l)
-                <label class="checkbox-label disabled" for="lang-{{$key}}">
-                    <input type="checkbox" class="special-checkbox" name="languages[]" id="lang-{{$key}}" value="{{$key}}" disabled="disabled">
+@if(false)
+    <span href="javascript:;" class="filter {{ !empty($requestAvailability) ? 'active' : '' }}">
+        More filters
+        <div class="caret-down"></div>
+
+        <div class="filter-options longer">
+            <div class="filter-inner">
+                <div class="filter-title">
+                    Appointment types:
+                </div>
+                <label class="checkbox-label disabled" for="virtual-visit">
+                    <input type="checkbox" class="special-checkbox" name="visits[]" id="virtual-visit" value="virtual" disabled="disabled">
                     <div class="checkbox-square">✓</div>
-                    {{$l}}
+                    Virtual 
                 </label>
-            @endforeach
-            <div class="filter-title">
-                Experience:
-            </div>
-            @foreach($experiences as $key => $experience)
-                <label class="checkbox-label disabled" for="experience-{{$key}}">
-                    <input type="checkbox" class="special-checkbox" name="experience[]" id="experience-{{$key}}" value="{{$key}}" disabled="disabled">
+                <label class="checkbox-label disabled" for="on--visit">
+                    <input type="checkbox" class="special-checkbox" name="visits[]" id="on--visit" value="on-site" disabled="disabled">
                     <div class="checkbox-square">✓</div>
-                    {{$experience}}
+                    On-site visit
                 </label>
-            @endforeach
-            <div class="filter-title">
-                Availability:
-            </div>
-            @foreach($availabilities as $key => $availability)
-                @php
-                    $active = !empty($requestAvailability) && in_array($key, $requestAvailability) ? true : false;
-                @endphp
-                <label class="checkbox-label {!! $active ? 'active' : '' !!}" for="availability-{{$key}}">
-                    <div class="flex flex-mobile flex-center space-between">
-                        <div>
-                            <input 
-                                type="checkbox" 
-                                class="special-checkbox" 
-                                name="availability[]" 
-                                id="availability-{{$key}}" 
-                                value="{{$key}}" 
-                                {!! $active ? 'checked="checked"' : '' !!}
-                            >
-                            <div class="checkbox-square">✓</div>
-                            {{$availability}}
+                <div class="filter-title">
+                    Languages spoken:
+                </div>
+                @foreach($languages as $key => $l)
+                    <label class="checkbox-label disabled" for="lang-{{$key}}">
+                        <input type="checkbox" class="special-checkbox" name="languages[]" id="lang-{{$key}}" value="{{$key}}" disabled="disabled">
+                        <div class="checkbox-square">✓</div>
+                        {{$l}}
+                    </label>
+                @endforeach
+                <div class="filter-title">
+                    Experience:
+                </div>
+                @foreach($experiences as $key => $experience)
+                    <label class="checkbox-label disabled" for="experience-{{$key}}">
+                        <input type="checkbox" class="special-checkbox" name="experience[]" id="experience-{{$key}}" value="{{$key}}" disabled="disabled">
+                        <div class="checkbox-square">✓</div>
+                        {{$experience}}
+                    </label>
+                @endforeach
+                <div class="filter-title">
+                    Availability:
+                </div>
+                @foreach($availabilities as $key => $availability)
+                    @php
+                        $active = !empty($requestAvailability) && in_array($key, $requestAvailability) ? true : false;
+                    @endphp
+                    <label class="checkbox-label {!! $active ? 'active' : '' !!}" for="availability-{{$key}}">
+                        <div class="flex flex-mobile flex-center space-between">
+                            <div>
+                                <input 
+                                    type="checkbox" 
+                                    class="special-checkbox" 
+                                    name="availability[]" 
+                                    id="availability-{{$key}}" 
+                                    value="{{$key}}" 
+                                    {!! $active ? 'checked="checked"' : '' !!}
+                                >
+                                <div class="checkbox-square">✓</div>
+                                {{$availability}}
+                            </div>
+                            <span class="filter-count">
+                                ({{ isset($dentistAvailability[$key]) ? $dentistAvailability[$key] : 0 }})
+                            </span>
                         </div>
-                        <span class="filter-count">
-                            ({{ isset($dentistAvailability[$key]) ? $dentistAvailability[$key] : 0 }})
-                        </span>
-                    </div>
-                </label>
-            @endforeach
+                    </label>
+                @endforeach
+            </div>
+            <div class="filter-buttons">
+                <a class="clear-filters" href="javascript:;">
+                    {{-- {!! nl2br(trans('trp.page.search.reset')) !!} --}}
+                    Clear
+                </a>
+                <button type="submit" href="javascript:;" class="blue-button">
+                    {!! nl2br(trans('trp.page.search.apply')) !!}
+                </button>
+            </div>
         </div>
-        <div class="filter-buttons">
-            <a class="clear-filters" href="javascript:;">
-                {{-- {!! nl2br(trans('trp.page.search.reset')) !!} --}}
-                Clear
-            </a>
-            <button type="submit" href="javascript:;" class="blue-button">
-                {!! nl2br(trans('trp.page.search.apply')) !!}
-            </button>
-        </div>
-    </div>
 
-</span>
+    </span>
+@endif
+
 <span class="break-mobile">
     <span class="sort-by-title">
         Sort by:

@@ -468,31 +468,31 @@ $(document).ready(function() {
                     $('#alert-video-uploaded').show();
                 } else {
                     // console.log(responseJSON);
-                    // $('.video-alerts').hide();
-                    // $('.video-buttons').hide();
-                    // $('#alert-video-error').show();
-                    // $('#start-video-button').show();
-                    // $('.myVideo-dimensions').hide();
-
-                    $('.video-buttons').hide();
                     $('.video-alerts').hide();
-                    $('#youtube_id').val('test');
+                    $('.video-buttons').hide();
+                    $('#alert-video-error').show();
+                    $('#start-video-button').show();
                     $('.myVideo-dimensions').hide();
-                    $('#alert-video-uploaded').show();
+
+                    // $('.video-buttons').hide();
+                    // $('.video-alerts').hide();
+                    // $('#youtube_id').val('test');
+                    // $('.myVideo-dimensions').hide();
+                    // $('#alert-video-uploaded').show();
                 }
             }).fail( function(error) {
                 // console.log(error);
-                // $('.video-alerts').hide();
-                // $('.video-buttons').hide();
-                // $('#alert-video-error').show();
-                // $('#start-video-button').show();
-                // $('.myVideo-dimensions').hide();
-
-                $('.video-buttons').hide();
                 $('.video-alerts').hide();
-                $('#youtube_id').val('test');
+                $('.video-buttons').hide();
+                $('#alert-video-error').show();
+                $('#start-video-button').show();
                 $('.myVideo-dimensions').hide();
-                $('#alert-video-uploaded').show();
+
+                // $('.video-buttons').hide();
+                // $('.video-alerts').hide();
+                // $('#youtube_id').val('test');
+                // $('.myVideo-dimensions').hide();
+                // $('#alert-video-uploaded').show();
             });
         });
     }

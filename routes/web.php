@@ -469,8 +469,6 @@ $reviewRoutes = function() {
 				Route::post('profile/invite', 						'ProfileController@invite');
 				Route::post('profile/invite-whatsapp', 				'ProfileController@invite_whatsapp');
 				Route::post('profile/invite-copypaste', 			'ProfileController@invite_copypaste');
-				Route::post('profile/invite-copypaste-emails', 		'ProfileController@invite_copypaste_emails');
-				Route::post('profile/invite-copypaste-names', 		'ProfileController@invite_copypaste_names');
 				Route::post('profile/invite-copypaste-final', 		'ProfileController@invite_copypaste_final');
 				Route::post('profile/invite-file',			 		'ProfileController@invite_file');
 				Route::any('profile/invites/delete/{id}', 			'ProfileController@invites_delete');

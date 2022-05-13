@@ -1,4 +1,4 @@
-<div class="popup fixed-popup verification-popup active removable" id="verification-popup" scss-load="trp-popup-verification">
+<div class="popup fixed-popup verification-popup no-image active removable" id="verification-popup" scss-load="trp-popup-verification">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
 			<img src="{{ url('img/close-icon.png') }}"/>

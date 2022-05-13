@@ -193,16 +193,12 @@ class DentistController extends FrontController {
 
 
         $aggregatedRating = [];
-        $hasOldReviews = false; //old reviews had options, new have rating
         $hasNewReviews = false; //old reviews had options, new have rating
 
         if (count($reviews)) {
 
             foreach ($reviews as $rev) {
                 foreach($rev->answers as $answer) {
-                    if($answer->options) {
-                        $hasOldReviews = true;
-                    }
                     if($answer->rating) {
                         $hasNewReviews = true;
                     }
@@ -215,33 +211,55 @@ class DentistController extends FrontController {
                 foreach($rev->answers as $answer) {
 
                     if ( $item->my_workplace_approved->isEmpty() || ( in_array($answer->question_id, array_merge(Review::$ratingForDentistQuestions, Review::$oldRatingForDentistQuestions)))) {
-                        if(!isset($aggregatedRating[$answer->question['label']])) {
-                            $aggregatedRating[$answer->question['label']] = 0;
+                        if(!isset($aggregatedRating[$answer->question['order']])) {
+                            $aggregatedRating[$answer->question['order']] = [
+                                'label' => $answer->question['label'],
+                                'type' => $answer->question['type'],
+                                'rating' => 0,
+                            ];
                         }
 
-                        if(!isset($aggregatedCountAnswer[$answer->question['label']])) {
-                            $aggregatedCountAnswer[$answer->question['label']] = 0;
+                        if(!isset($aggregatedCountAnswer[$answer->question['order']])) {
+                            $aggregatedCountAnswer[$answer->question['order']] = [
+                                'label' => $answer->question['label'],
+                                'type' => $answer->question['type'],
+                                'rating' => 0,
+                            ];
                         }
 
                         if($answer->options) {
                             $arr_sum = array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
                             if(!empty($arr_sum)) {
-                                $aggregatedCountAnswer[$answer->question['label']] += 1;
+                                $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
                             }
                         } else {
                             $arr_sum = $answer->rating;
-                            $aggregatedCountAnswer[$answer->question['label']] += $answer->rating;
+                            $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
                         }
 
-                        $aggregatedRating[$answer->question['label']] += $arr_sum;
+                        $aggregatedRating[$answer->question['order']]['rating'] += $arr_sum;
                     }
                 }
             }
 
             foreach ($aggregatedCountAnswer as $key => $value) {
-                $aggregatedRating[$key] /= $value;
+                $aggregatedRating[$key]['rating'] /= $aggregatedCountAnswer[$key]['rating'];
             }
         }
+
+        if(!$hasNewReviews) {
+            $reviewQuestions = Question::with('translations')->whereIn('id', array_values(Review::$ratingForDentistQuestions))->get();
+
+            foreach($reviewQuestions as $reviewQuestion) {
+                $aggregatedRating[$reviewQuestion->order] = [
+                    'label' => $reviewQuestion->label,
+                    'type' => 'blue',
+                    'rating' => 0,
+                ];
+            }
+        }
+
+        ksort($aggregatedRating);
 
         $has_asked_dentist = $this->user ? $this->user->hasAskedDentist($item->id) : null;
 
@@ -314,8 +332,6 @@ class DentistController extends FrontController {
             'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,
             'reviews' => $reviews,
             'has_asked_dentist' => $has_asked_dentist,
-            'hasOldReviews' => $hasOldReviews,
-            'hasNewReviews' => $hasNewReviews,
             'is_trusted' => !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false,
             'patient_asks' => $patient_asks,
             'aggregatedRating' => $aggregatedRating,
