@@ -135,7 +135,7 @@
 
 				<div class="flex flex-text-center">
 					<div class="info-box">
-						<div class="info-icon to-append-image" data-src="https://urgent.reviews.dentacoin.com/img-trp/dentacoin-find-the-best-dentist-icon.png" data-alt="Find the best dentist on Dentacoin Trusted Reviews icon">
+						<div class="info-icon to-append-image" data-src="https://reviews.dentacoin.com/img-trp/dentacoin-find-the-best-dentist-icon.png" data-alt="Find the best dentist on Dentacoin Trusted Reviews icon">
 							{{-- {{ trans('trp.alt-tags.best-dentist') }} --}}
 						</div>
 						<div class="info-text">
@@ -148,7 +148,7 @@
 						</div>
 					</div>
 					<div class="info-box">
-						<div class="info-icon to-append-image" data-src="https://urgent.reviews.dentacoin.com/img-trp/dentacoin-make-your-voice-heard-icon.png" data-alt="Review your dentist on Dentacoin Trusted Reviews icon">
+						<div class="info-icon to-append-image" data-src="https://reviews.dentacoin.com/img-trp/dentacoin-make-your-voice-heard-icon.png" data-alt="Review your dentist on Dentacoin Trusted Reviews icon">
 							{{-- {{ trans('trp.alt-tags.make-voice-heard') }} --}}
 						</div>
 						<div class="info-text">
@@ -160,7 +160,7 @@
 						</div>
 					</div>
 					<div class="info-box">
-						<div class="info-icon to-append-image" data-src="https://urgent.reviews.dentacoin.com/img-trp/dentacoin-get-rewarded-icon.png" data-alt="Get rewarded for your Dentacoin Trusted Reviews icon">
+						<div class="info-icon to-append-image" data-src="https://reviews.dentacoin.com/img-trp/dentacoin-get-rewarded-icon.png" data-alt="Get rewarded for your Dentacoin Trusted Reviews icon">
 							{{-- {{ trans('trp.alt-tags.get-rewarded') }} --}}
 						</div>
 						<div class="info-text">
