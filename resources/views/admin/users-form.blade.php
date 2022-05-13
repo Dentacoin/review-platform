@@ -1418,7 +1418,7 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                            @foreach($item->invites_team_unverified as $team_invited)
+                                            @foreach($item->notVerifiedTeamFromInvitation as $team_invited)
                                                 <tr>
                                                     <td>
                                                         {{ $team_invited->created_at->toDateTimeString() }}

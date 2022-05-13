@@ -1,0 +1,1361 @@
+.search-form {
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 3px 4px 0px #9f9f9f;
+  position: relative;
+  padding: 9px 85px 9px 0px; }
+  @media screen and (max-width: 768px) {
+    .search-form {
+      padding: 14px 20px 25px;
+      flex-direction: column; } }
+  .search-form .input-wrapper {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    padding-left: 19px;
+    border-right: 1px solid #888888; }
+    @media screen and (max-width: 998px) {
+      .search-form .input-wrapper {
+        padding-left: 10px; } }
+    @media screen and (max-width: 768px) {
+      .search-form .input-wrapper {
+        width: 100%;
+        padding-left: 0px;
+        border-right: none;
+        border-bottom: 1px solid #dddddd;
+        margin-bottom: 13px; } }
+    .search-form .input-wrapper.search-dentist-wrapper {
+      min-width: 360px; }
+      @media screen and (max-width: 1200px) {
+        .search-form .input-wrapper.search-dentist-wrapper {
+          min-width: 270px; } }
+      @media screen and (max-width: 998px) {
+        .search-form .input-wrapper.search-dentist-wrapper {
+          min-width: 210px; } }
+      @media screen and (max-width: 768px) {
+        .search-form .input-wrapper.search-dentist-wrapper {
+          min-width: auto; } }
+    @media screen and (max-width: 998px) {
+      .search-form .input-wrapper:not(.search-dentist-wrapper) {
+        width: 140px; } }
+    @media screen and (max-width: 768px) {
+      .search-form .input-wrapper:not(.search-dentist-wrapper) {
+        width: 100%; } }
+  .search-form .fake-input {
+    height: 55px;
+    line-height: 55px;
+    color: #888888;
+    margin-left: 10px;
+    cursor: text;
+    text-align: left;
+    width: 100%; }
+    @media screen and (max-width: 998px) {
+      .search-form .fake-input {
+        height: 35px; } }
+    @media screen and (max-width: 768px) {
+      .search-form .fake-input {
+        font-size: 14px;
+        height: 40px; } }
+  .search-form input[type="text"] {
+    font-size: 16px;
+    border: none;
+    padding-left: 10px;
+    height: 55px;
+    max-width: 100%;
+    width: 100%; }
+    @media screen and (max-width: 998px) {
+      .search-form input[type="text"] {
+        height: 35px; } }
+    @media screen and (max-width: 768px) {
+      .search-form input[type="text"] {
+        font-size: 14px;
+        height: 40px; } }
+    .search-form input[type="text"]:focus {
+      outline: none; }
+    .search-form input[type="text"]::placeholder {
+      color: #8c8c8c; }
+    .search-form input[type="text"]:last-child {
+      border-right: none; }
+  .search-form .jump-it {
+    animation: jump 6s;
+    animation-iteration-count: infinite; }
+@keyframes jump {
+  0% {
+    transform: scale(1); }
+  6% {
+    transform: scale(1.1); }
+  9% {
+    transform: scale(1); }
+  12% {
+    transform: scale(1.1); }
+  15% {
+    transform: scale(1); }
+  18% {
+    transform: scale(1.1); }
+  21% {
+    transform: scale(1); }
+  24% {
+    transform: scale(1.1); }
+  27% {
+    transform: scale(1); } }
+  .search-form label {
+    margin-left: 18px;
+    width: 162px; }
+    @media screen and (max-width: 998px) {
+      .search-form label {
+        margin-left: 10px;
+        width: 128px; } }
+    @media screen and (max-width: 768px) {
+      .search-form label {
+        width: 100%;
+        margin-left: 0px; } }
+  .search-form button {
+    background-color: #14cab8;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    cursor: pointer;
+    width: 72px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 0px; }
+    @media screen and (max-width: 768px) {
+      .search-form button {
+        position: static;
+        width: 100%;
+        height: auto;
+        display: block;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: white;
+        padding: 13px 20px;
+        border-radius: 30px; } }
+    .search-form button img {
+      max-width: 30px; }
+      @media screen and (max-width: 768px) {
+        .search-form button img {
+          display: none; } }
+
+.dentists-names-results {
+  position: absolute;
+  top: 101%;
+  left: 0px;
+  z-index: 10000;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  width: 580px;
+  max-height: 338px;
+  overflow-y: auto;
+  box-shadow: 0px 3px 4px 0px #9f9f9f; }
+  @media screen and (max-width: 1200px) {
+    .dentists-names-results {
+      width: 510px; } }
+  @media screen and (max-width: 768px) {
+    .dentists-names-results {
+      top: 55px;
+      width: 100%; } }
+  .dentists-names-results .info {
+    font-size: 14px;
+    color: #0084d1;
+    padding: 15px 10px 15px;
+    border-bottom: 1px solid #bebebe;
+    margin-right: 20px;
+    margin-left: 20px;
+    text-align: left; }
+    .dentists-names-results .info.error {
+      border-bottom: none;
+      padding-bottom: 0px; }
+    .dentists-names-results .info b {
+      font-size: 14px;
+      color: #0084d1; }
+  .dentists-names-results .dentist-results {
+    margin-top: 23px;
+    margin-bottom: 20px; }
+  .dentists-names-results .list {
+    margin-top: 16px;
+    margin-bottom: 16px; }
+  .dentists-names-results .dentist-button {
+    display: block;
+    padding-left: 20px;
+    padding-bottom: 7px;
+    padding-top: 6px;
+    transition: all 0.3s ease; }
+    .dentists-names-results .dentist-button.active, .dentists-names-results .dentist-button:hover {
+      background-color: #e2ebff;
+      transition: all 0.3s ease; }
+    .dentists-names-results .dentist-button .result-image-dentist {
+      width: 50px; }
+      @media screen and (max-width: 768px) {
+        .dentists-names-results .dentist-button .result-image-dentist {
+          width: 40px; } }
+      .dentists-names-results .dentist-button .result-image-dentist img {
+        display: block;
+        border-radius: 50%;
+        position: relative;
+        z-index: 1; }
+    .dentists-names-results .dentist-button .result-name-dentist {
+      flex: 1;
+      text-align: left;
+      margin-left: 10px; }
+      .dentists-names-results .dentist-button .result-name-dentist p {
+        font-weight: 800;
+        color: #332255;
+        margin-bottom: 6px;
+        margin-top: 4px;
+        text-transform: capitalize; }
+        @media screen and (max-width: 768px) {
+          .dentists-names-results .dentist-button .result-name-dentist p {
+            margin-bottom: 0px;
+            margin-top: 0px; } }
+        .dentists-names-results .dentist-button .result-name-dentist p span {
+          color: #0084d1;
+          font-size: 16px; }
+      .dentists-names-results .dentist-button .result-name-dentist span {
+        font-size: 14px;
+        color: #555555; }
+    .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper {
+      display: flex;
+      background-color: #0084d1;
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+      border-top-left-radius: 13px;
+      border-bottom-left-radius: 13px;
+      padding: 4px 10px; }
+      .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper img {
+        width: 13px;
+        margin-right: 4px; }
+      .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper span {
+        color: white;
+        font-size: 13px;
+        margin-right: 3px; }
+        @media screen and (max-width: 768px) {
+          .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper span {
+            display: none; } }
+    .dentists-names-results .dentist-button .team-dentist {
+      margin-left: 60px;
+      margin-top: 13px;
+      position: relative; }
+      .dentists-names-results .dentist-button .team-dentist:before {
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: 59px;
+        top: -34px;
+        background-color: #aaaaaa;
+        left: -36px; }
+      .dentists-names-results .dentist-button .team-dentist:after {
+        content: '';
+        position: absolute;
+        top: 24px;
+        width: 36px;
+        height: 1px;
+        background-color: #aaaaaa;
+        left: -36px; }
+      .dentists-names-results .dentist-button .team-dentist .result-image-dentist {
+        width: 40px; }
+      .dentists-names-results .dentist-button .team-dentist .result-name-dentist p {
+        font-weight: normal; }
+
+.dentists-countries-results {
+  display: none;
+  position: absolute;
+  top: 101%;
+  left: 360px;
+  width: 580px;
+  z-index: 10000;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0px 3px 4px 0px #9f9f9f; }
+  @media screen and (max-width: 1200px) {
+    .dentists-countries-results {
+      left: 270px;
+      width: 510px; } }
+  @media screen and (max-width: 998px) {
+    .dentists-countries-results {
+      left: 210px; } }
+  @media screen and (max-width: 768px) {
+    .dentists-countries-results {
+      top: 109px;
+      left: 0;
+      width: 100%; } }
+  .dentists-countries-results .info {
+    display: none;
+    font-size: 14px;
+    color: #0084d1;
+    padding: 15px 10px 15px;
+    text-align: left; }
+  .dentists-countries-results .dentists-countries-results-wrapper {
+    max-height: 375px;
+    overflow-y: auto; }
+  .dentists-countries-results .browse-country {
+    width: 100%;
+    background-color: #f2f6ff;
+    color: #1f90d5;
+    font-size: 14px;
+    padding: 9px 22px;
+    text-align: left;
+    display: block;
+    text-decoration: underline;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; }
+  .dentists-countries-results .letters-country-section {
+    padding: 0px 4px;
+    border-bottom: 1px solid #bebebe;
+    padding-bottom: 16px;
+    margin-top: 15px; }
+    .dentists-countries-results .letters-country-section .letter {
+      color: #0084d1;
+      font-weight: 800;
+      text-align: left;
+      padding-left: 20px;
+      margin-bottom: 10px; }
+    .dentists-countries-results .letters-country-section .flex {
+      flex-flow: row wrap; }
+      .dentists-countries-results .letters-country-section .flex .country {
+        width: 50%;
+        text-align: left;
+        margin-bottom: 7px; }
+        .dentists-countries-results .letters-country-section .flex .country a {
+          padding: 5px 20px;
+          display: inline-block;
+          border-radius: 20px;
+          color: #555555;
+          transition: all 0.3s ease; }
+          .dentists-countries-results .letters-country-section .flex .country a:hover {
+            background-color: #f2f6ff;
+            transition: all 0.3s ease; }
+          .dentists-countries-results .letters-country-section .flex .country a span {
+            color: #aaaaaa; }
+
+.dentists-cities-results {
+  display: none;
+  position: absolute;
+  top: 101%;
+  left: 607px;
+  width: 410px;
+  z-index: 10000;
+  overflow-y: auto;
+  max-height: 375px;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0px 3px 4px 0px #9f9f9f; }
+  @media screen and (max-width: 1200px) {
+    .dentists-cities-results {
+      left: 491px;
+      width: 460px; } }
+  @media screen and (max-width: 998px) {
+    .dentists-cities-results {
+      left: 369px;
+      width: 379px; } }
+  @media screen and (max-width: 768px) {
+    .dentists-cities-results {
+      left: 0px;
+      width: 100%;
+      top: 163px; } }
+  .dentists-cities-results .info {
+    display: none;
+    font-size: 14px;
+    color: #0084d1;
+    padding: 15px 10px 5px;
+    text-align: left; }
+  .dentists-cities-results .dentists-cities-results-wrapper {
+    padding: 6px; }
+  .dentists-cities-results .locations-results .result-city-wrapper {
+    text-align: left;
+    margin-bottom: 7px; }
+    .dentists-cities-results .locations-results .result-city-wrapper a {
+      display: inline-block;
+      padding: 5px 20px;
+      border-radius: 20px;
+      color: #555555;
+      transition: all 0.3s ease;
+      text-transform: capitalize; }
+      .dentists-cities-results .locations-results .result-city-wrapper a:hover {
+        background-color: #f2f6ff;
+        transition: all 0.3s ease; }
+      .dentists-cities-results .locations-results .result-city-wrapper a span {
+        color: #0082d1; }
+  .dentists-cities-results .browse-city {
+    width: 100%;
+    background-color: #f2f6ff;
+    color: #1f90d5;
+    font-size: 14px;
+    padding: 9px 22px;
+    text-align: left;
+    display: block;
+    text-decoration: underline;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; }
+
+.search-results-title {
+  background-color: #e2ebff;
+  padding: 110px 0px 50px;
+  text-align: center; }
+  @media screen and (max-width: 768px) {
+    .search-results-title {
+      padding: 85px 0px 28px; } }
+  .search-results-title h1 {
+    color: #332255;
+    font-weight: 800; }
+    @media screen and (max-width: 768px) {
+      .search-results-title h1 {
+        font-size: 20px; } }
+    @media screen and (max-width: 768px) {
+      .search-results-title h1 .subtitle {
+        font-size: 20px;
+        padding: 5px 15px 6px;
+        border-radius: 14px; } }
+  .search-results-title h3 {
+    margin-top: 20px; }
+
+@media screen and (max-width: 998px) {
+  form .container {
+    position: static; } }
+
+.filters-section {
+  padding: 30px 0px;
+  box-shadow: 0 0 24px 0px #c5c5c5; }
+  @media screen and (max-width: 998px) {
+    .filters-section {
+      padding: 15px 0px; } }
+  .filters-section .results-count h4 {
+    color: #51a8de; }
+    @media screen and (max-width: 998px) {
+      .filters-section .results-count h4 {
+        font-size: 17px; } }
+    .filters-section .results-count h4.hidden-mobile {
+      display: block; }
+      @media screen and (max-width: 768px) {
+        .filters-section .results-count h4.hidden-mobile {
+          display: none; } }
+    .filters-section .results-count h4.show-mobile {
+      display: none; }
+      @media screen and (max-width: 768px) {
+        .filters-section .results-count h4.show-mobile {
+          display: block; } }
+  .filters-section .container-filters {
+    padding: 0px 95px; }
+    @media screen and (max-width: 1350px) {
+      .filters-section .container-filters {
+        padding: 0px 35px; } }
+    @media screen and (max-width: 998px) {
+      .filters-section .container-filters {
+        font-size: 17px; } }
+    @media screen and (max-width: 768px) {
+      .filters-section .container-filters {
+        padding: 0px 15px; } }
+  @media screen and (max-width: 998px) {
+    .filters-section .filters-wrapper {
+      display: none;
+      padding: 15px;
+      position: fixed;
+      z-index: 10000000;
+      background: white;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center; } }
+  @media screen and (max-width: 768px) {
+    .filters-section .filters-wrapper {
+      text-align: left; } }
+  .filters-section .filters-wrapper.open {
+    display: block; }
+    .filters-section .filters-wrapper.open .hidden-mobile-filters {
+      display: block; }
+  .filters-section .filters-wrapper .hidden-mobile-filters {
+    display: none;
+    text-align: left; }
+    .filters-section .filters-wrapper .hidden-mobile-filters .close-filter {
+      display: inline-block;
+      text-align: left;
+      padding: 26px 14px; }
+      .filters-section .filters-wrapper .hidden-mobile-filters .close-filter img {
+        max-width: 37px; }
+    .filters-section .filters-wrapper .hidden-mobile-filters h3 {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      color: #0564c6;
+      font-weight: 900; }
+      .filters-section .filters-wrapper .hidden-mobile-filters h3 img {
+        margin-right: 7px;
+        max-width: 24px;
+        margin-top: 3px; }
+  .filters-section .mobile-filters-wrapper {
+    width: 204px;
+    display: none; }
+    @media screen and (max-width: 998px) {
+      .filters-section .mobile-filters-wrapper {
+        display: block; } }
+    .filters-section .mobile-filters-wrapper.smaller {
+      width: auto; }
+    .filters-section .mobile-filters-wrapper a {
+      width: 96px;
+      background-color: #e2ebff;
+      border: 1px solid #0084d1;
+      padding: 10px 10px;
+      border-radius: 21px;
+      align-items: center;
+      display: inline-block;
+      text-align: center; }
+      .filters-section .mobile-filters-wrapper a:first-child {
+        margin-right: 7px; }
+      .filters-section .mobile-filters-wrapper a img {
+        max-width: 20px;
+        margin-right: 5px;
+        vertical-align: bottom; }
+  .filters-section .filter {
+    font-size: 14px;
+    color: #332255;
+    padding: 8px 29px 10px 15px;
+    background-color: #f2f6ff;
+    display: inline-block;
+    border-radius: 22px;
+    margin-right: 13px;
+    border: 1px solid #f2f6ff;
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+    font-weight: bold; }
+    @media screen and (max-width: 768px) {
+      .filters-section .filter {
+        margin-bottom: 20px; } }
+    .filters-section .filter.clear-all-filters {
+      padding: 8px 15px 10px;
+      border-color: #0084d1;
+      background-color: #0084d1;
+      color: white;
+      transition: all 0.3s ease;
+      display: inline-block;
+      margin-left: 10px; }
+    .filters-section .filter.active {
+      border-color: #0084d1;
+      background-color: #e2ebff;
+      transition: all 0.3s ease; }
+    .filters-section .filter:hover {
+      border-color: #0084d1;
+      background-color: #0084d1;
+      color: white;
+      transition: all 0.3s ease; }
+      .filters-section .filter:hover .filter-options {
+        display: block; }
+        @media screen and (max-width: 768px) {
+          .filters-section .filter:hover .filter-options {
+            display: none; } }
+      .filters-section .filter:hover .caret-down {
+        background-position-y: 100%; }
+      .filters-section .filter:hover .filter-order-active-text {
+        color: white; }
+    .filters-section .filter:last-child {
+      margin-right: 0px; }
+    .filters-section .filter .filter-order-active-text {
+      font-size: 14px;
+      color: #332255;
+      background-color: transparent; }
+    .filters-section .filter .caret-down {
+      background-image: url(../img-trp/caret-down-new.png);
+      background-color: transparent;
+      width: 7px;
+      height: 6px;
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-size: cover;
+      background-position-y: 0%; }
+    .filters-section .filter .filter-options {
+      text-align: left;
+      display: none;
+      position: absolute;
+      z-index: 100011;
+      background-color: white;
+      left: 0px;
+      padding: 19px 15px;
+      box-shadow: 0px 0px 4px 0px #b3b3b3;
+      min-width: 250px;
+      top: 103%; }
+      @media screen and (max-width: 768px) {
+        .filters-section .filter .filter-options {
+          position: fixed;
+          z-index: 100000000;
+          top: 206px;
+          left: 15px;
+          right: 15px;
+          width: auto; } }
+      .filters-section .filter .filter-options.longer {
+        min-width: 390px; }
+        @media screen and (max-width: 768px) {
+          .filters-section .filter .filter-options.longer {
+            min-width: none; } }
+      .filters-section .filter .filter-options ::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 15px; }
+      .filters-section .filter .filter-options ::-webkit-scrollbar-track {
+        background-color: #e9e9e9;
+        margin-right: 20px; }
+      .filters-section .filter .filter-options ::-webkit-scrollbar-thumb {
+        background: #0084d1;
+        /* Old browsers */
+        border-right: 15px; }
+      .filters-section .filter .filter-options ::-moz-scrollbar {
+        width: 5px;
+        border-radius: 15px; }
+      .filters-section .filter .filter-options ::-moz-scrollbar-track {
+        border-radius: 15px;
+        background-color: #e9e9e9;
+        margin-right: 20px; }
+      .filters-section .filter .filter-options ::-moz-scrollbar-thumb {
+        background: #0084d1;
+        /* Old browsers */
+        border-right: 15px; }
+      .filters-section .filter .filter-options ::scrollbar {
+        width: 5px;
+        border-radius: 15px; }
+      .filters-section .filter .filter-options ::scrollbar-track {
+        border-radius: 15px;
+        background-color: #e9e9e9;
+        margin-right: 20px; }
+      .filters-section .filter .filter-options ::scrollbar-thumb {
+        background: #0084d1;
+        /* Old browsers */
+        border-right: 15px; }
+      .filters-section .filter .filter-options .filter-inner {
+        max-height: 320px;
+        overflow-y: auto;
+        margin-right: -15px;
+        margin-left: -15px;
+        margin-top: -19px; }
+        .filters-section .filter .filter-options .filter-inner .filter-title {
+          font-size: 16px;
+          font-weight: bold;
+          background-color: #f7f7f7;
+          padding: 7px 20px;
+          margin-top: 21px;
+          margin-bottom: 13px; }
+          .filters-section .filter .filter-options .filter-inner .filter-title:first-child {
+            margin-top: 0px; }
+        .filters-section .filter .filter-options .filter-inner .checkbox-label {
+          padding: 0px 20px; }
+      .filters-section .filter .filter-options .checkbox-label {
+        text-align: left;
+        margin-bottom: 11px; }
+        .filters-section .filter .filter-options .checkbox-label .specialization-info {
+          display: inline-block;
+          position: relative; }
+          .filters-section .filter .filter-options .checkbox-label .specialization-info:hover .info-tooltip {
+            display: block; }
+          .filters-section .filter .filter-options .checkbox-label .specialization-info img {
+            width: 14px; }
+          .filters-section .filter .filter-options .checkbox-label .specialization-info .info-tooltip {
+            display: none;
+            position: absolute;
+            background-color: #3d474d;
+            color: white;
+            width: 211px;
+            font-size: 14px;
+            padding: 10px;
+            z-index: 10;
+            border-radius: 8px;
+            top: -35px;
+            left: calc(100% - -9px); }
+            .filters-section .filter .filter-options .checkbox-label .specialization-info .info-tooltip.short {
+              top: -28px; }
+            .filters-section .filter .filter-options .checkbox-label .specialization-info .info-tooltip::before {
+              content: '';
+              width: 0;
+              height: 0;
+              border-style: solid;
+              border-width: 5px 6px 5px 0;
+              border-color: transparent #3d474d transparent transparent;
+              position: absolute;
+              left: -6px;
+              top: 50%;
+              transform: translateY(-50%); }
+        .filters-section .filter .filter-options .checkbox-label .filter-count {
+          font-size: 16px;
+          color: #bbbbbb;
+          font-weight: normal; }
+    .filters-section .filter .filter-buttons {
+      box-shadow: 0 0 3px 0px #c5c5c5;
+      margin-left: -15px;
+      margin-right: -15px;
+      margin-bottom: -20px;
+      padding: 14px 13px;
+      display: flex;
+      justify-content: end;
+      align-items: center; }
+      @media screen and (max-width: 768px) {
+        .filters-section .filter .filter-buttons {
+          justify-content: space-between; } }
+      .filters-section .filter .filter-buttons .blue-button {
+        font-size: 18px;
+        font-weight: normal;
+        padding: 1px 14px 5px;
+        font-weight: normal; }
+        @media screen and (max-width: 768px) {
+          .filters-section .filter .filter-buttons .blue-button {
+            padding: 1px 24px 5px; } }
+      .filters-section .filter .filter-buttons .clear-filters {
+        color: #888888;
+        font-size: 18px;
+        margin-right: 8px;
+        display: inline-block;
+        font-weight: normal; }
+        .filters-section .filter .filter-buttons .clear-filters:hover {
+          text-decoration: underline; }
+  .filters-section .sort-by-title {
+    color: #888888;
+    font-weight: bold;
+    position: relative;
+    padding-left: 10px; }
+    .filters-section .sort-by-title:before {
+      content: '';
+      height: 38px;
+      width: 2px;
+      background-color: #bdbebe;
+      position: absolute;
+      left: -3px;
+      top: 50%;
+      transform: translateY(-50%); }
+  @media screen and (max-width: 998px) {
+    .filters-section .break-mobile {
+      display: block;
+      border-top: 1px solid #bebebe;
+      margin-top: 30px;
+      padding-top: 30px; }
+      .filters-section .break-mobile .sort-by-title:before {
+        display: none; } }
+  @media screen and (max-width: 768px) {
+    .filters-section .break-mobile {
+      margin-top: 10px; } }
+
+.results-wrapper {
+  background: white;
+  border-top: 1px solid #bebebe; }
+  .results-wrapper ::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 15px; }
+  .results-wrapper ::-webkit-scrollbar-track {
+    background-color: #e9e9e9;
+    margin-right: 20px; }
+  .results-wrapper ::-webkit-scrollbar-thumb {
+    background: #0084d1;
+    /* Old browsers */
+    border-right: 15px; }
+  .results-wrapper ::-moz-scrollbar {
+    width: 5px;
+    border-radius: 15px; }
+  .results-wrapper ::-moz-scrollbar-track {
+    border-radius: 15px;
+    background-color: #e9e9e9;
+    margin-right: 20px; }
+  .results-wrapper ::-moz-scrollbar-thumb {
+    background: #0084d1;
+    /* Old browsers */
+    border-right: 15px; }
+  .results-wrapper ::scrollbar {
+    width: 5px;
+    border-radius: 15px; }
+  .results-wrapper ::scrollbar-track {
+    border-radius: 15px;
+    background-color: #e9e9e9;
+    margin-right: 20px; }
+  .results-wrapper ::scrollbar-thumb {
+    background: #0084d1;
+    /* Old browsers */
+    border-right: 15px; }
+  .results-wrapper .dentist-results {
+    max-height: 700px;
+    overflow-y: auto;
+    overflow-x: hidden; }
+    @media screen and (max-width: 998px) {
+      .results-wrapper .dentist-results {
+        max-height: none; } }
+    .results-wrapper .dentist-results .result-container {
+      position: relative;
+      align-items: center;
+      padding: 14px 80px;
+      border-bottom: 1px solid #bebebe;
+      transition: all 0.3s ease;
+      cursor: pointer; }
+      @media screen and (max-width: 1350px) {
+        .results-wrapper .dentist-results .result-container {
+          padding: 14px 20px; } }
+      @media screen and (max-width: 998px) {
+        .results-wrapper .dentist-results .result-container {
+          padding: 20px 35px; } }
+      .results-wrapper .dentist-results .result-container:hover, .results-wrapper .dentist-results .result-container.active {
+        background-color: #f0f0f0;
+        transition: all 0.3s ease; }
+        .results-wrapper .dentist-results .result-container:hover .dentist-info .button-submit, .results-wrapper .dentist-results .result-container.active .dentist-info .button-submit {
+          opacity: 1; }
+      .results-wrapper .dentist-results .result-container .dentist-image-wrapper {
+        text-align: center;
+        margin-right: 23px;
+        min-width: 138px;
+        position: relative; }
+        @media screen and (max-width: 768px) {
+          .results-wrapper .dentist-results .result-container .dentist-image-wrapper {
+            margin-right: 0px;
+            text-align: left; } }
+        .results-wrapper .dentist-results .result-container .dentist-image-wrapper .avatar {
+          width: 108px;
+          height: 108px;
+          border-radius: 50%;
+          background-position: 50%;
+          background-size: cover;
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 5px; }
+          @media screen and (max-width: 998px) {
+            .results-wrapper .dentist-results .result-container .dentist-image-wrapper .avatar {
+              margin-left: 0px;
+              position: relative;
+              z-index: 10; } }
+        .results-wrapper .dentist-results .result-container .dentist-image-wrapper .partner {
+          background-color: #0084d1;
+          color: white;
+          display: flex;
+          align-items: center;
+          padding: 5px 10px;
+          width: 138px;
+          border-radius: 20px;
+          font-size: 14px;
+          font-weight: bold;
+          margin-bottom: 5px; }
+          @media screen and (max-width: 768px) {
+            .results-wrapper .dentist-results .result-container .dentist-image-wrapper .partner {
+              position: absolute;
+              width: 220px;
+              top: 14px;
+              left: 80px;
+              justify-content: center; } }
+          .results-wrapper .dentist-results .result-container .dentist-image-wrapper .partner img {
+            max-width: 17px;
+            margin-right: 5px; }
+        @media screen and (max-width: 768px) {
+          .results-wrapper .dentist-results .result-container .dentist-image-wrapper .ratings {
+            position: absolute;
+            left: 124px;
+            top: 50px; } }
+        .results-wrapper .dentist-results .result-container .dentist-image-wrapper .ratings .stars {
+          display: block;
+          margin-left: auto;
+          margin-right: auto; }
+          @media screen and (max-width: 768px) {
+            .results-wrapper .dentist-results .result-container .dentist-image-wrapper .ratings .stars {
+              display: inline-block; } }
+        .results-wrapper .dentist-results .result-container .dentist-image-wrapper .ratings .rating {
+          font-size: 14px;
+          font-weight: 300;
+          margin-top: 6px;
+          display: block; }
+          @media screen and (max-width: 768px) {
+            .results-wrapper .dentist-results .result-container .dentist-image-wrapper .ratings .rating {
+              display: inline-block;
+              vertical-align: top;
+              margin-top: 0px; } }
+      .results-wrapper .dentist-results .result-container .dentist-info {
+        flex: 1; }
+        .results-wrapper .dentist-results .result-container .dentist-info .dentist-title {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%; }
+          @media screen and (max-width: 768px) {
+            .results-wrapper .dentist-results .result-container .dentist-info .dentist-title {
+              display: block; } }
+          .results-wrapper .dentist-results .result-container .dentist-info .dentist-title h4 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #332255;
+            margin-bottom: 12px; }
+          .results-wrapper .dentist-results .result-container .dentist-info .dentist-title .working-time {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            min-width: 83px; }
+            @media screen and (max-width: 768px) {
+              .results-wrapper .dentist-results .result-container .dentist-info .dentist-title .working-time {
+                position: absolute;
+                left: 160px;
+                top: 98px; } }
+            .results-wrapper .dentist-results .result-container .dentist-info .dentist-title .working-time.open {
+              color: #0084d1; }
+            .results-wrapper .dentist-results .result-container .dentist-info .dentist-title .working-time.closed {
+              color: #ff6a6a; }
+            .results-wrapper .dentist-results .result-container .dentist-info .dentist-title .working-time img {
+              max-width: 19px;
+              margin-right: 2px; }
+        .results-wrapper .dentist-results .result-container .dentist-info p {
+          font-size: 15px;
+          color: #555555;
+          margin-bottom: 7px;
+          padding-right: 120px; }
+          @media screen and (max-width: 1200px) {
+            .results-wrapper .dentist-results .result-container .dentist-info p {
+              padding-right: 130px; } }
+          @media screen and (max-width: 998px) {
+            .results-wrapper .dentist-results .result-container .dentist-info p {
+              padding-right: 190px; } }
+          @media screen and (max-width: 768px) {
+            .results-wrapper .dentist-results .result-container .dentist-info p {
+              padding-right: 0px; } }
+        .results-wrapper .dentist-results .result-container .dentist-info .text-link {
+          font-size: 15px;
+          color: #0084d1;
+          margin-bottom: 10px;
+          word-break: break-all;
+          display: inline-block; }
+          @media screen and (max-width: 768px) {
+            .results-wrapper .dentist-results .result-container .dentist-info .text-link {
+              display: block; } }
+        .results-wrapper .dentist-results .result-container .dentist-info .socials .social {
+          height: 24px;
+          display: inline-block;
+          margin-right: 6px;
+          transition: all 0.3s ease;
+          background: transparent; }
+        .results-wrapper .dentist-results .result-container .dentist-info .button-submit {
+          background-color: transparent;
+          opacity: 0;
+          font-size: 18px;
+          font-weight: bold;
+          color: #14cab8;
+          border: 1px solid #14cab8;
+          display: inline-block;
+          padding: 13px 22px;
+          border-radius: 30px;
+          position: absolute;
+          right: 30px;
+          bottom: 15px;
+          transition: all 0.3s ease; }
+          @media screen and (max-width: 1200px) {
+            .results-wrapper .dentist-results .result-container .dentist-info .button-submit {
+              font-size: 16px;
+              padding: 11px 14px;
+              right: 10px; } }
+          @media screen and (max-width: 998px) {
+            .results-wrapper .dentist-results .result-container .dentist-info .button-submit {
+              opacity: 1;
+              font-size: 18px;
+              padding: 13px 22px;
+              right: 30px; } }
+          @media screen and (max-width: 768px) {
+            .results-wrapper .dentist-results .result-container .dentist-info .button-submit {
+              position: static;
+              margin-top: 10px; } }
+    .results-wrapper .dentist-results .no-dentist-found {
+      display: flex;
+      background-color: #f0f5ff;
+      align-items: center;
+      padding: 25px 45px 0px; }
+      @media screen and (max-width: 768px) {
+        .results-wrapper .dentist-results .no-dentist-found {
+          flex-direction: column;
+          text-align: center;
+          padding: 30px 30px 85px; } }
+      .results-wrapper .dentist-results .no-dentist-found img {
+        margin-right: 30px;
+        max-width: 145px; }
+        @media screen and (max-width: 768px) {
+          .results-wrapper .dentist-results .no-dentist-found img {
+            margin-right: 0px; } }
+      .results-wrapper .dentist-results .no-dentist-found p {
+        font-size: 20px;
+        color: #332255;
+        margin-bottom: 10px;
+        margin-top: -20px; }
+        @media screen and (max-width: 768px) {
+          .results-wrapper .dentist-results .no-dentist-found p {
+            font-size: 18px;
+            font-weight: 800;
+            margin-top: 0px; } }
+      .results-wrapper .dentist-results .no-dentist-found .text-link {
+        font-size: 18px;
+        color: #0084d1;
+        text-decoration: underline;
+        font-weight: bold; }
+  .results-wrapper .maps-results {
+    max-width: 40%;
+    max-height: 700px;
+    min-height: 608px; }
+    @media screen and (max-width: 998px) {
+      .results-wrapper .maps-results {
+        display: none; } }
+    .results-wrapper .maps-results .alert {
+      position: absolute;
+      top: 0;
+      z-index: 190; }
+  .results-wrapper #map-mobile-tooltip {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background: white;
+    border-radius: 5px;
+    z-index: 1;
+    width: calc(100% - 20px);
+    align-items: center; }
+    .results-wrapper #map-mobile-tooltip .avatar {
+      flex: none;
+      width: 110px;
+      height: 110px;
+      padding: 0px; }
+  .results-wrapper #search-map {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-left: 1px solid #bebebe; }
+
+#search-in-map {
+  top: -1px !important;
+  background-color: white;
+  outline: none;
+  width: 100%;
+  left: -1px !important;
+  height: 40px;
+  border: 1px solid #bebebe;
+  padding: 0px 34px;
+  line-height: 40px;
+  background-image: url(../img-trp/gray-search.png);
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: 10px 50%; }
+
+@media screen and (max-width: 768px) {
+  #sort-popup .popup-title {
+    text-align: left;
+    padding: 5px 10px 8px; } }
+
+.button {
+  padding-left: 40px;
+  padding-right: 40px; }
+
+.results-static-map {
+  position: relative;
+  border-radius: 5px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  width: 670px;
+  display: block;
+  overflow: hidden; }
+  @media screen and (max-width: 768px) {
+    .results-static-map {
+      width: 300px;
+      margin-right: auto;
+      margin-left: auto; } }
+  .results-static-map img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto; }
+
+.search-results-wrapper {
+  position: relative;
+  z-index: 100; }
+  .search-results-wrapper .alert {
+    max-width: 670px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px; }
+
+.site-content {
+  min-height: calc(100vh - 147px); }
+  @media screen and (max-width: 768px) {
+    .site-content {
+      min-height: calc(100vh - 292px); } }
+
+body .main-top {
+  background: transparent; }
+  @media screen and (max-width: 768px) {
+    body .main-top {
+      padding-bottom: 220px; } }
+  body .main-top::after {
+    display: none; }
+body .sort-wrapper {
+  position: absolute;
+  z-index: 100;
+  left: 0;
+  right: 0;
+  width: 670px;
+  margin: 0 auto;
+  margin-top: -70px;
+  background: transparent;
+  margin-bottom: 45px; }
+  @media screen and (max-width: 768px) {
+    body .sort-wrapper {
+      width: 100%;
+      padding: 0px 10px;
+      margin-top: -100px; } }
+  @media screen and (max-width: 768px) {
+    body .sort-wrapper .flex {
+      display: flex; } }
+  body .sort-wrapper .col {
+    color: white;
+    font-weight: bold; }
+    @media screen and (max-width: 768px) {
+      body .sort-wrapper .col {
+        font-weight: 300; } }
+    body .sort-wrapper .col:nth-child(2) {
+      text-align: right; }
+  body .sort-wrapper .sort-button {
+    color: white;
+    font-weight: bold; }
+    @media screen and (max-width: 768px) {
+      body .sort-wrapper .sort-button {
+        font-weight: 300; } }
+    body .sort-wrapper .sort-button img {
+      vertical-align: bottom; }
+@media screen and (max-width: 768px) {
+  body .home-search-form form {
+    margin-bottom: 0px; } }
+
+.overflow-container {
+  position: relative;
+  z-index: 100;
+  text-align: center; }
+  .overflow-container h1 {
+    color: white;
+    font-weight: bold;
+    margin-top: -30px;
+    margin-bottom: 30px;
+    font-size: 33px; }
+    @media screen and (max-width: 768px) {
+      .overflow-container h1 {
+        margin-top: -60px;
+        font-size: 23px; } }
+    @media screen and (max-width: 768px) {
+      .overflow-container h1.small-mt {
+        margin-top: -20px; } }
+
+.pagination {
+  text-align: center;
+  list-style: none;
+  margin-top: 60px;
+  margin-bottom: 30px; }
+  .pagination li {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-color: #126585;
+    color: white;
+    cursor: pointer;
+    line-height: 30px;
+    margin: 0px 2px; }
+    .pagination li.active {
+      background-color: #0fb0e5; }
+
+#map-results-popup {
+  position: fixed;
+  top: 60px;
+  background-color: white;
+  z-index: 1000;
+  height: 100%;
+  left: 0;
+  width: 100%;
+  display: none; }
+  #map-results-popup .close-map {
+    width: 88px;
+    background-color: #e2ebff;
+    border: 1px solid #0084d1;
+    padding: 9px 10px;
+    border-radius: 21px;
+    align-items: center;
+    display: inline-block;
+    text-align: center;
+    position: absolute;
+    top: 50px;
+    z-index: 100;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+    #map-results-popup .close-map img {
+      margin-right: 3px; }
+  #map-results-popup .maps-results-mobile {
+    position: relative;
+    height: 100%;
+    width: 100%; }
+    #map-results-popup .maps-results-mobile #search-map-mobile {
+      width: 100%;
+      height: 100%;
+      background: transparent; }
+  #map-results-popup .mobile-map-results {
+    position: relative;
+    margin-top: -300px;
+    height: 242px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    background: transparent;
+    padding-top: 10px; }
+    #map-results-popup .mobile-map-results .mobile-map-inner {
+      position: absolute;
+      width: 12120px;
+      height: 100%; }
+      #map-results-popup .mobile-map-results .mobile-map-inner .result-container {
+        padding: 16px 25px;
+        margin: 0px 10px;
+        float: left;
+        width: 300px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 13px 0px #717171; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .avatar {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          z-index: 10;
+          position: relative; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .ratings {
+          margin-left: 5px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .ratings .stars {
+            vertical-align: middle; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .partner {
+          background-color: #0084d1;
+          color: white;
+          margin-left: -20px;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding-top: 3px;
+          padding-bottom: 4px;
+          border-top-right-radius: 30px;
+          border-bottom-right-radius: 30px;
+          font-size: 14px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .partner img {
+            margin-right: 3px; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .working-time {
+          font-size: 12px;
+          display: flex;
+          align-items: center;
+          margin-left: 5px;
+          margin-top: 7px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .working-time.open {
+            color: #0084d1; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .working-time.closed {
+            color: #ff6a6a; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .working-time img {
+            max-width: 19px;
+            margin-right: 2px; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container p, #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-title h4 {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis; }
+        #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info {
+          margin-top: 15px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info h4 {
+            font-size: 16px;
+            color: #332255;
+            font-weight: 800;
+            margin-bottom: 10px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info p {
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 10px; }
+          #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info .button-submit {
+            font-weight: bold;
+            color: #0084d1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f2f6ff;
+            padding: 3px 10px 5px;
+            border-radius: 30px; }
+            #map-results-popup .mobile-map-results .mobile-map-inner .result-container .dentist-info .button-submit span {
+              color: #0084d1; }
+
+.gm-style .gm-style-iw-c {
+  border-radius: 12px;
+  box-shadow: 0 0 13px 0px #717171; }
+
+.gm-ui-hover-effect {
+  top: -2px !important;
+  right: 0px !important; }
+
+.info-window {
+  margin: 0px auto;
+  width: 300px;
+  background-color: white; }
+  .info-window .flex {
+    align-items: center; }
+    .info-window .flex .info-avatar img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      z-index: 10;
+      position: relative; }
+    .info-window .flex .partner {
+      background-color: #0084d1;
+      color: white;
+      margin-left: -20px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 3px;
+      padding-bottom: 4px;
+      border-top-right-radius: 30px;
+      border-bottom-right-radius: 30px;
+      font-size: 14px; }
+      .info-window .flex .partner img {
+        max-width: 17px;
+        margin-right: 5px; }
+    .info-window .flex .ratings {
+      margin-left: 5px; }
+      .info-window .flex .ratings .stars {
+        vertical-align: middle; }
+    .info-window .flex .working-time {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      margin-left: 5px;
+      margin-top: 7px; }
+      .info-window .flex .working-time.open {
+        color: #0084d1; }
+      .info-window .flex .working-time.closed {
+        color: #ff6a6a; }
+      .info-window .flex .working-time img {
+        max-width: 19px;
+        margin-right: 2px; }
+  .info-window h4 {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #332255;
+    font-weight: 800;
+    margin-bottom: 10px; }
+  .info-window p {
+    font-size: 14px;
+    color: #555555;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: normal; }
+  .info-window .button-submit {
+    font-weight: bold;
+    color: #0084d1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f2f6ff;
+    padding: 3px 10px 5px;
+    border-radius: 30px;
+    outline: none; }
+
+.pac-matched {
+  font-family: 'Lato' !important; }

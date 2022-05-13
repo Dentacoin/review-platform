@@ -16,21 +16,52 @@
                 <h4 class="panel-title">Testimonial slider</h4>
             </div>
             <div class="panel-body">
-        		<div class="panel-body">
-					@include('admin.parts.table', [
-						'table_id' => 'testimonials',
-						'table_fields' => [
-							'image'				=> array('label' => 'Image', 'template' => 'admin.parts.table-testimonials-image'),
-							'name'				=> array('label' => 'Name'),
-							'job'				=> array('label' => 'Job'),
-							'description'		=> array('label' => 'Description'),
-							'edit'				=> array('label' => 'Edit', 'format' => 'update'),
-							'delete'			=> array('label' => 'Delete', 'format' => 'delete'),
-						],
-                        'table_data' => $testimonials,
-						'table_pagination' => false,
-                        'pagination_link' => array()
-					])
+                <div class="row table-responsive-md">
+                    <table class="table table-striped table-question-list">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Quote</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="questions-draggable" url="{{ url('cms/trp/testimonials/reorder') }}">
+                            @foreach($testimonials as $testimonial)
+                                <tr question-order="{{ $testimonial->order }}" question-id="{{ $testimonial->id }}" >
+                                    
+                                    <td class="question-number">
+                                        {{ $testimonial->order_dentist }}
+                                    </td>
+                                    <td>
+                                        <img style="max-width: 50px;border-radius: 50%;" src="{{ $testimonial->getImageUrl() }}">
+                                    </td>
+                                    <td>
+                                        {{ $testimonial->name }}
+                                    </td>
+                                    <td>
+                                        {{ $testimonial->job }}
+                                    </td>
+                                    <td>
+                                        {{ $testimonial->description }}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-primary" href="{{ url('cms/trp/testimonials/edit/'.$testimonial->id) }}">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-deafult" href="{{ url('cms/trp/testimonials/delete/'.$testimonial->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>                    
                 </div>
             </div>
         </div>
@@ -71,28 +102,34 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label" style="max-width: 200px;">Job</label>
+                                <label class="col-md-2 control-label" style="max-width: 200px;">Position</label>
                                 <div class="col-md-10">
                                     {{ Form::text('job-'.$code, null, array('maxlength' => 128, 'class' => 'form-control')) }}
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label" style="max-width: 200px;">Description</label>
+                                <label class="col-md-2 control-label" style="max-width: 200px;">Quote</label>
                                 <div class="col-md-10">
                                     {{ Form::textarea('description-'.$code, null, array('maxlength' => 2048, 'class' => 'form-control')) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" style="max-width: 200px;">Alt image text</label>
+                                <div class="col-md-6">
+                                    {{ Form::text('alt_image_text-'.$code, null, array('maxlength' => 128, 'class' => 'form-control')) }}
                                 </div>
                             </div>
                         </div>
                     @endforeach
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Image</label>
-                        <div class="col-md-4">
+                        <label class="col-md-2 control-label" style="max-width: 200px;">Image</label>
+                        <div class="col-md-10">
                             <input type="file" name="image" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-2"></div>
+                        <div class="col-md-2" style="max-width: 200px;"></div>
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-block btn-success">Add</button>
                         </div>                        

@@ -1,0 +1,253 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+.popup {
+    
+    .popup-inner {
+        width: 1020px;
+
+        @media #{$pc} {
+            width: 950px;
+            padding: 55px 60px;
+        }
+
+        @media #{$tablet} {
+            width: 100%;
+            padding: 35px 30px;
+        }
+
+        @media #{$phone} {
+            padding: 35px 15px;
+        }
+    }
+
+    .details-wrapper {
+        .review-avatar {
+            width: 115px;
+            height: 115px;
+            background-size: cover;
+            background-position: 50%;
+            border-radius: 50%;
+            margin: 0 auto 22px;
+
+            @media #{$phone} {
+                width: 85px;
+                height: 85px;
+                margin-bottom: 17px;
+            }
+        }
+
+        h2 {
+            margin-bottom: 35px;
+
+            @media #{$phone} {
+                margin-bottom: 30px;
+            }
+        }
+
+        .review-header {
+
+            .flex {
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 20px;
+                display: flex;
+                position: relative;
+
+                &.no-title {
+                    justify-content: flex-end;
+                }
+            }
+
+            .review-title {
+                font-weight: 900;
+                color: #332255;
+
+                @media #{$phone} {
+                    font-size: 24px;
+                }
+            }
+
+            .review-date {
+                font-size: 18px;
+                color: #888888;
+                margin-bottom: 20px;
+
+                @media #{$phone} {
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .review-content {
+            font-size: 18px;
+            color: #332255;
+            margin-bottom: 30px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #0084d1;
+
+            .video-wrap {
+                max-width: 610px;
+                margin: 0 auto;
+            }
+        }
+
+        h4 {
+            font-size: 20px;
+            color: #0084d1;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .review-treatments {
+
+            .treatments {
+                &.with-border {
+                    border-right: 1px solid #cad3e6;
+                    margin-right: 30px;
+
+                    @media #{$phone} {
+                        margin-right: 0px;
+                        border-right: none;
+                    }
+                }
+
+                .treatment {
+                    font-size: 16px;
+                    color: #332255;
+                    padding: 8px 15px 10px;
+                    background-color: #e2ebff;
+                    display: inline-block;
+                    border-radius: 22px;
+                    transition: all 0.3s ease;
+                    margin-bottom: 20px;
+                    border: 1px solid #0084d1;
+                    margin-right: 10px;
+                }
+            }
+
+            .review-dentist {
+                @media #{$phone} {
+                    margin-top: 20px;
+                }
+
+                .flex {
+                    align-items: center;
+                }
+
+                .review-dentist-avatar {
+                    width: 40px;
+                    height: 40px;
+                    background-position: 50%;
+                    background-size: cover;
+                    border-radius: 50%;
+                }
+
+                p {
+                    font-size: 18px;
+                    font-weight: 800;
+                    color: #332255;
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        .review-answers {
+            margin-top: 40px;
+            margin-bottom: 60px;
+
+            @media #{$phone} {
+                margin-bottom: 40px;
+            }
+
+            .overview-wrapper {
+                display: flex;
+                flex-flow: row wrap;
+
+                @media #{$phone} {
+                    margin-left: -15px;
+                    margin-right: -15px;
+                }
+
+                .overview-column {
+                    width: calc(25% - 21px);
+                    border-right: 1px solid #cad3e6;
+                    margin-right: 27px;
+                    padding-bottom: 30px;
+
+                    @media #{$pc} {
+                        width: calc(25% - 17px);
+                        margin-right: 17px;
+                    }
+
+                    @media #{$tablet} {
+                        width: calc(33.3% - 16px);
+                        margin-right: 24px;
+                    }
+
+                    @media #{$phone} {
+                        width: 100%;
+                        border-right: none;
+                        margin-right: 0px;
+                        padding: 21px 15px 19px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+
+                    &:nth-child(4n) {
+                        margin-right: 0px;
+                        border-right: none;
+
+                        @media #{$tablet} {
+                            margin-right: 24px;
+                            border-right: 1px solid #cad3e6;
+                        }
+
+                        @media #{$phone} {
+                            margin-right: 0px;
+                            border-right: none;
+                        }
+                    }
+
+                    &:nth-child(3n) {
+                        @media #{$tablet} {
+                            margin-right: 0px;
+                            border-right: none;
+                        }
+                    }
+
+                    &:nth-child(2n - 1) {
+                        @media #{$phone} {
+                            background-color: #f2f6ff;
+                        }
+                    }
+
+                    .rating {
+                        @media #{$phone} {
+                            margin-left: 10px;
+                        }
+                    }
+
+                    p {
+                        font-size: 18px;
+                        color: #332255;
+                        font-weight: 800;
+                        margin-bottom: 6px;
+                        display: flex;
+                        align-items: center;
+
+                        img {
+                            margin-right: 6px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .blue-button {
+            text-transform: none;
+        }
+    }
+}

@@ -36,6 +36,14 @@ class Country extends Model {
     public function cities() {
         return $this->hasMany('App\Models\City')->orderBy('name', 'ASC');
     }
+
+    public function dentists() {
+        return $this->hasMany('App\Models\User')
+        ->where('is_dentist', 1)
+        ->whereNull('self_deleted')
+        ->whereIn('status', config('dentist-statuses.shown_with_link'))
+        ->orderBy('name', 'ASC');
+    }
 }
 
 class CountryTranslation extends Model {

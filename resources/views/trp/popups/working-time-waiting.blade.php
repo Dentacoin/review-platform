@@ -1,4 +1,4 @@
-<div class="popup fixed-popup popup-wokring-time active removable" id="popup-wokring-time-waiting" empty-hours scss-load="trp-popup-working-time">
+<div class="popup fixed-popup popup-wokring-time active removable no-image" id="popup-wokring-time-waiting" empty-hours scss-load="trp-popup-working-time">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">
@@ -13,7 +13,10 @@
             {!! nl2br(trans('trp.popup.popup-wokring-time.title')) !!}
         </h2>
 
-		{!! Form::open(array('method' => 'post', 'url' => getLangUrl('add-working-hours') )) !!}
+		{!! Form::open([
+            'method' => 'post', 
+            'url' => getLangUrl('add-working-hours') 
+        ]) !!}
 			{!! csrf_field() !!}
 
 			<input type="hidden" name="last_user_id" value="">

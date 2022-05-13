@@ -49,7 +49,7 @@ jQuery(document).ready(function($){
 
 	initAddressSuggesters = function() {
 
-        prepareMapFucntion( function() {
+        prepareMapFunction( function() {
 
             $('.address-suggester-input').each( function() {
             	var conatiner = $(this).closest('.address-suggester-wrapper-input');

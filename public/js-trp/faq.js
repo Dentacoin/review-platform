@@ -7,5 +7,30 @@ jQuery(document).ready(function($){
             $('.question').removeClass('active');
             $(this).closest('.question').addClass('active');
         }
-    } );
+    });
+
+    $('.faq-section').click( function() {
+        $('.faq-section').removeClass('active');
+        $(this).addClass('active');
+        $('.questions').removeClass('active');
+        $('.'+$(this).attr('id')).addClass('active');
+
+        if($(window).outerWidth() <= 768) {
+            $('html, body').animate({
+                scrollTop: $('.questions.active').offset().top
+            }, 300);
+
+            let left = 0;
+            let prev = $(this).prev();
+            while(prev.length) {
+                console.log('sasa');
+                left += prev.outerWidth();
+                prev = prev.prev();
+            }
+
+            $('.faq-sections-title').animate({
+                scrollLeft: left
+            }, 500);
+        }
+    });
 });

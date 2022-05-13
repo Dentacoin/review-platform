@@ -15,7 +15,10 @@
             {!! nl2br(trans('trp.popup.popup-wokring-time.title')) !!}
         </h2>
 
-		{!! Form::open(array('method' => 'post', 'url' => getLangUrl('profile/info') )) !!}
+		{!! Form::open([
+            'method' => 'post', 
+            'url' => getLangUrl('profile/info') 
+        ]) !!}
 			{!! csrf_field() !!}
 		
 			@for($day=1;$day<=7;$day++)

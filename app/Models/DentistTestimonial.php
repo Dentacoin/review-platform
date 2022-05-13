@@ -14,6 +14,7 @@ class DentistTestimonial extends Model {
     use SoftDeletes;
     
     public $translatedAttributes = [
+        'alt_image_text',
         'description',
         'name',
         'job',
@@ -21,9 +22,11 @@ class DentistTestimonial extends Model {
 
     protected $fillable = [
         'image',
+        'alt_image_text',
         'description',
         'name',
         'job',
+        'order_dentist'
     ];
 
     protected $dates = [
@@ -51,7 +54,7 @@ class DentistTestimonial extends Model {
         if (in_array($img->mime(), $extensions)) {
 
             $to = $this->getImagePath();
-            $img->fit( 400, 400 );
+            $img->fit( 160, 160 );
             $img->save($to);
             $this->image = true;
             $this->save();
@@ -67,6 +70,7 @@ class DentistTestimonialTranslation extends Model {
     public $timestamps = false;
     protected $fillable = [
         'dentist_testimonial_id',
+        'alt_image_text',
         'description',
         'name',
         'job',

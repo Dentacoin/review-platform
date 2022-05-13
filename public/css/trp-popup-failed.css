@@ -1,19 +1,19 @@
-.failed-popup.fixed-popup .popup-inner {
+.failed-popup .popup-inner {
   max-width: 800px;
   top: 70px;
   transform: translateX(-50%);
   border-radius: 10px;
   padding: 0px; }
   @media screen and (max-width: 998px) {
-    .failed-popup.fixed-popup .popup-inner {
+    .failed-popup .popup-inner {
       max-width: 760px;
       height: auto;
       left: 50%; } }
   @media screen and (max-width: 768px) {
-    .failed-popup.fixed-popup .popup-inner {
+    .failed-popup .popup-inner {
       width: 90%;
       padding: 30px; } }
-  .failed-popup.fixed-popup .popup-inner h2 {
+  .failed-popup .popup-inner h2 {
     margin-bottom: 0px;
     font-size: 40px;
     font-weight: bold;
@@ -22,26 +22,26 @@
     margin-top: 30px;
     text-align: center; }
     @media screen and (max-width: 768px) {
-      .failed-popup.fixed-popup .popup-inner h2 {
+      .failed-popup .popup-inner h2 {
         margin-top: 0px;
         font-size: 30px; } }
-  .failed-popup.fixed-popup .popup-inner p {
+  .failed-popup .popup-inner p {
     font-size: 20px;
     padding-right: 60px; }
     @media screen and (max-width: 768px) {
-      .failed-popup.fixed-popup .popup-inner p {
+      .failed-popup .popup-inner p {
         padding-right: 0px;
         text-align: center; } }
-  .failed-popup.fixed-popup .popup-inner img {
+  .failed-popup .popup-inner img {
     max-width: 420px;
     display: block;
     margin-right: 50px; }
     @media screen and (max-width: 768px) {
-      .failed-popup.fixed-popup .popup-inner img {
+      .failed-popup .popup-inner img {
         max-width: 200px;
         margin: 20px auto; } }
   @media screen and (max-width: 768px) {
-    .failed-popup.fixed-popup .popup-inner .close-popup:not(.button) {
+    .failed-popup .popup-inner .close-popup:not(.button) {
       top: 10px; }
-      .failed-popup.fixed-popup .popup-inner .close-popup:not(.button) i {
+      .failed-popup .popup-inner .close-popup:not(.button) i {
         font-size: 20px; } }

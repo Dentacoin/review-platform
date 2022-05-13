@@ -28,6 +28,12 @@ class Question extends Model {
         'updated_at',
         'deleted_at'
     ];
+
+	public static $types = [
+		'old' => 'old',
+		'new' => 'new',
+		'deprecated' => 'deprecated',
+	];
 }
 
 class QuestionTranslation extends Model {

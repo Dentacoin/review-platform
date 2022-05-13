@@ -40,15 +40,21 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label" style="max-width: 200px;">Job</label>
+                                <label class="col-md-2 control-label" style="max-width: 200px;">Position</label>
                                 <div class="col-md-6">
                                     {{ Form::text('job-'.$code, $item->{'job:'.$code}, array('maxlength' => 128, 'class' => 'form-control')) }}
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label" style="max-width: 200px;">Description</label>
+                                <label class="col-md-2 control-label" style="max-width: 200px;">Quote</label>
                                 <div class="col-md-6">
                                     {{ Form::textarea('description-'.$code, $item->{'description:'.$code}, array('maxlength' => 2048, 'class' => 'form-control')) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" style="max-width: 200px;">Alt image text</label>
+                                <div class="col-md-6">
+                                    {{ Form::text('alt_image_text-'.$code, $item->{'alt_image_text:'.$code}, array('maxlength' => 128, 'class' => 'form-control')) }}
                                 </div>
                             </div>
                         </div>
@@ -56,12 +62,19 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label" style="max-width: 200px;">Image</label>
                         <div class="col-md-2">
-                            <label for="add-avatar" class="image-label" style="background-image: url('{{ $item->getImageUrl()}}');">
+                            <label for="add-avatar" class="image-label" style="background-image: url('{{ $item->getImageUrl()}}');border-radius: 50%;">
                                 <div class="loader">
                                     <i class="fas fa-circle-notch fa-spin"></i>
                                 </div>
                                 <input type="file" name="image" id="add-avatar" class="no-cropper" upload-url="{{ url('cms/trp/testimonials/edit/'.$item->id.'/addavatar') }}">
                             </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" style="max-width: 200px;"></label>
+                        <div class="col-md-5">
+                            Required image size: 160x160px; <br/>
+                            Format: png, jpg, jpeg
                         </div>
                     </div>
                     <div class="form-group">

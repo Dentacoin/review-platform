@@ -1,0 +1,467 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+@import 'trp-search-form';
+
+.search-title {
+	text-align: center;
+    padding-top: 100px;
+    padding-bottom: 30px;
+    background-color: #e2ebff;
+
+	@media #{$phone} {
+		padding-top: 90px;
+	}
+
+	h1 {
+		color: #332255;
+		font-weight: 800;
+
+		@media #{$phone} {
+			font-size: 20px;
+		}
+
+		span {
+			@media #{$phone} {
+				font-size: 20px;
+			}
+		}
+	}
+}
+
+.search-filters {
+	text-align: center;
+	padding-top: 20px;
+    padding-bottom: 35px;
+
+	.container {
+		@media #{$phone} {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			position: static;
+		}
+	}
+
+	.quick-search-country-wrapper {
+		max-width: 208px;
+		margin: 0px auto 20px;
+		border-bottom: 1px solid #bebebe;
+		display: flex;
+		align-items: center;
+		padding-bottom: 3px;
+
+		@media #{$phone} {
+			border: 1px solid #0084d1;
+			margin-left: 0px;
+			max-width: none;
+			margin-bottom: 0px;
+			border-radius: 21px;
+			padding-bottom: 3px;
+		}
+
+		img {
+			margin-left: 40px;
+			margin-right: 8px;
+			margin-bottom: -3px;
+
+			@media #{$phone} {
+				margin-left: 18px;
+				margin-right: 5px;
+			}
+		}
+
+		input {
+			height: 30px;
+			max-width: 140px;
+
+			@media #{$phone} {
+				height: 37px;
+				max-width: 160px;
+			}
+
+			&:focus {
+				outline: none;
+			}
+		}
+	}
+
+	.hidden-mobile-filters {
+		@media #{$phone} {
+			display: none;
+		}
+
+		&.open {
+			display: block;
+			text-align: left;
+			position: fixed;
+			top: 0;
+			height: 100%;
+			left: 0;
+			width: 100%;
+			background-color: white;
+			z-index: 1000;
+
+			.close-filter {
+				display: inline-block;
+				text-align: left;
+				padding: 26px 14px;
+
+				img {
+					max-width: 37px;
+				}
+			}
+
+			h3 {
+				margin-bottom: 30px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 28px;
+				color: #0564c6;
+				font-weight: 900;
+
+				img {
+					margin-right: 7px;
+					max-width: 24px;
+					margin-top: 3px;
+				}
+			}
+		}
+
+		.close-filter,
+		h3 {
+			display: none;
+		}
+	}
+
+	.open-country-filters {
+		display: none;
+		width: 96px;
+		background-color: #e2ebff;
+		border: 1px solid #0084d1;
+		padding: 10px 10px;
+		border-radius: 21px;
+		align-items: center;
+
+		@media #{$phone} {
+			display: flex;
+		}
+
+		img {
+			max-width: 20px;
+			margin-right: 5px;
+			margin-top: 2px;
+		}
+	}
+
+	.continents-filter {
+		margin-bottom: 25px;
+
+		@media #{$phone} {
+			border-bottom: 1px solid #bebebe;
+			padding: 0px 15px 15px;
+		}
+
+		.continent {
+			font-size: 18px;
+			color: #332255;
+			padding: 8px 15px 10px;
+			background-color: #f2f6ff;
+			display: inline-block;
+			border-radius: 22px;
+			margin-right: 3px;
+			border: 1px solid #f2f6ff;
+			transition: all 0.3s ease;
+
+			@media #{$tablet} {
+				font-size: 16px;
+				margin-right: 2px;
+			}
+
+			@media #{$phone} {
+				margin-bottom: 14px;
+				margin-right: 8px;
+			}
+
+			&.active {
+				border-color: #0084d1;
+				color: #0084d1;
+				text-decoration: underline;
+				background-color: #e2ebff;
+				transition: all 0.3s ease;
+
+				@media #{$phone} {
+					text-decoration: none;
+				}
+			}
+
+			&:hover {
+				color: #0084d1;
+				border-color: #0084d1;
+				transition: all 0.3s ease;
+			}
+
+			&:last-child {
+				margin-right: 0px;
+			}
+		}
+	}
+
+	.countries-letters-wrapper {
+		@media #{$phone} {
+			padding: 0px 15px;
+		}
+
+		.countries-letter {
+			font-size: 18px;
+			color: #332255;
+			padding: 0px 7px;
+			transition: all 0.3s ease;
+
+			@media #{$phone} {
+				font-size: 16px;
+				display: inline-block;
+				margin-bottom: 10px;
+			}
+
+			&.active {
+				transition: all 0.3s ease;
+				text-decoration: underline;
+				color: #0084d1;
+
+				@media #{$phone} {
+					background-color: #f2f6ff;
+					padding: 6px 10px 9px;
+					border-radius: 50%;
+				}
+			}
+
+			&:hover {
+				color: #0084d1;
+				transition: all 0.3s ease;
+			}
+		}
+	}
+}
+
+.country-all-practices {
+	padding: 32px 0px;
+
+	.show-all {
+		text-transform: uppercase;
+		color: #0084d1;
+		font-size: 18px;
+		text-decoration: underline;
+		padding-left: 77px;
+
+		@media #{$phone} {
+			padding-left: 0px;
+		}
+	}
+
+	.country-dentists {
+		padding-right: 77px;
+		font-size: 18px;
+		color: #52a7dd;
+
+		@media #{$phone} {
+			padding-right: 0px;
+		}
+	}
+}
+
+.countries-wrapper {
+	box-shadow: 0 0 24px 0px #c5c5c5;
+	min-height: calc(100vh - 588px);
+
+	.continent-title-wrapper {
+		display: none;
+		background-color: #0084d1;
+    	padding: 16px 0px;
+
+		.continent-title {
+			font-size: 30px;
+			color: white;
+			font-weight: 700;
+			padding-left: 77px;
+			text-transform: uppercase;
+
+			@media #{$phone} {
+				padding-left: 0px;
+			}
+		}
+
+		.continent-dentists {
+			padding-right: 77px;
+			color: white;
+			font-size: 18px;
+
+			@media #{$phone} {
+				padding-right: 0px;
+				font-size: 0px;
+			}
+
+			span {
+				font-size: 18px;
+				color: white;
+				font-weight: bold;
+
+				@media #{$phone} {
+					&:after {
+						content: ')';
+					}
+
+					&:before {
+						content: '(';
+					}
+				}
+			}
+		}
+	}
+
+	.letters-country-section {
+		padding: 35px 64px;
+		border-bottom: 1px solid #bebebe;
+
+		@media #{$pc} {
+			padding: 35px 0px 35px 20px;
+		}
+
+		@media #{$phone} {
+			padding: 20px 0px;
+		}
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		.letter {
+			font-size: 30px;
+			font-weight: 900;
+			color: #0084d1;
+			margin-bottom: 15px;
+			margin-left: 12px;
+		}
+
+		.flex {
+			flex-flow: row wrap;
+
+			.country {
+				width: 25%;
+
+				@media #{$tablet} {
+					width: 33.3%;
+				}
+
+				@media #{$phone} {
+					width: 50%;
+				}
+				
+				a {
+					font-size: 18px;
+					color: #555555;
+					padding: 6px 13px 8px;
+					border-radius: 20px;
+					display: inline-block;
+					float: left;
+    				clear: both;
+					transition: all 0.3s ease;
+
+					&.active,
+					&:hover {
+						background-color: #f2f6ff;
+						transition: all 0.3s ease;
+					}
+
+					span {
+						font-size: 18px;
+						color: #aaaaaa;
+					}
+				}
+			}
+		}
+	}
+
+	&.chosen-continent {
+
+		.continent-title-wrapper {
+			display: block;
+		}
+
+		.container {
+			display: flex;
+    		flex-flow: row wrap;
+		}
+
+		.letters-country-section {
+			width: 25%;
+			padding-right: 20px;
+
+			@media #{$tablet} {
+				width: 33.3%;
+			}
+
+			@media #{$phone} {
+				width: 100%;
+			}
+
+			.flex {
+				.country {
+					width: 100%;
+				}
+			}
+		}
+	}
+}
+
+
+// dots
+// width: 90%;
+// overflow:hidden; 
+// white-space:nowrap; 
+// text-overflow: ellipsis;
+
+.site-content {
+	min-height: calc(100vh - 127px);
+
+	@media #{$phone} {
+		min-height: calc(100vh - 292px);
+	}
+}
+
+.scroll-up {
+	background-color: #0084d1;
+    width: 70px;
+    height: 70px;
+    display: block;
+    text-align: center;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 140px;
+    right: 20px;
+	opacity: 0;
+	transition: all 0.3s ease;
+	z-index: 10;
+
+	@media #{$phone} {
+		width: 50px;
+		height: 50px;
+		bottom: 88px;
+		right: 16px;
+	}
+
+	img {
+		max-width: 28px;
+		transform: rotate(-90deg);
+		display: inline-block;
+		transform-origin: center center;
+		margin-top: 12px;
+
+		@media #{$phone} {
+			max-width: 18px;
+			margin-top: 8px;
+		}
+	}
+}

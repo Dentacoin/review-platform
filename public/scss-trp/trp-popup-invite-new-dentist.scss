@@ -1,0 +1,52 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+.invite-new-dentist-popup {
+
+	&.active {
+		display: flex;
+	}
+}
+
+.invite-new-dentist-success-popup {
+	.popup-inner {
+		max-width: 740px;
+		text-align: center;
+        box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
+
+        @media #{$tablet} {
+        	max-width: 100%;
+        }
+
+        img {
+        	max-width: 80px;
+        }
+
+		h2 {
+			font-weight: bold;
+		    color: black;
+			font-size: 22px;
+			margin-top: 30px;
+		    max-width: 470px;
+		    margin: 35px auto 15px;
+		}
+
+		p {
+			font-size: 20px;
+			margin-bottom: 30px;
+
+			span {
+				color: #0fb0e5;
+				font-weight: bold;
+				font-size: 20px;
+			}
+		}
+
+		.button {
+			padding: 10px 40px;
+			margin-top: 0px;
+			margin-bottom: 10px;
+		}
+	}
+}

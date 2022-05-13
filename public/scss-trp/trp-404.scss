@@ -1,0 +1,81 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+@import 'trp-index-flickity';
+
+.site-content {
+	min-height: calc(100vh - 127px);
+	background-color: #e2ebff;
+}
+
+.error-wrapper {
+	padding-bottom: 50px;
+	padding-top: 80px;
+
+	>.flex {
+		@media #{$phone} {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+
+	.error-image {
+		width: 430px;
+		margin-right: 30px;
+
+		@media #{$phone} {
+			width: 100%;
+			order: 2;
+			margin-right: 0px;
+		}
+
+		img {
+			width: 100%;
+
+			@media #{$phone} {
+				max-width: 260px;
+				margin: 0 auto;
+				display: block;
+			}
+		}
+	}
+
+	h1 {
+		color: #332255;
+		font-weight: 900;
+
+		@media #{$phone} {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+	}
+
+	.flickity-oval {
+		margin-top: 0px;
+
+		>.flex {
+			margin-bottom: 30px;
+
+			@media #{$phone} {
+				margin-bottom: 10px;
+			}
+
+			h3 {
+				color: #332255;
+
+				@media #{$phone} {
+					text-align: center;
+				}
+			}
+		}
+	}
+
+	.blue-button {
+		margin-top: 40px;
+
+		@media #{$phone} {
+			margin-top: -10px;
+		}
+	}
+}

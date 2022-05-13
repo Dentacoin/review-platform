@@ -7,7 +7,7 @@
 	<div class="container flex break-tablet">
 		<div class="flex-3">
 
-			<h2 class="page-title">
+			<h2 class="page-title" style="margin-bottom: 30px;">
 				<img src="{{ url('new-vox-img/profile-trp.png') }}" />
 				{!! nl2br(trans('trp.page.profile.trp.title')) !!}
 			</h2>
@@ -27,10 +27,9 @@
 							@include('trp.parts.reviews', [
 								'review' => $review,
 								'is_dentist' => $is_dentist,
+								'hidden' => 0,
 								'for_profile' => true,
 								'current_dentist' => $review->getDentist(),
-								'my_upvotes' => false,
-								'my_downvotes' => false,
 							])
 						@endif
 					@endforeach

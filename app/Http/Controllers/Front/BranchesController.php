@@ -50,13 +50,17 @@ class BranchesController extends FrontController {
                 'social_title' => $social_title,
                 'social_description' => $social_description,
                 'css' => [
-                    'trp-search.css',
+                    'trp-search-results.css',
                 ],
                 'js' => [
-                    'search.js',
+                    'search-form.js',
                     'branch.js',
                     'address.js',
+                    'search-results.js',
                 ],
+                'jscdn' => [
+                    'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
+                ]
             ]);
         } else {
             return redirect( getLangUrl('page-not-found') );

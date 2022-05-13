@@ -1,4 +1,4 @@
-<div class="popup fixed-popup" id="invite-sample">
+<div class="popup no-image" id="invite-sample">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">

@@ -1,167 +1,144 @@
 .flickity-oval {
-  position: relative;
-  background-color: #f7f7f7; }
-  .flickity-oval::after {
-    content: '';
-    position: absolute;
-    top: 0px;
-    background: url("../img-trp/oval-blue.png") no-repeat 50% 50%;
-    background-size: 100% 100%;
+  margin-top: 111px; }
+  @media screen and (max-width: 1200px) {
+    .flickity-oval {
+      margin-top: 91px; } }
+  @media screen and (max-width: 998px) {
+    .flickity-oval {
+      margin-top: 60px; } }
+  @media screen and (max-height: 750px) {
+    .flickity-oval {
+      margin-top: 41px; } }
+  @media screen and (max-width: 768px) {
+    .flickity-oval {
+      margin-top: 45px; } }
+  .flickity-oval .slider-left {
+    background: url(../img-trp/slider-arrow-left-inactive.svg) 50% 50% no-repeat;
+    width: 50px;
+    height: 50px; }
+    @media screen and (max-width: 998px) {
+      .flickity-oval .slider-left {
+        width: 40px;
+        height: 40px;
+        margin-bottom: -40px; } }
+    @media screen and (max-width: 768px) {
+      .flickity-oval .slider-left {
+        display: none; } }
+    .flickity-oval .slider-left.active {
+      background-image: url(../img-trp/slider-arrow-left-active.svg); }
+  .flickity-oval .slider-right {
+    background: url(../img-trp/slider-arrow-right-inactive.svg) 50% 50% no-repeat;
+    width: 50px;
+    height: 50px; }
+    @media screen and (max-width: 998px) {
+      .flickity-oval .slider-right {
+        width: 40px;
+        height: 40px;
+        margin-bottom: -40px; } }
+    @media screen and (max-width: 768px) {
+      .flickity-oval .slider-right {
+        display: none; } }
+    .flickity-oval .slider-right.active {
+      background-image: url(../img-trp/slider-arrow-right-active.svg); }
+  .flickity-oval .flickity {
     width: 100%;
-    height: 81px; }
-  .flickity-oval .slider-wrapper {
-    display: flex;
-    flex-direction: column; }
-
-.index-gradient {
-  padding-bottom: 1px; }
-  .index-gradient .main-top {
-    background: none;
-    padding-bottom: 0px;
-    margin-bottom: 7px; }
-    @media screen and (max-width: 345px) {
-      .index-gradient .main-top {
-        margin-bottom: 27px; } }
-  .index-gradient .home-search-form {
     position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    background: transparent;
-    margin: 0 auto;
-    padding-top: 100px; }
+    height: 315px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    padding-bottom: 0px;
+    padding-top: 50px;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */ }
+    @media screen and (max-width: 1200px) {
+      .flickity-oval .flickity {
+        height: 326px; } }
+    @media screen and (max-width: 998px) {
+      .flickity-oval .flickity {
+        height: 315px; } }
     @media screen and (max-width: 768px) {
-      .index-gradient .home-search-form {
-        padding-top: 70px;
-        top: auto !important; } }
-    @media screen and (max-width: 768px) {
-      .index-gradient .home-search-form form {
-        margin-bottom: 0px; } }
-  .index-gradient .flickity-oval {
-    background: none; }
-    .index-gradient .flickity-oval::after {
+      .flickity-oval .flickity {
+        height: 335px; } }
+    .flickity-oval .flickity::-webkit-scrollbar {
       display: none; }
-    @media screen and (max-width: 768px) {
-      .index-gradient .flickity-oval .container {
-        padding: 0px; } }
-    .index-gradient .flickity-oval .container .slider-right {
+    .flickity-oval .flickity .index-slider {
       position: absolute;
-      right: 18px;
-      background: url(../img-trp/slider-new-arrow-right.png) 50% 50% no-repeat;
-      width: 41px;
-      height: 112px;
-      top: 50%;
-      transform: translateY(-50%); }
+      width: 5020px;
+      height: 100%; }
+    .flickity-oval .flickity .flickity-prev-next-button {
+      width: 41px !important;
+      height: 112px !important; }
+    .flickity-oval .flickity .slider-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 348px;
+      padding: 0px;
+      margin: 0px 11px;
+      float: left; }
+      @media screen and (max-width: 1200px) {
+        .flickity-oval .flickity .slider-wrapper {
+          width: 301px; } }
       @media screen and (max-width: 998px) {
-        .index-gradient .flickity-oval .container .slider-right {
-          right: -4px; } }
+        .flickity-oval .flickity .slider-wrapper {
+          width: 348px; } }
       @media screen and (max-width: 768px) {
-        .index-gradient .flickity-oval .container .slider-right {
-          display: none; } }
-    .index-gradient .flickity-oval .container .slider-left {
-      position: absolute;
-      left: 18px;
-      background: url(../img-trp/slider-new-arrow-left.png) 50% 50% no-repeat;
-      width: 41px;
-      height: 112px;
-      top: 50%;
-      transform: translateY(-50%); }
-      @media screen and (max-width: 998px) {
-        .index-gradient .flickity-oval .container .slider-left {
-          left: -4px; } }
-      @media screen and (max-width: 768px) {
-        .index-gradient .flickity-oval .container .slider-left {
-          display: none; } }
-    .index-gradient .flickity-oval .flickity {
-      position: relative;
-      height: 492px;
-      overflow-y: hidden;
-      overflow-x: scroll;
-      padding-bottom: 30px;
-      padding-top: 30px;
-      -ms-overflow-style: none;
-      /* IE and Edge */
-      scrollbar-width: none;
-      /* Firefox */ }
-      @media screen and (max-width: 768px) {
-        .index-gradient .flickity-oval .flickity {
-          height: 432px; } }
-      .index-gradient .flickity-oval .flickity::-webkit-scrollbar {
-        display: none; }
-      .index-gradient .flickity-oval .flickity .index-slider {
-        position: absolute;
-        width: 3120px;
-        height: 100%; }
-      .index-gradient .flickity-oval .flickity .flickity-prev-next-button {
-        width: 41px !important;
-        height: 112px !important; }
-      .index-gradient .flickity-oval .flickity .slider-wrapper {
-        max-width: 220px;
-        padding: 0px;
-        margin: 0px 20px;
-        float: left; }
-        @media screen and (max-width: 1200px) {
-          .index-gradient .flickity-oval .flickity .slider-wrapper {
-            max-width: 178px; } }
-        @media screen and (max-width: 998px) {
-          .index-gradient .flickity-oval .flickity .slider-wrapper {
-            max-width: 298px; } }
-        @media screen and (max-width: 768px) {
-          .index-gradient .flickity-oval .flickity .slider-wrapper {
-            max-width: 220px; } }
-        .index-gradient .flickity-oval .flickity .slider-wrapper .slider-inner {
-          position: relative;
-          border-radius: 5px;
-          height: 100%;
+        .flickity-oval .flickity .slider-wrapper {
+          width: 320px;
+          margin: 0px 5px; } }
+      .flickity-oval .flickity .slider-wrapper:hover .slider-inner .slider-container {
+        border-color: #0084d1;
+        transform: translateY(0px) !important;
+        box-shadow: 7px 3px 11px 1px #959393; }
+      .flickity-oval .flickity .slider-wrapper .slider-inner {
+        position: relative;
+        border-radius: 5px;
+        height: 100%;
+        display: flex;
+        flex-direction: column; }
+        .flickity-oval .flickity .slider-wrapper .slider-inner .slider-image-wrapper {
           display: flex;
-          flex-direction: column; }
-        .index-gradient .flickity-oval .flickity .slider-wrapper .slider-container {
-          border-bottom-left-radius: 5px;
-          border-bottom-right-radius: 5px; }
-        .index-gradient .flickity-oval .flickity .slider-wrapper:hover .slider-container {
-          border-bottom-left-radius: 0px;
-          border-bottom-right-radius: 0px; }
-        .index-gradient .flickity-oval .flickity .slider-wrapper:hover .slider-inner {
-          box-shadow: 0px 0px 33px -2px rgba(0, 0, 0, 0.4); }
-        .index-gradient .flickity-oval .flickity .slider-wrapper .has-review-image {
+          align-items: center;
+          background: transparent;
           position: absolute;
-          width: 70px;
           z-index: 10;
-          right: -13px;
-          top: -13px; }
-        .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper {
-          position: relative;
-          text-align: center; }
-          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translateX(-50%) translateY(-50%);
-            width: 190.31px;
-            height: 190.31px;
-            background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%;
-            z-index: 1; }
-            @media screen and (max-width: 1200px) {
-              .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper::before {
-                width: 147.05px;
-                height: 148.05px; } }
-            @media screen and (max-width: 998px) {
-              .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper::before {
-                width: 190.31px;
-                height: 190.31px; } }
-          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .slider-real-image {
+          padding: 0px;
+          top: -43px;
+          left: 35px; }
+          @media screen and (max-width: 768px) {
+            .flickity-oval .flickity .slider-wrapper .slider-inner .slider-image-wrapper {
+              left: 35px; } }
+          .flickity-oval .flickity .slider-wrapper .slider-inner .slider-image-wrapper .slider-real-image {
+            max-width: 86px;
             border-radius: 50%;
             height: auto;
             display: block; }
-          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .tooltip-text {
-            position: absolute;
-            top: 15px;
-            left: 14px;
-            width: 18px;
-            height: 18px;
-            z-index: 100; }
-          .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper .invited-dentist {
+          .flickity-oval .flickity .slider-wrapper .slider-inner .slider-image-wrapper .partner {
+            width: 220px;
+            background-color: #0084d1;
+            margin-left: -10px;
+            z-index: -1;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px 5px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            font-size: 15px;
+            font-weight: bold; }
+            @media screen and (max-width: 1200px) {
+              .flickity-oval .flickity .slider-wrapper .slider-inner .slider-image-wrapper .partner {
+                width: 180px; } }
+            @media screen and (max-width: 768px) {
+              .flickity-oval .flickity .slider-wrapper .slider-inner .slider-image-wrapper .partner {
+                width: 195px; } }
+            .flickity-oval .flickity .slider-wrapper .slider-inner .slider-image-wrapper .partner img {
+              background-color: transparent;
+              max-width: 20px;
+              margin-right: 4px; }
+          .flickity-oval .flickity .slider-wrapper .slider-inner .slider-image-wrapper .invited-dentist {
             position: absolute;
             text-align: center;
             left: 0;
@@ -170,358 +147,600 @@
             margin-bottom: 0px;
             padding-bottom: 18px;
             margin-top: 0px; }
-        @media screen and (max-width: 768px) {
-          .index-gradient .flickity-oval .flickity .slider-wrapper:hover .slider-container {
-            transform: none;
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px; } }
-        .index-gradient .flickity-oval .flickity .slider-wrapper .ratings {
-          display: flex;
-          align-items: center; }
+        .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container {
+          min-height: 230px;
+          padding: 30px;
+          padding-top: 56px;
+          padding-bottom: 20px;
+          border-radius: 6px;
+          border: 2px solid white;
+          text-align: left;
+          display: block; }
           @media screen and (max-width: 1200px) {
-            .index-gradient .flickity-oval .flickity .slider-wrapper .ratings {
-              flex-direction: column; } }
-          @media screen and (max-width: 998px) {
-            .index-gradient .flickity-oval .flickity .slider-wrapper .ratings {
-              flex-direction: unset; } }
-          .index-gradient .flickity-oval .flickity .slider-wrapper .ratings .rating {
-            margin-left: 3px; }
+            .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container {
+              padding: 20px;
+              padding-top: 56px; } }
+          .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container .has-review-image {
+            position: absolute;
+            width: 70px;
+            z-index: 10;
+            right: -13px;
+            top: -13px; }
+          .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container h4 {
+            font-size: 20px;
+            font-weight: 900;
+            color: #332255; }
+            @media screen and (max-width: 1200px) {
+              .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container h4 {
+                font-size: 18px; } }
+          .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container .p {
+            font-size: 15px;
+            color: #555555; }
+            .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container .p img {
+              margin-top: 3px;
+              margin-right: 6px; }
+          .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container .ratings {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px; }
+            .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container .ratings .rating {
+              font-size: 15px;
+              margin-left: 4px;
+              color: #555555; }
+          .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container .review-content {
+            font-size: 15px;
+            color: #555555;
+            height: 40px;
+            overflow: hidden; }
 
-.home-search-form {
-  position: absolute;
-  z-index: 102;
-  width: 830px;
-  top: 140px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: transparent; }
-  @media screen and (max-width: 998px) {
-    .home-search-form {
-      width: 100%;
-      padding: 0px 20px; } }
+.search-form {
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 3px 4px 0px #9f9f9f;
+  position: relative;
+  padding: 9px 85px 9px 0px; }
   @media screen and (max-width: 768px) {
-    .home-search-form {
-      top: 100px; } }
-  .home-search-form h1 {
-    color: white;
-    padding-top: 0px;
-    font-weight: bold;
-    text-transform: uppercase; }
-  .home-search-form h2 {
-    color: white; }
-  .home-search-form form {
-    height: 54px;
-    background-color: white;
-    margin-bottom: 40px;
-    display: block;
-    border-radius: 5px;
-    padding-left: 18px;
-    padding-right: 18px;
+    .search-form {
+      padding: 14px 20px 25px;
+      flex-direction: column; } }
+  .search-form .input-wrapper {
+    position: relative;
     display: flex;
+    flex: 1;
     align-items: center;
-    box-shadow: 0px 3px 4px 0px #0c779c;
-    position: relative; }
+    padding-left: 19px;
+    border-right: 1px solid #888888; }
+    @media screen and (max-width: 998px) {
+      .search-form .input-wrapper {
+        padding-left: 10px; } }
     @media screen and (max-width: 768px) {
-      .home-search-form form {
-        height: 35px;
-        padding-left: 8px;
-        padding-right: 8px; } }
-    .home-search-form form input[type="text"] {
-      flex: 1;
-      font-size: 16px;
-      border: none;
-      padding-left: 10px; }
+      .search-form .input-wrapper {
+        width: 100%;
+        padding-left: 0px;
+        border-right: none;
+        border-bottom: 1px solid #dddddd;
+        margin-bottom: 13px; } }
+    .search-form .input-wrapper.search-dentist-wrapper {
+      min-width: 360px; }
+      @media screen and (max-width: 1200px) {
+        .search-form .input-wrapper.search-dentist-wrapper {
+          min-width: 270px; } }
+      @media screen and (max-width: 998px) {
+        .search-form .input-wrapper.search-dentist-wrapper {
+          min-width: 210px; } }
       @media screen and (max-width: 768px) {
-        .home-search-form form input[type="text"] {
-          font-size: 14px; } }
-      .home-search-form form input[type="text"]:focus {
-        outline: none; }
-      .home-search-form form input[type="text"]::placeholder {
-        color: #8c8c8c; }
-    .home-search-form form input[type="submit"] {
-      background: url("../img-trp/submit.png") no-repeat 50% 50%;
-      width: 27px;
-      height: 27px;
-      border: none;
-      cursor: pointer;
-      border-radius: 50%;
-      transition: all 0.3s ease; }
+        .search-form .input-wrapper.search-dentist-wrapper {
+          min-width: auto; } }
+    @media screen and (max-width: 998px) {
+      .search-form .input-wrapper:not(.search-dentist-wrapper) {
+        width: 140px; } }
+    @media screen and (max-width: 768px) {
+      .search-form .input-wrapper:not(.search-dentist-wrapper) {
+        width: 100%; } }
+  .search-form .fake-input {
+    height: 55px;
+    line-height: 55px;
+    color: #888888;
+    margin-left: 10px;
+    cursor: text;
+    text-align: left;
+    width: 100%; }
+    @media screen and (max-width: 998px) {
+      .search-form .fake-input {
+        height: 35px; } }
+    @media screen and (max-width: 768px) {
+      .search-form .fake-input {
+        font-size: 14px;
+        height: 40px; } }
+  .search-form input[type="text"] {
+    font-size: 16px;
+    border: none;
+    padding-left: 10px;
+    height: 55px;
+    max-width: 100%;
+    width: 100%; }
+    @media screen and (max-width: 998px) {
+      .search-form input[type="text"] {
+        height: 35px; } }
+    @media screen and (max-width: 768px) {
+      .search-form input[type="text"] {
+        font-size: 14px;
+        height: 40px; } }
+    .search-form input[type="text"]:focus {
+      outline: none; }
+    .search-form input[type="text"]::placeholder {
+      color: #8c8c8c; }
+    .search-form input[type="text"]:last-child {
+      border-right: none; }
+  .search-form .jump-it {
+    animation: jump 6s;
+    animation-iteration-count: infinite; }
+@keyframes jump {
+  0% {
+    transform: scale(1); }
+  6% {
+    transform: scale(1.1); }
+  9% {
+    transform: scale(1); }
+  12% {
+    transform: scale(1.1); }
+  15% {
+    transform: scale(1); }
+  18% {
+    transform: scale(1.1); }
+  21% {
+    transform: scale(1); }
+  24% {
+    transform: scale(1.1); }
+  27% {
+    transform: scale(1); } }
+  .search-form label {
+    margin-left: 18px;
+    width: 162px; }
+    @media screen and (max-width: 998px) {
+      .search-form label {
+        margin-left: 10px;
+        width: 128px; } }
+    @media screen and (max-width: 768px) {
+      .search-form label {
+        width: 100%;
+        margin-left: 0px; } }
+  .search-form button {
+    background-color: #14cab8;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    cursor: pointer;
+    width: 72px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 0px; }
+    @media screen and (max-width: 768px) {
+      .search-form button {
+        position: static;
+        width: 100%;
+        height: auto;
+        display: block;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: white;
+        padding: 13px 20px;
+        border-radius: 30px; } }
+    .search-form button img {
+      max-width: 30px; }
       @media screen and (max-width: 768px) {
-        .home-search-form form input[type="submit"] {
-          background-size: 21px; } }
-      .home-search-form form input[type="submit"]:focus {
-        outline: none; }
-      .home-search-form form input[type="submit"]:hover {
-        background-color: #d7e4ff;
-        transition: all 0.3s ease; }
+        .search-form button img {
+          display: none; } }
 
-.results {
+.dentists-names-results {
   position: absolute;
   top: 101%;
-  right: 0px;
   left: 0px;
-  padding: 20px;
   z-index: 10000;
   background-color: white;
   border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px; }
+  border-bottom-right-radius: 5px;
+  width: 580px;
+  max-height: 338px;
+  overflow-y: auto;
+  box-shadow: 0px 3px 4px 0px #9f9f9f; }
+  @media screen and (max-width: 1200px) {
+    .dentists-names-results {
+      width: 510px; } }
   @media screen and (max-width: 768px) {
-    .results {
-      text-align: left; } }
-  .results .result-title {
-    color: #777777;
-    border-bottom: 1px solid #9dcbe5;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
-    display: inline-block; }
-  .results a {
+    .dentists-names-results {
+      top: 55px;
+      width: 100%; } }
+  .dentists-names-results .info {
+    font-size: 14px;
+    color: #0084d1;
+    padding: 15px 10px 15px;
+    border-bottom: 1px solid #bebebe;
+    margin-right: 20px;
+    margin-left: 20px;
+    text-align: left; }
+    .dentists-names-results .info.error {
+      border-bottom: none;
+      padding-bottom: 0px; }
+    .dentists-names-results .info b {
+      font-size: 14px;
+      color: #0084d1; }
+  .dentists-names-results .dentist-results {
+    margin-top: 23px;
+    margin-bottom: 20px; }
+  .dentists-names-results .list {
+    margin-top: 16px;
+    margin-bottom: 16px; }
+  .dentists-names-results .dentist-button {
     display: block;
-    padding: 3px 12px;
-    margin-bottom: 4px;
-    font-size: 14px; }
-    @media screen and (max-width: 768px) {
-      .results a {
-        padding-left: 0px; } }
-    .results a.special {
-      color: #126585; }
-    .results a.active, .results a:hover {
-      background-color: #d8eaf5; }
-  .results .results-type {
-    margin-bottom: 25px; }
-    .results .results-type:last-child {
-      margin-bottom: 0px; }
-  .results .ratings {
-    margin-top: 0px;
-    float: right; }
-    @media screen and (max-width: 768px) {
-      .results .ratings {
-        display: none; } }
-    .results .ratings .stars {
-      background: url("../img-trp/stars-gray.png") 50% 50% no-repeat;
-      background-size: contain; }
-      .results .ratings .stars .bar {
-        background: url("../img-trp/stars-black.png") 0% 50% no-repeat;
-        background-size: cover; }
-    .results .ratings .rating {
-      vertical-align: top; }
-
-@media screen and (max-width: 620px) {
-  .main-box {
-    top: 70px !important; } }
-.main-box .index-big-title {
-  font-size: 45px;
-  color: white;
-  padding-top: 0px;
-  font-weight: bold;
-  text-transform: uppercase; }
-  @media screen and (max-width: 998px) {
-    .main-box .index-big-title {
-      font-size: 39px; } }
-  @media screen and (max-width: 768px) {
-    .main-box .index-big-title {
-      font-size: 30px;
-      margin-bottom: 10px; } }
-.main-box .index-main-title {
-  font-size: 35px;
-  color: white;
-  font-weight: 300;
-  margin-bottom: 30px;
-  text-transform: unset; }
-  @media screen and (max-width: 768px) {
-    .main-box .index-main-title {
-      font-size: 24px; } }
-
-@media screen and (max-width: 768px) {
-  .front-info {
-    text-align: center; } }
-.front-info .index-h2 {
-  padding-bottom: 25px;
-  margin-bottom: 100px;
-  position: relative; }
-  @media screen and (max-width: 768px) {
-    .front-info .index-h2 {
-      padding-bottom: 15px;
-      margin-bottom: 40px; } }
-.front-info h2 {
-  font-size: 30px; }
-.front-info p {
-  font-size: 18px; }
-.front-info .first .fixed-width {
-  width: 450px;
-  flex: unset;
-  margin-top: 45px; }
-  @media screen and (max-width: 768px) {
-    .front-info .first .fixed-width {
-      width: 100%;
-      margin-top: 15px;
-      text-align: center; } }
-  .front-info .first .fixed-width h3 {
-    margin-bottom: 30px;
-    font-weight: 300; }
-    @media screen and (max-width: 768px) {
-      .front-info .first .fixed-width h3 {
-        margin-bottom: 10px;
-        font-weight: normal; } }
-  .front-info .first .fixed-width p {
-    margin-bottom: 20px;
-    font-weight: 300; }
-.front-info .second {
-  padding-bottom: 140px; }
-  @media screen and (max-width: 768px) {
-    .front-info .second {
-      margin-top: 80px;
-      flex-direction: column;
+    padding-left: 20px;
+    padding-bottom: 7px;
+    padding-top: 6px;
+    transition: all 0.3s ease; }
+    .dentists-names-results .dentist-button.active, .dentists-names-results .dentist-button:hover {
+      background-color: #e2ebff;
+      transition: all 0.3s ease; }
+    .dentists-names-results .dentist-button .result-image-dentist {
+      width: 50px; }
+      @media screen and (max-width: 768px) {
+        .dentists-names-results .dentist-button .result-image-dentist {
+          width: 40px; } }
+      .dentists-names-results .dentist-button .result-image-dentist img {
+        display: block;
+        border-radius: 50%;
+        position: relative;
+        z-index: 1; }
+    .dentists-names-results .dentist-button .result-name-dentist {
+      flex: 1;
+      text-align: left;
+      margin-left: 10px; }
+      .dentists-names-results .dentist-button .result-name-dentist p {
+        font-weight: 800;
+        color: #332255;
+        margin-bottom: 6px;
+        margin-top: 4px;
+        text-transform: capitalize; }
+        @media screen and (max-width: 768px) {
+          .dentists-names-results .dentist-button .result-name-dentist p {
+            margin-bottom: 0px;
+            margin-top: 0px; } }
+        .dentists-names-results .dentist-button .result-name-dentist p span {
+          color: #0084d1;
+          font-size: 16px; }
+      .dentists-names-results .dentist-button .result-name-dentist span {
+        font-size: 14px;
+        color: #555555; }
+    .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper {
       display: flex;
-      padding-bottom: 40px; } }
-  .front-info .second .fixed-width {
-    width: 470px;
-    flex: unset;
-    margin-top: 110px; }
-    @media screen and (max-width: 768px) {
-      .front-info .second .fixed-width {
-        width: 100%;
-        flex: 1;
-        order: 2;
-        margin-top: 20px; } }
-    .front-info .second .fixed-width h3 {
-      margin-bottom: 30px;
-      font-weight: 300; }
-      @media screen and (max-width: 768px) {
-        .front-info .second .fixed-width h3 {
-          margin-bottom: 10px;
-          font-weight: normal; } }
-    .front-info .second .fixed-width p {
-      margin-bottom: 20px;
-      font-weight: 300; }
-  .front-info .second img {
-    float: right;
-    margin-top: -110px; }
-    @media screen and (max-width: 998px) {
-      .front-info .second img {
-        margin-top: 0px;
-        float: none; } }
-.front-info .third {
-  position: relative; }
-  @media screen and (max-width: 998px) {
-    .front-info .third {
-      margin-bottom: 40px; } }
-  @media screen and (max-width: 768px) {
-    .front-info .third {
-      margin-bottom: 0px; } }
-  .front-info .third .fixed-width {
-    width: 750px;
-    margin-right: auto;
-    margin-left: auto; }
-    @media screen and (max-width: 768px) {
-      .front-info .third .fixed-width {
-        width: 100%; } }
-    .front-info .third .fixed-width h2 {
-      position: relative;
-      margin-bottom: 45px;
+      background-color: #0084d1;
+      color: white;
+      font-size: 13px;
       font-weight: bold;
-      text-align: center;
-      width: 440px;
-      margin-right: auto;
-      margin-left: auto;
-      color: #2478d1; }
-      @media screen and (max-width: 768px) {
-        .front-info .third .fixed-width h2 {
-          width: 100%;
-          margin-bottom: 20px;
-          font-size: 30px; } }
-    .front-info .third .fixed-width p {
-      font-size: 20px;
-      margin-bottom: 50px;
-      font-weight: 300;
-      color: #333333; }
-      @media screen and (max-width: 768px) {
-        .front-info .third .fixed-width p {
-          margin-bottom: 30px; } }
+      border-top-left-radius: 13px;
+      border-bottom-left-radius: 13px;
+      padding: 4px 10px; }
+      .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper img {
+        width: 13px;
+        margin-right: 4px; }
+      .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper span {
+        color: white;
+        font-size: 13px;
+        margin-right: 3px; }
+        @media screen and (max-width: 768px) {
+          .dentists-names-results .dentist-button .result-partner-dentist .result-partner-dentist-wrapper span {
+            display: none; } }
+    .dentists-names-results .dentist-button .team-dentist {
+      margin-left: 60px;
+      margin-top: 13px;
+      position: relative; }
+      .dentists-names-results .dentist-button .team-dentist:before {
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: 59px;
+        top: -34px;
+        background-color: #aaaaaa;
+        left: -36px; }
+      .dentists-names-results .dentist-button .team-dentist:after {
+        content: '';
+        position: absolute;
+        top: 24px;
+        width: 36px;
+        height: 1px;
+        background-color: #aaaaaa;
+        left: -36px; }
+      .dentists-names-results .dentist-button .team-dentist .result-image-dentist {
+        width: 40px; }
+      .dentists-names-results .dentist-button .team-dentist .result-name-dentist p {
+        font-weight: normal; }
+
+.dentists-countries-results {
+  display: none;
+  position: absolute;
+  top: 101%;
+  left: 360px;
+  width: 580px;
+  z-index: 10000;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0px 3px 4px 0px #9f9f9f; }
+  @media screen and (max-width: 1200px) {
+    .dentists-countries-results {
+      left: 270px;
+      width: 510px; } }
+  @media screen and (max-width: 998px) {
+    .dentists-countries-results {
+      left: 210px; } }
+  @media screen and (max-width: 768px) {
+    .dentists-countries-results {
+      top: 109px;
+      left: 0;
+      width: 100%; } }
+  .dentists-countries-results .info {
+    display: none;
+    font-size: 14px;
+    color: #0084d1;
+    padding: 15px 10px 15px;
+    text-align: left; }
+  .dentists-countries-results .dentists-countries-results-wrapper {
+    max-height: 375px;
+    overflow-y: auto; }
+  .dentists-countries-results .browse-country {
+    width: 100%;
+    background-color: #f2f6ff;
+    color: #1f90d5;
+    font-size: 14px;
+    padding: 9px 22px;
+    text-align: left;
+    display: block;
+    text-decoration: underline;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; }
+  .dentists-countries-results .letters-country-section {
+    padding: 0px 4px;
+    border-bottom: 1px solid #bebebe;
+    padding-bottom: 16px;
+    margin-top: 15px; }
+    .dentists-countries-results .letters-country-section .letter {
+      color: #0084d1;
+      font-weight: 800;
+      text-align: left;
+      padding-left: 20px;
+      margin-bottom: 10px; }
+    .dentists-countries-results .letters-country-section .flex {
+      flex-flow: row wrap; }
+      .dentists-countries-results .letters-country-section .flex .country {
+        width: 50%;
+        text-align: left;
+        margin-bottom: 7px; }
+        .dentists-countries-results .letters-country-section .flex .country a {
+          padding: 5px 20px;
+          display: inline-block;
+          border-radius: 20px;
+          color: #555555;
+          transition: all 0.3s ease; }
+          .dentists-countries-results .letters-country-section .flex .country a:hover {
+            background-color: #f2f6ff;
+            transition: all 0.3s ease; }
+          .dentists-countries-results .letters-country-section .flex .country a span {
+            color: #aaaaaa; }
+
+.dentists-cities-results {
+  display: none;
+  position: absolute;
+  top: 101%;
+  left: 607px;
+  width: 410px;
+  z-index: 10000;
+  overflow-y: auto;
+  max-height: 375px;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0px 3px 4px 0px #9f9f9f; }
+  @media screen and (max-width: 1200px) {
+    .dentists-cities-results {
+      left: 491px;
+      width: 460px; } }
+  @media screen and (max-width: 998px) {
+    .dentists-cities-results {
+      left: 369px;
+      width: 379px; } }
+  @media screen and (max-width: 768px) {
+    .dentists-cities-results {
+      left: 0px;
+      width: 100%;
+      top: 163px; } }
+  .dentists-cities-results .info {
+    display: none;
+    font-size: 14px;
+    color: #0084d1;
+    padding: 15px 10px 5px;
+    text-align: left; }
+  .dentists-cities-results .dentists-cities-results-wrapper {
+    padding: 6px; }
+  .dentists-cities-results .locations-results .result-city-wrapper {
+    text-align: left;
+    margin-bottom: 7px; }
+    .dentists-cities-results .locations-results .result-city-wrapper a {
+      display: inline-block;
+      padding: 5px 20px;
+      border-radius: 20px;
+      color: #555555;
+      transition: all 0.3s ease;
+      text-transform: capitalize; }
+      .dentists-cities-results .locations-results .result-city-wrapper a:hover {
+        background-color: #f2f6ff;
+        transition: all 0.3s ease; }
+      .dentists-cities-results .locations-results .result-city-wrapper a span {
+        color: #0082d1; }
+  .dentists-cities-results .browse-city {
+    width: 100%;
+    background-color: #f2f6ff;
+    color: #1f90d5;
+    font-size: 14px;
+    padding: 9px 22px;
+    text-align: left;
+    display: block;
+    text-decoration: underline;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; }
+
+.home-section {
+  background-color: #e2ebff;
+  padding-bottom: 60px;
+  padding-top: 150px; }
+  @media screen and (max-width: 998px) {
+    .home-section {
+      padding-top: 130px;
+      padding-bottom: 40px; } }
+  @media screen and (max-height: 750px) {
+    .home-section {
+      padding-top: 110px; } }
+  @media screen and (max-width: 768px) {
+    .home-section {
+      padding-top: 80px; } }
+  .home-section h1 {
+    color: #332255;
+    text-transform: capitalize;
+    font-weight: 800;
+    margin-bottom: 30px; }
+  .home-section h2 {
+    margin-bottom: 2px;
+    color: #0564c6;
+    font-weight: bold; }
+    @media screen and (max-width: 768px) {
+      .home-section h2 {
+        margin-bottom: 5px; } }
+  .home-section h3 {
+    color: #332255;
+    margin-bottom: 30px; }
+    @media screen and (max-width: 768px) {
+      .home-section h3 {
+        margin-bottom: 18px; } }
 
 .info-section {
-  padding-bottom: 88px; }
+  padding-top: 58px;
+  padding-bottom: 113px; }
+  @media screen and (max-width: 998px) {
+    .info-section {
+      padding-bottom: 210px; } }
   @media screen and (max-width: 768px) {
     .info-section {
-      padding-bottom: 78px; } }
-  .info-section .container {
-    max-width: 838px; }
+      padding-bottom: 150px;
+      padding-top: 30px; } }
+  @media screen and (max-width: 768px) {
+    .info-section .container {
+      padding: 0px; } }
   .info-section h2 {
+    display: inline-block;
     text-align: center;
-    font-weight: bold;
-    color: #2478d1;
-    padding: 0px 7px;
-    padding-bottom: 40px;
-    margin-bottom: 70px; }
+    font-weight: 800;
+    padding: 12px 65px;
+    color: white;
+    background-color: #0084d1;
+    text-transform: uppercase;
+    border-radius: 13px;
+    margin-bottom: 10px; }
     @media screen and (max-width: 768px) {
       .info-section h2 {
-        padding: 0px;
-        padding-bottom: 20px;
-        margin-bottom: 40px; } }
+        font-size: 24px;
+        text-transform: none;
+        font-weight: bold;
+        margin-left: 25px;
+        margin-right: 25px;
+        padding: 12px; } }
+  .info-section h3 {
+    font-weight: bold;
+    color: #332255;
+    margin-bottom: 50px;
+    padding-left: 10px;
+    padding-right: 10px; }
+    @media screen and (max-width: 998px) {
+      .info-section h3 {
+        padding-left: 0px;
+        padding-right: 0px; } }
   .info-section .info-box {
-    margin-bottom: 70px; }
+    padding: 0px 40px; }
     @media screen and (max-width: 1200px) {
       .info-section .info-box {
-        margin-bottom: 40px; } }
+        padding: 0px 30px; } }
+    @media screen and (max-width: 998px) {
+      .info-section .info-box {
+        padding: 0px 9px; } }
     @media screen and (max-width: 768px) {
       .info-section .info-box {
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 45px; } }
-    .info-section .info-box .info-icon {
-      margin-right: 35px;
-      min-width: 106px; }
-      @media screen and (max-width: 768px) {
-        .info-section .info-box .info-icon {
-          margin-right: 0px;
-          margin-bottom: 16px; } }
+        padding-bottom: 25px; } }
     @media screen and (max-width: 768px) {
-      .info-section .info-box .info-text {
-        text-align: center; } }
+      .info-section .info-box:nth-child(2) {
+        background-color: #e2ebff; } }
     .info-section .info-box h3 {
-      margin-bottom: 10px; }
-      @media screen and (max-width: 768px) {
-        .info-section .info-box h3 {
-          font-size: 25px; } }
+      color: #0564c6;
+      margin-bottom: 18px; }
     .info-section .info-box p {
+      color: #332255;
+      max-width: 265px;
       font-size: 20px;
-      font-weight: 300;
-      color: #232323; }
-  .info-section .button {
-    font-size: 25px;
-    background-color: #46afda;
-    padding: 13px 65px;
-    font-weight: bold; }
-    .info-section .button:hover {
-      background-color: #238fbb; }
+      margin-bottom: 25px; }
+      @media screen and (max-width: 998px) {
+        .info-section .info-box p {
+          font-size: 18px; } }
+      @media screen and (max-width: 768px) {
+        .info-section .info-box p {
+          margin-left: auto;
+          margin-right: auto;
+          max-width: 285px; } }
+    .info-section .info-box .white-button {
+      width: 188px;
+      padding: 14px 0px; }
+      @media screen and (max-width: 768px) {
+        .info-section .info-box .white-button {
+          width: 180px;
+          padding: 12px 0px;
+          background-color: transparent;
+          font-size: 18px; } }
 
 .add-practice {
-  margin-bottom: 100px;
-  background: #09a8df;
-  /* Old browsers */
-  background: -moz-linear-gradient(top, #09a8df 0%, #2083d4 100%);
-  /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #09a8df 0%, #2083d4 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #09a8df 0%, #2083d4 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#09a8df', endColorstr='#2083d4',GradientType=0 );
-  /* IE6-9 */ }
-  @media screen and (max-width: 998px) {
-    .add-practice {
-      margin-bottom: 70px; } }
+  background-image: url("../img-trp/practice-section-background.jpg");
+  background-size: cover;
+  background-position: 50%; }
   @media screen and (max-width: 768px) {
     .add-practice {
       padding-bottom: 0px; } }
+  .add-practice .container {
+    width: 1150px; }
+    @media screen and (max-width: 1200px) {
+      .add-practice .container {
+        width: 980px; } }
+    @media screen and (max-width: 998px) {
+      .add-practice .container {
+        width: 750px; } }
+    @media screen and (max-width: 768px) {
+      .add-practice .container {
+        width: 100%; } }
   @media screen and (max-width: 998px) {
     .add-practice .flex {
       flex-direction: column;
       align-items: center; } }
+  @media screen and (max-width: 1200px) {
+    .add-practice .flex .col:first-child {
+      max-width: 460px; } }
   @media screen and (max-width: 998px) {
-    .add-practice .flex .col:nth-child(2) {
-      order: -1; } }
-  @media screen and (max-width: 768px) {
-    .add-practice .flex .col:nth-child(2) {
-      padding: 0px 20px; } }
+    .add-practice .flex .col:first-child {
+      max-width: 100%; } }
+  .add-practice .flex .col:nth-child(2) {
+    padding-left: 20px; }
+    @media screen and (max-width: 1200px) {
+      .add-practice .flex .col:nth-child(2) {
+        padding-left: 0px; } }
+    @media screen and (max-width: 768px) {
+      .add-practice .flex .col:nth-child(2) {
+        padding: 0px 20px; } }
   @media screen and (max-width: 998px) {
     .add-practice .practice-image {
       text-align: center; } }
@@ -534,116 +753,256 @@
         max-width: 450px; } }
     @media screen and (max-width: 998px) {
       .add-practice .practice-image img {
-        position: static;
-        top: auto; } }
+        top: -162px;
+        max-width: 370px;
+        left: 50%;
+        transform: translateX(-50%); } }
     @media screen and (max-width: 768px) {
       .add-practice .practice-image img {
         display: none; } }
   .add-practice .mobile-practice-img {
     display: none;
     margin-right: -14px;
-    margin-bottom: 60px;
-    margin-top: 60px; }
+    margin-bottom: 10px;
+    margin-top: -127px;
+    text-align: center; }
     @media screen and (max-width: 768px) {
       .add-practice .mobile-practice-img {
         display: block; } }
     .add-practice .mobile-practice-img img {
       width: 100%;
       transform: scale(1.3); }
+      @media screen and (max-width: 768px) {
+        .add-practice .mobile-practice-img img {
+          max-width: 280px;
+          transform: none; } }
   .add-practice h2 {
     padding-top: 60px;
     text-transform: uppercase;
     color: white;
-    margin-bottom: 19px; }
+    margin-bottom: 10px; }
     @media screen and (max-width: 1200px) {
       .add-practice h2 {
-        padding-top: 30px; } }
+        padding-top: 30px;
+        margin-bottom: 20px; } }
+    @media screen and (max-width: 998px) {
+      .add-practice h2 {
+        padding-top: 180px; } }
     @media screen and (max-width: 768px) {
       .add-practice h2 {
-        font-size: 30px;
-        text-align: center;
-        padding-top: 50px;
+        padding-top: 0px;
         line-height: 30px;
-        margin-bottom: 30px; } }
-  .add-practice .button {
-    margin-bottom: 45px;
-    margin-top: 30px; }
+        margin-bottom: 10px; } }
+  .add-practice h4 {
+    color: white;
+    margin-bottom: 20px;
+    font-weight: bold; }
+  .add-practice ul {
+    margin-bottom: 40px; }
     @media screen and (max-width: 1200px) {
-      .add-practice .button {
+      .add-practice ul {
+        margin-bottom: 24px; } }
+    @media screen and (max-width: 768px) {
+      .add-practice ul {
+        margin-bottom: 14px; } }
+    .add-practice ul li {
+      font-size: 20px;
+      color: white;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center; }
+      @media screen and (max-width: 1200px) {
+        .add-practice ul li {
+          font-size: 18px; } }
+      .add-practice ul li .circle {
+        width: 16px;
+        height: 16px;
+        min-width: 16px;
+        background-color: #14cab8;
+        display: block;
+        border-radius: 50%;
+        margin-right: 9px; }
+  .add-practice .transparent-white-button {
+    text-transform: uppercase;
+    margin-bottom: 45px; }
+    @media screen and (max-width: 1200px) {
+      .add-practice .transparent-white-button {
         margin-bottom: 35px; } }
     @media screen and (max-width: 768px) {
-      .add-practice .button {
-        margin-bottom: 55px;
-        margin-top: 45px; } }
-  .add-practice p {
-    color: white;
-    font-size: 24px;
-    font-weight: 300; }
-    @media screen and (max-width: 1200px) {
-      .add-practice p {
-        font-size: 20px; } }
-    .add-practice p.practice-subtitle {
-      font-weight: 400;
-      margin-bottom: 15px; }
-      @media screen and (max-width: 768px) {
-        .add-practice p.practice-subtitle {
-          margin-bottom: 25px; } }
-
-@media screen and (max-width: 998px) {
-  .tac-tablet {
-    text-align: center; } }
-
-.flickity-dentists-form {
-  font-size: 20px;
-  font-weight: 500;
-  margin-left: 85px;
-  margin-top: 10px;
-  margin-bottom: 10px; }
+      .add-practice .transparent-white-button {
+        margin-bottom: 45px;
+        margin-top: 20px; } }
   @media screen and (max-width: 998px) {
-    .flickity-dentists-form {
-      margin-left: 0px;
-      margin-top: 40px;
+    .add-practice .tac-tablet {
       text-align: center; } }
-  .flickity-dentists-form img {
-    max-width: 13px; }
-  .flickity-dentists-form .caret-down {
-    width: 7px;
-    margin-bottom: 4px; }
-  .flickity-dentists-form .current-city {
-    font-size: 20px;
-    font-weight: 500;
-    color: white;
-    border: 1px solid white;
-    border-radius: 10px;
-    padding: 5px 14px;
-    -webkit-appearance: none; }
-    @media screen and (max-width: 768px) {
-      .flickity-dentists-form .current-city {
-        padding: 3px 14px; } }
-    .flickity-dentists-form .current-city i {
-      color: white;
-      font-size: 10px;
-      position: relative;
-      top: -2px; }
 
-#change-dentist-popup .popup-inner {
-  padding-bottom: 40px; }
-#change-dentist-popup h2 {
-  font-size: 42px;
-  margin-bottom: 25px; }
+.how-works-section {
+  background-color: #e2ebff;
+  padding-top: 67px;
+  padding-bottom: 90px; }
+  @media screen and (max-width: 998px) {
+    .how-works-section {
+      padding-top: 47px;
+      padding-bottom: 60px; } }
   @media screen and (max-width: 768px) {
-    #change-dentist-popup h2 {
-      font-size: 32px; } }
-  #change-dentist-popup h2 img {
-    width: 25px; }
+    .how-works-section {
+      padding-top: 43px; } }
+  @media screen and (max-width: 768px) {
+    .how-works-section .flex {
+      display: flex;
+      flex-direction: column; } }
+  .how-works-section .col:first-child {
+    margin-right: 50px; }
+    @media screen and (max-width: 1200px) {
+      .how-works-section .col:first-child {
+        margin-right: 10px; } }
     @media screen and (max-width: 768px) {
-      #change-dentist-popup h2 img {
-        max-width: 15px; } }
-#change-dentist-popup .checkbox-label {
-  text-align: left; }
-#change-dentist-popup .modern-field {
-  margin-bottom: 10px; }
-#change-dentist-popup button {
-  margin-top: 45px;
-  background-color: #46afda;
-  padding: 13px 65px; }
+      .how-works-section .col:first-child {
+        margin-right: 0px;
+        padding: 0px 25px; } }
+  .how-works-section .col:nth-child(2) {
+    max-width: 400px; }
+    @media screen and (max-width: 998px) {
+      .how-works-section .col:nth-child(2) {
+        max-width: 290px; } }
+    @media screen and (max-width: 768px) {
+      .how-works-section .col:nth-child(2) {
+        order: -1; } }
+  .how-works-section h2 {
+    color: #0564c6;
+    margin-bottom: 30px;
+    margin-top: 50px;
+    font-weight: bold; }
+    @media screen and (max-width: 998px) {
+      .how-works-section h2 {
+        margin-top: 10px;
+        margin-bottom: 20px; } }
+    @media screen and (max-width: 768px) {
+      .how-works-section h2 {
+        margin-top: 70px;
+        font-size: 28px; } }
+  .how-works-section p {
+    font-size: 20px;
+    color: #332255; }
+    @media screen and (max-width: 998px) {
+      .how-works-section p {
+        font-size: 18px; } }
+    @media screen and (max-width: 768px) {
+      .how-works-section p {
+        font-size: 20px; } }
+    .how-works-section p a {
+      color: #14cab8;
+      transition: all 0.3s ease; }
+      .how-works-section p a:hover {
+        color: #0564c6;
+        transition: all 0.3s ease; }
+  .how-works-section img {
+    position: absolute;
+    transform: scale(1.2);
+    transform-origin: left top; }
+    @media screen and (max-width: 998px) {
+      .how-works-section img {
+        position: inherit; } }
+
+.invite-new-dentist-background {
+  background-color: #e2ebff;
+  padding-bottom: 100px; }
+
+.invite-new-dentist-wrapper {
+  display: flex;
+  align-items: center; }
+  @media screen and (max-width: 1200px) {
+    .invite-new-dentist-wrapper > img {
+      max-width: 430px; } }
+  @media screen and (max-width: 998px) {
+    .invite-new-dentist-wrapper > img {
+      display: none; } }
+  .invite-new-dentist-wrapper .invite-new-dentist-titles {
+    background-color: transparent;
+    position: relative;
+    z-index: 1;
+    transform: translateY(120px);
+    max-width: 670px;
+    margin-left: auto;
+    margin-right: auto; }
+    @media screen and (max-width: 768px) {
+      .invite-new-dentist-wrapper .invite-new-dentist-titles {
+        padding: 0px 45px; } }
+  .invite-new-dentist-wrapper h2 {
+    text-align: center;
+    font-size: 35px;
+    color: #0564c6;
+    font-weight: 800;
+    margin-bottom: 25px; }
+    @media screen and (max-width: 1200px) {
+      .invite-new-dentist-wrapper h2 {
+        font-size: 38px; } }
+    @media screen and (max-width: 768px) {
+      .invite-new-dentist-wrapper h2 {
+        font-size: 28px;
+        margin-bottom: 20px; } }
+  .invite-new-dentist-wrapper h5 {
+    color: #332255;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 40px; }
+    @media screen and (max-width: 768px) {
+      .invite-new-dentist-wrapper h5 {
+        margin-bottom: 30px; } }
+  .invite-new-dentist-wrapper .invite-new-dentist-form {
+    flex: 1;
+    background-color: white;
+    padding: 60px 90px;
+    box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
+    border-radius: 30px;
+    margin-left: -120px; }
+    @media screen and (max-width: 1200px) {
+      .invite-new-dentist-wrapper .invite-new-dentist-form {
+        padding: 60px 50px; } }
+    @media screen and (max-width: 998px) {
+      .invite-new-dentist-wrapper .invite-new-dentist-form {
+        max-width: 100%;
+        margin-left: 0px; } }
+    @media screen and (max-width: 768px) {
+      .invite-new-dentist-wrapper .invite-new-dentist-form {
+        max-width: 100%;
+        margin-left: 0px; } }
+    .invite-new-dentist-wrapper .invite-new-dentist-form .blue-button {
+      text-transform: uppercase;
+      padding: 14px 83px; }
+      @media screen and (max-width: 768px) {
+        .invite-new-dentist-wrapper .invite-new-dentist-form .blue-button {
+          padding: 13px 54px; } }
+    .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic {
+      margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic {
+          margin-bottom: 0px; } }
+      .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label {
+        flex: 1;
+        border-width: 2px;
+        text-transform: uppercase;
+        font-weight: 800;
+        padding: 15px 18px 15px 12px;
+        display: flex;
+        align-items: center; }
+        .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label:first-child {
+          margin-right: 10px; }
+        .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label.active {
+          box-shadow: none;
+          color: #0084d1; }
+          .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label.active .active-image {
+            display: block; }
+          .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label.active .inactive-image {
+            display: none; }
+        .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label img {
+          max-width: 30px;
+          width: 30px;
+          margin-right: 11px;
+          vertical-align: -webkit-baseline-middle; }
+          .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label img.active-image {
+            display: none; }
+          .invite-new-dentist-wrapper .invite-new-dentist-form .mode-dentist-clinic label img.inactive-image {
+            display: block; }
+    .invite-new-dentist-wrapper .invite-new-dentist-form .modern-field .modern-input {
+      background-color: white; }

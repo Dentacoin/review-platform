@@ -36,18 +36,33 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-		<link rel="preload" href="{{ url('fonts/Calibri-Light.woff2') }}" as="font" crossorigin>
-		<link rel="preload" href="{{ url('fonts/Calibri-Bold.woff2') }}" as="font" crossorigin>
-		<link rel="preload" href="{{ url('fonts/Calibri.woff2') }}" as="font" crossorigin>
+		<link rel="preload" href="{{ url('fonts/Lato-Black.woff2') }}" as="font" crossorigin>
+		<link rel="preload" href="{{ url('fonts/Lato-Bold.woff2') }}" as="font" crossorigin>
+		<link rel="preload" href="{{ url('fonts/Lato-Regular.woff2') }}" as="font" crossorigin>
+		<link rel="preload" href="{{ url('fonts/Lato-Light.woff2') }}" as="font" crossorigin>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		
+		@if(in_array($current_page, ['review-score-results', 'dentist']))
+			<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500,700;800&display=swap" rel="stylesheet">
+		@else
+			<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+		@endif
 		
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
 		@if($user)
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/trp-logged.css').'?ver='.$cache_version }}" />
+			<link rel="stylesheet" type="text/css" href="{{ url('/css/trp-search-form.css').'?ver='.$cache_version }}" />
 		@endif
 		
         @if(!empty($css) && is_array($css))
             @foreach($css as $file)
-				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
+			
+				@if(!empty($user) && $file == 'trp-search-form.css')
+				@else
+					<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
+				@endif
             @endforeach
         @endif
 
@@ -112,41 +127,31 @@
 		<header class="header">
 	       	<nav class="navbar navbar-default navbar-fixed-top">
   				<div class="container">
-				    <div class="navbar-header">
+				    <div class="navbar-header {{ !empty($user) ? '' : 'show-mobile-menu' }}">
 						<a class="logo" href="{{ getLangUrl('/') }}"></a>
-						<div class="header-info">								
-							@if($current_page=='dentist')
-								<img class="fa-search" src="{{ url('img/white-search.png') }}" width="24" height="24"/>
-							@endif
-
+						<div class="header-info">
+							
 	                        @if(!empty($user))
-								<a href="javascript:;" class="profile-btn header-avatar" id="header-avatar">
-									<span class="name">
-										{{ $user->getNames() }}
-									</span>
+								@if($current_page != 'index')
+									<a href="javascript:;" class="search-dentists">
+										<img class="fa-search" src="{{ url('img-trp/white-search.svg') }}" width="16" height="15"/>
+									</a>
+								@endif
+								<a href="javascript:;" class="user-profile-info header-avatar" id="header-avatar">
+									<span>Rewards: </span>
+									<span class="user-balance">{{ number_format($user_total_balance) }} DCN</span>
 									<img src="{{ $user->getImageUrl(true) }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
-									@if($user->is_clinic && $user->branches->isNotEmpty())
+									{{-- @if($user->is_clinic && $user->branches->isNotEmpty())
 										<div class="profile-branches">
 											<img src="{{ url('img-trp/swith-account-black.svg') }}"/>
 										</div>
-									@endif
+									@endif --}}
 									@if(!empty($has_review_notification))
 										<div class="notification"></div>
 									@endif
 								</a>
 	                        @else
-	                        	@if($current_page=='welcome-dentist')
-	                        		<a href="{{ getLangUrl('/') }}" class="button-dentists">
-										{!! trans('trp.header.for-patients') !!}
-									</a>
-	                        	@else
-									<a href="{{ getLangUrl('welcome-dentist') }}" class="button-dentists">
-										{!! trans('trp.header.for-dentists') !!}
-									</a>
-								@endif
-								<a href="javascript:;" class="button-sign-in open-dentacoin-gateway {{ $current_page!='welcome-dentist' ? 'patient-login' : 'dentist-login' }}">
-									{{ $current_page=='welcome-dentist' ? trans('trp.header.login') : trans('trp.header.signin') }}
-								</a>
+								@include('trp.parts.header-buttons')
 	                        @endif
 	                        @if(!empty($admin) && count(config('langs.trp')) > 1 && $current_page != 'dentists')
 		                        <div class="lang-wrapper">
@@ -161,10 +166,20 @@
 			                    </div>
 			                @endif
 						</div>
+						<a class="mobile-menu" href="javascript:;">
+							<img src="{{ url('img-trp/mobile-menu.png') }}"/>
+						</a>
 				    </div>
 			    </div>
+				<div class="menu-primary-container">
+					<a href="javascript:;" class="close-menu">
+						<img src="{{ url('img-trp/close-menu.svg') }}"/>
+					</a>
+					@include('trp.parts.header-buttons')
+				</div>
 		    </div>
-		    @if(!empty($user) && $user->is_clinic)
+		    @if(false)
+		    {{-- @if(!empty($user) && $user->is_clinic) --}}
 		    	@if($user->branches->isNotEmpty() && isset($clinicBranches))
 		    		<input type="hidden" id="clinic-branches" value="{{ $clinicBranches }}">
 		    	@endif
@@ -178,19 +193,19 @@
 
 		<footer class="{{ !empty($gray_footer) ? 'gray-footer' : '' }}">
 			<div class="container clearfix">
-				<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex break-mobile flex-center">
-					<img src="{{ url('img-trp/dc-logo.png') }}" alt="Dentacoin logo">
+				<a href="https://dentacoin.com/" target="_blank" class="footer-logo flex flex-mobile flex-center">
+					<img src="{{ url('img-trp/mini-logo-white.svg') }}" alt="Dentacoin logo">
 					<p class="bold">
 						{!! trans('trp.footer.powered') !!}
 					</p>
 				</a>
-				<div class="footer-text col-md-6 tac">
+				<div class="footer-text tac">
 					<div class="footer-menu">
-						<a href="https://reviews.dentacoin.com/blog/" target="_blank">{{ trans('trp.footer.blog') }}</a>
 						<a href="{{ getLangUrl('faq') }}">{{ trans('trp.footer.faq') }}</a>
+						<a href="https://support.dentacoin.com/" target="_blank">Help Center</a>
 						<a href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('trp.footer.privacy-policy') }}</a>
-						<a href="https://dentavox.dentacoin.com/" target="_blank">{{ trans('trp.footer.vox') }}</a>
 						<a href="https://dentacare.dentacoin.com/" target="_blank">{{ trans('trp.footer.dentacare') }}</a>
+						<a href="https://dentavox.dentacoin.com/" target="_blank">{{ trans('trp.footer.vox') }}</a>
 					</div>
 					<small>
 						{!! trans('trp.footer.copyright', [
@@ -198,16 +213,39 @@
 						]) !!}
 					</small>
 				</div>
-				<div class="socials col-md-3">
-					{!! trans('trp.footer.stay') !!}: &nbsp;
-					<a class="social" href="https://t.me/dentacoin" target="_blank"><img src="{{ url('img/social-network/telegram.svg') }}"/></a>
-					<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank"><img src="{{ url('img/social-network/facebook.svg') }}"/></a>
+				<div class="socials">
+					{{-- {!! trans('trp.footer.stay') !!}: &nbsp; --}}
+					Follow us: &nbsp;
+					<div class="flex flex-mobile">
+						<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank">
+							<img src="{{ url('img/social-network/socials-fb.svg') }}"/>
+						</a>
+						<a class="social" href="https://twitter.com/dentacoin/" target="_blank">
+							<img src="{{ url('img/social-network/socials-twitter.svg') }}"/>
+						</a>
+						<a class="social" href="instagram.com/dentacoin_official/" target="_blank">
+							<img src="{{ url('img/social-network/socials-instagram.svg') }}"/>
+						</a>
+					</div>
 				</div>
 			</div>
 		</footer>
 
 		@if(false)
 			<div class="bottom-drawer">
+			</div>
+		@endif
+
+		@if(!empty($user))
+			<div class="search-results-popup" id="search-results-popup">
+				<div class="container">
+					<a href="javascript:;" class="close-search-popup">
+						<img src="{{ url('img-trp/close-icon.png') }}"/>
+					</a>
+
+					@include('trp.parts.search-form')
+
+				</div>
 			</div>
 		@endif
 
@@ -387,6 +425,10 @@
 		
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>
+
+		@if(!empty($user))
+			<script src="{{ url('/js-trp/search-form.js').'?ver='.$cache_version }}"></script>
+		@endif
 		
         @if(!empty($jscdn) && is_array($jscdn))
             @foreach($jscdn as $file)
@@ -396,7 +438,10 @@
 		
         @if(!empty($js) && is_array($js))
             @foreach($js as $file)
-                <script src="{{ url('/js-trp/'.$file).'?ver='.$cache_version }}"></script>
+				@if(!empty($user) && $file == 'search-form.js')
+				@else
+                	<script src="{{ url('/js-trp/'.$file).'?ver='.$cache_version }}"></script>
+				@endif
             @endforeach
         @endif
         
@@ -405,6 +450,7 @@
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         	var images_path = '{{ url('img-trp') }}';
         	var all_images_path = '{{ url('img') }}';
+        	var lead_magnet_url = '{{ getLangUrl('review-score-test') }}';
         </script>
     </body>
 </html>

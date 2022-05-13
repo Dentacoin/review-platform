@@ -123,8 +123,14 @@ class YoutubeController extends AdminController {
         } else {
             $updateVideo = $videos[0];
             $updateVideo['status']['privacyStatus'] = 'public';
-            $updateVideo['snippet']['title'] = trans('trp.video-review.youtube-title', ['patient' => $review->user->getNames(), 'dentist' => ($review->clinic_id ? $review->clinic->getNames() : $review->dentist->getNames())]);
-            $updateVideo['snippet']['description'] = trans('trp.video-review.youtube-description', ['patient' => $review->user->getNames(), 'dentist' => ($review->clinic_id ? $review->clinic->getNames() : $review->dentist->getNames())]);
+            $updateVideo['snippet']['title'] = trans('trp.video-review.youtube-title', [
+                'patient' => $review->user->getNames(), 
+                'dentist' => ($review->clinic_id ? $review->clinic->getNames() : $review->dentist->getNames())
+            ]);
+            $updateVideo['snippet']['description'] = trans('trp.video-review.youtube-description', [
+                'patient' => $review->user->getNames(), 
+                'dentist' => ($review->clinic_id ? $review->clinic->getNames() : $review->dentist->getNames())
+            ]);
             $videoUpdateResponse = $service->videos->update("status,snippet", $updateVideo);
         }
 

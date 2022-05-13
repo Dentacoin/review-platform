@@ -1,4 +1,4 @@
-<div class="popup fixed-popup failed-popup active removable" id="failed-popup" scss-load="trp-popup-failed">
+<div class="popup fixed-popup failed-popup no-image active removable" id="failed-popup" scss-load="trp-popup-failed">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
 			<img src="{{ url('img/close-icon.png') }}"/>
