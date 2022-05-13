@@ -328,7 +328,7 @@
 														@if($item->work_hours && array_key_exists($w, $item->work_hours))
 															<p>
 																@foreach($item->work_hours[$w] as $k => $work_hours)
-																	{{ $work_hours }}h {!! $loop->last ? '' : ' - ' !!}
+																	{{ $work_hours }} {!! $loop->last ? '' : ' - ' !!}
 																@endforeach
 															</p>
 														@else
