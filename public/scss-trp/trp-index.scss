@@ -1,0 +1,607 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+@import 'trp-colors';
+@import 'trp-index-flickity';
+@import 'trp-search-form';
+
+.home-section {
+	background-color: $secondary_color;
+	padding-bottom: 60px;
+	padding-top: 150px;
+
+	@media #{$tablet} {
+		padding-top: 130px;
+		padding-bottom: 40px;
+	}
+
+	@media screen and (max-height: 750px) {
+		padding-top: 110px;
+	}
+
+	@media #{$phone} {
+		padding-top: 80px;
+	}
+
+	h1 {
+		color: $subtitle_color;
+		text-transform: capitalize;
+		font-weight: 800;
+		margin-bottom: 30px;
+	}
+
+	h2 {
+		margin-bottom: 2px;
+		color: $title_color;
+		font-weight: bold;
+
+		@media #{$phone} {
+			margin-bottom: 5px;
+		}
+	}
+
+	h3 {
+		color: $subtitle_color;
+		margin-bottom: 30px;
+
+		@media #{$phone} {
+			margin-bottom: 18px;
+		}
+	}
+}
+
+.info-section {
+	padding-top: 58px;
+	padding-bottom: 113px;
+
+	@media #{$tablet} {
+		padding-bottom: 210px;
+	}
+	
+	@media #{$phone} {
+		padding-bottom: 150px;
+		padding-top: 30px;
+	}
+	
+	.container {
+		@media #{$phone} {
+			padding: 0px;
+		}
+	}
+
+	h2 {
+		display: inline-block;
+		text-align: center;
+		font-weight: 800;
+		padding: 12px 65px;
+		color: white;
+		background-color: $main_color;
+		text-transform: uppercase;
+		border-radius: 13px;
+		margin-bottom: 10px;
+
+		@media #{$phone} {
+			font-size: 24px;
+			text-transform: none;
+			font-weight: bold;
+			margin-left: 25px;
+			margin-right: 25px;
+			padding: 12px;
+		}
+	}
+
+	h3 {
+		font-weight: bold;
+		color: $subtitle_color;
+		margin-bottom: 50px;
+		padding-left: 10px;
+    	padding-right: 10px;
+
+		@media #{$tablet} {
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+	}
+
+	.info-box {
+		padding: 0px 40px;
+
+		@media #{$pc} {
+			padding: 0px 30px;
+		}
+
+		@media #{$tablet} {
+			padding: 0px 9px;
+		}
+
+		@media #{$phone} {
+			padding-bottom: 25px;
+		}
+
+		&:nth-child(2) {
+			@media #{$phone} {
+				background-color: $secondary_color;
+			}
+		}
+		
+		h3 {
+			color: $title_color;
+			margin-bottom: 18px;
+		}
+
+		p {
+			color: $subtitle_color;
+			max-width: 265px;
+			font-size: 20px;
+			margin-bottom: 25px;
+
+			@media #{$tablet} {
+				font-size: 18px;
+			}
+
+			@media #{$phone} {
+				margin-left: auto;
+				margin-right: auto;
+				max-width: 285px;
+			}
+		}
+
+		.white-button {
+			width: 188px;
+			padding: 14px 0px;
+
+			@media #{$phone} {
+				width: 180px;
+    			padding: 12px 0px;
+				background-color: transparent;
+				font-size: 18px;
+			}
+		}
+	}
+}
+
+.add-practice {
+	background-image: url('../img-trp/practice-section-background.jpg');
+	background-size: cover;
+	background-position: 50%;
+
+	@media #{$phone} {
+		padding-bottom: 0px;
+	}
+
+	.container {
+		width: 1150px;
+
+		@media #{$pc} {
+			width: 980px;
+		}
+
+		@media #{$tablet} {
+			width: 750px;
+		}
+
+		@media #{$phone} {
+			width: 100%;
+		}
+	}
+
+	.flex {
+		@media #{$tablet} {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.col {
+			&:first-child {
+				@media #{$pc} {
+					max-width: 460px;
+				}
+
+				@media #{$tablet} {
+					max-width: 100%;
+					// margin-top: -160px;
+				}
+			}
+
+			&:nth-child(2) {
+				padding-left: 20px;
+
+				@media #{$pc} {
+					padding-left: 0px;
+				}
+
+				@media #{$phone} {
+					padding: 0px 20px;
+				}
+			}
+		}
+	}
+
+	.practice-image {
+
+		@media #{$tablet} {
+			text-align: center;
+		}
+
+		img {
+			position: absolute;
+	    	top: -55px;
+
+	    	@media #{$pc} {
+	    		top: -42px;
+	    		max-width: 450px;
+	    	}
+
+	    	@media #{$tablet} {
+	    		top: -162px;
+	    		max-width: 370px;
+				left: 50%;
+				transform: translateX(-50%);
+	    	}
+
+	    	@media #{$phone} {
+	    		display: none;
+	    	}
+		}
+	}
+
+	.mobile-practice-img {
+		display: none;
+		margin-right: -14px;
+		margin-bottom: 10px;
+		margin-top: -127px;
+		text-align: center;
+
+		@media #{$phone} {
+			display: block;
+		}
+
+		img {
+			width: 100%;
+		    transform: scale(1.3);
+
+			@media #{$phone} {
+				max-width: 280px;
+				transform: none;
+			}
+		}
+	}
+
+	h2 {
+		padding-top: 60px;
+		text-transform: uppercase;
+		color: white;
+		margin-bottom: 10px;
+
+		@media #{$pc} {
+			padding-top: 30px;
+			margin-bottom: 20px;
+		}
+		
+		@media #{$tablet} {
+			padding-top: 180px;
+		}
+
+		@media #{$phone} {
+			padding-top: 0px;
+			line-height: 30px;
+			margin-bottom: 10px;
+		}
+	}
+
+	h4 {
+		color: white;
+		margin-bottom: 20px;
+		font-weight: bold;
+	}
+
+	ul {
+		margin-bottom: 40px;
+
+		@media #{$pc} {
+			margin-bottom: 24px;
+		}
+
+		@media #{$phone} {
+			margin-bottom: 14px;
+		}
+
+		li {
+			font-size: 20px;
+    		color: white;
+			margin-bottom: 8px;
+			display: flex;
+			align-items: center;
+
+			@media #{$pc} {
+				font-size: 18px;
+			}
+
+			.circle {
+				width: 16px;
+				height: 16px;
+				min-width: 16px;
+				background-color: $stars_color;
+				display: block;
+				border-radius: 50%;
+				margin-right: 9px;
+			}
+		}
+	}
+
+	.transparent-white-button {
+		text-transform: uppercase;
+		margin-bottom: 45px;
+
+		@media #{$pc} {
+			margin-bottom: 35px;
+		}
+
+		@media #{$phone} {
+			margin-bottom: 45px;
+			margin-top: 20px;
+		}
+	}
+
+	.tac-tablet {
+		@media #{$tablet} {
+			text-align: center;
+		}
+	}
+}
+
+.how-works-section {
+	background-color: $secondary_color;
+	padding-top: 67px;
+	padding-bottom: 90px;
+
+	@media #{$tablet} {
+		padding-top: 47px;
+		padding-bottom: 60px;
+	}
+
+	@media #{$phone} {
+		padding-top: 43px;
+	}
+
+	.flex {
+		@media #{$phone} {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+
+	.col {
+		&:first-child {
+			margin-right: 50px;
+
+			@media #{$pc} {
+				margin-right: 10px;
+			}
+
+			@media #{$phone} {
+				margin-right: 0px;
+				padding: 0px 25px;
+			}
+		}
+
+		&:nth-child(2) {
+			max-width: 400px;
+
+			@media #{$tablet} {
+				max-width: 290px;
+			}
+
+			@media #{$phone} {
+				order: -1;
+			}
+		}
+	}
+
+	h2 {
+		color: $title_color;
+		margin-bottom: 30px;
+		margin-top: 50px;
+		font-weight: bold;
+
+		@media #{$tablet} {
+			margin-top: 10px;
+			margin-bottom: 20px;
+		}
+
+		@media #{$phone} {
+			margin-top: 70px;
+			font-size: 28px;
+		}
+	}
+
+	p {
+		font-size: 20px;
+		color: #332255;
+
+		@media #{$tablet} {
+			font-size: 18px;
+		}
+
+		@media #{$phone} {
+			font-size: 20px;
+		}
+
+		a {
+			color: #14cab8;
+			transition: all 0.3s ease;
+
+			&:hover {
+				color: #0564c6;
+				transition: all 0.3s ease;
+			}
+		}
+	}
+
+	img {
+		position: absolute;
+		transform: scale(1.2);
+		transform-origin: left top;
+
+		@media #{$tablet} {
+			position: inherit;
+			// transform: none;
+		}
+	}
+}
+
+
+
+//for logged
+
+.invite-new-dentist-background {
+	background-color: #e2ebff;
+	padding-bottom: 100px;
+}
+
+.invite-new-dentist-wrapper {
+	display: flex;
+    align-items: center;
+
+	>img {
+		@media #{$pc} {
+			max-width: 430px;
+		}
+
+		@media #{$tablet} {
+			display: none;
+		}
+	}
+
+	.invite-new-dentist-titles {
+		background-color: transparent;
+		position: relative;
+		z-index: 1;
+		transform: translateY(120px);
+		max-width: 670px;
+	    margin-left: auto;
+	    margin-right: auto;
+
+	    @media #{$phone} {
+	    	padding: 0px 45px;
+	    }
+	}
+
+	h2 {
+		text-align: center;
+		font-size: 35px;
+		color: #0564c6;
+		font-weight: 800;
+		margin-bottom: 25px;
+
+		@media #{$pc} {
+			font-size: 38px;
+		}
+
+		@media #{$phone} {
+			font-size: 28px;
+			margin-bottom: 20px;
+		}
+	}
+
+	h5 {
+		color: #332255;
+		font-weight: 900;
+		text-align: center;
+		margin-bottom: 40px;
+
+		@media #{$phone} {
+			margin-bottom: 30px;
+		}
+	}
+
+	.invite-new-dentist-form {
+		flex: 1;
+		background-color: white;
+		padding: 60px 90px;
+		box-shadow: 0 0 19px -2px rgba(0,0,0,0.8);
+		border-radius: 30px;
+		margin-left: -120px;
+
+		@media #{$pc} {
+			padding: 60px 50px;
+		}
+
+		@media #{$tablet} {
+			max-width: 100%;
+			margin-left: 0px;
+		}
+
+		@media #{$phone} {
+			max-width: 100%;
+			margin-left: 0px;
+		}
+	
+		.blue-button {
+			text-transform: uppercase;
+			padding: 14px 83px;
+	
+			@media #{$phone} {
+				padding: 13px 54px;
+			}
+		}
+	
+		.mode-dentist-clinic {
+			margin-bottom: 20px;
+			
+			@media #{$phone} {
+				margin-bottom: 0px;
+			}
+	
+			label {
+				flex: 1;
+				border-width: 2px;
+				text-transform: uppercase;
+    			font-weight: 800;
+				padding: 15px 18px 15px 12px;
+				display: flex;
+    			align-items: center;
+
+				&:first-child {
+					margin-right: 10px;
+				}
+
+                &.active {
+                    box-shadow: none;
+                    color: #0084d1;
+
+                    .active-image {
+                        display: block;
+                    }
+
+                    .inactive-image {
+                        display: none;
+                    }
+                }
+
+                img {
+                    max-width: 30px;
+					width: 30px;
+                    margin-right: 11px;
+                    vertical-align: -webkit-baseline-middle;
+
+                    &.active-image {
+                        display: none;
+                    }
+
+                    &.inactive-image {
+                        display: block;
+                    }
+                }
+			}
+
+		}
+	
+		.modern-field {
+			.modern-input {
+				background-color: white;
+			}
+		}
+	}
+}

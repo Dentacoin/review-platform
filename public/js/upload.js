@@ -31,9 +31,8 @@ $(document).ready(function(){
                     var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
         
                         that.closest('.image-label').removeClass('loading');
-        
                         if(!that.hasClass('no-cropper')) {
-                            main_parent.find('.avatar-name').text(file.name);
+                            main_parent.find('.avatar-name').text(file.name.slice(0, 14));
                             main_parent.find('.avatar-name-wrapper').show();
             
                             that.closest('.image-label').hide();
@@ -43,12 +42,18 @@ $(document).ready(function(){
                                 enableOrientation: true,
                                 enforceBoundary: false
                             };
+
+                            if($(window).outerWidth() > 768) {
+                                var avatar_width = 150;
+                            } else {
+                                var avatar_width = 80;
+                            }
                     
                             croppieParams.viewport = {
-                                width: 180,
-                                height: 180
+                                width: avatar_width,
+                                height: avatar_width
                             };
-                            croppieParams.boundary = {width: 180, height: 180};
+                            croppieParams.boundary = {width: avatar_width, height: avatar_width};
                     
                             croppie_instance = main_parent.find('.cropper-container').croppie(croppieParams);
         
@@ -59,11 +64,15 @@ $(document).ready(function(){
                             main_parent.find('.cropper-container').on('update.croppie', function(ev, cropData) {
                                 croppie_instance.croppie('result', {
                                     type: 'canvas',
-                                    size: {width: 180, height: 180},
+                                    size: {width: avatar_width, height: avatar_width},
                                 }).then(function (src) {
                                     main_parent.find('.avatar').val(src);
                                 });
                             });
+
+                            if(that.closest('.upload-image-wrapper').find('.save-avatar').length) {
+                                that.closest('.upload-image-wrapper').find('.save-avatar').show();
+                            }
         
                         } else {
         

@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\DentistTestimonial;
-use App\Helpers\GeneralHelper;
 use App\Exports\Export;
 use App\Imports\Import;
 
@@ -27,7 +26,9 @@ class TestimonialSliderController extends AdminController {
             return redirect('cms/home');            
         }
 
-    	$testimonials = DentistTestimonial::with('translations')->orderBy('id', 'desc')->get();
+    	$testimonials = DentistTestimonial::with('translations')
+        ->orderBy('order_dentist', 'asc')
+        ->get();
 
     	return $this->showView('testimonial-slider', [
 			'testimonials' => $testimonials,
@@ -53,35 +54,9 @@ class TestimonialSliderController extends AdminController {
             ->withInput()
             ->withErrors($validator);
         } else {
-            $newtestimonial = new DentistTestimonial; 
-            $newtestimonial->save();
-
-            foreach ($this->langs as $key => $value) {
-                if(!empty($this->request->input('name-'.$key))) {
-                    $translation = $newtestimonial->translateOrNew($key);
-                    $translation->dentist_testimonial_id = $newtestimonial->id;
-                    $translation->name = $this->request->input('name-'.$key);
-                    $translation->description = $this->request->input('description-'.$key);
-                    $translation->job = $this->request->input('job-'.$key);
-                }
-                $translation->save();
-            }
-
-            if( Request::file('image') && Request::file('image')->isValid() ) {
-
-                $allowedExtensions = array('jpg', 'jpeg', 'png');
-                $allowedMimetypes = ['image/jpeg', 'image/png'];
-                
-                $checkFile = GeneralHelper::checkFile(Input::file('image'), $allowedExtensions, $allowedMimetypes);
-
-                if(isset($checkFile['success'])) {
-                    $img = Image::make( Input::file('image') )->orientate();
-                    $newtestimonial->addImage($img);
-                } else {
-                    Request::session()->flash('error-message', $checkFile['error']);
-                    return redirect('cms/trp/testimonials/edit/'.$newtestimonial->id);
-                }
-            }
+            $newtestimonial = new DentistTestimonial;
+            $this->saveOrUpdate($newtestimonial);
+            $this->saveOrUpdateImage($newtestimonial);
 
             $this->request->session()->flash('success-message', trans('Testimonial added') );
             return redirect('cms/trp/testimonials');
@@ -110,18 +85,7 @@ class TestimonialSliderController extends AdminController {
 		            ->withErrors($validator);
 		        } else {
 
-                    foreach ($this->langs as $key => $value) {
-                        if(!empty($this->request->input('name-'.$key))) {
-                            $translation = $item->translateOrNew($key);
-                            $translation->dentist_testimonial_id = $item->id;
-                            $translation->name = $this->request->input('name-'.$key);
-                            $translation->description = $this->request->input('description-'.$key);
-                            $translation->job = $this->request->input('job-'.$key);
-                        }
-                        $translation->save();
-                    }
-		            
-		            $item->save();
+                    $this->saveOrUpdate($item);
 
 		            $this->request->session()->flash('success-message', trans('Testimonial edited') );
 		            return redirect('cms/trp/testimonials');
@@ -136,6 +100,45 @@ class TestimonialSliderController extends AdminController {
         }
     }
 
+    private function saveOrUpdate($item) {
+        $item->save();
+
+        foreach ($this->langs as $key => $value) {
+            if(!empty($this->request->input('name-'.$key))) {
+                $translation = $item->translateOrNew($key);
+                $translation->dentist_testimonial_id = $item->id;
+                $translation->name = $this->request->input('name-'.$key);
+                $translation->description = $this->request->input('description-'.$key);
+                $translation->alt_image_text = $this->request->input('alt_image_text-'.$key);
+                $translation->job = $this->request->input('job-'.$key);
+            }
+            $translation->save();
+        }
+        
+        $item->save();
+    }
+
+    private function saveOrUpdateImage($item, $ajax=false) {
+        if( Request::file('image') && Request::file('image')->isValid() ) {
+
+            $extensions = ['image/jpeg', 'image/png'];
+
+            if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
+                if($ajax) {
+                    return Response::json([
+                        'success' => false,
+                    ]);
+                } else {
+                    $this->request->session()->flash('error-message', 'File extension not supported' );
+                    return redirect('cms/vox/paid-reports');
+                }
+            }
+            
+            $img = Image::make( Input::file('image') )->orientate();
+            $item->addImage($img);
+        }
+    }
+
     public function add_avatar( $id ) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
@@ -144,29 +147,13 @@ class TestimonialSliderController extends AdminController {
         }
 
         $item = DentistTestimonial::find($id);
+        $this->saveOrUpdateImage($item, $ajax=true);
 
-        if( Request::file('image') && Request::file('image')->isValid() ) {
-
-            $allowedExtensions = array('jpg', 'jpeg', 'png');
-            $allowedMimetypes = ['image/jpeg', 'image/png'];
-            
-            $checkFile = GeneralHelper::checkFile(Input::file('image'), $allowedExtensions, $allowedMimetypes);
-
-            if(isset($checkFile['success'])) {
-                $img = Image::make( Input::file('image') )->orientate();
-                $item->addImage($img);
-
-                return Response::json([
-                    'success' => true,
-                    'thumb' => $item->getImageUrl(),
-                    'name' => ''
-                ]);
-            } else {
-                return Response::json([
-                    'success' => false,
-                ]);
-            }            
-        }
+        return Response::json([
+            'success' => true,
+            'thumb' => $item->getImageUrl(),
+            'name' => ''
+        ]);
     }
 
     public function delete( $id ) {
@@ -297,6 +284,28 @@ class TestimonialSliderController extends AdminController {
 
         return $this->showView('testimonial-slider', [
             'testimonials' => $testimonials,
+        ]);
+    }
+
+    public function reorderTestimonials() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $i=1;
+        foreach (Request::input('list') as $qid) {
+            $testimonials = DentistTestimonial::find($qid);
+            if( $testimonials ) {
+                $testimonials->order_dentist = $i;
+                $testimonials->save();
+                $i++;
+            }
+        }
+
+        return Response::json([
+            'success' => true
         ]);
     }
 }

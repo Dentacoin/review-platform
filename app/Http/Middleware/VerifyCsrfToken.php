@@ -13,7 +13,7 @@ class VerifyCsrfToken extends BaseVerifier {
     protected $except = [
         'test',
         'location',
-        'user-name',
+        'search-dentists',
         'dentist-location',
         'suggest-clinic',
         'suggest-clinic/*',

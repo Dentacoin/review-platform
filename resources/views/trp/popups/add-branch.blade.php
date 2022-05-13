@@ -27,7 +27,12 @@
 
 		<div class="bottom-gray-border"></div>
 
-		{!! Form::open(array('method' => 'post', 'class' => 'add-new-branch-form', 'url' => getLangUrl('profile/add-new-branch'), 'success-url' => getLangUrl('branches/'.$user->slug) )) !!}
+		{!! Form::open([
+			'method' => 'post', 
+			'class' => 'add-new-branch-form', 
+			'url' => getLangUrl('profile/add-new-branch'), 
+			'success-url' => getLangUrl('branches/'.$user->slug) 
+		]) !!}
 			{!! csrf_field() !!}
 
 			<div id="branch-option-1" class="branch-content" {!! session('user_branch') ? 'style="display: none;"' : '' !!}>

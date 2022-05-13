@@ -1,226 +1,193 @@
 <div class="details-wrapper">
-	<div class="review review-wrapper" review-id="{{ $review->id }}">
-		<div class="review-header">
-			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
-			<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: </span>
-			@if($review->verified)
-				<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
-					{!! nl2br(trans('trp.common.trusted-review')) !!}
-				    <img src="{{ url('img/info-white.svg') }}"/>
-				</div>
-			@endif
-			@if($review->title)
-				<span class="review-title">
-			    	“{{ $review->title }}”
-				</span>
-			@endif
-			@if($review->verified)
-				<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
-					{!! nl2br(trans('trp.common.trusted-review')) !!}
-				    <img src="{{ url('img/info-white.svg') }}"/>
-				</div>
-			@endif
-		</div>
-		<div class="review-rating">
-			<div class="ratings average">
+	<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
+	<h2 class="mont">
+		{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}'s Review of 
+		{{ $item->getNames() }}
+		{{-- {!! nl2br(trans('trp.popup.view-review-popup.title', [ 'name' => $item->getNames() ])) !!} --}}
+	</h2>
+
+	<div class="tac">
+		<div class="review-rating-new {{ $review->verified ? 'verified-review' : '' }}">
+			<span class="rating mont">
+				{{ number_format(!empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating, 1) }}
+			</span>
+			<div class="ratings big">
 				<div class="stars">
 					<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
 					</div>
 				</div>
-				<span class="rating">
-					({{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating }})
-				</span>
 			</div>
-			<span class="review-date">
-				{{ $review->created_at ? $review->created_at->toFormattedDateString() : '-' }}
-			</span>
-			@if(!empty($review->treatments))
-				@foreach($review->treatments as $t)
-					<span class="treatment">• {!! App\Models\Review::handleTreatmentTooltips(trans('trp.treatments.'.$t)) !!}</span>
-				@endforeach
+
+			@if($review->verified)
+				<div class="trusted tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
+					<img src="{{ url('img-trp/mobile-logo-white.png') }}"/>
+				</div>
 			@endif
 		</div>
-		<div class="review-content">
-			@if(!empty($review->youtube_id))
-				<div class="video-wrap">
-					<div class="video-wrapper">
-		                <iframe src="https://www.youtube.com/embed/{{ $review->youtube_id }}" frameborder="0"></iframe>
-		            </div>
-		        </div>
-			@else
-				{!! nl2br($review->answer) !!}
+	</div>
+
+	<div class="review-header">
+		<div class="flex {{ $review->title ? '' : 'no-title' }}">
+			@if($review->title)
+				<h3 class="review-title mont">
+					“{{ $review->title }}”
+				</h3>
 			@endif
+			
+			<a href="javascript:;" class="share-button" data-popup="popup-share">
+				<img src="{{ url('img-trp/share-arrow.svg') }}"/>
+				Share
+			</a>
 		</div>
-
-		<div class="review-footer flex flex-mobile break-mobile">
-			<div class="col">
-				@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
-					<a class="reply-review" href="javascript:;">
-						<span>
-							{!! nl2br(trans('trp.popup.view-review-popup.reply')) !!}
-						</span>
-					</a>
-				@endif
-
-				<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-					<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}">
-					<span>
-						{{ intval($review->upvotes) }}
-					</span>
-				</a>
-				<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes)) ? 'voted' : '' !!}" href="javascript:;">
-					<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}">
-					<span>
-						{{ intval($review->downvotes) }}
-					</span>
-				</a>
-
-				<a class="share-review" href="javascript:;" data-popup="popup-share" share-href="{{ $item->getLink() }}?review_id={{ $review->id }}" >
-					<img src="{{ url('img-trp/share-review.png') }}">
-					<span>
-						{!! trans('trp.common.share') !!}
-					</span>
-				</a>
-			</div>
-		</div>
-
-		@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
-			<div class="review-replied-wrapper reply-form" style="display: none;">
-				<div class="review">
-    				<div class="review-header">
-		    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-		    			<span class="review-name">{{ $item->getNames() }}</span>
-	    			</div>
-					<div class="review-content">
-						<form method="post" action="{{ $item->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
-							{!! csrf_field() !!}
-							<textarea class="input" name="reply" placeholder="{!! nl2br(trans('trp.popup.view-review-popup.enter-reply')) !!}"></textarea>
-							<button class="button" type="submit" name="">{!! nl2br(trans('trp.popup.view-review-popup.submit')) !!}</button>
-							<div class="alert alert-warning" style="display: none;">
-								{!! nl2br(trans('trp.popup.view-review-popup.reply-error')) !!}
-							</div>
-						</form>
-					</div>
+		<p class="review-date">
+			{{ $review->created_at ? $review->created_at->toFormattedDateString() : '-' }}
+		</p>
+	</div>
+	
+	<div class="review-content">
+		@if(!empty($review->youtube_id))
+			<div class="video-wrap">
+				<div class="video-wrapper">
+					<iframe src="https://www.youtube.com/embed/{{ $review->youtube_id }}" frameborder="0"></iframe>
 				</div>
 			</div>
-		@elseif($review->reply)
-			<div class="review-replied-wrapper">
-				<div class="review">
-					<div class="review-header">
-		    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-		    			<span class="review-name">{{ $item->getNames() }}</span>
-		    			<span class="review-date">
-							{{ $review->replied_at ? $review->replied_at->toFormattedDateString() : '-' }}
-						</span>
-	    			</div>
-					<div class="review-content">
-						{!! nl2br($review->reply) !!}
-					</div>
-
-					<div class="review-footer">
-						<div class="col">
-							<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-								<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}">
-								<span>
-									{{ intval($review->upvotes_reply) }}
-								</span>
-							</a>
-							<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes) ) ? 'voted' : '' !!}" href="javascript:;">
-								<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}">
-								<span>
-									{{ intval($review->downvotes_reply) }}
-								</span>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
+		@else
+			{!! nl2br($review->answer) !!}
 		@endif
 	</div>
-</div>
-
-<div class="overview-wrapper">
-	<div class="mobile-tac">
-		<h4 class="black-left-line">
-			{!! nl2br(trans('trp.popup.view-review-popup.overview')) !!}
-		</h4>
-	</div>
-
-	<div class="review-container clearfix">
-		@foreach($review->answers as $answer)
-			@if((!empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7 )) ||
-				(!empty($review->team_doctor_rating) && ($item->id == $review->clinic_id)) ||
-				empty($review->team_doctor_rating)
-			)
-
-				<div class="overview-column">
-					<p>{{ $answer->question['label'] }}</p>
-					<div class="ratings">
-						<div class="stars">
-							<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;">
-							</div>
-						</div>
-						<span class="rating">
-							({{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) }}) 
-						</span>
+	
+	@if(!empty($review->treatments) || !empty($review->reviewForDentistAndClinic()))
+		<div class="review-treatments flex">
+			@if(!empty($review->treatments))
+				<div class="treatments col {{ !empty($review->reviewForDentistAndClinic()) ? 'with-border' : '' }}">
+					<h4>Dental services received:</h4>
+					@foreach($review->treatments as $t)
+						<span class="treatment">{!! App\Models\Review::handleTreatmentTooltips(trans('trp.treatments.'.$t)) !!}</span>
+					@endforeach
+				</div>
+			@endif
+			@if(!empty($review->reviewForDentistAndClinic()))
+				<div class="review-dentist col">
+					<h4>{{ $review->dentist_id == $item->id ? 'Clinic' : 'Treating dentist' }}:</h4>
+					<div class="flex flex-mobile">
+						<div class="review-dentist-avatar" style="background-image: url('{{ $review->dentist->getImageUrl(true) }}');"></div>
+						<p>{{ $review->dentist_id == $item->id ? $review->clinic->getNames() : $review->dentist->getNames() }}</p>
 					</div>
 				</div>
 			@endif
-		@endforeach
-	</div>
-</div>
-<div class="detailed-review-wrapper">
-	<div class="mobile-tac">
-		<h4 class="black-left-line">
-			{!! nl2br(trans('trp.popup.view-review-popup.detailed-review')) !!}
-		</h4>
-	</div>
+		</div>
+	@endif
 
-	<div class="review-container">
+	<div class="review-answers">
+		<h4>Rating breakdown:</h4>
 
-		@foreach($review->answers as $answer)
-			@if((!empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7 )) ||
-				(!empty($review->team_doctor_rating) && ($item->id == $review->clinic_id)) ||
-				empty($review->team_doctor_rating)
-			)
+		<div class="overview-wrapper">
+			@php
+				$reviewQuestions = App\Models\Question::orderBy('order', 'asc')->get();
+				$ratingForDentistQuestions = App\Models\Review::$ratingForDentistQuestions;
+				$oldRatingForDentistQuestions = App\Models\Review::$oldRatingForDentistQuestions;
+				$oldReview = $review->answers->first()->rating ? false : true; //old reviews had options, new have rating
+			@endphp
 
-				<div class="detailed-container">
-					<div class="detailed-title tac">
-						<span>{{ $answer->question['label'] }}</span>
-						<div class="ratings tac">
-							<div class="stars">
-								<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;">
+			{{-- if review is for dentist that works in clinic show only 3 answers --}}
+			@if(!empty($review->team_doctor_rating) && ($item->id == $review->dentist_id))
+
+				@if($oldReview)
+
+					@foreach($reviewQuestions->whereIn('id', array_merge($ratingForDentistQuestions, $oldRatingForDentistQuestions)) as $question)
+						@php
+							$answer = $review->answers->where('question_id', $question->id)->first();
+						@endphp
+						<div class="overview-column">
+							<p>
+								@if(!$answer)
+									<img src="{{ url('img-trp/info-light.png') }}" class="tooltip-text" text="new"/>
+								@endif
+								{{ $question['label'] }}
+							</p>
+							<div class="ratings big">
+								<div class="stars {{ $answer ? '' : 'new' }}">
+									@if($answer)
+										<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;"></div>
+									@else
+										<div class="bar new" style="width: 0%;"></div>
+									@endif
 								</div>
 							</div>
-							<span class="rating">
-								({{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) }}) 
-							</span>
 						</div>
-					</div>
-					@if($answer->question_id == 4 && !empty($review->team_doctor_rating) && ($item->id == $review->clinic_id) && !empty($review->dentist_id) && !empty(App\Models\User::find($review->dentist_id)))
-						<div class="treating-dentist">{!! nl2br(trans('trp.popup.view-review-popup.treating-dentist')) !!}: <a href="{{ !empty(App\Models\User::find($review->dentist_id)->email) ? App\Models\User::find($review->dentist_id)->getLink() : 'javascript:;' }}">{{ App\Models\User::find($review->dentist_id)->getNames() }}</a></div>
-					@endif
+					@endforeach
 
-	            	@foreach(json_decode($answer->question['options'], true) as $i => $option)
-						<div class="clearfix flex-mobile">
-							<div class="detailed-review-column">
-		                		{{ $option[0] }}
-							</div>
-							<div class="detailed-review-column">
-								<div class="ratings tac">
-									<div class="stars">
-										<div class="bar" style="width: {{ json_decode($answer->options, true)[$i] / 5 * 100 }}%;">
-										</div>
-									</div>
+				@else
+
+					@foreach($reviewQuestions->whereIn('id', $ratingForDentistQuestions) as $question)
+						<div class="overview-column">
+							<p>
+								{{ $question['label'] }}
+							</p>
+							<div class="ratings big">
+								<div class="stars">
+									<div class="bar" style="width: {{ $review->answers->where('question_id', $question->id)->first()->rating / 5 * 100 }}%;"></div>
 								</div>
 							</div>
-							<div class="detailed-review-column tar">
-		                		{{ $option[1] }}
+						</div>
+					@endforeach
+
+				@endif
+
+			@else
+			
+				@if($oldReview)
+					{{-- @foreach($review->answers as $answer) --}}
+					@foreach($reviewQuestions as $question)
+						@php
+							$answer = $review->answers->where('question_id', $question->id)->first();
+						@endphp
+
+						<div class="overview-column">
+							<p>
+								@if(!$answer)
+									<img src="{{ url('img-trp/info-light.png') }}" class="tooltip-text" text="new"/>
+								@endif
+								{{ $question['label'] }}
+							</p>
+							<div class="ratings big">
+								<div class="stars {{ $answer ? '' : 'new' }}">
+									@if($answer)
+										<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;"></div>
+									@else
+										<div class="bar new" style="width: 0%;"></div>
+									@endif
+								</div>
 							</div>
 						</div>
-	            	@endforeach
-				</div>
+					
+					@endforeach
+					
+				@else
+					
+					@foreach($reviewQuestions->where('type', '!=', 'deprecated') as $question)
+						<div class="overview-column">
+							<p>
+								{{ $question['label'] }}
+							</p>
+							<div class="ratings big">
+								<div class="stars">
+									<div class="bar" style="width: {{ $review->answers->where('question_id', $question->id)->first()->rating / 5 * 100 }}%;"></div>
+								</div>
+							</div>
+						</div>
+					@endforeach
+
+				@endif
+
 			@endif
-		@endforeach
+			
+		</div>
+	</div>
+
+	<div class="tac">
+		<a href="javascript:;" class="close-popup button blue-button">
+			Close review
+		</a>
 	</div>
 </div>

@@ -1,0 +1,734 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+#popup-invite {
+
+    .popup-image {
+        margin-right: -40px;
+        
+        @media #{$pc} {
+            margin-right: -110px;
+        }
+    }
+
+    .popup-inner {
+        width: 100%;
+        padding: 50px 50px 30px;
+        max-width: 700px;
+        margin-bottom: 0px;
+        min-height: 700px;
+
+        @media #{$phone} {
+            padding: 50px 15px 30px;
+        }
+
+        &.success-invite {
+            padding: 86px 80px 47px;
+
+            @media #{$phone} {
+                padding: 70px 15px;
+            }
+
+            h2 {
+                font-size: 32px;
+            }
+
+            .check-image {
+                margin-bottom: 40px;
+                max-width: 125px;
+
+                @media #{$phone} {
+                    max-width: 80px;
+                    margin-bottom: 20px;
+                }
+            }
+
+            .step-info {
+                font-size: 18px;
+                text-align: center;
+                color: #332255;
+
+                &.last {
+                    margin-bottom: 70px;
+                }
+            }
+
+            .invite-alert {
+                margin-top: 0px;
+                margin-bottom: 20px;
+            }
+
+            .white-button {
+                padding: 10px 76px;
+
+                @media #{$phone} {
+                    padding: 10px 56px;
+                }
+            }
+
+            .blue-button {
+                @media #{$phone} {
+                    padding: 10px 37px;
+                }
+            }
+        }
+
+        .white-button {
+            border-width: 1px;
+            margin-right: 10px;
+
+            &.bulk-invite-back {
+                font-size: 36px;
+                font-weight: normal;
+                padding: 1px 34px;
+                vertical-align: top;
+            }
+        }
+
+        .blue-button {
+            padding: 10px 57px;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .popup-tabs {
+            margin-bottom: 40px;
+
+            @media #{$phone} {
+                margin-bottom: 20px;
+                overflow-x: scroll;
+                margin-left: -15px;
+                margin-right: -15px;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .popup-tabs-inner {
+                display: flex;
+
+                @media #{$phone} {
+                    width: 600px;
+                }
+            }
+
+            .popup-tab {
+                position: relative;
+                font-size: 16px;
+                padding: 8px 23px 10px;
+                background-color: #e2ebff;
+                border-radius: 22px;
+                margin-right: 15px;
+                border: 1px solid #3b9fdd;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                flex: 1;
+                text-align: center;
+
+                &:last-child {
+                    margin-right: 0px;
+                }
+
+                &.active {
+                    background-color: #0084d1;
+                    color: white;
+                }
+            }
+        }
+
+        .popup-desc {
+            color: #332255;
+            font-size: 18px;
+        }
+
+        h5 {
+            text-align: left;
+            font-size: 18px;
+            font-weight: 900;
+            color: #332255;
+            margin-bottom: 15px;
+        }
+
+        .blue-button {
+            text-transform: none;
+        }
+    }
+
+    .invite-content {
+        padding-bottom: 40px;
+
+        .invite-more-options {
+            margin-bottom: 45px;
+
+            @media #{$phone} {
+                margin-bottom: 25px;
+            }
+
+            .invite-hubapp {
+                flex: 2;
+                color: #332255;
+            }
+    
+            .preview-invite {
+                flex: 1;
+                color: #0084d1;
+                display: flex;
+                align-items: center;
+                justify-content: end;
+                max-width: 200px;
+                margin-left: auto;
+
+                @media #{$phone} {
+                    max-width: 100%;
+                    margin-left: 0px;
+                    justify-content: initial;
+                    margin-top: 20px;
+                }
+    
+                img {
+                    max-width: 24px;
+                    margin-right: 5px;
+                    margin-bottom: -2px;
+                }
+            }
+        }
+        
+        .checkboxes-wrapper {
+            width: 100%;
+            overflow: hidden;
+            overflow-x: auto;
+            margin-bottom: 30px;
+            -webkit-overflow-scrolling: touch;
+
+            .checkboxes-inner {
+                display: flex;
+
+                @media #{$phone} {
+                    flex-direction: column;
+                }
+            }
+
+            .checkbox-wrapper {
+                margin-right: 40px;
+                flex: 1;
+
+                @media #{$phone} {
+                    margin-right: 0px;
+                }
+
+                &:last-child {
+                    margin-right: 0px;
+
+                    @media #{$phone} {
+                        margin-top: 20px;
+                    }
+                }
+
+                input {
+                    display: none;
+                }
+
+                .invite-radio {
+                    cursor: pointer;
+                    position: relative;
+                    margin-bottom: 20px;
+                    flex: 1;
+                    text-align: center;
+                    background-color: #f0f6fd;
+                    padding: 10px 0px;
+                    color: #888888;
+
+                    &.active {
+                        background-color: #2dcec3;
+                        color: white;
+                    }
+
+                    &:first-child {
+                        margin-right: 2px;
+                        border-top-left-radius: 20px;
+                        border-bottom-left-radius: 20px;
+                    }
+
+                    &:nth-child(2) {
+                        border-top-right-radius: 20px;
+                        border-bottom-right-radius: 20px;
+                    }
+                }
+
+                .copypaste-box {
+                    border: 1px solid #0084d1;
+                    border-radius: 8px;
+                    padding: 5px 0px;
+                    max-height: 200px;
+                    overflow-y: auto;
+
+                    p {
+                        border-bottom: 1px solid #ebebeb;
+                        color: #333;
+                        padding: 4px 18px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+
+                        &:last-child {
+                            border-bottom: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        .label-file {
+            display: block;
+            width: 100%;
+            height: 55px;
+            border: 2px solid #cccccc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+
+            .browse {
+                width: 132px;
+                text-align: center;
+                background-color: #0084d1;
+                height: 55px;
+                margin-right: -1px;
+                color: white;
+                line-height: 55px;
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+                font-size: 20px;
+
+                @media #{$phone} {
+                    width: 112px;
+                }
+            }
+
+            span {
+                flex: 1;
+                padding: 0px 20px;				    
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            input {
+                opacity: 0;
+                z-index: -1;
+                width: 1px;
+                position: absolute;
+            }
+        }
+
+        .file-info {
+            margin-bottom: 250px;
+
+            @media #{$phone} {
+                margin-bottom: 40px;
+                margin-top: 10px;
+            }
+            
+            .download-sample {
+                color: #0084d1;
+            }
+
+            img {
+                width: 12px;
+                margin-right: 3px;
+            }
+
+            span {
+                display: block;
+                text-align: right;
+                color: #888888;
+                font-size: 14px;
+            }
+        }
+
+        .info {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+
+            img {
+                margin-right: 5px;
+            }
+        }
+
+        .button {
+            padding: 12px 49px;
+            background-color: #0cafd4;
+            -webkit-appearance: none;
+
+            @media #{$phone} {
+                width: 100%;
+                text-align: center;
+            }
+
+            i {
+                color: white;
+            }
+
+            &.button-inner-white {
+                background-color: white;
+                border-color: #0cafd4;
+                color: #0cafd4;
+                padding: 11px 77px;
+            }
+
+            &[disabled="disabled"] {
+                background-color: #aaaaaa;
+            }
+        }
+
+        .whatsapp-button {
+            padding: 14px 29px;
+            padding-left: 70px;
+            padding-right: 60px;
+            margin-top: 20px;
+            display: inline-block;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            position: relative;
+            text-transform: inherit;
+            background-color: #0084d1;
+            border-radius: 30px;
+
+            @media #{$phone} {
+                margin-top: 0px;
+            }
+
+            img {
+                position: absolute;
+                background-color: transparent;
+                max-width: 65px;
+                top: 50%;
+                transform: translateY(-50%);
+                left: -30px;
+            }
+        }
+
+        .modern-field {
+            .modern-input {
+                border-width: 1px;
+                border-radius: 8px;
+            }
+        }
+
+        .final-button {
+            position: relative;
+
+            &.waiting {
+                color: white;
+
+                .loader {
+                    display: block;
+                }
+            }
+            .loader {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+
+                i {
+                    border-radius: 50%;
+                    display: block;
+                    font-size: 15px;
+                    width: 20px;
+                    height: 20px;
+                    text-indent: -9999em;
+                    border-top: 3px solid #121212;
+                    border-right: 3px solid white;
+                    border-bottom: 3px solid white;
+                    border-left: 3px solid white;
+                    animation: load8 1.1s infinite linear;
+                }
+            }
+        }
+
+        .chosen-patient-info {
+            height: 62px;
+            border: 1px solid #d6d6d7;
+            border-radius: 8px;
+            margin-top: 25px;
+
+            @media #{$phone} {
+                height: auto;
+            }
+
+            .patient-info-label {
+                height: 100%;
+                min-width: 160px;
+                text-align: center;
+                align-items: center;
+                line-height: 60px;
+                text-transform: uppercase;
+                border-top-left-radius: 8px;
+                border-bottom-left-radius: 8px;
+                background-color: #eeeeee;
+
+                @media #{$phone} {
+                    line-height: 40px;
+                    border-top-right-radius: 8px;
+                    border-bottom-left-radius: 0px;
+                }
+            }
+
+            .patient-info-value {
+                height: 100%;
+                line-height: 60px;
+                margin: 0px 23px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+
+                @media #{$phone} {
+                    line-height: 50px;
+                    margin: 0px 10px;
+                }
+            }
+        }
+
+        form {
+
+            .input-flex {
+                align-items: center;
+
+                @media #{$phone} {
+                    display: flex;
+                }
+
+                .code-wrapper {
+                    flex: 1;
+                    max-width: 68px;
+                    text-align: center;
+                    height: 58px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: #eeeeee;
+                    border: 1px solid #cccccc;
+                    border-radius: 8px;
+                    border-right: none;
+                    border-top-right-radius: 0px;
+                    border-bottom-right-radius: 0px;
+
+                    @media #{$tablet} {
+                        height: 45px;
+                    }
+
+                    @media #{$phone} {
+                        max-width: 58px;
+                    }						
+                }
+
+                .modern-field {
+                    margin-bottom: 0px;
+
+                    .modern-input + label {
+                        height: 0px;
+                    }
+
+                    .modern-input {							
+                        border-top-left-radius: 0px;
+                        border-bottom-left-radius: 0px;
+                    }
+                }
+            }
+
+            #add-invite-image {
+                opacity: 0;
+               position: absolute;
+               z-index: -1;
+            }
+
+            label[for="add-invite-image"] {
+                position: relative;
+                width: 100%;
+                height: 41px;
+                background-color: #126585;
+                display: block;
+                border-radius: 5px;
+                color: white;
+                text-align: center;
+                line-height: 41px;
+                cursor: pointer;
+            }
+
+            .col:first-child {
+                margin-left: 0px;
+
+                @media #{$phone} {
+                    margin-right: 0px;
+                }
+            }
+
+            .col {
+                margin-left: 15px;
+
+                @media #{$phone} {
+                    margin-left: 0px;
+                }
+            }
+
+            .add-dentist,
+            .add-patient {
+                color: #126585;
+            }
+
+            .button {
+                margin-top: 25px;
+                padding: 12px 49px;
+            }
+        }
+    }
+
+    .first-alert {
+        margin-top: -110px;
+
+        @media #{$phone} {
+            margin-top: 0px;
+        }
+    }
+    
+    .whatsapp-image {
+        max-width: 260px;
+        display: block;
+        margin: -20px auto 20px;
+
+        @media #{$phone} {
+            margin-bottom: 40px;
+        }
+    }
+
+    .CodeMirror {
+        border: 1px solid #d6d6d7;
+        border-radius: 10px;
+        width: 100%;
+        height: 140px !important;
+        margin-bottom: 140px !important;
+
+        @media #{$phone} {
+            margin-bottom: 40px !important;
+        }
+
+        pre {
+
+            &.CodeMirror-line {
+                padding-left: 35px !important;
+            }
+
+            &.CodeMirror-placeholder {
+                color: #afb0b9 !important;
+                padding-left: 35px !important;
+            }
+        }
+
+    }
+
+    .CodeMirror-gutters {
+        border-color: #ebebeb;
+        width: 28px !important;
+        left: 0px !important;
+    }
+
+    .CodeMirror-linenumber {
+        min-width: 15px !important;
+    }
+
+    .CodeMirror-gutter-wrapper {
+        left: 0px !important;
+    }
+
+    
+    .sample-invite-wrapper {
+        p, div, a, a strong {
+        font-family: arial,helvetica,sans-serif;
+        font-size: 14px;
+        line-height: 22px;
+        }
+        a, a strong {
+        text-decoration: none !important;
+            color: #1188E6;
+        }
+        p { margin: 0 !important; padding: 0 !important; }
+        table.wrapper {
+        width:100% !important;
+        table-layout: fixed !important;
+        -webkit-font-smoothing: antialiased !important;
+        -webkit-text-size-adjust: 100% !important;
+        -moz-text-size-adjust: 100% !important;
+        -ms-text-size-adjust: 100% !important;
+        }
+        strong {
+            font-weight: bold;
+        }
+        img.max-width {
+        max-width: 100% !important;
+        }
+        .column.of-2 {
+        width: 50% !important;
+        }
+        .column.of-3 {
+        width: 33.333% !important;
+        }
+        .column.of-4 {
+        width: 25% !important;
+        }
+        @media screen and (max-width:480px) {
+        .preheader .rightColumnContent,
+        .footer .rightColumnContent {
+            text-align: left !important;
+        }
+        .preheader .rightColumnContent div,
+        .preheader .rightColumnContent span,
+        .footer .rightColumnContent div,
+        .footer .rightColumnContent span {
+            text-align: left !important;
+        }
+        .preheader .rightColumnContent,
+        .preheader .leftColumnContent {
+            font-size: 80% !important;
+            padding: 5px 0 !important;
+        }
+        table.wrapper-mobile {
+            width: 100% !important;
+            table-layout: fixed;
+        }
+        img.max-width {
+            height: auto !important;
+            max-width: 100% !important;
+        }
+        a.bulletproof-button {
+            display: block !important;
+            width: auto !important;
+            font-size: 80%;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+        .columns {
+            width: 100% !important;
+        }
+        .column {
+            display: block !important;
+            width: 100% !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+        .social-icon-column {
+            display: inline-block !important;
+        }
+        }
+    }
+}

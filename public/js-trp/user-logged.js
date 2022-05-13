@@ -4,75 +4,85 @@ var sliderTO = null;
 var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
-var galleryFlickty;
-var teamFlickity;
 var suggestDentist;
 var suggestClinic;
 var suggestedDentistClick;
 var suggestClinicClick;
-var aggregated_reviews;
 var editor;
 var fb_page_error;
 var load_maps = false;
 
-$(document).ready(function(){
+$(document).ready(function() {
 
-    var handleGalleryRemoved = function() {
-    
-        $('.delete-gallery').off('click').on('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var r = confirm( $(this).attr('sure') );
-            if(!r) {
-                return;
-            }
+    $('.turn-on-edit-mode').click( function() {
+        $('body').toggleClass('edit-dentist-profile-mode');
 
-            if(ajax_is_running) {
-                return;
-            }
-            ajax_is_running = true;
-
-            var id = $(this).closest('.slider-wrapper').attr('photo-id');
-            $.ajax( {
-                url: lang + '/profile/gallery/delete/'+id,
-                type: 'GET',
-                dataType: 'json',
-                success: (function( data ) {
-                    ajax_is_running = false;
-                    galleryFlickty.flickity( 'remove', $(this).closest('.slider-wrapper') );
-                }).bind(this)
-            });
-
-        } );
-    }
-    handleGalleryRemoved();
-
-    $('.alert-edit').click( function() {
-        $('html, body').animate({
-            scrollTop: $('.edit-profile').offset().top - $('header').height()
-        }, 500);
+        if($('body').hasClass('edit-dentist-profile-mode')) {
+            $(this).find('span').html($(this).attr('to-not-edit'));
+        } else {
+            $(this).find('span').html($(this).attr('to-edit'));
+        }
     });
 
-    $('.open-edit').click( function() {
-        $('.view-profile').toggle();
-        $('.edit-profile').toggle();
-        $('.edit-button').toggle();
-        $('body').addClass('edit-user');
-    } );
+    $('.edit-field-button').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
 
-    $('.cancel-edit').click( function() {
+        $('.tooltip-window').hide();
 
-        $('body').removeClass('edit-user');
-    });
+        if($(this).closest('.socials-wrapper').length) {
 
-    if(getUrlParameter('open-edit')) {
-        $('.open-edit').first().trigger('click');
-    }
+            let editWrap = $(this).closest('.socials-wrapper');
+            editWrap.find('.socials').hide();
+            editWrap.find('.edit-field').css('display', 'flex');
 
-    $('[role="presenter"] a').click( function() {
-        var cls = $(this).closest('[role="presenter"]').attr('class');
-        $('.'+cls+'[role="editor"]').show();
-        $('.'+cls+'[role="presenter"]').hide();
+        } else if($(this).closest('#team').length) {
+
+            $(this).closest('#team').find('.team-container').toggleClass('edit-mode');
+
+        } else if($(this).closest('.open-hours-section').length) {
+
+            $(this).closest('.open-hours-section').toggleClass('edit-mode');
+
+        } else if($(this).hasClass('edit-locations')) {
+
+            $('.location-section').toggleClass('edit-mode');
+            $('.gallery-flickity').flickity('resize');
+
+            $('.map-container').hide();
+
+            let editWrap = $('#locations').find('.edit-field');
+            editWrap.find('.edited-field').hide();
+            editWrap.find('.edit-field-button').hide();
+            console.log(editWrap.find('.edit-wrapper'));
+            editWrap.find('.edit-wrapper').show();
+
+        } else if($(this).hasClass('edit-specializations')) {
+
+            $('.specializations-section').toggleClass('edit-mode');
+
+        } else if($(this).hasClass('edit-payments')) {
+
+            $('.payments-section').toggleClass('edit-mode');
+
+        } else if($(this).hasClass('edit-description-button')) {
+            var cls = $(this).closest('.tab-inner-section').find('[role="presenter"]').attr('class');
+            $('.'+cls+'[role="editor"]').show();
+            $('.'+cls+'[role="presenter"]').hide();
+        } else if($(this).hasClass('scroll-to')) {
+            
+            $('html, body').animate({
+                scrollTop: $('.'+$(this).attr('scroll')).offset().top - $('header').height()
+            }, 500);
+            
+        } else {
+
+            let editWrap = $(this).closest('.edit-field');
+            editWrap.find('.edited-field').hide();
+            editWrap.find('.edit-field-button').hide();
+            console.log(editWrap.find('.edit-wrapper'));
+            editWrap.find('.edit-wrapper').show();
+        }
     });
 
     $('[role="editor"] form').off('submit').submit( function(e) {
@@ -83,7 +93,6 @@ $(document).ready(function(){
         }
         ajax_is_running = true;
 
-        
         $.post( 
             $(this).attr('action'), 
             $(this).serialize() , 
@@ -115,92 +124,256 @@ $(document).ready(function(){
                 }
                 ajax_is_running = false;
             }).bind(this), "json"
-        );          
-
-        return false;
+        );
     });
 
-    $('#clinic_dentists').change( function() {
-        $('.hidden-review-question').show();
+    $('.edit-wrapper').off('submit').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            (function( data ) {
+                if(data.success) {
+
+                    for(var i in data.inputs) {
+
+                        if(i == 'name' && typeof data.inputs['title'] != 'undefined') {
+                            $('#value-'+i).html(data.inputs['name']);
+                        } else {
+                            $('#value-'+i).html(data.inputs[i]);
+                            if(i == 'address') {
+                                $('#value-address-map').html(data.inputs[i]);
+                                // $('.map-container').show();
+                            }
+                        }
+                    }
+
+                    if(typeof data.inputs['avatar'] != 'undefined') {
+                        that.find('.image-label').css('background-image', 'url('+data.inputs['avatar']+')').show();
+                        that.find('.cropper-container').hide();
+                        that.find('.avatar-name-wrapper').hide();
+                        that.find('.save-avatar').hide();
+                    }
+
+                    if(typeof data.inputs['current-email'] != 'undefined') {
+                        that.closest('.socials-wrapper').find('.social.email-social').attr('href', 'mailto:'+data.inputs['current-email']);
+                    }
+
+                    if(typeof data.inputs['email_public'] != 'undefined') {
+                        that.closest('.socials-wrapper').find('.social.email-social').attr('href', 'mailto:'+data.inputs['email_public']);
+                    }
+
+                    if(typeof data.inputs['socials'] != 'undefined') {
+                        that.closest('.socials-wrapper').find('.socials').show();
+                        that.closest('.socials-wrapper').find('.edit-field').hide();
+                        that.closest('.socials-wrapper').find('.social:not(.email-social)').remove();
+
+                        for(var i in data.inputs['socials']) {
+                            if(data.inputs['socials'][i]) {
+                                that.closest('.socials-wrapper').find('.socials').append('<a class="social '+i+'" href="'+data.inputs['socials'][i]+'" target="_blank">\
+                                    <img src="https://urgent.reviews.dentacoin.com/img-trp/social-network/'+i+'.svg" height="26">\
+                                </a>');
+                            }
+                        }
+
+                        that.closest('.socials-wrapper').find('.edit-field-button').insertAfter(that.closest('.socials-wrapper').find('.social').last());
+                    }
+
+                    if(!that.closest('#locations').length) {
+                        let editWrap = that.closest('.edit-field');
+                        editWrap.find('.edited-field').show();
+                        editWrap.find('.edit-field-button').show();
+                        editWrap.find('.edit-wrapper').hide();
+                    }
+
+                    that.find('.alert').hide();
+                } else {
+                    let alert = that.find('.alert:not(.secondary-info)')
+                    
+                    alert.html('');
+                    for(var i in data.messages) {
+                        alert.append(data.messages[i]);
+                    }
+                    alert.show();
+                }
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );
     });
 
-    $('#dentist_clinics').change( function() {
-        $(this).closest('.questions-wrapper').find('input[type="hidden"]').val('');
-        $(this).closest('.questions-wrapper').find('.bar').css('width', '0px');
 
-        if ($(this).val() == 'own') {
-            $('.questions-wrapper .question:not(.skippable):not(.question-treatments):not(.review-desc)').addClass('do-not-show');
-            $('.questions-wrapper .question.skippable').next().hide();
-            $('.questions-wrapper .question[q-id="4"]').removeClass('do-not-show');
-            $('.questions-wrapper .question[q-id="6"]').removeClass('do-not-show');
-            $('.questions-wrapper .question[q-id="7"]').removeClass('do-not-show');
-            $('.questions-wrapper .question:not(.skippable):not(.question-treatments):not(.review-desc)').addClass('hidden');
-            $('.questions-wrapper .question[q-id="4"]').removeClass('hidden');
-            $(this).closest('.questions-wrapper').addClass('team-dentist');
-        } else {
-            $('.questions-wrapper .question').removeClass('do-not-show');
-            $('.questions-wrapper .question:not(.skippable):not(.question-treatments):not(.review-desc)').addClass('hidden');
-            $(this).closest('.question').next().show();
-            $(this).closest('.questions-wrapper').removeClass('team-dentist');
+    //specializations & payment methods
+    $('.checkboxes-wrapper input').change( function() {
+        if($(this).closest('.edit-mode').length) {
+            if($(this).closest('.checkboxes-wrapper').hasClass('not-added')) {
+                $(this).closest('form').find('.checkboxes-wrapper:not(.not-added)').append($(this).closest('label'));
+            } else {
+                $(this).closest('form').find('.checkboxes-wrapper.not-added').append($(this).closest('label'));
+            }
         }
     });
 
-    $('#write-review-form .stars').mousemove( function(e) {
-        var rate = e.offsetX;
-        rate = Math.ceil( rate*5 / $(this).width() );
+    $('.remove-checkbox').click( function() {
+        $(this).closest('label').find('input').prop('checked', false);
+        $(this).closest('label').find('input').trigger('change');
+    });
 
-        $(this).find('.bar').css('width', (rate*20)+'%' );
-    } ).click( function(e) {
-        var rate = e.offsetX;
-        rate = Math.ceil( rate*5 / $(this).width() );
+    $('.edit-checkboxes-form').off('submit').submit( function(e) {
+        e.preventDefault();
 
-        $(this).find('input').val(rate).trigger('change');
-        $(this).closest('.review-answers').find('.rating-error').hide();
-        $(this).find('.bar').css('width', (rate*20)+'%' );
-        handleDCNreward();
-
-    } ).mouseout( function(e) {
-        var rate = parseInt($(this).find('input').val());
-        if(rate) {
-            $(this).find('.bar').css('width', (rate*20)+'%' );
-        } else {
-            $(this).find('.bar').css('width', 0 );
+        if(ajax_is_running) {
+            return;
         }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            (function( data ) {
+                if(data.success) {
+                    that.closest('.checkbox-section').removeClass('edit-mode');
+                } else {
+                    let alert = that.find('.alert')
+                    
+                    alert.html('');
+                    for(var i in data.messages) {
+                        alert.append(data.messages[i]);
+                    }
+                    alert.show();
+                }
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );
+    });
+    //end specializations & payment methods
+
+
+    //working hours
+    $('.work-hour-cb').change( function() {
+        var closed = $(this).is(':checked');
+        var texts = $(this).closest('.col').find('select');
+
+        if(closed) {
+            texts.addClass('grayed');
+            // texts.attr('disabled', 'disabled');
+        } else {
+            texts.removeClass('grayed');
+            // texts.prop("disabled", false);
+        }
+    });
+
+    $('.edit-working-hours-wrap select').on('change click',  function() {
+        $(this).closest('.edit-working-hours-wrap').find('input').prop('checked', true);
+        $(this).closest('.edit-working-hours-wrap').find('input').closest('label').addClass('active');
+        $(this).closest('.edit-working-hours-wrap').find('select').removeClass('grayed');
+        $(this).closest('.edit-working-hours-wrapper').find('.work-hour-cb').prop('checked', false);
+        $(this).closest('.edit-working-hours-wrapper').find('.work-hour-cb').closest('label').removeClass('active');
+    });
+
+    $('.all-days-equal').click( function() {
+        for (var i = 2; i<6; i++) {
+            $('#day-'+i).click();
+                
+            $('[name="work_hours['+i+'][0][0]"]').val($('[name="work_hours[1][0][0]"]').val());
+            $('[name="work_hours['+i+'][0][1]"]').val($('[name="work_hours[1][0][1]"]').val());
+            $('[name="work_hours['+i+'][1][0]"]').val($('[name="work_hours[1][1][0]"]').val());
+            $('[name="work_hours['+i+'][1][1]"]').val($('[name="work_hours[1][1][1]"]').val());
+        }
+    });
+
+    $('.edit-working-hours-form').off('submit').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            (function( data ) {
+                console.log(data);
+                if(data.success) {
+                    that.closest('.open-hours-section').removeClass('edit-mode');
+
+                    var wh = data.inputs.work_hours;
+                    for(var i in wh) {
+                        console.log(data.inputs['day_'+i]);
+                        if(!data.inputs['day_'+i] && wh[i][0][0] != null && wh[i][0][1] != null && wh[i][1][0] != null && wh[i][1][1] != null) {
+                            $('.open-hours-section .col-'+i+' .working-hours-wrap p').html(wh[i][0][0]+':'+wh[i][0][1]+' - '+wh[i][1][0]+':'+wh[i][1][1]);
+                        } else {
+                            $('.open-hours-section .col-'+i+' .working-hours-wrap p').html('Closed');
+                        }
+                    }
+                }
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );
+    });
+    //end working hours
+
+    var handleGalleryRemoved = function() {
+    
+        $('.delete-gallery').off('click').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var r = confirm( $(this).attr('sure') );
+            if(!r) {
+                return;
+            }
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var id = $(this).closest('.slider-wrapper').attr('photo-id');
+            $.ajax( {
+                url: lang + '/profile/gallery/delete/'+id,
+                type: 'GET',
+                dataType: 'json',
+                success: (function( data ) {
+                    ajax_is_running = false;
+                    $('.gallery-flickity').flickity( 'remove', $(this).closest('.slider-wrapper') );
+                }).bind(this)
+            });
+        });
+    }
+    handleGalleryRemoved();
+
+    $('.alert-edit').click( function() {
+        $('html, body').animate({
+            scrollTop: $('.edit-profile').offset().top - $('header').height()
+        }, 500);
+    });
+
+    $('.open-edit').click( function() {
+        $('.view-profile').toggle();
+        $('.edit-profile').toggle();
+        $('.edit-button').toggle();
+        $('body').addClass('edit-user');
     } );
 
-    $('.review-tabs a').click( function() {
-        $('.review-tabs a').removeClass('active');
-        $(this).addClass('active');
-        $('.review-type-content').hide();
-        $('#review-option-'+$(this).attr('data-type')).show();
+    $('.cancel-edit').click( function() {
 
-        if( $(this).attr('data-type')=='video' ) {
-            if($('.review-box').hasClass('hide-video-reviews')) {
-                $('#review-title').hide();
-            } else {
-                $('#review-title').show();
-            }
-            $('#review-reward-total').html( $('#review-reward-total').attr('video') );
-        } else {
-            $('#review-title').show();
-            $('#review-reward-total').html( $('#review-reward-total').attr('standard') );
-        }
-        handleDCNreward();
+        $('body').removeClass('edit-user');
     });
 
-    handleDCNreward = function() {
-        var total = 0;
-        var filled = 0;
-        
-        $('#submit-review-popup .stars input[type="hidden"]').each( function() {
-            total++;
-            if( parseInt( $(this).val() ) ) {
-                filled++;
-            }
-        } );
-
-        var reward = Math.ceil( filled/total*parseInt($('#review-reward-total').text()) );
-        $('#review-reward-so-far').html(reward);
+    if(getUrlParameter('open-edit')) {
+        $('.open-edit').first().trigger('click');
     }
     
     //
@@ -412,517 +585,6 @@ $(document).ready(function(){
         $(this).closest('.first-label').toggleClass('open');
     });
 
-    //Invites
-
-
-    $('.invite-patient-form').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-
-        ajax_is_running = true;
-
-        $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-
-        $.ajax({
-            type: "POST",
-            url: $(this).attr('action'),
-            data: {
-                token: $(this).find('input[name="_token"]').val(),
-                name: $(this).find('.invite-name').val(),
-                email: $(this).find('.invite-email').val(),
-                invite_hubapp: $(this).find('[name="invite_hubapp"]').val(),
-            },
-            dataType: 'json',
-            success: function(data) {
-                if(data.success) {
-
-                    $('.invite-patient-form').find('.invite-email').val('');
-                    $('.invite-patient-form').find('.invite-name').val('').focus();
-                    $('.invite-patient-form').find('.invite-alert').show().addClass('alert-success').html(data.message);
-
-                    gtag('event', 'AddManually', {
-                        'event_category': 'ReviewInvites',
-                        'event_label': 'InvitesSent',
-                    });
-                } else {
-                    $('.invite-patient-form').find('.invite-alert').show().addClass('alert-warning').html(data.message);                    
-                }
-            },
-            error: function(ret) {
-                console.log(ret);
-                console.log('error');
-            }
-        });
-        ajax_is_running = false;
-    } );
-
-
-    if( $('#invite-no-address').length ) {
-
-        $('#invite-no-address').submit( function(e) {
-            e.preventDefault();
-
-            if(ajax_is_running) {
-                return;
-            }
-
-            ajax_is_running = true;
-
-            $('#invite-alert').hide();
-
-            $.post( 
-                $(this).attr('action'), 
-                $(this).serialize() , 
-                function( data ) {
-                    if(data.success) {
-                        window.location.href = window.location.href.split('?')[0] + '?popup-loged=popup-invite';
-                    } else {
-                        $('#invite-alert').show().addClass('alert-warning').html(data.message);                    
-                    }
-                    ajax_is_running = false;
-                }, "json"
-            );
-
-            return false;
-        } );
-
-    }
-
-
-    $('.whatsapp-button').click( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-
-        ajax_is_running = true;
-
-        that = $(this);
-        that.closest('.invite-content').find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-
-        $.ajax({
-            type: "POST",
-            url: that.attr('data-url'),
-            data: {
-                _token: $('input[name="_token"]').val(),
-            },
-            dataType: 'json',
-            success: function(data) {
-                if(data.success) {
-
-                    // if ($(window).innerWidth() <= 992) {
-                    //     window.open('whatsapp://send?text='+ data.text +'&href='+ data.text +'', '_blank');
-                    // } else {
-                        window.open('https://api.whatsapp.com/send?text=' + data.text, '_blank');
-                    // }
-
-                    that.closest('.invite-content').find('.invite-alert').show().addClass('alert-success').html(data.message);
-
-                    gtag('event', 'Whatsapp', {
-                        'event_category': 'ReviewInvites',
-                        'event_label': 'InvitesSent',
-                    });
-                }
-            },
-            error: function(ret) {
-                console.log('error');
-            }
-        });
-        ajax_is_running = false;
-    });
-
-
-    if( $('.invite-patient-whatsapp-form').length ) {
-        $('.invite-patient-whatsapp-form').submit( function(e) {
-            e.preventDefault();
-
-            if(ajax_is_running) {
-                return;
-            }
-
-            ajax_is_running = true;
-
-            $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-
-            var that = $(this);
-
-            $.post( 
-                $(this).attr('action'), 
-                $(this).serialize() , 
-                function( data ) {
-                    if(data.success) {
-
-                        if ($(window).innerWidth() <= 992) {
-                            window.open('whatsapp://send?text='+ data.text, '_blank');
-                        } else {
-                            window.open('https://api.whatsapp.com/send?text=' + data.text, '_blank');
-                        }                   
-
-                        that.find('.invite-phone').val('');
-                        that.find('.invite-alert').show().addClass('alert-success').html(data.message);
-
-                        // gtag('event', 'Send', {
-                        //     'event_category': 'Reviews',
-                        //     'event_label': 'InvitesSent',
-                        // });
-                    } else {
-                        console.log(data.message);
-                        that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
-                                        
-                    }
-                    ajax_is_running = false;
-
-                }, "json"
-            );
-        } );
-    }
-
-    if ($('#copypaste').length) {
-
-        editor = CodeMirror.fromTextArea(document.getElementById("copypaste"), {
-            lineNumbers: true,
-            matchBrackets: true,
-            mode: "text/x-csharp"
-        });
-    }
-
-    var inviteRadio = function() {
-        $('.invite-input-radio').change( function() {
-            $(this).closest('.copypaste-wrapper').find('.checkbox-wrapper').removeClass('active');
-            $(this).closest('.checkbox-wrapper').addClass('active');
-
-            if( $(this).closest('#invite-option-copypaste').length) {
-                if($(this).closest('form').hasClass('invite-patient-copy-paste-form-emails')) {
-                    gtag('event', 'SelectEmails', {
-                        'event_category': 'ReviewInvites',
-                        'event_label': 'BulkInvites2',
-                    });
-                } else if($(this).closest('form').hasClass('invite-patient-copy-paste-form-names')) {
-                    gtag('event', 'SelectNames', {
-                        'event_category': 'ReviewInvites',
-                        'event_label': 'BulkInvites3',
-                    });
-                }
-            } else if($(this).closest('#invite-option-file').length) {
-                if($(this).closest('form').hasClass('invite-patient-copy-paste-form-emails')) {
-                    gtag('event', 'SelectEmails', {
-                        'event_category': 'ReviewInvites',
-                        'event_label': 'FileImport2',
-                    });
-                } else if($(this).closest('form').hasClass('invite-patient-copy-paste-form-names')) {
-                    gtag('event', 'SelectNames', {
-                        'event_category': 'ReviewInvites',
-                        'event_label': 'FileImport3',
-                    });
-                }
-            }
-            $(this).closest('form').submit();
-        });
-
-        $('.bulk-invite-back').click( function() {
-            $(this).closest('.copypaste-wrapper').hide();
-            $(this).closest('.invite-content').find('.step'+$(this).attr('step')).find('.invite-input-radio').prop('checked', false);
-            $(this).closest('.invite-content').find('.step'+$(this).attr('step')).find('.checkbox-wrapper').removeClass('active');
-            $(this).closest('.invite-content').find('.step'+$(this).attr('step')).show();
-        });
-    }
-
-    inviteRadio();
-
-    $('.try-invite-again').click( function() {
-        $(this).closest('.copypaste-wrapper').hide();
-        $(this).closest('.invite-content').find('.step1').show();
-        $(this).closest('.copypaste-wrapper').find('.invite-alert').hide();
-    });
-
-    if( $('.invite-patient-copy-paste-form').length ) {
-        $('.invite-patient-copy-paste-form').submit( function(e) {
-            e.preventDefault();
-
-            if(ajax_is_running) {
-                return;
-            }
-
-            ajax_is_running = true;
-
-            $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-
-            var that = $(this);
-            var unique_id = $(this).closest('.invite-content').attr('radio-id');
-
-            $.post( 
-                $(this).attr('action'), 
-                $(this).serialize() , 
-                function( data ) {
-                    if(data.success && data.info) {
-
-                        that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').html('');
-                        for (var i in data.info) {
-
-                            that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="'+i+'"><label class="invite-radio" for="r'+unique_id+i+'"><div class="checkbox-square">✓</div><input type="radio" name="patient-emails" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="r'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
-
-                            for (var u in data.info[i]) {
-                                that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').find('.checkbox-wrapper[attr="'+i+'"]').find('.copypaste-box').append('<p>'+(data.info[i][u]? data.info[i][u] : '-')+'</p>');
-                            }
-                        }
-
-                        var scroll_parent = that.closest('.copypaste-wrapper').next().find('.checkboxes-inner');
-                        var children = scroll_parent.children();
-                        var total = 0;
-
-                        children.each( function() { 
-                            total += $(this).outerWidth() + parseFloat($(this).css('margin-right')) + parseFloat($(this).css('margin-left'));
-                        });
-
-                        scroll_parent.css('width', total + parseFloat(scroll_parent.css('padding-left')) + parseFloat(scroll_parent.css('padding-right')));
-
-                        that.closest('.copypaste-wrapper').hide().next().show();
-
-                        inviteRadio();
-
-                        that.closest('.invite-content').find('.step4').find('.final-button').show(); 
-                        that.closest('.invite-content').find('.step4').find('.bulk-invite-back').show();
-                        that.closest('.invite-content').find('.step4').find('.try-invite-again').hide();
-
-                        if( that.closest('#invite-option-copypaste').length) {
-
-                            gtag('event', 'Paste', {
-                                'event_category': 'ReviewInvites',
-                                'event_label': 'BulkInvites1',
-                            });
-                        }
-                    } else {
-                        that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
-                                        
-                    }
-                    ajax_is_running = false;
-
-                }, "json"
-            );
-        } );
-    }
-
-    $('.invite-patient-copy-paste-form-emails').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-
-        ajax_is_running = true;
-
-        $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-
-        var that = $(this);
-        var unique_id = $(this).closest('.invite-content').attr('radio-id');
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            function( data ) {
-                if(data.success && data.info) {
-
-                    that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').html('');
-
-                    for (var i in data.info) {
-
-                        that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="a'+i+'"><label class="invite-radio" for="ra'+unique_id+i+'"><div class="checkbox-square">✓</div><input type="radio" name="patient-names" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="ra'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
-
-                        for (var u in data.info[i]) {
-                            that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').find('.checkbox-wrapper[attr="a'+i+'"]').find('.copypaste-box').append('<p>'+(data.info[i][u]? data.info[i][u] : '-')+'</p>');
-                        }
-                    }
-
-                    var scroll_parent = that.closest('.copypaste-wrapper').next().find('.checkboxes-inner');
-                    var children = scroll_parent.children();
-                    var total = 0;
-
-                    children.each( function() { 
-                        total += $(this).outerWidth() + parseFloat($(this).css('margin-right')) + parseFloat($(this).css('margin-left'));
-                    });
-
-                    scroll_parent.css('width', total + parseFloat(scroll_parent.css('padding-left')) + parseFloat(scroll_parent.css('padding-right')));
-
-                    that.closest('.invite-content').find('.for-email').html(data.emails);
-
-                    that.closest('.copypaste-wrapper').hide().next().show();
-
-                    inviteRadio();
-
-                } else {
-                    that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
-                                    
-                }
-                ajax_is_running = false;
-
-            }, "json"
-        );
-    } );
-
-    $('.invite-patient-copy-paste-form-names').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-
-        ajax_is_running = true;
-
-        $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            function( data ) {
-                if(data.success) {
-
-                    that.closest('.copypaste-wrapper').next().find('.for-name').html(data.names);
-                    that.closest('.copypaste-wrapper').hide().next().show();
-
-                } else {
-                    that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
-                                    
-                }
-                ajax_is_running = false;
-
-            }, "json"
-        );
-    } );
-
-    $('.invite-patient-copy-paste-form-final').submit( function(e) {
-        e.preventDefault();
-        
-        if(ajax_is_running) {
-            return;
-        }
-
-        ajax_is_running = true;
-
-        var that = $(this);
-
-        that.find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-        that.find('button').addClass('waiting');
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            function( data ) {
-                
-                that.find('button').removeClass('waiting');
-
-                if(data.success) {
-                    that.find('.invite-alert').show().addClass('alert-'+data.color).html(data.message);
-                    that.find('.final-button').hide(); 
-                    that.find('.bulk-invite-back').hide(); 
-                    that.find('.try-invite-again').show();
-
-                    if (data.gtag_tracking) {
-                        
-                        if( that.closest('#invite-option-copypaste').length) {
-                            
-                            gtag('event', 'Copy-PasteBulk', {
-                                'event_category': 'ReviewInvites',
-                                'event_label': 'InvitesSent',
-                            });
-                        } else if(that.closest('#invite-option-file').length) {
-
-                            gtag('event', 'FileImport', {
-                                'event_category': 'ReviewInvites',
-                                'event_label': 'InvitesSent',
-                            });
-                        }
-                    }
-                } else {
-                    that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
-                }
-                ajax_is_running = false;
-
-            }, "json"
-        );
-    } );
-
-    $('#invite-file').change(function() {
-        var file = $('#invite-file')[0].files[0].name;
-        $(this).closest('label').find('span').text(file);
-    });
-
-
-    $('.invite-patient-file-form').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-
-        ajax_is_running = true;
-
-        $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-        var that = $(this);
-        var unique_id = $(this).closest('.invite-content').attr('radio-id');
-
-        var formData = new FormData(this);
-
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false
-        }).done( (function (data) {
-            if(data.success && data.info) {
-
-                that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').html('');
-                for (var i in data.info) {
-
-                    that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="'+i+'"><label class="invite-radio" for="r'+unique_id+i+'"><div class="checkbox-square">✓</div><input type="radio" name="patient-emails" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="r'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
-
-                    for (var u in data.info[i]) {
-                        that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').find('.checkbox-wrapper[attr="'+i+'"]').find('.copypaste-box').append('<p>'+(data.info[i][u]? data.info[i][u] : '-')+'</p>');
-                    }
-                }
-
-                var scroll_parent = that.closest('.copypaste-wrapper').next().find('.checkboxes-inner');
-                var children = scroll_parent.children();
-                var total = 0;
-
-                children.each( function() { 
-                    total += $(this).outerWidth() + parseFloat($(this).css('margin-right')) + parseFloat($(this).css('margin-left'));
-                });
-
-                scroll_parent.css('width', total + parseFloat(scroll_parent.css('padding-left')) + parseFloat(scroll_parent.css('padding-right')));
-
-                that.closest('.copypaste-wrapper').hide().next().show();
-
-                inviteRadio();
-
-                that.closest('.invite-content').find('.step4').find('.final-button').show(); 
-                that.closest('.invite-content').find('.step4').find('.bulk-invite-back').show();
-                that.closest('.invite-content').find('.step4').find('.try-invite-again').hide();
-
-                gtag('event', 'Upload', {
-                    'event_category': 'ReviewInvites',
-                    'event_label': 'FileImport1',
-                });
-            } else {
-                that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
-                                
-            }
-            ajax_is_running = false;
-
-        }).bind(this) ).fail(function (data) {
-                console.log('error');
-            // $(this).find('.alert').addClass('alert-danger').html('Грешка, моля, опитайте отново.').show();
-        });
-
-    } );
-
 
     //Profile edit
     $('.edit-profile').submit( function(e) {
@@ -985,7 +647,7 @@ $(document).ready(function(){
                 </a>\
                 ';
 
-                galleryFlickty.flickity( 'insert', $(html), 1 );
+                $('.gallery-flickity').flickity( 'insert', $(html), 1 );
                 handleGalleryRemoved();
 
                 if($('body').hasClass('guided-tour')) {
@@ -1035,39 +697,13 @@ $(document).ready(function(){
         return false;
     });
 
-    $('.ask-dentist-submit-review').click( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-        var that = $(this);
-
-        $.get( 
-            $(this).attr('href'), 
-            function( data ) {
-                if(data.success) {
-                    $('.button-inner-white.button-ask').hide();
-                    $('.ask-dentist').closest('.alert').hide();
-                    $('.ask-success-alert').show();
-                    $('#review-confirmed').hide();                 
-
-                    gtag('event', 'Request', {
-                        'event_category': 'Reviews',
-                        'event_label': 'InvitesAsk',
-                    });
-                } else {
-                    console.log('error');
-                }
-            }
-        );
-    } );
-
     $('.team-container .delete-invite').click( function(e) {
         e.preventDefault();
         e.stopPropagation();
-        var r = confirm( $(this).attr('sure') );
+
+        var that = $(this);
+
+        var r = confirm( that.attr('sure') );
         if(!r) {
             return;
         }
@@ -1077,14 +713,14 @@ $(document).ready(function(){
         }
         ajax_is_running = true;
 
-        var id = $(this).closest('.slider-wrapper').attr('invite-id');
+        var id = that.closest('.team').attr('invite-id');
         $.ajax( {
             url: lang + '/profile/invites/delete/'+id,
             type: 'GET',
             dataType: 'json',
             success: (function( data ) {
                 ajax_is_running = false;
-                teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
+                that.closest('.team').remove();
             }).bind(this)
         });
 
@@ -1385,12 +1021,14 @@ $(document).ready(function(){
 
     } );
 
-    $('.team-container .approve-buttons div').click( function(e) {
+    $('.team-container .action-buttons div').click( function(e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if( $(this).hasClass('no') ) {
-            var r = confirm( $(this).attr('sure') );
+        var that = $(this);
+
+        if( that.hasClass('reject-button') ) {
+            var r = confirm( that.attr('sure') );
             if(!r) {
                 return;
             }
@@ -1402,331 +1040,20 @@ $(document).ready(function(){
         ajax_is_running = true;
 
         $.get( 
-            $(this).attr('action'),
+            that.attr('action'),
             (function( data ) {
-                if( $(this).hasClass('yes') ) {
-                    $(this).closest('.slider-wrapper').removeClass('pending');
-                    $(this).closest('.slider-wrapper').find('.approve-buttons').remove();
+                if( that.hasClass('accept-button') ) {
+                    that.closest('.team').find('.action-buttons').remove();
                 } else {
-                    teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
+                    that.remove();
                 }
                 ajax_is_running = false;
             }).bind(this), "json"
         );
-
-    } );
-
-    //Write review 
-
-    $('#write-review-form').submit( function(e) {
-        e.preventDefault();
-
-        $('#treatment-error').hide();
-        $('#review-crypto-error').hide();
-        $('#review-answer-error').hide();
-        $('#review-short-text').hide();
-        $('#review-error').hide();
-        $('#video-not-agree').hide();
-        $('#write-review-form .rating-error').hide();
-
-        var allgood = true;
-
-        var coun_vals = 0;
-
-        $(this).find('input[type="hidden"]').each( function() {
-            if ($(this).closest('.question').hasClass('hidden-review-question') && !$('#clinic_dentists').val()) {
-                console.log('Skip 4th question'); //don't check because it's 4th question and I didn't pick a dentist
-            } else if($(this).closest('.questions-wrapper').hasClass('team-dentist')) {
-                if($(this).val() != '' && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id') {
-                    coun_vals++;
-                }
-            } else {
-                if( !parseInt($(this).val()) && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id' ) {
-                    allgood = false;
-                    $(this).closest('.question').find('.rating-error').show();
-
-                    $('html, body').animate({
-                        scrollTop: $(this).closest('.question').offset().top - 20
-                    }, 500);
-                    return false;
-                }
-            }
-        } );
-
-        if ($(this).find('.questions-wrapper').hasClass('team-dentist') && coun_vals != 10) {
-            allgood = false;
-            return false;
-        }
-
-        if( $('#youtube_id').val().trim().length && !$('#video-agree').is(':checked')) {
-            allgood = false;
-            $('#video-not-agree').show();
-            $('html, body').animate({
-                scrollTop: $('.review-tabs').offset().top - 20
-            }, 500);
-        }
-
-        if( !$('.treatment').is(':checked') ) {
-            allgood = false;
-            $('#treatment-error').show();
-            $('html, body').animate({
-                scrollTop: $('.question-treatments').offset().top - 20
-            }, 500);
-
-        }
-
-        if( !$('#review-title').val().trim().length || (!$('#review-answer').val().trim().length && !$('#youtube_id').val().trim().length) ) {
-            allgood = false;
-            $('#review-answer-error').show();
-            $('html, body').animate({
-                scrollTop: $('.review-tabs').offset().top - 20
-            }, 500);
-
-        }
-
-        if(ajax_is_running || !allgood) {
-            return;
-        }
-        ajax_is_running = true;
+    });
 
 
-        var btn = $(this).find('[type="submit"]').first();
-        btn.attr('data-old', btn.html());
-        btn.html('<i></i> '+btn.attr('data-loading'));
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            function( data ) {
-
-                console.log(data, data.imgs_urls);
-                if(data.success) {
-
-                    if(data.social_profile) {
-                        showPopup('social-profile-popup');
-                    }
-
-                    $('#review-confirmed').show();
-                    $('#review-confirmed').find('.ask-dentist-submit-review').attr('href', $('#review-confirmed').find('.ask-dentist-submit-review').attr('original-href') + data.review_id);
-                    $('#review-submit-button').hide();
-                    $('.profile-rating .button').remove();
-
-                    that.find('.question:not(.review-desc)').hide();
-                    that.find('.review-desc').find('.popup-title').hide();
-                    that.find('.review-desc').find('.reviews-wrapper').hide();
-
-                    gtag('event', 'Submit', {
-                        'event_category': 'Reviews',
-                        'event_label': 'Reviews',
-                    });
-                } else {
-                    if(data.valid_input) {
-                        $('#review-crypto-error').show();
-                        $('#review-crypto-error span').html(data.message);
-
-                        $('html, body').animate({
-                            scrollTop: $('.review-tabs').offset().top - 20
-                        }, 500);    
-                    } else if(data.short_text) {
-                        $('#review-short-text').show();
-
-                        $('html, body').animate({
-                            scrollTop: $('.review-tabs').offset().top - 20
-                        }, 500);                        
-                    } else if(data.ban) {
-
-                        window.location.reload(); 
-
-                    } else if(data.redirect) {
-
-                        $('.sso img').remove();
-
-                        for( var i in data.imgs_urls) {
-                            $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
-                        }
-
-                        var ssoTotal = $('.sso-imgs').length;
-                        var ssoLoaded = 0;
-                        $('.sso-imgs').each( function() {
-                            if( $(this)[0].complete ) {
-                                ssoLoaded++;        
-                                if(ssoLoaded==ssoTotal) {
-                                    window.location.href = data.redirect;
-                                }   
-                            }
-                        } );
-                        var ssoLoaded = 0;
-                        $('.sso-imgs').on('load error', function() {
-                            ssoLoaded++;        
-                            if(ssoLoaded==ssoTotal) {
-                                window.location.href = data.redirect;
-                            }
-                        });
-                        
-                    } else {
-                        $('#review-error').show();
-
-                        $('html, body').animate({
-                            scrollTop: $('.review-tabs').offset().top - 20
-                        }, 500);
-                    }
-                }
-                
-                btn.html( btn.attr('data-old') );
-                ajax_is_running = false;
-            }, "json"
-        );          
-
-
-        return false;
-
-    } );
-
-
-    //Video reviews
-    if($('#myVideo').length) {
-        var player = videojs("myVideo", {
-            controls: false,
-            //width: 720,
-            //height: 405,
-            fluid: true,
-            plugins: {
-                record: {
-                    audio: true,
-                    video: true,
-                    maxLength: 736,
-                    debug: true
-                }
-            }
-        }, function(){
-            // print version information at startup
-            videojs.log('Using video.js', videojs.VERSION,
-                'with videojs-record', videojs.getPluginVersion('record'),
-                'and recordrtc', RecordRTC.version);
-        });
-        
-        $('#init-video').click( function() {
-            $('.myVideo-dimensions').show();
-            var hm = player.record().getDevice();
-        } );
-        $('#start-video').click( function() {
-            player.record().start();
-            $('#start-video').hide();
-            $('#stop-video').show();
-            $('#review-option-video .alert').hide();
-        } );
-        $('#stop-video').click( function() {
-            player.record().stop();
-            $('#wrapper').hide();
-
-        });
-
-        // error handling
-        player.on('deviceError', function() {       
-            console.log('device error:', player.deviceErrorCode);
-            if(player.deviceErrorCode.name && player.deviceErrorCode.name=="NotAllowedError") {
-                $('#video-denied').show();
-            } else {
-                $('#video-error').show();                
-            }
-        });
-
-        player.on('error', function(error) {
-            console.log('error:', error);
-            
-        });
-        player.on('startRecord', function() {
-            videoStart = Date.now();
-            console.log('started recording!');
-        });
-
-
-        // user clicked the record button and started recording
-        player.on('deviceReady', function() {
-            $('#init-video').hide();
-            $('#video-denied').hide();
-            $('#video-error').hide();
-            $('#start-video').show();
-            console.log('deviceReady!');
-        });
-
-        // user completed recording and stream is available
-        player.on('finishRecord', function() {
-            videoLength = Date.now() - videoStart;
-            console.log(videoLength);
-            if(false && videoLength<15000) {
-                videoLength = null;
-                videoStart = null;
-                $('#start-video').show();
-                $('#stop-video').hide();
-                $('#video-short').show();
-                return;
-            }
-            console.log('finished recording: ', player.recordedData, player.recordedData.video);
-
-            $('#stop-video').hide();
-            $('#video-progress').show();
-
-
-            var fd = new FormData();
-            var vd = player.recordedData.video ? player.recordedData.video : player.recordedData;
-            fd.append('qqfile', vd);
-            $.ajax({
-                xhr: function() {
-                    var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress", function(evt) {
-                        if (evt.lengthComputable) {
-                            var percentComplete = evt.loaded / evt.total * 100;
-                            //Do something with upload progress here
-                            $('#video-progress-percent').html(Math.ceil(percentComplete));
-                            console.log(percentComplete);
-                            if( Math.ceil(percentComplete)==100 ) {
-                                $('#video-progress').hide();
-                                $('#video-youtube').show();
-                            }
-                        }
-                        }, false);
-
-                    xhr.addEventListener("progress", function(evt) {
-                       if (evt.lengthComputable) {
-                            var percentComplete = evt.loaded / evt.total * 100;
-                            //Do something with download progress
-                            $('#video-progress-percent').html(Math.ceil(percentComplete));
-                            console.log(percentComplete);
-                            if( Math.ceil(percentComplete)==100 ) {
-                                $('#video-progress').hide();
-                                $('#video-youtube').show();
-                            }
-                       }
-                    }, false);
-
-                    return xhr;
-                },
-                type: 'POST',
-                url: lang + '/youtube',
-                data: fd,
-                processData: false,
-                contentType: false,
-                dataType: 'json'
-            }).done(function(responseJSON) {
-                if (responseJSON.url) {
-                    $('#video-uploaded').show();
-                    $('#video-youtube').hide();
-                    $('#youtube_id').val(responseJSON.url);
-                } else {
-                    $('#video-error').show();
-                    $('#start-video').show();
-                }
-            }).fail( function(error) {
-                console.log(error);
-                $('#video-error').show();
-                $('#start-video').show();
-            } );
-        });
-    }
-
+    //socials
     $('.current-social').click( function(e) {
         var elem = $(this).closest('.social-networks').find('.social-dropdown');
         $('.social-dropdown').each( function() {
@@ -1750,36 +1077,31 @@ $(document).ready(function(){
         el.find('.social-link-input').attr('name', 'socials['+$(this).attr('social-type')+']');
         el.find('.social-dropdown').removeClass('active');
 
-
-        // el.closest('.address-suggester-wrapper-input').find('.social-dropdown .social-link[social-type="'+ $(this).attr('social-type') +'"]').each( function() {
-        //     $(this).addClass('inactive');
-        // });
-
         //get a List of elements that should be hidden
         var hideClasses = [];
-        $('.s-wrap .current-social').each( function() {
+        $('.social-wrap .current-social').each( function() {
             if( hideClasses.indexOf( $(this).attr('cur-type') ) == -1 ) {
                 hideClasses.push( $(this).attr('cur-type') );
             }
-        } )
+        });
 
-        $('.s-wrap .social-dropdown').each( function() {
+        $('.social-wrap .social-dropdown').each( function() {
             $(this).find('a').each( function() {
                 if( hideClasses.indexOf( $(this).attr('social-type') ) == -1 ) {
                     $(this).removeClass('inactive');
                 } else {
                     $(this).addClass('inactive');
                 }
-            } )
+            });
         });
-
     });
 
     $('.add-social-profile').click( function() {
 
-        var social_wrapper = $(this).closest('.address-suggester-wrapper-input').find('.social-wrap');
-        var cloned = social_wrapper.first().clone(true).insertAfter( $(this).closest('.address-suggester-wrapper-input').find('.social-wrap').last() );
+        var social_wrapper = $(this).closest('.socials-wrapper').find('.social-wrap');
+        var cloned = social_wrapper.first().clone(true).insertAfter( $(this).closest('.socials-wrapper').find('.social-wrap').last() );
 
+        cloned.addClass('new');
         cloned.find('.social-link-input').val('');
         cloned.find('.social-dropdown .social-link:not(.inactive)').first().trigger('click');
 
@@ -1788,18 +1110,25 @@ $(document).ready(function(){
         }
 
         if($('body').hasClass('guided-tour')) {
-            resizeGuidedTourWindow($('.social-wrapper:visible'), false);
+            resizeGuidedTourWindow($('.social-wrap:visible'), false);
         }
-        
     });
+
+    $('.remove-social').click( function() {
+        $(this).closest('.social-wrap').remove();
+    });
+
+    //end socials
 
     $('input[name="current-email"]').change( function() {
         if ($(this).is(':checked')) {
             $(this).closest('.email-wrapper').find('input[name="email_public"]').val($(this).attr('cur-email'));
             $(this).closest('.email-wrapper').find('input[name="email_public"]').attr('disabled','disabled');
+            $(this).closest('.email-wrapper').find('.email-wrap').addClass('disabled-email');
         } else {
             $(this).closest('.email-wrapper').find('input[name="email_public"]').val('');
             $(this).closest('.email-wrapper').find('input[name="email_public"]').removeAttr('disabled');
+            $(this).closest('.email-wrapper').find('.email-wrap').removeClass('disabled-email');
         }
     }); 
 
@@ -1828,7 +1157,6 @@ $(document).ready(function(){
             }
             pager.insertAfter(table).find('span.page-number:first').addClass('active');
         }
-
     });
 
     //Ask for trusted
@@ -1881,34 +1209,6 @@ $(document).ready(function(){
         showFullReview(id, $('#cur_dent_id').val());
     } );
 
-
-    $('.treatment').change( function() {
-        $(this).closest('label').toggleClass('active');
-
-        var duplicate_treatment = $(this).closest('.treatment-wrapper').find('.treatment[treatment="'+$(this).attr('treatment')+'"][category!="'+$(this).attr('category')+'"]');
-        if (duplicate_treatment.length) {
-            if (duplicate_treatment.closest('label').hasClass('active')) {
-                duplicate_treatment.closest('label').removeClass('active');
-                duplicate_treatment.removeAttr('checked');
-            } else {
-                duplicate_treatment.closest('label').addClass('active');
-                duplicate_treatment.attr('checked', 'checked');
-            }
-            
-        }
-
-        if ($(this).closest('.question').next().hasClass('hidden')) {
-            $(this).closest('.question').next().removeClass('hidden');
-        }
-
-        $('#treatment-error').hide();
-    });
-
-    $('.more-treatments').click( function() {
-        $(this).toggleClass('active');
-        $(this).closest('.treatment-wrapper').find('.treatments-hidden').toggleClass('active');
-    });
-
     $('.invite-again').click( function(e) {
         e.preventDefault();
 
@@ -1937,24 +1237,9 @@ $(document).ready(function(){
     });
 
 
-    if($('#symbols-count').length) {
-        $('#symbols-count').html($('#dentist-description').val().length);
-    }
-
     if($('#symbols-count-short').length) {
         $('#symbols-count-short').html($('#dentist-short-description').val().length);
     }
-
-    $('#dentist-description').keyup(function() {
-        var length = $(this).val().length;
-
-        if (length > 512) {
-            $('#symbols-count').addClass('red');
-        } else {
-            $('#symbols-count').removeClass('red');
-        }
-        $('#symbols-count').html(length);
-    });
 
     $('#dentist-short-description').keyup(function() {
         var length = $(this).val().length;
@@ -1972,14 +1257,6 @@ $(document).ready(function(){
             'event_category': 'Widgets',
             'event_label': 'Popup',
         });
-    });
-
-
-    $('.invite-tabs a').click( function() {
-        $('.invite-tabs a').removeClass('active');
-        $(this).addClass('active');
-        $('.invite-content').hide();
-        $('#invite-option-'+$(this).attr('data-invite')).show();
     });
 
     // $('.branch-tabs a').click( function() {
@@ -2657,82 +1934,6 @@ $(document).ready(function(){
             }
         }
     });
-    
-    if($('.team-container .flickity').length && window.innerWidth > 768) {
-
-        var isFlickity = true;
-        // toggle Flickity on/off
-        $('.rearrange-team').click( function() {
-            if ( isFlickity ) {
-                // destroy Flickity
-                $('.team-container .slider-wrapper:not(.approved-team)').hide();
-                $('.team-container').addClass('rearranging-team');
-
-                $('.team-container .flickity').sortable({
-                    containment: "parent",
-                    update: function (event, ui) {
-                        console.log('update');
-                        setTimeout( function(){
-                            var ids = [];
-                            $('.team-container .approved-team').each( function() {
-                                ids.push( $(this).attr('team-id') );
-                            } )
-
-                            $.ajax({
-                                url     : $('.team-container').attr('team-reorder-link'),
-                                type    : 'POST',
-                                data    : {
-                                    list: ids,
-                                    _token: $('input[name="_token"]').val(),
-                                },
-                                dataType: 'json',
-                                success : function( res ) {
-                                    console.log('success');
-                                },
-                                error : function( data ) {
-                                    console.log('error');
-                                }
-                            });
-                        }, 0);
-                    }
-                });
-
-                teamFlickity.flickity('destroy');
-                isFlickity = false;
-                $(this).html($(this).attr('done-text'));
-
-            } else {
-                // init new Flickity
-
-                $('.team-container .slider-wrapper:not(.approved-team)').show();
-                $('.team-container').removeClass('rearranging-team');
-
-                if (window.innerWidth > 992) {
-                    var draggable_team = false;
-                } else {
-                    var draggable_team = true;
-                }
-
-                teamFlickity = $('.flickity').flickity({
-                    autoPlay: false,
-                    wrapAround: true,
-                    cellAlign: 'left',
-                    pageDots: false,
-                    freeScroll: true,
-                    groupCells: 1,
-                    draggable: draggable_team,
-                });
-
-                teamFlickity.resize();
-
-                isFlickity = true;
-                
-                $(this).html($(this).attr('rearrange-text'));
-
-            }
-        });
-    }
-
 
     $('.verify-review').click( function() {
         if(ajax_is_running) {
@@ -2741,7 +1942,7 @@ $(document).ready(function(){
         ajax_is_running = true;
 
         var that = $(this);
-        var review_id_param = $(this).closest('.review.review-wrapper').attr('review-id');
+        var review_id_param = $(this).closest('.written-review').attr('review-id');
 
         $.ajax({
             type: "POST",
@@ -2756,10 +1957,10 @@ $(document).ready(function(){
                 if(ret.success) {
 
                     if ($(window).outerWidth() <= 768) {
-                        that.closest('.review.review-wrapper').find('.trusted-sticker.mobile-sticker').show();
+                        that.closest('.written-review').find('.trusted-sticker.mobile-sticker').show();
 
                     } else {
-                        that.closest('.review.review-wrapper').find('.trusted-sticker:not(.mobile-sticker)').show();
+                        that.closest('.written-review').find('.trusted-sticker:not(.mobile-sticker)').show();
                     }
 
                     that.hide();

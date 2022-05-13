@@ -2,51 +2,42 @@
 
 @section('content')
 
-	<div class="page-c">
-		<div class="black-overflow" style="display: none;"></div>
-		
-		<div class="search-gradient-wave green-gradient">
-			<div class="home-search-form">
-			    @include('trp.parts.search-form')
-			</div>
-	    	<h1 class="white-title">
-	    		{!! $main_title !!}
-	    	</h1>
+	<div class="search-title">
+		<div class="container">
+			<h1 class="mont">Find The Best Dental Experts in {{ in_array($country->id, [232, 230]) ? 'the ' : '' }}<br/>
+				<span class="mont subtitle">{{ $country->name }}</span>
+			</h1>
 		</div>
+	</div>
 
-	    <div class="countries-wrapper container">
-		    <div class="countries">
-		    	@if(count($states_name))
+	<div class="country-all-practices">
+		<div class="container flex flex-center flex-mobile space-between">
+			<a href="{{ getLangUrl('dentists/'.$country->slug) }}" class="show-all">SHOW ALL PRACTICES</a>
+			<p class="country-dentists">({{ $countryDentistsCount }} results)</p>
+		</div>
+	</div>
+	
+	<div class="countries-wrapper">
+		<div class="container">
+			@foreach($states as $letter => $state)
+				<div class="letters-country-section" letter="{{ $letter }}">
+					<p class="letter">{{ $letter }}</p>
 
-			    	<div class="show-all-dentists">
-			    		<a href="{{ getLangUrl('dentists/'.$country->slug) }}" class="show-all-dentists">{!! trans('trp.page.search.show-all') !!}</a>
-			    	</div>
-			    	<div class="flex">
-			    		<div class="col">
-					    	@foreach($states_name as $key => $cuser)
-					    		@if(!is_object($cuser))
-					    			<span class="letter">{{ $cuser }}</span>
-					    		@else
-					    			<a href="{{ getLangUrl('dentists-in-'.$country->slug.'/'.$cuser->state_slug) }}">{{ $cuser->state_name }}</a>
-					    		@endif
-					    		@if( $total_rows > 8 && in_array($key, $breakpoints) && !$loop->last)
-					    			</div>
-					    			<div class="col">
-					    		@endif
-
-					    	@endforeach
-					    </div>
-				    </div>
-			    @else
-		    		<div class="alert alert-info">
-		    			{!! nl2br(trans('trp.page.search.no-results-dentist',[
-		    				'link' => '<a href="'.getLangUrl('dentist-listings-by-country').'">',
-		    				'endlink' => '</a>',
-		    			])) !!}
-		    		</div>
-		    		<br/>
-			    @endif
-		    </div>
+					<div class="flex flex-mobile">
+						@foreach($state as $s)
+							<div class="country">
+								<a 
+									class="country-button" 
+									href="{{ getLangUrl('dentists-in-'.$country->slug.'/'.$s['state_slug']) }}" 
+								>
+									{{ $s['state_name'] }}
+									<span>({{ $s['cnt'] }})</span>
+								</a>
+							</div>
+						@endforeach
+					</div>
+				</div>
+			@endforeach
 		</div>
 	</div>
 

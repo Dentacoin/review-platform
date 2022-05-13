@@ -41,10 +41,24 @@ class Review extends Model {
     ];
 
     protected $dates = [
+        'replied_at',
         'created_at',
         'updated_at',
         'deleted_at'
     ];
+
+	public static $ratingForDentistQuestions = [
+		4,  //Doctor
+		7,  //Treatment Quality
+		12, //Wait time
+		16  //Follow-up care
+	];
+
+	public static $oldRatingForDentistQuestions = [
+		4,  //Doctor
+		6,  //Treatment Experience
+		7,  //Treatment Quality
+	];
 
     public function user() {
         return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
@@ -73,6 +87,10 @@ class Review extends Model {
     
     public function downvotes() {
         return $this->hasMany('App\Models\ReviewDownvote', 'review_id', 'id');
+    }
+    
+    public function reviewForDentistAndClinic() {
+        return !empty($this->dentist_id) && !empty($this->clinic_id);
     }
 
     public function getDentist($current_dentist = null) {
@@ -301,6 +319,12 @@ class Review extends Model {
         $new_title = str_replace("[/]","</span>",$t);
         
         return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_title);
+    }
+
+    public static function withoutTreatmentTooltips($t) {
+        $new_title = str_replace("[/]","",$t);
+        
+        return preg_replace('/\[([^\]]*)\]/', '', $new_title);
     }
 
     public function getTreatmentsAttribute() {

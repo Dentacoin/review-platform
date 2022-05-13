@@ -245,7 +245,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         });
     }
     public function reviews_in() {
-        return $this->reviews_in_dentist->merge($this->reviews_in_clinic)
+        return $this->reviews_in_dentist
+        ->merge($this->reviews_in_clinic)
         ->sortByDesc(function ($review, $key) {
             if($review->verified) {
                 return 1000000 + $review->id;
@@ -315,7 +316,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function suspiciousReasonAction() {
         return $this->hasMany('App\Models\UserAction', 'user_id', 'id')->whereIn('action', ['suspicious_admin'])->orderBy('id', 'desc');
     }
-    public function invites_team_unverified() {
+    public function notVerifiedTeamFromInvitation() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')
         ->whereNotNull('for_team')
         ->whereNull('invited_id')
@@ -491,7 +492,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if (!empty($user_ask)) {
             $days = $user_ask->created_at->diffInDays( Carbon::now() );
-            if($days>30) {
+
+            if($days>config('trp.limits_days.ask_dentist')) {
                 return true;
             } else {
                 return false;
@@ -501,7 +503,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
-    public function approvedPatientcanAskDentist($dentist_id) {
+    public function approvedPatientcanAskDentistForReview($dentist_id) {
 
         $lastReview = Review::where('user_id', $this->id)
         ->where(function($query) use ($dentist_id) {
@@ -510,16 +512,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         })->orderBy('id', 'desc')
         ->first();
 
-        $days = $lastReview->created_at->diffInDays( Carbon::now() );
+        if($lastReview) {
 
-        if ($this->canAskDentist($dentist_id)) {
-            if($days>30) {
-                return true;
+            $days = $lastReview->created_at->diffInDays( Carbon::now() );
+
+            if ($this->canAskDentist($dentist_id)) {
+                if($days>config('trp.limits_days.ask_dentist')) {
+                    return true;
+                } else {
+                    return config('trp.limits_days.ask_dentist') - $days;
+                }
             } else {
-                return false;
+                return config('trp.limits_days.review') - $days;
             }
         } else {
-            return false;
+            return true;
         }
     }
 
@@ -652,7 +659,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $review = $this->hasReviewTo($dentist_id);
             $days = $review->created_at->diffInDays( Carbon::now() );
 
-            if($days>93) {
+            if($days > config('trp.limits_days.review')) {
                 return false;
             } else {
                 $heAllowed = UserAsk::where('user_id', $this->id)
@@ -787,7 +794,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if(!StopEmailValidation::find(1)->stopped) {
 
             $email_validation = EmailValidation::where('email', 'like', $email)->first();
-
             if(empty($email_validation)) {
                 $query_params = new \stdClass();
                 $query_params->email = $email;
@@ -946,19 +952,38 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return getLangUrl('dentist/'.$this->slug, null, isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'https://urgent.reviews.dentacoin.com/' : 'https://reviews.dentacoin.com/');
     }
 
+    public function getLocation() {
+        return ($this->city_name ? $this->city_name.', ' : '').($this->state_name ? $this->state_name.', ' : '').($this->country->name);
+    }
+
     public function parseCategories($categories) {
         return array_intersect_key( $categories, array_flip( array_intersect_key(config('categories'), array_flip( $this->categories->pluck('category_id')->toArray() ) ) ) );
     }
 
     public function getImageUrl($thumb = false) {
-        return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+        // if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
+        //     return $this->id == 37530 ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+        // } else {
+            // $avatar = $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+
+            if (!file_exists($this->getImagePath(storage_path().'/app/public/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg'))) {
+                $avatar = url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+            } else {
+                $avatar = url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg');
+            }
+            return $avatar;
+        // }
     }
     public function getImagePath($thumb = false) {
-        $folder = storage_path().'/app/public/avatars/'.($this->id%100);
-        if(!is_dir($folder)) {
-            mkdir($folder);
-        }
-        return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.jpg';
+        // if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
+        //     return '/var/www/html/trp-urgent/public/new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png';
+        // } else {
+            $folder = storage_path().'/app/public/avatars/'.($this->id%100);
+            if(!is_dir($folder)) {
+                mkdir($folder);
+            }
+            return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.jpg';
+        // }
     }
 
     public function addImage($img) {
@@ -1009,44 +1034,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->avg_rating = $this->reviews_in()->count() ? $rating / $this->reviews_in()->count() : 0;
         $this->ratings = $this->reviews_in()->count();
         $this->save();
-    }
-
-    public function getReviewLimits() {
-        if( Auth::guard('admin')->user() ) {
-            return null;
-        }
-
-        $limits = config('limits.reviews');
-        
-        if($this->reviews_out->isEmpty()) {
-            return null;
-        }
-
-        $yearly = 0;
-        $quarterly = 0;
-        //$monthly = 0;
-        foreach ($this->reviews_out as $review) {
-            $days = $review->created_at->diffInDays( Carbon::now() );
-            if($days>365) {
-                break;
-            }
-            $yearly++;
-            // if($days>=31) {
-            //     $monthly++;
-            // }
-            if($days<=93) {
-                $quarterly++;
-            }
-        }
-
-        if($quarterly>=$limits['quarterly']) {
-            return 'quarterly';
-        }
-        if($yearly>=$limits['yearly']) {
-            return 'yearly';
-        }
-        
-        return null;
     }
 
     public function cantReviewDentist($dentist_id) {   

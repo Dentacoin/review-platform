@@ -5,19 +5,17 @@ var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
 var galleryFlickty;
-var teamFlickity;
 var suggestDentist;
 var suggestClinic;
 var suggestedDentistClick;
 var suggestClinicClick;
-var aggregated_reviews;
 var editor;
 var fb_page_error;
 var load_lightbox;
-var load_flickity;
-var dont_initialize_flickity;
+var loadFlickityJS = false;
+var load_flickity = false;
+var loadMapsJS = false;
 var load_maps = false;
-var click_on_map;
 
 $(document).ready(function(){
 
@@ -39,51 +37,28 @@ $(document).ready(function(){
         });
     }
 
-    $('.header-info .fa-search').click( function() {
-        $('.home-search-form').show();
-        $(this).hide();
-        $('#search-input').focus();
-        $('.blue-background').addClass('extended');
-    } );
-
     var flickityFunctions = function() {
-        if(!dont_initialize_flickity) {
 
-            if (window.innerWidth > 768) {
-                var draggable_gallery = false;
-            } else {
-                var draggable_gallery = true;
-            }
-
-            if (window.innerWidth > 992) {
-                var draggable_team = false;
-            } else {
-                var draggable_team = true;
-            }
-
-            galleryFlickty = $('.gallery-flickity').flickity({
+        if($('.gallery-flickity').length) {
+            var galleryFlickty = $('.gallery-flickity').flickity({
                 autoPlay: false,
                 wrapAround: true,
                 cellAlign: 'left',
-                pageDots: true,
                 freeScroll: true,
                 groupCells: 1,
-                draggable: draggable_gallery,
+                draggable: false,
             });
+        }
 
-            galleryFlickty.resize();
-
-            teamFlickity = $('.flickity').flickity({
+        if($('.video-reviews-flickity').length) {
+            $('.video-reviews-flickity').flickity({
                 autoPlay: false,
                 wrapAround: true,
                 cellAlign: 'left',
-                pageDots: false,
                 freeScroll: true,
                 groupCells: 1,
-                draggable: draggable_team,
+                draggable: false,
             });
-
-            teamFlickity.resize();
         }
     }
 
@@ -92,8 +67,7 @@ $(document).ready(function(){
             $('#profile-map').attr('inited', 'done');
             $('.info-address').hide();
 
-            prepareMapFucntion( function() {
-                    
+            prepareMapFunction( function() {
                 var profile_map = new google.maps.Map(document.getElementById('profile-map'), {
                     center: {
                         lat: parseFloat($('#profile-map').attr('lat')), 
@@ -111,131 +85,59 @@ $(document).ready(function(){
                     map: profile_map,
                     icon: images_path+'/map-pin-active.png',
                 });
-
-                var data = $('.scroll-to-map:visible').attr('map-tooltip');
-                var infowindow = new google.maps.InfoWindow({
-                  content: data
-                });
-                infowindow.open(profile_map,mapMarker);
-
-            } );
+            });
         }
     }
 
-    $('.fake-map').click( function() {
-        if (!load_maps && typeof google === 'undefined' ) {
-            $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
-                load_maps = true;
-                loadMap();
-            } );
-        } else {
-            loadMap();
-        }
-    });
-
-    $('.tab').click( function() {
-        if( $(this).attr('data-tab')=='about' ) {
-
-            if(!click_on_map) {
-                if(typeof google === 'undefined' ) {
-                    $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
-                        click_on_map = true;
-                        loadMap();
-                    } );
-                } else {
-                    loadMap();
-                }
-            }
-
-            if (!load_lightbox ) {
-                $.getScript(window.location.origin+'/js/lightbox.js', function() {
-                    $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/lightbox.css">');
-                    load_lightbox = true;
-                } );
-            }
-
-            if (!load_flickity ) {
+    var initJS = function() {
+        if (!load_flickity ) {
+            load_flickity = true;
+            if (!loadFlickityJS ) {
+                loadFlickityJS = true;
                 $.getScript(window.location.origin+'/js/flickity.min.js', function() {
                     $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
                     flickityFunctions();
-                    load_flickity = true;
-                } );
+                });
             } else {
                 flickityFunctions();
-            }            
+            }
         }
-    });
 
+        if(!load_maps) {
+            load_maps = true;
+            if (!loadMapsJS && typeof google === 'undefined' ) {
+                loadMapsJS = true;
+                $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
+                    loadMap();
+                });
+            } else {
+                loadMap();
+            }
+        }
 
-    if( getUrlParameter('tab') ) {
-        $('.profile-tabs a[data-tab="'+getUrlParameter('tab')+'"]').trigger('click');
-    } else if($('.profile-tabs .force-active').length) {
-        $('.profile-tabs .force-active').click();
-    } else {
-        $('.profile-tabs a').first().click();
+        if (!load_lightbox ) {
+            load_lightbox = true;
+            $.getScript(window.location.origin+'/js/lightbox.js', function() {
+                $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/lightbox.css">');
+            });
+        }
     }
+
+    if($(window).scrollTop() > 10) {
+        initJS();
+    }
+
+    $(window).on('scroll', function() {
+        initJS();
+    });
 
     if(getUrlParameter('review_id')) {
         showFullReview( getUrlParameter('review_id'), $('#cur_dent_id').val() );
     }
 
     handleReviewEvents = function() {
-        $('.thumbs-up, .thumbs-down').off('click').click( function() {
-            if(user_id) {
-                var type = $(this).hasClass('thumbs-up') ? 'useful' : 'unuseful';
-                var that = this;
-                $.ajax( {
-                    url: '/'+lang+'/'+type+'/' + $(this).closest('.review-wrapper').attr('review-id'),
-                    type: 'GET',
-                    dataType: 'json',
-                    success: (function( data ) {
-                        if(data.success) {
-    
-                            $(that).closest('.review-footer').find('.thumbs-up span').html( data.upvotes );
-                            $(that).closest('.review-footer').find('.thumbs-down span').html( data.downvotes );
-    
-                            var icon_up = $(that).closest('.review-footer').find('.thumbs-up');
-                            var icon_down = $(that).closest('.review-footer').find('.thumbs-down');
-    
-                            if (data.upvote_status) {
-                                icon_up.addClass('voted');
-                            } else {
-                                icon_up.removeClass('voted');
-                            }
-    
-                            if (data.downvote_status) {
-                                icon_down.addClass('voted');
-                            } else {
-                                icon_down.removeClass('voted');
-                            }
-    
-                            icon_up.find('img').attr('src', data.upvote_image);
-                            icon_down.find('img').attr('src', data.downvote_image);
-                        }
-                    }).bind(that)
-                }); 
-            } else {
-                $.event.trigger({type: 'openPatientRegister'});
-
-                $(document).on('dentacoinLoginGatewayLoaded', function (event) {
-                    var cta = $('.dentacoin-login-gateway-container .cta');
-                    cta.show();
-                    for(i=0;i<3;i++) {
-                        cta.fadeTo('slow', 0).fadeTo('slow', 1);
-                    }
-                });
-            }
-        } );
-
-        $('.reply-button.show-hide').off('click').click( function() {
-            var tmp = $(this).attr('alternative');
-            $('.reply-button.show-hide').attr('alternative', $(this).text());
-            $('.reply-button.show-hide').html(tmp);
-            $('.review-replied-wrapper:not(.reply-form)').toggle();
-        });
-
         $('.reply-review').off('click').click( function() {
-            $(this).closest('.review-wrapper').find('.reply-form').toggle();
+            $(this).closest('.regular-review').find('.reply-form').toggle();
         });
 
         $('.reply-form-element').off('submit').submit( function(e) {
@@ -275,27 +177,132 @@ $(document).ready(function(){
                     }
                     ajax_is_running = false;
                 }).bind(that), "json"
-            );          
-
-            return false;
-
-        } );
+            );
+        });
         
         $('.more').click( function(e) {
-    
             if (!$(e.target).closest('.review-replied-wrapper').length && !$(e.target).closest('.review-footer').length) {
-                var id = $(this).closest('.review-wrapper').attr('review-id');
+                var id = $(this).closest('.regular-review').attr('review-id');
                 showFullReview(id, $('#cur_dent_id').val());
             }
-        } );
+        });
+
+        $('.show-more-reviews').click( function() {
+            let hidden_reviews = $('.hidden-review');
+            // hidden_reviews.slice(0,2).removeClass('hidden-review');
+            hidden_reviews.slice(0,10).removeClass('hidden-review');
+
+            $(this).insertAfter($('.regular-review:not(.hidden-review)').last());
+
+            if(!$('.hidden-review').length) {
+                $(this).hide();
+            }
+        });
+
+        $('[name="filter"]').change( function() {
+            $(this).closest('.filter').find('.label').html($(this).attr('label'));
+
+            let wrapper = $('.written-reviews');
+            let reviews = $('.regular-review');
+
+            if($(this).val() == 'newest') {
+                reviews.sort(function(a, b) {
+					if( parseInt($(a).attr('time')) > parseInt($(b).attr('time')) ) {
+						return -1;
+					} else {
+						return 1;
+					}
+				});
+            } else if($(this).val() == 'oldest') {
+                reviews.sort(function(a, b) {
+					if( parseInt($(a).attr('time')) < parseInt($(b).attr('time')) ) {
+						return -1;
+					} else {
+						return 1;
+					}
+				});
+            } else if($(this).val() == 'highest') {
+                reviews.sort(function(a, b) {
+					if( parseInt($(a).attr('rating')) > parseInt($(b).attr('rating')) ) {
+						return -1;
+					} else {
+						return 1;
+					}
+				});
+            } else if($(this).val() == 'lowest') {
+                reviews.sort(function(a, b) {
+					if( parseInt($(a).attr('rating')) < parseInt($(b).attr('rating')) ) {
+						return -1;
+					} else {
+						return 1;
+					}
+				});
+            }
+
+            reviews.each(function() {
+                wrapper.append(this);
+            });
+
+            if($('[name="type"]:checked').val() == 'trusted') { //only trusted reviews
+                $('.regular-review[trusted="0"]').addClass('hidden-review');
+
+                $('.show-more-reviews').insertAfter($('.regular-review:not(.hidden-review)').last());
+            } else {
+                $('.regular-review').addClass('hidden-review');
+                $('.regular-review').slice(0,10).removeClass('hidden-review');
+    
+                $('.show-more-reviews').insertAfter($('.regular-review:not(.hidden-review)').last());
+                if($('.hidden-review').length) {
+                    $('.show-more-reviews').show();
+                }
+            }
+        });
+
+        $('[name="type"]').change( function() {
+            $(this).closest('.filter').find('.label').html($(this).attr('label'));
+
+            if($(this).val() == 'trusted') {
+                $('.regular-review').addClass('hidden-review');
+                $('.regular-review[trusted="1"]').removeClass('hidden-review');
+                $('.show-more-reviews').hide();
+            } else {
+                $('.regular-review').addClass('hidden-review');
+                $('.regular-review').slice(0,10).removeClass('hidden-review');
+                $('.show-more-reviews').show();
+            }
+        });
+
+        $('#search-review').on('keyup', function(e) {      
+            $('#no-reviews').hide();
+
+            if($(this).val()) {
+                $('.show-more-reviews').hide();
+
+                let searched_review = $(this);
+                $('.regular-review').each( function() {
+                    if ($(this).attr('find-in').indexOf(searched_review.val().toLowerCase()) >= 0 ) {
+                        $(this).removeClass('hidden-review');
+                    } else {
+                        $(this).addClass('hidden-review');
+                    }
+                });
+
+                if(!$('.regular-review:visible').length) {
+                    $('#no-reviews').show();
+                }
+            } else {
+                $('.regular-review').addClass('hidden-review');
+                $('.regular-review').slice(0,10).removeClass('hidden-review');
+                $('.show-more-reviews').show();
+            }
+        });
     }
     handleReviewEvents();
-
 
     $('.show-review').click( function(e) {
         var id = $(this).attr('review-id');
         showFullReview(id, $('#cur_dent_id').val());
-    } );
+    });
 
     $('.scroll-to-map').click( function() {
         $('.profile-tabs .tab[data-tab="about"]').trigger('click');
@@ -303,36 +310,6 @@ $(document).ready(function(){
             scrollTop: $('.map-container').offset().top - $('header').height() - 40
         }, 500);        
     });
-
-
-    if ($('#reviews-chart').length) {
-
-        // setTimeout( function() {
-        //     $('.chart').each( function() {
-        //         $(this).css('height', $(this).attr('to-height') * ( $(window).outerWidth() <= 768 ? 40 : 50) );
-        //     });
-        // }, 200);
-
-        if ($(window).outerWidth() < 980) {
-
-            var prepended = false;
-            $(window).on('scroll', function() {
-                if(!prepended) {                    
-                    $('.review-chart').prepend('<img class="slide-animation" src="'+window.location.origin+'/img-trp/slide.gif">');
-                    $('.slide-animation').addClass('active');
-                    $('.review-chart').on('click taphold swipe touchmove', function() {
-                        $('.slide-animation').removeClass('active');
-                    });
-                    prepended = true;
-                }
-            });
-
-        }
-    }
-
-    if (window.location.hash.length && $('.tab[data-tab="'+window.location.hash.substring(1)+'"]').length) {
-        $('.tab[data-tab="'+window.location.hash.substring(1)+'"]').trigger( "click" );
-    }
 
     if ($('#append-section-reviews').length) {
         $(window).scroll( function() {
@@ -362,5 +339,70 @@ $(document).ready(function(){
             }
         });
     }
+
+    $('.show-full-announcement').click( function() {
+        let announcement = $('.announcement-description');
+
+        if(announcement.hasClass('active')) {
+            announcement.html(announcement.attr('short-text'));
+            $(this).html($(this).attr('short-text'));
+
+            announcement.removeClass('active');
+        } else {
+            announcement.html(announcement.attr('long-text'));
+            $(this).html($(this).attr('long-text'));
+            
+            announcement.addClass('active');
+        }
+    });
+
+    $('.dentist-address').click( function() {
+        $('body, html').animate({
+            scrollTop: $('#locations').offset().top - $('header').outerHeight()
+        }, 500);
+    });
+
+    $('.tab-title').click( function() {
+
+        if(!$(this).hasClass('grayed')) {
+            $('.tab-title').removeClass('active');
+            $(this).addClass('active');
+        }
+
+        if($(this).hasClass('patients-tab')) {
+            $('.tab-sections').hide();
+            $('.asks-section').show();
+        } else {
+            $('.tab-sections').show();
+            $('.asks-section').hide();
+            $('body, html').animate({
+                scrollTop: $('#'+$(this).attr('data-tab')).offset().top - $('header').outerHeight()
+            }, 500);
+        }
+    });
+
+    $('.show-video-reviews').click( function() {
+        $('.reviews-type-buttons a').removeClass('active');
+        $(this).addClass('active');
+        $('.video-review-tab').show();
+        $('.regular-review-tab').hide();
+
+        if (!load_flickity ) {
+            load_flickity = true;
+            $.getScript(window.location.origin+'/js/flickity.min.js', function() {
+                $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
+                flickityFunctions();
+            });
+        } else {
+            flickityFunctions();
+        }
+    });
+
+    $('.show-written-reviews').click( function() {
+        $('.reviews-type-buttons a').removeClass('active');
+        $(this).addClass('active');
+        $('.video-review-tab').hide();
+        $('.regular-review-tab').show();
+    });
 
 });
