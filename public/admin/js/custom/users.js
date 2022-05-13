@@ -113,11 +113,16 @@ $(document).ready(function(){
     $('.btn-add-new-badge').click( function() {
 		var newinput = $('#badge-group-template').clone(true).removeAttr('id');
 		$('.top-list').append(newinput);
-	} );
+	});
 
-	$('.btn-remove-badge').click( function() {
+    $('.btn-add-new-year-badge').click( function() {
+		var newinput = $('#badge-group-year-template').clone(true).removeAttr('id');
+		$('.top-list-year').append(newinput);
+	});
+
+	$('.btn-remove-badge, .btn-remove-year-badge').click( function() {
 		$(this).closest('.input-group').remove();
-	} );
+	});
 
 
 	var userFilter = function() {

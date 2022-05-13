@@ -739,15 +739,25 @@
 					@endif
 				</div>
 			</div>
-			@if($item->top_dentist_month)
+			@if($item->top_dentist_month || $item->top_dentist_year)
 				<div class="awards">
 					<h4>Awards</h4>
-					<div class="top-dentist">
-						<img src="{{ url('img-trp/top-dentist-month.png') }}">
-						<span>
-							{!! trans('trp.common.top-dentist') !!}: {{ $item->getLastTopDentistBadge() }}
-						</span>
-					</div>
+					@if($item->top_dentist_month)
+						<div class="top-dentist">
+							<img src="{{ url('img-trp/top-dentist-month.png') }}">
+							<span>
+								{!! trans('trp.common.top-dentist') !!}: {{ $item->getLastTopDentistBadge() }}
+							</span>
+						</div>
+					@endif
+					@if($item->top_dentist_year)
+						<div class="top-dentist">
+							<img src="{{ url('img-trp/top-dentist-year.png') }}">
+							<span>
+								{!! trans('trp.common.top-dentist') !!}: {{ $item->getLastTopDentistYearBadge() }}
+							</span>
+						</div>
+					@endif
 				</div>
 			@endif
 		</div>

@@ -1215,6 +1215,19 @@ class UsersController extends AdminController {
                     $item->top_dentist_month = null;
                 }
 
+                if(!empty(request('badge-year-only'))) {
+                    $help_array = [];
+                    foreach(request('badge-year-only') as $i => $trg) {
+                        if(!empty($trg)) {
+                            $help_array[] = $trg;
+                        }
+                    }
+                    $item->top_dentist_year = implode(';', $help_array);
+                    
+                } else {
+                    $item->top_dentist_year = null;
+                }
+
                 $item->save();
 
                 foreach ($item->reviews_out as $review_out) {
@@ -2481,6 +2494,7 @@ class UsersController extends AdminController {
             $item->is_partner = null;
             $item->featured = null;
             $item->top_dentist_month = null;
+            $item->top_dentist_year = null;
             $item->title = null;
             $item->slug = null;
             $item->patient_status = 'new_not_verified';

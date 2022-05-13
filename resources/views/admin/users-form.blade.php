@@ -785,7 +785,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-md-2 control-label"><img src="{{ url('img-trp/top-dentist.png') }}" style="max-width: 18px;" /> Top Dentist</label>
+                                        <label class="col-md-2 control-label"><img src="{{ url('img-trp/top-dentist-month.png') }}" style="max-width: 20px;" /> Top Dentist Month</label>
                                         <div class="col-md-10 top-list">
                                             @if($item->top_dentist_month )
                                                 @foreach(explode(';',$item->top_dentist_month) as $badge)
@@ -816,10 +816,43 @@
                                     <div class="form-group clearfix">
                                         <div class="col-md-offset-2 col-md-10">
                                             <a href="javascript:;" class="btn btn-primary btn-block btn-add-new-badge" style="margin-top: -10px;" >
-                                                Аdd badge
+                                                Аdd top dentist month badge
                                             </a>
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label"><img src="{{ url('img-trp/top-dentist-year.png') }}" style="max-width: 20px;" /> Top Dentist Year</label>
+                                        <div class="col-md-10 top-list-year">
+                                            @if($item->top_dentist_year )
+                                                @foreach(explode(';',$item->top_dentist_year) as $badge)
+                                                    <div class="input-group clearfix">
+                                                        <div class="template-box clearfix">
+                                                            <select name="badge-year-only[]" class="form-control badge-select">
+                                                                @for($i=date('Y');$i>=2017;$i--)
+                                                                    <option value="{{ $i }}" {{ explode(':', $badge)[0] == $i ? 'selected="selected"' : '' }}>{{ $i }}</option>
+                                                                @endfor
+                                                            </select>                                          
+                                                        </div>
+                                                        <div class="input-group-btn">
+                                                            <button class="btn btn-default btn-remove-year-badge" type="button">
+                                                                <i class="glyphicon glyphicon-remove"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group clearfix">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <a href="javascript:;" class="btn btn-primary btn-block btn-add-new-year-badge" style="margin-top: -10px;" >
+                                                Аdd top dentist year badge
+                                            </a>
+                                        </div>
+                                    </div>
+
                                 @endif
 
                                 <div class="form-group">
@@ -2262,6 +2295,21 @@
             </div>
             <div class="input-group-btn">
                 <button class="btn btn-default btn-remove-badge" type="button">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="input-group clearfix" id="badge-group-year-template">
+            <div class="template-box clearfix">
+                <select name="badge-year-only[]" class="form-control badge-select">
+                    @for($i=date('Y');$i>=2017;$i--)
+                        <option value="{{ $i }}" {{ date('Y') == $i ? 'selected="selected"' : '' }}>{{ $i }}</option>
+                    @endfor
+                </select>                                          
+            </div>
+            <div class="input-group-btn">
+                <button class="btn btn-default btn-remove-year-badge" type="button">
                     <i class="glyphicon glyphicon-remove"></i>
                 </button>
             </div>

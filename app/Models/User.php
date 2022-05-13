@@ -66,6 +66,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'is_partner',
         'featured',
         'top_dentist_month',
+        'top_dentist_year',
         'main_branch_clinic_id',
         'title',
         'name',
@@ -2146,6 +2147,20 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         }
 
         return $text;
+    }
+
+    public function getLastTopDentistYearBadge() {
+
+        $time = 0;
+        if(!empty($this->top_dentist_year)) {
+            foreach (explode(';', $this->top_dentist_year) as $badge) {
+                if($time < $badge) {
+                    $time = $badge;
+                }
+            }
+        }
+
+        return $time;
     }
 
 
