@@ -33,7 +33,7 @@
                             /> 
                             @if($dentist->is_partner)
                                 <div class="partner">
-                                    <img src="{{ url('img-trp/mini-logo-white.svg') }}"/>
+                                    <img src="{{ url('img-trp/mini-logo-white.svg') }}" width="20" height="20"/>
                                     DCN Accepted
                                 </div>
                             @endif

@@ -36,7 +36,7 @@
 		/>
 	</div>
 	<label class="green-checkbox" for="partner">
-		<img src="{{ url('img-trp/mini-logo-black.svg') }}"/>
+		<img src="{{ url('img-trp/mini-logo-black.svg') }}" width="16" height="19"/>
 		DCN Accepted
 		<span class="checked-partner">✓</span>
 		<input class="checkbox" type="checkbox" name="is_partner" value="1" id="partner"/>
