@@ -53,14 +53,14 @@
                                     ({{ trans('trp.common.reviews-count', [ 'count' => intval($dentist->ratings)]) }})
                                 </span>
                             </div>
-                            @php
+                            {{-- @php
                                 $review = $dentist->reviews_in_standard()->first();
                             @endphp
                             @if( $review)
                                 <p class="review-content">
                                     “{{ mb_substr($review->answer, 0, 75) }}..”
                                 </p>
-                            @endif
+                            @endif --}}
                         </div>
                     </div>
                 </a>
