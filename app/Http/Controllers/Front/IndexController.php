@@ -39,6 +39,7 @@ class IndexController extends FrontController {
 			'results-url' => null
 		]);
 
+		//get all dentists and clinics
 		$featured = User::where('is_dentist', 1)
 		->whereIn('status', config('dentist-statuses.shown_with_link'))
 		->whereNull('self_deleted')
@@ -50,7 +51,7 @@ class IndexController extends FrontController {
 
 		$city_id = null;
 		if(!empty($this->city_id)) {
-			$city_id = City::with('translations')->find($this->city_id);
+			$city_id = City::find($this->city_id);
 		}
 
 		if( !empty($this->user) ) {
@@ -107,14 +108,15 @@ class IndexController extends FrontController {
 
 		$strength_arr = null;
 		$completed_strength = null;
-		if ($this->user) {
-			$strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
-			$completed_strength = $this->user->getStrengthCompleted('trp');
-		}
+		// if ($this->user) {
+		// 	$strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
+		// 	$completed_strength = $this->user->getStrengthCompleted('trp');
+		// }
 
 		$seos = PageSeo::find(20);
 
-		$countriesAlphabetically = [];//create a new array
+		//countries for search bar countries dropdown
+		$countriesAlphabetically = [];
         foreach(Country::has('dentists')->with(['dentists','translations'])->get() as $item) {
             $countriesAlphabetically[$item->name[0]][] = [
 				'name' => $item->name,
@@ -125,7 +127,7 @@ class IndexController extends FrontController {
         }
 
 		$params = [
-			'countries' => Country::with('translations')->get(),
+			'countries' => !empty($this->user) ? Country::with('translations')->get() : [], //for add new dentist form
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
 			'featured' => $homeDentists,
@@ -144,11 +146,11 @@ class IndexController extends FrontController {
 			]
 		];
 
-		if (!empty($this->user)) {
-			$params['extra_body_class'] = 'strength-pb';
-			$params['css'][] = 'flickity.min.css'; //because of strength scale
-			$params['js'][] = '../js/flickity.min.js'; //because of strength scale
-		}
+		// if (!empty($this->user)) {
+		// 	$params['extra_body_class'] = 'strength-pb';
+		// 	$params['css'][] = 'flickity.min.css'; //because of strength scale
+		// 	$params['js'][] = '../js/flickity.min.js'; //because of strength scale
+		// }
 
 		return $this->ShowView('index', $params);	
 	}

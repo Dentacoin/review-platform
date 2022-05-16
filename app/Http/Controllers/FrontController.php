@@ -184,56 +184,56 @@ class FrontController extends BaseController {
             //after login actions
             if(!empty($this->user) && session('login-logged')!=$this->user->id) {
 
-                //dentist guided tour after first login in trp
-                if($this->user->is_dentist && Request::getHost() == 'reviews.dentacoin.com') {
-                    $gt_exist = UserGuidedTour::where('user_id', $this->user->id)->first();
+                // //dentist guided tour after first login in trp
+                // if($this->user->is_dentist && Request::getHost() == 'reviews.dentacoin.com') {
+                //     $gt_exist = UserGuidedTour::where('user_id', $this->user->id)->first();
 
-                    if(!empty($gt_exist)) {
-                        if(empty($gt_exist->first_login_trp) && mb_strpos( Request::getHost(), 'vox' )===false) {
-                            $gt_exist->first_login_trp = true;
-                            $gt_exist->save();
+                //     if(!empty($gt_exist)) {
+                //         if(empty($gt_exist->first_login_trp) && mb_strpos( Request::getHost(), 'vox' )===false) {
+                //             $gt_exist->first_login_trp = true;
+                //             $gt_exist->save();
 
-                            session(['first_guided_tour' => true]);
+                //             session(['first_guided_tour' => true]);
 
-                        } else if(
-                            empty($gt_exist->login_after_first_review) 
-                            && mb_strpos( Request::getHost(), 'vox' )===false 
-                            && empty(session('first_guided_tour')) 
-                            && empty($this->user->widget_activated) 
-                            && $this->user->dentist_fb_page->isEmpty() 
-                            && $this->user->reviews_in_standard()->count() == 1 
-                        ) {
+                //         } else if(
+                //             empty($gt_exist->login_after_first_review) 
+                //             && mb_strpos( Request::getHost(), 'vox' )===false 
+                //             && empty(session('first_guided_tour')) 
+                //             && empty($this->user->widget_activated) 
+                //             && $this->user->dentist_fb_page->isEmpty() 
+                //             && $this->user->reviews_in_standard()->count() == 1 
+                //         ) {
 
-                            $date = null;
-                            foreach ($this->user->reviews_in_standard() as $review) {
-                                $date = $review->created_at;
-                            }
+                //             $date = null;
+                //             foreach ($this->user->reviews_in_standard() as $review) {
+                //                 $date = $review->created_at;
+                //             }
 
-                            $last_login = UserLogin::where('user_id', $this->user->id)
-                            ->where('created_at', '<=', Carbon::now()->addMinutes(-10))
-                            ->where('created_at', '>', $date)
-                            ->first();
+                //             $last_login = UserLogin::where('user_id', $this->user->id)
+                //             ->where('created_at', '<=', Carbon::now()->addMinutes(-10))
+                //             ->where('created_at', '>', $date)
+                //             ->first();
 
-                            if(empty($last_login)) {
-                                $gt_exist->login_after_first_review = true;
-                                $gt_exist->save();
+                //             if(empty($last_login)) {
+                //                 $gt_exist->login_after_first_review = true;
+                //                 $gt_exist->save();
                                 
-                                session(['reviews_guided_tour' => true]);
-                            }
-                        }
-                    } else {
-                        $gt = new UserGuidedTour;
-                        $gt->user_id = $this->user->id;
+                //                 session(['reviews_guided_tour' => true]);
+                //             }
+                //         }
+                //     } else {
+                //         $gt = new UserGuidedTour;
+                //         $gt->user_id = $this->user->id;
 
-                        if(mb_strpos( Request::getHost(), 'vox' )===false) {
-                            $gt->first_login_trp = true;
+                //         if(mb_strpos( Request::getHost(), 'vox' )===false) {
+                //             $gt->first_login_trp = true;
                             
-                            session(['first_guided_tour' => true]);
-                        }
+                //             session(['first_guided_tour' => true]);
+                //         }
 
-                        $gt->save();
-                    }
-                }
+                //         $gt->save();
+                //     }
+                // }
 
                 //don't notify user when ban expires and is logged in
                 if( !$this->user->isBanned('vox') && !$this->user->isBanned('trp') && $this->user->bans->isNotEmpty() ) {
@@ -488,6 +488,7 @@ class FrontController extends BaseController {
         $params['clinicBranches'] = false;
         $params['has_review_notification'] = false;
         
+        //needed for search form countries dropdown
         if(!empty($this->user) && !isset($params['countriesAlphabetically'])) {
             $countriesAlphabetically = [];//create a new array
             foreach(Country::has('dentists')->with(['dentists','translations'])->get() as $item) {
@@ -538,23 +539,6 @@ class FrontController extends BaseController {
 
         if($params['clinicBranches']) {
             $params['clinicBranches'] = json_encode($params['clinicBranches']);
-        }
-
-        if (empty($this->user)) {
-            $params['hours'] = [];
-            for($i=0;$i<=23;$i++) {
-                $h = str_pad($i, 2, "0", STR_PAD_LEFT);
-                $params['hours'][$h] = $h;
-            }
-
-            $params['minutes'] = [
-                '00' => '00',
-                '10' => '10',
-                '20' => '20',
-                '30' => '30',
-                '40' => '40',
-                '50' => '50',
-            ];
         }
 
         if(!isset($params['xframe'])) {

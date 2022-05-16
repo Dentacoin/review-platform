@@ -1497,6 +1497,22 @@
 								{!! csrf_field() !!}
 						@endif
 							<div class="flex work-hours">
+								@php
+									$hours = [];
+									for($i=0;$i<=23;$i++) {
+										$h = str_pad($i, 2, "0", STR_PAD_LEFT);
+										$hours[$h] = $h;
+									}
+
+									$minute = [
+										'00' => '00',
+										'10' => '10',
+										'20' => '20',
+										'30' => '30',
+										'40' => '40',
+										'50' => '50',
+									];
+								@endphp
 								@foreach($week_days as $w => $week_day)
 									<div class="col {{ date('w') == $w ? 'active' : '' }} col-{{ $w }}">
 										<p class="month">
