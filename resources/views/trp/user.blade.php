@@ -740,7 +740,7 @@
 					@endif
 				</div>
 			</div>
-			@if($item->top_dentist_month || $item->top_dentist_year)
+			@if($item->top_dentist_month || $item->top_dentist_year || $item->golden_partner)
 				<div class="awards">
 					<h4>Awards</h4>
 					
