@@ -43,7 +43,7 @@
 	</label>
 	<button type="submit">
 		Search
-		<img src="{{ url('img-trp/white-search.svg') }}"/>
+		<img src="{{ url('img-trp/white-search.svg') }}" width="30" height="29"/>
 	</button>
 	<input type="hidden" name="submit-form" value="1"/>
 	<div class="dentists-names-results" style="display: none;">
