@@ -56,9 +56,9 @@
                             @php
                                 $review = $dentist->reviews_in_standard()->first();
                             @endphp
-                            @if( $review )
+                            @if( $review && $review->answer)
                                 <p class="review-content">
-                                    “{{ $review->answer }}”
+                                    “{{ mb_substr($review->answer, 0, 75) }}..”
                                 </p>
                             @endif
                         </div>

@@ -130,7 +130,10 @@
 
 .gray-line {
   background-color: #e6eeff;
-  height: 70px; }
+  height: 80px; }
+  @media screen and (max-width: 768px) {
+    .gray-line {
+      height: 70px; } }
 
 .blue-button {
   padding: 12px 43px; }

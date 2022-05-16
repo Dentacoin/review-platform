@@ -1923,7 +1923,6 @@
 		{{-- @include('trp.popups.add-branch') --}}
 		{{-- @include('trp.popups.widget') --}}
 		@include('trp.popups.invite')
-		{{-- @include('trp.popups.working-time') --}}
 		{{-- @if(!empty(session('first_guided_tour')) || !empty(session('reviews_guided_tour')))
 			@include('trp.popups.first-guided-tour')
 		@endif --}}

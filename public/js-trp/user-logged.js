@@ -661,42 +661,6 @@ $(document).ready(function() {
         }
     });
 
-    //Work hours
-
-    $('#popup-wokring-time form').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                    $('input[data-popup-logged="popup-wokring-time"]').val(data.value);
-                    closePopup();
-
-                    if($('body').hasClass('guided-tour')) {
-                        $('.bubble-guided-tour .skip-step').trigger('click');
-                    }
-
-                } else {
-                    $(this).find('.alert').show();
-
-                    $('html, body').animate({
-                        scrollTop: that.offset().top - $('header').height()
-                    }, 500);
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );          
-
-        return false;
-    });
-
     $('.team-container .delete-invite').click( function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -1659,10 +1623,6 @@ $(document).ready(function() {
                         }
 
                         if(typeof step !== 'undefined') {
-
-                            if(step.action == 'work_hours') {
-                                $('#popup-wokring-time').css('z-index', 10000);
-                            }
 
                             if(step.action == 'invite') {
                                 $('#popup-invite').css('z-index', 10000);

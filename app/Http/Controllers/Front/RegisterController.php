@@ -181,44 +181,4 @@ class RegisterController extends FrontController {
             'message' => trans('trp.popup.verification-popup.user-info.error'),
         ]);
     }
-
-    /**
-     * after register popup - add work hours
-     */
-    public function add_work_hours($locale=null) {
-        if (request('last_user_id') && !empty(User::find(request('last_user_id'))) && !empty(request('last_user_hash'))) {
-
-            $user = User::find(request('last_user_id'));
-
-            if(request('last_user_hash') == $user->get_token()) {
-
-                $wh = Request::input('work_hours');
-                foreach ($wh as $k => $v) {
-                    if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) || empty(Request::input('day-'.$k))) { 
-                        unset($wh[$k]);
-                        continue;
-                    }
-
-                    if( !empty($wh[$k][0]) && !empty(Request::input('day-'.$k))) {
-                        $wh[$k][0] = implode(':', $wh[$k][0]);
-                    }
-                    if( !empty($wh[$k][1]) && !empty(Request::input('day-'.$k)) ) {
-                        $wh[$k][1] = implode(':', $wh[$k][1]);
-                    }
-                }
-
-                $user->work_hours = $wh;
-                $user->save();
-
-                return Response::json( [
-                    'success' => true,
-                ]);
-            }
-        }
-
-        return Response::json( [
-            'success' => false,
-            'message' => trans('trp.common.something-wrong'),
-        ]);
-    }
 }

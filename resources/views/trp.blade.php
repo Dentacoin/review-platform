@@ -167,7 +167,7 @@
 			                @endif
 						</div>
 						<a class="mobile-menu" href="javascript:;">
-							<img src="{{ url('img-trp/mobile-menu.png') }}"/>
+							<img src="{{ url('img-trp/mobile-menu.png') }}" width="44" height="22"/>
 						</a>
 				    </div>
 			    </div>
@@ -218,13 +218,13 @@
 					Follow us: &nbsp;
 					<div class="flex flex-mobile">
 						<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank">
-							<img src="{{ url('img/social-network/socials-fb.svg') }}"/>
+							<img src="{{ url('img/social-network/socials-fb.svg') }}" width="30" height="30"/>
 						</a>
 						<a class="social" href="https://twitter.com/dentacoin/" target="_blank">
-							<img src="{{ url('img/social-network/socials-twitter.svg') }}"/>
+							<img src="{{ url('img/social-network/socials-twitter.svg') }}" width="30" height="30"/>
 						</a>
 						<a class="social" href="instagram.com/dentacoin_official/" target="_blank">
-							<img src="{{ url('img/social-network/socials-instagram.svg') }}"/>
+							<img src="{{ url('img/social-network/socials-instagram.svg') }}" width="30" height="30"/>
 						</a>
 					</div>
 				</div>
@@ -427,6 +427,7 @@
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>
 
 		@if(!empty($user))
+			<script src="{{ url('/js-trp/logged.js').'?ver='.$cache_version }}"></script>
 			<script src="{{ url('/js-trp/search-form.js').'?ver='.$cache_version }}"></script>
 		@endif
 		

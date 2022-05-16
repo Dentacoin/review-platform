@@ -601,10 +601,6 @@ class IndexController extends FrontController {
 
 			return $this->ShowView('popups/dentist-verification');
 
-		} else if(request('id') == 'popup-wokring-time-waiting' && empty($this->user)) {
-
-			return $this->ShowView('popups/working-time-waiting');
-
 		} else if(request('id') == 'failed-popup' && empty($this->user)) {
 			
 			return $this->ShowView('popups/failed-reg-login');
@@ -613,17 +609,6 @@ class IndexController extends FrontController {
 			
 			return $this->ShowView('popups/existing-team-dentist');
 
-		} else if(request('id') == 'invite-new-dentist-popup' && ((!empty($this->user) && !$this->user->is_dentist) || empty($this->user))) {
-
-			return $this->ShowView('popups/invite-new-dentist', [
-				'countries' => Country::with('translations')->get(),
-				'country_id' => $this->country_id
-			]);
-		} else if(request('id') == 'invite-new-dentist-success-popup' && ((!empty($this->user) && !$this->user->is_dentist) || empty($this->user))) {
-
-			return $this->ShowView('popups/invite-new-dentist-success', [
-				'user' => $this->user
-			]);
 		}
 	}
 

@@ -148,6 +148,10 @@
 				</div>
 			</div>
 		</div>
+
+		{{-- <div class="strength-parent fixed">
+			@include('trp.parts.strength-scale')
+		</div> --}}
 	@else
 		<div class="info-section tac">
 			<div class="container">
@@ -165,7 +169,6 @@
 							{{-- <p>{!! nl2br(trans('trp.page.index.intro-description-1')) !!}</p> --}}
 							<p>Browse dentist ratings and choose the best provider in your area.</p>
 							<a href="javascript:;" class="white-button scroll-to-search">Search now</a>
-							{{-- data-popup="invite-new-dentist-popup" --}}
 						</div>
 					</div>
 					<div class="info-box">
@@ -195,14 +198,8 @@
 				</div>
 			</div>
 		</div>
+		<div id="to-append"></div>
 	@endif
 
-	<div id="to-append"></div>
-
-	{{-- @if(!empty($user))
-		<div class="strength-parent fixed">
-			@include('trp.parts.strength-scale')
-		</div>
-	@endif --}}
 
 @endsection

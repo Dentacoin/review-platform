@@ -1623,23 +1623,13 @@ class ProfileController extends FrontController {
 
                 $arr=[];
 
-                if(empty($this->user->work_hours) || empty($this->user->socials)) {
+                if(empty($this->user->socials)) {
                     $arr[] = [
                         'action' => 'edit',
                         'title' => trans('trp.guided-tour.first.edit.title'),
                         'description' => trans('trp.guided-tour.first.edit.description'),
                         'skip' => false,
                     ];
-
-                    if(empty($this->user->work_hours)) {
-                        $arr[] = [
-                            'action' => 'work_hours',
-                            'title' => trans('trp.guided-tour.first.work-hours.title'),
-                            'description' => trans('trp.guided-tour.first.work-hours.description'),
-                            'skip' => true,
-                            'skip_text' => trans('trp.guided-tour.skip-step'),
-                        ];
-                    }
 
                     if(empty($this->user->socials)) {
                         $arr[] = [

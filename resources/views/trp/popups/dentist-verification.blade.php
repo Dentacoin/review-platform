@@ -25,7 +25,6 @@
 
 		<div class="verification-info">
 			<h2>{!! nl2br(trans('trp.popup.verification-popup.subtitle')) !!}</h2>
-			<a href="javascript:;" class="button wh-btn" data-popup="popup-wokring-time-waiting" style="margin-bottom: 20px;">{{ trans('trp.popup.verification-popup.open-hours') }}</a>
 
 			<div id="clinic-add-team">
 				<h4 class="popup-title">

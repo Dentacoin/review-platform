@@ -600,7 +600,7 @@ class UserStrength extends Model {
                     'image' => 'invite-dentist',
                     'completed' => $user->reviews_out->isNotEmpty() ? true : false,
                     'buttonText' => trans('trp.strength.patient.invite-dentist.button-text'),
-                    'buttonHref' => getLangUrl('/').'?popup=invite-new-dentist-popup',
+                    'buttonHref' => getLangUrl('/'),
                     'event_category' => 'ProfileStrengthPatient',
                     'event_action' => 'Invite',
                     'event_label' => 'AddNewDentist',

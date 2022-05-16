@@ -254,12 +254,9 @@ jQuery(document).ready(function($) {
 			}
 		} else if(
 			id == 'popup-share' 
-			|| id == 'verification-popup' 
-			|| id == 'popup-wokring-time-waiting'
+			|| id == 'verification-popup'
 			|| id == 'failed-popup' 
 			|| id == 'popup-existing-dentist' 
-			|| id == 'invite-new-dentist-popup'
-			|| id == 'invite-new-dentist-success-popup' 
 		) {
 			$.ajax({
 	            type: "POST",
@@ -327,20 +324,7 @@ jQuery(document).ready(function($) {
 						        $('.image-label').css('background-image', 'none');
 							}
 
-	                	} else if($('.popup.active').attr('id')=='popup-wokring-time-waiting') {
-
-							if($('#popup-wokring-time-waiting').length) {
-								$('#popup-wokring-time-waiting').find('[name="last_user_id"]').val($('#verification-popup input[name="last_user_id"]').val());
-								$('#popup-wokring-time-waiting').find('[name="last_user_hash"]').val($('#verification-popup input[name="last_user_hash"]').val());
-							}
-							
-				            if ($('#day-1').is(':checked')) {
-				                $('.all-days-equal').show();
-				            } else {
-				                $('.all-days-equal').hide();
-					        }
-
-						} else if($('.popup.active').attr('id') == 'popup-existing-dentist') {
+	                	} else if($('.popup.active').attr('id') == 'popup-existing-dentist') {
 
 	                		for(var i in event_res) {
 								$('.existing-dentists').append('\
@@ -360,9 +344,6 @@ jQuery(document).ready(function($) {
 
 							$('.add-team-member-form').find('.check-for-same').val('1');
 							chooseExistingDentistActions();
-
-						} else if($('.popup.active').attr('id') == 'invite-new-dentist-success-popup') {
-		                	$('#inv_dent_name').html(event_res.dentist_name);
 						}
 
 						loadPopupFiles(id);
@@ -374,24 +355,7 @@ jQuery(document).ready(function($) {
 	        });
 		} else {
 
-			if($('.popup.active').attr('id')=='popup-wokring-time') {
-
-				if($('.popup-wokring-time').length && $('#popup-wokring-time').is('[empty-hours]')) {
-					
-					$('.popup-desc').each( function() {
-						$(this).find('select').first().find('option[value="09"]').attr('selected','selected');
-						$(this).children('select').eq(1).find('option[value="00"]').attr('selected','selected');
-						$(this).children('select').eq(2).find('option[value="18"]').attr('selected','selected');
-						$(this).children('select').eq(3).find('option[value="00"]').attr('selected','selected');
-					});
-				}
-				
-	            if ($('#day-1').is(':checked')) {
-	                $('.all-days-equal').show();
-	            } else {
-	                $('.all-days-equal').hide();
-		        }
-		    } else if(id == 'popup-branch') {
+			if(id == 'popup-branch') {
 				loadUploadAvatarScript();
 				loadCroppie();
 			}
@@ -411,7 +375,6 @@ jQuery(document).ready(function($) {
 	}
 
 	closePopup = function() {
-		var waiting_for_approval = false;
 		var custom_widget_popup = false;
 		var existing_dentist = false;
 		var invite_popup = false;
@@ -422,10 +385,7 @@ jQuery(document).ready(function($) {
 		if($('#invite-sample').hasClass('active')) {
 			invite_popup = true;
 		}
-		if($('#popup-wokring-time-waiting').hasClass('active')) {
-			waiting_for_approval = true;
-			$('#popup-wokring-time-waiting form').submit();
-		}
+		
 		if($('#popup-existing-dentist').hasClass('active')) {
 			existing_dentist = true;
 		}
@@ -434,28 +394,12 @@ jQuery(document).ready(function($) {
 			$('.bubble-guided-tour .skip-step').trigger('click');
 		}
 
-		if($('#popup-wokring-time').hasClass('active')) {
-			$('#popup-wokring-time form').submit();
-		}
-
 		if( refreshOnClosePopup ) {
 			window.location.reload();
 		}
 
 		if(existing_dentist) {
 			$('#popup-existing-dentist').remove();
-			$('#verification-popup').addClass('active');
-			if($('.verification-info').length) {
-
-                if($('.verification-form:visible').length) {
-                    $('.wh-btn').hide();
-                } else {
-                    $('.verification-info').hide()
-                }
-            }
-
-		} else if(waiting_for_approval) {
-			$('#popup-wokring-time-waiting').remove();
 			$('#verification-popup').addClass('active');
 			if($('.verification-info').length) {
 
@@ -555,36 +499,6 @@ jQuery(document).ready(function($) {
 		        }, "json"
 			);
 		});
-
-		$('#popup-wokring-time-waiting form').submit( function(e) {
-			e.preventDefault();
-			
-	        if(ajax_is_running) {
-	            return;
-	        }
-	        ajax_is_running = true;
-
-	        that = $(this);
-	        $.post( 
-	            $(this).attr('action'), 
-	            $(this).serialize() , 
-	            (function( data ) {
-	                if (data.success) {
-
-	                	gtag('event', 'Add', {
-	                        'event_category': 'DentistRegistration',
-	                        'event_label': 'OpenHours',
-	                    });
-
-	                } else {
-	                    console.log('error');
-	                }
-	                ajax_is_running = false;
-	            }).bind(this), "json"
-	        );          
-
-	        return false;
-	    });
 
 		$('.close-and-scroll').click( function() {
 			closePopup();
@@ -966,11 +880,6 @@ jQuery(document).ready(function($) {
 		$('[data-tab="about"]').trigger('click');
 	});
 
-	$('.str-working-hours').click( function() {
-		$('.strength-button.active').trigger('click');
-		showPopup('popup-wokring-time');
-	});
-
 	$('.str-see-reviews').click( function() {
 		$('.strength-button.active').trigger('click');
 		$('[data-tab="reviews"]').trigger('click');
@@ -1240,14 +1149,7 @@ jQuery(document).ready(function($) {
 	    	if(event.response_data.trp_ban) {
 	    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
 	    	} else {
-
-	    		var attr = $('#site-url').attr('open-popup');
-
-				if (typeof attr !== typeof undefined && attr !== false && attr == 'invite-dentist') {
-				    window.location.href = $('#site-url').attr('url')+'?popup=invite-new-dentist-popup';
-				} else {
-					window.location.href = $('#site-url').attr('url');
-				}
+	    		window.location.href = $('#site-url').attr('url');
 	    	}
 	    });
 

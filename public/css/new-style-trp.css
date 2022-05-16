@@ -1859,7 +1859,9 @@ footer {
         max-width: 26px; }
         @media screen and (max-width: 768px) {
           footer .socials .social img {
-            max-width: 100%; } }
+            max-width: 100%;
+            width: 48px !important;
+            height: 48px !important; } }
 
 .popup {
   position: fixed;

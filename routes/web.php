@@ -408,7 +408,6 @@ $reviewRoutes = function() {
 				Route::get('register', 								'RegisterController@register');
 				Route::post('verification-dentist', 				'RegisterController@verification_dentist');
 				Route::post('clinic-add-team', 						'RegisterController@clinic_add_team');
-				Route::post('add-working-hours',					'RegisterController@add_work_hours');
 	
 				Route::post('status', 								'LoginController@status');
 
