@@ -204,6 +204,21 @@ $phone: "screen and (max-width: 768px)";
 					}
 				}
 
+				.has-review-image {
+					position: absolute;
+					width: 70px;
+					z-index: 10;
+					right: -10px;
+					bottom: -10px;
+
+					@media #{$phone} {
+						width: 60px;
+						z-index: 10;
+						right: -5px;
+						bottom: -7px;
+					}
+				}
+
 				.slider-container {
 					min-height: 230px;
 					padding: 30px;
@@ -217,14 +232,6 @@ $phone: "screen and (max-width: 768px)";
 					@media #{$pc} {
 						padding: 20px;
 						padding-top: 56px;
-					}
-
-					.has-review-image {
-						position: absolute;
-						width: 70px;
-						z-index: 10;
-						right: -13px;
-						top: -13px;
 					}
 
 					h4 {

@@ -181,6 +181,7 @@ class DentistsController extends FrontController {
                     'latlng' => $lat.','.$lon,
                 ], $parsedAddress, $formattedAddress, $lat, $lon, $corrected_query, $query, $filter);
 
+
                 if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
                     if( $geores->results && $geores->results[0]->place_id ) {
                         $this->getFormatedAddress([
@@ -208,6 +209,7 @@ class DentistsController extends FrontController {
                     'North Korea' => 116,
                     'Vietnam' => 238,
                     'Czechia' => 58,
+                    'Syria' => 213,
                     'Iran' => 103,
                 ];
                 
@@ -911,6 +913,10 @@ class DentistsController extends FrontController {
         $userCities = $userCities->groupBy('city_name')
         ->orderBy('city_name', 'asc')
         ->get();
+
+        if(!$userCities->first()) {
+            return redirect('page-not-found');
+        }
 
         $stateName = $userCities->first()->state_name;
         $userCities = $userCities->toArray();

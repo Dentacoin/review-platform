@@ -200,6 +200,9 @@ class UsersController extends AdminController {
             'allow_withdraw' => [
                 'type' => 'bool',
             ],
+            'golden_partner' => [
+                'type' => 'bool',
+            ],
             'civic_kyc' => [
                 'type' => 'bool',
             ],

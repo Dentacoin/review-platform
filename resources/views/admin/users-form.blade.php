@@ -249,15 +249,6 @@
                                                         </div>
                                                     @endif
                                                 </div>
-                                                <div>
-                                                    <label class="control-label" style="padding-right: 10px;">Partner</label>
-                                                    <div style="display: inline-block;">
-                                                        @include('admin.parts.user-field',[
-                                                            'key' => 'is_partner',
-                                                            'info' => $fields['is_partner']
-                                                        ])
-                                                    </div>
-                                                </div>
                                             @else
                                                 <div>
                                                     <label class="control-label" style="padding-right: 10px;">Status</label>
@@ -305,6 +296,24 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if(!empty($item->is_dentist))
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Partner</label>
+                                        <div class="col-md-2">
+                                            @include('admin.parts.user-field',[
+                                                'key' => 'is_partner',
+                                                'info' => $fields['is_partner']
+                                            ])
+                                        </div>
+                                        <label class="col-md-3 control-label user-l" style="padding-left: 0px;">Golden Partner <img src="{{ url('img-trp/golden-partner.png') }}" style="max-width: 20px;" /></label>
+                                        <div class="col-md-1" style="padding-left: 0px;">
+                                            @include('admin.parts.user-field',[
+                                                'key' => 'golden_partner',
+                                                'info' => $fields['golden_partner']
+                                            ])
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Name</label>
                                     <div class="col-md-10">

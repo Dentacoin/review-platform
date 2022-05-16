@@ -743,6 +743,15 @@
 			@if($item->top_dentist_month || $item->top_dentist_year)
 				<div class="awards">
 					<h4>Awards</h4>
+					
+					@if($item->golden_partner)
+						<div class="top-dentist">
+							<img src="{{ url('img-trp/golden-partner.png') }}">
+							<span>
+								Golden Partner
+							</span>
+						</div>
+					@endif
 					@if($item->top_dentist_month)
 						<div class="top-dentist">
 							<img src="{{ url('img-trp/top-dentist-month.png') }}">

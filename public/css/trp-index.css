@@ -148,6 +148,18 @@
             margin-bottom: 0px;
             padding-bottom: 18px;
             margin-top: 0px; }
+        .flickity-oval .flickity .slider-wrapper .slider-inner .has-review-image {
+          position: absolute;
+          width: 70px;
+          z-index: 10;
+          right: -10px;
+          bottom: -10px; }
+          @media screen and (max-width: 768px) {
+            .flickity-oval .flickity .slider-wrapper .slider-inner .has-review-image {
+              width: 60px;
+              z-index: 10;
+              right: -5px;
+              bottom: -7px; } }
         .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container {
           min-height: 230px;
           padding: 30px;
@@ -161,12 +173,6 @@
             .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container {
               padding: 20px;
               padding-top: 56px; } }
-          .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container .has-review-image {
-            position: absolute;
-            width: 70px;
-            z-index: 10;
-            right: -13px;
-            top: -13px; }
           .flickity-oval .flickity .slider-wrapper .slider-inner .slider-container h4 {
             font-size: 20px;
             font-weight: 900;

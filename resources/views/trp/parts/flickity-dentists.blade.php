@@ -17,9 +17,9 @@
             @foreach( $featured as $dentist )
                 <a class="slider-wrapper" href="{{ $dentist->getLink() }}">
                     <div class="slider-inner">
-                        {{-- @if(!empty($user) && $user->hasReviewTo($dentist->id))
-                            <img class="has-review-image" src="{{ url('img-trp/patient-review.svg') }}">
-                        @endif --}}
+                        @if(!empty($user) && $user->hasReviewTo($dentist->id))
+                            <img class="has-review-image" src="{{ url('img-trp/patient-review.png') }}">
+                        @endif
                         <div class="slider-image-wrapper">
                             <img 
                                 class="slider-real-image" 
