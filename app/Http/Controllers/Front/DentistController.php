@@ -165,7 +165,12 @@ class DentistController extends FrontController {
             return redirect( getLangUrl('page-not-found') );
         }
 
-        if (!empty($this->user) && ($this->user->id != $item->id)) {
+        $editing_branch_clinic = false;
+        if(!empty($this->user) && $this->user->is_clinic && $item->is_clinic && $this->user->branches->isNotEmpty() && in_array($item->id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+            $editing_branch_clinic = $item;
+        }
+
+        if (!empty($this->user) && ($this->user->id != $item->id) && !$editing_branch_clinic) {
 
             if (!session('pageview-'.$item->id)) {
                 $pageview = new DentistPageview;
@@ -191,12 +196,13 @@ class DentistController extends FrontController {
             }
         }
 
+        
+        //overall rating start
 
         $aggregatedRating = [];
         $hasNewReviews = false; //old reviews had options, new have rating
 
         if (count($reviews)) {
-
             foreach ($reviews as $rev) {
                 foreach($rev->answers as $answer) {
                     if($answer->rating) {
@@ -261,6 +267,9 @@ class DentistController extends FrontController {
 
         ksort($aggregatedRating);
 
+        //overall rating end
+
+
         $has_asked_dentist = $this->user ? $this->user->hasAskedDentist($item->id) : null;
 
         try {
@@ -320,16 +329,13 @@ class DentistController extends FrontController {
             $writes_review = false;
         }
 
-        $countries = Country::with('translations')->get();
-
         $view_params = [
             'strength_arr' => $strength_arr,
             'completed_strength' => $completed_strength,
             'noIndex' => $item->status == 'test' || !$item->address ? true : false,
             'item' => $item,
+            'editing_branch_clinic' => $editing_branch_clinic,
             'writes_review' => $writes_review,
-            'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
-            'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,
             'reviews' => $reviews,
             'has_asked_dentist' => $has_asked_dentist,
             'is_trusted' => !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false,
@@ -338,11 +344,8 @@ class DentistController extends FrontController {
             'social_image' => $social_image,
             'canonical' => $item->getLink(),
             'og_url' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
-            'countries' => $countries,
-            'countriesArray' => $countries->pluck('name', 'id')->toArray(),
             'js' => [
                 'user.js',
-                'search-form.js',
             ],
             'css' => [
                 'trp-users.css',
@@ -350,18 +353,22 @@ class DentistController extends FrontController {
         ];
 
         if(!empty($this->user)) {
-            $view_params['jscdn'][] = '//vjs.zencdn.net/6.4.0/video.min.js';
-            $view_params['jscdn'][] = '//cdn.WebRTC-Experiment.com/RecordRTC.js';
-            $view_params['jscdn'][] = '//webrtc.github.io/adapter/adapter-latest.js';
-            $view_params['js'][] = '../js/videojs.record.min.js';
-            $view_params['js'][] = '../js/codemirror.min.js';
-            $view_params['js'][] = '../js/codemirror-placeholder.js';
+            if($this->user->is_dentist) {
+                $view_params['js'][] = '../js/codemirror.min.js';
+                $view_params['js'][] = '../js/codemirror-placeholder.js';
+                $view_params['css'][] = 'codemirror.css';
+            } else {
+                $view_params['jscdn'][] = '//vjs.zencdn.net/6.4.0/video.min.js';
+                $view_params['jscdn'][] = '//cdn.WebRTC-Experiment.com/RecordRTC.js';
+                $view_params['jscdn'][] = '//webrtc.github.io/adapter/adapter-latest.js';
+                $view_params['js'][] = '../js/videojs.record.min.js';
+
+            }
             $view_params['js'][] = 'user-logged.js';
-            $view_params['css'][] = 'codemirror.css';
             $view_params['css'][] = 'trp-users-logged.css';
         }
 
-        if(!empty($this->user) && $this->user->id == $item->id) {
+        if(!empty($this->user) && ($this->user->id == $item->id || $editing_branch_clinic)) {
             $view_params['js'][] = '../js/jquery-ui.min.js';
             $view_params['js'][] = '../js/croppie.min.js';
             $view_params['css'][] = 'croppie.css';
@@ -370,12 +377,13 @@ class DentistController extends FrontController {
             $item->save();
         }
 
-        if(!empty($this->user) && $this->user->is_clinic) {
-            $view_params['js'][] = 'branch.js';
+        if(!empty($this->user) && ($this->user->id==$item->id || $editing_branch_clinic)) {
+            $view_params['js'][] = '../js/upload.js';
+            $view_params['js'][] = 'address.js';
         }
 
         if($item->photos->isNotEmpty()) {
-            if(!empty($this->user) && $this->user->id == $item->id) {
+            if(!empty($this->user) && ($this->user->id == $item->id || $editing_branch_clinic)) {
                 $load_lightbox = 'true';
                 $view_params['css'][] = 'lightbox.css';
                 $view_params['js'][] = '../js/lightbox.js';
@@ -391,6 +399,7 @@ class DentistController extends FrontController {
         } else {
             $load_lightbox = 'true';
         }
+
         $view_params['load_lightbox'] = $load_lightbox;
 
         if( $is_review ) {
@@ -431,26 +440,6 @@ class DentistController extends FrontController {
             $view_params['seo_description'] = $seo_description;
             $view_params['social_title'] = $social_title;
             $view_params['social_description'] = $social_description;
-        }
-
-        if(!empty($this->user) && $this->user->id==$item->id) {
-            $view_params['js'][] = '../js/upload.js';
-            $view_params['hours'] = [
-            ];
-            for($i=0;$i<=23;$i++) {
-                $h = str_pad($i, 2, "0", STR_PAD_LEFT);
-                $view_params['hours'][$h] = $h;
-            }
-
-            $view_params['minutes'] = [
-                '00' => '00',
-                '10' => '10',
-                '20' => '20',
-                '30' => '30',
-                '40' => '40',
-                '50' => '50',
-            ];
-            $view_params['js'][] = 'address.js';
         }
 
         $view_params['schema'] = [
@@ -494,25 +483,22 @@ class DentistController extends FrontController {
         } else {
             if($item->is_clinic) {
                 $short_description = trans('trp.page.user.short_description.clinic', [
-                    'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country_id ? $item->country->name : '') 
+                    'location' => $item->getLocation() 
                 ]);
-
-                if($item->categories->isNotEmpty()) {
-                    $short_description.= ' '.trans('trp.page.user.short_description.categories', [
-                        'categories' => strtolower(implode(', ', $item->parseCategories($this->categories))) 
-                    ]);
-                }
             } else {
+                $short_description = trans('trp.page.user.short_description.dentist', [
+                    'location' => $item->getLocation()
+                ]);
+            }
 
-                $short_description = trans('trp.page.user.short_description.dentist', ['location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country_id ? $item->country->name : '') ]);
-                
-                if($item->categories->isNotEmpty()) {
-                    $short_description.= ' '.trans('trp.page.user.short_description.categories', ['categories' => strtolower(implode(', ', $item->parseCategories($this->categories))) ]);
-                }
+            if($item->categories->isNotEmpty()) {
+                $short_description.= ' '.trans('trp.page.user.short_description.categories', [
+                    'categories' => strtolower(implode(', ', $item->parseCategories($this->categories)))
+                ]);
             }
         }
 
-        $view_params['schema']["description"] =  $short_description;
+        $view_params['schema']["description"] = $short_description;
 
         if (!empty($item->website)) {
             $view_params['schema']["url"] = $item->website;
@@ -554,27 +540,28 @@ class DentistController extends FrontController {
             $view_params['schema']["paymentAccepted"] = $item->parseAcceptedPayment( $item->accepted_payment );
         }
 
-        $openingHours = [
-            1 => 'Mo',
-            2 => 'Tu',
-            3 => 'We',
-            4 => 'Th',
-            5 => 'Fr',
-            6 => 'Sa',
-            7 => 'Su',
-        ];
-
-        $openingHoursSpecification = [
-            1 => 'Monday',
-            2 => 'Tuesday',
-            3 => 'Wednesday',
-            4 => 'Thursday',
-            5 => 'Friday',
-            6 => 'Saturday',
-            7 => 'Sunday',
-        ];
-
         if (!empty($item->work_hours)) {
+
+            $openingHours = [
+                1 => 'Mo',
+                2 => 'Tu',
+                3 => 'We',
+                4 => 'Th',
+                5 => 'Fr',
+                6 => 'Sa',
+                7 => 'Su',
+            ];
+    
+            $openingHoursSpecification = [
+                1 => 'Monday',
+                2 => 'Tuesday',
+                3 => 'Wednesday',
+                4 => 'Thursday',
+                5 => 'Friday',
+                6 => 'Saturday',
+                7 => 'Sunday',
+            ];
+
             $hours_arr = [];
             $hours_specif = [];
 
@@ -602,26 +589,12 @@ class DentistController extends FrontController {
             ];
         }
 
-        if (!empty($this->user) && ($this->user->id == $item->id)) {
-            $view_params['extra_body_class'] = 'strength-pb';
-        }
+        // if (!empty($this->user) && ($this->user->id == $item->id)) {
+        //     $view_params['extra_body_class'] = 'strength-pb';
+        // }
 
         $claim_user = !empty($claim_id) ? User::find($claim_id) : null;
         $view_params['claim_user'] = $claim_user;
-        
-        if(!empty($this->user)) {
-
-            $countriesAlphabetically = [];//create a new array
-            foreach(Country::has('dentists')->get() as $item) {
-                $countriesAlphabetically[$item->name[0]][] = [
-                    'name' => $item->name,
-                    'dentist_count' => $item->dentists->count(),
-                    'id' => $item->id,
-                    'code' => $item->code,
-                ];
-            }
-            $view_params['countriesAlphabetically'] = $countriesAlphabetically;
-        }
         
         return $this->ShowView('user', $view_params);
     }

@@ -1,5 +1,4 @@
 var slider = null;
-var sliderTO = null;
 var showPopup = null;
 var closePopup = null;
 var handlePopups = null;
@@ -9,7 +8,6 @@ var prepareMapFunction;
 var mapsLoaded = false;
 var mapsWaiting = [];
 var initMap;
-var mapMarkers = {};
 var fixFlickty;
 var suggestTO;
 var refreshOnClosePopup = false;
@@ -21,8 +19,6 @@ var loadPopupFiles;
 var handleTooltip;
 var attachTooltips;
 var modernFieldsUpdate;
-var uploadTeamImage;
-var id_counter=0;
 var dentacoin_down = false;
 var handleActivePopupFunctions;
 
@@ -75,37 +71,6 @@ jQuery(document).ready(function($) {
     	$(this).closest('form').find('.geoip-confirmation').hide();
         $(this).closest('form').find('.geoip-hint').hide();
         $(this).closest('form').find('.different-country-hint').hide();
-
-		if(ajax_is_running) {
-			return;
-		}
-		ajax_is_running = true;
-
-    	var city_select = $(this).closest('form').find('.city-select').first();
-    	city_select.attr('disabled', 'disabled');
-    	var that = this;
-
-		$.ajax( {
-			url: '/cities/' + $(this).val(),
-			type: 'GET',
-			dataType: 'json',
-			success: function( data ) {
-				city_select.attr('disabled', false).find('option').remove();
-    			city_select.append('<option value="">-</option>');
-			    for(var i in data.cities) {
-    				city_select.append('<option value="'+i+'">'+data.cities[i]+'</option>');
-			    }
-			    $('.phone-code-holder').html(data.code);
-			    ajax_is_running = false;
-				//city_select
-				//$('#modal-message .modal-body').html(data);
-				$(that).trigger('changed');
-			},
-			error: function(data) {
-				console.log(data);
-			    ajax_is_running = false;
-			}
-		});
     });
 
 	handlePopups = function(id) {
@@ -153,7 +118,6 @@ jQuery(document).ready(function($) {
 
 	    if ($('.modern-input').length) {
 	    	setTimeout( function() {
-
 		    	$('.modern-input').each( function() {
 		    		if ($(this).val() || $(this).is(":-webkit-autofill")) {
 		    			$(this).closest('.modern-field').addClass('active');
@@ -296,6 +260,51 @@ jQuery(document).ready(function($) {
 								}
 								window.open( url , 'ShareWindow', 'height=450, width=550, top=' + (jQuery(window).height() / 2 - 275) + ', left=' + (jQuery(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
 							});
+
+							$('.copy-link').click( function(e) {
+								e.preventDefault();
+								e.stopPropagation();
+					
+								var $temp = $("<input>");
+								$("body").append($temp);
+								$temp.val($(this).closest('.flex').find('input').val()).select();
+								document.execCommand("copy");
+								$temp.remove();        
+					
+								$(this).attr('alternative', $(this).text().trim());
+								$(this).html('<img src="'+all_images_path+'/check-icon.svg"/>');
+					
+								setTimeout( (function() {
+									$(this).html( $(this).attr('alternative').length ? $(this).attr('alternative') : '<img src="'+all_images_path+'/copy-files.svg"/>' );
+								}).bind(this), 3000 );
+							});
+
+							$('#share-link-form').submit( function(e) {
+								e.preventDefault();
+								$(this).find('.alert').hide();
+
+								if(ajax_is_running) {
+									return;
+								}
+								ajax_is_running = true;
+
+								$.post( 
+									$(this).attr('action'), 
+									$(this).serialize() , 
+									(function( data ) {
+										if(data.success) {
+											$(this).find('.alert-success').show();
+											$(this).find('[name="email"]').val('').focus();
+										} else {
+											$(this).find('.alert-warning').show();
+										}
+										ajax_is_running = false;
+									}).bind(this), "json"
+								);          
+
+								return false;
+
+							});
 							
 	                	} else if($('.popup.active').attr('id') == 'verification-popup') {
 	                		$.getScript(window.location.origin+'/js-trp/login.js');
@@ -430,24 +439,6 @@ jQuery(document).ready(function($) {
 
 	handleActivePopupFunctions =  function() {
 		modernFieldsUpdate();
-		
-		$('.copy-link').click( function(e) {
-	    	e.preventDefault();
-	    	e.stopPropagation();
-
-	        var $temp = $("<input>");
-	        $("body").append($temp);
-	        $temp.val($(this).closest('.flex').find('input').val()).select();
-	        document.execCommand("copy");
-	        $temp.remove();        
-
-	        $(this).attr('alternative', $(this).text().trim());
-	        $(this).html('<img src="'+all_images_path+'/check-icon.svg"/>');
-
-	        setTimeout( (function() {
-	        	$(this).html( $(this).attr('alternative').length ? $(this).attr('alternative') : '<img src="'+all_images_path+'/copy-files.svg"/>' );
-	        }).bind(this), 3000 );
-	    } );
 
 	    $('.add-team-member-form').submit( function(e) {
 	        e.preventDefault();
@@ -500,19 +491,8 @@ jQuery(document).ready(function($) {
 			);
 		});
 
-		$('.close-and-scroll').click( function() {
-			closePopup();
-			$('body, html').animate({
-				scrollTop: 0
-			}, 500);
-		});
-
 	    $('.close-popup').click( function() {
 			closePopup();
-		});
-
-		$('.close-cur-popup').click( function() {
-			$(this).closest('.popup').removeClass('active');
 		});
 
 		$('.popup').click( function(e) {
@@ -632,34 +612,6 @@ jQuery(document).ready(function($) {
 	fix_header();
 
 
-	$('#share-link-form').submit( function(e) {
-        e.preventDefault();
-        $(this).find('.alert').hide();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                	$(this).find('.alert-success').show();
-                	$(this).find('[name="email"]').val('').focus();
-                } else {
-                	$(this).find('.alert-warning').show();
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );          
-
-        return false;
-
-	} );
-
-
 	//
 	//Flickty fixes
 	//
@@ -693,6 +645,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	//to  be deleted ?
 	$('.button-sign-up-patient').click( function() {
 		fbq('track', 'PatientInitiateRegistration');
 		gtag('event', 'ClickSignup', {
@@ -701,6 +654,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	//to  be deleted ?
 	$('.button-login-patient').click( function() {
 		fbq('track', 'PatientLogin');
 		gtag('event', 'ClickLogin', {
@@ -783,10 +737,6 @@ jQuery(document).ready(function($) {
 	    }
     }
     attachTooltips();
-
-    $('.close-explander').click( function() {
-    	$(this).closest('.expander-wrapper').removeClass('active');
-    });
 
 	$('.strength-button').click( function() {
 		if ($(this).hasClass('active')) {
@@ -1009,16 +959,6 @@ jQuery(document).ready(function($) {
 		closePopup();
 	});
 
-	$('.country-dropdown').change( function() {
-		if ($(this).attr('real-country') != '') {
-			if ($(this).val() != $(this).attr('real-country')) {
-				$(this).parent().parent().find('.ip-country').show();
-			} else {
-				$(this).parent().parent().find('.ip-country').hide();
-			}
-		}
-	});
-
 	$('.get-started-button').click( function() {
 		if(dentacoin_down && !user_id) {
     		showPopup('failed-popup');
@@ -1166,37 +1106,26 @@ jQuery(document).ready(function($) {
     	}
     });
 	
-	setTimeout( function() {
+	// setTimeout( function() {
 
-	    $('.support-icon').css('bottom', $('.christmas-banner:visible').outerHeight() + ($(window).outerWidth() <= 768 ? 10 : 20));
-	    if($('.christmas-banner').length) {
-	    	$('body').addClass('with-banner');
-	    	$('.christmas-banner:visible .banner-video')[0].play();
-	    	$('.christmas-banner:visible .banner-video')[0].removeAttribute("controls");
-	    }
+	//     $('.support-icon').css('bottom', $('.christmas-banner:visible').outerHeight() + ($(window).outerWidth() <= 768 ? 10 : 20));
+	//     if($('.christmas-banner').length) {
+	//     	$('body').addClass('with-banner');
+	//     	$('.christmas-banner:visible .banner-video')[0].play();
+	//     	$('.christmas-banner:visible .banner-video')[0].removeAttribute("controls");
+	//     }
 
-	    $('.close-banner').click( function(e) {
-	    	e.preventDefault();
-	    	$('.support-icon').css('bottom', ($(window).outerWidth() <= 768 ? 10 : 20));
-	    	$('.christmas-banner').hide();
+	//     $('.close-banner').click( function(e) {
+	//     	e.preventDefault();
+	//     	$('.support-icon').css('bottom', ($(window).outerWidth() <= 768 ? 10 : 20));
+	//     	$('.christmas-banner').hide();
 
-	    	$.ajax( {
-				url:  window.location.origin+'/en/remove-banner/',
-				type: 'GET',
-			});
-	    });
-    }, 500);
-
-	
-	$('.search-dentists').click( function() {
-		$('.search-results-popup').addClass('active');
-	});
-
-	$('.search-results-popup').click( function(e) {
-		if( !$(e.target).closest('.search-form').length ) {
-			$('.search-results-popup').removeClass('active');
-		}
-	});
+	//     	$.ajax( {
+	// 			url:  window.location.origin+'/en/remove-banner/',
+	// 			type: 'GET',
+	// 		});
+	//     });
+    // }, 500);
 
 });
 

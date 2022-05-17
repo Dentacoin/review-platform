@@ -192,10 +192,14 @@ $(document).ready(function(){
         });
     
         if( $('.result-container[lat]').length ) {
-            search_map.fitBounds(bounds);
+            search_map.fitBounds(bounds)
         } else {
             search_map.setZoom(12);
         }
+
+        // var zoom = search_map.getZoom();
+        // console.log(zoom);
+        // search_map.setZoom(zoom > 6 ? 6 : zoom);
     
         //activate pin
         $('.result-container').off('mouseover').mouseover( function() {
@@ -273,7 +277,6 @@ $(document).ready(function(){
     $('.filter-options .specializations').change( function() {
     	let cats = [];
 		let labels = $(this).closest('.filter-options').find('label.active');
-        let params = $('.search-get-form').serialize();
         
         if(labels.length) {
             let form_href = $('.filter-options').closest('form').attr('specializations-href');
@@ -281,14 +284,11 @@ $(document).ready(function(){
                 cats.push($(this).find('input').val());
             });
             
-            // console.log(cats);
             $(this).closest('form').attr('action', form_href+cats.join('-') );
-            // $(this).closest('form').attr('action', form_href+'/'+cats.join('-')+'?'+params );
             
         } else {
             let form_href = $('.filter-options').closest('form').attr('no-specializations-href');
             $(this).closest('form').attr('action', form_href );
-            // $(this).closest('form').attr('action', form_href+'/'+'?'+params );
         }
 	});
 
@@ -376,4 +376,33 @@ $(document).ready(function(){
             window.location.href = $(this).attr('action')+ (form_inputs ? '?' : '')+form_inputs;
         // }
 	});
+
+    
+
+    $('.delete-branch').click( function(e) {
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.ajax({
+            type: "POST",
+            url: that.attr('delete-url'),
+            data: {
+                branch_id: that.attr('branch-id'),
+                _token: $('input[name="_token"]').val(),
+            },
+            success: function(ret) {
+                that.closest('.result-container').remove();
+            },
+            error: function(ret) {
+                console.log('error');
+            }
+        });
+
+        ajax_is_running = false;
+    });
 });

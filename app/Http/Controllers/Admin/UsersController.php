@@ -1000,9 +1000,8 @@ class UsersController extends AdminController {
                     $allowedMimetypes = ['image/jpeg', 'image/png'];
 
                     $image = GeneralHelper::decode_base64_image(Request::input('avatar'));
-                
                     $checkFile = GeneralHelper::checkFile($image, $allowedExtensions, $allowedMimetypes);
-
+                    
                     if(isset($checkFile['success'])) {
                         $img = Image::make( $image )->orientate();
                         $item->addImage($img);

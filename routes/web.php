@@ -460,9 +460,9 @@ $reviewRoutes = function() {
 				Route::post('write-review/{step?}', 				'DentistController@writeReview');
 
 				Route::post('profile/info/upload', 					'ProfileController@upload');
-				Route::post('profile/gallery', 						'ProfileController@gallery');
+				Route::post('profile/gallery/{id?}', 				'ProfileController@gallery');
 				Route::any('profile/gallery/delete/{id}', 			'ProfileController@gallery_delete');
-				Route::post('profile/info', 						'ProfileController@info');
+				Route::post('profile/info/{id?}', 					'ProfileController@info');
 				Route::get('profile/trp-iframe', 					'ProfileController@trp');
 				Route::post('invite-patient-again',					'ProfileController@invite_patient_again');
 				Route::post('profile/invite', 						'ProfileController@invite');
@@ -491,8 +491,6 @@ $reviewRoutes = function() {
                 Route::post('verify-review', 						'DentistController@verifyReview');
 
 				Route::post('profile/add-new-branch/{step?}', 		'BranchesController@addNewBranch');
-				// Route::any('logoutas', 							'BranchesController@logoutas');
-				Route::post('loginas', 								'BranchesController@loginas');
 				Route::post('delete-branch', 						'BranchesController@deleteBranch');				
 			});
 			

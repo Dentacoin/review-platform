@@ -588,6 +588,10 @@ form {
 						opacity: 1;
 						// transition: all 0.3s ease;
 					}
+					.delete-branch {
+						opacity: 1;
+						// transition: all 0.3s ease;
+					}
 				}
 			}
 
@@ -762,6 +766,40 @@ form {
 						margin-right: 6px;
 						transition: all 0.3s ease;
 						background: transparent;
+					}
+				}
+
+				.delete-branch {
+					background-color: transparent;
+					opacity: 0;
+					font-size: 18px;
+					font-weight: bold;
+					color: #ff6b5e;
+					border: 1px solid #ff6b5e;
+					display: inline-block;
+					padding: 13px 22px;
+					border-radius: 30px;
+					position: absolute;
+					right: 175px;
+					bottom: 15px;
+					transition: all 0.3s ease;
+					
+					@media #{$pc} {
+						font-size: 16px;
+						padding: 11px 14px;
+						right: 130px;
+					}
+
+					@media #{$tablet} {
+						opacity: 1;
+						font-size: 18px;
+						padding: 13px 22px;
+						right: 175px;
+					}
+
+					@media #{$phone} {
+						position: static;
+						margin-top: 10px;
 					}
 				}
 
@@ -1363,4 +1401,15 @@ body {
 
 .pac-matched {
 	font-family: 'Lato' !important;
+}
+
+.add-branch {
+	width: 100%;
+	border-radius: 0px;
+	text-align: center;
+	font-size: 18px;
+	padding: 13px 43px;
+	box-shadow: 0 0 20px 0px rgba(146,146,146,0.8);
+	position: relative;
+	z-index: 10;
 }

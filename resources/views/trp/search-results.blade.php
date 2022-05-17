@@ -65,7 +65,9 @@
 						<img src="{{ url('img-trp/filters-blue.svg') }}"/>Filters
 					</h3>
 				</div>
-				@include('trp.parts.search-dentist-filters')
+				@include('trp.parts.search-dentist-filters', [
+					'for_branch' => false
+				])
 			</div>
 			<div class="results-count">
 				<h4 class="hidden-mobile">{{ $items->count() }} results found</h4>
@@ -89,7 +91,8 @@
 			@if($items->isNotEmpty())
 				@foreach($items as $dentist)
 					@include('trp.parts.search-dentist', [
-						'forMap' => false
+						'forMap' => false,
+						'for_branch' => false,
 					])
 				@endforeach
 			@else
@@ -131,7 +134,8 @@
 				<div class="mobile-map-inner">
 					@foreach($items as $dentist)
 						@include('trp.parts.search-dentist', [
-							'forMap' => true
+							'forMap' => true,
+							'for_branch' => false,
 						])
 					@endforeach
 				</div>

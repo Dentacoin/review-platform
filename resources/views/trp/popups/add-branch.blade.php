@@ -1,4 +1,4 @@
-<div class="popup fixed-popup" id="popup-branch" scss-load="trp-popup-branch">
+<div class="popup no-image" id="popup-branch" scss-load="trp-popup-branch" js-load="branch">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">
@@ -6,26 +6,30 @@
 			</a>
 		</div>
 
-		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
-		</div>
 		<h2>
 			{{ trans('trp.popup.add-branch.title') }}
 		</h2>
 
-		<div class="popup-tabs branch-tabs colorful-tabs flex flex-mobile">
-			<a class="{!! !session('user_branch') ? 'active' : '' !!} col" href="javascript:;" data-branch="1" style="z-index: 3">
-				1
-			</a>
-			<a class="col {!! session('user_branch') && !isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}" href="javascript:;" data-branch="2" style="z-index: 2">
-				2
-			</a>
-			<a class="col {!! session('user_branch') && isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}" href="javascript:;" data-branch="3" style="z-index: 1">
-				3
-			</a>
+		<div class="step-tabs branch-tabs flex flex-center flex-text-center flex-mobile">
+			<div class="step {!! !session('user_branch') ? 'active' : '' !!}" data-branch="1">
+				<span class="border">
+					<span>1</span>
+				</span>
+				{{-- <p>Practice info</p> --}}
+			</div>
+			<div class="step {!! session('user_branch') && !isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}" data-branch="2">
+				<span class="border">
+					<span>2</span>
+				</span>
+				{{-- <p>Current state</p> --}}
+			</div>
+			<div class="step {!! session('user_branch') && isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}" data-branch="3">
+				<span class="border">
+					<span>3</span>
+				</span>
+				{{-- <p>Your score</p> --}}
+			</div>
 		</div>
-
-		<div class="bottom-gray-border"></div>
 
 		{!! Form::open([
 			'method' => 'post', 
@@ -52,10 +56,11 @@
 					<p>{{ trans('trp.popup.add-branch.clinic-name-alternative.description') }}</p>
 				</div>
 
-				<div class="alert invite-alert" style="display: none; margin-top: 20px;">
-				</div>
+				<div class="alert invite-alert" style="display: none; margin-top: 20px;"></div>
 
-				<a href="javascript:;" id="first-branch-next" class="button next-branch-button" to-step="2" branch-url="{{ getLangUrl('profile/add-new-branch/1') }}" style="margin-right: auto;">{{ trans('trp.popup.add-branch.button-next') }}</a>
+				<div class="tac">
+					<a href="javascript:;" id="first-branch-next" class="blue-button next-branch-button" to-step="2" branch-url="{{ getLangUrl('profile/add-new-branch/1') }}" style="margin-right: auto;">{{ trans('trp.popup.add-branch.button-next') }}</a>
+				</div>
 			</div>
 
 			<div id="branch-option-2" class="branch-content" {!! session('user_branch') && !isset(session('user_branch')['clinic_website']) ? '' : 'style="display: none;"' !!}>
@@ -108,13 +113,9 @@
 					</div>
 				</div>
 
-				<div class="flex flex-mobile">
-					<div class="col">
-						<a href="javascript:;" class="button prev-branch-button" to-step="1">{{ trans('trp.popup.add-branch.button-back') }}</a>
-					</div>
-					<div class="col">
-						<a href="javascript:;" id="second-branch-next" class="button next-branch-button" to-step="3" branch-url="{{ getLangUrl('profile/add-new-branch/2') }}">{{ trans('trp.popup.add-branch.button-next') }}</a>
-					</div>
+				<div class="tac">
+					<a href="javascript:;" class="white-button prev-branch-button" to-step="1"><</a>
+					<a href="javascript:;" id="second-branch-next" class="blue-button next-branch-button" to-step="3" branch-url="{{ getLangUrl('profile/add-new-branch/2') }}">{{ trans('trp.popup.add-branch.button-next') }}</a>
 				</div>
 			</div>
 
@@ -170,17 +171,12 @@
 								</label>
                             @endforeach
                         </div>
-
 					</div>
 				</div>
 
-				<div class="flex flex-mobile">
-					<div class="col">
-						<a href="javascript:;" class="button prev-branch-button" to-step="2">{{ trans('trp.popup.add-branch.button-back') }}</a>
-					</div>
-					<div class="col">
-						<input type="submit" class="button submit-branch-button" value="{{ trans('trp.popup.add-branch.button-publish') }}">
-					</div>
+				<div class="tac">
+					<a href="javascript:;" class="white-button prev-branch-button" to-step="2"><</a>
+					<input type="submit" class="blue-button submit-branch-button" value="{{ trans('trp.popup.add-branch.button-publish') }}">
 				</div>
 			</div>
 		{!! Form::close() !!}

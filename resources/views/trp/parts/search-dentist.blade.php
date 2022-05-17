@@ -101,7 +101,17 @@
                 </div>
             @endif
 
-            @if(!empty($user) && $user->is_dentist)
+            @if(($for_branch && !empty($user) && $user->is_clinic && $dentist->is_clinic && $user->branches->isNotEmpty() && in_array($dentist->id, $user->branches->pluck('branch_clinic_id')->toArray())))
+                <a href="{{ $dentist->getLink() }}" class="button-submit">
+                    {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}
+                    Edit branch
+                </a>
+                @if($dentist->id != $dentist->mainBranchClinic->id)
+                    <a href="javascript:;" delete-url="{{ getLangUrl('delete-branch') }}" branch-id="{{ $dentist->id }}" class="delete-branch tooltip-text" text="Delete Branch">
+                        X
+                    </a>
+                @endif
+            @elseif(!empty($user) && $user->is_dentist)
                 <a href="{{ $dentist->getLink() }}" class="button-submit">
                     {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}
                     Check Profile

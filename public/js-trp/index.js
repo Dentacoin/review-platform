@@ -1,5 +1,4 @@
 var slider = null;
-var sliderTO = null;
 var displaySuggestions;
 var sendSuggestions;
 var handlePopups;

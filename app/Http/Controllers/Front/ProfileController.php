@@ -929,7 +929,7 @@ class ProfileController extends FrontController {
     /**
      * dentist profile edit
      */
-    public function info($locale=null) {
+    public function info($locale=null, $branch_id = null) {
 
         if(empty($this->user) || !$this->user->is_dentist || ($this->user->is_dentist && !in_array($this->user->status, config('dentist-statuses.approved_test')))) {
             if( Request::input('json') ) {
@@ -939,6 +939,14 @@ class ProfileController extends FrontController {
                 return Response::json($ret);
             }
             return redirect(getLangUrl('/'));
+        }
+
+        if($branch_id) {
+            $branchClinic = User::find($branch_id);
+    
+            if(!empty($branchClinic) && $this->user->is_clinic && $branchClinic->is_clinic && $this->user->branches->isNotEmpty() && in_array($branchClinic->id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+                $this->user = $branchClinic;
+            }
         }
 
         if( Request::input('avatar') ) {
@@ -1331,7 +1339,7 @@ class ProfileController extends FrontController {
     /**
      * dentist adds a gallery photos
      */
-    public function gallery($locale=null, $position=null) {
+    public function gallery($locale=null, $branch_id = null) {
 
         if(Request::file('image') && Request::file('image')->isValid()) {
 
@@ -1341,6 +1349,14 @@ class ProfileController extends FrontController {
                 return Response::json( [
                     'success' => false,
                 ]);
+            }
+
+            if($branch_id) {
+                $branchClinic = User::find($branch_id);
+    
+                if(!empty($branchClinic) && $this->user->is_clinic && $branchClinic->is_clinic && $this->user->branches->isNotEmpty() && in_array($branchClinic->id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+                    $this->user = $branchClinic;
+                }
             }
 
             $dapic = new UserPhoto;

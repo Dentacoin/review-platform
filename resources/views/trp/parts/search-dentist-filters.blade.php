@@ -14,9 +14,10 @@
                 <div class="flex flex-mobile flex-center space-between">
                     <div>
                         <input type="checkbox" 
-                            class="special-checkbox specializations"
+                            class="special-checkbox {{ $for_branch ? '' : 'specializations' }}"
                             id="checkbox-filter-{{ $cat }}" 
                             value="{{ $cat }}" 
+                            {!! $for_branch ? 'name="specs[]"' : '' !!} 
                             {!! $active ? 'checked="checked"' : '' !!}
                         >
                         <div class="checkbox-square">✓</div>

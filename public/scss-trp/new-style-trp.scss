@@ -1013,6 +1013,8 @@ footer {
 	}
 
 	&.no-image {
+		align-items: flex-start;
+		
 		.popup-inner {
 			left: 50%;
 			transform: translateX(-50%);

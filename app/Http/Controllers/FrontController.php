@@ -484,9 +484,8 @@ class FrontController extends BaseController {
     public function ShowView($page, $params=array(), $statusCode=null) {
         
         $this->PrepareViewData($page, $params, 'trp');
-
-        $params['clinicBranches'] = false;
-        $params['has_review_notification'] = false;
+        
+        $params['user_avatar'] = $this->user ? $this->user->getImageUrl(true) : ''; //because of clinic branches
         
         //needed for search form countries dropdown
         if(!empty($this->user) && !isset($params['countriesAlphabetically'])) {
@@ -503,21 +502,11 @@ class FrontController extends BaseController {
             $params['countriesAlphabetically'] = $countriesAlphabetically;
         }
         
+        $params['has_review_notification'] = false;
+
+        //check notifications for review
         if(!empty($this->user) && $this->user->is_clinic && $this->user->branches->isNotEmpty()) {
-            $params['clinicBranches'] = [];
             foreach($this->user->branches as $branch) {
-
-                $branchClinic = $branch->branchClinic;
-
-                $params['clinicBranches'][$branchClinic->id] = [
-                    'name' => $branchClinic->getNames(),
-                    'avatar' => $branchClinic->getImageUrl(true),
-                    'notification' => $branchClinic->review_notification ? true : false,
-                ];
-            }
-
-            foreach($this->user->branches as $branch) {
-
                 $branchClinic = $branch->branchClinic;
                 $has_ask_notification = false;
 
@@ -535,10 +524,6 @@ class FrontController extends BaseController {
                     break;
                 }
             }
-        }
-
-        if($params['clinicBranches']) {
-            $params['clinicBranches'] = json_encode($params['clinicBranches']);
         }
 
         if(!isset($params['xframe'])) {
@@ -621,6 +606,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '2022051601';
+        $params['cache_version'] = '20220517';
     }
 }

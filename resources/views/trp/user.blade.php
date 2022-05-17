@@ -3,21 +3,25 @@
 @section('content')
 
 @php
+	$loggedUserAllowEdit = !empty($user) && ($user->id==$item->id || $editing_branch_clinic) ? true : false;
+	$user = !empty($editing_branch_clinic) ? $editing_branch_clinic : (!empty($user) ? $user : null);
+	
 	$videoReviewsCount = $item->reviews_in_video()->count();
 	$regularReviewsCount = $item->reviews_in_standard()->count();
-	$hasPatientInvites = !empty($user) && $user->id==$item->id && $user->patients_invites->isNotEmpty();
-	$hasPatientAsks = !empty($user) && $user->id==$item->id && $user->asks->isNotEmpty();
+	$hasPatientInvites = $loggedUserAllowEdit && $user->patients_invites->isNotEmpty();
+	$hasPatientAsks = $loggedUserAllowEdit && $user->asks->isNotEmpty();
 
 	$hasTeamApproved = $item->teamApproved->isNotEmpty();
 	$hasNotVerifiedTeamFromInvitation = $item->notVerifiedTeamFromInvitation->isNotEmpty();
 
-	$workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id );
+	$workplace = $item->getWorkplaceText( $loggedUserAllowEdit );
 	$workingTime = $item->getWorkHoursText();
 
-	$showAboutSection = $item->description || $item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id);
-	$showTeamSection = $item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $hasTeamApproved || $hasNotVerifiedTeamFromInvitation );
-	$showLocationsSection = ($item->lat && $item->lon) || $item->photos->isNotEmpty() || ( !empty($user) && $user->id==$item->id);
+	$showAboutSection = $item->description || $item->categories->isNotEmpty() || ($loggedUserAllowEdit);
+	$showTeamSection = $item->is_clinic && ( $loggedUserAllowEdit || $hasTeamApproved || $hasNotVerifiedTeamFromInvitation );
+	$showLocationsSection = ($item->lat && $item->lon) || $item->photos->isNotEmpty() || ( $loggedUserAllowEdit);
 	$dentistWorkHours = $item->work_hours ? (is_array($item->work_hours) ? $item->work_hours : json_decode($item->work_hours, true)) : null;
+
 
 	$week_days = [
 		1 => 'Mon',
@@ -30,7 +34,7 @@
 	];
 @endphp
 
-{{-- @if(!empty($user) && $user->id==$item->id )
+{{-- @if($loggedUserAllowEdit )
 	<div class="guided-overflow-wrapper">
 		<div class="guided-tour-part guided-overflow-top"></div>
 		<div class="guided-tour-part guided-overflow-right">
@@ -68,16 +72,20 @@
 
 <div class="container">
 
-	<div class="profile-wrapper" link="{{ getLangUrl('profile/info') }}">
+	@if(!empty($user) && $user->branches->isNotEmpty())
+		<input type="hidden" id="user_branch_id" name="user_branch_id" value="{{ $user->id }}"/>
+	@endif
+
+	<div class="profile-wrapper" link="{{ getLangUrl('profile/info/'.($editing_branch_clinic )) }}">
 		<div class="profile-info-container">
 			<div class="profile-info flex">
 				<div class="avatar-wrapper">
-					@if(!empty($user) && $item->id==$user->id)
+					@if($loggedUserAllowEdit)
 						<div class="upload-image-wrapper">
 							{{ Form::open([
 								'class' => 'edit-wrapper edit-name', 
 								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
+								'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 							]) }}
 								{!! csrf_field() !!}
 								<label for="add-avatar" class="image-label" style="background-image: url({{ $user->getImageUrl(true)}})">
@@ -125,7 +133,7 @@
 					@endif
 
 					
-					{{-- @if(!empty($user) && $user->id!=$item->id && !empty($writes_review))
+					{{-- @if($loggedUserAllowEdit && !empty($writes_review))
 						<a href="javascript:;" class="recommend-button" data-popup="recommend-dentist">
 							<img src="{{ url('img-trp/thumb-up.svg') }}">
 							{{ trans('trp.page.user.recommend') }}
@@ -143,19 +151,12 @@
 							<img src="{{ url('img-trp/branches.svg') }}" width="24"/>
 							Manage branches
 						</a>
-						{{-- <a href="javascript:;" class="p clinic-branches login-as" login-url="{{ getLangUrl('loginas') }}" branch-id="{{ $item->id }}">
-							<div class="img">
-								<img src="{{ url('img-trp/swith-account-blue.svg') }}"/>
-							</div>
-							{!! nl2br(trans('trp.page.user.branch.switch-account')) !!}
-							{!! csrf_field() !!}
-						</a> --}}
 					@else
 						@if($item->branches->isNotEmpty())
 							<a class="clinic-branches mont" href="{{ getLangUrl('branches/'.$item->slug) }}">
 								<img src="{{ url('img-trp/branches.svg') }}" width="24"/>
 								{{-- {!! nl2br(trans('trp.page.user.branch.see-branches')) !!} --}}
-								@if(!empty($user) && $item->id==$user->id)
+								@if($loggedUserAllowEdit)
 									Manage branches
 								@else
 									Check branches
@@ -170,7 +171,7 @@
 						</a>
 					@endif
 
-					@if(!empty($user) && $user->id==$item->id)
+					@if($loggedUserAllowEdit)
 						<a href="javascript:;" class="turn-on-edit-mode white-button" to-edit="Edit Profile" to-not-edit="Edit Mode">
 							<img src="{{ url('img-trp/edit-profile-pencil.svg') }}" width="20" height="20"/>
 							<span>Edit Profile</span>
@@ -207,7 +208,7 @@
 					</div>
 
 					{{-- edit title & name --}}
-					@if(!empty($user) && $item->id==$user->id)
+					@if($loggedUserAllowEdit)
 						<div class="edit-field">
 							<h1 class="mont edited-field" id="value-name" style="display: inline-block;">
 								{{ $item->getNames() }}
@@ -217,11 +218,11 @@
 								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 							</a>
 
-							@if(!empty($user) && $item->id==$user->id)
+							@if($loggedUserAllowEdit)
 								{{ Form::open([
 									'class' => 'edit-wrapper edit-name', 
 									'method' => 'post', 
-									'url' => getLangUrl('profile/info') 
+									'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : ''))
 								]) }}
 									{!! csrf_field() !!}
 									<div class="flex flex-mobile">
@@ -260,7 +261,7 @@
 					@endif
 
 					{{-- edit phone --}}
-					@if(!empty($user) && $item->id==$user->id)
+					@if($loggedUserAllowEdit)
 						<div class="edit-field">
 							<h3 class="edited-field alternative-name" id="value-name_alternative" style="display: inline-block;">
 								{{ $item->name_alternative ?? 'edit your alternative name' }}
@@ -270,11 +271,11 @@
 								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 							</a>
 
-							@if(!empty($user) && $item->id==$user->id)
+							@if($loggedUserAllowEdit)
 								{{ Form::open([
 									'class' => 'edit-wrapper', 
 									'method' => 'post', 
-									'url' => getLangUrl('profile/info') 
+									'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 								]) }}
 									{!! csrf_field() !!}
 									<div class="flex flex-center">
@@ -317,7 +318,7 @@
 							<div>
 								@if($workingTime)
 									@if(str_contains($workingTime, 'Open now'))
-										<div class="working-time open {{ !empty($user) && $item->id==$user->id ? 'wider' : '' }}">
+										<div class="working-time open {{ $loggedUserAllowEdit ? 'wider' : '' }}">
 											<img src="{{ url('img-trp/clock-blue.svg') }}">
 											Open now
 											<div class="work-hours">
@@ -339,18 +340,18 @@
 												@endforeach
 											</div>
 
-											@if(!empty($user) && $item->id==$user->id)
+											@if($loggedUserAllowEdit)
 												<a class="edit-field-button scroll-to" scroll="open-hours-section">
 													<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 												</a>
 											@endif
 										</div>
 									@else
-										<div class="working-time closed {{ !empty($user) && $item->id==$user->id ? 'wider' : '' }}">
+										<div class="working-time closed {{ $loggedUserAllowEdit ? 'wider' : '' }}">
 											<img src="{{ url('img-trp/clock-red.svg') }}"/>
 											Closed now
 
-											@if(!empty($user) && $item->id==$user->id)
+											@if($loggedUserAllowEdit)
 												<a class="edit-field-button scroll-to" scroll="open-hours-section">
 													<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 												</a>
@@ -365,7 +366,7 @@
 					<p class="dentist-address">{{ $item->getLocation() }}</p>
 					
 					{{-- edit address --}}
-					@if(!empty($user) && $item->id==$user->id)
+					@if($loggedUserAllowEdit)
 						<div class="edit-field">
 							<p class="dentist-address edited-field" id="value-address" style="display: inline-block;">
 								{{ $item->address ?? 'edit your address' }}
@@ -375,11 +376,11 @@
 								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 							</a>
 
-							@if(!empty($user) && $item->id==$user->id)
+							@if($loggedUserAllowEdit)
 								{{ Form::open([
 									'class' => 'edit-wrapper address-suggester-wrapper-input', 
 									'method' => 'post', 
-									'url' => getLangUrl('profile/info') 
+									'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 								]) }}
 									{!! csrf_field() !!}
 
@@ -423,7 +424,7 @@
 					@endif
 					
 					{{-- edit phone --}}
-					@if(!empty($user) && $item->id==$user->id)
+					@if($loggedUserAllowEdit)
 						<div class="edit-field">
 							<p class="edited-field" id="value-phone" style="display: inline-block;">
 								{{ $item->getFormattedPhone() ?? 'edit your phone number' }}
@@ -436,7 +437,7 @@
 							{{ Form::open([
 								'class' => 'edit-wrapper', 
 								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
+								'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 							]) }}
 								{!! csrf_field() !!}
 
@@ -469,7 +470,7 @@
 					@endif
 
 					{{-- edit website --}}
-					@if(!empty($user) && $item->id==$user->id)
+					@if($loggedUserAllowEdit)
 						<div class="edit-field">
 							<p class="edited-field" style="display: inline-block;">
 								<a class="blue-href" href="{{ $item->getWebsiteUrl() }}" target="_blank" id="value-website">
@@ -484,7 +485,7 @@
 							{{ Form::open([
 								'class' => 'edit-wrapper', 
 								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
+								'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 							]) }}
 								{!! csrf_field() !!}
 
@@ -542,7 +543,7 @@
 									@endforeach
 								@endif
 
-								@if(!empty($user) && $item->id==$user->id)
+								@if($loggedUserAllowEdit)
 									<a class="edit-field-button tooltip-text" text="Edit email and social profiles">
 										<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>
 									</a>
@@ -550,12 +551,12 @@
 							</div>
 						@endif
 
-						@if(!empty($user) && $item->id==$user->id)
+						@if($loggedUserAllowEdit)
 							
 							{{ Form::open([
 								'class' => 'edit-wrapper', 
 								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
+								'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 							]) }}
 								{!! csrf_field() !!}
 
@@ -668,7 +669,7 @@
 						<div class="announcement-wrapper">
 							<h4>
 								<img src="{{ url('img-trp/announcement.svg') }}" width="16"/>New office safety precautions 
-								@if(!empty($user) && $item->id==$user->id)
+								@if($loggedUserAllowEdit)
 									<a class="edit-field-button">
 										<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 									</a>
@@ -712,7 +713,7 @@
 				</div>
 
 				<div class="buttons-flex">
-					@if(!empty($user) && $user->id==$item->id)
+					@if($loggedUserAllowEdit)
 					
 						@if( $regularReviewsCount )
 							<a href="javascript:;" class="white-button disabled-button tooltip-text" text="Comming soon">
@@ -777,12 +778,12 @@
 		
     	<div class="profile-info col">
 
-			@if(!empty($user) && $user->id==$item->id)
+			@if($loggedUserAllowEdit)
 				{!! Form::open([
 					'method' => 'post', 
 					'class' => 'edit-profile clearfix', 
 					'style' => 'display: none;', 
-					'url' => getLangUrl('profile/info') 
+					'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 				]) !!}
 					{!! csrf_field() !!}
 
@@ -935,7 +936,7 @@
 			</a>
 		@endif
 
-		@if(!empty($user) && $user->id==$item->id && ($hasPatientInvites || $hasPatientAsks))
+		@if($loggedUserAllowEdit && ($hasPatientInvites || $hasPatientAsks))
 			<a class="tab-title {!! $patient_asks ? 'force-active' : '' !!} patients-tab" data-tab="asks" href="javascript:;">
 				{!! nl2br(trans('trp.page.user.my-patients')) !!}
 
@@ -964,21 +965,21 @@
 				</h2>
 
 				<div class="tab-inner-section checkbox-section specializations-section">
-					@if($item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id))
+					@if($item->categories->isNotEmpty() || ($loggedUserAllowEdit))
 						<h3>
 							Specialities
 
-							@if(!empty($user) && $item->id==$user->id)
+							@if($loggedUserAllowEdit)
 								<a class="edit-field-button edit-specializations tooltip-text" text="Edit specialities">
 									<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 								</a>
 							@endif
 						</h3>
-						@if(!empty($user) && $item->id==$user->id)
+						@if($loggedUserAllowEdit)
 							{{ Form::open([
 								'class' => 'edit-checkboxes-form',
 								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
+								'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 							]) }}
 								{!! csrf_field() !!}
 						@endif
@@ -986,7 +987,7 @@
 							@foreach($item->categories as $specialization)
 								<label class="specialization" for="cat-{{ $specialization->category_id }}">
 									{{ trans('trp.categories.'.config('categories.'.$specialization->category_id)) }}
-									@if(!empty($user) && $item->id==$user->id)
+									@if($loggedUserAllowEdit)
 										<input 
 											type="checkbox"
 											id="cat-{{ $specialization->category_id }}" 
@@ -1001,7 +1002,7 @@
 								</label>
 							@endforeach
 						</div>
-						@if(!empty($user) && $item->id==$user->id)
+						@if($loggedUserAllowEdit)
 								<div class="checkboxes-wrapper specializations not-added">
 									@foreach($categories as $k => $v)
 										@if(!in_array($loop->index, $user->categories->pluck('category_id')->toArray()))
@@ -1031,11 +1032,11 @@
 				</div>
 				
 				<div class="tab-inner-section">
-					@if($item->description || (!empty($user) && $item->id==$user->id) )
+					@if($item->description || ($loggedUserAllowEdit) )
 						<h3>
 							Introduction
 
-							@if(!empty($user) && $item->id==$user->id)
+							@if($loggedUserAllowEdit)
 								<a href="javascript:;" class="edit-field-button edit-description-button tooltip-text" text="Tell patients more about your dental practice.">
 									<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 								</a>
@@ -1046,12 +1047,12 @@
 								{!! $item->description ? nl2br($item->description) : '' !!}
 							</span>
 						</div>
-						@if(!empty($user) && $item->id==$user->id)
+						@if($loggedUserAllowEdit)
 							<div class="about-content" role="editor" id="edit-descr-container" style="display: none; padding: 5px;">
 								{{ Form::open([
 									'class' => 'edit-description', 
 									'method' => 'post', 
-									'url' => getLangUrl('profile/info') 
+									'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 								]) }}
 									{!! csrf_field() !!}
 									<div class="flex">
@@ -1082,7 +1083,7 @@
 			<div class="tab-container" id="team">
 				<h2 class="mont">
 					{!! nl2br(trans('trp.page.user.team')) !!} 
-					@if(!empty($user) && $item->id==$user->id)
+					@if($loggedUserAllowEdit)
 						<a class="edit-field-button">
 							<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>
 						</a>
@@ -1094,7 +1095,7 @@
 						@if($team->clinicTeam)
 							<a class="team approved-team" href="{{ !$team->clinicTeam || in_array($team->clinicTeam->status, ['dentist_no_email', 'added_new']) ? 'javascript:;' : $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
 								<div class="team-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
-									@if( (!empty($user) && $item->id==$user->id) )
+									@if( ($loggedUserAllowEdit) )
 										<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
 											<img class="close-icon" src="{{ url('img-trp/close-icon-blue.png') }}"/>
 										</div>
@@ -1120,7 +1121,7 @@
 						@foreach( $item->notVerifiedTeamFromInvitation as $invite)
 							<a class="team" href="javascript:;" invite-id="{{ $invite->id }}">
 								<div class="team-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
-									@if( (!empty($user) && $item->id==$user->id) )
+									@if( ($loggedUserAllowEdit) )
 										<div class="delete-invite" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
 											<img class="close-icon" src="{{ url('img-trp/close-icon-blue.png') }}"/>
 										</div>
@@ -1151,7 +1152,7 @@
 						@endforeach
 					@endif
 
-					@if(!empty($user) && $item->id==$user->id)
+					@if($loggedUserAllowEdit)
 						@foreach( $item->teamUnapproved as $team)
 							@if($team->clinicTeam)
 								<a class="team pending" href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
@@ -1184,7 +1185,7 @@
 						@endforeach
 					@endif
 					
-					@if( (!empty($user) && $item->id==$user->id) )
+					@if( ($loggedUserAllowEdit) )
 						<a href="javascript:;" class="team add-team-member dont-count" guided-action="team">
 							@if(false)
 							{{-- data-popup="add-team-popup" --}}
@@ -1369,7 +1370,7 @@
 						'name' => $item->getNames()
 					])) !!} --}}
 
-					@if(!empty($user) && $item->id==$user->id)
+					@if($loggedUserAllowEdit)
 						<a class="edit-field-button edit-locations">
 							<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>
 						</a>
@@ -1378,17 +1379,17 @@
 
 				<div class="tab-inner-section location-section">
 					<div class="col">
-						@if( ($item->lat && $item->lon) || !empty($user) && $user->id==$item->id )
+						@if( ($item->lat && $item->lon) || $loggedUserAllowEdit )
 							<div class="edit-field map-address">
 								<p class="edited-field" id="value-address-map" style="display: inline-block;">
 									{{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }}
 								</p>
 
-								@if(!empty($user) && $item->id==$user->id)
+								@if($loggedUserAllowEdit)
 									{{ Form::open([
 										'class' => 'edit-wrapper address-suggester-wrapper-input', 
 										'method' => 'post', 
-										'url' => getLangUrl('profile/info') 
+										'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 									]) }}
 										{!! csrf_field() !!}
 
@@ -1427,10 +1428,10 @@
 							<div class="map-container" id="profile-map" lat="{{ $item->lat }}" lon="{{ $item->lon }}"></div>
 						@endif
 					</div>
-					@if($item->photos->isNotEmpty() || (!empty($user) && $item->id==$user->id) )
+					@if($item->photos->isNotEmpty() || ($loggedUserAllowEdit) )
 						<div class="gallery-slider col {!! count($item->photos) > 1 ? 'with-arrows' : '' !!}">
 							<div class="gallery-flickity">
-								@if( (!empty($user) && $item->id==$user->id && $item->photos->count() < 10 ) )
+								@if( ($loggedUserAllowEdit && $item->photos->count() < 10 ) )
 									<div class="slider-wrapper add-gallery-wrapper">
 										{{ Form::open([
 											'class' => 'gallery-add', 
@@ -1452,7 +1453,7 @@
 													type="file" 
 													name="image" 
 													id="add-gallery-photo" 
-													upload-url="{{ getLangUrl('profile/gallery') }}" 
+													upload-url="{{ getLangUrl('profile/gallery/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) }}" 
 													sure-trans="{!! trans('trp.page.user.gallery-sure') !!}" 
 													accept="image/png,image/jpeg,image/jpg"
 												>
@@ -1463,7 +1464,7 @@
 								@foreach($item->photos as $photo)
 									<a href="{{ $photo->getImageUrl() }}" data-lightbox="user-gallery" class="slider-wrapper" photo-id="{{ $photo->id }}">
 										<div class="slider-image cover" style="background-image: url('{{ $photo->getImageUrl(true) }}')">
-											@if( (!empty($user) && $item->id==$user->id) )
+											@if( ($loggedUserAllowEdit) )
 												<div class="delete-gallery delete-button" sure="{!! trans('trp.page.user.gallery-sure') !!}">
 													<img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
 												</div>
@@ -1476,23 +1477,23 @@
 					@endif
 				</div>
 
-				@if($workingTime || !empty($user) && $item->id==$user->id)
+				@if($workingTime || $loggedUserAllowEdit)
 					<div class="tab-inner-section open-hours-section">
 						<h3>
 							Open hours
 							
-							@if(!empty($user) && $item->id==$user->id)
+							@if($loggedUserAllowEdit)
 								<a class="edit-field-button">
 									<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>
 								</a>
 							@endif
 						</h3>
 
-						@if(!empty($user) && $item->id==$user->id)
+						@if($loggedUserAllowEdit)
 							{!! Form::open([
 								'class' => 'edit-working-hours-form',
 								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
+								'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 							]) !!}
 								{!! csrf_field() !!}
 						@endif
@@ -1504,7 +1505,7 @@
 										$hours[$h] = $h;
 									}
 
-									$minute = [
+									$minutes = [
 										'00' => '00',
 										'10' => '10',
 										'20' => '20',
@@ -1518,7 +1519,7 @@
 										<p class="month">
 											{{ $week_day }}
 										</p>
-										@if( (!empty($user) && $item->id==$user->id) )
+										@if( ($loggedUserAllowEdit) )
 											<div class="edit-working-hours-wrapper">
 												<div class="edit-working-hours-wrap">
 													{{ Form::select( 
@@ -1591,7 +1592,7 @@
 								@endforeach
 							</div>
 							
-						@if( (!empty($user) && $item->id==$user->id) )
+						@if( ($loggedUserAllowEdit) )
 							<input type="hidden" name="json" value="1" />
 							<input type="hidden" name="field" value="work_hours" />
 							<button type="submit" class="blue-button">
@@ -1604,21 +1605,21 @@
 				@endif
 
 				<div class="tab-inner-section checkbox-section payments-section">
-					@if($item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id))
+					@if($item->categories->isNotEmpty() || ($loggedUserAllowEdit))
 						<h3>
 							Payment methods
 
-							@if(!empty($user) && $item->id==$user->id)
+							@if($loggedUserAllowEdit)
 								<a class="edit-field-button edit-payments">
 									<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 								</a>
 							@endif
 						</h3>
-						@if(!empty($user) && $item->id==$user->id)
+						@if($loggedUserAllowEdit)
 							{{ Form::open([
 								'class' => 'edit-checkboxes-form',
 								'method' => 'post', 
-								'url' => getLangUrl('profile/info') 
+								'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 							]) }}
 								{!! csrf_field() !!}
 						@endif
@@ -1627,7 +1628,7 @@
 								<label class="payment" for="payment-{{ $acceptedPayment }}">
 									<img src="{{ url('img-trp/payment-methods/'.$acceptedPayment.'.svg') }}"/>
 									{!! trans('trp.accepted-payments.'.$acceptedPayment) !!}
-									@if(!empty($user) && $item->id==$user->id)
+									@if($loggedUserAllowEdit)
 										<input 
 											type="checkbox"
 											id="payment-{{ $acceptedPayment }}" 
@@ -1642,7 +1643,7 @@
 								</label>
 							@endforeach
 						</div>
-						@if(!empty($user) && $item->id==$user->id)
+						@if($loggedUserAllowEdit)
 								<div class="checkboxes-wrapper dentist-payments not-added">
 									@foreach(config('trp.payment_methods') as $k => $acceptedPayment)
 										@if(!in_array($acceptedPayment, $user->accepted_payment))
@@ -1758,7 +1759,7 @@
 	</div>
 </div>
 
-@if(!empty($user) && $user->id==$item->id && ($hasPatientInvites || $hasPatientAsks))
+@if($loggedUserAllowEdit && ($hasPatientInvites || $hasPatientAsks))
 	<div class="asks-section">
 		
 		<div class="container">
@@ -1927,7 +1928,7 @@
 	</div>
 @endif
 
-{{-- @if(!empty($user) && $item->id==$user->id)
+{{-- @if($loggedUserAllowEdit)
 	<div class="strength-parent fixed">
 		@include('trp.parts.strength-scale')
 	</div>
@@ -1935,7 +1936,7 @@
 
 @if(!empty($user))
 
-	@if( $user->id==$item->id )
+	@if( $loggedUserAllowEdit )
 		{{-- @include('trp.popups.add-branch') --}}
 		{{-- @include('trp.popups.widget') --}}
 		@include('trp.popups.invite')

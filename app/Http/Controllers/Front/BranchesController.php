@@ -12,6 +12,7 @@ use App\Models\Country;
 use App\Models\User;
 
 use App\Helpers\GeneralHelper;
+use App\Helpers\TrpHelper;
 use Carbon\Carbon;
 
 use Validator;
@@ -34,11 +35,34 @@ class BranchesController extends FrontController {
             $social_title = $seos->social_title;
             $social_description = $seos->social_description;
 
-            $items = [];
+            $branches = [$clinic->id];
 
             foreach($clinic->branches as $branch) {
-                $items[] = $branch->branchClinic;
+                $branches[] = $branch->branchClinic->id;
             }
+
+            $items = User::whereIn('id', $branches);
+
+            $requestTypes = Request::input('types');
+
+            if(empty($requestTypes)) {
+                $requestTypes = [
+                    'all',
+                ];
+            }
+
+            $filters = TrpHelper::filterDentists($items, $requestTypes, $filter=false, $forBranch=true);
+
+            $dentistSpecialications = $filters['dentistSpecialications'];
+            $dentistTypes = $filters['dentistTypes'];
+            $dentistRatings = $filters['dentistRatings'];
+            $requestRatings = $filters['requestRatings'];
+            $dentistAvailability = $filters['dentistAvailability'];
+            $requestAvailability = $filters['requestAvailability'];
+            $requestOrder = $filters['requestOrder'];
+            $orders = $filters['orders'];
+            $types = $filters['types'];
+            $searchCategories = $filters['searchCategories'];
 
             return $this->ShowView('branches', [
                 'noIndex' => true,
@@ -49,13 +73,52 @@ class BranchesController extends FrontController {
                 'seo_description' => $seo_description,
                 'social_title' => $social_title,
                 'social_description' => $social_description,
+
+                'searchCategories' => $searchCategories,
+                'dentistSpecialications' => $dentistSpecialications,
+                'dentistTypes' => $dentistTypes,
+                'requestTypes' => $requestTypes,
+                'types' => $types,
+                'dentistRatings' => $dentistRatings,
+                'requestRatings' => $requestRatings,
+                'ratings' => [
+                    5 => 'Above 4 stars',
+                    4 => 'Above 3 stars',
+                    3 => 'Above 2 stars',
+                    2 => 'Above 1 stars',
+                ],
+    
+                'languages' => [
+                    'en' => 'English',
+                    'gr' => 'German',
+                    'it' => 'Italian',
+                    'es' => 'Spanish',
+                    'fr' => 'French',
+                ],
+    
+                'experiences' => [
+                    'under_five' => 'Less than 5 years',
+                    'under_ten' => '5-10 years',
+                    'over_ten' => '10+ years',
+                ],
+                
+                'dentistAvailability' => $dentistAvailability,
+                'requestAvailability' => $requestAvailability,
+                'availabilities' => [
+                    'early_morning' => 'Early morning • Starts before 10 am',
+                    'morning' => 'Morning • Starts before 12 pm',
+                    'afternoon' => 'Afternoon • Starts after 12 pm',
+                    'evening' => 'Evening • Starts after 5 pm',
+                ],
+    
+                'requestOrder' => $requestOrder,
+                'orders' => $orders,
+
+
                 'css' => [
                     'trp-search-results.css',
                 ],
                 'js' => [
-                    'search-form.js',
-                    'branch.js',
-                    'address.js',
                     'search-results.js',
                 ],
                 'jscdn' => [
@@ -164,18 +227,18 @@ class BranchesController extends FrontController {
                     $phone = ltrim( str_replace(' ', '', Request::Input('clinic_phone')), '0');
                     $pn = $c->phone_code.' '.$phone;
 
-                    $validator = Validator::make(['clinic_phone' => $pn], [
-                        'clinic_phone' => ['required','phone:'.$c->code],
-                    ]);
+                    // $validator = Validator::make(['clinic_phone' => $pn], [
+                    //     'clinic_phone' => ['required','phone:'.$c->code],
+                    // ]);
 
-                    if ($validator->fails()) {
-                        return Response::json([
-                            'success' => false, 
-                            'messages' => [
-                                'clinic_phone' => trans('trp.popup.registration.phone')
-                            ]
-                        ]);
-                    }
+                    // if ($validator->fails()) {
+                    //     return Response::json([
+                    //         'success' => false, 
+                    //         'messages' => [
+                    //             'clinic_phone' => trans('trp.popup.registration.phone')
+                    //         ]
+                    //     ]);
+                    // }
 
                     $session_user_branch = [];
                     if(session('user_branch')) {
@@ -252,18 +315,18 @@ class BranchesController extends FrontController {
                 $phone = ltrim( str_replace(' ', '', Request::Input('clinic_phone')), '0');
                 $pn = $c->phone_code.' '.$phone;
 
-                $validator = Validator::make(['clinic_phone' => $pn], [
-                    'clinic_phone' => ['required','phone:'.$c->code],
-                ]);
+                // $validator = Validator::make(['clinic_phone' => $pn], [
+                //     'clinic_phone' => ['required','phone:'.$c->code],
+                // ]);
 
-                if ($validator->fails()) {
-                    return Response::json([
-                        'success' => false, 
-                        'messages' => [
-                            'clinic_phone' => trans('trp.popup.registration.phone')
-                        ]
-                    ]);
-                }
+                // if ($validator->fails()) {
+                //     return Response::json([
+                //         'success' => false, 
+                //         'messages' => [
+                //             'clinic_phone' => trans('trp.popup.registration.phone')
+                //         ]
+                //     ]);
+                // }
                 
                 $newuser = new User;
                 $newuser->name = Request::input('clinic_name');
@@ -381,72 +444,6 @@ class BranchesController extends FrontController {
 		            User::destroy( $item->id );
             	}
 
-                $ret['success'] = true;
-            }
-        }
-
-        return Response::json( $ret );
-    }
-
-    // public function logoutas($locale=null) {
-
-    //     $encrypted_user_id = GeneralHelper::encrypt($this->user->id);
-
-    //     // Auth::guard('web')->user()->logoutActions();
-    //     // Auth::guard('web')->user()->removeTokens();
-    //     // Auth::guard('web')->logout();
-
-    //     $ret['success'] = true;
-
-    //     $token = GeneralHelper::encrypt(session('login-logged-out'));
-    //     $imgs_urls = [];
-    //     foreach( config('platforms') as $k => $platform ) {
-    //         if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
-    //             if($k !== 'vox' && $k !== 'account') {
-    //                 $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?logout-token='.urlencode($token);
-    //             }
-    //         }
-    //     }
-    //     $imgs_urls[] = '//vox.dentacoin.com/custom-cookie?logout-token='.urlencode($token);
-
-    //     $ret['imgs_urls'] = $imgs_urls;
-    //     $ret['encrypted_user_id'] = $encrypted_user_id;
-
-    //     return Response::json( $ret );
-    // }
-
-    public function loginas( $locale=null) {
-        $ret['success'] = false;
-
-        if(
-            !empty($this->user) 
-            && !empty(request('branch_id')) 
-            && $this->user->branches->isNotEmpty() 
-            && in_array(request('branch_id'), $this->user->branches->pluck('branch_clinic_id')->toArray())
-        ) {
-
-            $id = request('branch_id');
-            $item = User::find($id);
-
-            if(!empty($item)) {
-
-                Auth::login($item, true);
-
-                // $tokenobj = $item->createToken('LoginToken');
-                // $tokenobj->token->platform = 'trp';
-                // $tokenobj->token->save();
-
-                // $token = GeneralHelper::encrypt($tokenobj->accessToken);
-                // $imgs_urls = [];
-                // foreach( config('platforms') as $k => $platform ) {
-                //     if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
-                //         if($k !== 'vox' && $k !== 'account') {
-                //             $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?slug='.urlencode(GeneralHelper::encrypt($item->id)).'&type='.urlencode(GeneralHelper::encrypt('dentist')).'&token='.urlencode($token);
-                //         }
-                //     }
-                // }
-
-                // $ret['imgs_urls'] = $imgs_urls;
                 $ret['success'] = true;
             }
         }

@@ -1928,17 +1928,19 @@ footer {
           margin-right: auto;
           margin-left: auto;
           margin-bottom: -76px; } }
-  .popup.no-image .popup-inner {
-    left: 50%;
-    transform: translateX(-50%);
-    top: 30px; }
-    @media screen and (max-width: 998px) {
-      .popup.no-image .popup-inner {
-        top: 0px;
-        border-radius: 0px; } }
-    @media screen and (max-width: 768px) {
-      .popup.no-image .popup-inner {
-        padding: 35px 15px; } }
+  .popup.no-image {
+    align-items: flex-start; }
+    .popup.no-image .popup-inner {
+      left: 50%;
+      transform: translateX(-50%);
+      top: 30px; }
+      @media screen and (max-width: 998px) {
+        .popup.no-image .popup-inner {
+          top: 0px;
+          border-radius: 0px; } }
+      @media screen and (max-width: 768px) {
+        .popup.no-image .popup-inner {
+          padding: 35px 15px; } }
   .popup.with-image {
     align-items: center;
     justify-content: center; }

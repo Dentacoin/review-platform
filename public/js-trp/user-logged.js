@@ -1,6 +1,5 @@
 var videoStart, videoLength;
 var slider = null;
-var sliderTO = null;
 var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;

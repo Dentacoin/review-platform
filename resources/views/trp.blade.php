@@ -130,7 +130,6 @@
 				    <div class="navbar-header {{ !empty($user) ? '' : 'show-mobile-menu' }}">
 						<a class="logo" href="{{ getLangUrl('/') }}"></a>
 						<div class="header-info">
-							
 	                        @if(!empty($user))
 								@if($current_page != 'index')
 									<a href="javascript:;" class="search-dentists">
@@ -140,12 +139,7 @@
 								<a href="javascript:;" class="user-profile-info header-avatar" id="header-avatar">
 									<span>Rewards: </span>
 									<span class="user-balance">{{ number_format($user_total_balance) }} DCN</span>
-									<img src="{{ $user->getImageUrl(true) }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
-									{{-- @if($user->is_clinic && $user->branches->isNotEmpty())
-										<div class="profile-branches">
-											<img src="{{ url('img-trp/swith-account-black.svg') }}"/>
-										</div>
-									@endif --}}
+									<img src="{{ $user_avatar }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
 									@if(!empty($has_review_notification))
 										<div class="notification"></div>
 									@endif
@@ -180,9 +174,6 @@
 		    </div>
 		    @if(false)
 		    {{-- @if(!empty($user) && $user->is_clinic) --}}
-		    	@if($user->branches->isNotEmpty() && isset($clinicBranches))
-		    		<input type="hidden" id="clinic-branches" value="{{ $clinicBranches }}">
-		    	@endif
 		    	<input type="hidden" id="add-branches-popup-link" value="https://reviews.dentacoin.com/en/dentist/{{$user->slug}}/?popup-loged=popup-branch">
 		    @endif
 	    </header>

@@ -157,6 +157,9 @@ $(document).ready(function(){
 
         // add assoc key values, this will be posts values
         formData.append("image", this.file, this.getName());
+        if($('[name="_token"]').length) {
+            formData.append("_token", $('[name="_token"]').val());
+        }
         formData.append("upload_file", true);
 
         $.ajax({
