@@ -971,7 +971,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             if (!file_exists($this->getImagePath(storage_path().'/app/public/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg'))) {
                 $avatar = url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
             } else {
-                $avatar = url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg');
+                $avatar = url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp;
             }
             return $avatar;
         // }
