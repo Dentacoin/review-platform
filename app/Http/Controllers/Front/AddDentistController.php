@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
 use App\Helpers\GeneralHelper;
+use App\Helpers\TrpHelper;
 
 use App\Models\Country;
 use App\Models\User;
@@ -141,8 +142,9 @@ class AddDentistController extends FrontController {
                 $newdentist->status = 'added_new';
                 $newdentist->address = Request::input('address');
 
-                if(str_contains(strtolower(Request::input('website')), 'facebook.com')) {
-                    $newdentist->socials = ['facebook' => Request::input('website')];
+                $social_network = TrpHelper::detectWebsitePlatform(Request::input('website'));
+                if($social_network) {
+                    $newdentist->socials = [$social_network => Request::input('website')];
                 } else {
                     $newdentist->website = Request::input('website');
                 }

@@ -6,11 +6,26 @@ $phone: "screen and (max-width: 768px)";
 	z-index: 999;
 
 	.popup-inner {
-		width: 770px;
+		width: 870px;
+		padding: 55px 120px;
 
-		// @media #{$tablet} {
-		// 	width: 100%;
-		// }
+		@media #{$tablet} {
+			width: 100%;
+		}
+
+		@media #{$phone} {
+			padding: 55px 15px;
+		}
+
+		h2 {
+			margin-bottom: 40px;
+		}
+
+		h4 {
+			font-size: 20px;
+			color: #0084d1;
+			font-weight: 800;
+		}
 
 		.branch-content {
 			padding: 0px 20px;
@@ -20,21 +35,29 @@ $phone: "screen and (max-width: 768px)";
 			}
 
 			.last-step-flex {
-				margin-bottom: 35px;
+				margin-left: -60px;
+				margin-right: -60px;
+				border-top: 1px solid #c5ccde;
+				padding-top: 30px;
+				margin-bottom: 50px;
+
+				@media #{$phone} {
+					margin-left: 0px;
+    				margin-right: 0px;
+				}
 
 				.col {
-					margin-right: 20px;
 
-					@media #{$phone} {
-						margin-right: 0px;
-					}
-
-					&:nth-child(2) {
+					&:first-child {
+						max-width: 260px;
+						border-right: 1px solid #c5ccde;
+						margin-right: 30px;
+	
 						@media #{$phone} {
-							display: flex;
-							justify-content: center;
 							margin-right: 0px;
-							margin-top: 30px;
+							max-width: 100%;
+							border-right: none;
+							margin-bottom: 30px;
 						}
 					}
 				}
@@ -43,6 +66,40 @@ $phone: "screen and (max-width: 768px)";
 			.submit-branch-button,
 			.next-branch-button {
 				text-align: center;
+				position: relative;
+				text-transform: none;
+
+				&.waiting {
+					color: #0084d1;
+
+					&:hover {
+						background-color: #0084d1;
+					}
+	
+					.loader {
+						display: block;
+					}
+				}
+				.loader {
+					position: absolute;
+					left: 50%;
+					top: 50%;
+					transform: translateX(-50%) translateY(-50%);
+	
+					i {
+						border-radius: 50%;
+						display: block;
+						font-size: 15px;
+						width: 20px;
+						height: 20px;
+						text-indent: -9999em;
+						border-top: 3px solid #121212;
+						border-right: 3px solid white;
+						border-bottom: 3px solid white;
+						border-left: 3px solid white;
+						animation: load8 1.1s infinite linear;
+					}
+				}
 			}
 
 			.prev-branch-button {
@@ -56,60 +113,98 @@ $phone: "screen and (max-width: 768px)";
 			}
 
 			.image-label {
-    			margin-left: auto;
+    			width: 150px;
+    			height: 150px;
+				border-radius: 50%;
+				border: 1px solid #0084d1;
+				background-color: #f4f7ff;
 
-    			@media #{$phone} {
-					margin-right: auto;
-    			}
+				.plus-image {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translateX(-50%) translateY(-50%);
+					text-align: center;
+					width: 100px;
+
+					img {
+						width: 60px;
+					}
+
+					span {
+						display: block;
+						font-size: 16px;
+						color: #0084d1;
+						margin-top: 10px;
+						font-weight: 900;
+					}
+				}
 			}
 
-			.phone-code-holder {
-				margin-top: 20px;
-			    display: block;
-			    margin-right: 5px;
+			.phone-code-holder-wrapper {
+				.phone-code-holder {
+					padding-left: 10px;
+					padding-right: 10px;
+					font-size: 16px;
+					color: #332255;
+					height: 58px;
+					border-radius: 4px;
+					border: 2px solid #cccccc;
+					background-color: white;
+					line-height: 56px;
+					display: block;
+					border-top-right-radius: 0px;
+					border-bottom-right-radius: 0px;
+					border-right-width: 1px;
+	
+					// @media #{$tablet} {
+					// 	margin-top: 13px;
+					// }
+				}
 
-			    @media #{$tablet} {
-    				margin-top: 13px;
-    			}
+				input {
+					border-top-left-radius: 0px;
+					border-bottom-left-radius: 0px;
+					border-left: 0px;
+				}
 			}
 
 			.cropper-container {
-				margin-left: auto;
-    			margin-bottom: 40px;
-
-				@media #{$phone} {
-					margin-right: auto;
+				.cr-boundary {
+					border-radius: 50%;
 				}
 			}
 
 			.avatar-name-wrapper,
 			.image-big-error {
-				margin-left: auto;
-				max-width: 180px;
-
-				@media #{$phone} {
-					margin-right: auto;
-				}
+				max-width: 150px;
 			}
 
-			.max-size-label {
-				@media #{$phone} {
-					max-width: 180px;
-					margin-left: auto;
-					margin-right: auto;
-				}
-			}
+			.specializations {
+				label {
+					position: relative;
+					font-size: 16px;
+					padding: 8px 23px 10px;
+					display: inline-block;
+					border-radius: 22px;
+					margin-right: 10px;
+					transition: all 0.3s ease;
+					background-color: #f2f6ff;
+					margin-bottom: 15px;
+					cursor: pointer;
+					text-align: center;
+					min-width: auto;
 
-			.checkbox-question {
-				max-width: 200px;
-				margin-bottom: 7px;
-			}
+					&.active {
+						background-color: #e2ebff;
+						border: 1px solid #3b9fdd;
+						transition: all 0.3s ease;
+					}
 
-			.checkbox-label {
-				text-align: left;
-
-				.checkbox-square {
-					margin-top: 4px;
+					&:hover {
+						background-color: #e2ebff;
+						transition: all 0.3s ease;
+					}
 				}
 			}
 		}

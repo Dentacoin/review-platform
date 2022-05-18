@@ -4,6 +4,7 @@
 
 @php
 	$loggedUserAllowEdit = !empty($user) && ($user->id==$item->id || $editing_branch_clinic) ? true : false;
+	$real_user = !empty($user) ? $user : null;
 	$user = !empty($editing_branch_clinic) ? $editing_branch_clinic : (!empty($user) ? $user : null);
 	
 	$videoReviewsCount = $item->reviews_in_video()->count();
@@ -139,31 +140,32 @@
 							{{ trans('trp.page.user.recommend') }}
 						</a>
 					@endif --}}
+					
+					@php
+						$is_branch = !empty($real_user) && $real_user->is_clinic && $item->is_clinic && $real_user->branches->isNotEmpty() && in_array($item->id, $real_user->branches->pluck('branch_clinic_id')->toArray());
+						$is_main_clinic_branch = !empty($real_user) && $real_user->is_clinic && $item->is_clinic && $real_user->branches->isNotEmpty() && $real_user->id == $item->mainBranchClinic->id;
+					@endphp
 
-					@if(
-					!empty($user) 
-					&& $user->is_clinic 
-					&& $item->is_clinic 
-					&& $user->branches->isNotEmpty() 
-					&& in_array($item->id, $user->branches->pluck('branch_clinic_id')->toArray()))
-
-						<a class="clinic-branches mont" href="{{ getLangUrl('branches/'.$item->slug) }}">
-							<img src="{{ url('img-trp/branches.svg') }}" width="24"/>
-							Manage branches
-						</a>
-					@else
-						@if($item->branches->isNotEmpty())
-							<a class="clinic-branches mont" href="{{ getLangUrl('branches/'.$item->slug) }}">
+					@if( $is_branch || $is_main_clinic_branch)
+						
+						@if($is_main_clinic_branch && $is_branch)
+							<a href="javascript:;" delete-url="{{ getLangUrl('delete-branch') }}" branch-id="{{ $item->id }}" class="delete-branch white-button">
+								X Delete branch
+							</a>
+						@else
+							<a class="clinic-branches mont" href="{{ getLangUrl($item->slug.'/branches') }}">
 								<img src="{{ url('img-trp/branches.svg') }}" width="24"/>
-								{{-- {!! nl2br(trans('trp.page.user.branch.see-branches')) !!} --}}
-								@if($loggedUserAllowEdit)
-									Manage branches
-								@else
-									Check branches
-								@endif
+								Manage branches
 							</a>
 						@endif
-					@endif
+					@else
+						@if($item->branches->isNotEmpty())
+							<a class="clinic-branches mont" href="{{ getLangUrl($item->slug.'/branches') }}">
+								<img src="{{ url('img-trp/branches.svg') }}" width="24"/>
+								Check branches
+							</a>
+						@endif
+					@endif					
 
 					@if(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
 						<a class="claim-button" href="javascript:;" data-popup="claim-popup">
@@ -383,6 +385,17 @@
 									'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 								]) }}
 									{!! csrf_field() !!}
+
+									<select name="country_id" id="dentist-country1" class="modern-input country-select" style="display: none">
+										@if(!$country_id)
+											<option>-</option>
+										@endif
+										@if(!empty($countries))
+											@foreach( $countries as $country )
+												<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+											@endforeach
+										@endif
+									</select>
 
 									<div class="flex flex-mobile flex-center">
 										<input 
@@ -1393,6 +1406,17 @@
 									]) }}
 										{!! csrf_field() !!}
 
+										<select name="country_id" id="dentist-country1" class="modern-input country-select" style="display: none">
+											@if(!$country_id)
+												<option>-</option>
+											@endif
+											@if(!empty($countries))
+												@foreach( $countries as $country )
+													<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+												@endforeach
+											@endif
+										</select>
+
 										<div class="flex flex-mobile flex-center">
 											<input 
 											type="text" 
@@ -1937,7 +1961,7 @@
 @if(!empty($user))
 
 	@if( $loggedUserAllowEdit )
-		{{-- @include('trp.popups.add-branch') --}}
+		@include('trp.popups.add-branch')
 		{{-- @include('trp.popups.widget') --}}
 		@include('trp.popups.invite')
 		{{-- @if(!empty(session('first_guided_tour')) || !empty(session('reviews_guided_tour')))

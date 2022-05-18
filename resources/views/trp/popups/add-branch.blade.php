@@ -6,64 +6,39 @@
 			</a>
 		</div>
 
-		<h2>
-			{{ trans('trp.popup.add-branch.title') }}
-		</h2>
-
-		<div class="step-tabs branch-tabs flex flex-center flex-text-center flex-mobile">
-			<div class="step {!! !session('user_branch') ? 'active' : '' !!}" data-branch="1">
-				<span class="border">
-					<span>1</span>
-				</span>
-				{{-- <p>Practice info</p> --}}
-			</div>
-			<div class="step {!! session('user_branch') && !isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}" data-branch="2">
-				<span class="border">
-					<span>2</span>
-				</span>
-				{{-- <p>Current state</p> --}}
-			</div>
-			<div class="step {!! session('user_branch') && isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}" data-branch="3">
-				<span class="border">
-					<span>3</span>
-				</span>
-				{{-- <p>Your score</p> --}}
-			</div>
-		</div>
-
 		{!! Form::open([
 			'method' => 'post', 
 			'class' => 'add-new-branch-form', 
 			'url' => getLangUrl('profile/add-new-branch'), 
-			'success-url' => getLangUrl('branches/'.$user->slug) 
 		]) !!}
 			{!! csrf_field() !!}
 
-			<div id="branch-option-1" class="branch-content" {!! session('user_branch') ? 'style="display: none;"' : '' !!}>
+			<div id="branch-option-1" class="branch-content">
 
-				<div class="modern-field alert-after {!! isset(session('user_branch')['clinic_name']) ? 'active' : '' !!}" >
-					<input type="text" name="clinic_name" id="clinic_name" class="modern-input tooltip-text input-tooltip clinic_name" text="{{ trans('trp.popup.add-branch.clinic-name.tooltip') }}" autocomplete="off" {!! isset(session('user_branch')['clinic_name']) ? 'value="'.session('user_branch')['clinic_name'].'"' : '' !!}>
+				<h2 class="mont">
+					{{-- {{ trans('trp.popup.add-branch.title') }} --}}
+					Add branch office
+				</h2>
+
+				<div class="modern-field alert-after">
+					<input type="text" name="clinic_name" id="clinic_name" class="modern-input clinic_name" autocomplete="off">
 					<label for="clinic_name">
-						<span>{{ trans('trp.popup.add-branch.clinic-name') }}</span>
+						{{-- <span>{{ trans('trp.popup.add-branch.clinic-name') }}</span> --}}
+						<span>Enter Clinic name:</span>
 					</label>
-					<p>{{ trans('trp.popup.add-branch.clinic-name.description') }}</p>
+					{{-- <p>{{ trans('trp.popup.add-branch.clinic-name.description') }}</p> --}}
+					<p> Please, write the full name of the clinic to ensure that patients will find it easily.</p>
 				</div>
-				<div class="modern-field alert-after {!! isset(session('user_branch')['clinic_name_alternative']) ? 'active' : '' !!}">
-					<input type="text" name="clinic_name_alternative" id="clinic_name_alternative" class="modern-input clinic_name_alternative" autocomplete="off" {!! isset(session('user_branch')['clinic_name_alternative']) ? 'value="'.session('user_branch')['clinic_name_alternative'].'"' : '' !!}>
+
+				<div class="modern-field alert-after">
+					<input type="text" name="clinic_name_alternative" id="clinic_name_alternative" class="modern-input clinic_name_alternative" autocomplete="off" >
 					<label for="clinic_name_alternative">
-						<span>{{ trans('trp.popup.add-branch.clinic-name-alternative') }}:</span>
+						{{-- <span>{{ trans('trp.popup.add-branch.clinic-name-alternative') }}:</span> --}}
+						<span>Enter Alternative spelling (optional):</span>
 					</label>
-					<p>{{ trans('trp.popup.add-branch.clinic-name-alternative.description') }}</p>
+					{{-- <p>{{ trans('trp.popup.add-branch.clinic-name-alternative.description') }}</p> --}}
+					<p>For example, Дентална практика “ВитаДент”</p>
 				</div>
-
-				<div class="alert invite-alert" style="display: none; margin-top: 20px;"></div>
-
-				<div class="tac">
-					<a href="javascript:;" id="first-branch-next" class="blue-button next-branch-button" to-step="2" branch-url="{{ getLangUrl('profile/add-new-branch/1') }}" style="margin-right: auto;">{{ trans('trp.popup.add-branch.button-next') }}</a>
-				</div>
-			</div>
-
-			<div id="branch-option-2" class="branch-content" {!! session('user_branch') && !isset(session('user_branch')['clinic_website']) ? '' : 'style="display: none;"' !!}>
 
 				<div class="address-suggester-wrapper-input">
 					<div class="modern-field alert-after">
@@ -72,63 +47,74 @@
 				  				<option>-</option>
 				  			@endif
 			  				@foreach( $countries as $country )
-			  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! isset(session('user_branch')['clinic_country_id']) ? (session('user_branch')['clinic_country_id'] == $country->id ? 'selected="selected"' : '') : ($country_id==$country->id ? 'selected="selected"' : '') !!} >{{ $country->name }}</option>
+			  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
 			  				@endforeach
 			  			</select>
 					</div>
-					<div class="modern-field alert-after" {!! isset(session('user_branch')['clinic_address']) ? 'active' : '' !!}>
-						<input type="text" name="clinic_address" id="clinic_address" class="modern-input tooltip-text input-tooltip clinic_address address-suggester-input" autocomplete="chrome-off" text="{{ trans('trp.popup.add-branch.address.tooltip') }}" {!! isset(session('user_branch')['clinic_address']) ? 'value="'.session('user_branch')['clinic_address'].'"' : '' !!}>
+
+					<div class="modern-field alert-after">
+						<input type="text" name="clinic_address" id="clinic_address" class="modern-input clinic_address address-suggester-input" autocomplete="chrome-off">
 						<label for="clinic_address">
 							<span>{{ trans('trp.popup.add-branch.address') }}:</span>
 						</label>
-						<p>{{ trans('trp.popup.add-branch.address.description') }}</p>
+						{{-- <p>{{ trans('trp.popup.add-branch.address.description') }}</p> --}}
+						<p>Please, enter the full address of your branch office as written on your website, Facebook or Google Business page.</p>
 					</div>
-                    <div class="suggester-map-div" style="height: 100px; display: none; margin: 10px 0px;">
-                    </div>
+                    <div class="suggester-map-div" style="height: 222px; display: none; margin: 10px 0px;"></div>
                     <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px 20px;">
-                    	{!! nl2br(trans('trp.common.check-address')) !!}
+						Please, check if we got the right address. If not, just drag the map to adjust it.
+                    	{{-- {!! nl2br(trans('trp.common.check-address')) !!} --}}
                     </div>
                     <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
                     	{!! nl2br(trans('trp.common.invalid-address')) !!}
                     </div>
                 </div>
 
-                <div class="modern-field alert-after" {!! isset(session('user_branch')['clinic_website']) ? 'active' : '' !!}>
-					<input type="text" name="clinic_website" id="clinic_website" class="modern-input clinic_website" autocomplete="off" {!! isset(session('user_branch')['clinic_website']) ? 'value="'.session('user_branch')['clinic_website'].'"' : '' !!}>
+				<div class="tac">
+					<a href="javascript:;" id="first-branch-next" class="blue-button next-branch-button" to-step="2" branch-url="{{ getLangUrl('profile/add-new-branch/1') }}" style="margin-right: auto;">{{ trans('trp.popup.add-branch.button-next') }}</a>
+				</div>
+			</div>
+
+			<div id="branch-option-2" class="branch-content" style="display: none;">
+
+				<h2 class="mont">
+					{{-- {{ trans('trp.popup.add-branch.title') }} --}}
+					Complete branch profile
+				</h2>
+
+				<div class="flex flex-mobile alert-after phone-code-holder-wrapper">
+					<div>
+	    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
+					</div>
+					<div style="flex: 1;" class="modern-field">
+						<input type="text" name="clinic_phone" id="clinic_phone" class="modern-input clinic_phone" autocomplete="off"/>
+						<label for="clinic_phone">
+							{{-- <span>{{ trans('trp.popup.add-branch.phone') }}:</span> --}}
+							<span>Enter phone number without country code:</span>
+						</label>
+					</div>
+				</div>
+				
+                <div class="modern-field alert-after">
+					<input type="text" name="clinic_website" id="clinic_website" class="modern-input clinic_website" autocomplete="off"/>
 					<label for="clinic_website">
-						<span>{{ trans('trp.popup.add-branch.website') }}</span>
+						{{-- <span>{{ trans('trp.popup.add-branch.website') }}</span> --}}
+						<span>Enter full website URL:</span>
 					</label>
 					<p>{{ trans('trp.popup.add-branch.website.description') }}</p>
 				</div>
 
-				<div class="flex flex-mobile alert-after">
-					<div>
-	    				<span class="phone-code-holder">{{ isset(session('user_branch')['clinic_country_id']) ? '+'.$countries->where('id', session('user_branch')['clinic_country_id'])->first()->phone_code : ($country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '') }}</span>
-					</div>
-					<div style="flex: 1;" class="modern-field" {!! isset(session('user_branch')['clinic_phone']) ? 'active' : '' !!}>
-						<input type="text" name="clinic_phone" id="clinic_phone" class="modern-input clinic_phone" autocomplete="off" {!! isset(session('user_branch')['clinic_phone']) ? 'value="'.session('user_branch')['clinic_phone'].'"' : '' !!}>
-						<label for="clinic_phone">
-							<span>{{ trans('trp.popup.add-branch.phone') }}:</span>
-						</label>
-					</div>
-				</div>
-
-				<div class="tac">
-					<a href="javascript:;" class="white-button prev-branch-button" to-step="1"><</a>
-					<a href="javascript:;" id="second-branch-next" class="blue-button next-branch-button" to-step="3" branch-url="{{ getLangUrl('profile/add-new-branch/2') }}">{{ trans('trp.popup.add-branch.button-next') }}</a>
-				</div>
-			</div>
-
-			<div id="branch-option-3" class="branch-content" {!! session('user_branch') && isset(session('user_branch')['clinic_website']) ? '' : 'style="display: none;"' !!}>
 				<div class="flex alert-after last-step-flex">
 					<div class="col">
+						<h4>Add branch profile image:</h4>
 						<div class="upload-image-wrapper">
 							<label for="add-avatar-clinic-branch" class="image-label">
-								<div class="centered-hack">
-									<img src="{{ url('img/plus.svg') }}"/>
-									<p>
-										{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}													
-									</p>
+								<div class="plus-image">
+									<img src="{{ url('img-trp/add-icon.png') }}"/>
+									<span>
+										Add image
+										{{-- {!! nl2br(trans('trp.page.user.reviews-image')) !!} --}}
+									</span>
 								</div>
 								<div class="loader">
 									<i></i>
@@ -142,23 +128,18 @@
 								<span class="avatar-name"></span>
 								<button class="destroy-croppie" type="button">×</button>
 							</div>
-	
-							<div class="max-size-label">
-								<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="upload" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="width-100">
-									<path fill="currentColor" d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z" class=""></path>
-								</svg>
-								{{ trans('trp.popup.add-branch.image-max-size') }}
-							</div>
+
 							<div class="alert alert-warning image-big-error" style="display: none; margin-top: 20px;">The file you selected is large. Max size: 2MB.</div>
 						</div>
 					</div>
 					<div class="col">
-						<div class="specilializations">
-							<p class="checkbox-question">
-								{{ trans('trp.popup.add-branch.specializations') }}:
-							</p>
-					    	@foreach($categories as $k => $v)
+						<h4>Select branch’s specialties:</h4>
+						
+						<div class="specializations">
+
+							@foreach($categories as $k => $v)
 								<label class="checkbox-label" for="checkbox-{{ $k }}-branch">
+									{{ $v }}
 									<input 
 										type="checkbox" 
 										class="special-checkbox" 
@@ -166,17 +147,18 @@
 										name="clinic_specialization[]" 
 										value="{{ $loop->index }}"
 									>
-									<div class="checkbox-square">✓</div>
-									{{ $v }}
 								</label>
-                            @endforeach
+							@endforeach
                         </div>
 					</div>
 				</div>
 
 				<div class="tac">
-					<a href="javascript:;" class="white-button prev-branch-button" to-step="2"><</a>
-					<input type="submit" class="blue-button submit-branch-button" value="{{ trans('trp.popup.add-branch.button-publish') }}">
+					<a href="javascript:;" class="white-button prev-branch-button" to-step="1"><</a>
+					<button type="submit" class="blue-button submit-branch-button">
+						<div class="loader"><i></i></div>
+						{{ trans('trp.popup.add-branch.button-publish') }}
+					</button>
 				</div>
 			</div>
 		{!! Form::close() !!}

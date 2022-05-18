@@ -72,7 +72,7 @@
 								</label>
 							</div>
 							<div class="modern-field alert-after">
-								<select name="country" id="magnet-country" class="modern-input country-select">
+								<select name="country" id="magnet-country" class="modern-input">
 									@if(!$country_id)
 										<option>-</option>
 									@endif

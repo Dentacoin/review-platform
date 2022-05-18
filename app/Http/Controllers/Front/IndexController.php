@@ -146,6 +146,11 @@ class IndexController extends FrontController {
 			]
 		];
 
+		if (!empty($this->user)) {
+			$params['js'][] = 'address.js';
+			$params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
+		}
+
 		// if (!empty($this->user)) {
 		// 	$params['extra_body_class'] = 'strength-pb';
 		// 	$params['css'][] = 'flickity.min.css'; //because of strength scale

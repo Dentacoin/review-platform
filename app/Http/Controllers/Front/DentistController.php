@@ -338,6 +338,7 @@ class DentistController extends FrontController {
             'writes_review' => $writes_review,
             'reviews' => $reviews,
             'has_asked_dentist' => $has_asked_dentist,
+            'countries' => !empty($this->user) ? Country::with('translations')->get() : [],
             'is_trusted' => !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false,
             'patient_asks' => $patient_asks,
             'aggregatedRating' => $aggregatedRating,

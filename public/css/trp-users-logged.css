@@ -163,6 +163,26 @@ body.edit-dentist-profile-mode .profile-wrapper .edit-field-button {
     font-weight: bold;
     color: #0084d1; }
 
+.delete-branch {
+  padding: 5px 20px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: #0084d1;
+  margin-right: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #0084d1;
+  margin-bottom: 10px; }
+  @media screen and (max-width: 768px) {
+    .delete-branch {
+      padding: 4px 20px 7px;
+      display: inline-flex;
+      border-width: 1px; } }
+  .delete-branch:hover {
+    color: #0084d1;
+    background-color: white; }
+
 .edit-field .edit-wrapper {
   display: none;
   margin-bottom: 6px;

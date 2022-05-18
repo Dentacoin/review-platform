@@ -5,7 +5,7 @@
 	<div class="search-results-title">
 		<div class="container">
 			{{-- trans('trp.page.branches.title') --}}
-			<h1 class="mont">Check all branches of {{ strtoupper($clinic->getNames()) }}</h1>
+			<h1 class="mont">{{ !empty($user) && $user->id == $clinic->id ? 'Manage your branch offices' : 'Check all branches of '.strtoupper($clinic->getNames()) }}</h1>
 		</div>
 	</div>
 
@@ -14,8 +14,6 @@
 		class="filters-section search-get-form" 
 		action=""
 	>
-		<input type="hidden" name="country" value="{{ request('country') }}"/>
-		<input type="hidden" name="city" value="{{ request('city') }}"/>
 		<div class="container-filters flex flex-mobile flex-center space-between">
 			<div class="filters-wrapper">
 				<div class="hidden-mobile-filters">
@@ -29,10 +27,6 @@
 				@include('trp.parts.search-dentist-filters', [
 					'for_branch' => true
 				])
-			</div>
-			<div class="results-count">
-				<h4 class="hidden-mobile">{{ $items->count() }} results found</h4>
-				<h4 class="show-mobile">{{ $items->count() }} results</h4>
 			</div>
 			<div class="mobile-filters-wrapper {{ $items->isEmpty() ? 'smaller' : '' }}">
 				<a href="javascript:;" class="open-filters">

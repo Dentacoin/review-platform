@@ -30,7 +30,7 @@ jQuery(document).ready(function($){
                         var gstring = results[0].formatted_address;
                         var country_name = this.find('.country-select option:selected').text();
                         gstring = gstring.replace(', '+country_name, '');
-                        console.log( gstring );
+                        // console.log( gstring );
 
                         this.find('.address-suggester-input').val(gstring).blur();
                     } else {

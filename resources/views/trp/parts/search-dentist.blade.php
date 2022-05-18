@@ -106,11 +106,6 @@
                     {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}
                     Edit branch
                 </a>
-                @if($dentist->id != $dentist->mainBranchClinic->id)
-                    <a href="javascript:;" delete-url="{{ getLangUrl('delete-branch') }}" branch-id="{{ $dentist->id }}" class="delete-branch tooltip-text" text="Delete Branch">
-                        X
-                    </a>
-                @endif
             @elseif(!empty($user) && $user->is_dentist)
                 <a href="{{ $dentist->getLink() }}" class="button-submit">
                     {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}

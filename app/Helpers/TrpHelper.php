@@ -25,6 +25,22 @@ class TrpHelper {
         return $dentistsAndClinics;
     }
 
+    public static function detectWebsitePlatform($url) {
+
+		foreach(config('trp.social_network') as $k => $v) {
+			if(str_contains(strtolower($url), $k.'.com')) {
+				return $k;
+			}
+		}
+		
+        if(str_contains(strtolower($url), 'vk.com')) {
+			return 'vkontakte';
+		}
+
+		return false;
+        
+    }
+
 	public static function filterDentists(&$items, $requestTypes, $filter, $forBranch=false) {
 
 		//search for type

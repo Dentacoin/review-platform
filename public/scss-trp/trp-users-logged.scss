@@ -48,6 +48,30 @@ body.edit-dentist-profile-mode {
 	}
 }
 
+.delete-branch {
+	padding: 5px 20px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: #0084d1;
+    margin-right: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #0084d1;
+    margin-bottom: 10px;
+
+	@media #{$phone} {
+		padding: 4px 20px 7px;
+		display: inline-flex;
+		border-width: 1px;
+	}
+
+	&:hover {
+		color: #0084d1;
+		background-color: white;
+	}
+}
+
 .edit-field {
 
 	.edit-wrapper {

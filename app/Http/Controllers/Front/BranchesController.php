@@ -120,6 +120,7 @@ class BranchesController extends FrontController {
                 ],
                 'js' => [
                     'search-results.js',
+                    'address.js',
                 ],
                 'jscdn' => [
                     'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
@@ -133,129 +134,52 @@ class BranchesController extends FrontController {
     public function addNewBranch($locale=null, $step=null) {
 
         if(!empty($step)) {
-            if($step == 1) {
-                $validator = Validator::make(Request::all(), [
-                    'clinic_name' => array('required', 'min:3'),
-                ]);
+            $validator = Validator::make(Request::all(), [
+                'clinic_name' => array('required', 'min:3'),
+                'clinic_country_id' => array('required', 'exists:countries,id'),
+                'clinic_address' =>  array('required', 'string'),
+            ]);
 
-                if ($validator->fails()) {
-                    $msg = $validator->getMessageBag()->toArray();
-                    $ret = array(
-                        'success' => false,
-                        'messages' => array()
-                    );
+            if ($validator->fails()) {
+                $msg = $validator->getMessageBag()->toArray();
+                $ret = array(
+                    'success' => false,
+                    'messages' => array()
+                );
 
-                    foreach ($msg as $field => $errors) {
-                        $ret['messages'][$field] = implode(', ', $errors);
-                    }
-                } else {
-                    if(GeneralHelper::validateLatin(Request::input('clinic_name')) == false) {
-                        return Response::json( [
-                            'success' => false, 
-                            'messages' => [
-                                'clinic_name' => trans('trp.common.invalid-name')
-                            ]
-                        ]);
-                    }
-
-                    $session_user_branch = [];
-                    if(session('user_branch')) {
-                        $session_user_branch = session('user_branch');
-                    }
-                    $session_user_branch['clinic_name'] = Request::input('clinic_name');
-                    $session_user_branch['clinic_name_alternative'] = Request::input('clinic_name_alternative');
-
-                    session([
-                        'user_branch' => $session_user_branch
-                    ]);
-
-                    $ret = array(
-                        'success' => true
-                    );
+                foreach ($msg as $field => $errors) {
+                    $ret['messages'][$field] = implode(', ', $errors);
                 }
-
-                return Response::json( $ret );
-
-            } else if($step == 2) {
-
-                if (request('clinic_website') && mb_strpos(mb_strtolower(request('clinic_website')), 'http') !== 0) {
-                    request()->merge([
-                        'clinic_website' => 'http://'.request('clinic_website')
+            } else {
+                if(GeneralHelper::validateLatin(Request::input('clinic_name')) == false) {
+                    return Response::json( [
+                        'success' => false, 
+                        'messages' => [
+                            'clinic_name' => trans('trp.common.invalid-name')
+                        ]
                     ]);
                 }
 
-                $validator = Validator::make(Request::all(), [
-                    'clinic_country_id' => array('required', 'exists:countries,id'),
-                    'clinic_address' =>  array('required', 'string'),
-                    'clinic_website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
-                    'clinic_phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
-                ]);
+                if(Request::getHost() != 'urgent.reviews.dentacoin.com') {
 
-                if ($validator->fails()) {
-                    $msg = $validator->getMessageBag()->toArray();
-                    $ret = array(
-                        'success' => false,
-                        'messages' => array()
-                    );
-
-                    foreach ($msg as $field => $errors) {
-                        if($field=='clinic_website') {
-                            $ret['messages'][$field] = trans('trp.common.invalid-website');
-                        } else {
-                            $ret['messages'][$field] = implode(', ', $errors);
-                        }
+                    $info = GeneralHelper::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
+                    if(empty($info)) {
+                        return Response::json( array(
+                            'success' => false,
+                            'messages' => array(
+                                'clinic_address' => trans('trp.common.invalid-address')
+                            )
+                        ));
                     }
-
-                    return Response::json( $ret );
-                } else {
-
-	                if(Request::getHost() != 'urgent.reviews.dentacoin.com') {
-
-		                $info = GeneralHelper::validateAddress( Country::find(request('clinic_country_id'))->name, request('clinic_address') );
-		                if(empty($info)) {
-		                    return Response::json( array(
-		                        'success' => false,
-		                        'messages' => array(
-		                            'clinic_address' => trans('trp.common.invalid-address')
-		                        )
-		                    ));
-		                }
-	                }
-
-                    $phone = null;
-                    $c = Country::find( Request::Input('clinic_country_id') );
-                    $phone = ltrim( str_replace(' ', '', Request::Input('clinic_phone')), '0');
-                    $pn = $c->phone_code.' '.$phone;
-
-                    // $validator = Validator::make(['clinic_phone' => $pn], [
-                    //     'clinic_phone' => ['required','phone:'.$c->code],
-                    // ]);
-
-                    // if ($validator->fails()) {
-                    //     return Response::json([
-                    //         'success' => false, 
-                    //         'messages' => [
-                    //             'clinic_phone' => trans('trp.popup.registration.phone')
-                    //         ]
-                    //     ]);
-                    // }
-
-                    $session_user_branch = [];
-                    if(session('user_branch')) {
-                        $session_user_branch = session('user_branch');
-                    }
-                    $session_user_branch['clinic_country_id'] = Request::input('clinic_country_id');
-                    $session_user_branch['clinic_address'] = Request::input('clinic_address');
-                    $session_user_branch['clinic_website'] = Request::input('clinic_website');
-                    $session_user_branch['clinic_phone'] = Request::input('clinic_phone');
-
-                    session([
-                        'user_branch' => $session_user_branch
-                    ]);
-
-                    return Response::json( ['success' => true] );
                 }
+
+                $ret = array(
+                    'success' => true
+                );
             }
+
+            return Response::json( $ret );
+
         } else {
             if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
                 request()->merge([
@@ -336,7 +260,14 @@ class BranchesController extends FrontController {
                 $newuser->address = Request::input('clinic_address');
                 $newuser->phone = $phone;
                 $newuser->platform = 'trp';
-                $newuser->website = Request::input('clinic_website');
+
+                $social_network = TrpHelper::detectWebsitePlatform(Request::input('clinic_website'));
+                if($social_network) {
+                    $newuser->socials = [$social_network => Request::input('clinic_website')];
+                } else {
+                    $newuser->website = Request::input('clinic_website');
+                }
+                
                 $newuser->status = 'clinic_branch';
                 $newuser->gdpr_privacy = true;
                 $newuser->is_dentist = 1;
@@ -402,10 +333,9 @@ class BranchesController extends FrontController {
                 $newbranch->branch_clinic_id = $this->user->id;
                 $newbranch->save();
 
-                session()->pull('user_branch');
-
                 return Response::json([
                     'success' => true,
+                    'url' => $newuser->getLink(),
                 ]);
             }
         }
@@ -445,6 +375,7 @@ class BranchesController extends FrontController {
             	}
 
                 $ret['success'] = true;
+                $ret['url'] = $this->user->getLink();
             }
         }
 

@@ -12,12 +12,6 @@ jQuery(document).ready(function($){
 
     //INDEX PAGE
 
-    $.getScript(window.location.origin+'/js-trp/address.js');
-
-    $('.address-suggester-input').click( function() {
-        $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en');
-    });
-
     $('.invite-new-dentist-form').submit( function(e) {
         e.preventDefault();
 
