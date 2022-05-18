@@ -501,15 +501,29 @@ class FrontController extends BaseController {
 
             $params['countriesAlphabetically'] = $countriesAlphabetically;
         }
-        
+
+        $params['clinicBranches'] = false;
         $params['has_review_notification'] = false;
 
-        //check notifications for review
+        //check notifications for review and branches
         if(!empty($this->user) && $this->user->is_clinic && $this->user->branches->isNotEmpty()) {
+            $params['clinicBranches'] = [];
+            foreach($this->user->branches as $branch) {
+
+                $branchClinic = $branch->branchClinic;
+
+                $params['clinicBranches'][$branchClinic->id] = [
+                    'name' => $branchClinic->getNames(),
+                    'avatar' => $branchClinic->getImageUrl(true),
+                    'url' => $branchClinic->getLink(),
+                    'notification' => $branchClinic->review_notification ? true : false,
+                ];
+            }
+
             foreach($this->user->branches as $branch) {
                 $branchClinic = $branch->branchClinic;
-                $has_ask_notification = false;
 
+                $has_ask_notification = false;
                 if ($branchClinic->asks->isNotEmpty()) {
                     foreach ($branchClinic->asks as $p_ask) {
                         if ($p_ask->status == 'waiting') {
@@ -524,6 +538,10 @@ class FrontController extends BaseController {
                     break;
                 }
             }
+        }
+
+        if($params['clinicBranches']) {
+            $params['clinicBranches'] = json_encode($params['clinicBranches']);
         }
 
         if(!isset($params['xframe'])) {

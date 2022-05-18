@@ -172,8 +172,10 @@
 					@include('trp.parts.header-buttons')
 				</div>
 		    </div>
-		    @if(false)
-		    {{-- @if(!empty($user) && $user->is_clinic) --}}
+		    @if(!empty($user) && $user->is_clinic)
+		    	@if($user->branches->isNotEmpty() && isset($clinicBranches))
+		    		<input type="hidden" id="clinic-branches" value="{{ $clinicBranches }}">
+		    	@endif
 		    	<input type="hidden" id="add-branches-popup-link" value="https://reviews.dentacoin.com/en/dentist/{{$user->slug}}/?popup-loged=popup-branch">
 		    @endif
 	    </header>
