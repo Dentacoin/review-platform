@@ -110,7 +110,7 @@
 						<div class="upload-image-wrapper">
 							<label for="add-avatar-clinic-branch" class="image-label">
 								<div class="plus-image">
-									<img src="{{ url('img-trp/add-icon.png') }}"/>
+									<img src="{{ url('img-trp/add-icon.png') }}" class="tooltip-text" text="Required resolution: 200x200 px (max. 500x500 px) <br/> Max. image size: 2 MB"/>
 									<span>
 										Add image
 										{{-- {!! nl2br(trans('trp.page.user.reviews-image')) !!} --}}
