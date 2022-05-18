@@ -10,8 +10,13 @@ var suggestClinicClick;
 var editor;
 var fb_page_error;
 var load_maps = false;
+var showPartnerWalletPopup;
 
 $(document).ready(function() {
+
+    if(showPartnerWalletPopup) {
+        showPopup('add-wallet-address');
+    }
 
     $('.turn-on-edit-mode').click( function() {
         $('body').toggleClass('edit-dentist-profile-mode');

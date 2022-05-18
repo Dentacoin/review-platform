@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\UserGuidedTour;
+use App\Models\WalletAddress;
 use App\Models\AnonymousUser;
 use App\Models\UserCategory;
 use App\Models\UserHistory;
@@ -2036,5 +2037,88 @@ class ProfileController extends FrontController {
             $ask->on_review = true;
             $ask->save();
         }
+    }
+
+    /**
+     * add dentist wallet address
+     */
+    public function addWalletAddress() {
+
+        if(!empty($this->user) && $this->user->is_partner && $this->user->wallet_addresses->isEmpty()) {
+
+            $validator_fields = [
+                'wallet-address' => ['required', 'max:42', 'min:42']
+            ];
+
+            if(Request::input('recieve-address')) {
+                $validator_fields['receive-wallet-address'] = ['required', 'max:42', 'min:42'];
+            }
+
+            $validator = Validator::make(Request::all(), $validator_fields, [], [
+                'wallet-address' => 'wallet address',
+                'receive-wallet-address' => 'rewards wallet address',
+            ]);
+
+            if ($validator->fails()) {
+
+                $msg = $validator->getMessageBag()->toArray();
+                $ret['messages'] = [];
+
+                foreach ($msg as $field => $errors) {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
+
+                return Response::json($ret);
+
+            } else {
+                //just for empty the field
+                $this->user->partner_wallet_popup = null;
+                $this->user->save();
+
+                $new_address = new WalletAddress;
+                $new_address->user_id = $this->user->id;
+                $new_address->dcn_address = Request::input('wallet-address');
+                $new_address->selected_wallet_address = 1;
+                $new_address->is_deprecated = 0;
+                $new_address->save();
+
+                if(Request::input('recieve-address')) {
+                    $new_address = new WalletAddress;
+                    $new_address->user_id = $this->user->id;
+                    $new_address->dcn_address = Request::input('receive-wallet-address');
+                    $new_address->selected_wallet_address = 0;
+                    $new_address->is_deprecated = 0;
+                    $new_address->save();
+                }
+
+                return Response::json( [
+                    'success' => true,
+                ]);
+            }
+        }
+
+        return Response::json( [
+            'success' => false,
+        ]);
+    }
+
+    /**
+     * close dentist wallet address popup
+     */
+    public function closePartnerWalletPopup() {
+
+        if(!empty($this->user) && $this->user->is_partner && $this->user->wallet_addresses->isEmpty()) {
+
+            $this->user->partner_wallet_popup = Carbon::now()->addDays(14);
+            $this->user->save();
+
+            return Response::json( [
+                'success' => true,
+            ]);
+        }
+
+        return Response::json( [
+            'success' => false,
+        ]);
     }
 }

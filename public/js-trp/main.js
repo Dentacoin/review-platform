@@ -378,10 +378,12 @@ jQuery(document).ready(function($) {
 		var custom_widget_popup = false;
 		var existing_dentist = false;
 		var invite_popup = false;
+		var partner_wallet_address_popup = false;
 
 		if($('#select-reviews-popup').hasClass('active')) {
 			custom_widget_popup = true;
 		}
+
 		if($('#invite-sample').hasClass('active')) {
 			invite_popup = true;
 		}
@@ -390,12 +392,26 @@ jQuery(document).ready(function($) {
 			existing_dentist = true;
 		}
 
+		if($('#add-wallet-address').hasClass('active')) {
+			partner_wallet_address_popup = true;
+		}
+
 		if(($('#add-team-popup').hasClass('active') || $('#popup-invite').hasClass('active')) && $('body').hasClass('guided-tour')) {
 			$('.bubble-guided-tour .skip-step').trigger('click');
 		}
 
 		if( refreshOnClosePopup ) {
 			window.location.reload();
+		}
+
+		if(partner_wallet_address_popup) {
+			$.ajax({
+	            type: "POST",
+	            url: lang + '/close-partner-wallet-popup/',
+				data: {
+					_token: $('meta[name="csrf-token"]').attr('content'),
+				},
+	        });
 		}
 
 		if(existing_dentist) {

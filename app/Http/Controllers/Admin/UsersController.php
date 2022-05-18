@@ -1064,6 +1064,11 @@ class UsersController extends AdminController {
                                 ];
 
                                 $item->sendGridTemplate(129, $substitutions, 'dentacoin');
+
+                                if($item->wallet_addresses->isEmpty()) {
+                                    $item->partner_wallet_popup = Carbon::now()->addDays(-1);
+                                    $item->save();
+                                }
                             }
                             $item->$key = $this->request->input($key);
                         } else if($key=='email') {

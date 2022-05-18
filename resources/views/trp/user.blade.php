@@ -1972,6 +1972,10 @@
 		@else
 			{{-- @include('trp.popups.workplace') --}}
 		@endif
+		
+		@if($user->wallet_addresses->isEmpty() && $user->is_partner && !$editing_branch_clinic)
+			@include('trp.popups.add-wallet-address')
+		@endif
 	@else
 		{{-- @if(!empty($writes_review))
 			@include('trp.popups.recommend-dentist')
@@ -2006,7 +2010,8 @@
 </script>
 
 <script type="text/javascript">
-	var load_lightbox = {!! $load_lightbox !!};	
+	var load_lightbox = {!! $load_lightbox !!};
+	var showPartnerWalletPopup = {!! $item->partner_wallet_popup && $item->partner_wallet_popup < Carbon::now() ? 'true' : 'false' !!};
 </script>
 
 @endsection

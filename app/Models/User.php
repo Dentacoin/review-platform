@@ -144,6 +144,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'self_deleted_at',
         'withdraw_at',
         'vip_access_until',
+        'partner_wallet_popup',
         'created_at',
         'updated_at',
         'deleted_at',

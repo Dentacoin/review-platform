@@ -486,6 +486,9 @@ $reviewRoutes = function() {
 				Route::get('profile/reviews-guided-tour-remove', 	'ProfileController@removeReviewsGuidedTour');
 				Route::get('profile/reviews-guided-tour/{layout?}', 'ProfileController@reviewsGuidedTour');
 
+				Route::post('add-wallet-address', 					'ProfileController@addWalletAddress');
+				Route::post('close-partner-wallet-popup', 			'ProfileController@closePartnerWalletPopup');
+
 				Route::post('share', 								'MiscController@share');
 
                 Route::post('verify-review', 						'DentistController@verifyReview');
