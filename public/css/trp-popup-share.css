@@ -1,72 +1,88 @@
-#popup-share .popup-inner h4 {
-  margin-bottom: 35px; }
-#popup-share .popup-inner .copy-wrapper {
-  margin-top: 30px;
-  margin-bottom: 30px; }
-  #popup-share .popup-inner .copy-wrapper .input {
-    height: 40px; }
-  #popup-share .popup-inner .copy-wrapper .button {
-    text-transform: unset;
-    padding: 9px 30px;
-    width: 100%;
-    text-align: center; }
-    #popup-share .popup-inner .copy-wrapper .button i {
-      color: white; }
-  #popup-share .popup-inner .copy-wrapper p {
-    margin-bottom: 10px; }
-#popup-share .popup-inner .share-buttons {
-  border-radius: 5px;
-  overflow: hidden; }
-  #popup-share .popup-inner .share-buttons .col {
-    transition: all 0.3s ease; }
-    #popup-share .popup-inner .share-buttons .col:hover {
-      opacity: 0.8; }
-    #popup-share .popup-inner .share-buttons .col:first-child {
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px; }
-    #popup-share .popup-inner .share-buttons .col:last-child {
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px; }
-    #popup-share .popup-inner .share-buttons .col.fb {
-      background-color: #3a559f; }
-    #popup-share .popup-inner .share-buttons .col.twt {
+#popup-share .popup-inner {
+  padding: 55px 120px; }
+  @media screen and (max-width: 768px) {
+    #popup-share .popup-inner {
+      padding: 55px 15px; } }
+  #popup-share .popup-inner h2 {
+    font-weight: 800; }
+  #popup-share .popup-inner .popup-desc {
+    font-size: 18px;
+    color: #332255;
+    text-align: center;
+    margin-left: -40px;
+    margin-right: -40px; }
+    @media screen and (max-width: 768px) {
+      #popup-share .popup-inner .popup-desc {
+        margin-left: 0px;
+        margin-right: 0px; } }
+  #popup-share .popup-inner .copy-wrapper {
+    margin-top: 30px;
+    margin-bottom: 110px; }
+    @media screen and (max-width: 768px) {
+      #popup-share .popup-inner .copy-wrapper {
+        margin-bottom: 40px; } }
+  #popup-share .popup-inner .share-buttons {
+    margin-bottom: 35px; }
+    #popup-share .popup-inner .share-buttons > div {
+      max-width: 344px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 30px;
+      transition: all 0.3s ease; }
+      #popup-share .popup-inner .share-buttons > div:hover {
+        opacity: 0.8;
+        transition: all 0.3s ease; }
+    #popup-share .popup-inner .share-buttons .fb {
+      background-color: #3a559f;
+      margin-bottom: 25px; }
+    #popup-share .popup-inner .share-buttons .twt {
       background-color: #50abf1; }
-    #popup-share .popup-inner .share-buttons .col a {
+    #popup-share .popup-inner .share-buttons a {
+      font-size: 20px;
+      font-weight: bold;
       display: flex;
-      height: 40px;
+      height: 50px;
       justify-content: center;
-      align-items: center; }
-      #popup-share .popup-inner .share-buttons .col a i {
+      align-items: center;
+      border-radius: 30px;
+      color: white; }
+      #popup-share .popup-inner .share-buttons a i {
         font-size: 26px;
         color: white; }
-#popup-share .popup-inner .share-link {
-  margin-left: 15px;
-  box-shadow: -3px 3px 7px 1px #d8d8d8;
-  border-radius: 5px;
-  overflow: hidden; }
+      #popup-share .popup-inner .share-buttons a img {
+        margin-right: 17px; }
   @media screen and (max-width: 998px) {
     #popup-share .popup-inner .share-link {
-      margin-left: 0px;
       margin-top: 10px; } }
   #popup-share .popup-inner .share-link input {
+    height: 58px;
     margin-bottom: 0px;
     border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px; }
-  #popup-share .popup-inner .share-link .button {
+    border-bottom-right-radius: 0px;
+    border-right: none; }
+  #popup-share .popup-inner .share-link .copy-link {
     position: relative;
     width: 50px;
     padding: 0px;
     background: #eeeeee;
     line-height: 40px;
     border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px; }
-    #popup-share .popup-inner .share-link .button img {
+    border-bottom-left-radius: 0px;
+    border: 2px solid #cccccc;
+    border-left: none;
+    text-transform: unset;
+    padding: 9px 30px;
+    text-align: center; }
+    #popup-share .popup-inner .share-link .copy-link img {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
-      max-width: 20px; }
-#popup-share .popup-inner .small-info {
-  font-size: 12px;
-  font-weight: 300;
-  color: #999999; }
+      max-width: 25px; }
+  #popup-share .popup-inner .small-info {
+    font-size: 12px;
+    font-weight: 300;
+    color: #999999; }
+  #popup-share .popup-inner .white-button {
+    border-width: 1px;
+    padding: 12px 114px; }

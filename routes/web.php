@@ -489,8 +489,6 @@ $reviewRoutes = function() {
 				Route::post('add-wallet-address', 					'ProfileController@addWalletAddress');
 				Route::post('close-partner-wallet-popup', 			'ProfileController@closePartnerWalletPopup');
 
-				Route::post('share', 								'MiscController@share');
-
                 Route::post('verify-review', 						'DentistController@verifyReview');
 
 				Route::post('profile/add-new-branch/{step?}', 		'BranchesController@addNewBranch');

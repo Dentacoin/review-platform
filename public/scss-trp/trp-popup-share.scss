@@ -5,95 +5,99 @@ $phone: "screen and (max-width: 768px)";
 
 #popup-share {
 	.popup-inner {
+        padding: 55px 120px;
 
-        h4 {
-            margin-bottom: 35px;
+        @media #{$phone} {
+            padding: 55px 15px;
+        }
+
+        h2 {
+            font-weight: 800;
+        }
+
+        .popup-desc {
+            font-size: 18px;
+            color: #332255;
+            text-align: center;
+            margin-left: -40px;
+            margin-right: -40px;
+
+            @media #{$phone} {
+                margin-left: 0px;
+                margin-right: 0px;
+            }
         }
         
         .copy-wrapper {
             margin-top: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 110px;
 
-            .input {
-                height: 40px;
-            }
-
-            .button {
-                text-transform: unset;
-                padding: 9px 30px;
-                width: 100%;
-                text-align: center;
-
-                i {
-                    color: white;
-                }
-            }
-
-            p {
-                margin-bottom: 10px;
+            @media #{$phone} {
+                margin-bottom: 40px;
             }
         }
 
         .share-buttons {
-            border-radius: 5px;
-            overflow: hidden;
+            margin-bottom: 35px;
 
-            .col {
+            >div {
+                max-width: 344px;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius: 30px;
                 transition: all 0.3s ease;
 
                 &:hover {
                     opacity: 0.8;
+                    transition: all 0.3s ease;
+                }
+            }
+
+            .fb {
+                background-color: #3a559f;
+                margin-bottom: 25px;
+            }
+
+            .twt {
+                background-color: #50abf1;
+            }
+
+            a {
+                font-size: 20px;
+                font-weight: bold;
+                display: flex;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                border-radius: 30px;
+                color: white;
+
+                i {
+                    font-size: 26px;
+                    color: white;
                 }
 
-                &:first-child {
-                    border-top-left-radius: 3px;
-                    border-bottom-left-radius: 3px;					
-                }
-                &:last-child {
-                    border-top-right-radius: 3px;
-                    border-bottom-right-radius: 3px;			
-                }
-
-                &.fb {
-                    background-color: #3a559f;
-                }
-
-                &.twt {
-                    background-color: #50abf1;
-                }
-
-                a {
-                    display: flex;
-                    height: 40px;
-                    justify-content: center;
-                    align-items: center;
-
-                    i {
-                        font-size: 26px;
-                        color: white;
-                    }
+                img {
+                    margin-right: 17px;
                 }
             }
         }
 
         .share-link {
-            margin-left: 15px;
-            box-shadow: -3px 3px 7px 1px #d8d8d8;
-            border-radius: 5px;
-            overflow: hidden;
 
             @media #{$tablet} {
-                margin-left: 0px;
                 margin-top: 10px;
             }
 
             input {
+                height: 58px;
                 margin-bottom: 0px;
                 border-top-right-radius: 0px;
                 border-bottom-right-radius: 0px;
+                border-right: none;
             }
 
-            .button {
+            .copy-link {
                 position: relative;
                 width: 50px;
                 padding: 0px;
@@ -101,13 +105,18 @@ $phone: "screen and (max-width: 768px)";
                 line-height: 40px;
                 border-top-left-radius: 0px;
                 border-bottom-left-radius: 0px;
+                border: 2px solid #cccccc;
+                border-left: none;
+                text-transform: unset;
+                padding: 9px 30px;
+                text-align: center;
 
                 img {
                     position: absolute;
                     top: 50%;
                     left: 50%;
                     transform: translateX(-50%) translateY(-50%);
-                    max-width: 20px;
+                    max-width: 25px;
                 }
             }
         }
@@ -116,6 +125,11 @@ $phone: "screen and (max-width: 768px)";
             font-size: 12px;
             font-weight: 300;
             color: #999999;
+        }
+
+        .white-button {
+            border-width: 1px;
+            padding: 12px 114px;
         }
     }
 }

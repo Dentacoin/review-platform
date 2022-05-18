@@ -258,7 +258,7 @@ jQuery(document).ready(function($) {
 					
 								var $temp = $("<input>");
 								$("body").append($temp);
-								$temp.val($(this).closest('.flex').find('input').val()).select();
+								$temp.val($(this).closest('.share-link').find('input').val()).select();
 								document.execCommand("copy");
 								$temp.remove();        
 					
@@ -268,33 +268,6 @@ jQuery(document).ready(function($) {
 								setTimeout( (function() {
 									$(this).html( $(this).attr('alternative').length ? $(this).attr('alternative') : '<img src="'+all_images_path+'/copy-files.svg"/>' );
 								}).bind(this), 3000 );
-							});
-
-							$('#share-link-form').submit( function(e) {
-								e.preventDefault();
-								$(this).find('.alert').hide();
-
-								if(ajax_is_running) {
-									return;
-								}
-								ajax_is_running = true;
-
-								$.post( 
-									$(this).attr('action'), 
-									$(this).serialize() , 
-									(function( data ) {
-										if(data.success) {
-											$(this).find('.alert-success').show();
-											$(this).find('[name="email"]').val('').focus();
-										} else {
-											$(this).find('.alert-warning').show();
-										}
-										ajax_is_running = false;
-									}).bind(this), "json"
-								);          
-
-								return false;
-
 							});
 							
 	                	} else if($('.popup.active').attr('id') == 'verification-popup') {
