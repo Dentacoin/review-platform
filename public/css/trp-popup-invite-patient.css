@@ -292,6 +292,11 @@
       color: white; }
       #popup-invite .invite-content .final-button.waiting .loader {
         display: block; }
+      #popup-invite .invite-content .final-button.waiting.blue-button {
+        color: #0084d1;
+        background-color: #0084d1; }
+        #popup-invite .invite-content .final-button.waiting.blue-button:hover {
+          background-color: #0084d1; }
     #popup-invite .invite-content .final-button .loader {
       position: absolute;
       left: 50%;

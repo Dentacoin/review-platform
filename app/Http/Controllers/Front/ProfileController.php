@@ -110,69 +110,6 @@ class ProfileController extends FrontController {
     }
 
     /**
-     * dentist invites patients manually
-     */
-    public function invite($locale=null) {
-
-        if(!empty($this->user) && $this->user->canInvite('trp') ) {
-
-            $validator = Validator::make(Request::all(), [
-                'email' => ['required', 'email'],
-                'name' => ['required', 'string'],
-            ]);
-
-            if ($validator->fails()) {
-                return Response::json([
-                    'success' => false, 
-                    'message' => trans('trp.page.profile.invite.failure') 
-                ]);
-            } else {
-                $email = Request::Input('email');
-                $name = Request::Input('name');
-
-                $valid_email = $this->user->sendgridEmailValidation(68, $email);
-
-                if(!$valid_email) {
-                    $invitation = new UserInvite;
-                    $invitation->user_id = $this->user->id;
-                    $invitation->invited_email = $email;
-                    $invitation->invited_name = $name;
-                    $invitation->platform = 'trp';
-                    $invitation->review = true;
-                    $invitation->suspicious_email = true;
-                    $invitation->save();
-
-                    // sendgridEmailValidation
-                    return Response::json([
-                        'success' => false, 
-                        'message' => trans('trp.page.profile.invite-dentist.suspicious-email') 
-                    ]);
-                }
-
-                $is_dentist = User::where('email', 'LIKE', $email )->where('is_dentist', 1)->first();
-
-                if (!empty($is_dentist)) {
-                    return Response::json([
-                        'success' => false, 
-                        'message' => trans('trp.page.profile.invite-dentist.failure')
-                    ]);
-                }
-
-                $ret = $this->sendInvite($email, $name, false);
-
-                if($ret) {
-                    return Response::json($ret);
-                }
-            }
-        }
-
-        return Response::json([
-            'success' => false, 
-            'message' => 'Error'
-        ]);
-    }
-
-    /**
      * dentist invites patients by whatsApp
      */
     public function invite_whatsapp($locale=null) {
@@ -187,7 +124,7 @@ class ProfileController extends FrontController {
 
             $text = trans('trp.page.profile.invite.whatsapp', [
                 'name' => str_replace(['&'], ['and'], $this->user->getNames() )
-            ]).rawurlencode($this->user->getLink().'?'. http_build_query([
+            ]).' '.rawurlencode($this->user->getLink().'?'. http_build_query([
                 'dcn-gateway-type'=>'patient-register', 
                 'inviter' => GeneralHelper::encrypt($this->user->id), 
                 'inviteid' => GeneralHelper::encrypt($invitation->id) 
@@ -252,16 +189,30 @@ class ProfileController extends FrontController {
                         $reversedRows[$i][] = isset($row[$i]) ? trim($row[$i]) : '';
                     }
                 }
-                
-                if (session('bulk_invites')) {
-                    session()->pull('bulk_invites');
-                }                
-                session(['bulk_invites' => $reversedRows]);
 
-                return Response::json([
-                    'success' => true,
-                    'info' => $reversedRows,
-                ]);
+                if(count($reversedRows[0]) == 1) {
+
+                    $emails = $reversedRows[0];
+                    $names = $reversedRows[1];
+
+                    if (!filter_var($emails[0], FILTER_VALIDATE_EMAIL) && filter_var($names[0], FILTER_VALIDATE_EMAIL)) {
+                        $emails = $reversedRows[1];
+                        $names = $reversedRows[0];
+                    }
+
+                    return Response::json($this->invite_copypaste_validator($emails, $names));
+                } else {
+
+                    if (session('bulk_invites')) {
+                        session()->pull('bulk_invites');
+                    }                
+                    session(['bulk_invites' => $reversedRows]);
+    
+                    return Response::json([
+                        'success' => true,
+                        'info' => $reversedRows,
+                    ]);
+                }
             }
         }
     }
@@ -284,81 +235,7 @@ class ProfileController extends FrontController {
                     $names = session('bulk_invites')[0];
                 }
 
-                $invalid = 0;
-                $invalid_emails = [];
-                $already_invited = 0;
-                $already_invited_emails = [];
-
-                foreach ($emails as $key => $email) {
-
-                    $is_dentist = User::where('email', 'LIKE', $email )
-                    ->where('is_dentist', 1)
-                    ->first();
-
-                    $valid_email = $this->user->sendgridEmailValidation(68, $email);
-
-                    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !empty($is_dentist) || !$valid_email) {
-                        $invalid++;
-
-                        $invalid_emails[] = $email;
-                        continue;
-                    }
-
-                    $invitation = UserInvite::where([
-                        ['user_id', $this->user->id],
-                        ['invited_email', 'LIKE', $email],
-                    ])->first();
-
-                    if ($invitation) {
-                        $already_invited++;
-
-                        $already_invited_emails[] = $email;
-                        continue;
-                    }
-                }
-
-                $final_message = '';
-                $alert_color = '';
-                $gtag_tracking = true;
-
-                if (!empty($invalid) && $invalid == count($emails)) {
-                    $final_message = trans('trp.page.profile.invite.copypaste.all-not-sent').'<br/>'.implode(',', $invalid_emails);
-                    $alert_color = 'warning';
-                    $gtag_tracking = false;
-                } else if(!empty($invalid) && $invalid != count($emails)) {
-                    if (empty($already_invited)) {
-                        // $final_message = trans('trp.page.profile.invite.copypaste.unvalid-emails').'<br/>'.implode(',', $invalid_emails);
-                        $final_message = 'Your review invites have been sent successfully to patients with valid emails. There were some unvalid emails, however, which were skipped:'.'<br/>'.implode(',', $invalid_emails);
-                        $alert_color = 'orange';
-                    } else {
-                        $final_message = 'Your review invites have been sent successfully to patients with valid emails. Some patients, however, were skipped either because they have already submitted feedback earlier this month or their emails were invalid:'.'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
-                        // $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback').'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
-                        $alert_color = 'orange';
-                    }
-                } else if(!empty($already_invited) && ($already_invited == count($emails))) {
-                    // $final_message = trans('trp.page.profile.invite.copypaste.all-submitted-feedback').'<br/>'.implode(',', $already_invited_emails);
-                    $final_message = 'Sending your review invites has failed. You have already invited these patients to submit feedback earlier this month.'.'<br/>'.implode(',', $already_invited_emails);
-                    $alert_color = 'warning';
-                    $gtag_tracking = false;
-                } else if(!empty($already_invited) && $already_invited != count($emails)) {
-                    // $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback-invalid-emails').'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
-                    $final_message = 'Your review invites have been sent successfully to patients with valid emails. Some patients, however, were skipped because they have already submitted feedback earlier this month:'.'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
-                    $alert_color = 'orange';
-                }
-
-                foreach ($emails as $key => $email) {
-                    $inviter_email = $this->user->email ? $this->user->email : $this->user->mainBranchEmail();
-                    if(!empty($names[$key]) && ($email != $inviter_email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        $this->sendInvite($email, $names[$key], true);
-                    }
-                }
-
-                return Response::json([
-                    'success' => true,
-                    'message' => $final_message,
-                    'color' => $alert_color,
-                    'gtag_tracking' => $gtag_tracking,
-                ]);
+                return Response::json($this->invite_copypaste_validator($emails, $names));
             } else {
                 return Response::json([
                     'success' => false,
@@ -367,6 +244,85 @@ class ProfileController extends FrontController {
                 ]);
             }
         }
+    }
+
+    private function invite_copypaste_validator($emails, $names) {
+        $invalid = 0;
+        $invalid_emails = [];
+        $already_invited = 0;
+        $already_invited_emails = [];
+
+        foreach ($emails as $key => $email) {
+
+            $is_dentist = User::where('email', 'LIKE', $email )
+            ->where('is_dentist', 1)
+            ->first();
+
+            $valid_email = $this->user->sendgridEmailValidation(68, $email);
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !empty($is_dentist) || !$valid_email) {
+                $invalid++;
+
+                $invalid_emails[] = $email;
+                continue;
+            }
+
+            $invitation = UserInvite::where([
+                ['user_id', $this->user->id],
+                ['invited_email', 'LIKE', $email],
+            ])->first();
+
+            if ($invitation) {
+                $already_invited++;
+
+                $already_invited_emails[] = $email;
+                continue;
+            }
+        }
+
+        $final_message = '';
+        $alert_color = '';
+        $gtag_tracking = true;
+
+        if (!empty($invalid) && $invalid == count($emails)) {
+            $final_message = trans('trp.page.profile.invite.copypaste.all-not-sent').'<br/>'.implode(',', $invalid_emails);
+            $alert_color = 'warning';
+            $gtag_tracking = false;
+        } else if(!empty($invalid) && $invalid != count($emails)) {
+            if (empty($already_invited)) {
+                // $final_message = trans('trp.page.profile.invite.copypaste.unvalid-emails').'<br/>'.implode(',', $invalid_emails);
+                $final_message = 'Your review invites have been sent successfully to patients with valid emails. There were some unvalid emails, however, which were skipped:'.'<br/>'.implode(',', $invalid_emails);
+                $alert_color = 'orange';
+            } else {
+                $final_message = 'Your review invites have been sent successfully to patients with valid emails. Some patients, however, were skipped either because they have already submitted feedback earlier this month or their emails were invalid:'.'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
+                // $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback').'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
+                $alert_color = 'orange';
+            }
+        } else if(!empty($already_invited) && ($already_invited == count($emails))) {
+            // $final_message = trans('trp.page.profile.invite.copypaste.all-submitted-feedback').'<br/>'.implode(',', $already_invited_emails);
+            $final_message = 'Sending your review invites has failed. You have already invited these patients to submit feedback earlier this month.'.'<br/>'.implode(',', $already_invited_emails);
+            $alert_color = 'warning';
+            $gtag_tracking = false;
+        } else if(!empty($already_invited) && $already_invited != count($emails)) {
+            // $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback-invalid-emails').'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
+            $final_message = 'Your review invites have been sent successfully to patients with valid emails. Some patients, however, were skipped because they have already submitted feedback earlier this month:'.'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
+            $alert_color = 'orange';
+        }
+
+        foreach ($emails as $key => $email) {
+            $inviter_email = $this->user->email ? $this->user->email : $this->user->mainBranchEmail();
+            if(!empty($names[$key]) && ($email != $inviter_email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->sendInvite($email, $names[$key], true);
+            }
+        }
+
+        return [
+            'success' => true,
+            'message' => $final_message,
+            'color' => $alert_color,
+            'gtag_tracking' => $gtag_tracking,
+            'show_popup' => true,
+        ];
     }
 
     /**

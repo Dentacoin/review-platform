@@ -431,6 +431,15 @@ $phone: "screen and (max-width: 768px)";
                 .loader {
                     display: block;
                 }
+
+                &.blue-button {
+                    color: #0084d1;
+                    background-color: #0084d1;
+
+                    &:hover {
+                        background-color: #0084d1;
+                    }
+                }
             }
             .loader {
                 position: absolute;

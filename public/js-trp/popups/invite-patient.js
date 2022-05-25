@@ -168,10 +168,37 @@ $(document).ready(function() {
         var that = $(this);
 
         $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
+            $(this).attr('action'),
+            $(this).serialize(),
             function( data ) {
-                if(data.success && data.info) {
+
+                if(data.success && data.show_popup) {
+                    if(data.color != 'warning') {
+                        $('.new-invite').hide();
+                        $('.success-invite').show();
+                        if(data.message) {
+                            $('.success-invite').find('.invite-alert').show().addClass('alert-'+data.color).html(data.message);
+                        }
+    
+                        if (data.gtag_tracking) {
+                            if( that.closest('#invite-option-copypaste').length) {
+                                gtag('event', 'Copy-PasteBulk', {
+                                    'event_category': 'ReviewInvites',
+                                    'event_label': 'InvitesSent',
+                                });
+                            } else if(that.closest('#invite-option-file').length) {
+                                gtag('event', 'FileImport', {
+                                    'event_category': 'ReviewInvites',
+                                    'event_label': 'InvitesSent',
+                                });
+                            }
+                        }
+                    } else {
+                        $('.copypaste-wrapper').hide();
+                        $('.copypaste-wrapper.step1').find('.invite-alert').show().addClass('alert-warning').html(data.message); 
+                        $('.copypaste-wrapper.step1').show();
+                    }
+                } else if(data.success && data.info) {
 
                     that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').html('');
                     for (var i in data.info) {
@@ -280,7 +307,6 @@ $(document).ready(function() {
                     $('.copypaste-wrapper').hide();
                     $('.copypaste-wrapper.step1').find('.invite-alert').show().addClass('alert-warning').html(data.message); 
                     $('.copypaste-wrapper.step1').show();
-
                 }
                 ajax_is_running = false;
 

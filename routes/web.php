@@ -465,7 +465,6 @@ $reviewRoutes = function() {
 				Route::post('profile/info/{id?}', 					'ProfileController@info');
 				Route::get('profile/trp-iframe', 					'ProfileController@trp');
 				Route::post('invite-patient-again',					'ProfileController@invite_patient_again');
-				Route::post('profile/invite', 						'ProfileController@invite');
 				Route::post('profile/invite-whatsapp', 				'ProfileController@invite_whatsapp');
 				Route::post('profile/invite-copypaste', 			'ProfileController@invite_copypaste');
 				Route::post('profile/invite-copypaste-final', 		'ProfileController@invite_copypaste_final');
