@@ -11,6 +11,12 @@
   @media screen and (max-width: 768px) {
     .popup .popup-inner {
       padding: 35px 15px; } }
+.popup .details-wrapper .verify-review {
+  padding: 9px 40px; }
+  @media screen and (max-width: 768px) {
+    .popup .details-wrapper .verify-review {
+      font-size: 15px;
+      padding: 5px 15px; } }
 .popup .details-wrapper .review-avatar {
   width: 115px;
   height: 115px;
@@ -58,6 +64,32 @@
   .popup .details-wrapper .review-content .video-wrap {
     max-width: 610px;
     margin: 0 auto; }
+  .popup .details-wrapper .review-content .review-replied-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    margin-left: 25px; }
+    .popup .details-wrapper .review-content .review-replied-wrapper .review-avatar {
+      width: 33px;
+      height: 33px;
+      border-radius: 50%;
+      margin-right: 10px;
+      margin-bottom: 0px; }
+    .popup .details-wrapper .review-content .review-replied-wrapper > div {
+      width: 100%; }
+    .popup .details-wrapper .review-content .review-replied-wrapper .replied-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2px;
+      font-size: 14px;
+      color: #888888; }
+      .popup .details-wrapper .review-content .review-replied-wrapper .replied-info img {
+        max-width: 15px;
+        margin-right: 3px; }
+    .popup .details-wrapper .review-content .review-replied-wrapper .review-content {
+      margin-bottom: 0px;
+      padding-bottom: 0px;
+      border-bottom: none; }
 .popup .details-wrapper h4 {
   font-size: 20px;
   color: #0084d1;
@@ -105,7 +137,8 @@
       margin-bottom: 40px; } }
   .popup .details-wrapper .review-answers .overview-wrapper {
     display: flex;
-    flex-flow: row wrap; }
+    flex-flow: row wrap;
+    align-items: flex-end; }
     @media screen and (max-width: 768px) {
       .popup .details-wrapper .review-answers .overview-wrapper {
         margin-left: -15px;
@@ -114,7 +147,8 @@
       width: calc(25% - 21px);
       border-right: 1px solid #cad3e6;
       margin-right: 27px;
-      padding-bottom: 30px; }
+      padding-bottom: 30px;
+      position: relative; }
       @media screen and (max-width: 1200px) {
         .popup .details-wrapper .review-answers .overview-wrapper .overview-column {
           width: calc(25% - 17px);
@@ -153,6 +187,20 @@
       @media screen and (max-width: 768px) {
         .popup .details-wrapper .review-answers .overview-wrapper .overview-column .rating {
           margin-left: 10px; } }
+      .popup .details-wrapper .review-answers .overview-wrapper .overview-column .new-question {
+        font-size: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #14cab8;
+        border: 1px solid #14cab8;
+        display: inline-block;
+        padding: 2px 12px;
+        border-radius: 12px;
+        margin-bottom: 7px; }
+        @media screen and (max-width: 768px) {
+          .popup .details-wrapper .review-answers .overview-wrapper .overview-column .new-question {
+            position: absolute;
+            top: 6px; } }
       .popup .details-wrapper .review-answers .overview-wrapper .overview-column p {
         font-size: 18px;
         color: #332255;
@@ -160,6 +208,9 @@
         margin-bottom: 6px;
         display: flex;
         align-items: center; }
+        @media screen and (max-width: 768px) {
+          .popup .details-wrapper .review-answers .overview-wrapper .overview-column p {
+            margin-bottom: 0px; } }
         .popup .details-wrapper .review-answers .overview-wrapper .overview-column p img {
           margin-right: 6px; }
 .popup .details-wrapper .blue-button {

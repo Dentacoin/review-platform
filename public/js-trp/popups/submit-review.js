@@ -61,14 +61,7 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function( data ) {
                     if(data.success) {
-
-                        if(that.hasClass('submit-video-review')) {
-                            $('.write-review-step').hide();
-                            $('.write-video-review-success').show();
-                            that.removeClass('submit-video-review');
-                        } else {
-                            showNextStep(2);
-                        }
+                        showNextStep(2);
                     } else {
                         if(data.short_text) {
                             $('#review-short-text').show();
@@ -465,6 +458,7 @@ $(document).ready(function() {
                     $('.video-buttons').hide();
                     $('#youtube_id').val(responseJSON.url);
                     $('.myVideo-dimensions').hide();
+                    $('.review-video-info').addClass('successful-video-review');
                     $('#alert-video-uploaded').show();
                 } else {
                     // console.log(responseJSON);

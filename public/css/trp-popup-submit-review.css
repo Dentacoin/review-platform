@@ -80,7 +80,7 @@
         display: inline-block;
         text-align: center;
         border-radius: 50%;
-        margin-right: 6px;
+        margin-right: 10px;
         font-size: 18px;
         color: white;
         height: 24px;
@@ -100,12 +100,15 @@
     text-transform: uppercase;
     font-size: 24px;
     color: #0084d1;
-    font-weight: bold; }
+    font-weight: bold;
+    max-width: 300px; }
     @media screen and (max-width: 1200px) {
       #submit-review-popup .review-info-description .earn-text {
-        font-size: 21px; } }
+        font-size: 21px;
+        max-width: 280px; } }
     @media screen and (max-width: 998px) {
       #submit-review-popup .review-info-description .earn-text {
+        max-width: 100%;
         text-align: center;
         font-size: 22px; } }
   #submit-review-popup .review-info-description .toggle-review-info {
@@ -283,6 +286,15 @@
         display: none; }
       #submit-review-popup .reviews-wrapper .review-video-info.hide-video-reviews p {
         color: #332255; }
+    #submit-review-popup .reviews-wrapper .review-video-info.successful-video-review {
+      border: none;
+      padding: 0px; }
+      #submit-review-popup .reviews-wrapper .review-video-info.successful-video-review:before {
+        display: none; }
+      #submit-review-popup .reviews-wrapper .review-video-info.successful-video-review .option-span,
+      #submit-review-popup .reviews-wrapper .review-video-info.successful-video-review .agree-text,
+      #submit-review-popup .reviews-wrapper .review-video-info.successful-video-review .green-button {
+        display: none; }
     #submit-review-popup .reviews-wrapper .review-video-info:before {
       content: 'How it works:';
       position: absolute;
@@ -545,7 +557,8 @@
         color: #0084d1;
         font-weight: 900;
         font-size: 13px;
-        margin-left: 2px; }
+        margin-left: 2px;
+        font-family: cursive, 'Lato', sans-serif; }
 #submit-review-popup #review-submit-button i {
   border-radius: 50%;
   display: inline-block;

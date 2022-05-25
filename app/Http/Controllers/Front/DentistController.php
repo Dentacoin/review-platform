@@ -626,7 +626,7 @@ class DentistController extends FrontController {
             ];
 
             $validator_arr = [
-                'title' => ['required'],
+                'title' => ['required', 'max:50'],
                 'answer' => ['required_without:youtube_id'],
                 'youtube_id' => ['required_without:answer'],
             ];
@@ -702,7 +702,7 @@ class DentistController extends FrontController {
             if(!empty($this->user)) {
 
                 $validator_arr = [
-                    'title' => ['required'],
+                    'title' => ['required', 'max:50'],
                     'answer' => ['required_without:youtube_id'],
                     'youtube_id' => ['required_without:answer'],
                     'treatments' => ['required']
@@ -1557,7 +1557,10 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
         ]);
 
         if ($validator->fails()) {
-            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
+            return Response::json([
+                'success' => false,
+                'message' => trans('trp.page.profile.invite.failure')
+            ]);
         } else {
             $recommendation = DentistRecommendation::where([
                 ['user_id', $this->user->id],
@@ -1568,7 +1571,10 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
             $recommended_user = User::find(Request::Input('dentist-id'));
             $type = $recommended_user->is_clinic ? 'dental clinic' : 'dentist';
 
-            $existing_patient = User::withTrashed()->where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 0)->first();
+            $existing_patient = User::withTrashed()
+            ->where('email', 'LIKE', Request::Input('email') )
+            ->where('is_dentist', 0)
+            ->first();
 
             if($recommendation) {
                 return Response::json([
@@ -1626,7 +1632,16 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                     'image_recommended_dentist' => $recommended_user->getSocialCover(),
                 ];
 
-                $mail = GeneralHelper::unregisteredSendGridTemplate($this->user, Request::Input('email'), Request::Input('name'), 89, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
+                $mail = GeneralHelper::unregisteredSendGridTemplate(
+                    $this->user, 
+                    Request::Input('email'), 
+                    Request::Input('name'), 
+                    89, 
+                    $substitutions, 
+                    'trp', 
+                    $unsubscribed, 
+                    Request::Input('email')
+                );
                 $mail->delete();
 
                 return Response::json([
@@ -1708,9 +1723,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
             }
         }
 
-        return Response::json( [
+        return Response::json([
             'success' => false,
-        ] );
+        ]);
     }
 
     /**
@@ -1777,7 +1792,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
             return Response::json([
                 'success' => true,
                 'link' => 'https://www.facebook.com/dialog/pagetab?app_id='.request('page').'&redirect_uri='.$this->user->getLink().'?popup=facebook-tab-success',
-            ] );
+            ]);
         }
     }
 
@@ -1879,7 +1894,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
         return Response::json([
             'success' => false,
             'review_id' => request('review-id'),
-        ] );
+        ]);
     }
 
 	/**

@@ -8,6 +8,9 @@
 			$questions = App\Models\Question::with('translations')->where('type', '!=', 'deprecated')->orderBy('order', 'asc')->get();
             $ratingForDentistQuestions = App\Models\Review::$ratingForDentistQuestions;
 			$approvedPatientcanAskDentistForReview = $user->approvedPatientcanAskDentistForReview($item->id);
+			$trustedPatient = $user->wasInvitedBy($item->id);
+			$reviewReward = $trustedPatient ? App\Models\Reward::getReward('review_trusted') : App\Models\Reward::getReward('review');
+			$reviewVideoReward = $trustedPatient ? App\Models\Reward::getReward('review_video_trusted') : App\Models\Reward::getReward('review_video');
 		@endphp
 
 		<input type="hidden" name="dentist_id" value="{{ $item->id }}"/>
@@ -67,8 +70,8 @@
 
 						<div class="subtitle-box">
 							<p>Tell us more about your dental visit and earn</p>
-							<h2><span class="subtitle">46126 DCN</span></h2>
-							<p>a reward for your helpful feedback!</p>
+							<h2><span class="subtitle">{{ $reviewReward }} DCN</span></h2>
+							<p>as a reward for your helpful feedback!</p>
 						</div>
 
 						<div class="reviews-wrapper">
@@ -104,8 +107,9 @@
 									id="review-title" 
 									class="modern-input" 
 									autocomplete="off" 
+									maxlength="50"
 									readonly onfocus="this.removeAttribute('readonly');"
-									placeholder="{{ $item->getNames() }} helped me overcome my dental fear!"
+									placeholder="Dr Jones helped me overcome my dental fear!"
 								/>
 								<label for="review-title">
 									{{-- <span>{!! nl2br(trans('trp.popup.submit-review-popup.title-placeholder')) !!}</span> --}}
@@ -216,7 +220,7 @@
 
 											<div class="alert alert-success video-alerts" style="display: none;" id="alert-video-uploaded">
 												{{-- {{ trans('trp.popup.submit-review-popup.video-uploaded') }} --}}
-												Your video was uploaded successfully. You can now go to the next step.
+												Your video was uploaded successfully. You can now turn off your camera and proceed with your rating.
 											</div>
 
 											<p class="agree-text">
@@ -245,7 +249,7 @@
 						@if(!$video_reviews_stopped)
 							<div class="tac review-type-content review-option-video" style="display: none;">
 								<a href="javascript:;" class="blue-button review-next-step submit-video-review" step="2" url="{{ getLangUrl('write-review/2') }}">
-									Submit your video review
+									Next: Rate your dental experience >
 								</a>
 							</div>
 						@endif
@@ -263,37 +267,6 @@
 				</div>
 			</div>
 			@if(!$alreadySubmitedReview)
-				<div class="write-review-step write-video-review-success flex flex-center dont-close-popup" style="display: none;">
-					<img class="popup-image" src="{{ url('img-trp/popup-images/review-video-success-image.png') }}"/>
-					<div class="popup-inner">
-						<a href="javascript:;" class="close-popup">
-							<img src="{{ url('img/close-icon.png') }}"/>
-						</a>
-
-						<h2 class="mont">
-							Thank you for submitting your video review!
-						</h2>
-
-						<div class="subtitle-box">
-							<p>Upon approval, your video will be published on your dentist’s profile page and you will receive:</p>
-						</div>
-
-						<div class="video-review-success-wrapper">
-							<img src="{{ url('img/dcn-logo-blue.svg') }}"/>
-							<p class="video-reward">92251 DCN</p>
-
-							<p class="step-info">The verification process usually takes up to 5 business days.</p>
-						</div>
-
-						<div class="success-bottom-section">
-							<h2 class="new-h2">Now let’s complete your review!</h2>
-
-							<a href="javascript:;" class="blue-button show-second-step">
-								Next: Rate your dental experience >
-							</a>
-						</div>
-					</div>
-				</div>
 				<div class="write-review-step write-review-step-2 flex flex-center dont-close-popup" style="display: none;">
 					<img class="popup-image" src="{{ url('img-trp/write-review-2.png') }}"/>
 					<div class="popup-inner">
@@ -538,7 +511,7 @@
 
 							<div class="review-reward-wrapper">
 								<img src="{{ url('img/dcn-logo-optimism.svg') }}"/>
-								<span class="review-reward">46126 DCN</span>
+								<span class="review-reward">{{ $reviewReward }} DCN</span>
 							</div>
 
 							<a target="_blank" href="https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews" class="learn-link">
@@ -546,7 +519,7 @@
 							</a>
 
 							<div class="tac">
-								<a href="javascript:;" class="blue-button close-popup">Check your review</a>
+								<a href="javascript:;" class="blue-button close-popup">Close</a>
 							</div>
 						</div>
 
@@ -556,13 +529,13 @@
 
 							<div class="review-reward-wrapper">
 								<img src="{{ url('img/dcn-logo-optimism.svg') }}"/>
-								<span class="review-reward">46126 DCN</span>
+								<span class="review-reward">{{ $reviewReward }} DCN</span>
 							</div>
 
 							<a target="_blank" href="https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews" class="learn-link">Learn how to keep track of your rewards</a>
 							
 							<div class="tac">
-								<a href="javascript:;" class="blue-button close-popup">Check your review</a>
+								<a href="javascript:;" class="blue-button close-popup">Close</a>
 							</div>
 						</div>
 
@@ -574,7 +547,7 @@
 
 							<div class="review-reward-wrapper">
 								<img src="{{ url('img/dcn-logo-optimism.svg') }}"/>
-								<span class="review-reward">46126 DCN</span>
+								<span class="review-reward">{{ $reviewReward }} DCN</span>
 							</div>
 							
 							<a href="{{ getLangUrl('dentist/'.$item->slug.'/ask/') }}" 

@@ -20,6 +20,13 @@ $(document).ready(function(){
 
     showFullReview = function(id, d_id) {
         showPopup('view-review-popup');
+
+        $('#the-detailed-review').html('<div class="loader-mask">\
+            <div class="loader">\
+                "Loading..."\
+            </div>\
+        </div>');
+
         $.ajax( {
             url: '/'+lang+'/review/' + id,
             type: 'GET',

@@ -23,6 +23,16 @@ $phone: "screen and (max-width: 768px)";
     }
 
     .details-wrapper {
+
+        .verify-review {
+            padding: 9px 40px;
+
+            @media #{$phone} {
+                font-size: 15px;
+                padding: 5px 15px;
+            }
+        }
+
         .review-avatar {
             width: 115px;
             height: 115px;
@@ -90,6 +100,44 @@ $phone: "screen and (max-width: 768px)";
             .video-wrap {
                 max-width: 610px;
                 margin: 0 auto;
+            }
+
+            .review-replied-wrapper {
+                display: flex;
+                align-items: center;
+                margin-top: 15px;
+                margin-left: 25px;
+
+                .review-avatar {
+                    width: 33px;
+                    height: 33px;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                    margin-bottom: 0px;
+                }
+
+                >div {
+                    width: 100%;
+                }
+
+                .replied-info {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 2px;
+                    font-size: 14px;
+                    color: #888888;
+
+                    img {
+                        max-width: 15px;
+                        margin-right: 3px;
+                    }
+                }
+
+                .review-content {
+                    margin-bottom: 0px;
+                    padding-bottom: 0px;
+                    border-bottom: none;
+                }
             }
         }
 
@@ -164,6 +212,7 @@ $phone: "screen and (max-width: 768px)";
             .overview-wrapper {
                 display: flex;
                 flex-flow: row wrap;
+                align-items: flex-end;
 
                 @media #{$phone} {
                     margin-left: -15px;
@@ -175,6 +224,7 @@ $phone: "screen and (max-width: 768px)";
                     border-right: 1px solid #cad3e6;
                     margin-right: 27px;
                     padding-bottom: 30px;
+                    position: relative;
 
                     @media #{$pc} {
                         width: calc(25% - 17px);
@@ -230,6 +280,23 @@ $phone: "screen and (max-width: 768px)";
                         }
                     }
 
+                    .new-question {
+                        font-size: 10px;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        color: #14cab8;
+                        border: 1px solid #14cab8;
+                        display: inline-block;
+                        padding: 2px 12px;
+                        border-radius: 12px;
+                        margin-bottom: 7px;
+
+                        @media #{$phone} {
+                            position: absolute;
+                            top: 6px;
+                        }
+                    }
+
                     p {
                         font-size: 18px;
                         color: #332255;
@@ -237,6 +304,10 @@ $phone: "screen and (max-width: 768px)";
                         margin-bottom: 6px;
                         display: flex;
                         align-items: center;
+
+                        @media #{$phone} {
+                            margin-bottom: 0px;
+                        }
 
                         img {
                             margin-right: 6px;

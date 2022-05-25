@@ -988,6 +988,9 @@ $phone: "screen and (max-width: 768px)";
 					width: 25%;
 					border-right: 1px solid #cad3e6;
 					padding: 0px 10px 0px 25px;
+					display: flex;
+					flex-direction: column;
+					justify-content: end;
 
 					@media #{$phone} {
 						width: 50%;
@@ -1012,6 +1015,19 @@ $phone: "screen and (max-width: 768px)";
 						border-right: none;
 						padding-right: 0px;
 					}
+
+                    .new-question {
+                        font-size: 10px;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        color: #14cab8;
+                        border: 1px solid #14cab8;
+                        display: inline-block;
+                        padding: 2px 12px;
+                        border-radius: 12px;
+                        margin-bottom: 7px;
+						max-width: 50px;
+                    }
 	
 					p {
 						font-weight: 900;
@@ -1755,6 +1771,18 @@ $phone: "screen and (max-width: 768px)";
 			@media #{$phone} {
 				max-width: 30px;
 			}
+		}
+	}
+}
+
+#the-detailed-review {
+	min-height: 84vh;
+
+	.loader-mask {
+		display: block;
+
+		.loader {
+			display: block;
 		}
 	}
 }

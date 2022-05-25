@@ -111,7 +111,7 @@ $phone: "screen and (max-width: 768px)";
                     display: inline-block;
                     text-align: center;
                     border-radius: 50%;
-                    margin-right: 6px;
+                    margin-right: 10px;
                     font-size: 18px;
                     color: white;
                     height: 24px;
@@ -138,12 +138,15 @@ $phone: "screen and (max-width: 768px)";
             font-size: 24px;
             color: #0084d1;
             font-weight: bold;
+            max-width: 300px;
 
             @media #{$pc} {
                 font-size: 21px;
+                max-width: 280px;
             }
 
             @media #{$tablet} {
+                max-width: 100%;
                 text-align: center;
                 font-size: 22px;
             }
@@ -407,6 +410,21 @@ $phone: "screen and (max-width: 768px)";
 
                 p {
                     color: #332255;
+                }
+            }
+
+            &.successful-video-review {
+                border: none;
+                padding: 0px;
+                
+                &:before {
+                    display: none;
+                }
+                
+                .option-span,
+                .agree-text,
+                .green-button {
+                    display: none;
                 }
             }
 
@@ -808,6 +826,7 @@ $phone: "screen and (max-width: 768px)";
                         font-weight: 900;
                         font-size: 13px;
                         margin-left: 2px;
+                        font-family: cursive, 'Lato', sans-serif;
                     }
                 }
             }

@@ -923,10 +923,6 @@ body.popup-visible {
 	        background: url('../img-trp/stars-gray-big.png') 50% 50% no-repeat;
 	        background-size: contain;
 
-			&.new {
-				background-image: url('../img-trp/stars-blue-new-big.png');
-			}
-
 	        .bar {
 	            background: url('../img-trp/stars-blue-big.png') 0% 50% no-repeat;
 	            background-size: cover;
@@ -956,10 +952,6 @@ body.popup-visible {
 	        height: 22px;
 	        background: url('../img-trp/stars-gray-average.png') 50% 50% no-repeat;
 	        background-size: contain;
-
-			&.new {
-				background-image: url('../img-trp/stars-new-average.png');
-			}
 
 	        .bar {
 	            background: url('../img-trp/stars-blue-average.png') 0% 50% no-repeat;

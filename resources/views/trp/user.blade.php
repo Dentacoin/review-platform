@@ -1257,14 +1257,16 @@
 						<div class="flex flex-mobile">
 							@foreach($aggregatedRating as $agg_rating)
 								<div class="overview-column">
+									@if($agg_rating['type'] == 'blue')
+										<div class="new-question">
+											new
+										</div>
+									@endif
 									<p>
-										@if($agg_rating['type'] == 'blue')
-											<img src="{{ url('img-trp/info-dark-gray.png') }}" class="tooltip-text" text="new"/>
-										@endif
 										{{ $agg_rating['label'] }}
 									</p>
 									<div class="ratings average">
-										<div class="stars {{ $agg_rating['type'] == 'blue' ? 'new' : '' }}">
+										<div class="stars">
 											<div class="bar" style="width: {{ $agg_rating['rating'] / 5 * 100 }}%;"></div>
 										</div>
 									</div>

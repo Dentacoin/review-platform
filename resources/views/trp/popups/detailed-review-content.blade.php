@@ -1,4 +1,9 @@
-<div class="details-wrapper">
+<div class="details-wrapper" review-id="{{ $review->id }}">
+	@if(!empty($user) && $user->id==$item->id && !$review->verified && !empty($user->trusted))
+		<a class="green-button verify-review" href="javascript:;">
+			Verify
+		</a>
+	@endif
 	<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 	<h2 class="mont">
 		{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}'s Review of 
@@ -18,11 +23,9 @@
 				</div>
 			</div>
 
-			@if($review->verified)
-				<div class="trusted tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
-					<img src="{{ url('img-trp/mobile-logo-white.png') }}"/>
-				</div>
-			@endif
+			<div class="trusted tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}" {!! $review->verified ? '' : 'style="display:none;"' !!}>
+				<img src="{{ url('img-trp/mobile-logo-white.png') }}"/>
+			</div>
 		</div>
 	</div>
 
@@ -54,6 +57,18 @@
 		@else
 			{!! nl2br($review->answer) !!}
 		@endif
+
+		@if($review->reply)
+			<div class="review-replied-wrapper">
+				<img class="review-avatar" src="{{ $item->getImageUrl(true) }}"/>
+				<div>
+					<p class="replied-info">
+						<img src="{{ url('img-trp/reply-icon.svg') }}" />Replied by {{ $item->getNames() }} {{ $review->replied_at ? 'on '.$review->replied_at->toFormattedDateString() : '' }}
+					</p>
+					<p class="review-content">{!! nl2br($review->reply) !!}</p>
+				</div>
+			</div>
+		@endif
 	</div>
 	
 	@if(!empty($review->treatments) || !empty($review->reviewForDentistAndClinic()))
@@ -69,10 +84,10 @@
 			@if(!empty($review->reviewForDentistAndClinic()))
 				<div class="review-dentist col">
 					<h4>{{ $review->dentist_id == $item->id ? 'Clinic' : 'Treating dentist' }}:</h4>
-					<div class="flex flex-mobile">
+					<a href="{{ $review->dentist_id == $item->id ? $review->clinic->getLink() : $review->dentist->getLink() }}" class="flex flex-mobile">
 						<div class="review-dentist-avatar" style="background-image: url('{{ $review->dentist->getImageUrl(true) }}');"></div>
 						<p>{{ $review->dentist_id == $item->id ? $review->clinic->getNames() : $review->dentist->getNames() }}</p>
-					</div>
+					</a>
 				</div>
 			@endif
 		</div>
@@ -99,14 +114,16 @@
 							$answer = $review->answers->where('question_id', $question->id)->first();
 						@endphp
 						<div class="overview-column">
+							@if(!$answer)
+								<div class="new-question">
+									new
+								</div>
+							@endif
 							<p>
-								@if(!$answer)
-									<img src="{{ url('img-trp/info-light.png') }}" class="tooltip-text" text="new"/>
-								@endif
 								{{ $question['label'] }}
 							</p>
 							<div class="ratings big">
-								<div class="stars {{ $answer ? '' : 'new' }}">
+								<div class="stars">
 									@if($answer)
 										<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;"></div>
 									@else
@@ -144,14 +161,16 @@
 						@endphp
 
 						<div class="overview-column">
+							@if(!$answer)
+								<div class="new-question">
+									new
+								</div>
+							@endif
 							<p>
-								@if(!$answer)
-									<img src="{{ url('img-trp/info-light.png') }}" class="tooltip-text" text="new"/>
-								@endif
 								{{ $question['label'] }}
 							</p>
 							<div class="ratings big">
-								<div class="stars {{ $answer ? '' : 'new' }}">
+								<div class="stars">
 									@if($answer)
 										<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;"></div>
 									@else

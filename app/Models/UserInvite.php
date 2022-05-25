@@ -46,7 +46,13 @@ class UserInvite extends Model {
     }
 
     public function getImageUrl($thumb = false) {
-        return $this->has_image ? url('/storage/invites/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-0.png');
+
+        if (!file_exists($this->getImagePath(storage_path().'/app/public/invites/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg'))) {
+            $avatar = url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+        } else {
+            $avatar = url('/storage/invites/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp;
+        }
+        return $avatar;
     }
     
     public function getImagePath($thumb = false) {

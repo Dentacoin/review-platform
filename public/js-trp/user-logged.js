@@ -1906,7 +1906,7 @@ $(document).ready(function() {
         ajax_is_running = true;
 
         var that = $(this);
-        var review_id_param = $(this).closest('.written-review').attr('review-id');
+        var review_id_param = $(this).closest('.written-review').length ? $(this).closest('.written-review').attr('review-id') : $('.details-wrapper').attr('review-id');
 
         $.ajax({
             type: "POST",
@@ -1920,11 +1920,11 @@ $(document).ready(function() {
                 console.log(ret);
                 if(ret.success) {
 
-                    if ($(window).outerWidth() <= 768) {
-                        that.closest('.written-review').find('.trusted-sticker.mobile-sticker').show();
-
+                    if(that.closest('.written-review').length) {
+                        that.closest('.written-review').find('.trusted-sticker').show();
                     } else {
-                        that.closest('.written-review').find('.trusted-sticker:not(.mobile-sticker)').show();
+                        that.closest('.details-wrapper').find('.review-rating-new').addClass('verified-review');
+                        that.closest('.details-wrapper').find('.review-rating-new .trusted').show();
                     }
 
                     that.hide();
@@ -1938,7 +1938,6 @@ $(document).ready(function() {
                 console.log('error');
                 ajax_is_running = false;
             }
-
         });
     });
 
