@@ -8,9 +8,8 @@
 			$questions = App\Models\Question::with('translations')->where('type', '!=', 'deprecated')->orderBy('order', 'asc')->get();
             $ratingForDentistQuestions = App\Models\Review::$ratingForDentistQuestions;
 			$approvedPatientcanAskDentistForReview = $user->approvedPatientcanAskDentistForReview($item->id);
-			$trustedPatient = $user->wasInvitedBy($item->id);
-			$reviewReward = $trustedPatient ? App\Models\Reward::getReward('review_trusted') : App\Models\Reward::getReward('review');
-			$reviewVideoReward = $trustedPatient ? App\Models\Reward::getReward('review_video_trusted') : App\Models\Reward::getReward('review_video');
+			$reviewReward = App\Models\Reward::getReward('review_trusted');
+			$reviewVideoReward = App\Models\Reward::getReward('review_video_trusted');
 		@endphp
 
 		<input type="hidden" name="dentist_id" value="{{ $item->id }}"/>
