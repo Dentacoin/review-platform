@@ -127,6 +127,11 @@
         max-width: 24px;
         margin-right: 5px;
         margin-bottom: -2px; }
+  #popup-invite .invite-content .error-on-first-step {
+    margin-top: -110px; }
+    @media screen and (max-width: 768px) {
+      #popup-invite .invite-content .error-on-first-step {
+        margin-top: 0px; } }
   #popup-invite .invite-content .checkboxes-wrapper {
     width: 100%;
     overflow: hidden;

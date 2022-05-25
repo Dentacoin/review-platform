@@ -195,6 +195,14 @@ $phone: "screen and (max-width: 768px)";
                 }
             }
         }
+
+        .error-on-first-step {
+            margin-top: -110px;
+
+            @media #{$phone} {
+                margin-top: 0px;
+            }
+        }
         
         .checkboxes-wrapper {
             width: 100%;

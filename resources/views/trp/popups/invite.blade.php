@@ -55,7 +55,7 @@
 
 					<textarea class="copypaste" id="copypaste" name="copypaste" placeholder="{!! trans('trp.popup.popup-invite.paste-file-placeholder') !!}"></textarea>
 
-					<div class="alert invite-alert" style="display: none; margin-top: 20px; margin-bottom: 20px;"></div>
+					<div class="alert invite-alert error-on-first-step" style="display: none; margin-bottom: 20px;"></div>
 
 					<div class="tac">
 						<input type="submit" class="blue-button" value="{!! nl2br(trans('trp.popup.popup-invite.next')) !!}">
