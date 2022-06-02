@@ -294,9 +294,12 @@ $(document).ready(function() {
         );
     });
 
-    $('.payments-section:not(.edit-mode) .open-my-account').click( function() {
-        window.location.href = 'https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews';
+    $('.payments-section .open-my-account').click( function() {
+        if(!$('body').hasClass('edit-dentist-profile-mode')) {
+            window.location.href = 'https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews';
+        }
     });
+    
     //end specializations & payment methods
 
 

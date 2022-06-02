@@ -132,7 +132,7 @@
                                         <span>
                                             Add image
                                             {{-- {!! nl2br(trans('trp.page.user.reviews-image')) !!} --}}
-                                            <img src="{{ url('img-trp/info-dark-gray.png') }}" class="tooltip-text" text="Required resolution: 500x250px<br/> Max. image size: 2 MB"/>
+                                            <img src="{{ url('img-trp/info-dark-gray.png') }}" class="tooltip-text" text="Required resolution: 1920x1080px<br/> Max. image size: 2 MB"/>
                                         </span>
                                     </div>
                                     <div class="loader">
