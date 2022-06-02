@@ -513,7 +513,7 @@
 								<span class="review-reward">{{ $reviewReward }} DCN</span>
 							</div>
 
-							<a target="_blank" href="https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews" class="learn-link">
+							<a target="_blank" href="https://account.dentacoin.com?platform=trusted-reviews" class="learn-link">
 								Learn how to withdraw your rewards
 							</a>
 
@@ -531,7 +531,7 @@
 								<span class="review-reward">{{ $reviewReward }} DCN</span>
 							</div>
 
-							<a target="_blank" href="https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews" class="learn-link">Learn how to keep track of your rewards</a>
+							<a target="_blank" href="https://account.dentacoin.com?platform=trusted-reviews" class="learn-link">Learn how to keep track of your rewards</a>
 							
 							<div class="tac">
 								<a href="javascript:;" class="blue-button close-popup">Close</a>
@@ -576,7 +576,7 @@
 						</p>
 
 						<div class="tac">
-							<a target="_blank" href="https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews" class="learn-link">Learn how to keep track of your rewards ></a>
+							<a target="_blank" href="https://account.dentacoin.com?platform=trusted-reviews" class="learn-link">Learn how to keep track of your rewards ></a>
 						</div>
 
 						<div class="tac">
