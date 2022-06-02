@@ -45,7 +45,7 @@
             {!! nl2br(trans('trp.common.trusted')) !!}
             <img src="{{ url('img/info-white.svg') }}" width="15" height="15"/>
         </div>
-        @if(!empty($user) && $user->id==$item->id && !$review->verified && !empty($user->trusted))
+        @if(!$for_profile && !empty($user) && $user->id==$current_dentist->id && !$review->verified && !empty($user->trusted))
             <a class="green-button verify-review" href="javascript:;">
                 Verify patient
             </a>
