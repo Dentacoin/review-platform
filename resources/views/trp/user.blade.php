@@ -313,7 +313,7 @@
 
 					@if($workplace || $workingTime || $loggedUserAllowEdit)
 						<div class="flex flex-center workplace-wrapper {{ $workplace || $workingTime ? '' : 'show-on-edit-mode' }}">
-							<div class="col {{ $workplace ? '' : 'show-on-edit-mode' }}">
+							<div class="col">
 								@if($workplace || ($loggedUserAllowEdit && !$item->is_clinic))
 									<div class="workplace">
 										{!! $workplace ?? 'Add workplace' !!}
