@@ -193,13 +193,19 @@ header {
 				color: #0564c6;
 				margin-right: 5px;
 
-				&.user-balance {
+				&.user-balance-dcn {
 					font-weight: bold;
 					margin-right: 0px;
 				}
+
+				&.user-balance-usd {
+					font-weight: bold;
+					margin-right: 0px;
+					display: none;
+				}
 			}
 
-			.caret {
+			.caret-switch {
 				transform: rotate(90deg);
 				max-width: 6px;
 				margin-left: 5px;

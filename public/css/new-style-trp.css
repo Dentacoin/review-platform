@@ -1359,10 +1359,14 @@ header {
         font-size: 18px;
         color: #0564c6;
         margin-right: 5px; }
-        header .header-info .user-profile-info span.user-balance {
+        header .header-info .user-profile-info span.user-balance-dcn {
           font-weight: bold;
           margin-right: 0px; }
-      header .header-info .user-profile-info .caret {
+        header .header-info .user-profile-info span.user-balance-usd {
+          font-weight: bold;
+          margin-right: 0px;
+          display: none; }
+      header .header-info .user-profile-info .caret-switch {
         transform: rotate(90deg);
         max-width: 6px;
         margin-left: 5px; }

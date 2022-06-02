@@ -138,8 +138,9 @@
 								@endif
 								<a target="_blank" href="https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews" class="user-profile-info">
 									<span>Rewards: </span>
-									<span class="user-balance">{{ number_format($user_total_balance) }} DCN</span>
-									<img class="caret" src="{{ url('img-trp/caret-white-down.svg') }}"/>
+									<span class="user-balance-dcn">{{ number_format($user_total_balance) }} DCN</span>
+									<span class="user-balance-usd">${{ sprintf('%.2F', $user_total_balance * $dcn_price) }}</span>
+									<img class="caret-switch" src="{{ url('img-trp/caret-white-down.svg') }}"/>
 									<img class="header-avatar {!! $user->hasimage ? '' : 'default-avatar' !!}" id="header-avatar" src="{{ $user_avatar }}"/>
 									@if(!empty($has_review_notification))
 										<div class="notification"></div>

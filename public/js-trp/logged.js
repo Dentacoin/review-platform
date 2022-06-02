@@ -10,6 +10,19 @@ jQuery(document).ready(function($){
 		}
 	});
 
+    $('.caret-switch').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if($('.user-balance-dcn').is(':visible')) {
+            $('.user-balance-dcn').hide();
+            $('.user-balance-usd').show();
+        } else {
+            $('.user-balance-dcn').show();
+            $('.user-balance-usd').hide();
+        }
+    });
+
     //INDEX PAGE
 
     $('.invite-new-dentist-form').submit( function(e) {
