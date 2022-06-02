@@ -31,7 +31,7 @@
 						{{-- {!! trans('trp.page.invite.popup.title') !!} --}}
 					</h2>
 					<h5>
-						All real entries will be rewarded with <b>{{ App\Models\Reward::getReward('patient_add_dentist') }} DCN</b>.
+						All real entries will be rewarded with <b>{{ App\Models\Reward::getReward('patient_add_dentist') }} DCN</b>!
 					</h5>
 
 					<div class="mode-dentist-clinic alert-after flex flex-mobile">

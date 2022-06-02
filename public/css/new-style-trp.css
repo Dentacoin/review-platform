@@ -383,7 +383,7 @@ h5 {
   @media screen and (max-width: 768px) {
     .popup .alert,
     .site-content .alert {
-      padding: 10px 10px 10px 51px;
+      padding: 10px 10px 10px 60px;
       border-radius: 16px;
       font-size: 14px; } }
   .popup .alert:first-child,
@@ -426,7 +426,7 @@ h5 {
         width: 44px; } }
   .popup .alert.mobile,
   .site-content .alert.mobile {
-    padding: 10px 10px 10px 51px;
+    padding: 10px 10px 10px 60px;
     border-radius: 16px;
     font-size: 14px; }
     .popup .alert.mobile:before,
@@ -757,7 +757,8 @@ body.popup-visible {
   padding: 0px 15px;
   background: white;
   border: 2px solid #cccccc;
-  outline: none; }
+  outline: none;
+  -webkit-box-shadow: 0 0 0px 1000px white inset; }
   @media screen and (max-width: 998px) {
     .input {
       width: 100%; } }
@@ -1016,6 +1017,7 @@ textarea.input {
     transition: padding-top 0.2s ease, margin-top 0.2s ease;
     overflow-x: hidden;
     background-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
     /* Hack to make "rows" attribute apply in Firefox. */ }
     .modern-field .modern-input.has-error {
       border-color: #ff5959; }
