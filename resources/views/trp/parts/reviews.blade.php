@@ -36,11 +36,19 @@
         </a>
     </div>
     <div class="review-rating">
-        @if($review->verified)
-            <div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $current_dentist->getNames() ])) !!}">
-                {!! nl2br(trans('trp.common.trusted')) !!}
-                <img src="{{ url('img/info-white.svg') }}" width="15" height="15"/>
-            </div>
+        <div 
+        class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', [
+            'name' => $current_dentist->getNames() 
+        ])) !!}"
+        {!! $review->verified ? '' : 'style="display:none;"' !!}
+        >
+            {!! nl2br(trans('trp.common.trusted')) !!}
+            <img src="{{ url('img/info-white.svg') }}" width="15" height="15"/>
+        </div>
+        @if(!empty($user) && $user->id==$item->id && !$review->verified && !empty($user->trusted))
+            <a class="green-button verify-review" href="javascript:;">
+                Verify patient
+            </a>
         @endif
         <div class="ratings average">
             <div class="stars">
@@ -81,11 +89,6 @@
 
             {{-- <div class="review-footer flex flex-mobile break-mobile">
                 <div class="col">
-                    @if(!empty($user) && $user->id==$current_dentist->id && !$review->verified && !empty($user->trusted))
-                        <a class="button verify-review" href="javascript:;">
-                            Verify
-                        </a>
-                    @endif
 
                     @if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
                         <a class="reply-review" href="javascript:;">

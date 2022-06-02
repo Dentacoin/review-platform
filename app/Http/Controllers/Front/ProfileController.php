@@ -6,6 +6,7 @@ use App\Http\Controllers\FrontController;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
+use App\Models\UserAnnouncement;
 use App\Models\UserGuidedTour;
 use App\Models\WalletAddress;
 use App\Models\AnonymousUser;
@@ -105,6 +106,22 @@ class ProfileController extends FrontController {
                 'type' => 'text',
                 'required' => false,
                 'is_email' => true,
+            ],
+            'languages' => [
+                'type' => 'text',
+                'required' => false,
+            ],
+            'education_info' => [
+                'type' => 'text',
+                'required' => false,
+            ],
+            'experience' => [
+                'type' => 'text',
+                'required' => false,
+            ],
+            'founded_at' => [
+                'type' => 'text',
+                'required' => false,
             ],
         ];
     }
@@ -955,7 +972,6 @@ class ProfileController extends FrontController {
         }
 
         $validator = Validator::make(Request::all(), $validator_arr);
-
         if ($validator->fails()) {
 
             if( Request::input('json') ) {
@@ -1079,6 +1095,27 @@ class ProfileController extends FrontController {
 
                         // dd($wh);
                         $this->user->$key = $wh;
+                    } else if($key=='languages') {
+                        $langField = Request::input('languages');
+
+                        if(in_array($langField, array_keys(config('trp.languages')))) {
+
+                            $current_langs = $this->user->languages ?? [];
+                            $current_langs[] = $langField;
+                            $this->user->$key = $current_langs;
+                        }
+                        
+                    } else if($key=='education_info') {
+                        $educationInfo = Request::input('education_info');
+
+                        foreach($educationInfo as $k => $ei) {
+                            if(!$ei) {
+                                unset($educationInfo[$k]);
+                            }
+                        }
+
+                        $this->user->$key = $educationInfo;
+                        
                     } else if($value['type']=='specialization') {
                         UserCategory::where('user_id', $this->user->id)->delete();
                         if(!empty(Request::input('specialization'))) {
@@ -1089,6 +1126,8 @@ class ProfileController extends FrontController {
                                 $newc->save();
                             }
                         }
+                    } else if($key=='founded_at') {
+                        $this->user->$key = Carbon::parse(Request::input($key));
                     } else {
                         $this->user->$key = Request::input($key);
                     }
@@ -1135,6 +1174,10 @@ class ProfileController extends FrontController {
                     $inputs['current-email'] = $this->user->email;
                 }
 
+                if(isset($inputs['experience'])) {
+                    $inputs['experience'] = config('trp.experience')[$this->user->experience];
+                }
+
                 $ret = [
                     'success' => true,
                     'href' => getLangUrl('/'),
@@ -1148,6 +1191,8 @@ class ProfileController extends FrontController {
                         $ret['value'] = strip_tags( $this->user->getWorkHoursText() );
                     } else if( Request::input('field')=='accepted_payment' ) {
                         $ret['value'] = $this->user->parseAcceptedPayment( $this->user->accepted_payment );
+                    } else if( in_array(Request::input('field'), ['languages', 'education_info']) ) {
+                        $ret['value'] = $this->user[Request::input('field')];
                     } else {
                         $ret['value'] = nl2br($this->user[ Request::input('field') ]) ;                            
                     }
@@ -1427,11 +1472,13 @@ class ProfileController extends FrontController {
         ->where('user_id', $id)
         ->delete();
 
-        if( $res ) {
-            $clinic = User::find( $id );
-            $clinic->sendTemplate(38, [
-                'dentist-name' => $this->user->getNames()
-            ], 'trp');
+        if(Request::getHost() != 'urgent.reviews.dentacoin.com') {
+            if( $res ) {
+                $clinic = User::find( $id );
+                $clinic->sendTemplate(38, [
+                    'dentist-name' => $this->user->getNames()
+                ], 'trp');
+            }
         }
 
         return Response::json( [
@@ -1447,21 +1494,27 @@ class ProfileController extends FrontController {
         if(!empty(Request::input('joinclinicid'))) {
 
             $clinic = User::find( Request::input('joinclinicid') );
-            if(!empty($clinic)) {
 
+            if(!empty($clinic)) {
                 $newclinic = new UserTeam;
                 $newclinic->dentist_id = $this->user->id;
                 $newclinic->user_id = Request::input('joinclinicid');
                 $newclinic->approved = 0;
                 $newclinic->save();
 
-                $clinic->sendTemplate(34, [
-                    'dentist-name' =>$this->user->getNames()
-                ], 'trp');
+                if(Request::getHost() != 'urgent.reviews.dentacoin.com') {
+                    $clinic->sendTemplate(34, [
+                        'dentist-name' =>$this->user->getNames()
+                    ], 'trp');
+                }
 
                 return Response::json( [
                     'success' => true,
-                    'message' => trans('trp.page.user.clinic-invited', ['name' => $clinic->getNames() ])
+                    'clinic' => [
+                        'name' => $clinic->getNames(),
+                        'link' => $clinic->getLink(),
+                        'id' => $clinic->id,
+                    ],
                 ]);
             }
         } 
@@ -2071,6 +2124,100 @@ class ProfileController extends FrontController {
             return Response::json( [
                 'success' => true,
             ]);
+        }
+
+        return Response::json( [
+            'success' => false,
+        ]);
+    }
+
+    /**
+     * delete dentist languages
+     */
+    public function deleteLanguage($locale=null, $branch_id = null) {
+
+        if($branch_id) {
+            $branchClinic = User::find($branch_id);
+    
+            if(!empty($branchClinic) && $this->user->is_clinic && $branchClinic->is_clinic && $this->user->branches->isNotEmpty() && in_array($branchClinic->id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+                $this->user = $branchClinic;
+            }
+        }
+
+        if(!empty($this->user) && $this->user->is_dentist) {
+
+            $current_langs =  $this->user->languages ?? [];
+            
+            if(in_array(Request::input('language'), array_keys(config('trp.languages'))) && in_array(Request::input('language'), $current_langs)) {
+                unset($current_langs[array_search(Request::input('language'), $current_langs)]);
+                $this->user->languages = $current_langs;
+                $this->user->save();
+
+                return Response::json( [
+                    'success' => true,
+                ]);
+            }
+        }
+
+        return Response::json( [
+            'success' => false,
+        ]);
+    }
+
+    /**
+     * add dentist announcement
+     */
+    public function addAnnouncement($locale=null, $branch_id = null) {
+
+        if($branch_id) {
+            $branchClinic = User::find($branch_id);
+    
+            if(!empty($branchClinic) && $this->user->is_clinic && $branchClinic->is_clinic && $this->user->branches->isNotEmpty() && in_array($branchClinic->id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+                $this->user = $branchClinic;
+            }
+        }
+
+        if(!empty($this->user) && $this->user->is_dentist) {
+
+            if(empty(Request::input('announcement_title')) && empty(Request::input('announcement_description'))) {
+                //remove announcement
+                if( $this->user->announcement) {
+                    UserAnnouncement::destroy($this->user->announcement->id);
+                }
+
+                return Response::json([
+                    'success' => true,
+                    'inputs' => Request::all()
+                ]);
+            } else {
+
+                $validator = Validator::make(Request::all(), [
+                    'announcement_title' => array('required'),
+                    'announcement_description' => array('required'),
+                ]);
+    
+                if ($validator->fails()) {
+                    $msg = $validator->getMessageBag()->toArray();
+                    $ret['messages'] = [];
+                    foreach ($msg as $field => $errors) {
+                        $ret['messages'][$field] = implode(', ', $errors);
+                    }
+                    return Response::json($ret);
+                } else {
+    
+                    $announcement = $this->user->announcement ?? new UserAnnouncement;
+                    $announcement->user_id = $this->user->id;
+                    $announcement->title = Request::input('announcement_title');
+                    $announcement->description = Request::input('announcement_description');
+                    $announcement->save();
+                    
+                    return Response::json([
+                        'success' => true,
+                        'inputs' => Request::all()
+                    ]);
+                }
+            }
+
         }
 
         return Response::json( [

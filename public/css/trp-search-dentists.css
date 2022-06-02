@@ -198,7 +198,8 @@
         display: block;
         border-radius: 50%;
         position: relative;
-        z-index: 1; }
+        z-index: 1;
+        box-shadow: 0px 0px 10px 2px #f3f3f3; }
     .dentists-names-results .dentist-button .result-name-dentist {
       flex: 1;
       text-align: left;

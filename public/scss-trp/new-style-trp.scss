@@ -199,6 +199,12 @@ header {
 				}
 			}
 
+			.caret {
+				transform: rotate(90deg);
+				max-width: 6px;
+				margin-left: 5px;
+			}
+
 			img {
 				border-radius: 50%;
 				vertical-align: middle;
@@ -718,7 +724,7 @@ footer {
 		align-items: flex-start;
 		width: 1290px;
 
-		@media screen and (max-width: 1300px) {
+		@media screen and (max-width: 1400px) {
 			width: 1120px;
 		}
 
@@ -1293,6 +1299,10 @@ footer {
 		@media #{$phone} {
 			margin-top: 20px;
 		}
+	}
+
+	.search-form {
+		box-shadow: none;
 	}
 
 	.close-search-popup {

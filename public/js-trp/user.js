@@ -16,7 +16,50 @@ var load_flickity = false;
 var loadMapsJS = false;
 var load_maps = false;
 
-$(document).ready(function(){
+$(document).ready(function() {
+
+    //dentist verifies review from patient
+    var verifyReview = function() {
+        $('.verify-review').click( function() {
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var that = $(this);
+            var review_id_param = $(this).closest('.written-review').length ? $(this).closest('.written-review').attr('review-id') : $('.details-wrapper').attr('review-id');
+
+            $.ajax({
+                type: "POST",
+                url: window.location.origin+'/en/verify-review/',
+                data: {
+                    review_id: review_id_param,
+                    _token: $('input[name="_token"]').val(),
+                },
+                dataType: 'json',
+                success: function(ret) {
+                    if(ret.success) {
+                        if(that.closest('.written-review').length) {
+                            that.closest('.written-review').find('.trusted-sticker').show();
+                        } else {
+                            that.closest('.details-wrapper').find('.review-rating-new').addClass('verified-review');
+                            that.closest('.details-wrapper').find('.review-rating-new .trusted').show();
+                            $('.written-review[review-id="'+review_id_param+'"]').find('.trusted-sticker').css('display', 'inline-flex');
+                        }
+
+                        that.hide();
+                    }
+                    ajax_is_running = false;
+                },
+                error: function(ret) {
+                    console.log('error');
+                    ajax_is_running = false;
+                }
+            });
+        });
+    }
+    verifyReview();
 
     showFullReview = function(id, d_id) {
         showPopup('view-review-popup');
@@ -39,6 +82,7 @@ $(document).ready(function(){
                 handleReviewEvents();
                 attachTooltips();
                 $('#view-review-popup .share-popup').attr('share-href', window.location.href.split('?')[0] + '?review_id=' + this);
+                verifyReview();
             }).bind(id)
         });
     }
@@ -66,48 +110,81 @@ $(document).ready(function(){
                 draggable: false,
             });
         }
+
+        if($('.highlights-flickity').length) {
+            $('.highlights-flickity').flickity({
+                autoPlay: false,
+                wrapAround: true,
+                cellAlign: 'left',
+                freeScroll: true,
+                groupCells: 1,
+                draggable: false,
+            });
+        } else {
+            if($('.highlights-mobile-flickity').length && $(window).outerWidth() <= 768) {
+                $('.highlights-mobile-flickity').flickity({
+                    autoPlay: false,
+                    wrapAround: true,
+                    cellAlign: 'left',
+                    freeScroll: true,
+                    groupCells: 1,
+                    draggable: false,
+                });
+            }
+        }
+        
+        if($('.address-flickity').length) {
+            $('.address-flickity').flickity({
+                autoPlay: false,
+                wrapAround: true,
+                cellAlign: 'left',
+                freeScroll: true,
+                groupCells: 1,
+                draggable: false,
+            });
+
+            $('.address-flickity').on( 'select.flickity', function( event, index ) {
+                $('.carousel-status').html(index+1+' of '+$('.address-slider').length);
+            });
+        }
     }
 
     var loadMap = function() {
-        if( $('#profile-map').length && !$('#profile-map').attr('inited') ) {
-            $('#profile-map').attr('inited', 'done');
-            $('.info-address').hide();
+        if( $('.profile-map').length) {
 
-            prepareMapFunction( function() {
-                var profile_map = new google.maps.Map(document.getElementById('profile-map'), {
-                    center: {
-                        lat: parseFloat($('#profile-map').attr('lat')), 
-                        lng: parseFloat($('#profile-map').attr('lon'))
-                    },
-                    zoom: 15,
-                    backgroundColor: 'none'
-                });
+            $('.profile-map').each( function() {
+                var that = $(this);
 
-                var mapMarker = new google.maps.Marker({
-                    position: {
-                        lat: parseFloat($('#profile-map').attr('lat')), 
-                        lng: parseFloat($('#profile-map').attr('lon'))
-                    },
-                    map: profile_map,
-                    icon: images_path+'/map-pin-active.png',
-                });
+                if(!that.attr('inited') ) {
+
+                    that.attr('inited', 'done');
+                    $('.info-address').hide();
+        
+                    prepareMapFunction( function() {
+                        var profile_map = new google.maps.Map(document.getElementById(that.attr('id')), {
+                            center: {
+                                lat: parseFloat(that.attr('lat')), 
+                                lng: parseFloat(that.attr('lon'))
+                            },
+                            zoom: 15,
+                            backgroundColor: 'none'
+                        });
+        
+                        var mapMarker = new google.maps.Marker({
+                            position: {
+                                lat: parseFloat(that.attr('lat')), 
+                                lng: parseFloat(that.attr('lon'))
+                            },
+                            map: profile_map,
+                            icon: images_path+'/map-pin-active.png',
+                        });
+                    });
+                }
             });
         }
     }
 
     var initJS = function() {
-        if (!load_flickity ) {
-            load_flickity = true;
-            if (!loadFlickityJS ) {
-                loadFlickityJS = true;
-                $.getScript(window.location.origin+'/js/flickity.min.js', function() {
-                    $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
-                    flickityFunctions();
-                });
-            } else {
-                flickityFunctions();
-            }
-        }
 
         if(!load_maps) {
             load_maps = true;
@@ -121,6 +198,19 @@ $(document).ready(function(){
             }
         }
 
+        if (!load_flickity ) {
+            load_flickity = true;
+            if (!loadFlickityJS ) {
+                loadFlickityJS = true;
+                $.getScript(window.location.origin+'/js/flickity.min.js', function() {
+                    $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
+                    flickityFunctions();
+                });
+            } else {
+                flickityFunctions();
+            }
+        }
+
         if (!load_lightbox ) {
             load_lightbox = true;
             $.getScript(window.location.origin+'/js/lightbox.js', function() {
@@ -129,11 +219,42 @@ $(document).ready(function(){
         }
     }
 
+    var fixedTabs = function() {
+        
+        if(!$('.tab-title.patients-tab.active').length) {
+            if($(window).scrollTop() > $('.tab-sections').offset().top - 100) {
+                if(!$('.tab-titles').hasClass('fixed-tabs')) {
+                    $('.tab-titles').addClass('fixed-tabs');
+                }
+            } else {
+                if($('.tab-titles').hasClass('fixed-tabs')) {
+                    $('.tab-titles').removeClass('fixed-tabs');
+                }
+            }
+    
+            var active_section = null;
+            $('.tab-title:not(.grayed):not(.patients-tab)').each( function() {
+                if($(this).offset().top > $('#'+$(this).attr('data-tab')).offset().top - 150) {
+                    active_section = $(this).attr('data-tab');
+                }
+                // console.log($(this).attr('data-tab')+': '+$(this).offset().top+' - '+$('#'+$(this).attr('data-tab')).offset().top);
+            });
+    
+            if(active_section) {
+                $('.tab-title').removeClass('active');
+                $('.tab-title[data-tab="'+active_section+'"]').addClass('active');
+            }
+            // console.log(active_section);
+        }
+    }
+
     if($(window).scrollTop() > 10) {
+        fixedTabs();
         initJS();
     }
 
     $(window).on('scroll', function() {
+        fixedTabs();
         initJS();
     });
 
@@ -370,20 +491,27 @@ $(document).ready(function(){
 
     $('.tab-title').click( function() {
 
-        if(!$(this).hasClass('grayed')) {
-            $('.tab-title').removeClass('active');
-            $(this).addClass('active');
-        }
-
         if($(this).hasClass('patients-tab')) {
-            $('.tab-sections').hide();
-            $('.asks-section').show();
+            if(!$(this).hasClass('grayed')) {
+                $('.tab-sections').hide();
+                $('.asks-section').show();
+                $('.tab-titles').removeClass('fixed-tabs');
+                $('.tab-title').removeClass('active');
+                $(this).addClass('active');
+            }
         } else {
+            if($('.tab-title.patients-tab.active').length && !$(this).hasClass('patients-tab')) {
+                $('.tab-title').removeClass('active');
+                $(this).addClass('active');
+            }
+
             $('.tab-sections').show();
             $('.asks-section').hide();
-            $('body, html').animate({
-                scrollTop: $('#'+$(this).attr('data-tab')).offset().top - $('header').outerHeight()
-            }, 500);
+            if($('#'+$(this).attr('data-tab')).length) {
+                $('body, html').animate({
+                    scrollTop: $('#'+$(this).attr('data-tab')).offset().top - $('header').outerHeight() - $('.tab-titles').outerHeight()
+                }, 500);
+            }
         }
     });
 

@@ -115,6 +115,14 @@ class UserInvite extends Model {
             return false;
         }
     }
+
+    public function inviteForReview($withCurrency=true) {
+        $dcnReward = DcnReward::where('reference_id', $this->id)
+        ->where('user_id', $this->user_id)
+        ->where('type', 'invitation')
+        ->first();
+        return $dcnReward ? $dcnReward->reward.($withCurrency ? ' DCN' : '') : '';
+    }
 }
 
 ?>

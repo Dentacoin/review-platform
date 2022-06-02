@@ -13,7 +13,8 @@ return [
                 'lead-magnet' => 'lead-magnet',
                 'rewards' => 'rewards',
                 'bans' => 'bans',
-                'lost_users' => 'lost_users'
+                'lost_users' => 'lost_users',
+                'make-partners' => 'make-partners',
             ),
             'js' => array(
                 'users.js',

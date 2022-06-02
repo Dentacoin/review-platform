@@ -81,6 +81,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/users/edit/{id}/restoreban/{banid}', 			'UsersController@restore_ban');
 	Route::get('users/users/edit/{id}/delete-reward/{rewardid}', 	'UsersController@delete_vox');
 	Route::get('users/users/edit/{id}/delete-unfinished/{vox_id}', 	'UsersController@delete_unfinished');
+	Route::any('users/users/edit/{id}/add-highlight',				'UsersController@addHighlight');
+	Route::get('users/users/edit/{user_id}/remove-highlight/{id}',	'UsersController@removeHighlight');
 	Route::any('users/users/delete/{id}', 							'UsersController@delete');
 	Route::any('users/users/delete-database/{id}', 					'UsersController@deleteDatabase');
 	Route::any('users/users/restore/{id}', 							'UsersController@restore');
@@ -98,6 +100,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/registrations', 								'UsersController@registrations');
 	Route::any('users/incomplete-registrations', 					'UsersController@incompleteRegs');
 	Route::any('users/lead-magnet', 								'UsersController@leadMagnet');
+	Route::any('users/make-partners', 								'UsersController@makePartners');
 
 	Route::get('users/anonymous_users', 							'AnonymousUsersController@anonymous_list');
 	Route::get('users/anonymous_users/delete/{id}',					'AnonymousUsersController@anonymousDelete');
@@ -463,6 +466,8 @@ $reviewRoutes = function() {
 				Route::post('profile/gallery/{id?}', 				'ProfileController@gallery');
 				Route::any('profile/gallery/delete/{id}', 			'ProfileController@gallery_delete');
 				Route::post('profile/info/{id?}', 					'ProfileController@info');
+				Route::post('profile/lang-delete/{id?}', 			'ProfileController@deleteLanguage');
+				Route::post('profile/add-announcement/{id?}', 		'ProfileController@addAnnouncement');
 				Route::get('profile/trp-iframe', 					'ProfileController@trp');
 				Route::post('invite-patient-again',					'ProfileController@invite_patient_again');
 				Route::post('profile/invite-whatsapp', 				'ProfileController@invite_whatsapp');

@@ -294,12 +294,12 @@ class DentistController extends FrontController {
             $is_review = true;
         }
 
-        $patient_asks = false;
+        $patient_asks = 0;
 
         if (!empty($this->user) && $this->user->asks->isNotEmpty()) {
             foreach ($this->user->asks as $p_ask) {
                 if ($p_ask->status == 'waiting') {
-                    $patient_asks = true;
+                    $patient_asks++;
                 }
             }
         }
@@ -357,6 +357,7 @@ class DentistController extends FrontController {
             if($this->user->is_dentist) {
                 $view_params['js'][] = '../js/codemirror.min.js';
                 $view_params['js'][] = '../js/codemirror-placeholder.js';
+                $view_params['js'][] = '../js/jquery.filedrop.js';
                 $view_params['css'][] = 'codemirror.css';
             } else {
                 $view_params['jscdn'][] = '//vjs.zencdn.net/6.4.0/video.min.js';

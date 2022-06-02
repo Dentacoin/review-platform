@@ -70,6 +70,17 @@
     @media screen and (max-width: 768px) {
       .written-review .review-rating {
         flex-flow: row wrap; } }
+    .written-review .review-rating .verify-review {
+      padding: 2px 14px 4px;
+      font-size: 15px;
+      color: #14cab8;
+      background-color: white;
+      font-weight: normal;
+      border-width: 1px;
+      margin-right: 5px; }
+      .written-review .review-rating .verify-review:hover {
+        background-color: #14cab8;
+        color: white; }
     .written-review .review-rating .trusted-sticker {
       margin-left: 0px;
       margin-right: 12px; }

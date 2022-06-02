@@ -11,12 +11,12 @@ return [
 		'wechat' => 'wechat',
 	],
 	'accepted_payment' => [
+		'dentacoin',
 		'cash',
 		'check',
 		'credit_card',
 		'invoice',
 		'paypal',
-		'dentacoin',
 	],
 	'treatments' => [
 		'most_popular' => [
@@ -110,9 +110,38 @@ return [
 		'review' => 93, //3 months
 		'ask_dentist' => 30, //1 month
 	],
-	'payment_methods' => [
-		'cash', 'check', 'credit_card', 'invoice', 'paypal', 'dentacoin'
-	]
+	'accepted_payment' => [
+		'dentacoin',
+		'cash',
+		'check',
+		'credit_card',
+		'invoice',
+		'paypal',
+	],
+	'languages' => [
+		'english' => 'English',
+		'german' => 'German',
+		'spanish' => 'Spanish',
+		'portuguese' => 'Portuguese',
+		'italian' => 'Italian',
+		'french' => 'French',
+		'mandarin' => 'Mandarin',
+		'japanese' => 'Japanese',
+		'greek' => 'Greek',
+		'turkish' => 'Turkish',
+		'arabic' => 'Arabic',
+		'russian' => 'Russian',
+		'urdi' => 'Urdi',
+		'hindi' => 'Hindi',
+		'bengali' => 'Bengali',
+		'bulgarian' => 'Bulgarian',
+		'other' => 'Other',
+	],
+	'experience' => [
+		'under_5' => 'Less than 5 years',
+		'5_10' => '5-10 years',
+		'over_10' => 'More than 10 years',
+	],
 ];
 
 ?>

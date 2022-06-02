@@ -33,6 +33,7 @@ $(document).ready(function() {
                 console.log(data);
                 if(data.success) {
                 	$('#add-wallet-address').removeClass('active');
+                    $('.open-popup-wallet-address').hide();
                 } else {
                     for(var i in data.messages) {
                         $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');

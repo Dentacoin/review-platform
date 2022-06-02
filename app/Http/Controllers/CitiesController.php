@@ -410,13 +410,16 @@ class CitiesController extends BaseController {
 		$clinics = $clinics->where('name', 'LIKE', $joinclinic.'%')
 		->whereIn('status', config('dentist-statuses.shown_with_link'))
 		->whereNull('self_deleted')
-		->take(10)
+		->take(6)
 		->get();
 
 		$clinic_list = [];
 		foreach ($clinics as $clinic) {
 			$clinic_list[] = [
 				'name' => $clinic->getNames(),
+				'avatar' => $clinic->getImageUrl(true),
+				'location' => $clinic->getLocation(),
+				'is_partner' => $clinic->is_partner,
 				'id' => $clinic->id,
 			];
 		}

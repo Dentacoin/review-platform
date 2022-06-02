@@ -23,8 +23,17 @@ $(document).ready(function() {
 
         if($('body').hasClass('edit-dentist-profile-mode')) {
             $(this).find('span').html($(this).attr('to-not-edit'));
+            $('.tab-title[data-tab="reviews"]').addClass('grayed');
+            $('.patients-tab').addClass('grayed');
+            $('[data-popup-logged="popup-invite"]').addClass('disabled-button');
+
         } else {
             $(this).find('span').html($(this).attr('to-edit'));
+            $('.edit-mode').removeClass('edit-mode');
+            
+            $('.tab-title[data-tab="reviews"]').removeClass('grayed');
+            $('.patients-tab').removeClass('grayed');
+            $('[data-popup-logged="popup-invite"]').removeClass('disabled-button');
         }
     });
 
@@ -54,6 +63,7 @@ $(document).ready(function() {
             $('.gallery-flickity').flickity('resize');
 
             $('.map-container').hide();
+            $('.address-flickity').flickity('resize');
 
             let editWrap = $('#locations').find('.edit-field');
             editWrap.find('.edited-field').hide();
@@ -65,9 +75,33 @@ $(document).ready(function() {
 
             $('.specializations-section').toggleClass('edit-mode');
 
+        } else if($(this).hasClass('edit-languages-button')) {
+
+            $('.languages-wrapper').toggleClass('edit-mode');
+
+        } else if($(this).hasClass('edit-experience-button')) {
+
+            $('.experience-wrapper').toggleClass('edit-mode');
+
+        } else if($(this).hasClass('edit-founded-button')) {
+
+            $('.founded-wrapper').toggleClass('edit-mode');
+
         } else if($(this).hasClass('edit-payments')) {
 
             $('.payments-section').toggleClass('edit-mode');
+
+        } else if($(this).hasClass('edit-announcement')) {
+
+            $('.announcement-wrapper').toggleClass('edit-mode');
+
+        } else if($(this).hasClass('edit-education-button')) {
+
+            $('.education-wrapper').toggleClass('edit-mode');
+
+        } else if($(this).hasClass('edit-workplace')) {
+
+            $('.workplace-wrapper').toggleClass('edit-mode');
 
         } else if($(this).hasClass('edit-description-button')) {
             var cls = $(this).closest('.tab-inner-section').find('[role="presenter"]').attr('class');
@@ -183,7 +217,7 @@ $(document).ready(function() {
                         for(var i in data.inputs['socials']) {
                             if(data.inputs['socials'][i]) {
                                 that.closest('.socials-wrapper').find('.socials').append('<a class="social '+i+'" href="'+data.inputs['socials'][i]+'" target="_blank">\
-                                    <img src="https://urgent.reviews.dentacoin.com/img-trp/social-network/'+i+'.svg" height="26">\
+                                    <img src="'+images_path+'/social-network/'+i+'.svg" height="26"/>\
                                 </a>');
                             }
                         }
@@ -259,6 +293,10 @@ $(document).ready(function() {
             }).bind(this), "json"
         );
     });
+
+    $('.payments-section:not(.edit-mode) .open-my-account').click( function() {
+        window.location.href = 'https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews';
+    });
     //end specializations & payment methods
 
 
@@ -329,35 +367,6 @@ $(document).ready(function() {
     });
     //end working hours
 
-    var handleGalleryRemoved = function() {
-    
-        $('.delete-gallery').off('click').on('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var r = confirm( $(this).attr('sure') );
-            if(!r) {
-                return;
-            }
-
-            if(ajax_is_running) {
-                return;
-            }
-            ajax_is_running = true;
-
-            var id = $(this).closest('.slider-wrapper').attr('photo-id');
-            $.ajax( {
-                url: lang + '/profile/gallery/delete/'+id,
-                type: 'GET',
-                dataType: 'json',
-                success: (function( data ) {
-                    ajax_is_running = false;
-                    $('.gallery-flickity').flickity( 'remove', $(this).closest('.slider-wrapper') );
-                }).bind(this)
-            });
-        });
-    }
-    handleGalleryRemoved();
-
     $('.alert-edit').click( function() {
         $('html, body').animate({
             scrollTop: $('.edit-profile').offset().top - $('header').height()
@@ -372,17 +381,281 @@ $(document).ready(function() {
     } );
 
     $('.cancel-edit').click( function() {
-
         $('body').removeClass('edit-user');
     });
 
     if(getUrlParameter('open-edit')) {
         $('.open-edit').first().trigger('click');
     }
+
+    var removeLanguages = function() {
+        $('.remove-lang').click( function() {
     
-    //
-    //Popups
-    //
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+    
+            var that = $(this);
+    
+            $.ajax( {
+                url: $('.edit-languages').attr('remove-url'),
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    language: $(this).attr('language'),
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: (function( data ) {
+                    if(data.success) {
+                        if(that.closest('.languages-wrapper').find('option:not(.hidden-option)').length == 1) {
+                            that.closest('.languages-wrapper').find('select').show();
+                        }
+                        that.closest('.languages-wrapper').find('option[value="'+that.attr('language')+'"]').removeClass('hidden-option');
+                        that.closest('.bubble').remove();
+                    }
+    
+                    ajax_is_running = false;
+    
+                }).bind(this)
+            });
+        });
+    }
+    removeLanguages();
+
+    $('#dentist-languages').change( function() {
+        $(this).closest('form').submit();
+    });
+
+    $('.edit-languages').off('submit').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            (function( data ) {
+                if(data.success) {
+                    that.find('select').val('');
+                    that.find('option[value="'+data.inputs.languages+'"]').addClass('hidden-option');
+                    $('<span class="bubble">\
+                        '+data.inputs.languages+'\
+                        <a href="javascript:;" class="remove-lang" language="'+data.inputs.languages+'">\
+                            <img class="close-icon" src="'+images_path+'/close-icon-blue.png" width="10"/>\
+                        </a>\
+                    </span>').insertBefore(that);
+                    removeLanguages();
+                    
+                    if(that.find('option:not(.hidden-option)').length == 1) {
+                        that.find('select').hide();
+                    }
+                } else {
+                    console.log('error');
+                }
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );
+    });
+
+    $('[name="experience"]').change( function() {
+        $('.edit-experience-form').submit();
+    });
+
+    $('.edit-experience-form').off('submit').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            (function( data ) {
+                if(data.success) {
+                    if($('.chosen-experience').length) {
+                        $('.chosen-experience').find('.bubble').html(data.inputs.experience);
+                    } else {
+                        $('<div class="chosen-experience">\
+                            <span class="bubble">\
+                                '+data.inputs.experience+'\
+                            </span>\
+                        </div>').insertBefore('.edit-experience-form');
+                    }
+                    that.closest('.experience-wrapper').removeClass('edit-mode');
+                } else {
+                    console.log('error');
+                }
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );
+    });
+
+    $('.datepicker').datepicker({
+        todayHighlight: true,
+        autoclose: true,
+        changeMonth: true,
+        changeYear: true,
+    });
+
+    $('.edit-founded-form').off('submit').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            (function( data ) {
+                console.log(data);
+                if(data.success) {
+                    if($('.chosen-founded').length) {
+                        $('.chosen-founded').html(data.inputs.founded_at);
+                    } else {
+                        $('<div class="chosen-founded">\
+                            '+data.inputs.founded_at+'\
+                        </div>').insertBefore('.edit-founded-form');
+                    }
+                    that.closest('.founded-wrapper').removeClass('edit-mode');
+                } else {
+                    console.log('error');
+                }
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );
+    });
+
+    $('.edit-announcement-form').off('submit').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+        that.find('.input').removeClass('has-error');
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            (function( data ) {
+                console.log(data);
+                if(data.success) {
+                    
+                    if(data.inputs.announcement_title) {
+                        $('.announcement-wrap h4 span').html(data.inputs.announcement_title);
+                    } else {
+                        $('.announcement-wrap h4 span').html('Add office update');
+                    }
+                    
+                    if(data.inputs.announcement_description) {
+                        $('.announcement-description').html(data.inputs.announcement_description.substring(0,150));
+                        $('.announcement-description').attr('short-text', data.inputs.announcement_description.substring(0,150));
+                        $('.announcement-description').attr('long-text', data.inputs.announcement_description);
+
+                        if(data.inputs.announcement_description.length >= 150) {
+                            $('.show-full-announcement').show();
+                        } else {
+                            $('.show-full-announcement').hide();
+                        }
+                        $('.announcement-subtitle').show();
+                        $('.announcement-wrapper').removeClass('show-on-edit-mode');
+
+                    } else {
+                        $('.announcement-description').html('');
+                        $('.show-full-announcement').hide();
+                        $('.announcement-subtitle').hide();
+                        $('.announcement-wrapper').addClass('show-on-edit-mode');
+                    }
+
+                    that.closest('.announcement-wrapper').removeClass('edit-mode');
+                } else {
+                    if(data.messages) {
+                        for(var i in data.messages) {
+                            that.find('[name="'+i+'"]').addClass('has-error');
+                        }
+                    }
+                }
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );
+    });
+
+    var removeEducationBox = function() {
+        $('.remove-education-info').click( function() {
+            $(this).closest('.flex').remove();
+        });
+    }
+    removeEducationBox();
+
+    $('.add-education-info').click( function() {
+        var cloned = $(this).closest('.education-wrap').find('.flex').first().clone(true).insertBefore( $(this).closest('.education-wrap').find('.add-education-info') );
+
+        cloned.find('input').val('');
+
+        removeEducationBox();
+    });
+
+    $('.edit-education-info-form').off('submit').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize(), 
+            (function( data ) {
+                console.log(data);
+                if(data.success) {
+
+                    if(data.inputs.education_info[0] !== null) {
+                        let chosenFounded = '';
+                        for(let i in data.inputs.education_info) {
+                            chosenFounded+= ('•&nbsp;&nbsp;&nbsp;'+data.inputs.education_info[i]+'<br/>');
+                        }
+
+                        if($('.chosen-education').length) {
+                            $('.chosen-education').html(chosenFounded);
+                        } else {
+                            $('<div class="chosen-education">\
+                                '+chosenFounded+'\
+                            </div>').insertBefore('.edit-education-info-form');
+                        }
+                        $('.chosen-education').show();
+                    } else {
+                        $('.chosen-education').hide();
+                    }
+
+                    $('.education-wrapper').removeClass('edit-mode');
+                    
+                } else {
+                    console.log('error');
+                }
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );
+    });
+    
 
     //Widget
 
@@ -590,46 +863,96 @@ $(document).ready(function() {
     });
 
 
-    //Profile edit
-    $('.edit-profile').submit( function(e) {
-        e.preventDefault();
 
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-        $('.edit-error').hide();
-        $('.short-descr-error').hide();        
 
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize(), 
-            function( data ) {
-                if(data.success) {
-                    window.location.reload();
-                } else {
-                    $('.edit-error').show().html('');
-                    for(var i in data.messages) {
-                        $('.edit-error').append(data.messages[i] + '<br/>');
-                        $('input[name="'+i+'"]').addClass('has-error');
-                        $('textarea[name="'+i+'"]').addClass('has-error');
-                    }
+    //<------------ GALLERY ------------>
+
+    var handleGalleryRemoved = function() {
+    
+        $('.delete-gallery').off('click').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var r = confirm( $(this).attr('sure') );
+            if(!r) {
+                return;
+            }
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var id = $(this).closest('.slider-wrapper').attr('photo-id');
+            $.ajax( {
+                url: lang + '/profile/gallery/delete/'+id,
+                type: 'GET',
+                dataType: 'json',
+                success: (function( data ) {
+                    ajax_is_running = false;
+                    $('.gallery-flickity').flickity( 'remove', $(this).closest('.slider-wrapper') );
+                }).bind(this)
+            });
+        });
+    }
+    handleGalleryRemoved();
+
+    $(".add-gallery-image").filedrop({
+        fallback_id: 'fallbackFileDrop',
+        url: '/api/upload.php',
+        paramname: 'fileUpload',
+        maxfilesize: 2,
+        allowedfiletypes: ['image/jpeg','image/png'],	// filetypes allowed by Content-Type.  Empty array means no restrictions
+	    allowedfileextensions: ['.jpg','.jpeg','.png'], // file extensions allowed. Empty array means no restrictions
+        uploadFinished: function(index, file, json, timeDiff) {
+    
+            $('.add-gallery-image').addClass('loading');
+    
+            var sure_text = $('#add-gallery-photo').attr('sure-trans');
+            var that = $('#add-gallery-photo');
+            var upload = new Upload(file, that.attr('upload-url'), function(data) {
+                
+                $('.add-gallery-image').removeClass('loading');
+    
+                var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
+                    <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
+                        <div class="delete-gallery delete-button" sure="'+sure_text+'">\
+                            <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
+                        </div>\
+                    </div>\
+                </a>\
+                ';
+    
+                var galleryFlickty = $('.gallery-flickity').flickity({
+                    autoPlay: false,
+                    wrapAround: true,
+                    cellAlign: 'left',
+                    freeScroll: true,
+                    groupCells: 1,
+                    draggable: false,
+                });
+    
+                $('.gallery-flickity').flickity( 'insert', $(html), 1 );
+                if($('.gallery-flickity .slider-wrapper').length > 2) {
+                    $('.gallery-flickity').flickity( 'selectCell', 1 );
+                }
+                handleGalleryRemoved();
+    
+                if($('body').hasClass('guided-tour')) {
+                    $('.bubble-guided-tour .skip-step').trigger('click');
                 }
                 ajax_is_running = false;
-            }, 
-            "json"
-        );
+            });
+            upload.doUpload();
+        },
+    });
 
-    } );
-
-    //Gallery upload
     $('#add-gallery-photo').change( function() {
         if(ajax_is_running) {
             return;
         }
         ajax_is_running = true;
 
-        $('.add-gallery-image .image-label').addClass('loading');
+        $('.add-gallery-image').addClass('loading');
 
         var sure_text = $('#add-gallery-photo').attr('sure-trans');
         var file = $(this)[0].files[0];
@@ -640,7 +963,7 @@ $(document).ready(function() {
             console.log("Only formats are allowed : "+fileExtension.join(', '));
         } else {
             var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
-                $('.add-gallery-image .image-label').removeClass('loading');
+                $('.add-gallery-image').removeClass('loading');
 
                 var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
                     <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
@@ -651,19 +974,34 @@ $(document).ready(function() {
                 </a>\
                 ';
 
+                var galleryFlickty = $('.gallery-flickity').flickity({
+                    autoPlay: false,
+                    wrapAround: true,
+                    cellAlign: 'left',
+                    freeScroll: true,
+                    groupCells: 1,
+                    draggable: false,
+                });
+
                 $('.gallery-flickity').flickity( 'insert', $(html), 1 );
+                if($('.gallery-flickity .slider-wrapper').length > 2) {
+                    $('.gallery-flickity').flickity( 'selectCell', 1 );
+                }
                 handleGalleryRemoved();
 
                 if($('body').hasClass('guided-tour')) {
                     $('.bubble-guided-tour .skip-step').trigger('click');
                 }
-
                 ajax_is_running = false;
             });
-
             upload.doUpload();
         }
     });
+
+    //<------------ END GALLERY ------------>
+
+
+
 
     $('.team-container .delete-invite').click( function(e) {
         e.preventDefault();
@@ -691,8 +1029,8 @@ $(document).ready(function() {
                 that.closest('.team').remove();
             }).bind(this)
         });
+    });
 
-    } );
     //
     //Add dentist to clinic
     //
@@ -720,8 +1058,7 @@ $(document).ready(function() {
                 teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
             }).bind(this)
         });
-
-    } );
+    });
 
     suggestedDentistClick = function(elm) {
         $(elm).closest('.dentist-suggester-wrapper').find('.suggest-results').hide();
@@ -757,7 +1094,6 @@ $(document).ready(function() {
                 } else {
                     $('#dentist-add-result').html(data.message).attr('class', 'alert '+(data.success ? 'alert-success' : 'alert-warning')).show();
                 }
-                refreshOnClosePopup = true;
 
                 ajax_is_running = false;
 
@@ -855,6 +1191,26 @@ $(document).ready(function() {
     //Ask clinic to join
     //
 
+    var removeWorkplace = function() {
+        $('#workplaces-list .remove-dentist').click( function(e) {
+            e.preventDefault();
+    
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+    
+            $.get( 
+                $(this).attr('href'),
+                (function( data ) {
+                    $(this).closest('.workplace-clinic').remove();
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+    }
+    removeWorkplace();
+
     suggestClinicClick = function(elm) {
         var id = $(elm).attr('data-id');
 
@@ -866,7 +1222,7 @@ $(document).ready(function() {
         }
         ajax_is_running = true;
 
-        $.ajax( {
+        $.ajax({
             url: lang + '/profile/clinics/invite',
             type: 'POST',
             dataType: 'json',
@@ -874,14 +1230,25 @@ $(document).ready(function() {
                 joinclinicid: $(elm).attr('data-id')
             },
             success: (function( data ) {
-                $('#clinic-add-result').html(data.message).attr('class', 'alert '+(data.success ? 'alert-success' : 'alert-warning')).show();
-                refreshOnClosePopup = true;
+                $('#workplaces-list').prepend('\
+                    <span class="workplace-clinic">\
+                        <a href="'+data.clinic.link+'">'
+                            +data.clinic.name+
+                        '</a>\
+                        <a class="remove-dentist" href="'+window.location.origin+'/'+lang+'/profile/clinics/delete/'+data.clinic.id+'/">\
+                            <img class="close-icon" src="'+images_path+'/close-icon-blue.png" width="10">\
+                        </a>\
+                    </span>\
+                ');
+
+                $('#workplaces-list .show-on-edit-mode-inline').remove();
+
+                removeWorkplace();
 
                 ajax_is_running = false;
 
             }).bind(this)
         });
-
     }
 
     suggestClinic = function() {
@@ -904,12 +1271,33 @@ $(document).ready(function() {
                 if (data.length) {
                     container.html('').show();
                     for(var i in data) {
-                        container.append('<a href="javascript:;" data-id="'+data[i].id+'">'+data[i].name+'</a>');
+
+                        var is_partner = data[i].is_partner ? '\
+							<div class="result-partner-dentist">\
+								<div class="result-partner-dentist-wrapper">\
+									<img src="'+images_path+'/mini-logo-white.svg">\
+									<span>Dentacoin</span> Partner\
+								</div>\
+							</div>\
+						' : '';
+
+                        container.append('<a href="javascript:;" data-id="'+data[i].id+'">\
+                            <div class="flex flex-mobile">\
+                                <div class="result-image-dentist">\
+                                    <img src="'+data[i].avatar+'"/>\
+                                </div>\
+                                <div class="result-name-dentist">\
+                                    <p>'+data[i].name+'</p>\
+                                    <span>'+data[i].location+'</span>\
+                                </div>\
+                                '+is_partner+'\
+                            </div>\
+                        </a>')
                     }
 
                     container.find('a').click( function() {
                         suggestClinicClick(this);
-                    } );
+                    });
                 } else {
                     container.hide();                    
                 }
@@ -931,9 +1319,9 @@ $(document).ready(function() {
     $('.clinic-suggester').on( 'keyup', function(e) {
         
         var container = $(this).closest('.clinic-suggester-wrapper').find('.suggest-results');
-
         var keyCode = e.keyCode || e.which;
         var activeLink = container.find('a.active');
+
         if (keyCode === 40 || keyCode === 38) { //Down / Up
             if(activeLink.length) {
                 activeLink.removeClass('active');
@@ -970,24 +1358,6 @@ $(document).ready(function() {
         }
     });
 
-    $('#workplaces-list .remove-dentist').click( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        $.get( 
-            $(this).attr('href'),
-            (function( data ) {
-                $(this).closest('.flex').remove();
-                refreshOnClosePopup = true;
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );          
-
-    } );
 
     $('.team-container .action-buttons div').click( function(e) {
         e.preventDefault();
@@ -1202,22 +1572,6 @@ $(document).ready(function() {
                 console.log('error');
             }
         });
-    });
-
-
-    if($('#symbols-count-short').length) {
-        $('#symbols-count-short').html($('#dentist-short-description').val().length);
-    }
-
-    $('#dentist-short-description').keyup(function() {
-        var length = $(this).val().length;
-
-        if (length > 150) {
-            $('#symbols-count-short').addClass('red');
-        } else {
-            $('#symbols-count-short').removeClass('red');
-        }
-        $('#symbols-count-short').html(length);
     });
 
     $('.add-widget-button').click( function() {
@@ -1899,48 +2253,8 @@ $(document).ready(function() {
         }
     });
 
-    $('.verify-review').click( function() {
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
 
-        var that = $(this);
-        var review_id_param = $(this).closest('.written-review').length ? $(this).closest('.written-review').attr('review-id') : $('.details-wrapper').attr('review-id');
-
-        $.ajax({
-            type: "POST",
-            url: window.location.origin+'/en/verify-review/',
-            data: {
-                review_id: review_id_param,
-                _token: $('input[name="_token"]').val(),
-            },
-            dataType: 'json',
-            success: function(ret) {
-                console.log(ret);
-                if(ret.success) {
-
-                    if(that.closest('.written-review').length) {
-                        that.closest('.written-review').find('.trusted-sticker').show();
-                    } else {
-                        that.closest('.details-wrapper').find('.review-rating-new').addClass('verified-review');
-                        that.closest('.details-wrapper').find('.review-rating-new .trusted').show();
-                    }
-
-                    that.hide();
-
-                } else {
-                    console.log('error');
-                }
-                ajax_is_running = false;
-            },
-            error: function(ret) {
-                console.log('error');
-                ajax_is_running = false;
-            }
-        });
-    });
-
+    //dentist delete his branch
     $('.delete-branch').click( function(e) {
         if(ajax_is_running) {
             return;

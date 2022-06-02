@@ -1370,6 +1370,53 @@
 
     <h4 style="margin-bottom: 20px;">TRUSTED REVIEWS</h4>
 
+    @if($item->is_dentist)
+        <div id="highlights" class="row">
+            <div class="col-md-12">
+                <div class="panel panel-inverse">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Highlights</h4>
+                    </div>
+                    <div class="panel-body">
+                        
+                        <div class="form-group">
+                            <div class="col-md-12 highlists-list" style="margin-bottom: 10px;">
+                                @if($item->highlights->isNotEmpty())
+                                    @foreach($item->highlights as $highlight)
+                                        <div class="input-group clearfix">
+                                            <div class="row template-box clearfix">
+                                                <div class="col-md-1">
+                                                    <div class="image-label" style="background-image: url('{{ $highlight->getImageUrl(true)}}');"></div>
+                                                </div>
+                                                <div class="col-md-11" style="margin-top: 24px;">
+                                                    <div>{{ $highlight->title }}</div>
+                                                    <div>{{ $highlight->link }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <a class="btn btn-default" type="button" href="{{ url('cms/users/users/edit/'.$item->id.'/remove-highlight/'.$highlight->id) }}">
+                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="{{ url('cms/users/users/edit/'.$item->id.'/add-highlight') }}" class="btn btn-primary btn-block">
+                                        Аdd highlight
+                                    </a>
+                                </div>
+                            </div>
+                            <label class="alert alert-danger appeal-error" style="display: none;margin-top: 10px;"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     @if($item->is_clinic && $item->branches->isNotEmpty())
         <div id="clinic-branches" class="row">
             <div class="col-md-12">

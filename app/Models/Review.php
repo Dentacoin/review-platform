@@ -101,6 +101,14 @@ class Review extends Model {
         }
     }
 
+    public function rewardForReview($withCurrency=true) {
+        $dcnReward = DcnReward::where('reference_id', $this->id)
+        ->where('user_id', $this->review_to_id ? $this->review_to_id : ($this->dentist_id ?? $this->clinic_id))
+        ->where('type', 'dentist-review')
+        ->first();
+        return $dcnReward ? $dcnReward->reward.($withCurrency ? ' DCN' : '') : '';
+    }
+
     public function afterSubmitActions() {
         //sent email to the dentist/clinic
         $this->original_dentist->sendTemplate( $this->verified ? 21 : 6, [

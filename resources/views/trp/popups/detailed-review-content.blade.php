@@ -1,7 +1,7 @@
 <div class="details-wrapper" review-id="{{ $review->id }}">
 	@if(!empty($user) && $user->id==$item->id && !$review->verified && !empty($user->trusted))
 		<a class="green-button verify-review" href="javascript:;">
-			Verify
+			Verify patient
 		</a>
 	@endif
 	<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>

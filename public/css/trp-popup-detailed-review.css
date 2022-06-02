@@ -12,11 +12,23 @@
     .popup .popup-inner {
       padding: 35px 15px; } }
 .popup .details-wrapper .verify-review {
-  padding: 9px 40px; }
+  padding: 6px 23px;
+  font-size: 18px;
+  color: #14cab8;
+  background-color: white;
+  font-weight: normal;
+  position: absolute;
+  top: 26px;
+  left: 34px; }
   @media screen and (max-width: 768px) {
     .popup .details-wrapper .verify-review {
       font-size: 15px;
-      padding: 5px 15px; } }
+      padding: 5px 15px;
+      left: 10;
+      top: 10; } }
+  .popup .details-wrapper .verify-review:hover {
+    background-color: #14cab8;
+    color: white; }
 .popup .details-wrapper .review-avatar {
   width: 115px;
   height: 115px;

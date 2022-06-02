@@ -110,6 +110,21 @@ $phone: "screen and (max-width: 768px)";
             flex-flow: row wrap;
         }
 
+        .verify-review {
+            padding: 2px 14px 4px;
+            font-size: 15px;
+            color: #14cab8;
+            background-color: white;
+            font-weight: normal;
+            border-width: 1px;
+            margin-right: 5px;
+
+            &:hover {
+                background-color: #14cab8;
+                color: white;
+            }
+        }
+
         .trusted-sticker {
             margin-left: 0px;
             margin-right: 12px;

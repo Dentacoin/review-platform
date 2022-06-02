@@ -136,10 +136,11 @@
 										<img class="fa-search" src="{{ url('img-trp/white-search.svg') }}" width="16" height="15"/>
 									</a>
 								@endif
-								<a href="javascript:;" class="user-profile-info header-avatar" id="header-avatar">
+								<a target="_blank" href="https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews" class="user-profile-info">
 									<span>Rewards: </span>
 									<span class="user-balance">{{ number_format($user_total_balance) }} DCN</span>
-									<img src="{{ $user_avatar }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
+									<img class="caret" src="{{ url('img-trp/caret-white-down.svg') }}"/>
+									<img class="header-avatar {!! $user->hasimage ? '' : 'default-avatar' !!}" id="header-avatar" src="{{ $user_avatar }}"/>
 									@if(!empty($has_review_notification))
 										<div class="notification"></div>
 									@endif
@@ -197,7 +198,7 @@
 						<a href="{{ getLangUrl('faq') }}">{{ trans('trp.footer.faq') }}</a>
 						<a href="https://support.dentacoin.com/" target="_blank">Help Center</a>
 						<a href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('trp.footer.privacy-policy') }}</a>
-						<a href="https://dentacare.dentacoin.com/" target="_blank">{{ trans('trp.footer.dentacare') }}</a>
+						<a href="https://reviews.dentacoin.com/blog/" target="_blank">Blog</a>
 						<a href="https://dentavox.dentacoin.com/" target="_blank">{{ trans('trp.footer.vox') }}</a>
 					</div>
 					<small>

@@ -4,18 +4,130 @@ $phone: "screen and (max-width: 768px)";
 
 @import 'trp-list-reviews';
 
-.profile-wrapper {
+// .profile-wrapper {
 	.edit-field-button {
 		display: none;
+	}
+// }
+
+// .edited-field,
+// .edit-wrapper {
+// 	display: none;
+// }
+
+.show-on-edit-mode {
+	display: none;
+}
+
+.edit-mode-line {
+	display: none;
+	background-color: #0084d1;
+    padding: 16px 0px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 10000000;
+	text-align: center;
+
+	@media #{$phone} {
+		padding: 6px 0px;
+	}
+
+	a {
+		font-size: 18px;
+		padding: 12px 43px;
+		width: 250px;
+		box-shadow: 0px 3px 6px -1px #666666;
+		margin: 0 auto;
+
+		@media #{$phone} {
+			width: auto;
+			font-size: 16px;
+    		padding: 10px 43px;
+		}
 	}
 }
 
 body.edit-dentist-profile-mode {
-	.profile-wrapper {
+	// .profile-wrapper {
 		.edit-field-button {
 			display: inline-block;
 		}
+	// }
+
+	#reviews {
+		display: none;
 	}
+
+	.show-on-edit-mode {
+		display: block;
+	}
+
+	.show-on-edit-mode-inline {
+		display: inline-block;
+	}
+
+	// .edited-field,
+	// .edit-wrapper {
+	// 	display: block;
+	// }
+
+	.workplace-wrapper {
+		.workplace {
+			display: none !important;
+		}
+	}
+
+	.edit-workplace-wrapper {
+		display: block !important;
+
+		.workplace-clinic {
+
+			.remove-dentist {
+				display: none;
+			}
+		}
+	}
+
+	.edit-mode-line {
+		display: block;
+	}
+
+	.turn-on-edit-mode.white-button {
+		// background-color: #14cab8;
+		border-color: #14cab8;
+		box-shadow: 0px 0px 6px -1px #666666;
+
+		span {
+			// color: white;
+		}
+
+		img {
+			display: none;
+		}
+	}
+}
+
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 23px;
+    height: 23px;
+    background: #898989;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+	&.delete-gallery {
+		display: none;
+	}
+
+    img {
+    	width: 54%;
+    }
 }
 
 .turn-on-edit-mode {
@@ -143,6 +255,207 @@ body.edit-dentist-profile-mode {
 	}
 }
 
+.workplace-wrapper {
+	&.edit-mode {
+		.workplace-clinic {
+			.remove-dentist {
+				display: inline-block !important;
+				margin-left: 10px;
+			}
+		}
+
+		.edit-field-button {
+			display: none;
+		}
+
+		.clinic-suggester-wrapper {
+			display: block;
+		}
+
+		.show-on-edit-mode-inline {
+			display: none;
+		}
+	}
+
+	.col {
+		margin-right: 20px;
+	}
+
+	.clinic-suggester-wrapper {
+		display: none;
+	}
+		
+	.search-dentist {
+		position: relative;
+
+		.search-icon {
+			position: absolute;
+			max-width: 20px;
+			top: 50%;
+			left: 10px;
+			transform: translateY(-50%);
+		}
+
+		.input {
+			padding-left: 32px;
+			padding-bottom: 4px;
+		}
+
+		.suggest-results {
+			background-color: white;
+
+			a {
+				display: block;
+				padding-left: 20px;
+				padding-bottom: 7px;
+				padding-top: 6px;
+				transition: all 0.3s ease;
+		
+				&.active,
+				&:hover {
+					background-color: #e2ebff;
+					transition: all 0.3s ease;
+				}
+		
+				.result-image-dentist {
+					width: 50px;
+		
+					@media #{$phone} {
+						width: 40px;
+					}
+		
+					img {
+						display: block;
+						border-radius: 50%;
+						position: relative;
+						z-index: 1;
+						box-shadow: 0px 0px 10px 2px #f3f3f3;
+					}
+				}
+		
+				.result-name-dentist {
+					flex: 1;
+					text-align: left;
+					margin-left: 10px;
+		
+					p {
+						font-weight: 800;
+						color: #332255;
+						margin-bottom: 6px;
+						margin-top: 4px;
+						text-transform: capitalize;
+		
+						@media #{$phone} {
+							margin-bottom: 0px;
+							margin-top: 0px;
+						}
+		
+						span {
+							color: #0084d1;
+							font-size: 16px;
+						}
+					}
+		
+					span {
+						font-size: 14px;
+						color: #555555;
+					}
+				}
+		
+				.result-partner-dentist {
+					.result-partner-dentist-wrapper {
+						display: flex;
+						background-color: #0084d1;
+						color: white;
+						font-size: 13px;
+						font-weight: bold;
+						border-top-left-radius: 13px;
+						border-bottom-left-radius: 13px;
+						padding: 4px 10px;			
+		
+						img {
+							width: 13px;
+							margin-right: 4px;
+						}
+		
+						span {
+							color: white;
+							font-size: 13px;
+							margin-right: 3px;
+		
+							@media #{$phone} {
+								display: none;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.workplace-clinic {
+		position: relative;
+		font-size: 16px;
+		padding: 8px 23px 10px;
+		background-color: #e2ebff;
+		display: inline-block;
+		border-radius: 22px;
+		margin-right: 2px;
+		border: 1px solid #3b9fdd;
+		transition: all 0.3s ease;
+		margin-bottom: 7px;
+		cursor: pointer;
+
+		&.grayed {
+			background-color: #e0e0e0;
+			border-color: #e0e0e0;
+			color: #868686;
+		}
+	}
+}
+
+.announcement-wrapper {
+
+	&.edit-mode {
+
+		.announcement-wrap {
+			display: none;
+		}
+
+		.edit-announcement-form {
+			max-width: 455px;
+			display: block !important;
+
+			.input[name="announcement_title"] {
+				font-size: 20px;
+				font-weight: 900;
+				color: #332255;
+			}
+		
+			textarea {
+				color: #555555;
+				margin-bottom: 0px;
+			}
+		
+			.save-field {
+				cursor: pointer;
+				position: relative;
+				width: 44px;
+				min-width: 44px;
+				background-color: #0084d1;
+				display: block;
+				height: auto;
+				line-height: 44px;
+				text-align: center;
+				border-top-right-radius: 5px;
+				border-bottom-right-radius: 5px;
+				margin-left: -3px;
+			}
+		}
+	}
+}
+
+
 .profile-wrapper {
 
 	.profile-info-container {
@@ -162,6 +475,7 @@ body.edit-dentist-profile-mode {
 					height: 150px;
 					border-radius: 50%;
 					overflow: hidden;
+					box-shadow: 0px 0px 10px 2px #f3f3f3;
 
 					@media #{$phone} {
 						width: 80px;
@@ -369,7 +683,6 @@ body.edit-dentist-profile-mode {
 		}
 	
 		.add-social-profile {
-			position: absolute;
 			display: inline-block;
 			font-size: 18px;
 			color: #0084d1;
@@ -379,6 +692,7 @@ body.edit-dentist-profile-mode {
 
 	.save-field {
 		height: auto;
+		margin-bottom: 32px;
 	}
 }
 
@@ -444,6 +758,18 @@ body.edit-dentist-profile-mode {
 		}
 
 		.payments-section {
+
+			.open-popup-wallet-address {
+				display: inline-block;
+				font-size: 18px;
+				color: #0084d1;
+				margin-top: 10px;
+			}
+
+			.open-my-account {
+				cursor: pointer;
+			}
+
 			&.edit-mode {
 				.dentist-payments {
 					label {
@@ -468,66 +794,149 @@ body.edit-dentist-profile-mode {
 				flex-direction: column;
 				align-items: flex-start;
 
+				.address-flickity-wrapper {
+					.address-flickity {
+						.flickity-viewport {
+							height: 70px !important;
+						}
+					}
+				}
+
+				.map-for-branch {
+					display: none !important;
+				}
+
 				.gallery-slider {
 					margin-left: 0px;
 					margin-top: 10px;
 					width: 100%;
 					max-width: 100%;
+					display: flex;
+
+					.add-gallery-wrapper {
+						display: block;
+						margin-right: 10px;
+
+						@media #{$tablet} {
+							margin-right: 5px;
+						}
+					
+						.slider-image {
+							padding: 0px;
+							border: 1px solid #0084d1;
+							position: relative;
+							background-color: #f4f7ff;
+							width: 215px;
+							height: 248px;
+
+							@media #{$pc} {
+								height: 208px;
+							}
+
+							@media #{$tablet} {
+								width: 175px;
+								height: 188px;
+							}
+							
+							@media #{$phone} {
+								width: 135px;
+								height: 151px;
+							}
+
+							&.loading {
+								.plus-gallery-image {
+									display: none;
+								}
+
+								.loader {
+									display: block;
+								}
+							}
+
+							.plus-gallery-image {
+								position: absolute;
+								top: 50%;
+								left: 50%;
+								transform: translateX(-50%) translateY(-50%);
+								text-align: center;
+								width: 99%;
+							
+								.add-gallery-icon {
+									width: 80px;
+
+									@media #{$phone} {
+										width: 60px;
+									}
+								}
+							
+								span {
+									display: block;
+									font-size: 20px;
+									font-weight: bold;
+									color: #0084d1;
+									margin-top: 10px;
+
+									@media #{$phone} {
+										font-size: 17px;
+									}
+
+									img {
+										vertical-align: middle;
+									}
+								}
+							}
+						}
+					}
 
 					.gallery-flickity {
+						width: 100%;
+
 						.flickity-viewport {
 							height: 250px !important;
 
+							@media #{$pc} {
+								height: 220px !important;
+							}
+
 							@media #{$tablet} {
-								height: 241px !important;
+								height: 190px !important;
+							}
+
+							@media #{$phone} {
+								height: 152px !important;
 							}
 						}
+
 						.slider-wrapper {
-							width: 33.3%;
+							width: 50%;
+							padding-right: 10px;
+							padding-left: 10px;
 
 							@media #{$tablet} {
-								width: 50%;
+								padding-right: 5px;
+    							padding-left: 5px;
 							}
 
-							&.add-gallery-wrapper {
-								display: block;
+							@media #{$phone} {
+								width: 100%;
 							}
 							
 							.slider-image {
+								padding-top: 58%;
 								position: relative;
-					
-								&.add-gallery-image {
-									display: block;
-									padding-top: 60%;
-									border: 1px solid #0084d1;
-									position: relative;
-									background-color: #f4f7ff;
 
-									.plus-gallery-image {
-										position: absolute;
-										top: 50%;
-										left: 50%;
-										transform: translateX(-50%) translateY(-50%);
-										text-align: center;
-									
-										img {
-											width: 80px;
-										}
-									
-										span {
-											display: block;
-											font-size: 20px;
-											font-weight: bold;
-											color: #0084d1;
-											margin-top: 10px;
-										}
-									}
+								@media #{$tablet} {
+									padding-top: 68%;
 								}
 					
 								.remove-gallery-image {
 									position: absolute;
 									right: 5px;
 									top: 5px;
+								}
+
+								.delete-gallery {
+									display: flex;
 								}
 							}
 						}
@@ -605,6 +1014,145 @@ body.edit-dentist-profile-mode {
 				margin-top: 20px;
 			}
 		}
+		
+		.languages-wrapper {
+			&.edit-mode {
+				.bubble {
+					padding: 8px 23px 10px;
+
+					a {
+						display: inline-block;
+					}
+				}
+
+				form {
+					display: inline-block;
+				}
+			}
+		}
+
+		.education-wrapper {
+			&.edit-mode {
+
+				.chosen-education {
+					display: none !important;
+				}
+
+				form {
+					display: block;
+					max-width: 750px;
+
+					.education-wrap {
+						.flex {
+							position: relative;
+							margin-bottom: 10px;
+							margin-right: -3px;
+
+							&:first-child {
+								.remove-education-info {
+									display: none;
+								}
+							}
+
+							input {
+								margin-bottom: 0px;
+							}
+
+							.remove-education-info {
+								position: absolute;
+								right: 10px;
+								top: 48%;
+								transform: translateY(-50%);
+							}
+						}
+
+						.add-education-info {
+							display: inline-block;
+							font-size: 18px;
+							color: #0084d1;
+						}
+					}
+
+					.save-field {
+						margin-bottom: 32px;
+						height: auto;
+					}
+				}
+			}
+		}
+		
+		.experience-wrapper {
+			&.edit-mode {
+				.bubble {
+
+					&.active {
+						background-color: #0084d1;
+						color: white;
+					}
+
+					input {
+						display: none;
+					}
+				}
+
+				.chosen-experience {
+					display: none;
+				}
+	
+				form {
+					display: block;
+				}
+			}
+		}
+
+		.founded-wrapper {
+			&.edit-mode {
+
+				form {
+					display: block;
+				}
+
+				.founded-flex {
+					border: 2px solid #cccccc;
+					border-radius: 5px;
+					position: relative;
+					display: flex;
+
+					.calendar {
+						margin: 0px 10px;
+						position: absolute;
+						top: 50%;
+						transform: translateY(-50%);
+						z-index: -1;
+					}
+
+					input {
+						flex: 1;
+    					height: 40px;
+						width: 152px;
+						outline: none;
+						padding-left: 40px;
+					}
+
+					.save-field {
+						background-color: #0084d1;
+						min-width: 44px;
+						width: 44px;
+						text-align: center;
+						border-top-right-radius: 5px;
+						border-bottom-right-radius: 5px;
+						cursor: pointer;
+						margin-top: -2px;
+						margin-right: -2px;
+						margin-bottom: -2px;
+					}
+				}
+
+				.chosen-founded {
+					display: none;
+				}
+			}
+		}
 	}
 }
 
@@ -625,6 +1173,27 @@ body.edit-dentist-profile-mode {
 		color: #0084d1;
 		font-weight: 800;
 		margin-bottom: 23px;
+
+		span {
+			display: inline-block;
+			border-radius: 50%;
+			background-color: #ff6e6e;
+			font-size: 12px;
+			font-weight: bold;
+			color: #ffffff;
+			width: 23px;
+			height: 23px;
+			text-align: center;
+			line-height: 23px;
+			vertical-align: bottom;
+
+			@media #{$phone} {
+				width: 19px;
+				height: 19px;
+				font-size: 10px;
+				line-height: 19px;
+			}
+		}
 	}
 }
 
@@ -641,6 +1210,13 @@ body.edit-dentist-profile-mode {
 		thead {
 			font-weight: 900;
 			background-color: #f2f6ff;
+
+			th {
+				img {
+					vertical-align: middle;
+					margin-left: 5px;
+				}
+			}
 		}
 
 		th,td {
@@ -652,7 +1228,7 @@ body.edit-dentist-profile-mode {
 			border-right: 2px solid #e2ebff;
 
 			@media #{$phone} {
-				padding: 8px 10px;
+				padding: 5px 10px;
 			}
 
 			&:last-child {
@@ -721,44 +1297,50 @@ body.edit-dentist-profile-mode {
 }
 
 
+.pager {
+    text-align: center;
+    margin: 1em 0;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.edit-short-description {
-	float: left;
-    width: 340px;
-    margin-right: 10px;
-    margin-top: 20px;
-
-    @media #{$pc} {
-		width: 260px;
+    @media #{$phone} {
+    	margin-bottom: 40px;
     }
 
-    @media #{$tablet} {
-    	width: 100%;
-    	margin-right: 0px;
-    	margin-top: 40px;
-    }
+    span {
+		border: 1px solid #0084d1;
+		background-color: white;
+		display: inline-block;
+		width: 30px;
+		height: 30px;
+		line-height: 1.8;
+		text-align: center;
+		cursor: pointer;
+		color: #0084d4;
+		margin-right: 10px;
+		font-weight: bold;
+		margin-bottom: 10px;
+		border-radius: 50%;
+
+	    &.active {
+	    	background-color: #0084d1;
+	    	color: white;
+	    }
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .popup {
 	&#recommend-dentist {
@@ -1792,3 +2374,436 @@ body.guided-tour {
 		}
 	}
 }
+
+select[name="languages"] {
+	position: relative;
+    font-size: 16px;
+    padding: 8px 15px 10px;
+    background-color: #e2ebff;
+    display: inline-block;
+    border-radius: 22px;
+    margin-right: 10px;
+    border: 1px solid #3b9fdd;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    cursor: pointer;
+    outline: none;
+    color: #0084d1;
+	-webkit-appearance: none;
+  	appearance: none;
+}
+
+.ui-datepicker {
+	width: 240px !important;
+    padding: 0.2em 0.2em 0;
+    display: none;
+	background-color: white;
+    border: 2px solid #cccccc;
+    border-top: none;
+    margin-left: -2px;
+    margin-top: -2px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.ui-datepicker .ui-datepicker-header {
+	position: relative;
+	padding: .2em 0;
+}
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+	position: absolute;
+	top: 2px;
+	width: 1.8em;
+	height: 1.8em;
+}
+.ui-datepicker .ui-datepicker-prev-hover,
+.ui-datepicker .ui-datepicker-next-hover {
+	top: 1px;
+}
+.ui-datepicker .ui-datepicker-prev {
+	left: 2px;
+}
+.ui-datepicker .ui-datepicker-next {
+	right: 2px;
+}
+.ui-datepicker .ui-datepicker-prev-hover {
+	left: 1px;
+}
+.ui-datepicker .ui-datepicker-next-hover {
+	right: 1px;
+}
+.ui-datepicker .ui-datepicker-prev span,
+.ui-datepicker .ui-datepicker-next span {
+	display: block;
+	position: absolute;
+	left: 50%;
+	margin-left: -8px;
+	top: 50%;
+	margin-top: -8px;
+}
+.ui-datepicker .ui-datepicker-title {
+	margin: 0 2.3em;
+	line-height: 1.8em;
+	text-align: center;
+}
+.ui-datepicker .ui-datepicker-title select {
+	font-size: 1em;
+	margin: 1px 0;
+}
+.ui-datepicker select.ui-datepicker-month,
+.ui-datepicker select.ui-datepicker-year {
+	width: 45%;
+}
+.ui-datepicker table {
+	width: 100%;
+	font-size: .9em;
+	border-collapse: collapse;
+	margin: 0 0 .4em;
+}
+.ui-datepicker th {
+	padding: .7em .3em;
+	text-align: center;
+	font-weight: bold;
+	border: 0;
+}
+.ui-datepicker td {
+	border: 0;
+	padding: 1px;
+}
+.ui-datepicker td span,
+.ui-datepicker td a {
+	display: block;
+	padding: .2em;
+	text-align: right;
+	text-decoration: none;
+	border-radius: 4px;
+}
+.ui-datepicker td a.ui-state-hover {
+	background-color: #def3ff;
+}
+.ui-datepicker .ui-datepicker-buttonpane {
+	background-image: none;
+	margin: .7em 0 0 0;
+	padding: 0 .2em;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 0;
+}
+.ui-datepicker .ui-datepicker-buttonpane button {
+	float: right;
+	margin: .5em .2em .4em;
+	cursor: pointer;
+	padding: .2em .6em .3em .6em;
+	width: auto;
+	overflow: visible;
+}
+.ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current {
+	float: left;
+}
+
+/* with multiple calendars */
+.ui-datepicker.ui-datepicker-multi {
+	width: auto;
+}
+.ui-datepicker-multi .ui-datepicker-group {
+	float: left;
+}
+.ui-datepicker-multi .ui-datepicker-group table {
+	width: 95%;
+	margin: 0 auto .4em;
+}
+.ui-datepicker-multi-2 .ui-datepicker-group {
+	width: 50%;
+}
+.ui-datepicker-multi-3 .ui-datepicker-group {
+	width: 33.3%;
+}
+.ui-datepicker-multi-4 .ui-datepicker-group {
+	width: 25%;
+}
+.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header,
+.ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header {
+	border-left-width: 0;
+}
+.ui-datepicker-multi .ui-datepicker-buttonpane {
+	clear: left;
+}
+.ui-datepicker-row-break {
+	clear: both;
+	width: 100%;
+	font-size: 0;
+}
+
+/* RTL support */
+.ui-datepicker-rtl {
+	direction: rtl;
+}
+.ui-datepicker-rtl .ui-datepicker-prev {
+	right: 2px;
+	left: auto;
+}
+.ui-datepicker-rtl .ui-datepicker-next {
+	left: 2px;
+	right: auto;
+}
+.ui-datepicker-rtl .ui-datepicker-prev:hover {
+	right: 1px;
+	left: auto;
+}
+.ui-datepicker-rtl .ui-datepicker-next:hover {
+	left: 1px;
+	right: auto;
+}
+.ui-datepicker-rtl .ui-datepicker-buttonpane {
+	clear: right;
+}
+.ui-datepicker-rtl .ui-datepicker-buttonpane button {
+	float: left;
+}
+.ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current,
+.ui-datepicker-rtl .ui-datepicker-group {
+	float: right;
+}
+.ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header,
+.ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header {
+	border-right-width: 0;
+	border-left-width: 1px;
+}
+
+.ui-state-highlight, 
+.ui-widget-content .ui-state-highlight, 
+.ui-widget-header .ui-state-highlight {
+	border: 1px solid #0084d1;
+    background: #0084d1 !important;
+    color: #ffffff;
+}
+
+.ui-icon {
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: -.25em;
+	position: relative;
+	text-indent: -99999px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+}
+
+.ui-widget-icon-block {
+	left: 50%;
+	margin-left: -8px;
+	display: block;
+}
+
+.ui-icon {
+	width: 16px;
+	height: 16px;
+}
+.ui-icon,
+.ui-widget-content .ui-icon {
+	background-image: url("../img-trp/ui-icons_444444_256x240.png");
+}
+.ui-widget-header .ui-icon {
+	background-image: url("../img-trp/ui-icons_444444_256x240.png");
+}
+// .ui-state-hover .ui-icon,
+// .ui-state-focus .ui-icon,
+// .ui-button:hover .ui-icon,
+// .ui-button:focus .ui-icon {
+// 	background-image: url("../img-trp/ui-icons_555555_256x240.png");
+// }
+.ui-state-active .ui-icon,
+.ui-button:active .ui-icon {
+	background-image: url("../img-trp/ui-icons_ffffff_256x240.png");
+}
+.ui-state-highlight .ui-icon,
+.ui-button .ui-state-highlight.ui-icon {
+	background-image: url("../img-trp/ui-icons_777620_256x240.png");
+}
+.ui-state-error .ui-icon,
+.ui-state-error-text .ui-icon {
+	background-image: url("../img-trp/ui-icons_cc0000_256x240.png");
+}
+.ui-button .ui-icon {
+	background-image: url("../img-trp/ui-icons_777777_256x240.png");
+}
+
+/* positioning */
+/* Three classes needed to override `.ui-button:hover .ui-icon` */
+.ui-icon-blank.ui-icon-blank.ui-icon-blank {
+	background-image: none;
+}
+.ui-icon-caret-1-n { background-position: 0 0; }
+.ui-icon-caret-1-ne { background-position: -16px 0; }
+.ui-icon-caret-1-e { background-position: -32px 0; }
+.ui-icon-caret-1-se { background-position: -48px 0; }
+.ui-icon-caret-1-s { background-position: -65px 0; }
+.ui-icon-caret-1-sw { background-position: -80px 0; }
+.ui-icon-caret-1-w { background-position: -96px 0; }
+.ui-icon-caret-1-nw { background-position: -112px 0; }
+.ui-icon-caret-2-n-s { background-position: -128px 0; }
+.ui-icon-caret-2-e-w { background-position: -144px 0; }
+.ui-icon-triangle-1-n { background-position: 0 -16px; }
+.ui-icon-triangle-1-ne { background-position: -16px -16px; }
+.ui-icon-triangle-1-e { background-position: -32px -16px; }
+.ui-icon-triangle-1-se { background-position: -48px -16px; }
+.ui-icon-triangle-1-s { background-position: -65px -16px; }
+.ui-icon-triangle-1-sw { background-position: -80px -16px; }
+.ui-icon-triangle-1-w { background-position: -96px -16px; }
+.ui-icon-triangle-1-nw { background-position: -112px -16px; }
+.ui-icon-triangle-2-n-s { background-position: -128px -16px; }
+.ui-icon-triangle-2-e-w { background-position: -144px -16px; }
+.ui-icon-arrow-1-n { background-position: 0 -32px; }
+.ui-icon-arrow-1-ne { background-position: -16px -32px; }
+.ui-icon-arrow-1-e { background-position: -32px -32px; }
+.ui-icon-arrow-1-se { background-position: -48px -32px; }
+.ui-icon-arrow-1-s { background-position: -65px -32px; }
+.ui-icon-arrow-1-sw { background-position: -80px -32px; }
+.ui-icon-arrow-1-w { background-position: -96px -32px; }
+.ui-icon-arrow-1-nw { background-position: -112px -32px; }
+.ui-icon-arrow-2-n-s { background-position: -128px -32px; }
+.ui-icon-arrow-2-ne-sw { background-position: -144px -32px; }
+.ui-icon-arrow-2-e-w { background-position: -160px -32px; }
+.ui-icon-arrow-2-se-nw { background-position: -176px -32px; }
+.ui-icon-arrowstop-1-n { background-position: -192px -32px; }
+.ui-icon-arrowstop-1-e { background-position: -208px -32px; }
+.ui-icon-arrowstop-1-s { background-position: -224px -32px; }
+.ui-icon-arrowstop-1-w { background-position: -240px -32px; }
+.ui-icon-arrowthick-1-n { background-position: 1px -48px; }
+.ui-icon-arrowthick-1-ne { background-position: -16px -48px; }
+.ui-icon-arrowthick-1-e { background-position: -32px -48px; }
+.ui-icon-arrowthick-1-se { background-position: -48px -48px; }
+.ui-icon-arrowthick-1-s { background-position: -64px -48px; }
+.ui-icon-arrowthick-1-sw { background-position: -80px -48px; }
+.ui-icon-arrowthick-1-w { background-position: -96px -48px; }
+.ui-icon-arrowthick-1-nw { background-position: -112px -48px; }
+.ui-icon-arrowthick-2-n-s { background-position: -128px -48px; }
+.ui-icon-arrowthick-2-ne-sw { background-position: -144px -48px; }
+.ui-icon-arrowthick-2-e-w { background-position: -160px -48px; }
+.ui-icon-arrowthick-2-se-nw { background-position: -176px -48px; }
+.ui-icon-arrowthickstop-1-n { background-position: -192px -48px; }
+.ui-icon-arrowthickstop-1-e { background-position: -208px -48px; }
+.ui-icon-arrowthickstop-1-s { background-position: -224px -48px; }
+.ui-icon-arrowthickstop-1-w { background-position: -240px -48px; }
+.ui-icon-arrowreturnthick-1-w { background-position: 0 -64px; }
+.ui-icon-arrowreturnthick-1-n { background-position: -16px -64px; }
+.ui-icon-arrowreturnthick-1-e { background-position: -32px -64px; }
+.ui-icon-arrowreturnthick-1-s { background-position: -48px -64px; }
+.ui-icon-arrowreturn-1-w { background-position: -64px -64px; }
+.ui-icon-arrowreturn-1-n { background-position: -80px -64px; }
+.ui-icon-arrowreturn-1-e { background-position: -96px -64px; }
+.ui-icon-arrowreturn-1-s { background-position: -112px -64px; }
+.ui-icon-arrowrefresh-1-w { background-position: -128px -64px; }
+.ui-icon-arrowrefresh-1-n { background-position: -144px -64px; }
+.ui-icon-arrowrefresh-1-e { background-position: -160px -64px; }
+.ui-icon-arrowrefresh-1-s { background-position: -176px -64px; }
+.ui-icon-arrow-4 { background-position: 0 -80px; }
+.ui-icon-arrow-4-diag { background-position: -16px -80px; }
+.ui-icon-extlink { background-position: -32px -80px; }
+.ui-icon-newwin { background-position: -48px -80px; }
+.ui-icon-refresh { background-position: -64px -80px; }
+.ui-icon-shuffle { background-position: -80px -80px; }
+.ui-icon-transfer-e-w { background-position: -96px -80px; }
+.ui-icon-transferthick-e-w { background-position: -112px -80px; }
+.ui-icon-folder-collapsed { background-position: 0 -96px; }
+.ui-icon-folder-open { background-position: -16px -96px; }
+.ui-icon-document { background-position: -32px -96px; }
+.ui-icon-document-b { background-position: -48px -96px; }
+.ui-icon-note { background-position: -64px -96px; }
+.ui-icon-mail-closed { background-position: -80px -96px; }
+.ui-icon-mail-open { background-position: -96px -96px; }
+.ui-icon-suitcase { background-position: -112px -96px; }
+.ui-icon-comment { background-position: -128px -96px; }
+.ui-icon-person { background-position: -144px -96px; }
+.ui-icon-print { background-position: -160px -96px; }
+.ui-icon-trash { background-position: -176px -96px; }
+.ui-icon-locked { background-position: -192px -96px; }
+.ui-icon-unlocked { background-position: -208px -96px; }
+.ui-icon-bookmark { background-position: -224px -96px; }
+.ui-icon-tag { background-position: -240px -96px; }
+.ui-icon-home { background-position: 0 -112px; }
+.ui-icon-flag { background-position: -16px -112px; }
+.ui-icon-calendar { background-position: -32px -112px; }
+.ui-icon-cart { background-position: -48px -112px; }
+.ui-icon-pencil { background-position: -64px -112px; }
+.ui-icon-clock { background-position: -80px -112px; }
+.ui-icon-disk { background-position: -96px -112px; }
+.ui-icon-calculator { background-position: -112px -112px; }
+.ui-icon-zoomin { background-position: -128px -112px; }
+.ui-icon-zoomout { background-position: -144px -112px; }
+.ui-icon-search { background-position: -160px -112px; }
+.ui-icon-wrench { background-position: -176px -112px; }
+.ui-icon-gear { background-position: -192px -112px; }
+.ui-icon-heart { background-position: -208px -112px; }
+.ui-icon-star { background-position: -224px -112px; }
+.ui-icon-link { background-position: -240px -112px; }
+.ui-icon-cancel { background-position: 0 -128px; }
+.ui-icon-plus { background-position: -16px -128px; }
+.ui-icon-plusthick { background-position: -32px -128px; }
+.ui-icon-minus { background-position: -48px -128px; }
+.ui-icon-minusthick { background-position: -64px -128px; }
+.ui-icon-close { background-position: -80px -128px; }
+.ui-icon-closethick { background-position: -96px -128px; }
+.ui-icon-key { background-position: -112px -128px; }
+.ui-icon-lightbulb { background-position: -128px -128px; }
+.ui-icon-scissors { background-position: -144px -128px; }
+.ui-icon-clipboard { background-position: -160px -128px; }
+.ui-icon-copy { background-position: -176px -128px; }
+.ui-icon-contact { background-position: -192px -128px; }
+.ui-icon-image { background-position: -208px -128px; }
+.ui-icon-video { background-position: -224px -128px; }
+.ui-icon-script { background-position: -240px -128px; }
+.ui-icon-alert { background-position: 0 -144px; }
+.ui-icon-info { background-position: -16px -144px; }
+.ui-icon-notice { background-position: -32px -144px; }
+.ui-icon-help { background-position: -48px -144px; }
+.ui-icon-check { background-position: -64px -144px; }
+.ui-icon-bullet { background-position: -80px -144px; }
+.ui-icon-radio-on { background-position: -96px -144px; }
+.ui-icon-radio-off { background-position: -112px -144px; }
+.ui-icon-pin-w { background-position: -128px -144px; }
+.ui-icon-pin-s { background-position: -144px -144px; }
+.ui-icon-play { background-position: 0 -160px; }
+.ui-icon-pause { background-position: -16px -160px; }
+.ui-icon-seek-next { background-position: -32px -160px; }
+.ui-icon-seek-prev { background-position: -48px -160px; }
+.ui-icon-seek-end { background-position: -64px -160px; }
+.ui-icon-seek-start { background-position: -80px -160px; }
+/* ui-icon-seek-first is deprecated, use ui-icon-seek-start instead */
+.ui-icon-seek-first { background-position: -80px -160px; }
+.ui-icon-stop { background-position: -96px -160px; }
+.ui-icon-eject { background-position: -112px -160px; }
+.ui-icon-volume-off { background-position: -128px -160px; }
+.ui-icon-volume-on { background-position: -144px -160px; }
+.ui-icon-power { background-position: 0 -176px; }
+.ui-icon-signal-diag { background-position: -16px -176px; }
+.ui-icon-signal { background-position: -32px -176px; }
+.ui-icon-battery-0 { background-position: -48px -176px; }
+.ui-icon-battery-1 { background-position: -64px -176px; }
+.ui-icon-battery-2 { background-position: -80px -176px; }
+.ui-icon-battery-3 { background-position: -96px -176px; }
+.ui-icon-circle-plus { background-position: 0 -192px; }
+.ui-icon-circle-minus { background-position: -16px -192px; }
+.ui-icon-circle-close { background-position: -32px -192px; }
+.ui-icon-circle-triangle-e { background-position: -48px -192px; }
+.ui-icon-circle-triangle-s { background-position: -64px -192px; }
+.ui-icon-circle-triangle-w { background-position: -80px -192px; }
+.ui-icon-circle-triangle-n { background-position: -96px -192px; }
+.ui-icon-circle-arrow-e { background-position: -112px -192px; }
+.ui-icon-circle-arrow-s { background-position: -128px -192px; }
+.ui-icon-circle-arrow-w { background-position: -144px -192px; }
+.ui-icon-circle-arrow-n { background-position: -160px -192px; }
+.ui-icon-circle-zoomin { background-position: -176px -192px; }
+.ui-icon-circle-zoomout { background-position: -192px -192px; }
+.ui-icon-circle-check { background-position: -208px -192px; }
+.ui-icon-circlesmall-plus { background-position: 0 -208px; }
+.ui-icon-circlesmall-minus { background-position: -16px -208px; }
+.ui-icon-circlesmall-close { background-position: -32px -208px; }
+.ui-icon-squaresmall-plus { background-position: -48px -208px; }
+.ui-icon-squaresmall-minus { background-position: -64px -208px; }
+.ui-icon-squaresmall-close { background-position: -80px -208px; }
+.ui-icon-grip-dotted-vertical { background-position: 0 -224px; }
+.ui-icon-grip-dotted-horizontal { background-position: -16px -224px; }
+.ui-icon-grip-solid-vertical { background-position: -32px -224px; }
+.ui-icon-grip-solid-horizontal { background-position: -48px -224px; }
+.ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
+.ui-icon-grip-diagonal-se { background-position: -80px -224px; }

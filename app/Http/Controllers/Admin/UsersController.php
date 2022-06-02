@@ -11,6 +11,7 @@ use App\Models\IncompleteRegistration;
 use App\Models\VoxQuestionAnswered;
 use App\Models\UserSurveyWarning;
 use App\Models\DeletedUserEmails;
+use App\Models\DentistBlogpost;
 use App\Models\UserGuidedTour;
 use App\Models\DcnTransaction;
 use App\Models\VoxCrossCheck;
@@ -1064,6 +1065,13 @@ class UsersController extends AdminController {
                                 ];
 
                                 $item->sendGridTemplate(129, $substitutions, 'dentacoin');
+                                
+                                $acceptedPayments = $item->accepted_payment ?? [];
+                                if(!in_array('dentacoin', $acceptedPayments)) {
+                                    $acceptedPayments[] = 'dentacoin';
+                                    $item->accepted_payment = $acceptedPayments;
+                                    $item->save();
+                                }
 
                                 if($item->wallet_addresses->isEmpty()) {
                                     $item->partner_wallet_popup = Carbon::now()->addDays(-1);
@@ -3300,5 +3308,89 @@ class UsersController extends AdminController {
             'success' => true, 
             'data' => $answered_questions_count,
         ]);
+    }
+
+    public function addHighlight($id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        if(Request::isMethod('post')) {
+
+            $validator = Validator::make(Request::all(), [
+                'image' => array('required'),
+                'title' => array('required'),
+                'link' => array('required'),
+            ]);
+
+            if ($validator->fails()) {
+                return redirect(url('cms/users/users/edit/'.$id.'/add-highlight/'))
+                ->withInput()
+                ->withErrors($validator);
+            } else {
+                $newblogpost = new DentistBlogpost;
+                $newblogpost->dentist_id = $id;
+                $newblogpost->title = Request::input('title');
+                $newblogpost->link = Request::input('link');
+                $newblogpost->save();
+
+                if($_FILES['image']['name']) {
+                    $allowedExtensions = array('jpg', 'jpeg', 'png');
+                    $allowedMimetypes = ['image/jpeg', 'image/png'];
+                    
+                    $checkFile = GeneralHelper::checkFile(Input::file('image'), $allowedExtensions, $allowedMimetypes);
+            
+                    if(isset($checkFile['success'])) {
+                        $img = Image::make( Input::file('image') )->orientate();
+                        $filename = explode('.', $_FILES['image']['name'])[0];
+                        $newblogpost->addImage($img ,$filename);
+                    } else {
+                        Request::session()->flash('error-message', $checkFile['error']);
+                        return redirect('cms/users/users/edit/'.$id);
+                    }
+                }
+
+                Request::session()->flash('success-message', 'Highlights Added');
+                return redirect('cms/users/users/edit/'.$id);
+            }
+        }
+
+        return $this->showView('users-add-highlight', array(
+            'item' => User::find($id),
+        ));
+
+    }
+
+    public function removeHighlight($user_id, $id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        DentistBlogpost::find($id)->delete();
+
+        Request::session()->flash('success-message', 'Highlights Delete');
+        return redirect('cms/users/users/edit/'.$user_id);
+    }
+
+    public function makePartners() {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $items = User::whereNull('self_deleted')
+        ->where(function($query) {
+			$query->where('is_partner', 0)
+			->orWhereNull('is_partner');
+		})->where('accepted_payment', 'LIKE', 'dentacoin')->get();
+        
+        return $this->showView('users-make-partners', array(
+            'items' => $items,
+        ));
     }
 }

@@ -1362,6 +1362,10 @@ header {
         header .header-info .user-profile-info span.user-balance {
           font-weight: bold;
           margin-right: 0px; }
+      header .header-info .user-profile-info .caret {
+        transform: rotate(90deg);
+        max-width: 6px;
+        margin-left: 5px; }
       header .header-info .user-profile-info img {
         border-radius: 50%;
         vertical-align: middle;
@@ -1709,7 +1713,7 @@ footer {
     display: flex;
     align-items: flex-start;
     width: 1290px; }
-    @media screen and (max-width: 1300px) {
+    @media screen and (max-width: 1400px) {
       footer .container {
         width: 1120px; } }
     @media screen and (max-width: 1200px) {
@@ -2106,6 +2110,8 @@ footer {
     @media screen and (max-width: 768px) {
       .search-results-popup .container {
         margin-top: 20px; } }
+  .search-results-popup .search-form {
+    box-shadow: none; }
   .search-results-popup .close-search-popup {
     margin-left: auto;
     width: 35px;

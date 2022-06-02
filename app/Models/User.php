@@ -86,6 +86,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'phone',
         'website',
         'socials',
+        'experience',
         'work_hours',
         'working_position',
         'working_position_label',
@@ -145,14 +146,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'withdraw_at',
         'vip_access_until',
         'partner_wallet_popup',
+        'founded_at',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
 
-    // protected $casts = [
-    //     'top_dentist_month' => 'array',
-    // ];
+    protected $casts = [
+        'languages' => 'array',
+        'education_info' => 'array',
+    ];
 
 
     public function had_first_transaction() {
@@ -190,6 +193,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     public function categories() {
         return $this->hasMany('App\Models\UserCategory', 'user_id', 'id');
+    }
+    public function highlights() {
+        return $this->hasMany('App\Models\DentistBlogpost', 'dentist_id', 'id');
     }
     public function wallet_addresses() {
         return $this->hasMany('App\Models\WalletAddress', 'user_id', 'id')->orderBy('id', 'DESC');
@@ -337,6 +343,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     public function recommendations() {
         return $this->hasMany('App\Models\Recommendation', 'user_id', 'id')->orderBy('created_at', 'DESC');
+    }
+    public function announcement() {
+        return $this->hasOne('App\Models\UserAnnouncement', 'user_id', 'id');
     }
     public function asks() {
         return $this->hasMany('App\Models\UserAsk', 'dentist_id', 'id')->orderBy('id', 'DESC');
@@ -1694,7 +1703,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
                     $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getNames().'</a>';
                 } else {
                     if( $isme ) {
-                        $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getNames().' ('.trans('trp.page.index.pending').')</a>';
+                        $ret[] = '<a class="grayed tooltip-text" text="'.trans('trp.popup.popup-wokrplace.pending').'" href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getNames().'</a>';
                     }
                 }
             }
