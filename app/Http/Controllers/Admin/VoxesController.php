@@ -1382,10 +1382,10 @@ class VoxesController extends AdminController {
             $history_info.= 'OLD Age: '.implode(',',$item->age).'<br/>';
             $history_info.= 'NEW Age: '.implode(',',$this->request->input('age')).'<br/>';
         }
-        if($this->request->input('countries_ids') != $item->countries_ids) {
-            $history_info.= 'OLD Countries IDs: '.implode(',',$item->countries_ids).'<br/>';
-            $history_info.= 'NEW Countries IDs: '.implode(',',$this->request->input('countries_ids')).'<br/>';
-        }
+        // if($this->request->input('countries_ids') != $item->countries_ids) {
+        //     $history_info.= 'OLD Countries IDs: '.implode(',',$item->countries_ids).'<br/>';
+        //     $history_info.= 'NEW Countries IDs: '.implode(',',$this->request->input('countries_ids')).'<br/>';
+        // }
         if($this->request->input('exclude_countries_ids') != $item->exclude_countries_ids) {
             $history_info.= 'OLD Exclude Countries IDs: '.implode(',',$item->exclude_countries_ids).'<br/>';
             $history_info.= 'NEW Exclude Countries IDs: '.implode(',',$this->request->input('exclude_countries_ids')).'<br/>';
