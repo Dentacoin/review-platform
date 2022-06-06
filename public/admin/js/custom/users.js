@@ -293,4 +293,44 @@ $(document).ready(function(){
 			console.log(data);
 	    });
     });
+
+	$('.hightlights-draggable').multisortable({
+		items: ".input-group",
+		selectedClass: "selected",
+		// click: function(e) { 
+		// 	$('.questions-draggable[lang-code="en"]').find("textarea").bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(e) {
+		//       	e.stopImmediatePropagation();
+		//     });
+		// 	$('.questions-draggable[lang-code="en"]').find("input").bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(e) {
+		//       	e.stopImmediatePropagation();
+		//     });
+		// },
+		update: function( event, ui ) {	
+			console.log('update');
+			setTimeout( function() {
+				var ids = [];
+				$('.hightlights-draggable .input-group').each( function() {
+					ids.push( $(this).attr('hightlight-id') );
+				});
+
+		        $.ajax({
+		            url     : $('.hightlights-draggable').attr('reorder-action'),
+		            type    : 'POST',
+		            data 	: {
+		            	list: ids,
+		            },
+		            dataType: 'json',
+		            success : (function( res ) {
+		            	var i=1;
+		            	$('.questions-draggable[lang-code="en"] tr').each( function() {
+							$(this).find('.question-number').val(i);
+							i++;
+						});
+		            }).bind( this ),
+		            error : function( data ) {
+		            }
+		        });
+			}, 0);
+		},
+	});
 });

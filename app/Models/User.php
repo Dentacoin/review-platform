@@ -195,7 +195,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserCategory', 'user_id', 'id');
     }
     public function highlights() {
-        return $this->hasMany('App\Models\DentistBlogpost', 'dentist_id', 'id');
+        return $this->hasMany('App\Models\DentistBlogpost', 'dentist_id', 'id')->orderBy('sort_order', 'ASC');
     }
     public function wallet_addresses() {
         return $this->hasMany('App\Models\WalletAddress', 'user_id', 'id')->orderBy('id', 'DESC');

@@ -21,6 +21,7 @@ return [
                 'address.js',
                 'anonymous-users.js',
                 '../jquery.multi-select.min.js',
+                'jquery.multisortable.js',
             ),
             'jscdn' => array(
                 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',

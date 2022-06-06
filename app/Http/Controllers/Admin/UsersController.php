@@ -3310,7 +3310,7 @@ class UsersController extends AdminController {
         ]);
     }
 
-    public function addHighlight($id) {
+    public function addOrEditHighlight($user_id, $highlight_id=null) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'support'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
@@ -3320,21 +3320,25 @@ class UsersController extends AdminController {
         if(Request::isMethod('post')) {
 
             $validator = Validator::make(Request::all(), [
-                'image' => array('required'),
+                // 'image' => array('required'),
                 'title' => array('required'),
                 'link' => array('required'),
             ]);
 
             if ($validator->fails()) {
-                return redirect(url('cms/users/users/edit/'.$id.'/add-highlight/'))
+                return redirect(url('cms/users/users/edit/'.$user_id.'/add-edit-highlight/'($highlight_id ?? '')))
                 ->withInput()
                 ->withErrors($validator);
             } else {
-                $newblogpost = new DentistBlogpost;
-                $newblogpost->dentist_id = $id;
-                $newblogpost->title = Request::input('title');
-                $newblogpost->link = Request::input('link');
-                $newblogpost->save();
+                if($highlight_id) {
+                    $blogpost = DentistBlogpost::find($highlight_id);
+                } else {
+                    $blogpost = new DentistBlogpost;
+                }
+                $blogpost->dentist_id = $user_id;
+                $blogpost->title = Request::input('title');
+                $blogpost->link = Request::input('link');
+                $blogpost->save();
 
                 if($_FILES['image']['name']) {
                     $allowedExtensions = array('jpg', 'jpeg', 'png');
@@ -3345,22 +3349,21 @@ class UsersController extends AdminController {
                     if(isset($checkFile['success'])) {
                         $img = Image::make( Input::file('image') )->orientate();
                         $filename = explode('.', $_FILES['image']['name'])[0];
-                        $newblogpost->addImage($img ,$filename);
+                        $blogpost->addImage($img ,$filename);
                     } else {
                         Request::session()->flash('error-message', $checkFile['error']);
-                        return redirect('cms/users/users/edit/'.$id);
+                        return redirect('cms/users/users/edit/'.$user_id);
                     }
                 }
 
-                Request::session()->flash('success-message', 'Highlights Added');
-                return redirect('cms/users/users/edit/'.$id);
+                return redirect('cms/users/users/edit/'.$user_id);
             }
         }
 
         return $this->showView('users-add-highlight', array(
-            'item' => User::find($id),
+            'item' => User::find($user_id),
+            'highlight' => $highlight_id ? DentistBlogpost::find($highlight_id) : '',
         ));
-
     }
 
     public function removeHighlight($user_id, $id) {
@@ -3374,6 +3377,28 @@ class UsersController extends AdminController {
 
         Request::session()->flash('success-message', 'Highlights Delete');
         return redirect('cms/users/users/edit/'.$user_id);
+    }
+
+    public function reorderHighlight($user_id) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $list = Request::input('list');
+        // dd($list);
+        $i=1;
+        foreach ($list as $hid) {
+            $highlight = DentistBlogpost::find($hid);
+            $highlight->sort_order = $i;
+            $highlight->save();
+            $i++;
+        }
+
+        return Response::json([
+            'success' => true
+        ]);
     }
 
     public function makePartners() {

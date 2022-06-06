@@ -1380,20 +1380,23 @@
                     <div class="panel-body">
                         
                         <div class="form-group">
-                            <div class="col-md-12 highlists-list" style="margin-bottom: 10px;">
+                            <div class="col-md-12 highlists-list hightlights-draggable" style="margin-bottom: 10px;" reorder-action="{{ url('cms/users/users/edit/'.$item->id.'/highlights-reorder') }}">
                                 @if($item->highlights->isNotEmpty())
                                     @foreach($item->highlights as $highlight)
-                                        <div class="input-group clearfix">
+                                        <div class="input-group clearfix" hightlight-id="{{ $highlight->id }}">
                                             <div class="row template-box clearfix">
                                                 <div class="col-md-1">
                                                     <div class="image-label" style="background-image: url('{{ $highlight->getImageUrl(true)}}');"></div>
                                                 </div>
-                                                <div class="col-md-11" style="margin-top: 24px;">
+                                                <div class="col-md-11" style="margin-top: 14px;">
                                                     <div>{{ $highlight->title }}</div>
                                                     <div>{{ $highlight->link }}</div>
                                                 </div>
                                             </div>
                                             <div class="input-group-btn">
+                                                <a class="btn btn-sm btn-primary" href="{{ url('cms/users/users/edit/'.$item->id.'/add-edit-highlight/'.$highlight->id) }}" style="padding: 7px 14px; border-top-left-radius: 3px; border-bottom-left-radius: 3px;">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
                                                 <a class="btn btn-default" type="button" href="{{ url('cms/users/users/edit/'.$item->id.'/remove-highlight/'.$highlight->id) }}">
                                                     <i class="glyphicon glyphicon-remove"></i>
                                                 </a>
@@ -1404,7 +1407,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <a href="{{ url('cms/users/users/edit/'.$item->id.'/add-highlight') }}" class="btn btn-primary btn-block">
+                                    <a href="{{ url('cms/users/users/edit/'.$item->id.'/add-edit-highlight') }}" class="btn btn-primary btn-block">
                                         Аdd highlight
                                     </a>
                                 </div>

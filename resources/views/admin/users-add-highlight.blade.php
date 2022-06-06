@@ -3,7 +3,7 @@
 @section('content')
 
     <h1 class="page-header"> 
-        Add Highlight to {{ $item->getNames() }}
+        {{ $highlight ? 'Edit' : 'Add' }} Highlight to {{ $item->getNames() }}
     </h1>
     <!-- end page-header -->
 
@@ -14,22 +14,22 @@
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">Add Highlight to {{ $item->getNames() }}</h4>
+                    <h4 class="panel-title">{{ $highlight ? 'Edit' : 'Add' }} Highlight to {{ $item->getNames() }}</h4>
                 </div>
                 <div class="panel-body">
-                    {!! Form::open(array('url' => url('cms/users/users/edit/'.$item->id.'/add-highlight/'), 'method' => 'post', 'class' => 'form-horizontal','files' => true)) !!}
+                    {!! Form::open(array('url' => url('cms/users/users/edit/'.$item->id.'/add-edit-highlight/'.($highlight ? $highlight->id : '')), 'method' => 'post', 'class' => 'form-horizontal','files' => true)) !!}
                         {!! csrf_field() !!}
 
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">Title</label>
                             <div class="col-md-10">
-                                {{ Form::text('title', null, array('maxlength' => 128, 'class' => 'form-control')) }}
+                                {{ Form::text('title', $highlight ? $highlight->title : null, array('maxlength' => 128, 'class' => 'form-control')) }}
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">Link</label>
                             <div class="col-md-10">
-                                {{ Form::text('link', null, array('maxlength' => 128, 'class' => 'form-control')) }}
+                                {{ Form::text('link', $highlight ? $highlight->link : null, array('maxlength' => 128, 'class' => 'form-control')) }}
                             </div>
                         </div>
                         <div class="form-group">

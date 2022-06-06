@@ -81,8 +81,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/users/edit/{id}/restoreban/{banid}', 			'UsersController@restore_ban');
 	Route::get('users/users/edit/{id}/delete-reward/{rewardid}', 	'UsersController@delete_vox');
 	Route::get('users/users/edit/{id}/delete-unfinished/{vox_id}', 	'UsersController@delete_unfinished');
-	Route::any('users/users/edit/{id}/add-highlight',				'UsersController@addHighlight');
+	Route::any('users/users/edit/{id}/add-edit-highlight/{h_id?}',	'UsersController@addOrEditHighlight');
 	Route::get('users/users/edit/{user_id}/remove-highlight/{id}',	'UsersController@removeHighlight');
+	Route::any('users/users/edit/{user_id}/highlights-reorder',		'UsersController@reorderHighlight');
 	Route::any('users/users/delete/{id}', 							'UsersController@delete');
 	Route::any('users/users/delete-database/{id}', 					'UsersController@deleteDatabase');
 	Route::any('users/users/restore/{id}', 							'UsersController@restore');

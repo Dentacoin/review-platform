@@ -13,6 +13,7 @@ class DentistBlogpost extends Model {
         'image',
         'title',
         'link',
+        'sort_order',
     ];
 
     protected $dates = [
