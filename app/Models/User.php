@@ -363,7 +363,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->where('new_clinic', true);
     }
     public function teamApproved() {
-        return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->where('approved', true)->orderBy('team_order', 'asc');
+        return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->with('clinicTeam')->where('approved', true)->orderBy('team_order', 'asc');
     }
     public function teamUnapproved() {
         return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->where('approved', false);
@@ -387,7 +387,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasOne('App\Models\Civic', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function branches() {
-        return $this->hasMany('App\Models\UserBranch', 'clinic_id', 'id');
+        return $this->hasMany('App\Models\UserBranch', 'clinic_id', 'id')->with(['branchClinic', 'branchClinic.country']);
     }
     public function mainBranchClinic() {
         return $this->hasOne('App\Models\User', 'id', 'main_branch_clinic_id');
@@ -2273,7 +2273,17 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         if(!empty($this->country_id) && empty($this->vip_access)) {
             $user = $this;
             $restricted_voxes = $voxList->filter(function($vox) use ($user) {
-                return ((!empty($vox->exclude_countries_ids) && !in_array($user->country_id, $vox->exclude_countries_ids)) || empty($vox->exclude_countries_ids)) && !empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($user->country_id, $vox->users_percentage) && $vox->users_percentage[$user->country_id] >= $vox->country_percentage;
+                return !empty($vox->countries_ids) && !in_array($user->country_id, $vox->countries_ids) || (
+                    (
+                        (!empty($vox->exclude_countries_ids) && !in_array($user->country_id, $vox->exclude_countries_ids)) 
+                        || 
+                        empty($vox->exclude_countries_ids)
+                    ) 
+                    && !empty($vox->country_percentage) 
+                    && !empty($vox->users_percentage) 
+                    && array_key_exists($user->country_id, $vox->users_percentage) 
+                    && $vox->users_percentage[$user->country_id] >= $vox->country_percentage
+                );
             });
 
             $arr = [];
