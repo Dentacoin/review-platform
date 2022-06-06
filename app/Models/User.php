@@ -2040,7 +2040,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         if (!empty($country_id)) {
             $voxlist = $voxlist->where(function($query) use ($country_id) {
                 $query->whereNull('countries_ids')
-                ->orWhereRaw('not JSON_CONTAINS( `countries_ids`, \'"'.$country_id.'"\')');
+                ->orWhereRaw('JSON_CONTAINS( `countries_ids`, \'"'.$country_id.'"\')');
+                // ->orWhereRaw('not JSON_CONTAINS( `countries_ids`, \'"'.$country_id.'"\')');
             });
         }
 
@@ -2273,7 +2274,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         if(!empty($this->country_id) && empty($this->vip_access)) {
             $user = $this;
             $restricted_voxes = $voxList->filter(function($vox) use ($user) {
-                return !empty($vox->countries_ids) && !in_array($user->country_id, $vox->countries_ids) || (
+                return !empty($vox->countries_ids) && !in_array($user->country_id, $vox->countries_ids) 
+                || (
                     (
                         (!empty($vox->exclude_countries_ids) && !in_array($user->country_id, $vox->exclude_countries_ids)) 
                         || 
