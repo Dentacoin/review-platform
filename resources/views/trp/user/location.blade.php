@@ -220,7 +220,7 @@
                             <p class="month">
                                 {{ $week_day }}
                             </p>
-                            @if( ($loggedUserAllowEdit) )
+                            @if($loggedUserAllowEdit)
                                 <div class="edit-working-hours-wrapper">
                                     <div class="edit-working-hours-wrap">
                                         {{ Form::select( 
@@ -279,14 +279,18 @@
                                 </div>
                             @endif
                             <div class="working-hours-wrap">
-                                @if($dentistWorkHours && array_key_exists($w, $dentistWorkHours))
-                                    <p>
-                                        @foreach($dentistWorkHours[$w] as $k => $work_hours)
-                                            {{ $work_hours }} {!! $loop->last ? '' : ' - ' !!}
-                                        @endforeach
-                                    </p>
+                                @if($dentistWorkHours)
+                                    @if(array_key_exists($w, $dentistWorkHours))
+                                        <p>
+                                            @foreach($dentistWorkHours[$w] as $k => $work_hours)
+                                                {{ $work_hours }} {!! $loop->last ? '' : ' - ' !!}
+                                            @endforeach
+                                        </p>
+                                    @else
+                                        <p>Closed</p>
+                                    @endif    
                                 @else
-                                    <p>Closed</p>
+                                    <p>HH:MM-HH:MM</p>
                                 @endif
                             </div>
                         </div>
