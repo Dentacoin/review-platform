@@ -157,7 +157,6 @@
     font-size: 18px;
     padding: 10px 43px 12px;
     width: 250px;
-    box-shadow: 0px 3px 6px -1px #666666;
     margin: 0 auto; }
     @media screen and (max-width: 768px) {
       .edit-mode-line a {
@@ -196,8 +195,11 @@ body.edit-dentist-profile-mode .exit-mode {
     body.edit-dentist-profile-mode .exit-mode {
       display: inline-flex; } }
 body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
-  border-color: #14cab8;
-  box-shadow: 0px 0px 6px -1px #666666; }
+  border-color: #14cab8; }
+  body.edit-dentist-profile-mode .turn-on-edit-mode.white-button span {
+    color: #14cab8;
+    text-transform: uppercase;
+    font-size: 17px; }
   body.edit-dentist-profile-mode .turn-on-edit-mode.white-button img {
     display: none; }
 

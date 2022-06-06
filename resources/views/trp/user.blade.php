@@ -272,7 +272,7 @@
 								{{ $item->name_alternative ?? 'Add alternative name' }}
 							</h3>
 
-							<a class="edit-field-button tooltip-text" text="{{ $item->name_alternative ? 'Edit' : 'Add' }} alternative name">
+							<a class="edit-field-button {{ $item->name_alternative ? 'tooltip-text' : '' }}" text="Edit alternative name">
 								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 							</a>
 
@@ -353,7 +353,7 @@
 													Add workplace
 												</span>
 											@endif
-											<a class="edit-field-button edit-workplace tooltip-text" text="{{ $workplace ? 'Edit' : 'Add'}} workplace">
+											<a class="edit-field-button edit-workplace {{ $workplace ? 'tooltip-text' : ''}}" text="Edit workplace">
 												<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 											</a>
 										</div>
@@ -414,10 +414,10 @@
 					@if($loggedUserAllowEdit)
 						<div class="edit-field">
 							<p class="dentist-address edited-field" id="value-address" style="display: inline-block;">
-								{{ $item->address ?? 'edit your address' }}
+								{{ $item->address ?? 'Edit your address' }}
 							</p>
 
-							<a class="edit-field-button tooltip-text" text="{{ $item->address ? 'Еdit' : 'Add' }} address">
+							<a class="edit-field-button {{ $item->address ? 'tooltip-text' : '' }}" text="Еdit address">
 								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 							</a>
 
@@ -483,10 +483,10 @@
 					@if($loggedUserAllowEdit)
 						<div class="edit-field">
 							<p class="edited-field" id="value-phone" style="display: inline-block;">
-								{{ $item->getFormattedPhone() ?? 'edit your phone number' }}
+								{{ $item->getFormattedPhone() ?? 'Edit your phone number' }}
 							</p>
 
-							<a class="edit-field-button tooltip-text" text="{{ $item->getFormattedPhone() ? 'Edit' : 'Add' }} phone number">
+							<a class="edit-field-button {{ $item->phone ? 'tooltip-text' : '' }}" text="Edit phone number">
 								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 							</a>
 
@@ -530,11 +530,11 @@
 						<div class="edit-field">
 							<p class="edited-field" style="display: inline-block;">
 								<a class="blue-href" href="{{ $item->getWebsiteUrl() }}" target="_blank" id="value-website">
-									{{ $item->website }}
+									{{ $item->website ?? 'Add your website' }}
 								</a>
 							</p>
 
-							<a class="edit-field-button tooltip-text" text="{{ $item->website ? 'Edit' : 'Add' }} website">
+							<a class="edit-field-button {{ $item->website ? 'tooltip-text' : '' }}" text="Edit website">
 								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 							</a>
 
@@ -730,7 +730,7 @@
 										<img src="{{ url('img-trp/announcement.svg') }}" width="16"/>
 										<span>{{ $item->announcement ? $item->announcement->title : 'Add office update' }}</span>
 										@if($loggedUserAllowEdit)
-											<a class="edit-field-button edit-announcement tooltip-text" text="{{ $item->announcement ? 'Edit' : 'Add' }} office update">
+											<a class="edit-field-button edit-announcement {{ $item->announcement ? 'tooltip-text' : '' }}" text="Edit office update">
 												<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 											</a>
 										@endif
