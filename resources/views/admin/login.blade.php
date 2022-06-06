@@ -50,7 +50,7 @@
             <!-- begin brand -->
             <div class="login-header">
                 <div class="brand">
-                    <span class="logo"></span> Admin
+                    <span class="logo"></span> Admin | IP: {{ App\Models\User::getRealIp() }}
                 </div>
                 <div class="icon">
                     <i class="fa fa-sign-in"></i>
