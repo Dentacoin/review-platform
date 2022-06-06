@@ -79,14 +79,17 @@
                 Introduction
 
                 @if($loggedUserAllowEdit)
-                    <a href="javascript:;" class="edit-field-button edit-description-button tooltip-text" text="Tell patients more about your dental practice.">
+                    <a href="javascript:;" class="edit-field-button edit-description-button {{ $item->description ? 'tooltip-text' : '' }}" text="Tell patients more about your dental practice.">
                         <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
                     </a>
                 @endif
             </h3>
+
+            {{-- SmileDent was founded in 2012 in the city of Varna, Bulgaria. We offer the full scope of pediatric dental services and focus on prevention. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sollicitudin dolor eget finibus egestas. Sed varius sapien urna, eu aliquam velit molestie at. Etiam ex ligula, auctor convallis laoreet quis, consectetur a ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed sit amet turpis sollicitudin, luctus diam --}}
             <div class="about-content" role="presenter">
-                <span class="value-here description" empty-value="{{ nl2br(trans('trp.page.user.description-empty')) }}">
-                    {!! $item->description ? nl2br($item->description) : '' !!}
+                <span class="value-here description" empty-value="Tell patients more about your dental practice.">
+                    {{-- {{ nl2br(trans('trp.page.user.description-empty')) }} --}}
+                    {!! $item->description ? nl2br($item->description) : 'Tell patients more about your dental practice.' !!}
                 </span>
             </div>
             @if($loggedUserAllowEdit)

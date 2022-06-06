@@ -35,7 +35,7 @@ $phone: "screen and (max-width: 768px)";
 
 	a {
 		font-size: 18px;
-		padding: 12px 43px;
+		padding: 10px 43px 12px;
 		width: 250px;
 		box-shadow: 0px 3px 6px -1px #666666;
 		margin: 0 auto;
@@ -43,8 +43,20 @@ $phone: "screen and (max-width: 768px)";
 		@media #{$phone} {
 			width: auto;
 			font-size: 16px;
-    		padding: 10px 43px;
+    		padding: 8px 43px 10px;
 		}
+	}
+
+	.turn-mode {
+		display: flex;
+
+		@media #{$phone} {
+			display: inline-flex;
+		}
+	}
+
+	.exit-mode {
+		display: none;
 	}
 }
 
@@ -91,6 +103,18 @@ body.edit-dentist-profile-mode {
 
 	.edit-mode-line {
 		display: block;
+	}
+
+	.turn-mode {
+		display: none;
+	}
+
+	.exit-mode {
+		display: flex;
+
+		@media #{$phone} {
+			display: inline-flex;
+		}
 	}
 
 	.turn-on-edit-mode.white-button {
@@ -693,6 +717,26 @@ body.edit-dentist-profile-mode {
 	.save-field {
 		height: auto;
 		margin-bottom: 32px;
+	}
+}
+
+
+
+#team {
+	h2 {
+		span {
+			display: inline-block;
+			border-radius: 50%;
+			background-color: #ff6e6e;
+			font-size: 12px;
+			font-weight: bold;
+			color: #ffffff;
+			width: 23px;
+			height: 23px;
+			text-align: center;
+			line-height: 23px;
+			vertical-align: middle;
+		}
 	}
 }
 

@@ -31,7 +31,9 @@ $(document).ready(function() {
             $(this).find('span').html($(this).attr('to-edit'));
             $('.edit-mode').removeClass('edit-mode');
             
-            $('.tab-title[data-tab="reviews"]').removeClass('grayed');
+            if(!$('.tab-title[data-tab="reviews"]').hasClass('fixed-grayed')) {
+                $('.tab-title[data-tab="reviews"]').removeClass('grayed');
+            }
             $('.patients-tab').removeClass('grayed');
             $('[data-popup-logged="popup-invite"]').removeClass('disabled-button');
         }
@@ -658,6 +660,20 @@ $(document).ready(function() {
             }).bind(this), "json"
         );
     });
+
+
+    if($('.edit-mode-line').length) {
+        $(window).scroll( function() {
+            
+            if($(window).scrollTop() > 0) {
+                $('.edit-mode-line').show();
+            } else {
+                if(!$('body').hasClass('edit-dentist-profile-mode')) {
+                    $('.edit-mode-line').hide();
+                }
+            }
+        });
+    }
     
 
     //Widget
@@ -1385,8 +1401,12 @@ $(document).ready(function() {
             (function( data ) {
                 if( that.hasClass('accept-button') ) {
                     that.closest('.team').find('.action-buttons').remove();
+
                 } else {
                     that.remove();
+                }
+                if(!$('.team-container .accept-button').length) {
+                    $('.pending-team').hide();
                 }
                 ajax_is_running = false;
             }).bind(this), "json"

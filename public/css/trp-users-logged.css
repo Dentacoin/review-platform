@@ -155,7 +155,7 @@
       padding: 6px 0px; } }
   .edit-mode-line a {
     font-size: 18px;
-    padding: 12px 43px;
+    padding: 10px 43px 12px;
     width: 250px;
     box-shadow: 0px 3px 6px -1px #666666;
     margin: 0 auto; }
@@ -163,7 +163,14 @@
       .edit-mode-line a {
         width: auto;
         font-size: 16px;
-        padding: 10px 43px; } }
+        padding: 8px 43px 10px; } }
+  .edit-mode-line .turn-mode {
+    display: flex; }
+    @media screen and (max-width: 768px) {
+      .edit-mode-line .turn-mode {
+        display: inline-flex; } }
+  .edit-mode-line .exit-mode {
+    display: none; }
 
 body.edit-dentist-profile-mode .edit-field-button {
   display: inline-block; }
@@ -181,6 +188,13 @@ body.edit-dentist-profile-mode .edit-workplace-wrapper {
     display: none; }
 body.edit-dentist-profile-mode .edit-mode-line {
   display: block; }
+body.edit-dentist-profile-mode .turn-mode {
+  display: none; }
+body.edit-dentist-profile-mode .exit-mode {
+  display: flex; }
+  @media screen and (max-width: 768px) {
+    body.edit-dentist-profile-mode .exit-mode {
+      display: inline-flex; } }
 body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
   border-color: #14cab8;
   box-shadow: 0px 0px 6px -1px #666666; }
@@ -584,6 +598,19 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
 .socials-wrapper .save-field {
   height: auto;
   margin-bottom: 32px; }
+
+#team h2 span {
+  display: inline-block;
+  border-radius: 50%;
+  background-color: #ff6e6e;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  width: 23px;
+  height: 23px;
+  text-align: center;
+  line-height: 23px;
+  vertical-align: middle; }
 
 .tab-sections .tab-container .payments-section.edit-mode .edit-checkboxes-form .checkboxes-wrapper.not-added,
 .tab-sections .tab-container .specializations-section.edit-mode .edit-checkboxes-form .checkboxes-wrapper.not-added {

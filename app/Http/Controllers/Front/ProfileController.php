@@ -1105,6 +1105,14 @@ class ProfileController extends FrontController {
                             $this->user->$key = $current_langs;
                         }
                         
+                    } else if($key=='phone') {
+                        if($this->user->country_id && Request::input('phone')) {
+                            $phone = GeneralHelper::validatePhone($this->user->country->phone_code, Request::input('phone'));
+                        } else {
+                            $phone = Request::input('phone');
+                        }
+                        $this->user->$key = $phone;
+                        
                     } else if($key=='education_info') {
                         $educationInfo = Request::input('education_info');
 

@@ -88,7 +88,7 @@
         @else
             <p class="d-address">{{ $dentist->city_name }}, {{ $dentist->country->name }}</p>
             <p class="d-address">{{ $dentist->address }}</p>
-            <p>{{ $dentist->phone }}</p>
+            <p>{{ $dentist->getFormattedPhone() }}</p>
             <a href="{{ $dentist->getWebsiteUrl() }}?popup-loged=submit-review-popup" target="_blank" class="text-link">{{ $dentist->website }}</a>
 
             @if( $dentist->socials )

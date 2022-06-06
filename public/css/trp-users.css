@@ -233,7 +233,7 @@
         .profile-wrapper .profile-info-container .profile-details {
           margin-right: 0px; } }
       .profile-wrapper .profile-info-container .profile-details .partner-wrapper {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         align-items: center; }
         .profile-wrapper .profile-info-container .profile-details .partner-wrapper .partner {
           width: 180px;
@@ -273,7 +273,7 @@
               .profile-wrapper .profile-info-container .profile-details .partner-wrapper .share-button img {
                 width: 22px; } }
       .profile-wrapper .profile-info-container .profile-details h1 {
-        font-size: 36px;
+        font-size: 33px;
         color: #332255;
         margin-bottom: 20px;
         font-weight: 900; }
@@ -560,22 +560,23 @@
     .tab-titles .tab-title.grayed {
       color: #ccc;
       border-color: transparent; }
-    .tab-titles .tab-title.patients-tab {
-      position: relative; }
+    @media screen and (max-width: 768px) {
+      .tab-titles .tab-title.pending-team-tab-title {
+        min-width: 70px; } }
+    @media screen and (max-width: 768px) {
+      .tab-titles .tab-title.patients-tab {
+        min-width: 120px; } }
+    .tab-titles .tab-title.patients-tab:before {
+      content: '';
+      width: 2px;
+      height: 107%;
+      position: absolute;
+      left: -36px;
+      top: 0px;
+      border-left: 2px solid #c5ccde; }
       @media screen and (max-width: 768px) {
-        .tab-titles .tab-title.patients-tab {
-          min-width: 120px; } }
-      .tab-titles .tab-title.patients-tab:before {
-        content: '';
-        width: 2px;
-        height: 107%;
-        position: absolute;
-        left: -36px;
-        top: 0px;
-        border-left: 2px solid #c5ccde; }
-        @media screen and (max-width: 768px) {
-          .tab-titles .tab-title.patients-tab:before {
-            left: -10px; } }
+        .tab-titles .tab-title.patients-tab:before {
+          left: -10px; } }
     .tab-titles .tab-title:last-child {
       margin-right: 0px; }
     @media screen and (max-width: 768px) {

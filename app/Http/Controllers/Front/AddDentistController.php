@@ -132,16 +132,19 @@ class AddDentistController extends FrontController {
                         ]
                     ]);
                 }
+
+                $phone = GeneralHelper::validatePhone($this->user->country->phone_code, Request::input('phone'));
                 
                 $newdentist = new User;
                 $newdentist->name = Request::input('name');
                 $newdentist->email = Request::input('email');
                 $newdentist->country_id = Request::input('country_id');
-                $newdentist->phone = Request::input('phone');
+                $newdentist->phone = $phone;
                 $newdentist->platform = 'trp';
                 $newdentist->status = 'added_new';
                 $newdentist->address = Request::input('address');
 
+                //detect website platform
                 $social_network = TrpHelper::detectWebsitePlatform(Request::input('website'));
                 if($social_network) {
                     $newdentist->socials = [$social_network => Request::input('website')];

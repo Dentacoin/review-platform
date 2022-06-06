@@ -190,6 +190,23 @@ class GeneralHelper {
         return $result;
     }
 
+    public static function validatePhone($countryCode, $phone) {
+
+        $phone = trim(str_replace(['(', ')', ' ', '.', '-'], ['', '', '', '', ''], $phone));
+
+        //remove country code
+        do {
+            $phone = mb_substr($phone, 1);
+
+        } while (in_array(mb_substr($phone, 0, 1), [0, '+']));
+        // dd(mb_strpos($countryCode, $phone, 0));
+        if(mb_strpos($phone, $countryCode, 0) !== false) {
+            $phone = str_replace($countryCode, '', $phone);
+        }
+     
+        return $phone;
+    }
+
     public static function validateWebsite($website) {
         $result = false;
 

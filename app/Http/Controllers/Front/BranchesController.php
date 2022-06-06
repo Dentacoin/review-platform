@@ -233,24 +233,9 @@ class BranchesController extends FrontController {
 	                    ));
 	                }
                 }
-
-                $phone = null;
+                
                 $c = Country::find( Request::Input('clinic_country_id') );
-                $phone = ltrim( str_replace(' ', '', Request::Input('clinic_phone')), '0');
-                $pn = $c->phone_code.' '.$phone;
-
-                // $validator = Validator::make(['clinic_phone' => $pn], [
-                //     'clinic_phone' => ['required','phone:'.$c->code],
-                // ]);
-
-                // if ($validator->fails()) {
-                //     return Response::json([
-                //         'success' => false, 
-                //         'messages' => [
-                //             'clinic_phone' => trans('trp.popup.registration.phone')
-                //         ]
-                //     ]);
-                // }
+                $phone = GeneralHelper::validatePhone($c->phone_code, Request::input('phone'));
                 
                 $newuser = new User;
                 $newuser->name = Request::input('clinic_name');

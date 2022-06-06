@@ -1,6 +1,9 @@
 <div class="tab-container" id="team">
     <h2 class="mont">
         {!! nl2br(trans('trp.page.user.team')) !!} 
+        @if($item->teamUnapproved->isNotEmpty())
+            <span class="pending-team">{{ $item->teamUnapproved->count() }}</span>
+        @endif
         @if($loggedUserAllowEdit)
             <a class="edit-field-button tooltip-text" text="{{ $hasTeamApproved || $hasNotVerifiedTeamFromInvitation ? 'Edit' : 'Add' }} team members">
                 <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>

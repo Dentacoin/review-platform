@@ -877,12 +877,6 @@
 
 	{{-- @if(in_array($item->status, config('dentist-statuses.unclaimed')))
 		<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
-	@endif
-
-	@if(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
-		<a class="claim-button" href="javascript:;" data-popup="claim-popup">
-			{{ trans('trp.common.claim-practice') }}
-		</a>
 	@endif --}}
 </div>
 
@@ -893,11 +887,14 @@
 			About
 		</a>
 		@if($showTeamSection)
-			<a class="tab-title" data-tab="team" href="javascript:;">
+			<a class="tab-title {{ $item->teamUnapproved->isNotEmpty() ? 'pending-team-tab-title' : '' }}" data-tab="team" href="javascript:;">
 				Team
+				@if($item->teamUnapproved->isNotEmpty())
+					<span class="active pending-team">{{ $item->teamUnapproved->count() }}</span>
+				@endif
 			</a>
 		@endif
-		<a class="tab-title {{ $regularReviewsCount || $videoReviewsCount ? '' : 'grayed' }}" data-tab="reviews" href="javascript:;">
+		<a class="tab-title {{ $regularReviewsCount || $videoReviewsCount ? '' : 'grayed fixed-grayed' }}" data-tab="reviews" href="javascript:;">
 			{!! nl2br(trans('trp.page.user.reviews')) !!}
 		</a>
 		<a class="tab-title {{ $showLocationsSection ? '' : 'grayed' }}" data-tab="locations" href="javascript:;">
@@ -974,7 +971,8 @@
 
 @if($loggedUserAllowEdit)
 	<div class="edit-mode-line">
-		<a href="javascript:;" class="green-button turn-on-edit-mode">Exit edit mode</a>
+		<a href="javascript:;" class="green-button turn-on-edit-mode turn-mode">Edit profile</a>
+		<a href="javascript:;" class="green-button turn-on-edit-mode exit-mode">Exit edit mode</a>
 	</div>
 @endif
 

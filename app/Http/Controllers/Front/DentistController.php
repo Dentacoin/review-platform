@@ -41,91 +41,7 @@ use Mail;
 class DentistController extends FrontController {
 
     /**
-     * show dentist's full review
-     */
-    public function fullReview($locale=null, $id) {
-        $review = Review::find($id);
-
-        if(empty($review)) {
-            return '';
-        } else {
-
-            $d_id = Request::input('d_id');
-
-            $item = User::find($d_id);
-
-            if(empty($item)) {
-                $item = $review->dentist_id ? User::find($review->dentist_id) : User::find($review->clinic_id);
-            }           
-
-            return $this->ShowView('popups.detailed-review-content', [
-                'item' => $item,
-                'review' => $review,
-                'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
-                'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,            
-            ]);
-        }
-    }
-
-    /**
-     * write a video review
-     */
-    public function youtube($locale=null) {
-
-        if(!empty($this->user)) {
-            $fn = microtime(true).'-'.$this->user->id;
-            $fileName   = storage_path(). '/app/public/'.$fn.'.webm';
-
-            if ($this->request->hasFile('qqfile')) {
-                $image      = $this->request->file('qqfile');
-                copy($image, $fileName);
-            } else {
-                dd('upload a video first');
-            }
-
-            // Define an object that will be used to make all API requests.
-            $client = $this->getClient();
-
-            $service = new \Google_Service_YouTube($client);
-
-            if (isset($_SESSION['token'])) {
-                $client->setAccessToken($_SESSION['token']);
-            }
-
-            if (!$client->getAccessToken()) {
-                print("no access token");
-                exit;
-            }
-
-            $url = $this->videosInsert($client,
-                $service,
-                $fileName,
-                array(
-                    'snippet.categoryId' => '22',
-                    'snippet.defaultLanguage' => '',
-                    'snippet.description' => $this->user->getNames().'\'s video review on ',
-                    'snippet.tags[]' => '',
-                    'snippet.title' => 'Dentist review by '.$this->user->getNames(),
-                    'status.embeddable' => '',
-                    'status.license' => '',
-                    'status.privacyStatus' => 'unlisted',
-                    'status.publicStatsViewable' => ''
-                ),
-                'snippet,status', array()
-            );
-
-            return Response::json([
-                'url' => $url
-            ]);
-        }
-
-        print("no user");
-        exit;
-    }
-
-    /**
      * show dentist's profile
-     * white a review
      */
     public function list($locale=null, $slug, $claim_id = false) {
 
@@ -354,41 +270,38 @@ class DentistController extends FrontController {
         ];
 
         if(!empty($this->user)) {
-            if($this->user->is_dentist) {
-                $view_params['js'][] = '../js/codemirror.min.js';
-                $view_params['js'][] = '../js/codemirror-placeholder.js';
-                $view_params['js'][] = '../js/jquery.filedrop.js';
-                $view_params['css'][] = 'codemirror.css';
-            } else {
+            if(!$this->user->is_dentist) {
                 $view_params['jscdn'][] = '//vjs.zencdn.net/6.4.0/video.min.js';
                 $view_params['jscdn'][] = '//cdn.WebRTC-Experiment.com/RecordRTC.js';
                 $view_params['jscdn'][] = '//webrtc.github.io/adapter/adapter-latest.js';
                 $view_params['js'][] = '../js/videojs.record.min.js';
-
             }
             $view_params['js'][] = 'user-logged.js';
             $view_params['css'][] = 'trp-users-logged.css';
         }
 
+        //logged dentist in his profile
         if(!empty($this->user) && ($this->user->id == $item->id || $editing_branch_clinic)) {
+            $view_params['js'][] = '../js/codemirror.min.js';
+            $view_params['js'][] = '../js/codemirror-placeholder.js';
+            $view_params['js'][] = '../js/jquery.filedrop.js';
             $view_params['js'][] = '../js/jquery-ui.min.js';
             $view_params['js'][] = '../js/croppie.min.js';
+            $view_params['js'][] = '../js/lightbox.js';
+            $view_params['js'][] = '../js/upload.js';
+            $view_params['js'][] = 'address.js';
+            $view_params['css'][] = 'codemirror.css';
             $view_params['css'][] = 'croppie.css';
+            $view_params['css'][] = 'lightbox.css';
+
+            $load_lightbox = 'true';
 
             $item->review_notification = false;
             $item->save();
         }
 
-        if(!empty($this->user) && ($this->user->id==$item->id || $editing_branch_clinic)) {
-            $view_params['js'][] = '../js/upload.js';
-            $view_params['js'][] = 'address.js';
-        }
-
         if($item->photos->isNotEmpty()) {
             if(!empty($this->user) && ($this->user->id == $item->id || $editing_branch_clinic)) {
-                $load_lightbox = 'true';
-                $view_params['css'][] = 'lightbox.css';
-                $view_params['js'][] = '../js/lightbox.js';
             } else {
                 if($item->reviews_in()->isEmpty()) {
                     $load_lightbox = 'true';
@@ -599,6 +512,89 @@ class DentistController extends FrontController {
         $view_params['claim_user'] = $claim_user;
         
         return $this->ShowView('user', $view_params);
+    }
+
+    /**
+     * show dentist's full review
+     */
+    public function fullReview($locale=null, $id) {
+        $review = Review::find($id);
+
+        if(empty($review)) {
+            return '';
+        } else {
+
+            $d_id = Request::input('d_id');
+
+            $item = User::find($d_id);
+
+            if(empty($item)) {
+                $item = $review->dentist_id ? User::find($review->dentist_id) : User::find($review->clinic_id);
+            }           
+
+            return $this->ShowView('popups.detailed-review-content', [
+                'item' => $item,
+                'review' => $review,
+                'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
+                'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,            
+            ]);
+        }
+    }
+
+    /**
+     * write a video review
+     */
+    public function youtube($locale=null) {
+
+        if(!empty($this->user)) {
+            $fn = microtime(true).'-'.$this->user->id;
+            $fileName   = storage_path(). '/app/public/'.$fn.'.webm';
+
+            if ($this->request->hasFile('qqfile')) {
+                $image      = $this->request->file('qqfile');
+                copy($image, $fileName);
+            } else {
+                dd('upload a video first');
+            }
+
+            // Define an object that will be used to make all API requests.
+            $client = $this->getClient();
+
+            $service = new \Google_Service_YouTube($client);
+
+            if (isset($_SESSION['token'])) {
+                $client->setAccessToken($_SESSION['token']);
+            }
+
+            if (!$client->getAccessToken()) {
+                print("no access token");
+                exit;
+            }
+
+            $url = $this->videosInsert($client,
+                $service,
+                $fileName,
+                array(
+                    'snippet.categoryId' => '22',
+                    'snippet.defaultLanguage' => '',
+                    'snippet.description' => $this->user->getNames().'\'s video review on ',
+                    'snippet.tags[]' => '',
+                    'snippet.title' => 'Dentist review by '.$this->user->getNames(),
+                    'status.embeddable' => '',
+                    'status.license' => '',
+                    'status.privacyStatus' => 'unlisted',
+                    'status.publicStatsViewable' => ''
+                ),
+                'snippet,status', array()
+            );
+
+            return Response::json([
+                'url' => $url
+            ]);
+        }
+
+        print("no user");
+        exit;
     }
 
 
@@ -977,7 +973,7 @@ class DentistController extends FrontController {
                             'messages' => [
                                 'name' => trans('trp.common.invalid-name')
                             ]
-                        ] );
+                        ]);
                     }
 
                     if (!empty(Request::input('job'))) {
@@ -987,17 +983,27 @@ class DentistController extends FrontController {
                         if($claimsFromSameIp > 3) {
                             return Response::json( [
                                 'success' => false,
-                                'message' => trans('trp.popup.popup-claim-profile.error-ip', ['link' => '<a href="mailto:reviews@dentacoin.com">', 'endlink' => '</a>'])
-                            ] );
+                                'message' => trans('trp.popup.popup-claim-profile.error-ip', [
+                                    'link' => '<a href="mailto:reviews@dentacoin.com">', 'endlink' => '</a>'
+                                ])
+                            ]);
                         }
 
                         $fromm = !empty(Request::input('email')) ? 'from site' : 'from mail';
+
+                        $phone = null;
+                        if(!empty(Request::input('phone')) && $this->country_id) {
+                            $c = Country::find( $this->country_id );
+                            $phone = GeneralHelper::validatePhone($c->phone_code, Request::input('phone'));
+                        } else {
+                            $phone = Request::input('phone');
+                        }
 
                         $claim = new DentistClaim;
                         $claim->dentist_id = $user->id;
                         $claim->name = Request::input('name');
                         $claim->email = Request::input('email') ? Request::input('email') : $user->email;
-                        $claim->phone = !empty(Request::input('phone')) ? Request::input('phone') : '';
+                        $claim->phone = $phone;
                         $claim->password = bcrypt(Request::input('password'));
                         $claim->job = Request::input('job');
                         $claim->explain_related = empty(Request::input('explain-related')) ? Request::input('explain-related') : '';
@@ -1056,7 +1062,7 @@ class DentistController extends FrontController {
                             $claim->dentist_id = $user->id;
                             $claim->name = Request::input('name');
                             $claim->email = $user->email;
-                            $claim->phone = '';
+                            $claim->phone = null;
                             $claim->password = bcrypt(Request::input('password'));
                             $claim->status = 'approved';
                             $claim->from_mail = true;
@@ -1081,7 +1087,15 @@ class DentistController extends FrontController {
                             $user->name = Request::input('name');
                         }
 
-                        $user->phone = Request::input('phone');
+
+                        if(!empty(Request::input('phone')) && $this->country_id) {
+                            $c = Country::find( $this->country_id );
+                            $phone = GeneralHelper::validatePhone($c->phone_code, Request::input('phone'));
+                        } else {
+                            $phone = Request::input('phone');
+                        }
+
+                        $user->phone = Request::input('phone') ? $phone : null;
                         $user->password = bcrypt(Request::input('password'));
                         if($user->status == 'admin_imported') {
                             $user->status = 'approved';
@@ -1143,10 +1157,10 @@ class DentistController extends FrontController {
 
                         Auth::login($user);
 
-                        return Response::json( [
+                        return Response::json([
                             'success' => true,
                             'reload' => true,
-                        ] );
+                        ]);
                     }
                 }
             }
