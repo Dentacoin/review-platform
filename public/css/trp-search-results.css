@@ -872,6 +872,11 @@
               margin-top: 0px; } }
       .results-wrapper .dentist-results .result-container .dentist-info {
         flex: 1; }
+        .results-wrapper .dentist-results .result-container .dentist-info .main-clinic {
+          font-size: 14px;
+          color: #332255;
+          font-weight: 600;
+          margin-bottom: 10px; }
         .results-wrapper .dentist-results .result-container .dentist-info .dentist-title {
           display: flex;
           align-items: center;

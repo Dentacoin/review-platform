@@ -684,6 +684,13 @@ form {
 			.dentist-info {
 				flex: 1;
 
+				.main-clinic {
+					font-size: 14px;
+					color: #332255;
+					font-weight: 600;
+					margin-bottom: 10px;
+				}
+
 				.dentist-title {
 					display: flex;
 					align-items: center;

@@ -57,6 +57,9 @@
     @endif
 
     <div class="dentist-info">
+        @if($for_branch && $dentist->id == $dentist->mainBranchClinic->id)
+            <div class="main-clinic mont">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
+        @endif
         <div class="dentist-title">
             <h4>
                 {{ $dentist->getNames() }}
@@ -101,7 +104,7 @@
                 </div>
             @endif
 
-            @if(($for_branch && !empty($user) && $user->is_clinic && $dentist->is_clinic && $user->branches->isNotEmpty() && in_array($dentist->id, $user->branches->pluck('branch_clinic_id')->toArray())))
+            @if($for_branch && !empty($user) && $user->is_clinic && $dentist->is_clinic && $user->branches->isNotEmpty() && in_array($dentist->id, $user->branches->pluck('branch_clinic_id')->toArray()))
                 <a href="{{ $dentist->getLink() }}" class="button-submit">
                     {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}
                     Edit branch
