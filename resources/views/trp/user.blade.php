@@ -884,6 +884,57 @@
 	@endif --}}
 </div>
 
+<div class="tab-titles">
+	<div class="container">
+		<a class="tab-title active {{ $showAboutSection ? '' : 'grayed' }}" data-tab="about" href="javascript:;">
+			{{-- {!! nl2br(trans('trp.page.user.about')) !!} --}}
+			About
+		</a>
+		@if($showTeamSection)
+			<a class="tab-title {{ $item->teamUnapproved->isNotEmpty() ? 'pending-team-tab-title' : '' }}" data-tab="team" href="javascript:;">
+				Team
+				@if($item->teamUnapproved->isNotEmpty())
+					<span class="active pending-team">{{ $item->teamUnapproved->count() }}</span>
+				@endif
+			</a>
+		@endif
+		<a class="tab-title {{ $regularReviewsCount || $videoReviewsCount ? '' : 'grayed fixed-grayed' }}" data-tab="reviews" href="javascript:;">
+			{!! nl2br(trans('trp.page.user.reviews')) !!}
+		</a>
+		<a class="tab-title {{ $showLocationsSection ? '' : 'grayed' }}" data-tab="locations" href="javascript:;">
+			Location{{ $item->branches->isNotEmpty() ? 's' : '' }}
+		</a>
+		
+		@if($showMoreInfoSection)
+			<a class="tab-title" data-tab="more-info" href="javascript:;">
+				More info
+			</a>
+		@endif
+
+		@if($loggedUserAllowEdit && ($hasPatientInvites || $hasPatientAsks))
+			<a class="tab-title {!! $patient_asks ? 'force-active' : '' !!} patients-tab" data-tab="asks" href="javascript:;">
+				{!! nl2br(trans('trp.page.user.my-patients')) !!}
+
+				@if($patient_asks)
+					<span class="{!! $patient_asks ? 'active' : ''  !!}">{{ $patient_asks }}</span>
+				@endif
+			</a>
+		@endif
+	</div>
+</div>
+
+
+@if($loggedUserAllowEdit && ($hasPatientInvites || $hasPatientAsks))
+	@include('trp.user.asks')
+@endif
+
+@if($loggedUserAllowEdit)
+	<div class="edit-mode-line">
+		<a href="javascript:;" class="green-button turn-on-edit-mode turn-mode">Edit profile</a>
+		<a href="javascript:;" class="green-button turn-on-edit-mode exit-mode">Exit edit mode</a>
+	</div>
+@endif
+
 {{-- @if($loggedUserAllowEdit)
 	<div class="strength-parent fixed">
 		@include('trp.parts.strength-scale')
