@@ -136,7 +136,7 @@
 							'location' => $item->getLocation()
 						]) }}" width="150" height="150">
 					@endif
-					@if($item->is_clinic && $item->branches->isNotEmpty() && $item->id == $item->mainBranchClinic->id)
+					@if($item->is_clinic && $item->branches->isNotEmpty() && $item->mainBranchClinic && $item->id == $item->mainBranchClinic->id)
 						<div class="main-clinic mont">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
 					@endif
 
