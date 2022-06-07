@@ -115,17 +115,28 @@ $(document).ready(function() {
             $('.highlights-flickity').flickity({
                 autoPlay: false,
                 wrapAround: true,
-                cellAlign: 'left',
+                cellAlign: 'center',
                 freeScroll: true,
                 groupCells: 1,
                 draggable: false,
+            });
+
+            $('.highlights-flickity').each( function() {
+                var mh = 0;
+                $(this).find('.hightlight').css('height', 'auto');
+                $(this).find('.hightlight').each( function() {
+                    if( $(this).outerHeight() > mh ) {
+                        mh = $(this).outerHeight();
+                    }
+                });
+                $(this).find('.hightlight').css('height', mh+'px');
             });
         } else {
             if($('.highlights-mobile-flickity').length && $(window).outerWidth() <= 768) {
                 $('.highlights-mobile-flickity').flickity({
                     autoPlay: false,
                     wrapAround: true,
-                    cellAlign: 'left',
+                    cellAlign: 'center',
                     freeScroll: true,
                     groupCells: 1,
                     draggable: false,

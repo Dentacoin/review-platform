@@ -1755,70 +1755,6 @@ $phone: "screen and (max-width: 768px)";
 }
 
 .hightlights-wrapper {
-		
-	.flickity-viewport {
-		width: 100%;
-
-		.hightlight {
-			width: calc(33.3% - 49px);
-			margin: 0px 25px;
-			// height: 100%;
-
-			@media #{$pc} {
-				width: calc(33.3% - 20px);
-				margin: 0px 10px;
-			}
-
-			@media #{$tablet} {
-				width: calc(50% - 20px);
-			}
-
-			@media #{$phone} {
-				width: calc(100%);
-				margin: 0px;
-			}
-
-			&:last-child {
-				margin-right: 25px;
-
-				@media #{$pc} {
-					margin-right: 10px;
-				}
-
-				@media #{$phone} {
-					margin-right: 0px;
-				}
-			}
-		}
-	}
-			
-	.flickity-page-dots {
-		display: none;
-	}
-
-	.flickity-prev-next-button {
-		width: 28px !important;
-		height: 66px !important;
-		border-radius: 0px !important;
-	}
-
-	.flickity-prev-next-button.previous {
-		transform: rotate(180deg);
-		transform-origin: 50% 19px;
-		background: url('../img-trp/slider-arrow-left-black.svg') 50% 50% no-repeat;
-
-		svg {
-			display: none;
-		}
-	}
-
-	.flickity-prev-next-button.next {
-		background: url('../img-trp/slider-arrow-right-black.svg') 50% 50% no-repeat;
-
-		svg {
-			display: none;
-		}
-	}
 
 	.hightlight {
 		width: 33.3%;
@@ -1826,20 +1762,15 @@ $phone: "screen and (max-width: 768px)";
 		display: flex;
     	flex-direction: column;
 		border-radius: 10px;
-		transition: all 0.3s ease;
 
 		@media #{$pc} {
 			margin-right: 20px;
 		}
 
-		&:hover {
-			box-shadow: 0px 0px 21px 0px #d3d2d2;
-			transition: all 0.3s ease;
-		}
-
 		&:last-child {
 			margin-right: 0px;
 		}
+
 		.hightlight-image {
 			background-color: #f2f6ff;
 			height: 340px;
@@ -1875,6 +1806,70 @@ $phone: "screen and (max-width: 768px)";
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+	}
+		
+	.flickity-viewport {
+
+		.hightlight {
+			width: calc(33.3% - 50px);
+			margin-right: 50px;
+
+			@media #{$pc} {
+				width: calc(33.3% - 30px);
+				margin-right: 30px;
+			}
+
+			@media #{$tablet} {
+				width: calc(50% - 30px);
+			}
+
+			@media #{$phone} {
+				width: 100%;
+				margin: 0px;
+			}
+
+			&:last-child {
+				margin-right: 50px;
+
+				@media #{$pc} {
+					margin-right: 30px;
+				}
+
+				@media #{$phone} {
+					margin-right: 0px;
+				}
+			}
+		}
+	}
+			
+	.flickity-page-dots {
+		display: none;
+	}
+
+	.flickity-prev-next-button {
+		width: 28px !important;
+		height: 66px !important;
+		border-radius: 0px !important;
+	}
+
+	.flickity-prev-next-button.previous {
+		left: -10px !important;
+		transform: rotate(180deg);
+		transform-origin: 50% 19px;
+		background: url('../img-trp/slider-arrow-left-black.svg') 50% 50% no-repeat;
+
+		svg {
+			display: none;
+		}
+	}
+
+	.flickity-prev-next-button.next {
+		right: -10px !important;
+		background: url('../img-trp/slider-arrow-right-black.svg') 50% 50% no-repeat;
+
+		svg {
+			display: none;
 		}
 	}
 }

@@ -1285,59 +1285,15 @@
           .tab-sections .tab-container .team-container .team .team-info .action-buttons div:first-child {
             margin-right: 5px; }
 
-.hightlights-wrapper .flickity-viewport {
-  width: 100%; }
-  .hightlights-wrapper .flickity-viewport .hightlight {
-    width: calc(33.3% - 49px);
-    margin: 0px 25px; }
-    @media screen and (max-width: 1200px) {
-      .hightlights-wrapper .flickity-viewport .hightlight {
-        width: calc(33.3% - 20px);
-        margin: 0px 10px; } }
-    @media screen and (max-width: 998px) {
-      .hightlights-wrapper .flickity-viewport .hightlight {
-        width: calc(50% - 20px); } }
-    @media screen and (max-width: 768px) {
-      .hightlights-wrapper .flickity-viewport .hightlight {
-        width: calc(100%);
-        margin: 0px; } }
-    .hightlights-wrapper .flickity-viewport .hightlight:last-child {
-      margin-right: 25px; }
-      @media screen and (max-width: 1200px) {
-        .hightlights-wrapper .flickity-viewport .hightlight:last-child {
-          margin-right: 10px; } }
-      @media screen and (max-width: 768px) {
-        .hightlights-wrapper .flickity-viewport .hightlight:last-child {
-          margin-right: 0px; } }
-.hightlights-wrapper .flickity-page-dots {
-  display: none; }
-.hightlights-wrapper .flickity-prev-next-button {
-  width: 28px !important;
-  height: 66px !important;
-  border-radius: 0px !important; }
-.hightlights-wrapper .flickity-prev-next-button.previous {
-  transform: rotate(180deg);
-  transform-origin: 50% 19px;
-  background: url("../img-trp/slider-arrow-left-black.svg") 50% 50% no-repeat; }
-  .hightlights-wrapper .flickity-prev-next-button.previous svg {
-    display: none; }
-.hightlights-wrapper .flickity-prev-next-button.next {
-  background: url("../img-trp/slider-arrow-right-black.svg") 50% 50% no-repeat; }
-  .hightlights-wrapper .flickity-prev-next-button.next svg {
-    display: none; }
 .hightlights-wrapper .hightlight {
   width: 33.3%;
   margin-right: 50px;
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
-  transition: all 0.3s ease; }
+  border-radius: 10px; }
   @media screen and (max-width: 1200px) {
     .hightlights-wrapper .hightlight {
       margin-right: 20px; } }
-  .hightlights-wrapper .hightlight:hover {
-    box-shadow: 0px 0px 21px 0px #d3d2d2;
-    transition: all 0.3s ease; }
   .hightlights-wrapper .hightlight:last-child {
     margin-right: 0px; }
   .hightlights-wrapper .hightlight .hightlight-image {
@@ -1370,6 +1326,46 @@
     display: flex;
     align-items: center;
     justify-content: center; }
+.hightlights-wrapper .flickity-viewport .hightlight {
+  width: calc(33.3% - 50px);
+  margin-right: 50px; }
+  @media screen and (max-width: 1200px) {
+    .hightlights-wrapper .flickity-viewport .hightlight {
+      width: calc(33.3% - 30px);
+      margin-right: 30px; } }
+  @media screen and (max-width: 998px) {
+    .hightlights-wrapper .flickity-viewport .hightlight {
+      width: calc(50% - 30px); } }
+  @media screen and (max-width: 768px) {
+    .hightlights-wrapper .flickity-viewport .hightlight {
+      width: 100%;
+      margin: 0px; } }
+  .hightlights-wrapper .flickity-viewport .hightlight:last-child {
+    margin-right: 50px; }
+    @media screen and (max-width: 1200px) {
+      .hightlights-wrapper .flickity-viewport .hightlight:last-child {
+        margin-right: 30px; } }
+    @media screen and (max-width: 768px) {
+      .hightlights-wrapper .flickity-viewport .hightlight:last-child {
+        margin-right: 0px; } }
+.hightlights-wrapper .flickity-page-dots {
+  display: none; }
+.hightlights-wrapper .flickity-prev-next-button {
+  width: 28px !important;
+  height: 66px !important;
+  border-radius: 0px !important; }
+.hightlights-wrapper .flickity-prev-next-button.previous {
+  left: -10px !important;
+  transform: rotate(180deg);
+  transform-origin: 50% 19px;
+  background: url("../img-trp/slider-arrow-left-black.svg") 50% 50% no-repeat; }
+  .hightlights-wrapper .flickity-prev-next-button.previous svg {
+    display: none; }
+.hightlights-wrapper .flickity-prev-next-button.next {
+  right: -10px !important;
+  background: url("../img-trp/slider-arrow-right-black.svg") 50% 50% no-repeat; }
+  .hightlights-wrapper .flickity-prev-next-button.next svg {
+    display: none; }
 
 .invited-dentist {
   margin-top: -40px;
