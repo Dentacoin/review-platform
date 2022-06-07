@@ -163,15 +163,17 @@
                 @endif
                 <div class="gallery-flickity">
                     @foreach($item->photos as $photo)
-                        <a href="{{ $photo->getImageUrl() }}" data-lightbox="user-gallery" class="slider-wrapper" photo-id="{{ $photo->id }}">
-                            <div class="slider-image cover" style="background-image: url('{{ $photo->getImageUrl(true) }}')">
-                                @if( ($loggedUserAllowEdit) )
-                                    <div class="delete-gallery delete-button" sure="{!! trans('trp.page.user.gallery-sure') !!}">
-                                        <img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
-                                    </div>
-                                @endif
-                            </div>
-                        </a>
+                        @if($photo)
+                            <a href="{{ $photo->getImageUrl() }}" data-lightbox="user-gallery" class="slider-wrapper" photo-id="{{ $photo->id }}">
+                                <div class="slider-image cover" style="background-image: url('{{ $photo->getImageUrl(true) }}')">
+                                    @if( ($loggedUserAllowEdit) )
+                                        <div class="delete-gallery delete-button" sure="{!! trans('trp.page.user.gallery-sure') !!}">
+                                            <img class="close-icon" src="{{ url('img/close-icon-white.png') }}"/>
+                                        </div>
+                                    @endif
+                                </div>
+                            </a>
+                        @endif
                     @endforeach
                 </div>
             </div>
