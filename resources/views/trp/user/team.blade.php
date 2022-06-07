@@ -71,8 +71,8 @@
                             @endif
                         </div>
                     </a>
-                @endforeach
-            @endif
+                @endif
+            @endforeach
         @endif
 
         @if($loggedUserAllowEdit)
