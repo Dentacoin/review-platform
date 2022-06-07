@@ -480,6 +480,9 @@
                                         <thead>
                                             <tr>
                                                 <th><a href="javascript:;" class="table-select-all">All / None</a></th>
+                                                @if($admin->id == 1)
+                                                    <th>ID</th>
+                                                @endif
                                                 <th>{{ trans('admin.page.'.$current_page.'.question-num') }}</th>
                                                 <th>{{ trans('admin.page.'.$current_page.'.question-title') }}</th>
                                                 <th>{{ trans('admin.page.'.$current_page.'.question-control') }}</th>
@@ -500,6 +503,11 @@
                                                         <td>
                                                             <input type="checkbox" name="ids[]" value="{{ $question->id }}" />
                                                         </td>
+                                                        @if($admin->id == 1)
+                                                            <td>
+                                                                {{ $question->id }}
+                                                            </td>
+                                                        @endif
                                                         <td>
                                                             <input type="text" class="form-control question-number" style="width: 60px;" data-qid="{{ $question->id }}" value="{{ $question->order }}" {{ $code != 'en' ? 'disabled="disabled"' : '' }} />
                                                         </td>
