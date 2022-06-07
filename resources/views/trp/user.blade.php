@@ -150,7 +150,7 @@
 					
 					@php
 						$is_branch = !empty($real_user) && $real_user->is_clinic && $item->is_clinic && $real_user->branches->isNotEmpty() && in_array($item->id, $real_user->branches->pluck('branch_clinic_id')->toArray());
-						$is_main_clinic_branch = !empty($real_user) && $real_user->is_clinic && $item->is_clinic && $real_user->branches->isNotEmpty() && $real_user->id == $item->mainBranchClinic->id;
+						$is_main_clinic_branch = !empty($real_user) && $real_user->is_clinic && $item->is_clinic && $real_user->branches->isNotEmpty() && $item->mainBranchClinic && $real_user->id == $item->mainBranchClinic->id;
 					@endphp
 
 					@if( $is_branch || $is_main_clinic_branch)
