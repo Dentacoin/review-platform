@@ -923,6 +923,16 @@
 	</div>
 </div>
 
+<div class="tab-sections">
+	<div class="container">
+
+		@if($showAboutSection)
+			@include('trp.user.about')
+		@endif
+
+		<input type="hidden" name="cur_dent_id" id="cur_dent_id" value="{{ $item->id }}">
+	</div>
+</div>
 
 @if($loggedUserAllowEdit && ($hasPatientInvites || $hasPatientAsks))
 	@include('trp.user.asks')
