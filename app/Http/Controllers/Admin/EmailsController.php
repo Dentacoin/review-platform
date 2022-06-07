@@ -316,7 +316,7 @@ class EmailsController extends AdminController {
         }
 
         //status?
-        $country_id = $user->country->id;
+        $country_id = $user->country_id;
         $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
             $query->where('country_id', $country_id);
         })->get();
@@ -368,7 +368,7 @@ class EmailsController extends AdminController {
         $user_no_reviews = User::find(77812);
 
         if($user_no_reviews->country_id) {
-            $country_id = $user_no_reviews->country->id;
+            $country_id = $user_no_reviews->country_id;
             $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
                 $query->where('country_id', $country_id);
             })->get();

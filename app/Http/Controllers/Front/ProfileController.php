@@ -589,7 +589,7 @@ class ProfileController extends FrontController {
                                 'name' => $same_dentist->getNames().( $same_dentist->name_alternative && mb_strtolower($same_dentist->name)!=mb_strtolower($same_dentist->name_alternative) ? ' / '.$same_dentist->name_alternative : '' ),
                                 'id' => $same_dentist->id,
                                 'avatar' => $same_dentist->getImageUrl(),
-                                'location' => !empty($same_dentist->country) ? $same_dentist->city_name.', '.$same_dentist->country->name : '',
+                                'location' => !empty($same_dentist->country_id) ? $same_dentist->city_name.', '.$same_dentist->country->name : '',
                             ];
                         }
 

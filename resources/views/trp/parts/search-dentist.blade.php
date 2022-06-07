@@ -81,7 +81,7 @@
             @endif
         </div>
         @if($forMap)
-            <p>{{ $dentist->address }}, {{ $dentist->city_name }}, {{ $dentist->country->name }}</p>
+            <p>{{ $dentist->address }}, {{ $dentist->city_name }}{{ $dentist->country_id ? ', '.$dentist->country->name : '' }}</p>
 
             <a href="{{ $dentist->getLink() }}" class="button-submit">
                 {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}
@@ -164,7 +164,7 @@
                 {{ $dentist->getNames() }}
             </h4>
             
-            <p>{{ $dentist->address }}, {{ $dentist->city_name }}, {{ $dentist->country->name }}</p>
+            <p>{{ $dentist->address }}, {{ $dentist->city_name }}{{ $dentist->country_id ? ', '.$dentist->country->name : '' }}</p>
 
             <a href="{{ $dentist->getLink() }}" class="button-submit">
                 {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}

@@ -480,9 +480,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getFormattedPhone($forlink=false) {
-        $ret = '+'.$this->country->phone_code.' '.$this->phone;
-        if($forlink) {
-            $ret = str_replace(' ', '', $ret);
+        if($this->country_id) {
+            $ret = '+'.$this->country->phone_code.' '.$this->phone;
+            if($forlink) {
+                $ret = str_replace(' ', '', $ret);
+            }
+        } else {
+            $ret = $this->phone;
         }
         return $ret;
     }
@@ -926,7 +930,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->attributes['city_name'] = null;
         $this->attributes['state_name'] = null;
         $this->attributes['state_slug'] = null;
-        if( $this->country) {
+        if( $this->country_id) {
             $info = GeneralHelper::validateAddress($this->country->name, $newvalue);
             if(!empty($info)) {
                 foreach ($info as $key => $value) {
@@ -1654,7 +1658,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         ];
         $opens = null;
 
-        if( $this->work_hours && $this->country) {
+        if( $this->work_hours && $this->country_id) {
             $work_h = is_array($this->work_hours) ? $this->work_hours : json_decode($this->work_hours, true);
 
             $identifiers = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, mb_strtoupper($this->country->code));
@@ -1811,7 +1815,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
             $font->valign('top');
         });
 
-        $location = ($this->city_name ? $this->city_name.', ' : '').($this->state_name ? $this->state_name.', ' : '').$this->country->name;
+        $location = $this->getLocation();
         $location = wordwrap($location, 50); 
         $top2 = count(explode("\n", $location));
         $top2 = 365 + $above_pushing;

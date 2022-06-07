@@ -133,7 +133,11 @@ class AddDentistController extends FrontController {
                     ]);
                 }
 
-                $phone = GeneralHelper::validatePhone($this->user->country->phone_code, Request::input('phone'));
+                if($this->user->country_id) {
+                    $phone = GeneralHelper::validatePhone($this->user->country->phone_code, Request::input('phone'));
+                } else {
+                    $phone = Request::input('phone');
+                }
                 
                 $newdentist = new User;
                 $newdentist->name = Request::input('name');

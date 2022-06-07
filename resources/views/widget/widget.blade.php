@@ -204,7 +204,7 @@
 									{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}
 								</div>
 
-								@if($review->user->country)
+								@if($review->user->country_id)
 									<p>
 										<i class="fa fa-map-marker fa-fw"></i> 
 										{{ $review->user->city_name ? $review->user->city_name.', ' : '' }}, 

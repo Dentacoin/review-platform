@@ -341,7 +341,7 @@ class DentistController extends FrontController {
             $seos = PageSeo::find(32);
 
             $seo_title = str_replace(':name', $item->getNames(), $seos->seo_title);
-            $seo_title = str_replace(':country', $item->country ? $item->country->name : '', $seo_title);
+            $seo_title = str_replace(':country', $item->country_id ? $item->country->name : '', $seo_title);
             $seo_title = str_replace(':city', $item->city_name ? $item->city_name : '', $seo_title);
 
             $seo_description = str_replace(':name', $item->getNames(), $seos->seo_description);

@@ -25,6 +25,14 @@ $phone: "screen and (max-width: 768px)";
 	}
 }
 
+.lightboxOverlay {
+    z-index: 99999999 !important;
+}
+
+.lightbox {
+    z-index: 100000000 !important;
+}
+
 .blue-button {
     padding: 12px 43px;
 }

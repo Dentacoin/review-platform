@@ -35,7 +35,7 @@
                             <div class="address-slider">
                                 <p class="branch-name">{{ $item->getNames() }}</p>
                                 <p class="edited-field" id="value-address-map" style="display: inline-block;">
-                                    {{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }}
+                                    {{ $item->address ? $item->address.', ' : '' }} {{ $item->country_id ? $item->country->name : '' }}
                                 </p>
                                 <div class="map-container map-for-branch profile-map" id="profile-map-0" lat="{{ $item->lat }}" lon="{{ $item->lon }}"></div>
                             </div>
@@ -58,7 +58,7 @@
                 @if( ($item->lat && $item->lon) || $loggedUserAllowEdit )
                     <div class="edit-field map-address">
                         <p class="edited-field" id="value-address-map" style="display: inline-block;">
-                            {{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }}
+                            {{ $item->address ? $item->address.', ' : '' }} {{ $item->country_id ? $item->country->name : '' }}
                         </p>
 
                         @if($loggedUserAllowEdit)

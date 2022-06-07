@@ -1484,7 +1484,7 @@ UNCONFIRMED TRANSACTIONS
 
 
                             //status?
-                            $country_id = $user->country->id;
+                            $country_id = $user->country_id;
                             $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
                                 $query->where('country_id', $country_id);
                             })->get();
@@ -1535,7 +1535,7 @@ UNCONFIRMED TRANSACTIONS
                         } else {
 
                             if($user->country_id) {
-                                $country_id = $user->country->id;
+                                $country_id = $user->country_id;
                                 $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
                                     $query->where('country_id', $country_id);
                                 })->get();
