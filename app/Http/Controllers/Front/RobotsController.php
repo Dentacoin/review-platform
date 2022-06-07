@@ -22,7 +22,6 @@ Disallow: /';
 
 			$content = 'User-agent: *
 Disallow: /cms/
-Disallow: /question-count/
 Disallow: /suggest-clinic/
 Disallow: /suggest-dentist/
 Disallow: /want-to-invite-dentist/

@@ -1361,6 +1361,9 @@ header {
         font-size: 18px;
         color: #0564c6;
         margin-right: 5px; }
+        @media screen and (max-width: 768px) {
+          header .header-info .user-profile-info span {
+            font-size: 16px; } }
         header .header-info .user-profile-info span.user-balance-dcn {
           font-weight: bold;
           margin-right: 0px; }
@@ -2106,7 +2109,7 @@ footer {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 130, 209, 0.88);
-  z-index: 1001;
+  z-index: 1001111111;
   display: none;
   overflow-y: auto; }
   .search-results-popup.active {

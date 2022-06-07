@@ -384,20 +384,6 @@ class CitiesController extends BaseController {
     	return Response::json($ret);
 	}
 
-	public function getQuestions() {
-        $dcn_price = @file_get_contents('/tmp/dcn_price');
-        $dcn_change = @file_get_contents('/tmp/dcn_change');
-
-		$ret = [
-			'question_count' => number_format( VoxAnswer::getCount() , 0, '', ' '),
-			'dcn_price' => sprintf('%.6F', $dcn_price),
-			'header_price' => sprintf('%.3F', 1000 * $dcn_price),
-			'dcn_price_full' => sprintf('%.10F', $dcn_price),
-			'dcn_change' => $dcn_change,
-		];
-    	return Response::json($ret);
-	}
-
 	public function getClinic($id=null) {
 
 		$joinclinic = trim(Request::input('joinclinic'));
@@ -407,9 +393,12 @@ class CitiesController extends BaseController {
 	            $query->where('dentist_id', $id);
 	        });
 		}
-		$clinics = $clinics->where('name', 'LIKE', $joinclinic.'%')
-		->whereIn('status', config('dentist-statuses.shown_with_link'))
-		->whereNull('self_deleted')
+
+		$clinics = $clinics->whereIn('status', config('dentist-statuses.shown_with_link'))
+		->where(function($query) use ($joinclinic) {
+			$query->where('name', 'like', '%'.$joinclinic.'%')
+			->orWhere('name_alternative', 'like', '%'.$joinclinic.'%');
+		})->whereNull('self_deleted')
 		->take(6)
 		->get();
 

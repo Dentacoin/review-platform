@@ -21,7 +21,6 @@ Route::get('cities/{id}/{empty?}', 									'CitiesController@getCities');
 Route::post('location', 											'CitiesController@getLocation');
 Route::post('search-dentists', 										'CitiesController@searchDentists');
 Route::post('dentist-location', 									'CitiesController@getDentistLocation');
-Route::get('question-count', 										'CitiesController@getQuestions');
 Route::any('suggest-clinic/{id?}', 									'CitiesController@getClinic');
 Route::any('suggest-dentist/{id?}', 								'CitiesController@getDentist');
 Route::get('custom-cookie', 										'SSOController@manageCustomCookie')->name('custom-cookie');
