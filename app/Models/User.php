@@ -965,7 +965,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getLocation() {
-        return ($this->city_name ? $this->city_name.', ' : '').($this->state_name ? $this->state_name.', ' : '').($this->country->name);
+        return ($this->city_name ? $this->city_name : '').($this->state_name ? ', '.$this->state_name : '').($this->country_id ? ', '.$this->country->name : '');
     }
 
     public function parseCategories($categories) {
