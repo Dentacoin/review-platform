@@ -8,7 +8,7 @@ use Request;
 
 class TrpHelper {
 
-    public static function searchDentistsByName($searchSplitedUsername) {
+    public static function searchDentistsByName($searchSplitedUsername, $statuses) {
 
         $dentistsAndClinics = User::where('is_dentist', true)
 		->where(function($query) use ($searchSplitedUsername) {
@@ -18,7 +18,7 @@ class TrpHelper {
 					->orWhere('name_alternative', 'like', "%{$value}%");
 				});
 			}
-		})->whereIn('status', config('dentist-statuses.shown'))
+		})->whereIn('status', $statuses)
 		->whereNull('self_deleted')
 		->orderBy('is_partner', 'desc');
 

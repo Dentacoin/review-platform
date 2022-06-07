@@ -143,7 +143,7 @@ class DentistsController extends FrontController {
 
             //search dentist by params - name, country, city, partners
             $searchSplitedUsername = explode('-', $query);
-            $dentistByName = TrpHelper::searchDentistsByName($searchSplitedUsername);
+            $dentistByName = TrpHelper::searchDentistsByName($searchSplitedUsername, config('dentist-statuses.shown_with_link'));
             
             $items = clone $dentistByName;
 

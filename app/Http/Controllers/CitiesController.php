@@ -106,7 +106,7 @@ class CitiesController extends BaseController {
 		};
 
 		//query for search with country/city
-		$dentistsAndClinics = TrpHelper::searchDentistsByName($searchSplitedUsername);
+		$dentistsAndClinics = TrpHelper::searchDentistsByName($searchSplitedUsername, config('dentist-statuses.shown'));
 		if($searchForPartner) {
 			$dentistsAndClinics->where('is_partner', 1);
 		}
