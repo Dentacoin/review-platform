@@ -26,6 +26,7 @@ $(document).ready(function() {
             $('.tab-title[data-tab="reviews"]').addClass('grayed');
             $('.patients-tab').addClass('grayed');
             $('[data-popup-logged="popup-invite"]').addClass('disabled-button');
+            $('.add-branch').addClass('disabled-button');
 
         } else {
             $(this).find('span').html($(this).attr('to-edit'));
@@ -36,6 +37,7 @@ $(document).ready(function() {
             }
             $('.patients-tab').removeClass('grayed');
             $('[data-popup-logged="popup-invite"]').removeClass('disabled-button');
+            $('.add-branch').removeClass('disabled-button');
         }
     });
 

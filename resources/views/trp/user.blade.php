@@ -72,7 +72,7 @@
 
 <div class="gray-line"></div>
 
-<div class="container">
+<div class="container main-section-container">
 
 	<div class="profile-wrapper" link="{{ getLangUrl('profile/info/'.($editing_branch_clinic )) }}">
 		<div class="profile-info-container">
@@ -157,7 +157,7 @@
 						
 						@if($is_main_clinic_branch && $is_branch)
 							<a href="javascript:;" delete-url="{{ getLangUrl('delete-branch') }}" branch-id="{{ $item->id }}" class="delete-branch white-button">
-								X Delete branch
+								<img src="{{ url('img-trp/close-blue-x.png') }}" width="11"/> Delete branch
 							</a>
 						@else
 							<a class="clinic-branches mont" href="{{ getLangUrl($item->slug.'/branches') }}">
@@ -172,7 +172,12 @@
 								Check branches
 							</a>
 						@endif
-					@endif					
+						@if($loggedUserAllowEdit && $item->is_clinic && $item->branches->isEmpty())
+							<a class="white-button add-branch" href="javascript:;" data-popup-logged="popup-branch">
+								+ Add branch
+							</a>
+						@endif
+					@endif
 
 					@if(empty($user) && in_array($item->status, config('dentist-statuses.unclaimed')))
 						<a class="claim-button" href="javascript:;" data-popup="claim-popup">

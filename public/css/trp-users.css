@@ -149,6 +149,9 @@
 .blue-button {
   padding: 12px 43px; }
 
+.main-section-container {
+  z-index: 100; }
+
 .profile-wrapper {
   padding: 45px 0px 65px;
   display: flex;

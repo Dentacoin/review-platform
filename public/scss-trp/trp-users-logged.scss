@@ -186,10 +186,11 @@ body.edit-dentist-profile-mode {
 	}
 }
 
+.add-branch,
 .delete-branch {
 	padding: 5px 20px 8px;
     display: flex;
-    align-items: center;
+	align-items: baseline;
     justify-content: center;
     border-color: #0084d1;
     margin-right: 5px;
@@ -207,6 +208,10 @@ body.edit-dentist-profile-mode {
 	&:hover {
 		color: #0084d1;
 		background-color: white;
+	}
+
+	img {
+		margin-right: 9px;
 	}
 }
 

@@ -242,10 +242,11 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
     font-weight: bold;
     color: #0084d1; }
 
+.add-branch,
 .delete-branch {
   padding: 5px 20px 8px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: center;
   border-color: #0084d1;
   margin-right: 5px;
@@ -254,13 +255,18 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
   color: #0084d1;
   margin-bottom: 10px; }
   @media screen and (max-width: 768px) {
+    .add-branch,
     .delete-branch {
       padding: 4px 20px 7px;
       display: inline-flex;
       border-width: 1px; } }
+  .add-branch:hover,
   .delete-branch:hover {
     color: #0084d1;
     background-color: white; }
+  .add-branch img,
+  .delete-branch img {
+    margin-right: 9px; }
 
 .edit-field .edit-wrapper {
   display: none;
