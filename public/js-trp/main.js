@@ -652,7 +652,7 @@ jQuery(document).ready(function($) {
         $('.tooltip-window').html($(this).attr('text'));
 		
 		$('.tooltip-window').removeClass('top-tooltip');
-		if (window.innerWidth < 768) {
+		// if (window.innerWidth < 768 || $(this).hasClass('fixed-bottom')) {
 		//   if ($(this).hasClass('fixed-tooltip')) {
 
 			var that = $(this).closest('.tooltip-text');
@@ -661,22 +661,22 @@ jQuery(document).ready(function($) {
 
 			$('.tooltip-window').css('left', x );
 			$('.tooltip-window').css('top', y );
-		} else {
+		// } else {
 
-				$('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
+		// 	$('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
 
-			if (window.innerWidth > 768) {
-				if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
-					$('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
-				}
-			}
+		// 	if (window.innerWidth > 768) {
+		// 		if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
+		// 			$('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
+		// 		}
+		// 	}
 
-			if (window.innerWidth < 768) {
-				$('.tooltip-window').css('top', e.pageY + 15 );
-			} else {
-				$('.tooltip-window').css('top', e.pageY + 30 );
-			}
-		}
+		// 	if (window.innerWidth < 768) {
+		// 		$('.tooltip-window').css('top', e.pageY + 15 );
+		// 	} else {
+		// 		$('.tooltip-window').css('top', e.pageY + 30 );
+		// 	}
+		// }
 
         $('.tooltip-window').css('display', 'block');
 

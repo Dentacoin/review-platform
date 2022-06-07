@@ -195,7 +195,8 @@ body.edit-dentist-profile-mode .exit-mode {
     body.edit-dentist-profile-mode .exit-mode {
       display: inline-flex; } }
 body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
-  border-color: #14cab8; }
+  border-color: #14cab8;
+  padding: 6px 20px 7px; }
   body.edit-dentist-profile-mode .turn-on-edit-mode.white-button span {
     color: #14cab8;
     text-transform: uppercase;

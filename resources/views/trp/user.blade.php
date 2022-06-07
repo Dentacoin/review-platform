@@ -86,7 +86,11 @@
 								'url' => getLangUrl('profile/info/'.($editing_branch_clinic ? $editing_branch_clinic->id : '')) 
 							]) }}
 								{!! csrf_field() !!}
-								<label for="add-avatar" class="image-label" style="background-image: url({{ $user->getImageUrl(true)}})">
+								<label for="add-avatar" class="image-label tooltip-text" style="background-image: url({{ $user->getImageUrl(true)}})" text="Best resolution: <br/>
+									150x150px <br/>
+									(max. 200x200 px) <br/>
+									Max. size: 2 MB
+									">
 									<div class="centered-hack">
 										<p class="mont">
 											@if( !$user->hasimage )
