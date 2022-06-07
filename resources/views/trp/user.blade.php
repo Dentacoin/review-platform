@@ -884,6 +884,8 @@
 	@endif --}}
 </div>
 
+@if(!empty($user) && $user->id == 37530)
+@else
 <div class="tab-titles">
 	<div class="container">
 		<a class="tab-title active {{ $showAboutSection ? '' : 'grayed' }}" data-tab="about" href="javascript:;">
@@ -980,6 +982,8 @@
 		<a href="javascript:;" class="green-button turn-on-edit-mode turn-mode">Edit profile</a>
 		<a href="javascript:;" class="green-button turn-on-edit-mode exit-mode">Exit edit mode</a>
 	</div>
+@endif
+
 @endif
 
 {{-- @if($loggedUserAllowEdit)
