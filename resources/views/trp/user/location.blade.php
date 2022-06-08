@@ -184,14 +184,12 @@
         <div class="tab-inner-section open-hours-section">
             <h3>
                 Open hours
-                
                 @if($loggedUserAllowEdit)
                     <a class="edit-field-button tooltip-text" text="{{ $workingTime ? 'Edit' : 'Add' }} open hours">
                         <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>
                     </a>
                 @endif
             </h3>
-
             @if($loggedUserAllowEdit)
                 {!! Form::open([
                     'class' => 'edit-working-hours-form',
@@ -200,112 +198,18 @@
                 ]) !!}
                     {!! csrf_field() !!}
             @endif
-                <div class="flex work-hours">
-                    @php
-                        $hours = [];
-                        for($i=0;$i<=23;$i++) {
-                            $h = str_pad($i, 2, "0", STR_PAD_LEFT);
-                            $hours[$h] = $h;
-                        }
 
-                        $minutes = [
-                            '00' => '00',
-                            '10' => '10',
-                            '20' => '20',
-                            '30' => '30',
-                            '40' => '40',
-                            '50' => '50',
-                        ];
-                    @endphp
-                    @foreach($week_days as $w => $week_day)
-                        <div class="col {{ date('w') == $w ? 'active' : '' }} col-{{ $w }}">
-                            <p class="month">
-                                {{ $week_day }}
-                            </p>
-                            @if($loggedUserAllowEdit)
-                                <div class="edit-working-hours-wrapper">
-                                    <div class="edit-working-hours-wrap">
-                                        {{ Form::select( 
-                                            'work_hours['.$w.'][0][0]', 
-                                            $hours,
-                                            !empty($user->work_hours[$w][0]) ? explode(':', $user->work_hours[$w][0])[0] : '' , 
-                                            array(
-                                                'class' => !empty($user->work_hours[$w]) ? 'input' : 'input grayed', 
-                                                'placeholder' => 'HH',
-                                            ) 
-                                        ) }}
-                                        {{ Form::select( 
-                                            'work_hours['.$w.'][0][1]', 
-                                            $minutes,
-                                            !empty($user->work_hours[$w][0]) ? explode(':', $user->work_hours[$w][0])[1] : '' , 
-                                            array(
-                                                'class' => !empty($user->work_hours[$w]) ? 'input' : 'input grayed', 
-                                                'placeholder' => 'MM',
-                                            ) 
-                                        ) }}
-                                        {{ Form::select( 
-                                            'work_hours['.$w.'][1][0]', 
-                                            $hours,
-                                            !empty($user->work_hours[$w][1]) ? explode(':', $user->work_hours[$w][1])[0] : '' , 
-                                            array(
-                                                'class' => !empty($user->work_hours[$w]) ? 'input' : 'input grayed', 
-                                                'placeholder' => 'HH',
-                                            ) 
-                                        ) }}
-                                        {{ Form::select( 
-                                            'work_hours['.$w.'][1][1]', 
-                                            $minutes,
-                                            !empty($user->work_hours[$w][1]) ? explode(':', $user->work_hours[$w][1])[1] : '' , 
-                                            array(
-                                                'class' => !empty($user->work_hours[$w]) ? 'input' : 'input grayed', 
-                                                'placeholder' => 'MM',
-                                            ) 
-                                        ) }}
-
-                                    </div>
-
-                                    <label class="checkbox-label {{ empty($user->work_hours[$w]) ? 'active' : '' }}" for="day-{{ $w }}"> 
-                                        {{ Form::checkbox( 'day_'.$w, 1, '', array( 'id' => 'day-'.$w, 'class' => 'special-checkbox work-hour-cb', empty($user->work_hours[$w]) ? 'checked' : 'something' => 'checked' ) ) }}
-                                        <div class="checkbox-square">✓</div>
-                                        Closed
-                                    </label>
-
-                                    @if($w == 1)
-                                        <label class="checkbox-label" for="all-days-equal"> 
-                                            {{ Form::checkbox( 'all-days-equal', 1, '', array( 'id' => 'all-days-equal', 'class' => 'special-checkbox all-days-equal') ) }}
-                                            <div class="checkbox-square">✓</div>
-                                            {{-- {!! nl2br(trans('trp.popup.popup-wokring-time.user-same-hours')) !!} --}}
-                                            Apply to all
-                                        </label>
-                                    @endif
-                                </div>
-                            @endif
-                            <div class="working-hours-wrap">
-                                @if($dentistWorkHours)
-                                    @if(array_key_exists($w, $dentistWorkHours))
-                                        <p>
-                                            @foreach($dentistWorkHours[$w] as $k => $work_hours)
-                                                {{ $work_hours }} {!! $loop->last ? '' : ' - ' !!}
-                                            @endforeach
-                                        </p>
-                                    @else
-                                        <p>Closed</p>
-                                    @endif    
-                                @else
-                                    <p>HH:MM-HH:MM</p>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                
+                @include('trp.parts.open-hours', [
+                    'withoutUser' => false,
+                ])
+    
             @if( ($loggedUserAllowEdit) )
                 <input type="hidden" name="json" value="1" />
                 <input type="hidden" name="field" value="work_hours" />
                 <button type="submit" class="blue-button">
                     {!! nl2br(trans('trp.page.user.save')) !!}
                 </button>
-            {!! Form::close() !!}
+                {!! Form::close() !!}
             @endif
             
         </div>

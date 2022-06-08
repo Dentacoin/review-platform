@@ -1,172 +1,275 @@
 $pc: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 998px)";
 $phone: "screen and (max-width: 768px)";
- 
+
+@import 'trp-work-hours';
+
 .verification-popup {
     .popup-inner {
         padding: 40px 60px;
         box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
+		width: 700px;
  
         @media #{$phone} {
             padding: 20px 30px;
         }
 
-        .close-popup {
-        	position: absolute;
-		    right: 15px;
-		    top: 15px;
-
-		    i {
-		    	font-size: 25px;
-    			color: #424242;
-		    }
-        }
-
-        .alert {
-            margin-bottom: 20px;
-        }
-
         .verification-content {
-        	text-align: center;
-			padding: 20px 80px 0px;
 
-			@media #{$tablet} {
-		    	padding: 20px 20px 0px;
-		    }
-
-		    @media #{$phone} {
-		    	padding: 0px;
-		    }
-
-			img {
-				max-height: 80px;
-    			margin-bottom: 20px;
-
-    			@media #{$phone} {
-			    	max-height: 50px;
-			    }
-			}
-
-        	h2 {
-        		font-weight: bold;
-        		text-transform: uppercase;
-        		color: black;
-        		margin-bottom: 25px;
-
-        		@media #{$phone} {
-			    	margin-top: 0px;
-			    }
-        	}
-
-        	h4 {
-        		color: #333333;
-
-        		@media #{$phone} {
-			    	font-size: 16px;
-			    	margin-bottom: 25px;
-			    }
-        	}
-        }
-
-        #clinic-add-team {
-
-        	form {
-        		margin-bottom: 30px;
-
-        		.flex {
-        			margin: 0px -10px;
-        		}
-
-        		.col {
-        			margin: 0px 10px;
-        		}
-        	}
-        }
-
-        .info {
-			margin-bottom: 24px;
-		    display: flex;
-		    align-items: center;
-
-			img {
-				margin-right: 5px;
-			}
-		}
-
-        .verification-info {
-			border-top: 1px solid black;
-        	padding: 30px 65px 0px;
-
-			@media #{$tablet} {
-		    	padding: 30px 20px 0px;
-		    }
-
-		    @media #{$phone} {
-		    	padding: 20px 0px 0px;
-		    }
-
-        	h2 {
-        		color: black;
-        		font-weight: bold;
-        		margin-bottom: 40px;
-
-        		@media #{$phone} {
-        			margin-top: 0px;
-        			margin-bottom: 20px;
-        		}
-        	}
-        }
-
-		.avatar-name-wrapper,
-		.image-big-error {
-			@media #{$phone} {
-				max-width: 180px;
+			h2 {
+				text-align: center;
+				font-size: 28px;
+				margin-bottom: 25px;
+				color: #0564c6;
+				font-weight: 900;
+				max-width: 510px;
 				margin-left: auto;
 				margin-right: auto;
 			}
-		}
 
-        form {
+			.popup-desc {
+				font-size: 18px;
+				color: #332255;
+				margin-bottom: 20px;
 
-        	.big-button {
-			    padding: 15px 90px;
+				span {
+					font-size: 18px;
+					font-weight: 900;
+					color: #0564c6;
+				}
+			}
 
-			    @media #{$tablet} {
-			    	padding: 9px 70px;
-			    }
-        	}
+			.step-buttons {
+				margin-top: 50px;
 
-        	.button-white {
-    			text-align: center;
-        	}
+				a,button {
+					text-transform: none;
+					width: 250px;
+					padding: 11px 20px 12px;
 
-        	.invite-clinic-buttons {
-        		max-width: 430px;
-        		margin: 0 auto;
-        		padding-bottom: 25px;
-        		border-bottom: 1px solid black;
-        		margin-bottom: 30px;
-        		display: flex;
+					@media #{$phone} {
+						width: auto;
+						padding: 11px 33px 12px;
+					}
+				}
 
-        		.col {
-        			flex: 1;
+				a {
+					margin-right: 10px;
 
-        			&:first-child {
-        				margin-right: 5px;
-        			}
-        		}
+					@media #{$phone} {
+						margin-right: 5px;
+					}
+				}
+			}
 
-        		.button {
-        			padding: 15px;
-        			width: 100%;
-        			display: block;
-        			border: 2px solid #126585;
+			.invite-manual {
+				display: flex;
+				align-items: center;
+				color: #0084d1;
+				font-size: 18px;
 
-        			@media #{$tablet} {
-        				padding: 7px;
-        			}
-        		}
-        	}
+				img {
+					width: 26px;
+					margin-right: 10px;
+				}
+			}
+
+			#clinic-add-team {
+				max-width: 520px;
+				margin-left: auto;
+				margin-right: auto;
+				
+				form {
+					margin-bottom: 30px;
+
+					.upload-image-wrapper {
+						margin-bottom: 30px;
+						margin-right: 10px;
+					}
+
+					.image-label {
+						background-color: #f4f7ff;
+						border: 1px solid #0084d1;
+						width: 150px;
+						border-radius: 10px;
+						height: 150px;
+
+						.plus-gallery-image {
+							position: absolute;
+							top: 50%;
+							left: 50%;
+							transform: translateX(-50%) translateY(-50%);
+							text-align: center;
+							width: 99%;
+
+							.add-gallery-icon {
+								width: 70px;
+							}
+
+							span {
+								display: block;
+								font-size: 16px;
+								font-weight: bold;
+								color: #0084d1;
+								margin-top: 10px;
+
+								img {
+									vertical-align: middle;
+									width: 13px;
+								}
+							}
+						}
+					}
+
+					.dentist-suggester {
+						height: 60px;
+						line-height: 60px;
+					}
+
+					.suggest-results {
+						margin-top: 0px;
+						background-color: white;
+			
+						a {
+							display: block;
+							padding-left: 20px;
+							padding-bottom: 7px;
+							padding-top: 6px;
+							transition: all 0.3s ease;
+					
+							&.active,
+							&:hover {
+								background-color: #e2ebff;
+								transition: all 0.3s ease;
+							}
+					
+							.result-image-dentist {
+								width: 50px;
+					
+								@media #{$phone} {
+									width: 40px;
+								}
+					
+								img {
+									max-width: 100%;
+									display: block;
+									border-radius: 50%;
+									position: relative;
+									z-index: 1;
+									box-shadow: 0px 0px 10px 2px #f3f3f3;
+								}
+							}
+					
+							.result-name-dentist {
+								flex: 1;
+								text-align: left;
+								margin-left: 10px;
+					
+								p {
+									font-weight: 800;
+									color: #332255;
+									margin-bottom: 6px;
+									margin-top: 4px;
+									text-transform: capitalize;
+					
+									@media #{$phone} {
+										margin-bottom: 0px;
+										margin-top: 0px;
+									}
+					
+									span {
+										color: #0084d1;
+										font-size: 16px;
+									}
+								}
+					
+								span {
+									font-size: 14px;
+									color: #555555;
+								}
+							}
+					
+							.result-partner-dentist {
+								.result-partner-dentist-wrapper {
+									display: flex;
+									background-color: #0084d1;
+									color: white;
+									font-size: 13px;
+									font-weight: bold;
+									border-top-left-radius: 13px;
+									border-bottom-left-radius: 13px;
+									padding: 4px 10px;			
+					
+									img {
+										width: 13px;
+										margin-right: 4px;
+									}
+					
+									span {
+										color: white;
+										font-size: 13px;
+										margin-right: 3px;
+					
+										@media #{$phone} {
+											display: none;
+										}
+									}
+								}
+							}
+						}
+					}
+
+					.specializations-col {
+						margin-left: 10px;
+
+						@media #{$phone} {
+							margin-left: 0px;
+						}
+					}
+
+					.invite-existing-dentist {
+						background-color: #ffffff;
+						border: 1px solid #14cab8;
+						color: #14cab8;
+						font-size: 20px;
+						font-weight: bold;
+						padding: 11px 43px 13px;
+						display: inline-block;
+						border-radius: 40px;
+						transition: all 0.3s ease;
+						cursor: pointer;
+						width: 193px;
+						margin-right: 10px;
+
+						@media #{$phone} {
+							padding: 11px 22px 13px;
+							width: auto;
+							margin-right: 2px;
+						}
+					}
+
+					.green-button {
+						padding: 10px 43px 12px;
+					}
+				}
+			}
+
+			textarea {
+				height: 200px;
+			}
+
+			.alert {
+				margin-bottom: 20px;
+			}
+	
+			.avatar-name-wrapper,
+			.image-big-error {
+				@media #{$phone} {
+					max-width: 150px;
+					margin-left: auto;
+					margin-right: auto;
+				}
+			}
         }
     }
 }

@@ -4,7 +4,6 @@ var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
 var galleryFlickty;
-var suggestDentist;
 var suggestClinic;
 var suggestedDentistClick;
 var suggestClinicClick;

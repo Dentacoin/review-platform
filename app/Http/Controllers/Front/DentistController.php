@@ -63,12 +63,13 @@ class DentistController extends FrontController {
         $review_id = request('review_id');
 
         $item = User::where('slug', 'LIKE', $slug);
-        if (empty($this->admin)) {
+        if (empty($this->admin)) { //show self deleted to admins
             $item = $item->whereNull('self_deleted');
         }
         $item = $item->first();
 
         if(empty($item)) {
+            //check for changed slug
             $old_slug = OldSlug::where('slug', 'LIKE', $slug)->first();
 
             if (!empty($old_slug)) {
@@ -82,7 +83,13 @@ class DentistController extends FrontController {
         }
 
         $editing_branch_clinic = false;
-        if(!empty($this->user) && $this->user->is_clinic && $item->is_clinic && $this->user->branches->isNotEmpty() && in_array($item->id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+        if(
+            !empty($this->user)
+            && $this->user->is_clinic 
+            && $item->is_clinic 
+            && $this->user->branches->isNotEmpty() 
+            && in_array($item->id, $this->user->branches->pluck('branch_clinic_id')->toArray())
+        ) { //if main clinic has branches and whants to edit branch info -> fake log with branch
             $editing_branch_clinic = $item;
         }
 
@@ -113,7 +120,7 @@ class DentistController extends FrontController {
         }
 
         
-        //overall rating start
+        //<----------- Overall rating count --------------->
 
         $aggregatedRating = [];
         $hasNewReviews = false; //old reviews had options, new have rating
@@ -183,13 +190,13 @@ class DentistController extends FrontController {
 
         ksort($aggregatedRating);
 
-        //overall rating end
+        //<----------- Overall rating count END --------------->
 
 
         $has_asked_dentist = $this->user ? $this->user->hasAskedDentist($item->id) : null;
 
         try {
-            //because of deleted avatars
+            //because of deleted/missing avatars
             $social_image = $item->getSocialCover();
         } catch (\Exception $e) {
             $social_image = '';
@@ -202,7 +209,7 @@ class DentistController extends FrontController {
             }
             
             try {
-                //because of deleted avatars
+                //because of deleted/missing avatars
                 $social_image = $current_review->getSocialCover($item->id);
             } catch (\Exception $e) {
                 $social_image = '';
@@ -210,6 +217,7 @@ class DentistController extends FrontController {
             $is_review = true;
         }
 
+        //patients ask dentist for verification
         $patient_asks = 0;
 
         if (!empty($this->user) && $this->user->asks->isNotEmpty()) {
@@ -271,6 +279,7 @@ class DentistController extends FrontController {
 
         if(!empty($this->user)) {
             if(!$this->user->is_dentist) {
+                //load video reviews js for patients
                 $view_params['jscdn'][] = '//vjs.zencdn.net/6.4.0/video.min.js';
                 $view_params['jscdn'][] = '//cdn.WebRTC-Experiment.com/RecordRTC.js';
                 $view_params['jscdn'][] = '//webrtc.github.io/adapter/adapter-latest.js';
@@ -282,40 +291,19 @@ class DentistController extends FrontController {
 
         //logged dentist in his profile
         if(!empty($this->user) && ($this->user->id == $item->id || $editing_branch_clinic)) {
-            $view_params['js'][] = '../js/codemirror.min.js';
-            $view_params['js'][] = '../js/codemirror-placeholder.js';
-            $view_params['js'][] = '../js/jquery.filedrop.js';
+            $view_params['js'][] = '../js/codemirror.min.js'; //for "invite patients" popup (textarea)
+            $view_params['js'][] = '../js/codemirror-placeholder.js'; //for "invite patients" popup (textarea)
+            $view_params['js'][] = '../js/jquery.filedrop.js'; //for gallery photos
             $view_params['js'][] = '../js/jquery-ui.min.js';
-            $view_params['js'][] = '../js/croppie.min.js';
-            $view_params['js'][] = '../js/lightbox.js';
-            $view_params['js'][] = '../js/upload.js';
-            $view_params['js'][] = 'address.js';
-            $view_params['css'][] = 'codemirror.css';
-            $view_params['css'][] = 'croppie.css';
-            $view_params['css'][] = 'lightbox.css';
-
-            $load_lightbox = 'true';
+            $view_params['js'][] = '../js/croppie.min.js'; //for uploading avatars
+            $view_params['js'][] = '../js/upload.js'; // for gallery photos and avatars
+            $view_params['js'][] = 'address.js';  // for GM address suggester
+            $view_params['css'][] = 'codemirror.css'; //for "invite patients" popup (textarea)
+            $view_params['css'][] = 'croppie.css'; //for uploading avatars
 
             $item->review_notification = false;
             $item->save();
         }
-
-        if($item->photos->isNotEmpty()) {
-            if(!empty($this->user) && ($this->user->id == $item->id || $editing_branch_clinic)) {
-            } else {
-                if($item->reviews_in()->isEmpty()) {
-                    $load_lightbox = 'true';
-                    $view_params['css'][] = 'lightbox.css';
-                    $view_params['js'][] = '../js/lightbox.js';
-                } else {
-                    $load_lightbox = 'false';
-                }
-            }
-        } else {
-            $load_lightbox = 'true';
-        }
-
-        $view_params['load_lightbox'] = $load_lightbox;
 
         if( $is_review ) {
             $seos = PageSeo::find(33);
@@ -356,6 +344,7 @@ class DentistController extends FrontController {
             $view_params['social_title'] = $social_title;
             $view_params['social_description'] = $social_description;
         }
+
 
         $view_params['schema'] = [
             "@context" => "http://schema.org",
@@ -524,10 +513,7 @@ class DentistController extends FrontController {
             return '';
         } else {
 
-            $d_id = Request::input('d_id');
-
-            $item = User::find($d_id);
-
+            $item = User::find(Request::input('d_id'));
             if(empty($item)) {
                 $item = $review->dentist_id ? User::find($review->dentist_id) : User::find($review->clinic_id);
             }           
@@ -535,71 +521,13 @@ class DentistController extends FrontController {
             return $this->ShowView('popups.detailed-review-content', [
                 'item' => $item,
                 'review' => $review,
-                'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
-                'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,            
             ]);
         }
-    }
-
-    /**
-     * write a video review
-     */
-    public function youtube($locale=null) {
-
-        if(!empty($this->user)) {
-            $fn = microtime(true).'-'.$this->user->id;
-            $fileName   = storage_path(). '/app/public/'.$fn.'.webm';
-
-            if ($this->request->hasFile('qqfile')) {
-                $image      = $this->request->file('qqfile');
-                copy($image, $fileName);
-            } else {
-                dd('upload a video first');
-            }
-
-            // Define an object that will be used to make all API requests.
-            $client = $this->getClient();
-
-            $service = new \Google_Service_YouTube($client);
-
-            if (isset($_SESSION['token'])) {
-                $client->setAccessToken($_SESSION['token']);
-            }
-
-            if (!$client->getAccessToken()) {
-                print("no access token");
-                exit;
-            }
-
-            $url = $this->videosInsert($client,
-                $service,
-                $fileName,
-                array(
-                    'snippet.categoryId' => '22',
-                    'snippet.defaultLanguage' => '',
-                    'snippet.description' => $this->user->getNames().'\'s video review on ',
-                    'snippet.tags[]' => '',
-                    'snippet.title' => 'Dentist review by '.$this->user->getNames(),
-                    'status.embeddable' => '',
-                    'status.license' => '',
-                    'status.privacyStatus' => 'unlisted',
-                    'status.publicStatsViewable' => ''
-                ),
-                'snippet,status', array()
-            );
-
-            return Response::json([
-                'url' => $url
-            ]);
-        }
-
-        print("no user");
-        exit;
     }
 
 
     public function writeReview($locale=null,$step=null) {
-        
+        //if video reviews are stopped
         $video_reviews_stopped = StopVideoReview::find(1)->stopped;
 
         //review to dentist
@@ -608,7 +536,7 @@ class DentistController extends FrontController {
         $reviewDentistAndClinic = !empty($reviewDentistThatWorksForClinic) && $reviewDentistThatWorksForClinic != 'own'; //write two reviews at once
 
         //review to clinic
-        $reviewDentistFromClinic = Request::input('clinic_dentists'); //write two reviews at once
+        $reviewDentistFromClinic = Request::input('clinic_dentists'); //writes two reviews at once
 
         $questions = Question::with('translations')
         ->where('type', '!=', 'deprecated')
@@ -920,6 +848,62 @@ class DentistController extends FrontController {
 
             return Response::json( $ret );
         }
+    }
+
+    /**
+     * write a video review
+     */
+    public function youtube($locale=null) {
+
+        if(!empty($this->user)) {
+            $fn = microtime(true).'-'.$this->user->id;
+            $fileName   = storage_path(). '/app/public/'.$fn.'.webm';
+
+            if ($this->request->hasFile('qqfile')) {
+                $image      = $this->request->file('qqfile');
+                copy($image, $fileName);
+            } else {
+                dd('upload a video first');
+            }
+
+            // Define an object that will be used to make all API requests.
+            $client = $this->getClient();
+
+            $service = new \Google_Service_YouTube($client);
+
+            if (isset($_SESSION['token'])) {
+                $client->setAccessToken($_SESSION['token']);
+            }
+
+            if (!$client->getAccessToken()) {
+                print("no access token");
+                exit;
+            }
+
+            $url = $this->videosInsert($client,
+                $service,
+                $fileName,
+                array(
+                    'snippet.categoryId' => '22',
+                    'snippet.defaultLanguage' => '',
+                    'snippet.description' => $this->user->getNames().'\'s video review on ',
+                    'snippet.tags[]' => '',
+                    'snippet.title' => 'Dentist review by '.$this->user->getNames(),
+                    'status.embeddable' => '',
+                    'status.license' => '',
+                    'status.privacyStatus' => 'unlisted',
+                    'status.publicStatsViewable' => ''
+                ),
+                'snippet,status', array()
+            );
+
+            return Response::json([
+                'url' => $url
+            ]);
+        }
+
+        print("no user");
+        exit;
     }
 
     /**
@@ -1939,8 +1923,6 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
 
 		return $this->ShowView('user-down', [
             'item' => $item,
-            'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
-            'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,
         ]);	
 	}
 } ?>

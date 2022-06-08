@@ -138,7 +138,7 @@ class RegisterController extends FrontController {
     /**
      * after register popup - add a description
      */
-    public function verification_dentist($locale=null) {
+    public function verificationDentistShortDescription($locale=null) {
         if (request('user_id') && !empty(User::find(request('user_id'))) && !empty(request('user_hash'))) {
 
             $user = User::find(request('user_id'));
@@ -170,7 +170,67 @@ class RegisterController extends FrontController {
                     return Response::json( [
                         'success' => true,
                         'user' => $user->is_clinic ? 'clinic' : 'dentist',
-                        'message' => trans('trp.popup.verification-popup.user-info.success'),
+                    ]);
+                }
+            }
+        }
+
+        return Response::json( [
+            'success' => false,
+            'message' => trans('trp.popup.verification-popup.user-info.error'),
+        ]);
+    }
+
+    /**
+     * after register popup - add a description
+     */
+    public function verificationDentistWorkHours($locale=null) {
+        if (request('user_id') && !empty(User::find(request('user_id'))) && !empty(request('user_hash'))) {
+
+            $user = User::find(request('user_id'));
+
+            if($user->get_token() == request('user_hash')) {
+
+                $validator = Validator::make(Request::all(), [
+                    'description' => array('required', 'max:512'),
+                ]);
+
+                if ($validator->fails()) {
+
+                    $msg = $validator->getMessageBag()->toArray();
+                    $ret = array(
+                        'success' => false,
+                        'messages' => array()
+                    );
+
+                    foreach ($msg as $field => $errors) {
+                        $ret['messages'][$field] = implode(', ', $errors);
+                    }
+
+                    return Response::json( $ret );
+                } else {
+
+                    $wh = Request::input('work_hours');
+                        
+                    foreach ($wh as $k => $v) {
+                        if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) || !empty(Request::input('day_'.$k))) { 
+                            unset($wh[$k]);
+                            continue;
+                        }
+
+                        if( !empty($wh[$k][0]) && empty(Request::input('day_'.$k))) {
+                            $wh[$k][0] = implode(':', $wh[$k][0]);
+                        }
+                        if( !empty($wh[$k][1]) && empty(Request::input('day_'.$k)) ) {
+                            $wh[$k][1] = implode(':', $wh[$k][1]);
+                        }
+                    }
+
+                    $user->work_hours = $wh;
+                    $user->save();
+
+                    return Response::json( [
+                        'success' => true,
                     ]);
                 }
             }

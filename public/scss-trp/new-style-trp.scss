@@ -1636,17 +1636,6 @@ footer {
     	max-width: 200px;
     }
 
-    &.top-tooltip {
-    	max-width: 460px;
-
-    	&::after {
-    		top: auto;
-	    	bottom: -7.5px;
-			border-width: 7.5px 7.5px 0 7.5px;
-			border-color: #41b0ff transparent transparent transparent;
-	    }
-    }
-
     &::after {
     	content: '';
     	position: absolute;

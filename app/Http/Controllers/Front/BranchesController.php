@@ -25,7 +25,9 @@ class BranchesController extends FrontController {
 
     public function branchesPage($locale=null, $slug) {
 
-        $clinic = User::where('slug', 'LIKE', $slug)->whereNull('self_deleted')->first();
+        $clinic = User::where('slug', 'LIKE', $slug)
+        ->whereNull('self_deleted')
+        ->first();
 
         if(!empty($clinic) && $clinic->branches->isNotEmpty()) {
 
@@ -134,6 +136,7 @@ class BranchesController extends FrontController {
     public function addNewBranch($locale=null, $step=null) {
 
         if(!empty($step)) {
+
             $validator = Validator::make(Request::all(), [
                 'clinic_name' => array('required', 'min:3'),
                 'clinic_country_id' => array('required', 'exists:countries,id'),
@@ -181,6 +184,8 @@ class BranchesController extends FrontController {
             return Response::json( $ret );
 
         } else {
+
+            //add http to website if missing
             if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
                 request()->merge([
                     'website' => 'http://'.request('website')
@@ -234,8 +239,8 @@ class BranchesController extends FrontController {
 	                }
                 }
                 
-                $c = Country::find( Request::Input('clinic_country_id') );
-                $phone = GeneralHelper::validatePhone($c->phone_code, Request::input('phone'));
+                $country = Country::find( Request::Input('clinic_country_id') );
+                $phone = GeneralHelper::validatePhone($country->phone_code, Request::input('phone'));
                 
                 $newuser = new User;
                 $newuser->name = Request::input('clinic_name');
@@ -280,13 +285,11 @@ class BranchesController extends FrontController {
                     }
                 }
                 
-                if(!empty(Request::input('clinic_specialization'))) {
-                    foreach (Request::input('clinic_specialization') as $cat) {
-                        $newc = new UserCategory;
-                        $newc->user_id = $newuser->id;
-                        $newc->category_id = $cat;
-                        $newc->save();
-                    }
+                foreach (Request::input('clinic_specialization') as $cat) {
+                    $newc = new UserCategory;
+                    $newc->user_id = $newuser->id;
+                    $newc->category_id = $cat;
+                    $newc->save();
                 }
 
                 $newuser->generateSocialCover();
@@ -347,7 +350,6 @@ class BranchesController extends FrontController {
                 ->delete();
             	
             	if(!$item->email) {
-
 		            $action = new UserAction;
 		            $action->user_id = $item->id;
 		            $action->action = 'deleted';

@@ -1,0 +1,165 @@
+$pc: "screen and (max-width: 1200px)";
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+		
+.open-hours-section {
+
+    &.edit-mode {
+        .work-hours {
+            .col {
+                .edit-working-hours-wrapper {
+                    display: block;
+                }
+                .working-hours-wrap {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .work-hours {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+
+        @media #{$tablet} {
+            overflow-x: scroll;
+        }
+
+        @media #{$phone} {
+            display: flex;
+            overflow: initial;
+            flex-flow: row wrap;
+            margin-left: -15px;
+            margin-right: -15px;
+            border-top: none;
+        }
+
+        &.force-wrap {
+            display: flex;
+            flex-flow: row wrap;
+
+            .col {
+                max-width: 25%;
+                .edit-working-hours-wrapper {
+                    .edit-working-hours-wrap {
+                        select {
+                            width: 66px;
+                        }
+                    }
+                }                
+
+                label {
+                    padding-left: 6px;
+                    min-width: 120px;
+                }
+            }
+        }
+
+        .col {
+            border-right: 2px solid #e2ebff;
+
+            @media #{$pc} {
+                max-width: 140px;
+            }
+
+            @media #{$phone} {
+                min-width: 50%;
+                max-width: 50%;
+            }
+
+            &.active {
+                p {
+                    color: #0084d1;
+                }
+            }
+
+            &:first-child {
+                .month {
+                    border-top-left-radius: 20px;
+                    border-bottom-left-radius: 20px;
+                    border-left: 1px solid #0084d1;
+
+                    @media #{$phone} {
+                        border-radius: 0px;
+                    }
+                }
+            }
+
+            &:last-child {
+                border-right: none;
+
+                .month {
+                    border-top-right-radius: 20px;
+                    border-bottom-right-radius: 20px;
+                    border-right: 1px solid #0084d1;
+
+                    @media #{$phone} {
+                        border-radius: 0px;
+                    }
+                }
+            }
+
+            .month {
+                font-size: 16px;
+                font-weight: 900;
+                color: #332255;
+                background-color: #f2f6ff;
+                border-bottom: 1px solid #0084d1;
+                border-top: 1px solid #0084d1;
+                padding: 7px 16px;
+
+                @media #{$phone} {
+                    border-top: 1px solid #0084d1;
+                }
+            }
+
+            p {
+                padding: 14px 16px 7px;
+
+                @media #{$phone} {
+                    padding: 14px 16px 14px;
+                }
+            }
+    
+            label {
+                display: block;
+                padding-left: 26px;
+                margin-bottom: 15px;
+            }
+
+            .edit-working-hours-wrapper {
+                display: none;
+
+                .edit-working-hours-wrap {
+                    display: none;
+                    display: flex;
+                    align-items: center;
+                    flex-flow: row wrap;
+                    justify-content: center;
+                    margin-top: 10px;
+    
+                    select {
+                        width: 56px;
+                        padding: 0px;
+                        display: inline-block;
+                        margin-right: 5px;
+
+                        @media #{$phone} {
+                            width: 65px;
+                        }
+
+                        &:nth-child(2n) {
+                            margin-right: 0px;
+                        }
+        
+                        &.grayed {
+                            background-color: #eee;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1043,7 +1043,6 @@
 </script>
 
 <script type="text/javascript">
-	var load_lightbox = {!! $load_lightbox !!};
 	var showPartnerWalletPopup = {!! $item->partner_wallet_popup && $item->partner_wallet_popup < Carbon::now() ? 'true' : 'false' !!};
 </script>
 

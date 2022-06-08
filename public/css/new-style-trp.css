@@ -757,8 +757,9 @@ body.popup-visible {
   padding: 0px 15px;
   background: white;
   border: 2px solid #cccccc;
-  outline: none;
-  -webkit-box-shadow: 0 0 0px 1000px white inset; }
+  outline: none; }
+  .input:not(.grayed) {
+    -webkit-box-shadow: 0 0 0px 1000px white inset; }
   @media screen and (max-width: 998px) {
     .input {
       width: 100%; } }
@@ -1017,6 +1018,7 @@ textarea.input {
     transition: padding-top 0.2s ease, margin-top 0.2s ease;
     overflow-x: hidden;
     background-color: white;
+    font-family: 'Lato', sans-serif;
     -webkit-box-shadow: 0 0 0px 1000px white inset;
     /* Hack to make "rows" attribute apply in Firefox. */ }
     .modern-field .modern-input.has-error {
@@ -2352,13 +2354,6 @@ footer {
   @media screen and (max-width: 768px) {
     .tooltip-window {
       max-width: 200px; } }
-  .tooltip-window.top-tooltip {
-    max-width: 460px; }
-    .tooltip-window.top-tooltip::after {
-      top: auto;
-      bottom: -7.5px;
-      border-width: 7.5px 7.5px 0 7.5px;
-      border-color: #41b0ff transparent transparent transparent; }
   .tooltip-window::after {
     content: '';
     position: absolute;

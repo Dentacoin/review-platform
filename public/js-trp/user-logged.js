@@ -3,10 +3,11 @@ var slider = null;
 var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
-var suggestDentist;
 var suggestClinic;
 var suggestedDentistClick;
 var suggestClinicClick;
+var suggestTO;
+var editWorkingHours;
 var editor;
 var fb_page_error;
 var load_maps = false;
@@ -308,37 +309,7 @@ $(document).ready(function() {
 
 
     //working hours
-    $('.work-hour-cb').change( function() {
-        var closed = $(this).is(':checked');
-        var texts = $(this).closest('.col').find('select');
-
-        if(closed) {
-            texts.addClass('grayed');
-            // texts.attr('disabled', 'disabled');
-        } else {
-            texts.removeClass('grayed');
-            // texts.prop("disabled", false);
-        }
-    });
-
-    $('.edit-working-hours-wrap select').on('change click',  function() {
-        $(this).closest('.edit-working-hours-wrap').find('input').prop('checked', true);
-        $(this).closest('.edit-working-hours-wrap').find('input').closest('label').addClass('active');
-        $(this).closest('.edit-working-hours-wrap').find('select').removeClass('grayed');
-        $(this).closest('.edit-working-hours-wrapper').find('.work-hour-cb').prop('checked', false);
-        $(this).closest('.edit-working-hours-wrapper').find('.work-hour-cb').closest('label').removeClass('active');
-    });
-
-    $('.all-days-equal').click( function() {
-        for (var i = 2; i<6; i++) {
-            $('#day-'+i).click();
-                
-            $('[name="work_hours['+i+'][0][0]"]').val($('[name="work_hours[1][0][0]"]').val());
-            $('[name="work_hours['+i+'][0][1]"]').val($('[name="work_hours[1][0][1]"]').val());
-            $('[name="work_hours['+i+'][1][0]"]').val($('[name="work_hours[1][1][0]"]').val());
-            $('[name="work_hours['+i+'][1][1]"]').val($('[name="work_hours[1][1][1]"]').val());
-        }
-    });
+    editWorkingHours();
 
     $('.edit-working-hours-form').off('submit').submit( function(e) {
         e.preventDefault();
@@ -1122,7 +1093,7 @@ $(document).ready(function() {
         });
     }
 
-    suggestDentist = function() {
+    var suggestDentist = function() {
 
         if(ajax_is_running) {
             return;

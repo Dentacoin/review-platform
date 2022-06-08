@@ -22,12 +22,15 @@ class AddDentistController extends FrontController {
 
         if(Request::isMethod('post')) {
 
+            
+		    //add https in website if missing
             if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
                 request()->merge([
                     'website' => 'http://'.request('website')
                 ]);
             }
 
+		    //remove dr from search query, because dr is in another field
             if (request('name') && (mb_strpos(mb_strtolower(request('name')), 'dr. ') === 0 || mb_strpos(mb_strtolower(request('name')), 'dr ') === 0)) {
 
                 $removed_word = mb_strpos(mb_strtolower(request('name')), 'dr. ') === 0 ? 'dr. ' : (mb_strpos(mb_strtolower(request('name')), 'dr ') === 0 ? 'dr ' : '');
@@ -117,14 +120,10 @@ class AddDentistController extends FrontController {
                     ]);
                 }
 
-                if (!empty($this->user) && !empty($this->user->country_id) && Request::input('country_id') != $this->user->country_id) {
-                    return Response::json([
-                        'success' => false,
-                        'messages' => [
-                            'address' => trans('trp.invite.invalid-address')
-                        ]
-                    ]);
-                } else if (!empty($this->country_id) && Request::input('country_id') != $this->country_id) {
+                $country_id = !empty($this->user) && !empty($this->user->country_id) ? $this->user->country_id : ($this->country_id ?? null);
+                
+                //validate if address is in country
+                if ($country_id && Request::input('country_id') != $country_id) {
                     return Response::json([
                         'success' => false,
                         'messages' => [
@@ -133,8 +132,9 @@ class AddDentistController extends FrontController {
                     ]);
                 }
 
-                if($this->user->country_id) {
-                    $phone = GeneralHelper::validatePhone($this->user->country->phone_code, Request::input('phone'));
+                if($this->user->country_id || $this->country_id) {
+                    $phone_code = $this->user->country_id ? $this->user->country->phone_code : Country::find($this->country_id)->phone_code;
+                    $phone = GeneralHelper::validatePhone($phone_code, Request::input('phone'));
                 } else {
                     $phone = Request::input('phone');
                 }

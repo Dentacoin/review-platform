@@ -32,6 +32,7 @@ class UserPhoto extends Model {
     }
 
     public function addImage($img) {
+        // dd($img->height() , $img->width());
         
         $extensions = ['image/jpeg', 'image/png'];
 
@@ -45,9 +46,17 @@ class UserPhoto extends Model {
                 $constraint->upsize();
             });
             $img->save($to);
-            $img->heighten(400, function ($constraint) {
-                $constraint->upsize();
-            });
+
+            if ($img->height() > $img->width()) {
+                $img->heighten(300);
+            } else {
+                $img->widen(500);
+            }
+            $img->resizeCanvas(500, 300);
+
+            // $img->heighten(400, function ($constraint) {
+            //     $constraint->upsize();
+            // });
             $img->save($to_thumb);
             $this->save();
         }

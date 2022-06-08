@@ -8,8 +8,8 @@ var prepareMapFunction;
 var mapsLoaded = false;
 var mapsWaiting = [];
 var initMap;
+var editWorkingHours;
 var fixFlickty;
-var suggestTO;
 var map_loaded = false;
 var upload_loaded = false;
 var croppie_loaded = false;
@@ -272,8 +272,6 @@ jQuery(document).ready(function($) {
 							});
 							
 	                	} else if($('.popup.active').attr('id') == 'verification-popup') {
-	                		$.getScript(window.location.origin+'/js-trp/login.js');
-
 							loadUploadAvatarScript();
 							loadCroppie();
 
@@ -284,15 +282,10 @@ jQuery(document).ready(function($) {
 						        if (event_res.data.id) {
 						            $('input[name="last_user_id"]').val(event_res.data.id);
 						        }
-						        if (event_res.data.is_clinic) {
 
-						            $('.wh-btn').hide();
-						            $('#title-clinic').show();
-						            $('#title-dentist').hide();
-						        } else {
-						        	$('#title-clinic').hide();
-						            $('#title-dentist').show();
-						            $('#clinic-add-team').remove();
+						        if (!event_res.data.is_clinic) {
+						        	$('.step[step="2"]').remove();
+						        	$('.step[step="3"] .popup-desc').html('<span>Step 2:</span> Add a short description about your dental practice');
 						        }
 
 						        $('.image-label').css('background-image', 'none');
@@ -480,14 +473,6 @@ jQuery(document).ready(function($) {
 			}
 		});
 
-		$('.team-member-job').change( function() {
-	        if ($(this).val() == 'dentist') {
-	            $(this).closest('.flex').find('.mail-col').show();
-	        } else {
-	            $(this).closest('.flex').find('.mail-col').hide();
-	        }
-	    });
-
 	    $('input[name="mode"]').change( function() {
 	        $(this).closest('.modern-radios').removeClass('has-error');
 	    });
@@ -648,43 +633,15 @@ jQuery(document).ready(function($) {
 	});
 
 	handleTooltip = function(e) {
-
         $('.tooltip-window').html($(this).attr('text'));
-		
-		$('.tooltip-window').removeClass('top-tooltip');
-		// if (window.innerWidth < 768 || $(this).hasClass('fixed-bottom')) {
-		//   if ($(this).hasClass('fixed-tooltip')) {
 
-			var that = $(this).closest('.tooltip-text');
-			var y = that.offset().top + that.outerHeight() + 10;
-			var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
+		var that = $(this).closest('.tooltip-text').length ? $(this).closest('.tooltip-text') : $(this);
+		var y = that.offset().top + that.outerHeight() + 10;
+		var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
 
-			$('.tooltip-window').css('left', x );
-			$('.tooltip-window').css('top', y );
-		// } else {
-
-		// 	$('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
-
-		// 	if (window.innerWidth > 768) {
-		// 		if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
-		// 			$('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
-		// 		}
-		// 	}
-
-		// 	if (window.innerWidth < 768) {
-		// 		$('.tooltip-window').css('top', e.pageY + 15 );
-		// 	} else {
-		// 		$('.tooltip-window').css('top', e.pageY + 30 );
-		// 	}
-		// }
-
+		$('.tooltip-window').css('left', x );
+		$('.tooltip-window').css('top', y );
         $('.tooltip-window').css('display', 'block');
-
-        if ($(this).closest('.tooltip-text').hasClass('info-cookie')) {
-        	$('.tooltip-window').addClass('dark-tooltip');
-        } else {
-        	$('.tooltip-window').removeClass('dark-tooltip');
-        }
     }
 
     attachTooltips = function() {
@@ -711,104 +668,104 @@ jQuery(document).ready(function($) {
     }
     attachTooltips();
 
-	$('.strength-button').click( function() {
-		if ($(this).hasClass('active')) {
-			$(this).removeClass('active');
-			$('body').removeClass('dark');
-			$('.strength-parent').removeClass('active');
-			// $('.strength-wrapper').css('top', '100%');
-			$('.stretching-box').css('height', 0);
+	// $('.strength-button').click( function() {
+	// 	if ($(this).hasClass('active')) {
+	// 		$(this).removeClass('active');
+	// 		$('body').removeClass('dark');
+	// 		$('.strength-parent').removeClass('active');
+	// 		// $('.strength-wrapper').css('top', '100%');
+	// 		$('.stretching-box').css('height', 0);
 
-		} else {
-			$(this).addClass('active');
-			$('body').addClass('dark');
-			$('.strength-parent').addClass('active');
-			// $('.strength-wrapper').css('top', 'calc(100% - '+$('.strength-wrapper').outerHeight()+'px)');
+	// 	} else {
+	// 		$(this).addClass('active');
+	// 		$('body').addClass('dark');
+	// 		$('.strength-parent').addClass('active');
+	// 		// $('.strength-wrapper').css('top', 'calc(100% - '+$('.strength-wrapper').outerHeight()+'px)');
 
-			$('.stretching-box').css('height', $('.strength-flickity').outerHeight());
-		}
-	});
+	// 		$('.stretching-box').css('height', $('.strength-flickity').outerHeight());
+	// 	}
+	// });
 
-    if ($('.strength-flickity').length) {
-    	var $carousel = $('.strength-flickity');
+    // if ($('.strength-flickity').length) {
+    // 	var $carousel = $('.strength-flickity');
 
-		$carousel.flickity({
-	    	wrapAround: true,
-			//adaptiveHeight: true,
-			draggable: true,
-			pageDots: false,
-		});
-	}
+	// 	$carousel.flickity({
+	//     	wrapAround: true,
+	// 		//adaptiveHeight: true,
+	// 		draggable: true,
+	// 		pageDots: false,
+	// 	});
+	// }
 
-	var showStrength = function() {
+	// var showStrength = function() {
 
-		if(($('body').hasClass('page-dentist') || $('body').hasClass('page-index')) && $('.strength-parent').length) {
+	// 	if(($('body').hasClass('page-dentist') || $('body').hasClass('page-index')) && $('.strength-parent').length) {
 			
-			$('.strength-parent').css('display', 'block');
-			$carousel.flickity('resize');
-		}
-	}
-	showStrength();
+	// 		$('.strength-parent').css('display', 'block');
+	// 		$carousel.flickity('resize');
+	// 	}
+	// }
+	// showStrength();
 
-	$('.black-overflow').click( function() {
-		if ($('.strength-button').length) {
-			$('.strength-button').removeClass('active');
-			$('.strength-parent').removeClass('active');
-			// $('.strength-wrapper').css('top', '100%');
-			$('.stretching-box').css('height', 0);
-		}		
-	});
+	// $('.black-overflow').click( function() {
+	// 	if ($('.strength-button').length) {
+	// 		$('.strength-button').removeClass('active');
+	// 		$('.strength-parent').removeClass('active');
+	// 		// $('.strength-wrapper').css('top', '100%');
+	// 		$('.stretching-box').css('height', 0);
+	// 	}		
+	// });
 
-	$('[event_category]').click( function() {
-		gtag('event', $(this).attr('event_action'), {
-            'event_category': $(this).attr('event_category'),
-            'event_label': $(this).attr('event_label'),
-        });
-	});
+	// $('[event_category]').click( function() {
+	// 	gtag('event', $(this).attr('event_action'), {
+    //         'event_category': $(this).attr('event_category'),
+    //         'event_label': $(this).attr('event_label'),
+    //     });
+	// });
 
-	$('.str-invite').click( function() {
-		$('.strength-button.active').trigger('click');
-		showPopup('popup-invite');
-	});
+	// $('.str-invite').click( function() {
+	// 	$('.strength-button.active').trigger('click');
+	// 	showPopup('popup-invite');
+	// });
 
-	$('.str-description').click( function() {
-		$('body, html').animate({
-            scrollTop: $('.profile-tabs').offset().top
-        }, 500);
-		$('.strength-button.active').trigger('click');
-		$('[data-tab="about"]').trigger('click');
-		$('.about-content[role="presenter"] a').trigger('click');
-		$('#dentist-description').css('box-shadow', '0px 0px 14px 2px #F44336');
-	});
+	// $('.str-description').click( function() {
+	// 	$('body, html').animate({
+    //         scrollTop: $('.profile-tabs').offset().top
+    //     }, 500);
+	// 	$('.strength-button.active').trigger('click');
+	// 	$('[data-tab="about"]').trigger('click');
+	// 	$('.about-content[role="presenter"] a').trigger('click');
+	// 	$('#dentist-description').css('box-shadow', '0px 0px 14px 2px #F44336');
+	// });
 
-	$('.str-socials').click( function() {
-		$('body, html').animate({
-            scrollTop: 0
-        }, 500);
-		$('.strength-button.active').trigger('click');
-		$('.open-edit:visible').trigger('click');
-		$('.social-wrap:visible').css('box-shadow', '0px 0px 13px -1px #F44336');
-	});
+	// $('.str-socials').click( function() {
+	// 	$('body, html').animate({
+    //         scrollTop: 0
+    //     }, 500);
+	// 	$('.strength-button.active').trigger('click');
+	// 	$('.open-edit:visible').trigger('click');
+	// 	$('.social-wrap:visible').css('box-shadow', '0px 0px 13px -1px #F44336');
+	// });
 
-	$('.str-team').click( function() {
-		$('.strength-button.active').trigger('click');
-		showPopup('add-team-popup');
-	});
+	// $('.str-team').click( function() {
+	// 	$('.strength-button.active').trigger('click');
+	// 	showPopup('add-team-popup');
+	// });
 
-	$('.str-photos').click( function() {
-		$('body, html').animate({
-            scrollTop: $('.profile-tabs').offset().top
-        }, 500);
-		$('.strength-button.active').trigger('click');
-		$('[data-tab="about"]').trigger('click');
-	});
+	// $('.str-photos').click( function() {
+	// 	$('body, html').animate({
+    //         scrollTop: $('.profile-tabs').offset().top
+    //     }, 500);
+	// 	$('.strength-button.active').trigger('click');
+	// 	$('[data-tab="about"]').trigger('click');
+	// });
 
-	$('.str-see-reviews').click( function() {
-		$('.strength-button.active').trigger('click');
-		$('[data-tab="reviews"]').trigger('click');
-		$('body, html').animate({
-            scrollTop: $('.written-wrapper').first().offset().top - 200
-        }, 500);
+	// $('.str-see-reviews').click( function() {
+	// 	$('.strength-button.active').trigger('click');
+	// 	$('[data-tab="reviews"]').trigger('click');
+	// 	$('body, html').animate({
+    //         scrollTop: $('.written-wrapper').first().offset().top - 200
+    //     }, 500);
 
   //       if(ajax_is_running) {
 		// 	return;
@@ -828,7 +785,7 @@ jQuery(document).ready(function($) {
 		// 	    ajax_is_running = false;
 		// 	}
 		// });
-	});
+	// });
 
 
     var hasNumber = function(myString) {
@@ -1078,6 +1035,45 @@ jQuery(document).ready(function($) {
     		showPopup('failed-popup');
     	}
     });
+
+
+    //working hours
+	
+	editWorkingHours = function() {
+
+		$('.work-hour-cb').change( function() {
+			var closed = $(this).is(':checked');
+			var texts = $(this).closest('.col').find('select');
+	
+			if(closed) {
+				texts.addClass('grayed');
+				// texts.attr('disabled', 'disabled');
+			} else {
+				texts.removeClass('grayed');
+				// texts.prop("disabled", false);
+			}
+		});
+
+		$('.edit-working-hours-wrap select').on('change click',  function() {
+			$(this).closest('.edit-working-hours-wrap').find('input').prop('checked', true);
+			$(this).closest('.edit-working-hours-wrap').find('input').closest('label').addClass('active');
+			$(this).closest('.edit-working-hours-wrap').find('select').removeClass('grayed');
+			$(this).closest('.edit-working-hours-wrapper').find('.work-hour-cb').prop('checked', false);
+			$(this).closest('.edit-working-hours-wrapper').find('.work-hour-cb').closest('label').removeClass('active');
+		});
+
+		$('.all-days-equal').click( function() {
+			for (var i = 2; i<6; i++) {
+				$('#day-'+i).click();
+					
+				$('[name="work_hours['+i+'][0][0]"]').val($('[name="work_hours[1][0][0]"]').val());
+				$('[name="work_hours['+i+'][0][1]"]').val($('[name="work_hours[1][0][1]"]').val());
+				$('[name="work_hours['+i+'][1][0]"]').val($('[name="work_hours[1][1][0]"]').val());
+				$('[name="work_hours['+i+'][1][1]"]').val($('[name="work_hours[1][1][1]"]').val());
+			}
+		});
+	}
+    //end working hours
 	
 	// setTimeout( function() {
 

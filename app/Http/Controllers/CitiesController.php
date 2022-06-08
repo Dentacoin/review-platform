@@ -431,16 +431,22 @@ class CitiesController extends BaseController {
 	        });
 		}
 
-        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')
-		->whereIn('status', config('dentist-statuses.shown_with_link'))
+        $dentists = $dentists->whereIn('status', config('dentist-statuses.shown_with_link'))
+		->where(function($query) use ($invitedentist) {
+			$query->where('name', 'like', '%'.$invitedentist.'%')
+			->orWhere('name_alternative', 'like', '%'.$invitedentist.'%');
+		})
 		->whereNull('self_deleted')
-		->take(10)
+		->take(6)
 		->get();
 
 		$dentist_list = [];
 		foreach ($dentists as $dentist) {
 			$dentist_list[] = [
 				'name' => $dentist->getNames(),
+				'avatar' => $dentist->getImageUrl(true),
+				'location' => $dentist->getLocation(),
+				'is_partner' => $dentist->is_partner,
 				'id' => $dentist->id,
 			];
 		}

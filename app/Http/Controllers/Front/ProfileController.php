@@ -571,7 +571,8 @@ class ProfileController extends FrontController {
                         }
                     }
 
-                    $dentists_with_same_name = User::where('is_dentist', true)->where('is_clinic', '!=', 1)->where(function($query) use ($username) {
+                    $dentists_with_same_name = User::where('is_dentist', true)
+                    ->where('is_clinic', '!=', 1)->where(function($query) use ($username) {
                         $query->where('name', 'LIKE', $username)
                         ->orWhere('name_alternative', 'LIKE', $username);
                     })->whereIn('status', config('dentist-statuses.dentist_approved'))
@@ -596,7 +597,7 @@ class ProfileController extends FrontController {
                         return Response::json( [
                             'success' => true,
                             'dentists' => $user_list
-                        ] );
+                        ]);
                     }
                 }
 
@@ -787,6 +788,13 @@ class ProfileController extends FrontController {
                 $newteam->save();
 
                 if(!empty(Request::input('email'))) {
+
+                    if(!empty(Request::input('team-speciality')) || Request::input('team-speciality') == 0) {
+                        $newc = new UserCategory;
+                        $newc->user_id = $newuser->id;
+                        $newc->category_id = Request::input('team-speciality');
+                        $newc->save();
+                    }
 
                     if(!empty($this->user)) {
                         $newuser->slug = $newuser->makeSlug();

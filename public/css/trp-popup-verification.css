@@ -1,105 +1,280 @@
+.open-hours-section.edit-mode .work-hours .col .edit-working-hours-wrapper {
+  display: block; }
+.open-hours-section.edit-mode .work-hours .col .working-hours-wrap {
+  display: none; }
+.open-hours-section .work-hours {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px; }
+  @media screen and (max-width: 998px) {
+    .open-hours-section .work-hours {
+      overflow-x: scroll; } }
+  @media screen and (max-width: 768px) {
+    .open-hours-section .work-hours {
+      display: flex;
+      overflow: initial;
+      flex-flow: row wrap;
+      margin-left: -15px;
+      margin-right: -15px;
+      border-top: none; } }
+  .open-hours-section .work-hours.force-wrap {
+    display: flex;
+    flex-flow: row wrap; }
+    .open-hours-section .work-hours.force-wrap .col {
+      max-width: 25%; }
+      .open-hours-section .work-hours.force-wrap .col .edit-working-hours-wrapper .edit-working-hours-wrap select {
+        width: 66px; }
+      .open-hours-section .work-hours.force-wrap .col label {
+        padding-left: 6px;
+        min-width: 120px; }
+  .open-hours-section .work-hours .col {
+    border-right: 2px solid #e2ebff; }
+    @media screen and (max-width: 1200px) {
+      .open-hours-section .work-hours .col {
+        max-width: 140px; } }
+    @media screen and (max-width: 768px) {
+      .open-hours-section .work-hours .col {
+        min-width: 50%;
+        max-width: 50%; } }
+    .open-hours-section .work-hours .col.active p {
+      color: #0084d1; }
+    .open-hours-section .work-hours .col:first-child .month {
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      border-left: 1px solid #0084d1; }
+      @media screen and (max-width: 768px) {
+        .open-hours-section .work-hours .col:first-child .month {
+          border-radius: 0px; } }
+    .open-hours-section .work-hours .col:last-child {
+      border-right: none; }
+      .open-hours-section .work-hours .col:last-child .month {
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        border-right: 1px solid #0084d1; }
+        @media screen and (max-width: 768px) {
+          .open-hours-section .work-hours .col:last-child .month {
+            border-radius: 0px; } }
+    .open-hours-section .work-hours .col .month {
+      font-size: 16px;
+      font-weight: 900;
+      color: #332255;
+      background-color: #f2f6ff;
+      border-bottom: 1px solid #0084d1;
+      border-top: 1px solid #0084d1;
+      padding: 7px 16px; }
+      @media screen and (max-width: 768px) {
+        .open-hours-section .work-hours .col .month {
+          border-top: 1px solid #0084d1; } }
+    .open-hours-section .work-hours .col p {
+      padding: 14px 16px 7px; }
+      @media screen and (max-width: 768px) {
+        .open-hours-section .work-hours .col p {
+          padding: 14px 16px 14px; } }
+    .open-hours-section .work-hours .col label {
+      display: block;
+      padding-left: 26px;
+      margin-bottom: 15px; }
+    .open-hours-section .work-hours .col .edit-working-hours-wrapper {
+      display: none; }
+      .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap {
+        display: none;
+        display: flex;
+        align-items: center;
+        flex-flow: row wrap;
+        justify-content: center;
+        margin-top: 10px; }
+        .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select {
+          width: 56px;
+          padding: 0px;
+          display: inline-block;
+          margin-right: 5px; }
+          @media screen and (max-width: 768px) {
+            .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select {
+              width: 65px; } }
+          .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select:nth-child(2n) {
+            margin-right: 0px; }
+          .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select.grayed {
+            background-color: #eee; }
+
 .verification-popup .popup-inner {
   padding: 40px 60px;
-  box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8); }
+  box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
+  width: 700px; }
   @media screen and (max-width: 768px) {
     .verification-popup .popup-inner {
       padding: 20px 30px; } }
-  .verification-popup .popup-inner .close-popup {
-    position: absolute;
-    right: 15px;
-    top: 15px; }
-    .verification-popup .popup-inner .close-popup i {
-      font-size: 25px;
-      color: #424242; }
-  .verification-popup .popup-inner .alert {
-    margin-bottom: 20px; }
-  .verification-popup .popup-inner .verification-content {
+  .verification-popup .popup-inner .verification-content h2 {
     text-align: center;
-    padding: 20px 80px 0px; }
-    @media screen and (max-width: 998px) {
-      .verification-popup .popup-inner .verification-content {
-        padding: 20px 20px 0px; } }
-    @media screen and (max-width: 768px) {
-      .verification-popup .popup-inner .verification-content {
-        padding: 0px; } }
-    .verification-popup .popup-inner .verification-content img {
-      max-height: 80px;
-      margin-bottom: 20px; }
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #0564c6;
+    font-weight: 900;
+    max-width: 510px;
+    margin-left: auto;
+    margin-right: auto; }
+  .verification-popup .popup-inner .verification-content .popup-desc {
+    font-size: 18px;
+    color: #332255;
+    margin-bottom: 20px; }
+    .verification-popup .popup-inner .verification-content .popup-desc span {
+      font-size: 18px;
+      font-weight: 900;
+      color: #0564c6; }
+  .verification-popup .popup-inner .verification-content .step-buttons {
+    margin-top: 50px; }
+    .verification-popup .popup-inner .verification-content .step-buttons a, .verification-popup .popup-inner .verification-content .step-buttons button {
+      text-transform: none;
+      width: 250px;
+      padding: 11px 20px 12px; }
       @media screen and (max-width: 768px) {
-        .verification-popup .popup-inner .verification-content img {
-          max-height: 50px; } }
-    .verification-popup .popup-inner .verification-content h2 {
-      font-weight: bold;
-      text-transform: uppercase;
-      color: black;
-      margin-bottom: 25px; }
+        .verification-popup .popup-inner .verification-content .step-buttons a, .verification-popup .popup-inner .verification-content .step-buttons button {
+          width: auto;
+          padding: 11px 33px 12px; } }
+    .verification-popup .popup-inner .verification-content .step-buttons a {
+      margin-right: 10px; }
       @media screen and (max-width: 768px) {
-        .verification-popup .popup-inner .verification-content h2 {
-          margin-top: 0px; } }
-    .verification-popup .popup-inner .verification-content h4 {
-      color: #333333; }
-      @media screen and (max-width: 768px) {
-        .verification-popup .popup-inner .verification-content h4 {
-          font-size: 16px;
-          margin-bottom: 25px; } }
-  .verification-popup .popup-inner #clinic-add-team form {
-    margin-bottom: 30px; }
-    .verification-popup .popup-inner #clinic-add-team form .flex {
-      margin: 0px -10px; }
-    .verification-popup .popup-inner #clinic-add-team form .col {
-      margin: 0px 10px; }
-  .verification-popup .popup-inner .info {
-    margin-bottom: 24px;
+        .verification-popup .popup-inner .verification-content .step-buttons a {
+          margin-right: 5px; } }
+  .verification-popup .popup-inner .verification-content .invite-manual {
     display: flex;
-    align-items: center; }
-    .verification-popup .popup-inner .info img {
-      margin-right: 5px; }
-  .verification-popup .popup-inner .verification-info {
-    border-top: 1px solid black;
-    padding: 30px 65px 0px; }
-    @media screen and (max-width: 998px) {
-      .verification-popup .popup-inner .verification-info {
-        padding: 30px 20px 0px; } }
-    @media screen and (max-width: 768px) {
-      .verification-popup .popup-inner .verification-info {
-        padding: 20px 0px 0px; } }
-    .verification-popup .popup-inner .verification-info h2 {
-      color: black;
-      font-weight: bold;
-      margin-bottom: 40px; }
-      @media screen and (max-width: 768px) {
-        .verification-popup .popup-inner .verification-info h2 {
-          margin-top: 0px;
-          margin-bottom: 20px; } }
+    align-items: center;
+    color: #0084d1;
+    font-size: 18px; }
+    .verification-popup .popup-inner .verification-content .invite-manual img {
+      width: 26px;
+      margin-right: 10px; }
+  .verification-popup .popup-inner .verification-content #clinic-add-team {
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto; }
+    .verification-popup .popup-inner .verification-content #clinic-add-team form {
+      margin-bottom: 30px; }
+      .verification-popup .popup-inner .verification-content #clinic-add-team form .upload-image-wrapper {
+        margin-bottom: 30px;
+        margin-right: 10px; }
+      .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label {
+        background-color: #f4f7ff;
+        border: 1px solid #0084d1;
+        width: 150px;
+        border-radius: 10px;
+        height: 150px; }
+        .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label .plus-gallery-image {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translateX(-50%) translateY(-50%);
+          text-align: center;
+          width: 99%; }
+          .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label .plus-gallery-image .add-gallery-icon {
+            width: 70px; }
+          .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label .plus-gallery-image span {
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            color: #0084d1;
+            margin-top: 10px; }
+            .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label .plus-gallery-image span img {
+              vertical-align: middle;
+              width: 13px; }
+      .verification-popup .popup-inner .verification-content #clinic-add-team form .dentist-suggester {
+        height: 60px;
+        line-height: 60px; }
+      .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results {
+        margin-top: 0px;
+        background-color: white; }
+        .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a {
+          display: block;
+          padding-left: 20px;
+          padding-bottom: 7px;
+          padding-top: 6px;
+          transition: all 0.3s ease; }
+          .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a.active, .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a:hover {
+            background-color: #e2ebff;
+            transition: all 0.3s ease; }
+          .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-image-dentist {
+            width: 50px; }
+            @media screen and (max-width: 768px) {
+              .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-image-dentist {
+                width: 40px; } }
+            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-image-dentist img {
+              max-width: 100%;
+              display: block;
+              border-radius: 50%;
+              position: relative;
+              z-index: 1;
+              box-shadow: 0px 0px 10px 2px #f3f3f3; }
+          .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist {
+            flex: 1;
+            text-align: left;
+            margin-left: 10px; }
+            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist p {
+              font-weight: 800;
+              color: #332255;
+              margin-bottom: 6px;
+              margin-top: 4px;
+              text-transform: capitalize; }
+              @media screen and (max-width: 768px) {
+                .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist p {
+                  margin-bottom: 0px;
+                  margin-top: 0px; } }
+              .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist p span {
+                color: #0084d1;
+                font-size: 16px; }
+            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist span {
+              font-size: 14px;
+              color: #555555; }
+          .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper {
+            display: flex;
+            background-color: #0084d1;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            border-top-left-radius: 13px;
+            border-bottom-left-radius: 13px;
+            padding: 4px 10px; }
+            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper img {
+              width: 13px;
+              margin-right: 4px; }
+            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper span {
+              color: white;
+              font-size: 13px;
+              margin-right: 3px; }
+              @media screen and (max-width: 768px) {
+                .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper span {
+                  display: none; } }
+      .verification-popup .popup-inner .verification-content #clinic-add-team form .specializations-col {
+        margin-left: 10px; }
+        @media screen and (max-width: 768px) {
+          .verification-popup .popup-inner .verification-content #clinic-add-team form .specializations-col {
+            margin-left: 0px; } }
+      .verification-popup .popup-inner .verification-content #clinic-add-team form .invite-existing-dentist {
+        background-color: #ffffff;
+        border: 1px solid #14cab8;
+        color: #14cab8;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 11px 43px 13px;
+        display: inline-block;
+        border-radius: 40px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        width: 193px;
+        margin-right: 10px; }
+        @media screen and (max-width: 768px) {
+          .verification-popup .popup-inner .verification-content #clinic-add-team form .invite-existing-dentist {
+            padding: 11px 22px 13px;
+            width: auto;
+            margin-right: 2px; } }
+      .verification-popup .popup-inner .verification-content #clinic-add-team form .green-button {
+        padding: 10px 43px 12px; }
+  .verification-popup .popup-inner .verification-content textarea {
+    height: 200px; }
+  .verification-popup .popup-inner .verification-content .alert {
+    margin-bottom: 20px; }
   @media screen and (max-width: 768px) {
-    .verification-popup .popup-inner .avatar-name-wrapper,
-    .verification-popup .popup-inner .image-big-error {
-      max-width: 180px;
+    .verification-popup .popup-inner .verification-content .avatar-name-wrapper,
+    .verification-popup .popup-inner .verification-content .image-big-error {
+      max-width: 150px;
       margin-left: auto;
       margin-right: auto; } }
-  .verification-popup .popup-inner form .big-button {
-    padding: 15px 90px; }
-    @media screen and (max-width: 998px) {
-      .verification-popup .popup-inner form .big-button {
-        padding: 9px 70px; } }
-  .verification-popup .popup-inner form .button-white {
-    text-align: center; }
-  .verification-popup .popup-inner form .invite-clinic-buttons {
-    max-width: 430px;
-    margin: 0 auto;
-    padding-bottom: 25px;
-    border-bottom: 1px solid black;
-    margin-bottom: 30px;
-    display: flex; }
-    .verification-popup .popup-inner form .invite-clinic-buttons .col {
-      flex: 1; }
-      .verification-popup .popup-inner form .invite-clinic-buttons .col:first-child {
-        margin-right: 5px; }
-    .verification-popup .popup-inner form .invite-clinic-buttons .button {
-      padding: 15px;
-      width: 100%;
-      display: block;
-      border: 2px solid #126585; }
-      @media screen and (max-width: 998px) {
-        .verification-popup .popup-inner form .invite-clinic-buttons .button {
-          padding: 7px; } }
