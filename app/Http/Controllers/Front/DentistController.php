@@ -1092,32 +1092,34 @@ class DentistController extends FrontController {
                         }
                         $user->save();
 
-                        $user->product_news = ['dentacoin', 'trp'];
-                        $user->save();
+                        if(config('trp.add_to_sendgrid_list')) {
+                            $user->product_news = ['dentacoin', 'trp'];
+                            $user->save();
 
-                        //add to dcn sendgrid list
-                        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-                        $user_info = new \stdClass();
-                        $user_info->email = $user->email;
-                        $user_info->title = $user->title ? config('titles')[$user->title] : 'Dr';
-                        $user_info->first_name = explode(' ', $user->name)[0];
-                        $user_info->last_name = isset(explode(' ', $user->name)[1]) ? explode(' ', $user->name)[1] : '';
-                        $user_info->type = 'dentist';
-                        $user_info->partner = $user->is_partner ? 'yes' : 'no';
-
-                        $request_body = [
-                            $user_info
-                        ];
-                        $response = $sg->client->contactdb()->recipients()->post($request_body);
-                        $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
-
-                        //add to list
-                        if($recipient_id) {
-
+                            //add to dcn sendgrid list
                             $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-                            $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
-                            $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+
+                            $user_info = new \stdClass();
+                            $user_info->email = $user->email;
+                            $user_info->title = $user->title ? config('titles')[$user->title] : 'Dr';
+                            $user_info->first_name = explode(' ', $user->name)[0];
+                            $user_info->last_name = isset(explode(' ', $user->name)[1]) ? explode(' ', $user->name)[1] : '';
+                            $user_info->type = 'dentist';
+                            $user_info->partner = $user->is_partner ? 'yes' : 'no';
+
+                            $request_body = [
+                                $user_info
+                            ];
+                            $response = $sg->client->contactdb()->recipients()->post($request_body);
+                            $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+                            //add to list
+                            if($recipient_id) {
+
+                                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                                $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
+                                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+                            }
                         }
 
                         $existing_anonymous = AnonymousUser::where('email', 'LIKE', $user->email)->first();

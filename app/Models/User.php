@@ -1390,7 +1390,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
             $this->save();
 
-            if(!empty($this->email)) {
+            if(!empty($this->email) && config('trp.add_to_sendgrid_list')) {
 
                 $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
 
@@ -1417,7 +1417,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
         } else {
 
-            if(!empty($this->email)) {
+            if(!empty($this->email) && config('trp.add_to_sendgrid_list')) {
 
                 $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
 
@@ -1448,7 +1448,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
     public function sendgridSubscribeToGroup($platform) {
 
-        if(!empty($this->email)) {
+        if(!empty($this->email) && config('trp.add_to_sendgrid_list')) {
             $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
             $group_id = config('email-preferences')['product_news'][$platform]['sendgrid_group_id'];
             $email = $this->email;

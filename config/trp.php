@@ -1,6 +1,9 @@
 <?php
 
 return [
+	
+	'add_to_sendgrid_list' => false, //false from 09.06.22
+	
 	'social_network' => [
 		'facebook' => 'facebook',
 		'linkedin' => 'linkedin',

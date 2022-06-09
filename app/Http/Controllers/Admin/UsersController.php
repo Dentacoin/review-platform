@@ -1496,32 +1496,34 @@ class UsersController extends AdminController {
         $item->verified_on = Carbon::now();
         $item->save();
 
-        $item->product_news = ['dentacoin', 'trp'];
-        $item->save();
+        if(config('trp.add_to_sendgrid_list')) {
+            $item->product_news = ['dentacoin', 'trp'];
+            $item->save();
 
-        //add to dcn sendgrid list
-        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-        $user_info = new \stdClass();
-        $user_info->email = $item->email;
-        $user_info->title = $item->title ? config('titles')[$item->title] : '';
-        $user_info->first_name = explode(' ', $item->name)[0];
-        $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
-        $user_info->type = 'dentist';
-        $user_info->partner = $item->is_partner ? 'yes' : 'no';
-
-        $request_body = [
-            $user_info
-        ];
-
-        $response = $sg->client->contactdb()->recipients()->post($request_body);
-        $recipient_id = isset(json_decode($response->body())->persisted_recipients[0]) ? json_decode($response->body())->persisted_recipients[0] : null;
-
-        //add to list
-        if($recipient_id) {
+            //add to dcn sendgrid list
             $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-            $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
-            $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+
+            $user_info = new \stdClass();
+            $user_info->email = $item->email;
+            $user_info->title = $item->title ? config('titles')[$item->title] : '';
+            $user_info->first_name = explode(' ', $item->name)[0];
+            $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
+            $user_info->type = 'dentist';
+            $user_info->partner = $item->is_partner ? 'yes' : 'no';
+
+            $request_body = [
+                $user_info
+            ];
+
+            $response = $sg->client->contactdb()->recipients()->post($request_body);
+            $recipient_id = isset(json_decode($response->body())->persisted_recipients[0]) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+            //add to list
+            if($recipient_id) {
+                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
+                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+            }
         }
 
         if($item->is_clinic && $item->team_new_clinic->isNotEmpty()) {
@@ -2519,26 +2521,29 @@ class UsersController extends AdminController {
 
             //create recipients
             $item->removeFromSendgridSubscribes();
-            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
 
-            $user_info = new \stdClass();
-            $user_info->email = $item->email;
-            $user_info->first_name = explode(' ', $item->name)[0];
-            $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
-            $user_info->type = 'patient';
-
-            $request_body = [
-                $user_info
-            ];
-
-            $response = $sg->client->contactdb()->recipients()->post($request_body);
-            $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
-
-            //add to list
-            if($recipient_id) {
+            if(config('trp.add_to_sendgrid_list')) {
                 $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-                $list_id = config('email-preferences')['product_news']['vox']['sendgrid_list_id'];
-                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+
+                $user_info = new \stdClass();
+                $user_info->email = $item->email;
+                $user_info->first_name = explode(' ', $item->name)[0];
+                $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
+                $user_info->type = 'patient';
+
+                $request_body = [
+                    $user_info
+                ];
+
+                $response = $sg->client->contactdb()->recipients()->post($request_body);
+                $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+                //add to list
+                if($recipient_id) {
+                    $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                    $list_id = config('email-preferences')['product_news']['vox']['sendgrid_list_id'];
+                    $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+                }
             }
         }
 
