@@ -182,14 +182,15 @@ class RegisterController extends FrontController {
     }
 
     /**
-     * after register popup - add a description
+     * after register popup - add working hours
      */
     public function verificationDentistWorkHours($locale=null) {
-        if (request('user_id') && !empty(User::find(request('user_id'))) && !empty(request('user_hash'))) {
 
-            $user = User::find(request('user_id'));
+        if (request('last_user_id') && !empty(User::find(request('last_user_id'))) && !empty(request('last_user_hash'))) {
 
-            if($user->get_token() == request('user_hash') && !empty(Request::input('work_hours'))) {
+            $user = User::find(request('last_user_id'));
+
+            if($user->get_token() == request('last_user_hash') && !empty(Request::input('work_hours'))) {
 
                 $wh = Request::input('work_hours');
                     
