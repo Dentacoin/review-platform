@@ -26,6 +26,7 @@ $(document).ready(function() {
             $('.tab-title[data-tab="reviews"]').addClass('grayed');
             $('.patients-tab').addClass('grayed');
             $('[data-popup-logged="popup-invite"]').addClass('disabled-button');
+            $('[data-popup-logged="popup-widget"]').addClass('disabled-button');
             $('.add-branch').addClass('disabled-button');
 
         } else {
@@ -37,6 +38,7 @@ $(document).ready(function() {
             }
             $('.patients-tab').removeClass('grayed');
             $('[data-popup-logged="popup-invite"]').removeClass('disabled-button');
+            $('[data-popup-logged="popup-widget"]').removeClass('disabled-button');
             $('.add-branch').removeClass('disabled-button');
         }
     });
