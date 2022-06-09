@@ -189,50 +189,30 @@ class RegisterController extends FrontController {
 
             $user = User::find(request('user_id'));
 
-            if($user->get_token() == request('user_hash')) {
+            if($user->get_token() == request('user_hash') && !empty(Request::input('work_hours'))) {
 
-                $validator = Validator::make(Request::all(), [
-                    'description' => array('required', 'max:512'),
-                ]);
-
-                if ($validator->fails()) {
-
-                    $msg = $validator->getMessageBag()->toArray();
-                    $ret = array(
-                        'success' => false,
-                        'messages' => array()
-                    );
-
-                    foreach ($msg as $field => $errors) {
-                        $ret['messages'][$field] = implode(', ', $errors);
+                $wh = Request::input('work_hours');
+                    
+                foreach ($wh as $k => $v) {
+                    if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) || !empty(Request::input('day_'.$k))) { 
+                        unset($wh[$k]);
+                        continue;
                     }
 
-                    return Response::json( $ret );
-                } else {
-
-                    $wh = Request::input('work_hours');
-                        
-                    foreach ($wh as $k => $v) {
-                        if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) || !empty(Request::input('day_'.$k))) { 
-                            unset($wh[$k]);
-                            continue;
-                        }
-
-                        if( !empty($wh[$k][0]) && empty(Request::input('day_'.$k))) {
-                            $wh[$k][0] = implode(':', $wh[$k][0]);
-                        }
-                        if( !empty($wh[$k][1]) && empty(Request::input('day_'.$k)) ) {
-                            $wh[$k][1] = implode(':', $wh[$k][1]);
-                        }
+                    if( !empty($wh[$k][0]) && empty(Request::input('day_'.$k))) {
+                        $wh[$k][0] = implode(':', $wh[$k][0]);
                     }
-
-                    $user->work_hours = $wh;
-                    $user->save();
-
-                    return Response::json( [
-                        'success' => true,
-                    ]);
+                    if( !empty($wh[$k][1]) && empty(Request::input('day_'.$k)) ) {
+                        $wh[$k][1] = implode(':', $wh[$k][1]);
+                    }
                 }
+
+                $user->work_hours = $wh;
+                $user->save();
+
+                return Response::json( [
+                    'success' => true,
+                ]);
             }
         }
 
