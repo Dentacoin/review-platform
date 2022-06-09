@@ -71,7 +71,7 @@
 							placeholder="Search for registered dental professionals">
 
 							<div class="suggest-results"></div>
-							
+
 							<input 
 							type="hidden" 
 							class="suggester-hidden" 
@@ -155,7 +155,8 @@
 											@endforeach
 										</select>
 										<label for="team-member-job">
-											<span>{{ trans('trp.popup.verification-popup.add-team-position') }}:</span>
+											{{-- <span>{{ trans('trp.popup.verification-popup.add-team-position') }}:</span> --}}
+											<span>Select Position:</span>
 										</label>
 									</div>
 								</div>
@@ -170,7 +171,8 @@
 									name="email" 
 									placeholder="{{ trans('trp.common.optional') }}"/>
 									<label for="team-member-email">
-										<span>{{ trans('trp.popup.verification-popup.add-team-email') }}</span>
+										{{-- <span>{{ trans('trp.popup.verification-popup.add-team-email') }}</span> --}}
+										<span>Enter Email:</span>
 									</label>
 								</div>
 								</div>

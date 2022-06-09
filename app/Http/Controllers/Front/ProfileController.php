@@ -610,7 +610,7 @@ class ProfileController extends FrontController {
                         ]);
                     }
 
-                    $valid_email = $this->user->sendgridEmailValidation(92, Request::input('email'));
+                    $valid_email = $current_user->sendgridEmailValidation(92, Request::input('email'));
 
                     if(!$valid_email) {
                         return Response::json([
