@@ -2079,15 +2079,6 @@ footer {
       @media screen and (max-width: 998px) {
         .popup .popup-inner .hidden {
           display: none; } }
-    .popup .popup-inner .option-span {
-      display: block;
-      font-weight: 300;
-      font-size: 16px;
-      line-height: 24px; }
-      .popup .popup-inner .option-span b {
-        color: #116587;
-        margin-right: 5px;
-        font-size: 18px; }
     .popup .popup-inner .search-dentist {
       margin-top: 40px;
       margin-bottom: 30px;

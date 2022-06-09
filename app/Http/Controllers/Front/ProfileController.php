@@ -575,7 +575,8 @@ class ProfileController extends FrontController {
                     ->where('is_clinic', '!=', 1)->where(function($query) use ($username) {
                         $query->where('name', 'LIKE', $username)
                         ->orWhere('name_alternative', 'LIKE', $username);
-                    })->whereIn('status', config('dentist-statuses.dentist_approved'))
+                    })
+                    // ->whereIn('status', config('dentist-statuses.dentist_approved'))
                     ->whereNull('self_deleted');
 
                     if (!empty($team_ids)) {

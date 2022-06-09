@@ -1,30 +1,20 @@
-<div class="popup fixed-popup" id="popup-widget">
+<div class="popup no-image" id="popup-widget" scss-load="trp-popup-widget" js-load="widget">
 	<div class="popup-inner inner-white">
-		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup">
-				<img src="{{ url('img/close-icon.png') }}"/>
-			</a>
-		</div>
 
-		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
-		</div>
-		<h2 class="hide-fb">{!! nl2br(trans('trp.popup.popup-widget.title')) !!}</h2>
+		<a href="javascript:;" class="close-popup">
+			<img src="{{ url('img/close-icon.png') }}"/>
+		</a>
+
+		<h2 class="hide-fb mont">{!! nl2br(trans('trp.popup.popup-widget.title')) !!}</h2>
 		
 		@if(false)
 			<h2 class="show-fb" style="display: none;">{!! nl2br(trans('trp.popup.popup-widget.facebook-title')) !!}</h2>
 		@endif
 
-		<h4 class="popup-title hide-fb">{!! nl2br(trans('trp.popup.popup-widget.subtitle')) !!}</h4>
-		
-		@if(false)
-			<h4 class="popup-title show-fb" style="display: none;">{!! nl2br(trans('trp.popup.popup-widget.facebook-subtitle')) !!}</h4>
-		@endif
-
 		<div class="widget-step widget-step-1">
-			<p class="popup-desc">
+			<h5>
 				{!! nl2br(trans('trp.popup.popup-widget.hint')) !!}
-			</p>
+			</h5>
 
 			<h3 class="widget-step-title">{!! nl2br(trans('trp.popup.popup-widget.step1.title')) !!}</h3>
 			<p class="step-description">{!! nl2br(trans('trp.popup.popup-widget.step1.subtitle')) !!}</p>
@@ -113,7 +103,7 @@
 				</div>
 
 				<div class="tac widget-button-next-wrap">
-					<a href="javascript:;" class="button widget-button widget-layout-button with-layout" to-step="2">{!! trans('trp.common.next') !!} > </a>
+					<a href="javascript:;" class="blue-button widget-button widget-layout-button with-layout" to-step="2">{!! trans('trp.common.next') !!} > </a>
 				</div>
 			</div>
 		</div>
@@ -193,9 +183,9 @@
 								<span class="modern-radio">
 									<span></span>
 								</span>
-						    	<input class="type-radio-widget-first" type="radio" name="review-type" id="trusted-reviews" value="trusted">
+						    	<input class="type-radio-widget-first" type="radio" name="review-type" id="trusted-reviews" value="trusted"/>
 						    	<span>{!! nl2br(trans('trp.popup.popup-widget.reviews.trusted')) !!}</span>
-						    	<img class="tooltip-text info" text="{!! nl2br(trans('trp.popup.popup-widget.reviews.trusted.hint')) !!}" src="{{ url('img-trp/info-light.png') }}">
+						    	<img class="tooltip-text info" text="{!! nl2br(trans('trp.popup.popup-widget.reviews.trusted.hint')) !!}" src="{{ url('img-trp/info-dark-gray.png') }}"/>
 						    	<a href="javascript:;" class="open-hidden-option">
 									<img src="{{ url('img/caret-down.svg') }}"/>
 								</a>
@@ -263,9 +253,9 @@
 
 				<div class="alert fbtab-alert" style="display: none; margin-top: 20px; margin-bottom: 20px;">{!! nl2br(trans('trp.popup.popup-widget.reviews.fb.error')) !!}</div>
 
-				<div class="tac get-widget-code-wrap">
-					<a href="javascript:;" class="button widget-button back-widget" to-step="1">< {!! nl2br(trans('trp.page.invite.popup.success.button')) !!}</a>
-					<a href="javascript:;" class="button get-widget-code hide-fb">{!! nl2br(trans('trp.popup.popup-widget.get-code')) !!}</a>
+				<div class="tac get-widget-code-wrap step-buttons">
+					<a href="javascript:;" class="white-button widget-button back-widget" to-step="1">< {!! nl2br(trans('trp.page.invite.popup.success.button')) !!}</a>
+					<a href="javascript:;" class="blue-button get-widget-code hide-fb">{!! nl2br(trans('trp.popup.popup-widget.get-code')) !!}</a>
 					
 					@if(false)
 						<a href="javascript:;" class="button fb-tab-submit show-fb" fb-url="{{ getLangUrl('dentist-fb-tab') }}">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
@@ -281,21 +271,17 @@
 					<div class="alert mobile-alert alert-warning widget-tab-alert" style="display: none;">
 						{!! nl2br(trans('trp.popup.popup-widget.widget-options.subtitle')) !!}
 					</div>
-
+					
 					<div class="popup-tabs widget-tabs flex flex-mobile">
 						<a class="active col" href="javascript:;" data-widget="simple">
 							{!! nl2br(trans('trp.popup.popup-widget.simple')) !!}
-							
-							<p>
-								{!! nl2br(trans('trp.popup.popup-widget.simple-hint')) !!}
-							</p>
+							<img class="tooltip-text info" text="{!! nl2br(trans('trp.popup.popup-widget.simple-hint')) !!}" src="{{ url('img-trp/info-dark-gray.png') }}"/>
+							<span>✓</span>
 						</a>
 						<a class="col" href="javascript:;" data-widget="flexible">
 							{!! nl2br(trans('trp.popup.popup-widget.flexible')) !!}
-							
-							<p>
-								{!! nl2br(trans('trp.popup.popup-widget.flexible-hint')) !!}
-							</p>
+							<img class="tooltip-text info" text="{!! nl2br(trans('trp.popup.popup-widget.flexible-hint')) !!}" src="{{ url('img-trp/info-dark-gray.png') }}"/>
+							<span>✓</span>
 						</a>
 					</div>
 
@@ -303,25 +289,25 @@
 
 						<div id="widget-option-simple" class="widget-content" style="">
 							<div id="option-iframe" class="option-div">
-								<span class="option-span"><b>01</b>
+								<span class="option-span">
 									{!! nl2br(trans('trp.popup.popup-widget.step-2-simple-1')) !!}
 								</span>
-								<span class="option-span"><b>02</b>
+								<span class="option-span">
 									{!! nl2br(trans('trp.popup.popup-widget.step-2-simple-2')) !!}
 								</span>
-								<span class="option-span"><b>03</b>
+								<span class="option-span">
 									{!! nl2br(trans('trp.popup.popup-widget.step-2-simple-3')) !!}
 								</span>
-								<span class="option-span"><b>04</b>
+								<span class="option-span">
 									{!! nl2br(trans('trp.popup.popup-widget.step-2-simple-4')) !!}
 								</span>
-								<span class="option-span"><b>05</b>
+								<span class="option-span">
 									{!! nl2br(trans('trp.popup.popup-widget.step-2-simple-5')) !!}
 								</span>
-								<span class="option-span"><b>06</b>
+								<span class="option-span">
 									{!! nl2br(trans('trp.popup.popup-widget.step-2-simple-6')) !!}
 								</span>
-								<span class="option-span"><b>07</b>
+								<span class="option-span">
 						  			{!! nl2br(trans('trp.popup.popup-widget.step-3')) !!}				  			
 						  		</span>
 								<br/><br/>
@@ -342,16 +328,16 @@
 
 						<div id="widget-option-flexible" class="widget-content" style="display: none;">
 							<div id="option-js" class="option-div">
-						  		<span class="option-span"><b>01</b>
+						  		<span class="option-span">
 						  			{!! nl2br(trans('trp.popup.popup-widget.step-2-flexible-1')) !!}
 						  		</span>
-								<span class="option-span"><b>02</b>
+								<span class="option-span">
 						  			{!! nl2br(trans('trp.popup.popup-widget.step-2-flexible-2')) !!}
 						  		</span>
-								<span class="option-span"><b>03</b>
+								<span class="option-span">
 						  			{!! nl2br(trans('trp.popup.popup-widget.step-2-flexible-3')) !!}				  			
 						  		</span>
-								<span class="option-span"><b>04</b>
+								<span class="option-span">
 						  			{!! nl2br(trans('trp.popup.popup-widget.step-3')) !!}				  			
 						  		</span>
 								<br/><br/>
@@ -364,14 +350,12 @@
 							</div>
 						</div>
 					</div>
-					<div class="tac">
-						<a href="javascript:;" class="button widget-button back-widget" to-step="1">< {!! nl2br(trans('trp.page.invite.popup.success.button')) !!}</a>
-						<a href="javascript:;" class="button close-popup done-widget with-layout">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
+					<div class="tac step-buttons">
+						<a href="javascript:;" class="white-button widget-button back-widget" to-step="1">< {!! nl2br(trans('trp.page.invite.popup.success.button')) !!}</a>
+						<a href="javascript:;" class="blue-button close-popup done-widget with-layout">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
 					</div>
 				</div>
 			</div>
-
-
 		</div>
 	</div>
 </div>
@@ -382,24 +366,18 @@
 </script>
 
 
-<div class="popup fixed-popup" id="select-reviews-popup">
-	<div class="popup-inner inner-white">
-		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup">
-				<img src="{{ url('img/close-icon.png') }}"/>
-			</a>
-		</div>
+<div class="popup no-image" id="select-reviews-popup">
+	<div class="popup-inner">
+		<a href="javascript:;" class="close-popup">
+			<img src="{{ url('img/close-icon.png') }}"/>
+		</a>
 
-		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
-		</div>
-		<h2>
+		<h2 class="mont">
 			{!! nl2br(trans('trp.popup.popup-widget.title')) !!}
 		</h2>
 
-		<h4 class="popup-title">
+		<h4 class="tac popup-title">
 			{!! nl2br(trans('trp.popup.popup-widget.subtitle')) !!}
-			
 		</h4>
 
 		<div class="list-reviews">
@@ -440,29 +418,29 @@
 				</label>
 	    	@endforeach
 		</div>
-
+		<br/>
+		<br/>
 		<div class="tac">
-			<a href="javascript:;" class="button close-popup">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
+			<a href="javascript:;" class="blue-button close-select-widget-reviews-popup">
+				{!! nl2br(trans('trp.popup.popup-widget.done')) !!}
+			</a>
 		</div>
 	</div>
 </div>
 
-<div class="popup fixed-popup" id="facebook-tab-success">
-	<div class="popup-inner inner-white">
-		<div class="popup-pc-buttons">
+@if(false)
+	<div class="popup no-image" id="facebook-tab-success">
+		<div class="popup-inner">
 			<a href="javascript:;" class="close-popup">
 				<img src="{{ url('img/close-icon.png') }}"/>
 			</a>
-		</div>
 
-		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
-		</div>
-		<div class="header-success-tab tac">
-			<img src="{{ url('img-trp/verification-check.png') }}">
-			<h2>{!! nl2br(trans('trp.popup.popup-widget.success.title')) !!}</h2>
-			<h4>{!! nl2br(trans('trp.popup.popup-widget.success.subtitle')) !!}</h4>
-			<a href="javascript:;" class="button close-popup">{!! nl2br(trans('trp.popup.popup-claim-profile.thank-you.ok')) !!}</a>
+			<div class="header-success-tab tac">
+				<img src="{{ url('img-trp/verification-check.png') }}">
+				<h2>{!! nl2br(trans('trp.popup.popup-widget.success.title')) !!}</h2>
+				<h4>{!! nl2br(trans('trp.popup.popup-widget.success.subtitle')) !!}</h4>
+				<a href="javascript:;" class="button close-popup">{!! nl2br(trans('trp.popup.popup-claim-profile.thank-you.ok')) !!}</a>
+			</div>
 		</div>
 	</div>
-</div>
+@endif

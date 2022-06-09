@@ -31,12 +31,6 @@ class BranchesController extends FrontController {
 
         if(!empty($clinic) && $clinic->branches->isNotEmpty()) {
 
-            $seos = PageSeo::find(35);
-            $seo_title = $seos->seo_title;
-            $seo_description = $seos->seo_description;
-            $social_title = $seos->social_title;
-            $social_description = $seos->social_description;
-
             $branches = [$clinic->id];
 
             foreach($clinic->branches as $branch) {
@@ -65,6 +59,12 @@ class BranchesController extends FrontController {
             $orders = $filters['orders'];
             $types = $filters['types'];
             $searchCategories = $filters['searchCategories'];
+
+            $seos = PageSeo::find(35);
+            $seo_title = $seos->seo_title;
+            $seo_description = $seos->seo_description;
+            $social_title = $seos->social_title;
+            $social_description = $seos->social_description;
 
             return $this->ShowView('branches', [
                 'noIndex' => true,
@@ -294,6 +294,8 @@ class BranchesController extends FrontController {
 
                 $newuser->generateSocialCover();
 
+                //make branches connection
+                
                 if($this->user->branches->isNotEmpty()) {
                     foreach($this->user->branches as $branch) {
                         $newbranch = new UserBranch;

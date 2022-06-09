@@ -826,8 +826,7 @@
 					@if($loggedUserAllowEdit)
 					
 						@if( $regularReviewsCount )
-							<a href="javascript:;" class="white-button disabled-button tooltip-text" text="Comming soon">
-							{{-- <a href="javascript:;" class="white-button disabled-button add-widget-button" data-popup-logged="popup-widget" reviews-guided-action="add"> --}}
+							<a href="javascript:;" class="white-button add-widget-button" data-popup-logged="popup-widget" reviews-guided-action="add">
 								{{-- {!! nl2br(trans('trp.page.user.widget')) !!} --}}
 								Add to website
 							</a>
@@ -997,13 +996,13 @@
 
 	@if( $loggedUserAllowEdit )
 		@include('trp.popups.add-branch')
-		{{-- @include('trp.popups.widget') --}}
+		@include('trp.popups.widget')
 		@include('trp.popups.invite')
 		{{-- @if(!empty(session('first_guided_tour')) || !empty(session('reviews_guided_tour')))
 			@include('trp.popups.first-guided-tour')
 		@endif --}}
 		@if( $user->is_clinic )
-			{{-- @include('trp.popups.add-member') --}}
+			@include('trp.popups.add-member')
 		@endif
 		
 		@if($user->wallet_addresses->isEmpty() && $user->is_partner && !$editing_branch_clinic)

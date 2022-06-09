@@ -8,6 +8,8 @@ var prepareMapFunction;
 var mapsLoaded = false;
 var mapsWaiting = [];
 var initMap;
+var chooseExistingDentistActions;
+var refreshOnClosePopup = false;
 var editWorkingHours;
 var fixFlickty;
 var map_loaded = false;
@@ -377,6 +379,9 @@ jQuery(document).ready(function($) {
 	        });
 		}
 
+		if( refreshOnClosePopup ) {
+			window.location.reload();
+		}
 		if(existing_dentist) {
 			$('#popup-existing-dentist').remove();
 			$('#verification-popup').addClass('active');
@@ -409,57 +414,6 @@ jQuery(document).ready(function($) {
 
 	handleActivePopupFunctions =  function() {
 		modernFieldsUpdate();
-
-	    $('.add-team-member-form').submit( function(e) {
-	        e.preventDefault();
-
-	        if(ajax_is_running) {
-	            return;
-	        }
-
-	        ajax_is_running = true;
-	        $(this).find('.member-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-	        that = $(this);
-
-	        $.post( 
-	            $(this).attr('action'), 
-	            $(this).serialize() , 
-	            function (data) {
-	                if(data.success) {
-
-	                	if(data.dentists) {
-	                		showPopup('popup-existing-dentist', data.dentists);
-	                	} else {                		
-		                    that.find('.check-for-same').val('');
-		                    that.find('.photo-name-team').val('');
-		                    that.find('.image-label').css('background-image', 'none');
-		                    that.find('.image-label').find('.centered-hack').show();
-		                    that.find('.team-member-email').val('');
-		                    that.find('.team-member-name').val('').focus();
-		                    that.find('.member-alert').show().addClass('alert-success').html(data.message);
-		                    $('.existing-dentists').children().remove();
-
-		                    if (data.with_email) {
-		                    	gtag('event', 'Invite', {
-		                            'event_category': 'DentistRegistration',
-		                            'event_label': 'ClinicTeam',
-		                        });
-		                    } else {
-		                    	gtag('event', 'Add', {
-		                            'event_category': 'DentistRegistration',
-		                            'event_label': 'ClinicTeam',
-		                        });
-		                    }
-	                	}
-	                    
-	                } else {
-	                    that.find('.member-alert').show().addClass('alert-warning').html(data.message);                    
-	                }
-	                ajax_is_running = false;
-
-		        }, "json"
-			);
-		});
 
 	    $('.close-popup').click( function() {
 			closePopup();
@@ -896,69 +850,6 @@ jQuery(document).ready(function($) {
 			$.event.trigger({type: 'openDentistRegister'});
 		}
 	});
-
-    var chooseExistingDentistActions = function() {
-    	$('.close-ex-d').click( function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-
-	    	if ($(this).closest('.existing-dentists').children().length > 1) {
-	    		$(this).closest('.dentist-exists').remove();
-	    	} else {
-	    		$(this).closest('.popup').remove();
-	    		if($('#verification-popup').length) {
-	    			$('#verification-popup').addClass('active');
-	    		}
-	    	}
-	    });
-
-	    $('.choose-ex-d').click( function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-
-	        var ex_d_id = $(this).closest('.dentist-exists').attr('ex-dent-id');
-	        var clinic_id = $('input[name="last_user_id"]').length ? $('input[name="last_user_id"]').val() : null;
-	        var that = $(this);
-	        var form = $('.add-team-member-form');
-
-	        $.ajax({
-	            type: "POST",
-	            url: window.location.origin+'/en/profile/add-existing-dentist-team/',
-	            data: {
-	            	clinic_id: clinic_id,
-	            	ex_d_id: ex_d_id,
-	                _token: $('input[name="_token"]').val(),
-	            },
-	            dataType: 'json',
-	            success: function(ret) {
-	                if(ret.success) {
-
-	                	that.closest('.popup').remove();
-	                	if($('#verification-popup').length) {
-			    			$('#verification-popup').addClass('active');
-			    		}
-
-	                	form.find('.check-for-same').val('');
-	                	// that.closest('.dentist-exists').find('.ex-d-btns').append('<div class="alert alert-success" style="display:inline-block;">Added</div>');
-	                	// that.closest('.dentist-exists').find('.ex-d-btns a').remove();
-
-	                    form.find('.team-member-email').val('');
-	                    form.find('.team-member-job').val('dentist');
-	                    form.find('.team-member-name').val('').focus();
-	                    form.find('.team-member-photo').closest('.image-label').css('background-image', 'none');
-	                    form.find('.photo-name-team').val('');
-	                    form.find('.member-alert').show().addClass('alert-success').html(ret.message);
-	                	
-	                } else {
-	    				console.log('error');
-	                }
-	            },
-	            error: function(ret) {
-	                console.log('error');
-	            }
-	        });
-	    });
-    }
 
     $('.str-check-assurance').click( function() {
     	if(ajax_is_running) {

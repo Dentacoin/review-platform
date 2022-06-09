@@ -97,14 +97,17 @@
           .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select.grayed {
             background-color: #eee; }
 
+#add-team-popup .popup-inner,
 .verification-popup .popup-inner {
   padding: 40px 60px;
   box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
   width: 700px; }
   @media screen and (max-width: 768px) {
+    #add-team-popup .popup-inner,
     .verification-popup .popup-inner {
       padding: 20px 30px; } }
-  .verification-popup .popup-inner .verification-content h2 {
+  #add-team-popup .popup-inner h2,
+  .verification-popup .popup-inner h2 {
     text-align: center;
     font-size: 28px;
     margin-bottom: 25px;
@@ -113,168 +116,218 @@
     max-width: 510px;
     margin-left: auto;
     margin-right: auto; }
-  .verification-popup .popup-inner .verification-content .popup-desc {
+  #add-team-popup .popup-inner .popup-desc,
+  .verification-popup .popup-inner .popup-desc {
     font-size: 18px;
     color: #332255;
     margin-bottom: 20px; }
-    .verification-popup .popup-inner .verification-content .popup-desc span {
+    #add-team-popup .popup-inner .popup-desc span,
+    .verification-popup .popup-inner .popup-desc span {
       font-size: 18px;
       font-weight: 900;
       color: #0564c6; }
-  .verification-popup .popup-inner .verification-content .step-buttons {
+  #add-team-popup .popup-inner .step-buttons,
+  .verification-popup .popup-inner .step-buttons {
     margin-top: 50px; }
-    .verification-popup .popup-inner .verification-content .step-buttons a, .verification-popup .popup-inner .verification-content .step-buttons button {
+    #add-team-popup .popup-inner .step-buttons a, #add-team-popup .popup-inner .step-buttons button,
+    .verification-popup .popup-inner .step-buttons a,
+    .verification-popup .popup-inner .step-buttons button {
       text-transform: none;
       width: 250px;
       padding: 11px 20px 12px; }
       @media screen and (max-width: 768px) {
-        .verification-popup .popup-inner .verification-content .step-buttons a, .verification-popup .popup-inner .verification-content .step-buttons button {
+        #add-team-popup .popup-inner .step-buttons a, #add-team-popup .popup-inner .step-buttons button,
+        .verification-popup .popup-inner .step-buttons a,
+        .verification-popup .popup-inner .step-buttons button {
           width: auto;
           padding: 11px 33px 12px; } }
-    .verification-popup .popup-inner .verification-content .step-buttons a {
+    #add-team-popup .popup-inner .step-buttons a,
+    .verification-popup .popup-inner .step-buttons a {
       margin-right: 10px; }
       @media screen and (max-width: 768px) {
-        .verification-popup .popup-inner .verification-content .step-buttons a {
+        #add-team-popup .popup-inner .step-buttons a,
+        .verification-popup .popup-inner .step-buttons a {
           margin-right: 5px; } }
-  .verification-popup .popup-inner .verification-content .invite-manual {
+  #add-team-popup .popup-inner .invite-manual,
+  .verification-popup .popup-inner .invite-manual {
     display: flex;
     align-items: center;
     color: #0084d1;
     font-size: 18px; }
-    .verification-popup .popup-inner .verification-content .invite-manual img {
+    #add-team-popup .popup-inner .invite-manual img,
+    .verification-popup .popup-inner .invite-manual img {
       width: 26px;
       margin-right: 10px; }
-  .verification-popup .popup-inner .verification-content #clinic-add-team {
+  #add-team-popup .popup-inner #clinic-add-team,
+  .verification-popup .popup-inner #clinic-add-team {
     max-width: 520px;
     margin-left: auto;
     margin-right: auto; }
-    .verification-popup .popup-inner .verification-content #clinic-add-team form {
+    #add-team-popup .popup-inner #clinic-add-team form,
+    .verification-popup .popup-inner #clinic-add-team form {
       margin-bottom: 30px; }
-      .verification-popup .popup-inner .verification-content #clinic-add-team form .upload-image-wrapper {
-        margin-bottom: 30px;
-        margin-right: 10px; }
-      .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label {
-        background-color: #f4f7ff;
-        border: 1px solid #0084d1;
-        width: 150px;
-        border-radius: 10px;
-        height: 150px; }
-        .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label .plus-gallery-image {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translateX(-50%) translateY(-50%);
-          text-align: center;
-          width: 99%; }
-          .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label .plus-gallery-image .add-gallery-icon {
-            width: 70px; }
-          .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label .plus-gallery-image span {
-            display: block;
-            font-size: 16px;
-            font-weight: bold;
-            color: #0084d1;
-            margin-top: 10px; }
-            .verification-popup .popup-inner .verification-content #clinic-add-team form .image-label .plus-gallery-image span img {
-              vertical-align: middle;
-              width: 13px; }
-      .verification-popup .popup-inner .verification-content #clinic-add-team form .dentist-suggester {
-        height: 60px;
-        line-height: 60px; }
-      .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results {
-        margin-top: 0px;
-        background-color: white; }
-        .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a {
+    #add-team-popup .popup-inner #clinic-add-team .upload-image-wrapper,
+    .verification-popup .popup-inner #clinic-add-team .upload-image-wrapper {
+      margin-bottom: 30px;
+      margin-right: 10px; }
+    #add-team-popup .popup-inner #clinic-add-team .image-label,
+    .verification-popup .popup-inner #clinic-add-team .image-label {
+      background-color: #f4f7ff;
+      border: 1px solid #0084d1;
+      width: 150px;
+      border-radius: 10px;
+      height: 150px; }
+      #add-team-popup .popup-inner #clinic-add-team .image-label .plus-gallery-image,
+      .verification-popup .popup-inner #clinic-add-team .image-label .plus-gallery-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        text-align: center;
+        width: 99%; }
+        #add-team-popup .popup-inner #clinic-add-team .image-label .plus-gallery-image .add-gallery-icon,
+        .verification-popup .popup-inner #clinic-add-team .image-label .plus-gallery-image .add-gallery-icon {
+          width: 70px; }
+        #add-team-popup .popup-inner #clinic-add-team .image-label .plus-gallery-image span,
+        .verification-popup .popup-inner #clinic-add-team .image-label .plus-gallery-image span {
           display: block;
-          padding-left: 20px;
-          padding-bottom: 7px;
-          padding-top: 6px;
+          font-size: 16px;
+          font-weight: bold;
+          color: #0084d1;
+          margin-top: 10px; }
+          #add-team-popup .popup-inner #clinic-add-team .image-label .plus-gallery-image span img,
+          .verification-popup .popup-inner #clinic-add-team .image-label .plus-gallery-image span img {
+            vertical-align: middle;
+            width: 13px; }
+    #add-team-popup .popup-inner #clinic-add-team .dentist-suggester,
+    .verification-popup .popup-inner #clinic-add-team .dentist-suggester {
+      height: 60px;
+      line-height: 60px; }
+    #add-team-popup .popup-inner #clinic-add-team .suggest-results,
+    .verification-popup .popup-inner #clinic-add-team .suggest-results {
+      margin-top: 0px;
+      background-color: white; }
+      #add-team-popup .popup-inner #clinic-add-team .suggest-results a,
+      .verification-popup .popup-inner #clinic-add-team .suggest-results a {
+        display: block;
+        padding-left: 20px;
+        padding-bottom: 7px;
+        padding-top: 6px;
+        transition: all 0.3s ease; }
+        #add-team-popup .popup-inner #clinic-add-team .suggest-results a.active, #add-team-popup .popup-inner #clinic-add-team .suggest-results a:hover,
+        .verification-popup .popup-inner #clinic-add-team .suggest-results a.active,
+        .verification-popup .popup-inner #clinic-add-team .suggest-results a:hover {
+          background-color: #e2ebff;
           transition: all 0.3s ease; }
-          .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a.active, .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a:hover {
-            background-color: #e2ebff;
-            transition: all 0.3s ease; }
-          .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-image-dentist {
-            width: 50px; }
+        #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-image-dentist,
+        .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-image-dentist {
+          width: 50px; }
+          @media screen and (max-width: 768px) {
+            #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-image-dentist,
+            .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-image-dentist {
+              width: 40px; } }
+          #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-image-dentist img,
+          .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-image-dentist img {
+            max-width: 100%;
+            display: block;
+            border-radius: 50%;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0px 0px 10px 2px #f3f3f3; }
+        #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist,
+        .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist {
+          flex: 1;
+          text-align: left;
+          margin-left: 10px; }
+          #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist p,
+          .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist p {
+            font-weight: 800;
+            color: #332255;
+            margin-bottom: 6px;
+            margin-top: 4px;
+            text-transform: capitalize; }
             @media screen and (max-width: 768px) {
-              .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-image-dentist {
-                width: 40px; } }
-            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-image-dentist img {
-              max-width: 100%;
-              display: block;
-              border-radius: 50%;
-              position: relative;
-              z-index: 1;
-              box-shadow: 0px 0px 10px 2px #f3f3f3; }
-          .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist {
-            flex: 1;
-            text-align: left;
-            margin-left: 10px; }
-            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist p {
-              font-weight: 800;
-              color: #332255;
-              margin-bottom: 6px;
-              margin-top: 4px;
-              text-transform: capitalize; }
-              @media screen and (max-width: 768px) {
-                .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist p {
-                  margin-bottom: 0px;
-                  margin-top: 0px; } }
-              .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist p span {
-                color: #0084d1;
-                font-size: 16px; }
-            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-name-dentist span {
-              font-size: 14px;
-              color: #555555; }
-          .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper {
-            display: flex;
-            background-color: #0084d1;
+              #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist p,
+              .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist p {
+                margin-bottom: 0px;
+                margin-top: 0px; } }
+            #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist p span,
+            .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist p span {
+              color: #0084d1;
+              font-size: 16px; }
+          #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist span,
+          .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-name-dentist span {
+            font-size: 14px;
+            color: #555555; }
+        #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper,
+        .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper {
+          display: flex;
+          background-color: #0084d1;
+          color: white;
+          font-size: 13px;
+          font-weight: bold;
+          border-top-left-radius: 13px;
+          border-bottom-left-radius: 13px;
+          padding: 4px 10px; }
+          #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper img,
+          .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper img {
+            width: 13px;
+            margin-right: 4px; }
+          #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper span,
+          .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper span {
             color: white;
             font-size: 13px;
-            font-weight: bold;
-            border-top-left-radius: 13px;
-            border-bottom-left-radius: 13px;
-            padding: 4px 10px; }
-            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper img {
-              width: 13px;
-              margin-right: 4px; }
-            .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper span {
-              color: white;
-              font-size: 13px;
-              margin-right: 3px; }
-              @media screen and (max-width: 768px) {
-                .verification-popup .popup-inner .verification-content #clinic-add-team form .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper span {
-                  display: none; } }
-      .verification-popup .popup-inner .verification-content #clinic-add-team form .specializations-col {
-        margin-left: 10px; }
-        @media screen and (max-width: 768px) {
-          .verification-popup .popup-inner .verification-content #clinic-add-team form .specializations-col {
-            margin-left: 0px; } }
-      .verification-popup .popup-inner .verification-content #clinic-add-team form .invite-existing-dentist {
-        background-color: #ffffff;
-        border: 1px solid #14cab8;
-        color: #14cab8;
-        font-size: 20px;
-        font-weight: bold;
-        padding: 11px 43px 13px;
-        display: inline-block;
-        border-radius: 40px;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        width: 193px;
-        margin-right: 10px; }
-        @media screen and (max-width: 768px) {
-          .verification-popup .popup-inner .verification-content #clinic-add-team form .invite-existing-dentist {
-            padding: 11px 22px 13px;
-            width: auto;
-            margin-right: 2px; } }
-      .verification-popup .popup-inner .verification-content #clinic-add-team form .green-button {
-        padding: 10px 43px 12px; }
-  .verification-popup .popup-inner .verification-content textarea {
+            margin-right: 3px; }
+            @media screen and (max-width: 768px) {
+              #add-team-popup .popup-inner #clinic-add-team .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper span,
+              .verification-popup .popup-inner #clinic-add-team .suggest-results a .result-partner-dentist .result-partner-dentist-wrapper span {
+                display: none; } }
+    #add-team-popup .popup-inner #clinic-add-team .specializations-col,
+    .verification-popup .popup-inner #clinic-add-team .specializations-col {
+      margin-left: 10px; }
+      @media screen and (max-width: 768px) {
+        #add-team-popup .popup-inner #clinic-add-team .specializations-col,
+        .verification-popup .popup-inner #clinic-add-team .specializations-col {
+          margin-left: 0px; } }
+    #add-team-popup .popup-inner #clinic-add-team .invite-existing-dentist,
+    .verification-popup .popup-inner #clinic-add-team .invite-existing-dentist {
+      background-color: #ffffff;
+      border: 1px solid #14cab8;
+      color: #14cab8;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 11px 43px 13px;
+      display: inline-block;
+      border-radius: 40px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      width: 193px;
+      margin-right: 10px; }
+      @media screen and (max-width: 768px) {
+        #add-team-popup .popup-inner #clinic-add-team .invite-existing-dentist,
+        .verification-popup .popup-inner #clinic-add-team .invite-existing-dentist {
+          padding: 11px 22px 13px;
+          width: auto;
+          margin-right: 2px; } }
+    #add-team-popup .popup-inner #clinic-add-team .green-button,
+    .verification-popup .popup-inner #clinic-add-team .green-button {
+      padding: 10px 43px 12px; }
+  #add-team-popup .popup-inner textarea,
+  .verification-popup .popup-inner textarea {
     height: 200px; }
-  .verification-popup .popup-inner .verification-content .alert {
+  #add-team-popup .popup-inner .alert,
+  .verification-popup .popup-inner .alert {
     margin-bottom: 20px; }
   @media screen and (max-width: 768px) {
-    .verification-popup .popup-inner .verification-content .avatar-name-wrapper,
-    .verification-popup .popup-inner .verification-content .image-big-error {
+    #add-team-popup .popup-inner .avatar-name-wrapper,
+    #add-team-popup .popup-inner .image-big-error,
+    .verification-popup .popup-inner .avatar-name-wrapper,
+    .verification-popup .popup-inner .image-big-error {
       max-width: 150px;
       margin-left: auto;
       margin-right: auto; } }
+
+#add-team-popup .popup-inner .popup-desc {
+  color: #0564c6; }
+#add-team-popup .popup-inner #clinic-add-team {
+  max-width: 100%; }

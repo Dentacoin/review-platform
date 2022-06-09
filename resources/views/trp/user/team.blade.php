@@ -109,19 +109,11 @@
         @endif
         
         @if( ($loggedUserAllowEdit) )
-            <a href="javascript:;" class="team add-team-member dont-count" guided-action="team">
-                @if(false)
-                {{-- data-popup="add-team-popup" --}}
-                @endif
-                <div class="disabled-prop">
-                    <div class="team-image" style="background-image: url('{{ url('img-trp/add-icon.png') }}')"></div>
-                    <div class="team-info">
-                        <span class="add-team-text">Add team member</span>
-                    </div>
+            <a href="javascript:;" class="team add-team-member dont-count" guided-action="team" data-popup="add-team-popup">
+                <div class="team-image" style="background-image: url('{{ url('img-trp/add-icon.png') }}')"></div>
+                <div class="team-info">
+                    <span class="add-team-text">Add team member</span>
                 </div>
-                <span class="comming-soon">
-                    Coming soon...
-                </span>
             </a>
         @endif
     </div>

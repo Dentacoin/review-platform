@@ -236,12 +236,13 @@ class DentistController extends FrontController {
         // }
 
         if(!empty($this->user)) {
+            
             $dent_id = $item->id;
+
             $reviews = Review::where(function($query) use ($dent_id) {
                 $query->where( 'dentist_id', $dent_id)
                 ->orWhere('clinic_id', $dent_id);
-            })->where('user_id', $this->user->id)
-            ->first();
+            })->where('user_id', $this->user->id)->first();
 
             if (!empty($reviews)) {
                 $writes_review = true;
