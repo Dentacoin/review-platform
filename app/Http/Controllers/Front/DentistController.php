@@ -426,7 +426,7 @@ class DentistController extends FrontController {
                     "@type" => "Review",
                     "author" => [
                         "@type" => "Person",
-                        "name" => $review->user ? $review->user->name : '',
+                        "name" => $review->user ? $review->user->name : 'User',
                     ],
                     "datePublished" => $review->created_at->format('Y-m-d'),
                     "reviewBody" => $review->answer,
