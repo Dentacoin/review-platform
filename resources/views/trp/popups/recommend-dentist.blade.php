@@ -1,27 +1,16 @@
-<div class="popup fixed-popup" id="recommend-dentist">
+<div class="popup no-image" id="recommend-dentist" scss-load="trp-popup-recommend-dentist" js-load="recommend-dentist">
 	<div class="popup-inner inner-white">
-		<div class="popup-pc-buttons">
-			<a href="javascript:;" class="close-popup">
-				<img src="{{ url('img/close-icon.png') }}"/>
-			</a>
-		</div>
+		<a href="javascript:;" class="close-popup">
+			<img src="{{ url('img/close-icon.png') }}"/>
+		</a>
 
-		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
-		</div>
-		<h2>
+		<h2 class="mont">
 			{!! nl2br(trans('trp.popup.popup-recommend-dentist.title')) !!}
 		</h2>
 
-		<h4 class="popup-title">
-			{!! nl2br(trans('trp.popup.popup-recommend-dentist.via-email')) !!}
-		</h4>
-
-		<p class="popup-desc">
-			• {!! nl2br(trans('trp.popup.popup-recommend-dentist.info')) !!}
-		</p>
-		<br/>
-		<br/>
+		<h5>
+			{!! nl2br(trans('trp.popup.popup-recommend-dentist.info')) !!}
+		</h5>
 
 		{!! Form::open([
 			'method' => 'post', 
@@ -50,11 +39,11 @@
 			</div>
 			<input type="hidden" name="dentist-id" value="{{ $item->id }}" class="recommend-dentist-id">
 
-			<div class="alert recommend-alert" style="display: none; margin-top: 20px;">
+			<div class="alert recommend-alert" style="display: none; margin-bottom: 20px;">
 			</div>
 
 			<div class="tac">
-				<input type="submit" class="button" value="{!! trans('trp.popup.popup-recommend-dentist.recommend') !!}">
+				<input type="submit" class="blue-button" value="{!! trans('trp.popup.popup-recommend-dentist.recommend') !!}">
 			</div>
 		{!! Form::close() !!}	
 	</div>

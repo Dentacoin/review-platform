@@ -1,0 +1,5 @@
+#recommend-dentist .popup-inner .rec-first {
+  margin-right: 18px; }
+  @media screen and (max-width: 768px) {
+    #recommend-dentist .popup-inner .rec-first {
+      margin-right: 0px; } }

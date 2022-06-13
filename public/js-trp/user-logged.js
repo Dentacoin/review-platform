@@ -479,12 +479,14 @@ $(document).ready(function() {
         );
     });
 
-    $('.datepicker').datepicker({
-        todayHighlight: true,
-        autoclose: true,
-        changeMonth: true,
-        changeYear: true,
-    });
+    if($('.datepicker').length) {
+        $('.datepicker').datepicker({
+            todayHighlight: true,
+            autoclose: true,
+            changeMonth: true,
+            changeYear: true,
+        });
+    }
 
     $('.edit-founded-form').off('submit').submit( function(e) {
         e.preventDefault();
@@ -683,55 +685,58 @@ $(document).ready(function() {
     }
     handleGalleryRemoved();
 
-    $(".add-gallery-image").filedrop({
-        fallback_id: 'fallbackFileDrop',
-        url: '/api/upload.php',
-        paramname: 'fileUpload',
-        maxfilesize: 2,
-        allowedfiletypes: ['image/jpeg','image/png'],	// filetypes allowed by Content-Type.  Empty array means no restrictions
-	    allowedfileextensions: ['.jpg','.jpeg','.png'], // file extensions allowed. Empty array means no restrictions
-        uploadFinished: function(index, file, json, timeDiff) {
-    
-            $('.add-gallery-image').addClass('loading');
-    
-            var sure_text = $('#add-gallery-photo').attr('sure-trans');
-            var that = $('#add-gallery-photo');
-            var upload = new Upload(file, that.attr('upload-url'), function(data) {
-                
-                $('.add-gallery-image').removeClass('loading');
-    
-                var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
-                    <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
-                        <div class="delete-gallery delete-button" sure="'+sure_text+'">\
-                            <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
+    if($(".add-gallery-image").length) {
+
+        $(".add-gallery-image").filedrop({
+            fallback_id: 'fallbackFileDrop',
+            url: '/api/upload.php',
+            paramname: 'fileUpload',
+            maxfilesize: 2,
+            allowedfiletypes: ['image/jpeg','image/png'],	// filetypes allowed by Content-Type.  Empty array means no restrictions
+            allowedfileextensions: ['.jpg','.jpeg','.png'], // file extensions allowed. Empty array means no restrictions
+            uploadFinished: function(index, file, json, timeDiff) {
+        
+                $('.add-gallery-image').addClass('loading');
+        
+                var sure_text = $('#add-gallery-photo').attr('sure-trans');
+                var that = $('#add-gallery-photo');
+                var upload = new Upload(file, that.attr('upload-url'), function(data) {
+                    
+                    $('.add-gallery-image').removeClass('loading');
+        
+                    var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
+                        <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
+                            <div class="delete-gallery delete-button" sure="'+sure_text+'">\
+                                <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
+                            </div>\
                         </div>\
-                    </div>\
-                </a>\
-                ';
-    
-                var galleryFlickty = $('.gallery-flickity').flickity({
-                    autoPlay: false,
-                    wrapAround: true,
-                    cellAlign: 'left',
-                    freeScroll: true,
-                    groupCells: 1,
-                    draggable: false,
+                    </a>\
+                    ';
+        
+                    var galleryFlickty = $('.gallery-flickity').flickity({
+                        autoPlay: false,
+                        wrapAround: true,
+                        cellAlign: 'left',
+                        freeScroll: true,
+                        groupCells: 1,
+                        draggable: false,
+                    });
+        
+                    $('.gallery-flickity').flickity( 'insert', $(html), 1 );
+                    if($('.gallery-flickity .slider-wrapper').length > 2) {
+                        $('.gallery-flickity').flickity( 'selectCell', 1 );
+                    }
+                    handleGalleryRemoved();
+        
+                    if($('body').hasClass('guided-tour')) {
+                        $('.bubble-guided-tour .skip-step').trigger('click');
+                    }
+                    ajax_is_running = false;
                 });
-    
-                $('.gallery-flickity').flickity( 'insert', $(html), 1 );
-                if($('.gallery-flickity .slider-wrapper').length > 2) {
-                    $('.gallery-flickity').flickity( 'selectCell', 1 );
-                }
-                handleGalleryRemoved();
-    
-                if($('body').hasClass('guided-tour')) {
-                    $('.bubble-guided-tour .skip-step').trigger('click');
-                }
-                ajax_is_running = false;
-            });
-            upload.doUpload();
-        },
-    });
+                upload.doUpload();
+            },
+        });
+    }
 
     $('#add-gallery-photo').change( function() {
         if(ajax_is_running) {
@@ -1159,7 +1164,7 @@ $(document).ready(function() {
     });
 
     //Ask for trusted
-
+    
     $('.ask-dentist').click( function(e) {
         e.preventDefault();
 
@@ -1173,40 +1178,26 @@ $(document).ready(function() {
             $(this).attr('href'), 
             function( data ) {
                 if(data.success) {
-                    if (that.parent().hasClass('ask-dentist-alert')) {
-                        $('.ask-dentist-alert').find('.ask-dentist').remove();
-                        $('.ask-dentist-alert').find('br').remove();
-                        that.closest('.popup').removeClass('active');
+                    if (that.hasClass('ask-dentist-after-submit-review')) {
+                        that.remove();
+                        closePopup();
                     } else {
-                        $('.ask-dentist').closest('.alert').hide();
-                        $('.ask-success').show();
-                        $('.button-ask').remove();
+                        $(that).remove();
                     }
 
                     gtag('event', 'Request', {
                         'event_category': 'Reviews',
                         'event_label': 'InvitesAsk',
                     });
-                } else {
-                    console.log('error');
                 }
             }
         );
-    } );
-
-    $('.ask-review-button').click( function(e) {
-        $('#popup-ask-dentist').find('.ask-dentist').attr('href', $('#popup-ask-dentist').find('.ask-dentist').attr('original-href')+'/1' );
-
-        gtag('event', 'Request', {
-            'event_category': 'Reviews',
-            'event_label': 'InvitesAskUnver',
-        });
     });
 
     $('.ask-review').click( function() {
         var id = $(this).attr('review-id');
         showFullReview(id, $('#cur_dent_id').val());
-    } );
+    });
 
     $('.invite-again').click( function(e) {
         e.preventDefault();
@@ -1232,65 +1223,6 @@ $(document).ready(function() {
             error: function(ret) {
                 console.log('error');
             }
-        });
-    });
-
-    if( $('.recommend-dentist-form').length ) {
-
-        $('.recommend-dentist-form').submit( function(e) {
-            e.preventDefault();
-
-            if(ajax_is_running) {
-                return;
-            }
-
-            ajax_is_running = true;
-
-            $(this).find('.recommend-alert').hide().removeClass('alert-warning').removeClass('alert-success');
-
-            var formData = new FormData();
-
-            // add assoc key values, this will be posts values
-            formData.append("_token", $(this).find('input[name="_token"]').val());            
-            formData.append("name", $(this).find('.recommend-name').val());
-            formData.append("email", $(this).find('.recommend-email').val());
-            formData.append("dentist-id", $(this).find('.recommend-dentist-id').val());
-
-            $.ajax({
-                type: "POST",
-                url: $(this).attr('action'),
-                success: function (data) {
-                    if(data.success) {
-                        $('.recommend-dentist-form').find('.recommend-email').val('');
-                        $('.recommend-dentist-form').find('.recommend-name').val('').focus();
-                        $('.recommend-dentist-form').find('.recommend-alert').show().addClass('alert-success').html(data.message);
-
-                        gtag('event', 'Submit', {
-                            'event_category': 'Recommend',
-                            'event_label': 'RecommendSent',
-                        });
-                    } else {
-                        $('.recommend-dentist-form').find('.recommend-alert').show().addClass('alert-warning').html(data.message);                    
-                    }
-                    ajax_is_running = false;
-                },
-                error: function (error) {
-                    console.log('error');
-                },
-                async: true,
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                timeout: 60000
-            });
-        } );
-    }
-
-    $('.recommend-button').click( function() {
-        gtag('event', 'Open', {
-            'event_category': 'Recommend',
-            'event_label': 'RecommendPopup',
         });
     });
 

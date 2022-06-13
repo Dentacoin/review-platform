@@ -518,54 +518,6 @@ $(document).ready(function() {
     });
 
 
-    $('.ask-dentist').click( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-        var that = $(this);
-
-        $.get( 
-            $(this).attr('href'), 
-            function( data ) {
-                if(data.success) {
-                    if (that.parent().hasClass('ask-dentist-alert')) {
-                        $('.ask-dentist-alert').find('.ask-dentist').remove();
-                        $('.ask-dentist-alert').find('br').remove();
-                        closePopup();
-                    } else {
-                        $('.ask-dentist').closest('.alert').hide();
-                        $('.ask-success').show();
-                        $('.button-ask').remove();
-                    }
-
-                    gtag('event', 'Request', {
-                        'event_category': 'Reviews',
-                        'event_label': 'InvitesAsk',
-                    });
-                }
-            }
-        );
-    });
-
-    // $('.ask-review-button').click( function(e) {
-    //     $('#popup-ask-dentist').find('.ask-dentist').attr('href', $('#popup-ask-dentist').find('.ask-dentist').attr('original-href')+'/1' );
-
-    //     gtag('event', 'Request', {
-    //         'event_category': 'Reviews',
-    //         'event_label': 'InvitesAskUnver',
-    //     });
-    // });
-
-    // $('.ask-review').click( function() {
-    //     var id = $(this).attr('review-id');
-    //     showFullReview(id, $('#cur_dent_id').val());
-    // } );
-
-
-
     //////TREATMENTS
 
     var removeTreatment = function() {

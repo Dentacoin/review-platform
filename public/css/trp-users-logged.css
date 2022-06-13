@@ -226,7 +226,8 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
   align-items: center;
   justify-content: center;
   border-color: #0084d1;
-  margin-right: 5px; }
+  margin-right: 5px;
+  margin-bottom: 10px; }
   @media screen and (max-width: 768px) {
     .turn-on-edit-mode {
       padding: 4px 20px 7px;
@@ -242,6 +243,7 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
     font-weight: bold;
     color: #0084d1; }
 
+.recommend-button,
 .add-branch,
 .delete-branch {
   padding: 5px 20px 8px;
@@ -255,15 +257,18 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
   color: #0084d1;
   margin-bottom: 10px; }
   @media screen and (max-width: 768px) {
+    .recommend-button,
     .add-branch,
     .delete-branch {
       padding: 4px 20px 7px;
       display: inline-flex;
       border-width: 1px; } }
+  .recommend-button:hover,
   .add-branch:hover,
   .delete-branch:hover {
     color: #0084d1;
     background-color: white; }
+  .recommend-button img,
   .add-branch img,
   .delete-branch img {
     margin-right: 9px; }
@@ -1001,24 +1006,6 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
     .pager span.active {
       background-color: #0084d1;
       color: white; }
-
-.popup#recommend-dentist .popup-inner h2 {
-  margin-bottom: 25px; }
-.popup#recommend-dentist .popup-inner .popup-title {
-  font-weight: bold; }
-.popup#recommend-dentist .popup-inner .rec-first {
-  margin-right: 18px; }
-  @media screen and (max-width: 768px) {
-    .popup#recommend-dentist .popup-inner .rec-first {
-      margin-right: 0px; } }
-.popup#recommend-dentist .popup-inner .modern-field .modern-input {
-  border-radius: 7px;
-  border-width: 1px; }
-.popup#recommend-dentist .popup-inner input[type="submit"] {
-  background-color: #0cafd4;
-  margin-top: 25px;
-  margin-bottom: 30px;
-  padding: 12px 52px; }
 
 #add-team-popup form .input {
   height: 40px; }

@@ -139,14 +139,6 @@
 					@if($item->is_clinic && $item->branches->isNotEmpty() && $item->mainBranchClinic && $item->id == $item->mainBranchClinic->id)
 						<div class="main-clinic mont">{!! nl2br(trans('trp.common.primary-account')) !!}</div>
 					@endif
-
-					
-					{{-- @if($loggedUserAllowEdit && !empty($writes_review))
-						<a href="javascript:;" class="recommend-button" data-popup="recommend-dentist">
-							<img src="{{ url('img-trp/thumb-up.svg') }}">
-							{{ trans('trp.page.user.recommend') }}
-						</a>
-					@endif --}}
 					
 					@php
 						$is_branch = !empty($real_user) && $real_user->is_clinic && $item->is_clinic && $real_user->branches->isNotEmpty() && in_array($item->id, $real_user->branches->pluck('branch_clinic_id')->toArray());
@@ -189,6 +181,13 @@
 						<a href="javascript:;" class="turn-on-edit-mode white-button" to-edit="Edit Profile" to-not-edit="Edit Mode">
 							<img src="{{ url('img-trp/edit-profile-pencil.svg') }}" width="20" height="20"/>
 							<span>Edit Profile</span>
+						</a>
+					@endif
+
+					@if($user && !$user->is_dentist && !empty($writes_review))
+						<a href="javascript:;" class="white-button recommend-button" data-popup="recommend-dentist">
+							<img src="{{ url('img-trp/thumb-up.svg') }}" width="15"/>
+							{{ trans('trp.page.user.recommend') }}
 						</a>
 					@endif
 
@@ -841,9 +840,8 @@
 							{{-- {!! nl2br(trans('trp.page.user.submit-review')) !!} --}}
 							Write a review
 						</a>
-						{{-- @if(empty($is_trusted) && !$has_asked_dentist) --}}
-						@if(false)
-							<a href="javascript:;" class="blue-button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
+						@if(empty($is_trusted) && !$has_asked_dentist)							
+							<a href="{{ $item->getLink().'ask/' }}" class="white-button ask-dentist tooltip-text" text="{!! nl2br(trans('trp.popup.popup-ask-dentist.hint', [ 'name' => $item->getNames() ])) !!}" style="margin-top: 10px">
 								{!! nl2br(trans('trp.page.user.request-invite')) !!}
 							</a>
 						@endif
@@ -1009,12 +1007,9 @@
 			@include('trp.popups.add-wallet-address')
 		@endif
 	@else
-		{{-- @if(!empty($writes_review))
+		@if(!empty($writes_review))
 			@include('trp.popups.recommend-dentist')
-		@endif --}}
-		{{-- @if(empty($is_trusted) && !$has_asked_dentist)
-			@include('trp.popups.ask-dentist')
-		@endif --}}
+		@endif
 		@if(!$user->is_dentist)
 			@include('trp.popups.submit-review')
 		@endif

@@ -163,6 +163,7 @@ body.edit-dentist-profile-mode {
     justify-content: center;
     border-color: #0084d1;
 	margin-right: 5px;
+	margin-bottom: 10px;
 
 	@media #{$phone} {
 		padding: 4px 20px 7px;
@@ -186,6 +187,7 @@ body.edit-dentist-profile-mode {
 	}
 }
 
+.recommend-button,
 .add-branch,
 .delete-branch {
 	padding: 5px 20px 8px;
@@ -1382,54 +1384,6 @@ body.edit-dentist-profile-mode {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-.popup {
-	&#recommend-dentist {
-
-		.popup-inner {
-
-			h2 {
-				margin-bottom: 25px;
-			}
-
-			.popup-title {
-				font-weight: bold;
-			}
-
-			.rec-first {
-				margin-right: 18px;
-
-				@media #{$phone} {
-					margin-right: 0px;
-				}
-			}
-
-			.modern-field {
-				.modern-input {
-					border-radius: 7px;
-					border-width: 1px; 
-				}
-			}
-
-			input[type="submit"] {
-				background-color: #0cafd4;
-			    margin-top: 25px;
-			    margin-bottom: 30px;
-			    padding: 12px 52px;
-			}
-		}
-	}
-}
 
 #add-team-popup {
 	form {

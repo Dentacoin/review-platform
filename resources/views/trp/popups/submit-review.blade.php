@@ -55,7 +55,7 @@
 							</div>
 							<br><br>
 							<div class="tac">
-								<a href="{{ getLangUrl('dentist/'.$item->slug).'ask' }}" class="blue-button ask-dentist">
+								<a href="{{ getLangUrl('dentist/'.$item->slug.'/ask') }}" class="blue-button ask-dentist ask-dentist-after-submit-review">
 									{!! nl2br(trans('trp.popup.submit-review-popup.limit-send')) !!}
 								</a>
 							</div>
