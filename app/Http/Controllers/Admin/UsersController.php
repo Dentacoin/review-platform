@@ -3417,7 +3417,7 @@ class UsersController extends AdminController {
         ->where(function($query) {
 			$query->where('is_partner', 0)
 			->orWhereNull('is_partner');
-		})->where('accepted_payment', 'LIKE', 'dentacoin')->get();
+		})->where('accepted_payment', 'LIKE', '%dentacoin%')->get();
         
         return $this->showView('users-make-partners', array(
             'items' => $items,

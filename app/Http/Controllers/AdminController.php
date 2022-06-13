@@ -229,6 +229,11 @@ class AdminController extends BaseController {
         $params['counters']['support'] = $support_contacts;
         $params['counters']['contact'] = $support_contacts;
         $params['counters']['orders'] = Order::whereNull('is_send')->count();
+        $params['counters']['make-partners'] = User::whereNull('self_deleted')
+        ->where(function($query) {
+			$query->where('is_partner', 0)
+			->orWhereNull('is_partner');
+		})->where('accepted_payment', 'LIKE', '%dentacoin%')->count();
 
         $params['cache_version'] = '20220606';
         
