@@ -1,6 +1,4 @@
 var videoStart, videoLength;
-var slider = null;
-var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
 var suggestClinic;
@@ -345,27 +343,6 @@ $(document).ready(function() {
         );
     });
     //end working hours
-
-    $('.alert-edit').click( function() {
-        $('html, body').animate({
-            scrollTop: $('.edit-profile').offset().top - $('header').height()
-        }, 500);
-    });
-
-    $('.open-edit').click( function() {
-        $('.view-profile').toggle();
-        $('.edit-profile').toggle();
-        $('.edit-button').toggle();
-        $('body').addClass('edit-user');
-    } );
-
-    $('.cancel-edit').click( function() {
-        $('body').removeClass('edit-user');
-    });
-
-    if(getUrlParameter('open-edit')) {
-        $('.open-edit').first().trigger('click');
-    }
 
     var removeLanguages = function() {
         $('.remove-lang').click( function() {
@@ -713,7 +690,7 @@ $(document).ready(function() {
                     </a>\
                     ';
         
-                    var galleryFlickty = $('.gallery-flickity').flickity({
+                    $('.gallery-flickity').flickity({
                         autoPlay: false,
                         wrapAround: true,
                         cellAlign: 'left',
@@ -766,7 +743,7 @@ $(document).ready(function() {
                 </a>\
                 ';
 
-                var galleryFlickty = $('.gallery-flickity').flickity({
+                $('.gallery-flickity').flickity({
                     autoPlay: false,
                     wrapAround: true,
                     cellAlign: 'left',
@@ -1226,6 +1203,9 @@ $(document).ready(function() {
         });
     });
 
+
+    // <------ Guided TOUR ---------->
+
     var resizeGuidedTourWindow = function(elm, bubble_at_top) {
 
         var element_top = elm.offset().top - $(window).scrollTop();
@@ -1320,7 +1300,6 @@ $(document).ready(function() {
         }
 
         $('body').css('overflow-y', 'hidden');
-
         $('.bubble-guided-tour h4').html(step.title);
         $('#cur-step').html(step_number + 1);
         $('#all-steps').html(data.count_all_steps);
@@ -1677,6 +1656,10 @@ $(document).ready(function() {
         }
     });
 
+    
+    // <------ END Guided TOUR ---------->
+
+    
     //clinic delete its branch
     $('.delete-branch').click( function(e) {
         if(ajax_is_running) {

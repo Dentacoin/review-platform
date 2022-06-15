@@ -5,27 +5,16 @@ footer,
 .support-icon {
   display: none; }
 
-.flex-3 {
-  flex: 1; }
-
 .container {
   width: 100%; }
 
-.profile-reviews-space .review-wrapper:last-child {
-  margin-bottom: 0px !important; }
-
 .site-content {
-  min-height: auto !important;
-  color: #1d1d1d; }
-  .site-content * {
-    color: #1d1d1d; }
+  min-height: auto !important; }
   .site-content h2.page-title {
     font-size: 24px;
     font-family: 'Lato', sans-serif;
-    font-weight: bold; }
-    .site-content h2.page-title img {
-      margin-right: 10px;
-      vertical-align: sub; }
+    font-weight: bold;
+    margin-bottom: 30px; }
     @media screen and (max-width: 992px) {
       .site-content h2.page-title {
         font-size: 22px;
@@ -33,54 +22,13 @@ footer,
         margin-left: -10px;
         margin-right: -10px;
         padding: 5px 10px; } }
+    .site-content h2.page-title img {
+      margin-right: 10px;
+      vertical-align: sub; }
+  .site-content .blue-button {
+    margin-top: 20px; }
 
-.alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px; }
-  .alert:before {
-    display: none; }
-  .alert.alert-info {
-    color: #31708f;
-    background-color: #d9edf7;
-    border-color: #bce8f1; }
-  .alert.alert-success {
-    color: #3c763d;
-    background-color: #dff0d8;
-    border-color: #d6e9c6; }
-  .alert.alert-danger {
-    color: #a94442;
-    background-color: #f2dede;
-    border-color: #ebccd1; }
-
-@media screen and (max-width: 998px) {
-  #banned-popup:after {
-    display: none; } }
-@media screen and (max-width: 998px) {
-  #banned-popup .popup-inner {
-    height: 660px;
-    background-position: 50% 100%; } }
-@media screen and (max-width: 768px) {
-  #banned-popup .popup-inner {
-    height: 460px; } }
-@media screen and (max-width: 998px) {
-  #banned-popup .popup-inner > div {
-    height: 660px;
-    justify-content: center; } }
-@media screen and (max-width: 768px) {
-  #banned-popup .popup-inner > div {
-    height: 460px; } }
-@media screen and (max-width: 998px) {
-  #banned-popup .popup-inner .icon {
-    position: static;
-    order: 2;
-    max-width: 150px;
-    margin-top: 160px; } }
-@media screen and (max-width: 768px) {
-  #banned-popup .popup-inner .icon {
-    max-width: 90px;
-    margin-top: 30px; } }
-@media screen and (max-width: 998px) {
-  #banned-popup .popup-inner:after {
-    display: none; } }
+#banned-popup .popup-inner .flex {
+  justify-content: center; }
+#banned-popup .popup-inner h4 {
+  color: #332255; }

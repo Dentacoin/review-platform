@@ -7,6 +7,117 @@ $phone: "screen and (max-width: 768px)";
     background-color: #e2ebff;
 }
 
+
+
+.step-tabs {
+	margin-bottom: 25px;
+
+	.step {
+		text-align: center;
+		margin-right: 110px;
+
+		@media #{$phone} {
+			margin-right: 40px;
+		}
+
+		.border {
+			position: relative;
+			background: #bebebe;
+			width: 40px;
+			height: 40px;
+			display: inline-block;
+			border: none;
+			border-radius: 50%;
+
+			&:after {
+				content: '';
+				width: 151px;
+				height: 2px;
+				background-color: #bebebe;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				left: 100%;
+
+				@media #{$phone} {
+					width: 80px;
+				}
+			}
+
+			span {
+				width: 36px;
+				height: 36px;
+				display: inline-block;
+				border-radius: 50%;
+				margin-top: 2px;
+				margin-right: 0px;
+				background-color: white;
+				line-height: 36px;
+				font-size: 18px;
+				color: #bebebe;
+				font-weight: 900;
+			}
+		}
+
+		p {
+			font-size: 14px;
+			color: #bebebe;
+			margin-top: 5px;
+		}
+
+		&.active {
+			.border {
+				background: rgba(20,202,184, 1);
+				background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
+
+				span {
+					color: #14cab8;
+				}
+			}
+
+			p {
+				color: #14cab8;
+			}
+		}
+
+		&.completed {
+			.border {
+				background: rgba(20,202,184, 1);
+				background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
+
+				&::before {
+					content: '✓';
+					color: white;
+					font-size: 18px;
+					line-height: 38px;
+				}
+
+				&::after {
+					background-color: #14cab8;
+				}
+
+				span {
+					display: none;
+				}
+			}
+
+			p {
+				color: #4b607d;
+			}
+		}
+
+		&:last-child {
+			margin-right: 0px;
+
+			.border {
+				&:after {
+					display: none;
+				}
+			}
+		}
+	}
+}
+
 .lead-magnet-questions-wrapper {
     display: flex;
     align-items: center;
@@ -208,59 +319,6 @@ $phone: "screen and (max-width: 768px)";
                     input {
                         display: none;
                     }
-
-                    .checkbox-square {
-                        width: 17px;
-                        height: 17px;
-                        border: 1px solid #dddddd;
-                        display: inline-block;
-                        background-color: white;
-                        color: #126585;
-                        line-height: 26px;
-                        text-align: center;
-                        border-radius: 20%;
-                        font-weight: bold;
-                        margin-right: 5px;
-                        font-size: 0px;
-                
-                        @media #{$phone} {
-                            width: 14px;
-                            height: 14px;
-                            line-height: 23px;
-                        }
-                    }
-
-                    i {
-                        font-size: 23px;
-                        vertical-align: middle;
-                        margin-right: 6px;
-                        color: #dddddd;
-
-                        @media #{$phone} {
-                            font-size: 19px;
-                        }
-                    }
-
-                    &.active {
-                        
-                        .checkbox-square {
-                            border-color: #126585;
-                            font-size: 13px;
-                            line-height: 18px;
-                
-                            @media #{$phone} {
-                                line-height: 13px;
-                            }
-                        }
-
-                        i {
-                            color: #126585;
-
-                            &:before {
-                                content: '\f14a';
-                            }
-                        }
-                    }
                 }
             }
 
@@ -292,10 +350,6 @@ $phone: "screen and (max-width: 768px)";
                     width: 100%;
                     margin-top: 0px;
                 }
-            }
-
-            .button {
-                margin-top: 20px;
             }
         }
 

@@ -1,3 +1,10 @@
+.mobile-alert {
+  margin-bottom: 20px;
+  font-size: 14px;
+  padding: 10px 20px 10px 50px; }
+  .mobile-alert:before {
+    font-size: 20px; }
+
 @media screen and (max-width: 998px) {
   #select-reviews-popup,
   #popup-widget {
@@ -35,6 +42,14 @@
   padding: 12px 73px;
   margin-top: 30px;
   margin-bottom: 20px; }
+
+.widget-wrapper h3 {
+  margin-bottom: 30px; }
+.widget-wrapper .widget-options {
+  margin-top: 20px;
+  margin-bottom: 30px; }
+.widget-wrapper .widget-content {
+  margin-bottom: 40px; }
 
 .widget-step {
   padding-bottom: 30px; }
@@ -432,3 +447,88 @@
     color: #888888;
     text-align: center;
     margin-bottom: 20px; }
+
+.modern-radios {
+  display: flex; }
+  .modern-radios .radio-label input {
+    display: none; }
+  .modern-radios .radio-label label {
+    display: block;
+    border: 2px solid #ccc;
+    padding: 7px 9px;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #888888;
+    cursor: pointer; }
+    @media screen and (max-width: 998px) {
+      .modern-radios .radio-label label {
+        font-size: 14px;
+        padding: 11px 9px; } }
+    .modern-radios .radio-label label .modern-radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      display: inline-block;
+      background-color: white;
+      position: relative;
+      vertical-align: sub; }
+      @media screen and (max-width: 998px) {
+        .modern-radios .radio-label label .modern-radio {
+          width: 16px;
+          height: 16px;
+          margin-right: 5px; } }
+      .modern-radios .radio-label label .modern-radio span {
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        width: 10px;
+        height: 10px; }
+    .modern-radios .radio-label label i {
+      padding-right: 4px;
+      font-size: 13px;
+      color: #138ab8; }
+    .modern-radios .radio-label label.active {
+      color: black;
+      border-color: #0084d1; }
+      .modern-radios .radio-label label.active span span {
+        background-color: #666666; }
+      .modern-radios .radio-label label.active i:before {
+        content: "\f192"; }
+  .modern-radios .radio-label:first-child {
+    margin-right: 38px; }
+  .modern-radios .radio-label > span {
+    font-size: 12px;
+    color: #888888; }
+
+.header-success-tab {
+  background-color: transparent; }
+  .header-success-tab img {
+    max-width: 120px;
+    margin-bottom: 10px; }
+    @media screen and (max-width: 768px) {
+      .header-success-tab img {
+        max-width: 60px; } }
+  .header-success-tab h2 {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 38px;
+    color: #126585 !important;
+    margin-bottom: 13px !important;
+    margin-top: 30px !important; }
+    @media screen and (max-width: 768px) {
+      .header-success-tab h2 {
+        font-size: 24px;
+        margin-top: 0px !important;
+        margin-bottom: 20px !important; } }
+  .header-success-tab h4 {
+    color: #333;
+    max-width: 620px;
+    margin-right: auto;
+    margin-left: auto; }
+    @media screen and (max-width: 768px) {
+      .header-success-tab h4 {
+        font-size: 16px;
+        margin-bottom: 25px; } }

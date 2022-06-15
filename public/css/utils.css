@@ -322,12 +322,6 @@ h5 {
 .flex-bottom {
   align-items: flex-end; }
 
-.flex-item-right {
-  margin-left: auto; }
-
-.flex-item-left {
-  margin-right: auto; }
-
 .container {
   width: 1120px;
   margin-left: auto;
@@ -347,22 +341,6 @@ h5 {
       padding-left: 10px;
       padding-right: 10px; } }
   .container img {
-    max-width: 100%; }
-
-.container-middle {
-  width: 830px;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  z-index: 10;
-  background: transparent; }
-  @media screen and (max-width: 998px) {
-    .container-middle {
-      width: 760px; } }
-  @media screen and (max-width: 768px) {
-    .container-middle {
-      width: 100%; } }
-  .container-middle img {
     max-width: 100%; }
 
 .popup .alert,
@@ -505,14 +483,6 @@ h5 {
     .popup .alert.alert-info:after,
     .site-content .alert.alert-info:after {
       background-color: #bbe6ff; }
-  .popup .alert a:not(.button),
-  .site-content .alert a:not(.button) {
-    color: inherit;
-    text-decoration: underline; }
-    .popup .alert a:not(.button):hover,
-    .site-content .alert a:not(.button):hover {
-      color: inherit;
-      text-decoration: underline; }
   .popup .alert span,
   .site-content .alert span {
     display: block; }
@@ -542,18 +512,8 @@ h5 {
   .site-content .alert#password-validator {
     margin-top: -20px; }
 
-a.text {
-  color: #126585;
-  text-decoration: underline;
-  font-size: inherit; }
-  a.text:hover {
-    color: #268db5; }
-
 .site-content {
   overflow-x: hidden; }
-
-.gray-background {
-  background-color: #f7f7f7; }
 
 .black-overflow {
   position: fixed;
@@ -591,29 +551,6 @@ body.popup-visible {
   border: none; }
   .button:hover {
     background-color: #268db5;
-    transition: all 0.3s ease; }
-  .button.button-white {
-    background-color: white;
-    color: #126585; }
-  .button.button-yellow {
-    background-color: #fdc734;
-    color: black;
-    font-size: 24px; }
-    .button.button-yellow:hover {
-      background-color: #f7d16a; }
-  .button.verify-review {
-    font-size: 14px;
-    padding: 0px 10px; }
-    @media screen and (max-width: 768px) {
-      .button.verify-review {
-        font-size: 10px; } }
-
-.button-inner-white {
-  background-color: #f7f7f7;
-  border: 1px solid #126585;
-  color: #126585; }
-  .button-inner-white:hover {
-    background-color: #f7f7f7;
     transition: all 0.3s ease; }
 
 .blue-button {
@@ -727,15 +664,6 @@ body.popup-visible {
     background: url("../img-trp/stars-blue-big.png") 0% 50% no-repeat;
     background-size: cover;
     height: 29px; }
-.ratings.biggest .stars {
-  width: 230px;
-  height: 43px;
-  background: url("../img-trp/stars-gray-big.png") 50% 50% no-repeat;
-  background-size: contain; }
-  .ratings.biggest .stars .bar {
-    background: url("../img-trp/stars-blue-big.png") 0% 50% no-repeat;
-    background-size: cover;
-    height: 43px; }
 .ratings.average .stars {
   width: 124px;
   height: 22px;
@@ -852,20 +780,6 @@ textarea.input {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
-.radio-label input {
-  display: none; }
-.radio-label label {
-  padding-left: 0px;
-  display: inline;
-  font-size: 16px;
-  cursor: pointer; }
-  .radio-label label i {
-    padding-right: 4px;
-    font-size: 13px;
-    color: #138ab8; }
-  .radio-label label.active i:before {
-    content: "\f192"; }
-
 .green-checkbox {
   position: relative;
   font-size: 16px;
@@ -1086,142 +1000,8 @@ textarea.input {
     @media screen and (max-width: 768px) {
       .modern-field.active textarea.modern-input + label > span {
         top: -196px; } }
-  .modern-field.active .search-icon {
-    background-color: #126585; }
   .modern-field .suggest-results {
     top: calc(100% - 16px) !important; }
-  .modern-field .search-icon {
-    position: absolute;
-    right: 1px;
-    top: 1px;
-    height: 56px;
-    width: 45px;
-    background-color: #888888;
-    color: white;
-    text-align: center;
-    line-height: 56px;
-    border-radius: 3px; }
-    @media screen and (max-width: 998px) {
-      .modern-field .search-icon {
-        height: 43px;
-        line-height: 43px; } }
-  .modern-field .search-wrap {
-    position: absolute;
-    right: 1px;
-    top: 1px;
-    height: 56px;
-    width: 45px;
-    background-color: #888888;
-    color: white;
-    text-align: center;
-    line-height: 56px;
-    border-radius: 3px;
-    padding: 11px; }
-    @media screen and (max-width: 998px) {
-      .modern-field .search-wrap {
-        height: 43px;
-        line-height: 43px; } }
-    .modern-field .search-wrap img {
-      width: 16px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%); }
-  .modern-field.modern-file label {
-    padding-left: 20px;
-    font-size: 17px;
-    height: 58px;
-    font-weight: 300;
-    border-radius: 4px;
-    margin: 0;
-    border: 2px solid #cccccc;
-    width: 100%;
-    transition: padding-top 0.2s ease, margin-top 0.2s ease;
-    overflow-x: hidden;
-    position: relative; }
-    @media screen and (max-width: 998px) {
-      .modern-field.modern-file label {
-        height: 45px; } }
-    .modern-field.modern-file label .file-name {
-      line-height: 42px; }
-      @media screen and (max-width: 998px) {
-        .modern-field.modern-file label .file-name {
-          line-height: 31px; } }
-    .modern-field.modern-file label .file-submit {
-      position: absolute;
-      width: 130px;
-      background-color: #ccc;
-      color: black;
-      font-size: 18px;
-      right: 0px;
-      top: 0;
-      bottom: 0;
-      line-height: 54px;
-      text-align: center;
-      font-weight: 500; }
-      @media screen and (max-width: 998px) {
-        .modern-field.modern-file label .file-submit {
-          line-height: 40px;
-          font-size: 16px; } }
-  .modern-field.modern-file input {
-    display: none; }
-  .modern-field.modern-file.has-error label {
-    border-color: rgba(255, 0, 0, 0.2); }
-    .modern-field.modern-file.has-error label .file-submit {
-      background-color: rgba(255, 0, 0, 0.2); }
-  .modern-field.modern-file.active label {
-    border-color: #126585; }
-    .modern-field.modern-file.active label .file-submit {
-      background-color: #126585;
-      color: white; }
-
-.modern-radios {
-  display: flex; }
-  .modern-radios .radio-label label {
-    display: block;
-    border: 2px solid #ccc;
-    padding: 7px 9px;
-    border-radius: 4px;
-    font-size: 18px;
-    color: #888888; }
-    @media screen and (max-width: 998px) {
-      .modern-radios .radio-label label {
-        font-size: 14px;
-        padding: 11px 9px; } }
-    .modern-radios .radio-label label .modern-radio {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 1px solid #ccc;
-      display: inline-block;
-      background-color: white;
-      position: relative;
-      vertical-align: sub; }
-      @media screen and (max-width: 998px) {
-        .modern-radios .radio-label label .modern-radio {
-          width: 16px;
-          height: 16px;
-          margin-right: 5px; } }
-      .modern-radios .radio-label label .modern-radio span {
-        position: absolute;
-        border-radius: 50%;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-        width: 10px;
-        height: 10px; }
-    .modern-radios .radio-label label.active {
-      color: black;
-      border-color: #126585; }
-      .modern-radios .radio-label label.active span span {
-        background-color: #666666; }
-  .modern-radios .radio-label:first-child {
-    margin-right: 38px; }
-  .modern-radios .radio-label > span {
-    font-size: 12px;
-    color: #888888; }
-  .modern-radios.has-error .radio-label label {
-    border-color: #ffd7d7; }
 
 .green-text {
   color: #14cab8; }

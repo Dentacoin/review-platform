@@ -79,7 +79,7 @@
 			                    	@if(filter_var($user->website, FILTER_VALIDATE_URL) === FALSE)
 	                                    <p>{{ $user->website }}</p>
 	                                @else
-	                                    <p><a href="{{ $user->website }}" target="_blank">{{ $user->website }}</a></p>
+	                                    <p><a href="{{ $user->getWebsiteUrl() }}" target="_blank">{{ $user->website }}</a></p>
 	                                @endif
 	                            @else
 	                            	<p>-</p>

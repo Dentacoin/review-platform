@@ -32,7 +32,7 @@
 			</div>
 			<div class="col flex flex-mobile share-link">
 				<input type="text" id="share-url" class="input select-me" name="link" value="">
-				<a class="copy-link button" href="javascript:;">
+				<a class="copy-link" href="javascript:;">
 					<img src="{{ url('img/copy-files.svg') }}" width="25"/>
 				</a>
 			</div>

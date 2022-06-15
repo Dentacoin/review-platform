@@ -3,6 +3,8 @@
 return [
 	
 	'add_to_sendgrid_list' => false, //false from 09.06.22
+	'using_google_maps' => false, //false from 15.06.22
+	'use_deepl' => false, //false from 15.06.22
 	
 	'social_network' => [
 		'facebook' => 'facebook',

@@ -27,5 +27,4 @@ $(document).ready(function(){
 	});
 
 	setTimeout( redirectToAccount, 15000 );
-
 });

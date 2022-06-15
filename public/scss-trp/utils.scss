@@ -315,7 +315,6 @@ h5 {
     	@media #{$pc} {
 			flex-direction: column;
 
-
     		&>.col,
     		&>.flex-2,
     		&>.flex-3,
@@ -421,13 +420,6 @@ h5 {
     align-items: flex-end;
 }
 
-.flex-item-right {
-	margin-left: auto;
-}
-.flex-item-left {
-	margin-right: auto;
-}
-
 .container {
 	width: 1120px;
 	margin-left: auto;
@@ -446,26 +438,6 @@ h5 {
 		width: 100%;
 		padding-left: 10px;
 		padding-right: 10px;
-	}
-
-	img {
-		max-width: 100%;
-	}
-}
-
-.container-middle {
-	width: 830px;
-	margin-left: auto;
-	margin-right: auto;
-	position: relative;
-	z-index: 10;
-	background: transparent;
-
-	@media #{$tablet} {
-		width: 760px;
-	}
-	@media #{$phone} {
-		width: 100%;
 	}
 
 	img {
@@ -578,6 +550,7 @@ h5 {
 				background-color: #f4c1c3;
 			}
 		}
+
 		&.alert-orange {
 			border-color: #e4c1b0;
 			
@@ -596,6 +569,7 @@ h5 {
 				background-color: #e4c1b0;
 			}
 		}
+
 		&.alert-success {
 			border-color: #90fce6;
 			
@@ -614,6 +588,7 @@ h5 {
 				background-color: #90fce6;
 			}
 		}
+
 		&.alert-info {
 			border-color: #bbe6ff;
 
@@ -630,16 +605,6 @@ h5 {
 
 			&:after {
 				background-color: #bbe6ff;
-			}
-		}
-
-		a:not(.button) {
-			color: inherit;
-			text-decoration: underline;
-
-			&:hover {
-				color: inherit;
-				text-decoration: underline;
 			}
 		}
 
@@ -676,23 +641,8 @@ h5 {
 	}
 }
 
-
-a.text {
-	color: #126585;
-	text-decoration: underline;
-    font-size: inherit;
-
-	&:hover {
-		color: #268db5;
-	}
-}
-
 .site-content {
 	overflow-x: hidden; 
-}
-
-.gray-background {
-	background-color: #f7f7f7;
 }
 
 .black-overflow {
@@ -743,42 +693,6 @@ body.popup-visible {
 
     &:hover {
     	background-color: #268db5;
-    	transition: all 0.3s ease;
-    }
-
-    &.button-white {
-    	background-color: white;
-    	color: #126585;
-    }
-
-    &.button-yellow {
-    	background-color: #fdc734;
-    	color: black;
-		font-size: 24px;
-
-    	&:hover {
-    		background-color: #f7d16a;
-    	}
-    }
-
-	&.verify-review {
-		font-size: 14px;
-		padding: 0px 10px;
-		//background-color: #14cab8;
-
-		@media #{$phone} {
-			font-size: 10px;
-		}
-	}
-}
-
-.button-inner-white {
-	background-color: #f7f7f7;
-    border: 1px solid #126585;
-    color: #126585;
-
-    &:hover {
-    	background-color: #f7f7f7;
     	transition: all 0.3s ease;
     }
 }
@@ -929,22 +843,7 @@ body.popup-visible {
 				height: 29px;
 	        }
 	    }
-    }	
-
-    &.biggest {
-	    .stars {
-	        width: 230px;
-	        height: 43px;
-	        background: url('../img-trp/stars-gray-big.png') 50% 50% no-repeat;
-	        background-size: contain;
-
-	        .bar {
-	            background: url('../img-trp/stars-blue-big.png') 0% 50% no-repeat;
-	            background-size: cover;
-	            height: 43px;
-	        }
-	    }
-    }	
+    }
 
     &.average {
 	    .stars {
@@ -1106,31 +1005,6 @@ textarea.input {
   	100% {
 	    -webkit-transform: rotate(360deg);
 	    transform: rotate(360deg);
-	}
-}
-
-.radio-label {
-	input {
-	    display: none;
-	}
-
-	label {
-	    padding-left: 0px;
-	    display: inline;
-	    font-size: 16px;
-	    cursor: pointer;
-
-	    i {
-		    padding-right: 4px;
-		    font-size: 13px;
-		    color: #138ab8;
-		}
-
-		&.active {
-			i:before {
-			    content: "\f192";
-			}
-		}
 	}
 }
 
@@ -1464,206 +1338,10 @@ textarea.input {
 				top: -196px;
 			}
 		}
-
-		.search-icon {
-			background-color: #126585;
-		}
 	}
 
 	.suggest-results {
 		top: calc(100% - 16px) !important;
-	}
-
-	.search-icon {
-		position: absolute;
-		right: 1px;
-		top: 1px;
-		height: 56px;
-		width: 45px;
-		background-color: #888888;
-		color: white;
-		text-align: center;
-		line-height: 56px;
-		border-radius: 3px;
-
-		@media #{$tablet} {
-		    height: 43px;
-		    line-height: 43px;
-		}
-	}
-
-	.search-wrap {
-		position: absolute;
-		right: 1px;
-		top: 1px;
-		height: 56px;
-		width: 45px;
-		background-color: #888888;
-		color: white;
-		text-align: center;
-		line-height: 56px;
-		border-radius: 3px;
-		padding: 11px;
-
-		@media #{$tablet} {
-		    height: 43px;
-		    line-height: 43px;
-		}
-
-		img {
-			width: 16px;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translateX(-50%) translateY(-50%);
-		}
-	}
-
-	&.modern-file {
-
-		label {
-			padding-left: 20px;
-		    font-size: 17px;
-		    height: 58px;
-		    font-weight: 300;
-		    border-radius: 4px;
-		    margin: 0;
-		    border: 2px solid #cccccc;
-		    width: 100%;
-		    transition: padding-top 0.2s ease, margin-top 0.2s ease;
-		    overflow-x: hidden;
-		    position: relative;
-
-		    @media #{$tablet} {
-				height: 45px;
-			}
-
-		    .file-name {
-		    	line-height: 42px;
-
-		    	@media #{$tablet} {
-		    		line-height: 31px;
-		    	}
-		    }
-
-		    .file-submit {
-		    	position: absolute;
-		    	width: 130px;
-		    	background-color: #ccc;
-		    	color: black;
-		    	font-size: 18px;
-		    	right: 0px;
-				top: 0;
-				bottom: 0;
-				line-height: 54px;
-				text-align: center;
-				font-weight: 500;
-
-				@media #{$tablet} {
-					line-height: 40px;
-					font-size: 16px;
-				}
-		    }
-		}
-
-		input {
-			display: none;
-		}
-
-		&.has-error {
-			label {
-				border-color: rgba(255, 0, 0, 0.2);
-
-				.file-submit {
-					background-color: rgba(255, 0, 0, 0.2);
-				}
-			}
-			
-		}
-
-		&.active {
-			label {
-				border-color: #126585;
-
-				.file-submit {
-					background-color: #126585;
-					color: white;
-				}
-			}
-		}
-	}
-}
-
-.modern-radios {
-	display: flex;
-
-	.radio-label {
-		label {
-			display: block;
-			border: 2px solid #ccc;
-			padding: 7px 9px;
-			border-radius: 4px;
-			font-size: 18px;
-			color: #888888;
-
-			@media #{$tablet} {
-				font-size: 14px;
-				padding: 11px 9px;
-			}
-
-			.modern-radio {
-				width: 20px;
-				height: 20px;
-				border-radius: 50%;
-				border: 1px solid #ccc;
-				display: inline-block;
-				background-color: white;
-				position: relative;
-				vertical-align: sub;
-
-				@media #{$tablet} {
-					width: 16px;
-					height: 16px;
-					margin-right: 5px;
-				}
-
-				span {
-					position: absolute;
-					border-radius: 50%;
-					top: 50%;
-					left: 50%;
-					transform: translateX(-50%) translateY(-50%);
-					width: 10px;
-					height: 10px;
-				}
-			}
-			&.active {
-				color: black;
-				border-color: #126585;		
-				span {
-					span {
-						background-color: #666666;
-					}
-				}
-			}
-		}
-
-		&:first-child {
-			margin-right: 38px;
-		}
-
-		>span {
-			font-size: 12px;
-			color: #888888;
-		}
-	}
-
-	&.has-error {
-		.radio-label {
-			label {
-				border-color: #ffd7d7;
-			}
-		}
 	}
 }
 

@@ -133,39 +133,6 @@ header {
 			margin-right: 3px;
 		}
 
-		.button-dentists {
-			color: white;
-		    border: 1px solid white;
-		    padding: 6px 15px;
-		    border-radius: 5px;
-		    text-align: center;
-		    display: inline-block;
-		    padding-bottom: 7px;
-		    transition: all 0.3s ease;
-
-		    &:hover {
-		    	background-color: white;
-		    	color: #126585;
-		    	transition: all 0.3s ease;
-		    }
-		}
-
-		.button-sign-in {
-			color: white;
-			text-transform: uppercase;
-			margin-left: 10px;
-		    transition: all 0.3s ease;
-
-			&:hover {
-				color: #126585;
-		    	transition: all 0.3s ease;
-			}
-		}
-
-		.name {
-			color: white;
-		}
-
 		.search-dentists {
 			width: 40px;
 			height: 40px;
@@ -225,34 +192,6 @@ header {
 				// 	margin-left: 8px;
 				// 	width: 35px;
 				// }
-			}
-
-			.profile-branches {
-				position: absolute;
-				width: 18px;
-				height: 18px;
-				background-color: white;
-				border-radius: 50%;
-				right: -5px;
-				bottom: -5px;
-				box-shadow: 0px 0px 7px 0px #898989;
-				text-align: center;
-
-			    @media #{$phone} {
-			    	width: 20px;
-    				height: 20px;
-    				padding: 3px;
-			    }
-
-			    img {
-			    	width: 68%;
-					margin-left: auto;
-					vertical-align: initial;
-					position: absolute;
-					top: 50%;
-					left: 50%;
-					transform: translateX(-50%) translateY(-50%);
-			    }
 			}
 
 			.notification {
@@ -352,33 +291,6 @@ header {
 }
 
 body {
-	
-	&.logged-in {
-
-		.home-search-form {
-			top: 160px;
-	
-			@media #{$phone} {
-				top: 80px;
-				text-align: center;
-			}
-	
-			h2 {
-				@media #{$phone} {
-					font-size: 30px;
-					margin-bottom: 20px;
-				}
-			}
-		}
-	
-		.main-top {
-			padding-bottom: 370px;
-	
-			@media #{$phone} {
-				padding-bottom: 210px;
-			}
-		}
-	}
 
 	&.white-header {
 		header {
@@ -420,275 +332,6 @@ body {
 	display: none;
 }
 
-.flickity {
-	width: 89%;
-	margin-right: auto;
-	margin-left: auto;
-	padding-bottom: 100px;
-	position: relative;
-
-	@media #{$phone} {
-		width: 100%;
-		padding-bottom: 40px;
-	}
-
-	.slider-wrapper {
-		display: block;
-		width: 25%;
-		padding-left: 20px;
-		padding-right: 20px;
-		counter-increment: carousel-cell;
-		border-radius: 5px;
-
-		@media #{$pc} {
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-
-		@media #{$tablet} {
-			width: 50%;
-		}
-
-		@media #{$phone} {
-			width: 66%;
-		}
-
-		&:hover:not(.pending):not(.no-upper) {
-
-			.slider-container {
-				transition: all 0.3s ease;
-    			transform: translateY(-41px);
-
-				@media #{$tablet} {
-					margin-top: 0px;
-				}
-			}
-		}
-
-		&:hover:not(.pending) {
-			.flickity-buttons {
-				display: block;
-			}
-		}
-
-		.slider-container {
-		    z-index: 2;
-		    width: 100%;
-		    position: relative;
-		    background-color: white;
-		    padding: 13px;
-    		padding-right: 10px;
-			transition: all 0.3s ease;
-			flex: 1;
-			display: flex;
-			justify-content: center;
-    		flex-direction: column;
-
-			@media #{$pc} {
-				padding: 6px;
-			}
-
-			.not-verified {
-				position: absolute;
-				top: -22px;
-				background-color: #126585;
-				color: white;
-				left: 0;
-				right: 0;
-				text-align: center;
-				height: 22px;
-				line-height: 22px;
-			}
-
-    		h4 {
-    			font-weight: bold;
-    			margin-bottom: 15px;
-    		}
-
-    		.p {
-    			margin-bottom: 5px;
-    			font-size: 14px;
-    			display: flex;
-
-    			.img {
-					width: 25px;
-
-					img {
-						height: 14px;
-					}
-				}
-
-    			span {
-    				font-size: 14px;
-    				color: gray;
-
-    				&.green-text {
-					    color: #14cab8;
-					}
-    			}
-    		}
-
-    		.approve-buttons {
-    			display: flex;
-    			margin-top: 20px;
-
-    			div {
-    				flex: 1;
-    				height: 30px;
-    				line-height: 30px;
-    				text-align: center;
-    				font-size: 14px;
-    				color: white;
-    				display: block;
-    				border-radius: 5px;
-
-    				&.yes {
-    					margin-right: 15px;
-    					background: #14cab8;
-    				}
-    				&.no {
-    					background: #ea6e6a;
-    				}
-    			}
-    		}
-		}
-
-		.flickity-buttons {
-			display: none;
-			text-align: center;
-    		margin-top: -41px;
-
-			@media #{$tablet} {
-				display: block;
-			}
-
-			div {
-				width: 50%;
-				float: left;
-				display: block;
-			    background-color: #08aae0;
-			    padding-top: 10px;
-			    padding-bottom: 12px;
-			    color: white;
-
-			    @media #{$pc} {
-					font-size: 13px;
-				}
-
-			    &:first-child {
-			    	border-bottom-left-radius: 5px;
-			    }
-
-			    &:nth-child(2) {
-			    	background-color: #2dcec3;
-			    	border-bottom-right-radius: 5px;
-			    }
-			}
-		}
-
-		.slider-image {
-			padding-top: 100%;
-			background-size: cover;
-			background-position: 50%;
-			border-top-left-radius: 5px;
-			border-top-right-radius: 5px;
-			position: relative;
-    		background-color: white;
-
-			@media #{$tablet} {
-				height: 220px;
-			}
-
-			@media #{$phone} {
-				padding-top: 78%;
-    			height: auto;
-			}
-
-			img:not(.close-icon) {
-				position: absolute;
-			    top: 6px;
-			    left: 6px;
-			    width: 18px;
-			    height: 18px;
-			    z-index: 100;
-			}
-
-			.close-icon {
-				width: 50%;
-			}
-
-			.deleter {
-			    position: absolute;
-			    top: 5px;
-			    right: 5px;
-			    width: 23px;
-			    height: 23px;
-			    background: #898989;
-			    border-radius: 50%;
-			    display: flex;
-			    align-items: center;
-			    justify-content: center;
-
-			    i {
-			    	background: none;
-			    	color: white;
-			    }
-			}
-		}
-
-		.slider-image-wrapper {
-			background: white;
-			padding: 20px;
-			border-top-left-radius: 5px;
-			border-top-right-radius: 5px;
-			
-			.slider-image {
-				border-radius: 5px;
-			}
-		}
-	}
-
-	.flickity-prev-next-button {
-	    width: 28px !important;
-	    height: 66px !important;
-	    border-radius: 0px !important;
-	}
-
-	.flickity-prev-next-button.previous {
-		left: -50px !important;
-		background: url('../img-trp/slider-arrow-left.png') 50% 50% no-repeat;
-
-		svg {
-			display: none;
-		}
-	}
-
-	.flickity-prev-next-button.next {
-		right: -50px !important;
-		background: url('../img-trp/slider-arrow-right.png') 50% 50% no-repeat;
-
-		svg {
-			display: none;
-		}
-	}
-}
-
-.gbb {
-	position: relative;
-	padding-bottom: 25px;
-
-	&::after {
-	    content: '';
-	    position: absolute;
-	    bottom: 0px;
-	    left: 50%;
-	    transform: translateX(-50%);
-	    height: 2px;
-	    width: 223px;
-	    background-color: #c1c1c1;
-	}
-}
-
 .centered-hack {
 	position: absolute;
 	width: 100%;
@@ -723,10 +366,6 @@ footer {
 		height: auto;
 		padding-top: 20px;
 		padding-bottom: 40px;
-	}
-
-	&.gray-footer {
-		background-color: #f7f7f7;
 	}
 
 	.container {
@@ -1090,7 +729,6 @@ footer {
 		}
 	}
 
-
 	.popup-inner {
 		position: relative;
 		background-color: white;
@@ -1135,12 +773,6 @@ footer {
 			}
 		}
 
-		.share-popup {
-			position: absolute;
-			left: 20px;
-			top: 20px;
-		}
-
 		h2 {
 			text-align: center;
 			font-size: 35px;
@@ -1171,68 +803,6 @@ footer {
 			}
 		}
 
-		.dcn-review-reward {
-			position: absolute;
-			left: 20px;
-			top: 20px;
-			display: flex;
-    		align-items: center;
-
-			@media #{$tablet} {
-				left: unset;
-				right: 20px;
-				top: 40px;
-			}
-
-			span.reward-info {
-				font-size: 20px;
-	    		color: #126585;
-
-	    		@media #{$tablet} {
-	    			font-size: 16px;
-	    		}
-
-	    		span {
-	    			font-size: inherit;
-	    			color: inherit;
-	    		}
-	    	}
-
-	    	img {
-	    		width: 17px;
-	    		height: 17px;
-	    		margin-right: 3px;
-
-	    		@media #{$tablet} {
-	    		    width: 13px;
-	    		    height: 13px;
-	    		}
-	    	}
-		}
-
-		.mobile-tac {
-
-			h4 {
-				@media #{$phone} {
-					display: inline-block;
-					background-color: white;
-				}
-
-				&:before {
-					@media #{$phone} {
-						content: "";
-					    position: absolute;
-					    height: 1px;
-					    width: 100vw;
-					    left: 100%;
-					    background-color: black;
-					    top: 50%;
-					    margin-left: 10px;
-					}
-				}
-			}
-		}
-
 		.blue-button {
 			text-transform: uppercase;
 			padding: 10px 76px;
@@ -1247,179 +817,8 @@ footer {
 			}	
 		}
 
-		.search-dentist {
-			margin-top: 40px;
-			margin-bottom: 30px;
-			position: relative;
-
-			&:not(.iconn) {
-				
-				input {
-					width: 100%;
-					height: 40px;
-					padding-left: 45px;
-				}
-
-				img {
-					position: absolute;
-					top: 11px;
-					left: 20px;
-					max-width: 18px;
-				}
-			}
-		}
-
 		.search-dentist-form {
 			margin-bottom: 40px;
-		}
-	}
-}
-
-.search-results-popup {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 130, 209, 0.88);
-	z-index: 1001111111;
-	display: none;
-	overflow-y: auto;
-
-	&.active {
-		display: block;
-	}
-
-	.container {
-		margin-top: 110px;
-
-		@media #{$phone} {
-			margin-top: 20px;
-		}
-	}
-
-	.search-form {
-		box-shadow: none;
-	}
-
-	.close-search-popup {
-		margin-left: auto;
-		width: 35px;
-		display: block;
-		margin-bottom: 40px;
-
-		@media #{$phone} {
-			width: 25px;
-			margin-bottom: 20px;
-		}
-	}
-}
-
-.step-tabs {
-	margin-bottom: 25px;
-
-	.step {
-		text-align: center;
-		margin-right: 110px;
-
-		@media #{$phone} {
-			margin-right: 40px;
-		}
-
-		.border {
-			position: relative;
-			background: #bebebe;
-			width: 40px;
-			height: 40px;
-			display: inline-block;
-			border: none;
-			border-radius: 50%;
-
-			&:after {
-				content: '';
-				width: 151px;
-				height: 2px;
-				background-color: #bebebe;
-				position: absolute;
-				top: 50%;
-				transform: translateY(-50%);
-				left: 100%;
-
-				@media #{$phone} {
-					width: 80px;
-				}
-			}
-
-			span {
-				width: 36px;
-				height: 36px;
-				display: inline-block;
-				border-radius: 50%;
-				margin-top: 2px;
-				margin-right: 0px;
-				background-color: white;
-				line-height: 36px;
-				font-size: 18px;
-				color: #bebebe;
-				font-weight: 900;
-			}
-		}
-
-		p {
-			font-size: 14px;
-			color: #bebebe;
-			margin-top: 5px;
-		}
-
-		&.active {
-			.border {
-				background: rgba(20,202,184, 1);
-				background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
-
-				span {
-					color: #14cab8;
-				}
-			}
-
-			p {
-				color: #14cab8;
-			}
-		}
-
-		&.completed {
-			.border {
-				background: rgba(20,202,184, 1);
-				background: linear-gradient(156deg, rgba(20,202,184,1) 0%, rgba(5,100,198,1) 100%);
-
-				&::before {
-					content: '✓';
-					color: white;
-					font-size: 18px;
-					line-height: 38px;
-				}
-
-				&::after {
-					background-color: #14cab8;
-				}
-
-				span {
-					display: none;
-				}
-			}
-
-			p {
-				color: #4b607d;
-			}
-		}
-
-		&:last-child {
-			margin-right: 0px;
-
-			.border {
-				&:after {
-					display: none;
-				}
-			}
 		}
 	}
 }
@@ -1445,88 +844,6 @@ footer {
 		@media #{$phone} {
 			width: 26px;
 		}
-	}
-}
-
-.mobile-buttons {
-	display: none;
-
-	@media #{$phone} {
-		display: flex;
-	}
-}
-
-.tablet-buttons {
-	display: none;
-
-	@media #{$tablet} {
-		display: block;
-	}
-}
-
-.page-dentist,
-.page-dentists {
-
-	.home-search-form {
-	    top: 15px;
-	    width: 810px;
-		z-index: 1022;
-
-	    @media #{$pc} {
-	    	width: 620px;
-	    }
-
-	    @media #{$tablet} {
-	    	width: 450px;
-	    }
-
-	    @media #{$phone} {
-	    	width: 100%;
-	    	top: 60px;
-	    }
-
-		form {
-			height: 35px;
-
-			i {
-			    line-height: 35px;
-			}
-
-			input[type="submit"] {
-			    margin-top: 3px;
-			}
-		}
-	}
-	.main-top {
-		padding-bottom: 170px;
-	}
-}
-
-.page-dentists {
-	.home-search-form {
-		@media #{$phone} {
-	    	padding: 0px 10px;
-	    }
-	}
-}
-
-.blue-background {
-	background-color: #12b3e7;
-	height: 117px;
-	position: relative;
-
-	&::after {
-		content: '';
-		position: absolute;
-		top: 100%;
-		background: url('../img-trp/profile-line.png') no-repeat 50% 50%;
-		background-size: cover;
-	    width: 100%;
-	    padding-top: 12%;
-	}
-
-	&.extended {
-		height: 147px;
 	}
 }
 
@@ -1580,7 +897,7 @@ footer {
 
 .site-content {
 	.pac-container {
-		z-index: 2000 !important;
+		z-index: 2000 !important; //do not remove
 	}
 }
 
@@ -1590,16 +907,6 @@ footer {
 	left: 0;
 	right: 0;
     z-index: 10000;
-}
-
-.clear {
-	clear: both;
-
-	&.flex {
-		@media #{$tablet} {
-			display: block;
-		}
-	}
 }
 
 .suggester-map-div {
@@ -1639,17 +946,6 @@ footer {
 
 .lb-outerContainer {
 	background-color: transparent !important;
-}
-
-.mobile-alert,
-#alert-name-dentist {
-	margin-bottom: 20px;
-    font-size: 14px;
-    padding: 10px 20px 10px 50px;
-
-    &:before {
-	    font-size: 20px;
-	}
 }
 
 .loader-mask {
@@ -1742,6 +1038,7 @@ footer {
 	}
 }
 
+//dcn login/register popup
 .dentacoin-login-gateway-container {
 
 	& * {
@@ -1868,11 +1165,6 @@ footer {
 	}
 }
 
-//fb chat
-[data-testid="unread_iframe"] {
-	display: none;
-}
-
 //cookiebar
 .dcn-privacy-policy-cookie {
 
@@ -1991,29 +1283,6 @@ footer {
 		line-height: 22px;
 		border: 0;
 		background: transparent;
-	}
-}
-
-.max-size-label {
-	max-width: 170px;
-	margin-left: auto;
-	margin-top: 10px;
-
-	@media #{$phone} {
-		font-size: 14px;
-		max-width: 100%;
-		text-align: center;
-	}
-
-	svg {
-		max-width: 30px;
-		margin-right: 10px;
-		vertical-align: sub;
-
-		@media #{$phone} {
-			max-width: 15px;
-			margin-right: 5px;
-		}
 	}
 }
 

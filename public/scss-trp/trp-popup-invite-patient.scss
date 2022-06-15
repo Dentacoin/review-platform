@@ -368,32 +368,6 @@ $phone: "screen and (max-width: 768px)";
             }
         }
 
-        .button {
-            padding: 12px 49px;
-            background-color: #0cafd4;
-            -webkit-appearance: none;
-
-            @media #{$phone} {
-                width: 100%;
-                text-align: center;
-            }
-
-            i {
-                color: white;
-            }
-
-            &.button-inner-white {
-                background-color: white;
-                border-color: #0cafd4;
-                color: #0cafd4;
-                padding: 11px 77px;
-            }
-
-            &[disabled="disabled"] {
-                background-color: #aaaaaa;
-            }
-        }
-
         .whatsapp-button {
             padding: 14px 29px;
             padding-left: 70px;
@@ -469,144 +443,6 @@ $phone: "screen and (max-width: 768px)";
                 }
             }
         }
-
-        .chosen-patient-info {
-            height: 62px;
-            border: 1px solid #d6d6d7;
-            border-radius: 8px;
-            margin-top: 25px;
-
-            @media #{$phone} {
-                height: auto;
-            }
-
-            .patient-info-label {
-                height: 100%;
-                min-width: 160px;
-                text-align: center;
-                align-items: center;
-                line-height: 60px;
-                text-transform: uppercase;
-                border-top-left-radius: 8px;
-                border-bottom-left-radius: 8px;
-                background-color: #eeeeee;
-
-                @media #{$phone} {
-                    line-height: 40px;
-                    border-top-right-radius: 8px;
-                    border-bottom-left-radius: 0px;
-                }
-            }
-
-            .patient-info-value {
-                height: 100%;
-                line-height: 60px;
-                margin: 0px 23px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                border-top-right-radius: 8px;
-                border-bottom-right-radius: 8px;
-
-                @media #{$phone} {
-                    line-height: 50px;
-                    margin: 0px 10px;
-                }
-            }
-        }
-
-        form {
-
-            .input-flex {
-                align-items: center;
-
-                @media #{$phone} {
-                    display: flex;
-                }
-
-                .code-wrapper {
-                    flex: 1;
-                    max-width: 68px;
-                    text-align: center;
-                    height: 58px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background-color: #eeeeee;
-                    border: 1px solid #cccccc;
-                    border-radius: 8px;
-                    border-right: none;
-                    border-top-right-radius: 0px;
-                    border-bottom-right-radius: 0px;
-
-                    @media #{$tablet} {
-                        height: 45px;
-                    }
-
-                    @media #{$phone} {
-                        max-width: 58px;
-                    }						
-                }
-
-                .modern-field {
-                    margin-bottom: 0px;
-
-                    .modern-input + label {
-                        height: 0px;
-                    }
-
-                    .modern-input {							
-                        border-top-left-radius: 0px;
-                        border-bottom-left-radius: 0px;
-                    }
-                }
-            }
-
-            #add-invite-image {
-                opacity: 0;
-               position: absolute;
-               z-index: -1;
-            }
-
-            label[for="add-invite-image"] {
-                position: relative;
-                width: 100%;
-                height: 41px;
-                background-color: #126585;
-                display: block;
-                border-radius: 5px;
-                color: white;
-                text-align: center;
-                line-height: 41px;
-                cursor: pointer;
-            }
-
-            .col:first-child {
-                margin-left: 0px;
-
-                @media #{$phone} {
-                    margin-right: 0px;
-                }
-            }
-
-            .col {
-                margin-left: 15px;
-
-                @media #{$phone} {
-                    margin-left: 0px;
-                }
-            }
-
-            .add-dentist,
-            .add-patient {
-                color: #126585;
-            }
-
-            .button {
-                margin-top: 25px;
-                padding: 12px 49px;
-            }
-        }
     }
 
     .first-alert {
@@ -665,87 +501,86 @@ $phone: "screen and (max-width: 768px)";
     .CodeMirror-gutter-wrapper {
         left: 0px !important;
     }
-
     
     .sample-invite-wrapper {
         p, div, a, a strong {
-        font-family: arial,helvetica,sans-serif;
-        font-size: 14px;
-        line-height: 22px;
+            font-family: arial,helvetica,sans-serif;
+            font-size: 14px;
+            line-height: 22px;
         }
         a, a strong {
-        text-decoration: none !important;
+            text-decoration: none !important;
             color: #1188E6;
         }
         p { margin: 0 !important; padding: 0 !important; }
         table.wrapper {
-        width:100% !important;
-        table-layout: fixed !important;
-        -webkit-font-smoothing: antialiased !important;
-        -webkit-text-size-adjust: 100% !important;
-        -moz-text-size-adjust: 100% !important;
-        -ms-text-size-adjust: 100% !important;
+            width:100% !important;
+            table-layout: fixed !important;
+            -webkit-font-smoothing: antialiased !important;
+            -webkit-text-size-adjust: 100% !important;
+            -moz-text-size-adjust: 100% !important;
+            -ms-text-size-adjust: 100% !important;
         }
         strong {
             font-weight: bold;
         }
         img.max-width {
-        max-width: 100% !important;
-        }
-        .column.of-2 {
-        width: 50% !important;
-        }
-        .column.of-3 {
-        width: 33.333% !important;
-        }
-        .column.of-4 {
-        width: 25% !important;
-        }
-        @media screen and (max-width:480px) {
-        .preheader .rightColumnContent,
-        .footer .rightColumnContent {
-            text-align: left !important;
-        }
-        .preheader .rightColumnContent div,
-        .preheader .rightColumnContent span,
-        .footer .rightColumnContent div,
-        .footer .rightColumnContent span {
-            text-align: left !important;
-        }
-        .preheader .rightColumnContent,
-        .preheader .leftColumnContent {
-            font-size: 80% !important;
-            padding: 5px 0 !important;
-        }
-        table.wrapper-mobile {
-            width: 100% !important;
-            table-layout: fixed;
-        }
-        img.max-width {
-            height: auto !important;
             max-width: 100% !important;
         }
-        a.bulletproof-button {
-            display: block !important;
-            width: auto !important;
-            font-size: 80%;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
+        .column.of-2 {
+            width: 50% !important;
         }
-        .columns {
-            width: 100% !important;
+        .column.of-3 {
+            width: 33.333% !important;
         }
-        .column {
-            display: block !important;
-            width: 100% !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
+        .column.of-4 {
+            width: 25% !important;
         }
-        .social-icon-column {
-            display: inline-block !important;
-        }
+        @media screen and (max-width:480px) {
+            .preheader .rightColumnContent,
+            .footer .rightColumnContent {
+                text-align: left !important;
+            }
+            .preheader .rightColumnContent div,
+            .preheader .rightColumnContent span,
+            .footer .rightColumnContent div,
+            .footer .rightColumnContent span {
+                text-align: left !important;
+            }
+            .preheader .rightColumnContent,
+            .preheader .leftColumnContent {
+                font-size: 80% !important;
+                padding: 5px 0 !important;
+            }
+            table.wrapper-mobile {
+                width: 100% !important;
+                table-layout: fixed;
+            }
+            img.max-width {
+                height: auto !important;
+                max-width: 100% !important;
+            }
+            a.bulletproof-button {
+                display: block !important;
+                width: auto !important;
+                font-size: 80%;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+            .columns {
+                width: 100% !important;
+            }
+            .column {
+                display: block !important;
+                width: 100% !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            .social-icon-column {
+                display: inline-block !important;
+            }
         }
     }
 }

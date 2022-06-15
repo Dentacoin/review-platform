@@ -167,20 +167,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function banAppeal() {
         return $this->hasOne('App\Models\BanAppeal', 'user_id', 'id')->oldest();
     }
-    public function emails() {
-        return $this->hasMany('App\Models\Email', 'user_id', 'id')->orderBy('id', 'DESC');
-    }
     public function allBanAppeals() {
         return $this->hasMany('App\Models\BanAppeal', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function approvedBanAppeals() {
         return $this->hasMany('App\Models\BanAppeal', 'user_id', 'id')->where('status', 'approved')->orderBy('id', 'DESC');
     }
-    public function oldEmails() {
-        return $this->hasMany('App\Models\OldEmail', 'user_id', 'id')->orderBy('id', 'DESC');
-    }
     public function newBanAppeal() {
         return $this->hasOne('App\Models\BanAppeal', 'user_id', 'id')->where('status', 'new')->oldest();
+    }
+    public function emails() {
+        return $this->hasMany('App\Models\Email', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
+    public function oldEmails() {
+        return $this->hasMany('App\Models\OldEmail', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function actions() {
         return $this->hasMany('App\Models\UserAction', 'user_id', 'id');

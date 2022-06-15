@@ -245,42 +245,46 @@ class GeneralHelper {
     }
 
     public static function validateAddress($country, $address) {
-        $kingdoms = [
-            'United Arab Emirates',
-        ];
+        if(config('trp.using_google_maps')) {
+            $kingdoms = [
+                'United Arab Emirates',
+            ];
 
-        $query = $country.', '.$address;
-        //dd($query);
+            $query = $country.', '.$address;
+            //dd($query);
 
-        $geores = \GoogleMaps::load('geocoding')
-        ->setParam ([
-            'address'    => $query,
-        ])
-        ->get();
+            $geores = \GoogleMaps::load('geocoding')
+            ->setParam ([
+                'address'    => $query,
+            ])
+            ->get();
 
-        $geores = json_decode($geores);
-        $ret = [];
-        // dd($geores);
-        if(!empty($geores->results[0]->geometry->location)) {
+            $geores = json_decode($geores);
+            $ret = [];
+            // dd($geores);
+            if(!empty($geores->results[0]->geometry->location)) {
 
-            if(in_array($country, $kingdoms)) {
-                $ret['state_name'] = $country;
-                $ret['state_slug'] = str_replace([' ', "'"], ['-', ''], $country);
-                $ret['city_name'] = $country;
-            } else {
-                $ret = self::parseAddress( $geores->results[0]->address_components );
+                if(in_array($country, $kingdoms)) {
+                    $ret['state_name'] = $country;
+                    $ret['state_slug'] = str_replace([' ', "'"], ['-', ''], $country);
+                    $ret['city_name'] = $country;
+                } else {
+                    $ret = self::parseAddress( $geores->results[0]->address_components );
+                }
+
+                $ret['lat'] = $geores->results[0]->geometry->location->lat;
+                $ret['lon'] = $geores->results[0]->geometry->location->lng;
+
+                // $ret['info'] = [];
+                // foreach ($geores->results[0]->address_components as $ac) {
+                //     $ret['info'][] = implode(', ', $ac->types).': '.$ac->long_name;
+                // }
             }
 
-            $ret['lat'] = $geores->results[0]->geometry->location->lat;
-            $ret['lon'] = $geores->results[0]->geometry->location->lng;
-
-            // $ret['info'] = [];
-            // foreach ($geores->results[0]->address_components as $ac) {
-            //     $ret['info'][] = implode(', ', $ac->types).': '.$ac->long_name;
-            // }
+            return $ret;
+        } else {
+            return true;
         }
-
-        return $ret;
     }
 
     public static function parseAddress( $components ) {

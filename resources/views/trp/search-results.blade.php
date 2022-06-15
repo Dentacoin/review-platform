@@ -4,7 +4,7 @@
 
 	<div class="search-results-title">
 		<div class="container">
-			<h1 class="mont">{!! $search_title !!}</h1>
+			<h1 class="mont">{!! config('trp.using_google_maps') ? $search_title : str_replace('-', ' ', $search_title) !!}</h1>
 
 			@if($dentistsFromDifferentCountry)
 				<h3>
@@ -77,7 +77,7 @@
 				<a href="javascript:;" class="open-filters">
 					<img src="{{ url('img-trp/filters.svg') }}"/>Filters
 				</a>
-				@if($items->isNotEmpty())
+				@if($items->isNotEmpty() && config('trp.using_google_maps'))
 					<a href="javascript:;" class="open-map">
 						<img src="{{ url('img-trp/map.svg') }}"/>Map
 					</a>
@@ -111,9 +111,11 @@
 				</div>
 			@endif
 		</div>
-		<div class="col maps-results">
-			<div id="search-map" lat="{{ $lat }}" lon="{{ $lon }}"></div>
-		</div>
+		@if(config('trp.using_google_maps'))
+			<div class="col maps-results">
+				<div id="search-map" lat="{{ $lat }}" lon="{{ $lon }}"></div>
+			</div>
+		@endif
 	</div>
 	<div style="display: none;">
 		<input type="text" id="search-in-map" placeholder="Search in map"/>

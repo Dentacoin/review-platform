@@ -222,8 +222,12 @@ $(document).ready(function(){
         }
     }
 
-    if($(window).outerWidth() > 998) {
+    if($(window).outerWidth() > 998 && using_google_maps) {
         initResultsMap();
+    } else {
+        $('.result-container.flex').click( function() { //click on dentist result
+            window.location.href = $(this).attr('dentist-link');
+        });
     }
     
     $('.open-map').click( function() {

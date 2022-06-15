@@ -10,11 +10,6 @@ $phone: "screen and (max-width: 768px)";
         	padding: 22px 20px 50px;
         }
 
-        .claim-success,
-        .claim-details {
-        	background-color: transparent;
-        }
-
         .claim-success {
         	display: none;
 
@@ -34,16 +29,6 @@ $phone: "screen and (max-width: 768px)";
         }
 
         .header-claim {
-        	background-color: transparent;
-
-        	img {
-        		max-width: 120px;
-        		margin-bottom: 10px;
-
-        		@media #{$phone} {
-        			max-width: 60px;
-        		}
-        	}
 
 			h2 {
 				font-weight: 800;

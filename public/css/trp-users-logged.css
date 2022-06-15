@@ -968,9 +968,6 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
       @media screen and (max-width: 1200px) {
         .asks-container table td .ask-review {
           font-size: 12px; } }
-    .asks-container table td .show-review {
-      color: #126585;
-      text-decoration: underline; }
   .asks-container table .action-buttons .accept-button {
     margin-right: 4px; }
     @media screen and (max-width: 768px) {
@@ -1006,11 +1003,6 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
     .pager span.active {
       background-color: #0084d1;
       color: white; }
-
-#add-team-popup form .input {
-  height: 40px; }
-#add-team-popup form label[for="add-invite-image"] {
-  margin-bottom: 20px; }
 
 .tour-popup {
   background-color: rgba(0, 0, 0, 0.6); }
@@ -1257,36 +1249,6 @@ body.guided-tour {
     display: none !important; }
   body.guided-tour .strength-parent {
     display: none !important; }
-
-.header-success-tab {
-  background-color: transparent; }
-  .header-success-tab img {
-    max-width: 120px;
-    margin-bottom: 10px; }
-    @media screen and (max-width: 768px) {
-      .header-success-tab img {
-        max-width: 60px; } }
-  .header-success-tab h2 {
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 38px;
-    color: #126585 !important;
-    margin-bottom: 13px !important;
-    margin-top: 30px !important; }
-    @media screen and (max-width: 768px) {
-      .header-success-tab h2 {
-        font-size: 24px;
-        margin-top: 0px !important;
-        margin-bottom: 20px !important; } }
-  .header-success-tab h4 {
-    color: #333;
-    max-width: 620px;
-    margin-right: auto;
-    margin-left: auto; }
-    @media screen and (max-width: 768px) {
-      .header-success-tab h4 {
-        font-size: 16px;
-        margin-bottom: 25px; } }
 
 .image-team-wrapper .avatar-name-wrapper,
 .image-team-wrapper .image-big-error {

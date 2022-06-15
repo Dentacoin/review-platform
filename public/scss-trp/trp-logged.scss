@@ -700,3 +700,44 @@ $phone: "screen and (max-width: 768px)";
 		}
 	}
 }
+
+
+.search-results-popup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 130, 209, 0.88);
+	z-index: 1001111111;
+	display: none;
+	overflow-y: auto;
+
+	&.active {
+		display: block;
+	}
+
+	.container {
+		margin-top: 110px;
+
+		@media #{$phone} {
+			margin-top: 20px;
+		}
+	}
+
+	.search-form {
+		box-shadow: none;
+	}
+
+	.close-search-popup {
+		margin-left: auto;
+		width: 35px;
+		display: block;
+		margin-bottom: 40px;
+
+		@media #{$phone} {
+			width: 25px;
+			margin-bottom: 20px;
+		}
+	}
+}

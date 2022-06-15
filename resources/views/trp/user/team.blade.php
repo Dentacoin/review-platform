@@ -50,10 +50,6 @@
                             @endif
                         </div>
                         <div class="team-info">
-                            {{-- ???????????????????????????????? --}}
-                            {{-- @if(empty($invite->job))
-                                <div class="not-verified">{!! nl2br(trans('trp.page.user.team-not-verified')) !!}</div>
-                            @endif --}}
                             <h4>{{ $invite->invited_name }}</h4>
                             @if(empty($invite->job))
                                 <p>{!! trans('trp.team-jobs.dentist') !!}</p>

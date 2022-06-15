@@ -21,6 +21,7 @@ Route::get('cities/{id}/{empty?}', 									'CitiesController@getCities');
 Route::post('location', 											'CitiesController@getLocation');
 Route::post('search-dentists', 										'CitiesController@searchDentists');
 Route::post('dentist-location', 									'CitiesController@getDentistLocation');
+Route::post('dentist-city', 										'CitiesController@getDentistsCities');
 Route::any('suggest-clinic/{id?}', 									'CitiesController@getClinic');
 Route::any('suggest-dentist/{id?}', 								'CitiesController@getDentist');
 Route::get('custom-cookie', 										'SSOController@manageCustomCookie')->name('custom-cookie');
@@ -195,7 +196,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/edit/{id}/change-question/{question_id}', 		'VoxesController@change_question_text');
 	Route::post('vox/edit/{id}/check-for-vox-changes', 				'VoxesController@checkVoxForChanges');
 	Route::get('vox/duplicate/{id}', 								'VoxesController@duplicateSurvey');
-	Route::get('vox/ideas', 										'VoxesController@ideas');
 	Route::get('vox/categories', 									'VoxesController@categories');
 	Route::any('vox/categories/add', 								'VoxesController@add_category');
 	Route::any('vox/categories/edit/{id}', 							'VoxesController@edit_category');

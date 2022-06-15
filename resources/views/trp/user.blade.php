@@ -62,7 +62,7 @@
 			<div class="flex guided-buttons">
 				<div class="steps">{{ trans('trp.guided-tour.steps') }}: <span id="cur-step">1</span><span>/</span><span id="all-steps">7</span></div>
 				<a href="javascript:;" class="skip-step">{{ trans('trp.guided-tour.skip-steps') }}</a>
-				<a href="javascript:;" class="skip-reviews-step with-layout button" style="display: none;">{{ trans('trp.guided-tour.ok-button') }}</a>
+				<a href="javascript:;" class="skip-reviews-step with-layout blue-button" style="display: none;">{{ trans('trp.guided-tour.ok-button') }}</a>
 			</div>
 		</div>
 	</div>
@@ -425,9 +425,11 @@
 								{{ $item->address ?? 'Edit your address' }}
 							</p>
 
-							<a class="edit-field-button {{ $item->address ? 'tooltip-text' : '' }}" text="Еdit address">
-								<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
-							</a>
+							@if(config('trp.using_google_maps'))
+								<a class="edit-field-button {{ $item->address ? 'tooltip-text' : '' }}" text="Еdit address">
+									<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
+								</a>
+							@endif
 
 							@if($loggedUserAllowEdit)
 								{{ Form::open([
@@ -880,10 +882,6 @@
 			@endif
 		</div>
 	</div>
-
-	{{-- @if(in_array($item->status, config('dentist-statuses.unclaimed')))
-		<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
-	@endif --}}
 </div>
 
 <div class="tab-titles">
@@ -1025,7 +1023,7 @@
 		<h2>{{ trans('trp.guided-tour.well-done') }}</h2>
 
 		<div class="tour-buttons">
-			<a href="javascript:;" class="button-white tour-button done-tour">
+			<a href="javascript:;" class="white-button tour-button done-tour">
 				{{ trans('trp.guided-tour.ok') }}
 			</a>
 		</div>

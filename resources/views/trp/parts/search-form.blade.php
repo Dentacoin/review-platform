@@ -98,9 +98,8 @@
 			<div class="locations-results results-type">
 			</div>
 		</div>
-		<a href="{{ getLangUrl('dentist-listings-by-country') }}" class="browse-city">
-			{{-- {!! nl2br(trans('trp.common.search-dentists-countries')) !!} --}}
+		{{-- <a href="{{ getLangUrl('dentist-listings-by-country') }}" class="browse-city">
 			Browse providers by city >
-		</a>
+		</a> --}}
 	</div>
 </form>	

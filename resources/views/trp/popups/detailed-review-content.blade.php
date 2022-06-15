@@ -205,7 +205,7 @@
 	</div>
 
 	<div class="tac">
-		<a href="javascript:;" class="close-popup button blue-button">
+		<a href="javascript:;" class="close-popup blue-button">
 			Close review
 		</a>
 	</div>

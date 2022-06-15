@@ -6,22 +6,136 @@ var autocomplete;
 jQuery(document).ready(function($) {
 
 	var dentistLocationSuggestions = function() {
+
 		var query = $('#search-dentist-city').val();
-		if($('#search-country-id').val()) {
-			var options = { 
-				input: query,
-				types: ['(cities)'],
-				componentRestrictions: { country:  $('#search-dentist-country').attr('country-code') },
-				//types: ['(cities)', 'country'],
-			};
+
+		if(using_google_maps) {
+
+			if($('#search-country-id').val()) {
+				var options = { 
+					input: query,
+					types: ['(cities)'],
+					componentRestrictions: { country:  $('#search-dentist-country').attr('country-code') },
+					//types: ['(cities)', 'country'],
+				};
+			} else {
+				var options = { 
+					input: query,
+					types: ['(cities)'],
+					//types: ['(cities)', 'country'],
+				};
+			}
+			
+			autocomplete.getPlacePredictions(options, function(predictions, status) {
+				$('.dentists-cities-results .info').hide();
+				$('.dentists-cities-results-wrapper .locations-results').html('').show();
+				if (status != google.maps.places.PlacesServiceStatus.OK) {
+					if(status == 'ZERO_RESULTS') {
+						$('.dentists-cities-results .info').show();
+					}
+					console.log(status);
+					return;
+				}
+		
+				predictions.forEach(function(prediction) {
+		
+					var href = prediction.description;
+					href = href.replace(/\s+/g, '-').toLowerCase();
+					href = href.replace(/\,/g, '');
+		
+					var city = prediction.description.toLowerCase();
+					// var city = prediction.description.toLowerCase().latinise();
+					if($('#search-country-id').val()) {
+						if(city.split(',').length > 2) {
+							city = city.split(',')[0]+', '+city.split(',')[1];
+						} else {
+							city = city.split(',')[0];
+						}
+					}
+		
+					// if(!city.isLatin()) {
+					// 	var lettersToReplace = [];
+					// 	for( var i in city) {
+					// 		if (fromLatinLetters[city[i]]) {
+					// 			lettersToReplace.push(city[i]);
+					// 		}
+					// 	}
+					// }
+					
+					city = city.replace($('#search-dentist-city').val().toLowerCase(), '<span>'+$('#search-dentist-city').val().toLowerCase()+'</span>');
+		
+					if(prediction.description.split(',').length > 2) {
+						var city_name = prediction.description.split(',')[0]+', '+prediction.description.split(',')[1];
+					} else {
+						var city_name = prediction.description.split(',')[0];
+					}
+					
+					$('.dentists-cities-results-wrapper .locations-results').append('\
+						<div class="result-city-wrapper">\
+							<a class="city-button" href="javascript:;" city-name="'+city_name+'">'+city+'</a>\
+						</div>\
+					');
+		
+					$('.city-button').click( function() {
+						$('#search-dentist-city').val($(this).attr('city-name'));
+						$('.dentists-cities-results').hide();
+					});
+				});
+		
+				$('.dentists-cities-results-wrapper .locations-results').show();
+			});
+
 		} else {
-			var options = { 
-				input: query,
-				types: ['(cities)'],
-				//types: ['(cities)', 'country'],
-			};
+
+			$.ajax( {
+				url: '/dentist-city',
+				type: 'POST',
+				data: {
+					city_name: query
+				},
+				dataType: 'json',
+				cache: false,
+				success: function( data ) {
+					
+					console.log(data);
+					$('.dentists-cities-results .info').hide();
+					$('.dentists-cities-results-wrapper .locations-results').html('').show();
+
+					if (!data.length) {
+						$('.dentists-cities-results .info').show();
+						return;
+					}
+
+					for(var i in data) {
+						var city = data[i]['name'];
+						var city_key = data[i]['key_name'];
+
+						if($('#search-country-id').val()) {
+							if(city.split(',').length > 2) {
+								city = city.split(',')[0]+', '+city.split(',')[1];
+							} else {
+								city = city.split(',')[0];
+							}
+						}
+
+						$('.dentists-cities-results-wrapper .locations-results').append('\
+							<div class="result-city-wrapper">\
+								<a class="city-button" href="javascript:;" city-name="'+city_key+'">'+city+'</a>\
+							</div>\
+						');
+
+						$('.city-button').click( function() {
+							$('#search-dentist-city').val($(this).attr('city-name'));
+							$('.dentists-cities-results').hide();
+						});
+					}
+					$('.dentists-cities-results-wrapper .locations-results').show();
+				},
+				error: function() {
+					console.log('ERROR SF')
+				}
+			});
 		}
-		autocomplete.getPlacePredictions(options, displayCitySuggestions);
 	}
 
 	var dentistNameSuggestions = function(forForm=false) {
@@ -126,26 +240,6 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 
 		dentistNameSuggestions(true);
-
-		// if(ajax_is_running) {
-		// 	return;
-		// }
-
-		// ajax_is_running = true;
-
-		// let that = $(this);
-
-		// $.post( 
-		// 	that.attr('action'), 
-		// 	that.serialize() , 
-		// 	function( data ) {
-		// 		if(data.success) {
-		// 		} else {
-		// 			console.log('error');
-		// 		}
-		// 		ajax_is_running = false;
-		// 	}, "json"
-		// );
 	});
 
 	$('#search-dentist-name').on( 'keyup focus', function(e) {
@@ -303,65 +397,6 @@ jQuery(document).ready(function($) {
 			$('#search-country-id').val('');
 		}
 	});
-
-	var displayCitySuggestions = function(predictions, status) {
-		$('.dentists-cities-results .info').hide();
-		$('.dentists-cities-results-wrapper .locations-results').html('').show();
-		if (status != google.maps.places.PlacesServiceStatus.OK) {
-			if(status == 'ZERO_RESULTS') {
-				$('.dentists-cities-results .info').show();
-			}
-			console.log(status);
-			return;
-		}
-
-		predictions.forEach(function(prediction) {
-
-			var href = prediction.description;
-			href = href.replace(/\s+/g, '-').toLowerCase();
-			href = href.replace(/\,/g, '');
-
-			var city = prediction.description.toLowerCase();
-			// var city = prediction.description.toLowerCase().latinise();
-			if($('#search-country-id').val()) {
-				if(city.split(',').length > 2) {
-					city = city.split(',')[0]+', '+city.split(',')[1];
-				} else {
-					city = city.split(',')[0];
-				}
-			}
-
-			// if(!city.isLatin()) {
-			// 	var lettersToReplace = [];
-			// 	for( var i in city) {
-			// 		if (fromLatinLetters[city[i]]) {
-			// 			lettersToReplace.push(city[i]);
-			// 		}
-			// 	}
-			// }
-			
-			city = city.replace($('#search-dentist-city').val().toLowerCase(), '<span>'+$('#search-dentist-city').val().toLowerCase()+'</span>');
-
-			if(prediction.description.split(',').length > 2) {
-				var city_name = prediction.description.split(',')[0]+', '+prediction.description.split(',')[1];
-			} else {
-				var city_name = prediction.description.split(',')[0];
-			}
-			
-			$('.dentists-cities-results-wrapper .locations-results').append('\
-				<div class="result-city-wrapper">\
-					<a class="city-button" href="javascript:;" city-name="'+city_name+'">'+city+'</a>\
-				</div>\
-			');
-
-			$('.city-button').click( function() {
-				$('#search-dentist-city').val($(this).attr('city-name'));
-				$('.dentists-cities-results').hide();
-			});
-		});
-
-		$('.dentists-cities-results-wrapper .locations-results').show();
-	};
 
 	prepareMapFunction( function() {
 		$('#search-dentist-city').on('keyup focus', function(e) {

@@ -1,7 +1,6 @@
-var slider = null;
 var showPopup = null;
 var closePopup = null;
-var handlePopups = null;
+var handleClickToOpenPopups = null;
 var ajax_is_running = false;
 var loadedJS = {};
 var prepareMapFunction;
@@ -11,7 +10,6 @@ var initMap;
 var chooseExistingDentistActions;
 var refreshOnClosePopup = false;
 var editWorkingHours;
-var fixFlickty;
 var map_loaded = false;
 var upload_loaded = false;
 var croppie_loaded = false;
@@ -20,7 +18,7 @@ var loadPopupFiles;
 var handleTooltip;
 var attachTooltips;
 var modernFieldsUpdate;
-var dentacoin_down = false;
+var dentacoin_down = false; //check if there is connection with DCN for login/reg popup
 var handleActivePopupFunctions;
 
 jQuery(document).ready(function($) {
@@ -65,7 +63,7 @@ jQuery(document).ready(function($) {
 		$('body').removeClass('popup-visible');
 	});
 
-	handlePopups = function(id) {
+	handleClickToOpenPopups = function(id) {
 		var dataPopupClick = function(e) {
 			showPopup( $(this).attr('data-popup'), null, e );
 		}
@@ -95,7 +93,7 @@ jQuery(document).ready(function($) {
 		$('[data-popup]').off('click').click( dataPopupClick );
 		$('[data-popup-logged]').off('click').click( dataPopupClickLogged );
 	}
-	handlePopups();
+	handleClickToOpenPopups();
 
     modernFieldsUpdate = function() {
 	    $('.modern-input').focus( function() {
@@ -235,7 +233,7 @@ jQuery(document).ready(function($) {
 	                	$('body').addClass('popup-visible');
 	                	$('.loader-mask').hide();
 	                	handleActivePopupFunctions();
-	                	handlePopups();
+	                	handleClickToOpenPopups();
 
 	                	if($('.popup.active').attr('id') == 'popup-share') {
 	                		
@@ -330,7 +328,7 @@ jQuery(document).ready(function($) {
 			}
 
 			$('#'+id+'.popup').addClass('active');
-			handlePopups();
+			handleClickToOpenPopups();
 			if ($('.popup.active').length) {
 				$('body').addClass('popup-visible');
 			}
@@ -431,12 +429,6 @@ jQuery(document).ready(function($) {
 	        $(this).closest('.modern-radios').removeClass('has-error');
 	    });
 
-	    $('.type-radio').change( function(e) {
-			$(this).closest('.mobile-radios').find('label').removeClass('active');
-			$(this).closest('label').addClass('active');
-		    $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
-		});
-
 		$('.address-suggester-input').click( function() {
 	    	loadMapScript();
 	    });
@@ -456,13 +448,6 @@ jQuery(document).ready(function($) {
 				$(this).closest('label').addClass('active');
 				$(this).prop('checked', true);
 			}
-		});
-
-		$('.tab').click( function() {
-			$('.tab').removeClass('active');
-			$(this).addClass('active');
-			$('.tab-container').removeClass('active');
-			$('#'+ $(this).attr('data-tab')).addClass('active');
 		});
 	}
 	handleActivePopupFunctions();
@@ -486,6 +471,7 @@ jQuery(document).ready(function($) {
 		   	}
 		}
 	}
+
 	if(getUrlParameter('popup')) {
 		if(getUrlParameter('popup') == 'popup-lead-magnet') {
 			window.location.href = lead_magnet_url;
@@ -539,7 +525,7 @@ jQuery(document).ready(function($) {
 	//Flickty fixes
 	//
 
-	fixFlickty = function() {
+	var fixFlickty = function() {
 		$('.flickity-slider').each( function() {
 			var mh = 0;
 			$(this).find('.slider-wrapper').css('height', 'auto');
@@ -558,32 +544,6 @@ jQuery(document).ready(function($) {
 		e.stopPropagation();
 		e.preventDefault();
 		window.location.href = $(this).attr('href');
-	});
-
-	$('.button-sign-up-dentist').click( function() {
-		fbq('track', 'DentistInitiateRegistration');
-		gtag('event', 'ClickSignup', {
-			'event_category': 'DentistRegistration',
-			'event_label': 'InitiateDentistRegistration',
-		});
-	});
-
-	//to  be deleted ?
-	$('.button-sign-up-patient').click( function() {
-		fbq('track', 'PatientInitiateRegistration');
-		gtag('event', 'ClickSignup', {
-			'event_category': 'PatientRegistration',
-			'event_label': 'PatientInitiateRegistration',
-		});
-	});
-
-	//to  be deleted ?
-	$('.button-login-patient').click( function() {
-		fbq('track', 'PatientLogin');
-		gtag('event', 'ClickLogin', {
-			'event_category': 'PatientLogin',
-			'event_label': 'LoginPopup',
-		});
 	});
 
 	handleTooltip = function(e) {
@@ -741,161 +701,51 @@ jQuery(document).ready(function($) {
 		// });
 	// });
 
+    // $('.str-check-assurance').click( function() {
+    // 	if(ajax_is_running) {
+	// 		return;
+	// 	}
+	// 	ajax_is_running = true;
 
-    var hasNumber = function(myString) {
-        return /\d/.test(myString);
-    }
-    var hasLowerCase = function(str) {
-        return (/[a-z]/.test(str));
-    }
-    var hasUpperCase = function(str) {
-        return (/[A-Z]/.test(str));
-    }
-    var validatePassword = function(password) {
-        return password.trim().length >= 8 && password.trim().length <= 30 && hasLowerCase(password) && hasUpperCase(password) && hasNumber(password);
-    }
+    // 	$.ajax( {
+	// 		url: window.location.origin+'/en/profile/check-assurance/',
+	// 		type: 'GET',
+	// 		dataType: 'json',
+	// 		success: function( data ) {
+	// 			console.log('success-assurance');
+	// 		    ajax_is_running = false;
+	// 		},
+	// 		error: function(data) {
+	// 			console.log(data);
+	// 		    ajax_is_running = false;
+	// 		}
+	// 	});
+    // });
 
-    $('#claim-profile-form').submit( function(e) {
-        e.preventDefault();
+    // $('.str-check-dentacare').click( function() {
+    // 	if(ajax_is_running) {
+	// 		return;
+	// 	}
+	// 	ajax_is_running = true;
 
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
+    // 	$.ajax( {
+	// 		url: window.location.origin+'/en/profile/check-dentacare/',
+	// 		type: 'GET',
+	// 		dataType: 'json',
+	// 		success: function( data ) {
+	// 			console.log('success-dentacare');
+	// 		    ajax_is_running = false;
+	// 		},
+	// 		error: function(data) {
+	// 			console.log(data);
+	// 		    ajax_is_running = false;
+	// 		}
+	// 	});
+    // });
 
-        $(this).find('.ajax-alert').remove();
-        $(this).find('.alert').hide();
-        $(this).find('.has-error').removeClass('has-error');
-
-        if($('#claim-password').val() && !validatePassword($('#claim-password').val()) ) {
-
-        	$('#password-validator').show();
-        	ajax_is_running = false;
-        	return;
-        }
-
-        var formData = new FormData(this);
-
-        $.ajax({
-	        url: $(this).attr('action'),
-	        type: 'POST',
-	        data: formData,
-	        cache: false,
-	        contentType: false,
-	        processData: false
-	    }).done( (function (data) {
-			if(data.success) {
-				if (data.reload) {
-
-                    if (!Cookies.get('performance_cookies')) {
-                        basic.cookies.set('performance_cookies', 1);
-                    }
-                    if (!Cookies.get('functionality_cookies')) {
-                        basic.cookies.set('functionality_cookies', 1);
-                    }
-                    if (!Cookies.get('strictly_necessary_policy')) {
-                        basic.cookies.set('strictly_necessary_policy', 1);
-                    }
-
-                    if ($('.dcn-privacy-policy-cookie').length) {
-                        $('.dcn-privacy-policy-cookie').remove();
-                    }
-
-					window.location.reload();
-				} else {
-					$('#claim-popup').addClass('claimed');
-				}
-				
-			} else {
-
-				if(data.messages) {
-					for(var i in data.messages) {
-	                    $(this).find('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
-
-	                    $(this).find('[name="'+i+'"]').addClass('has-error');
-
-	                    if ($(this).find('[name="'+i+'"]').closest('.modern-file').length) {
-	                        $(this).find('[name="'+i+'"]').closest('.modern-file').addClass('has-error');
-	                    }
-
-	                    if ($(this).find('[name="'+i+'"]').closest('.agree-label').length) {
-	                        $(this).find('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
-	                        $(this).find('[name="'+i+'"]').closest('.agree-label').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
-	                    }
-	                }
-	                $('.popup').animate({
-		                scrollTop: $('.ajax-alert:visible').first().offset().top
-		            }, 500);
-				} else {
-					$('#claim-err').html(data.message).show();
-				}
-			}
-            ajax_is_running = false;
-
-	    }).bind(this) ).fail(function (data) {
-			$('#claim-err').show();
-	    });
-
-	    return;
-    } );
-
-    $('.claimed-ok').click( function() {
-		closePopup();
-	});
-
-	$('.get-started-button').click( function() {
-		if(dentacoin_down && !user_id) {
-    		showPopup('failed-popup');
-    	} else {
-			$.event.trigger({type: 'openDentistRegister'});
-		}
-	});
-
-    $('.str-check-assurance').click( function() {
-    	if(ajax_is_running) {
-			return;
-		}
-		ajax_is_running = true;
-
-    	$.ajax( {
-			url: window.location.origin+'/en/profile/check-assurance/',
-			type: 'GET',
-			dataType: 'json',
-			success: function( data ) {
-				console.log('success-assurance');
-			    ajax_is_running = false;
-			},
-			error: function(data) {
-				console.log(data);
-			    ajax_is_running = false;
-			}
-		});
-    });
-
-    $('.str-check-dentacare').click( function() {
-    	if(ajax_is_running) {
-			return;
-		}
-		ajax_is_running = true;
-
-    	$.ajax( {
-			url: window.location.origin+'/en/profile/check-dentacare/',
-			type: 'GET',
-			dataType: 'json',
-			success: function( data ) {
-				console.log('success-dentacare');
-			    ajax_is_running = false;
-			},
-			error: function(data) {
-				console.log(data);
-			    ajax_is_running = false;
-			}
-		});
-    });
-
-    $('.open-str-link').click( function() {
-    	window.open($(this).attr('href'), '_blank');
-    });
+    // $('.open-str-link').click( function() {
+    // 	window.open($(this).attr('href'), '_blank');
+    // });
 
     if(!dentacoin_down) {
     	

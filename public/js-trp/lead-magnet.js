@@ -4,6 +4,14 @@ jQuery(document).ready(function($){
         $(this).val($(this).val().toLowerCase());
     });
 
+	$('.get-started-button').click( function() {
+		if(dentacoin_down && !user_id) {
+    		showPopup('failed-popup');
+    	} else {
+			$.event.trigger({type: 'openDentistRegister'});
+		}
+	});
+
     if($(window).outerWidth() < 999) { //tablet
         $(window).on('scroll', function() {
             if ( ($('header').outerHeight() - 40 < $(window).scrollTop()) ) {

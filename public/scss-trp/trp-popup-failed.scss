@@ -4,31 +4,11 @@ $phone: "screen and (max-width: 768px)";
 
 .failed-popup {
 	.popup-inner {
-		max-width: 800px;
-	    top: 70px;
-	    transform: translateX(-50%);
-	    border-radius: 10px;
 	    padding: 0px;
 
-	    @media #{$tablet} {
-	    	max-width: 760px;
-	    	height: auto;
-			left: 50%;
-	    }
-
-		@media #{$phone} {
-    		width: 90%;
-    		padding: 30px;
-		}
-
 		h2 {
-			margin-bottom: 0px;
-		    font-size: 40px;
-		    font-weight: bold;
-		    color: black;
 		    text-transform: uppercase;
 		    margin-top: 30px;
-	    	text-align: center;
 
 	    	@media #{$phone} {
 	    	    margin-top: 0px;
@@ -39,6 +19,7 @@ $phone: "screen and (max-width: 768px)";
 		p {
 			font-size: 20px;
 			padding-right: 60px;
+			color: #332255;
 
 			@media #{$phone} {
 				padding-right: 0px;
@@ -46,7 +27,7 @@ $phone: "screen and (max-width: 768px)";
 			}
 		}
 
-		img {
+		.failed-image {
 			max-width: 420px;
 		    display: block;
 		    margin-right: 50px;
@@ -55,16 +36,6 @@ $phone: "screen and (max-width: 768px)";
 			    max-width: 200px;
 	    		margin: 20px auto;
 	    	}
-		}
-
-		@media #{$phone} {
-			.close-popup:not(.button) {
-				top: 10px;
-
-				i {
-					font-size: 20px;
-				}
-			}
 		}
 	}
 }

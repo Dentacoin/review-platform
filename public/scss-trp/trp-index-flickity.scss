@@ -143,7 +143,6 @@ $phone: "screen and (max-width: 768px)";
 				.slider-image-wrapper {
 					display: flex;
 					align-items: center;
-					background: transparent;
 					position: absolute;
 					z-index: 10;
 					padding: 0px;
@@ -225,9 +224,12 @@ $phone: "screen and (max-width: 768px)";
 					padding-top: 56px;
 					padding-bottom: 20px;
 					border-radius: 6px;
+					background-color: white;
+					transition: all 0.3s ease;
 					border: 2px solid white;
 					text-align: left;
 					display: block;
+					flex: 1;
 
 					@media #{$pc} {
 						padding: 20px;
@@ -238,6 +240,7 @@ $phone: "screen and (max-width: 768px)";
 						font-size: 20px;
 						font-weight: 900;
 						color: #332255;
+						margin-bottom: 15px;
 
 						@media #{$pc} {
 							font-size: 18px;
@@ -247,6 +250,8 @@ $phone: "screen and (max-width: 768px)";
 					.p {
 						font-size: 15px;
     					color: #555555;
+						margin-bottom: 5px;
+						display: flex;
 
 						img {
 							margin-top: 3px;

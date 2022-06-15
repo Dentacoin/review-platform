@@ -1381,36 +1381,6 @@
   .hightlights-wrapper .flickity-prev-next-button.next svg {
     display: none; }
 
-.invited-dentist {
-  margin-top: -40px;
-  margin-bottom: 25px;
-  color: #14c9b9;
-  padding: 5px;
-  font-weight: bold;
-  font-size: 20px; }
-  @media screen and (max-width: 1200px) {
-    .invited-dentist {
-      font-size: 18px;
-      margin-top: 0px;
-      margin-bottom: 5px; } }
-  @media screen and (max-width: 998px) {
-    .invited-dentist {
-      margin-top: -20px;
-      text-align: center;
-      margin-left: 10px; } }
-  @media screen and (max-width: 768px) {
-    .invited-dentist {
-      font-size: 16px;
-      margin-top: -8px; } }
-
-.popup .popup-inner .widget-wrapper h3 {
-  margin-bottom: 30px; }
-.popup .popup-inner .widget-wrapper .widget-options {
-  margin-top: 20px;
-  margin-bottom: 30px; }
-.popup .popup-inner .widget-wrapper .widget-content {
-  margin-bottom: 40px; }
-
 .review-rating-new {
   border: 2px solid #2dcec3;
   display: inline-flex;

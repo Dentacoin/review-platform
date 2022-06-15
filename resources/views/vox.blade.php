@@ -370,7 +370,6 @@
             @endforeach
         @endif
         
-		{{-- <link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" /> --}}
 		<!-- end css -->
 
 		<!-- js -->

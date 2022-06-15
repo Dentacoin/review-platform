@@ -122,8 +122,8 @@
 						<button type="submit" class="blue-button">
 							<div class="loader"><i></i></div>
 							Send Invite
+							{{-- {!! nl2br(trans('trp.page.invite.submit')) !!} --}}
 						</button>
-						{{-- <input type="submit" value="{!! nl2br(trans('trp.page.invite.submit')) !!}" class="button next"/> --}}
 					</div>
 
 					<div class="alert alert-success" style="display: none;"></div>

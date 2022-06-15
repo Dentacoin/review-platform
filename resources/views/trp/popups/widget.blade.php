@@ -258,7 +258,7 @@
 					<a href="javascript:;" class="blue-button get-widget-code hide-fb">{!! nl2br(trans('trp.popup.popup-widget.get-code')) !!}</a>
 					
 					@if(false)
-						<a href="javascript:;" class="button fb-tab-submit show-fb" fb-url="{{ getLangUrl('dentist-fb-tab') }}">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
+						<a href="javascript:;" class="blue-button fb-tab-submit show-fb" fb-url="{{ getLangUrl('dentist-fb-tab') }}">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
 					@endif
 				</div>
 			</div>
@@ -439,7 +439,7 @@
 				<img src="{{ url('img-trp/verification-check.png') }}">
 				<h2>{!! nl2br(trans('trp.popup.popup-widget.success.title')) !!}</h2>
 				<h4>{!! nl2br(trans('trp.popup.popup-widget.success.subtitle')) !!}</h4>
-				<a href="javascript:;" class="button close-popup">{!! nl2br(trans('trp.popup.popup-claim-profile.thank-you.ok')) !!}</a>
+				<a href="javascript:;" class="blue-button close-popup">{!! nl2br(trans('trp.popup.popup-claim-profile.thank-you.ok')) !!}</a>
 			</div>
 		</div>
 	</div>

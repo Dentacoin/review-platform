@@ -10,6 +10,7 @@ use App\Models\Continent;
 use App\Models\Country;
 use App\Models\PageSeo;
 use App\Models\User;
+use App\Models\City;
 
 use Request;
 use Route;
@@ -168,104 +169,134 @@ class DentistsController extends FrontController {
 
             $query = str_replace('-', ' ', $query);
             
-            $this->getFormatedAddress([
-                'address' => $query,
-            ], $parsedAddress, $formattedAddress, $lat, $lon, $corrected_query, $query, $filter, $setLatLon = true);
-            
-            if(empty($lat) || empty($lon)) {
-                return redirect( getLangUrl('page-not-found') );
-            }
+            if(config('trp.using_google_maps')) {
+                $this->getFormatedAddress([
+                    'address' => $query,
+                ], $parsedAddress, $formattedAddress, $lat, $lon, $corrected_query, $query, $filter, $setLatLon = true);
+                
+                if(empty($lat) || empty($lon)) {
+                    return redirect( getLangUrl('page-not-found') );
+                }
 
-            if ((urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) && App::getLocale().'/'.$corrected_query != 'en/dentists/federal-capital-territory-nigeria') {
-                $geores = $this->getFormatedAddress([
-                    'latlng' => $lat.','.$lon,
-                ], $parsedAddress, $formattedAddress, $lat, $lon, $corrected_query, $query, $filter);
+                if ((urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) && App::getLocale().'/'.$corrected_query != 'en/dentists/federal-capital-territory-nigeria') {
+                    $geores = $this->getFormatedAddress([
+                        'latlng' => $lat.','.$lon,
+                    ], $parsedAddress, $formattedAddress, $lat, $lon, $corrected_query, $query, $filter);
 
 
-                if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
-                    if( $geores->results && $geores->results[0]->place_id ) {
-                        $this->getFormatedAddress([
-                            'address' => $geores->results[0]->formatted_address,
-                        ], $parsedAddress, $formattedAddress, $lat, $lon, $corrected_query, $query, $filter);
-                        
-                        if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
+                    if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
+                        if( $geores->results && $geores->results[0]->place_id ) {
+                            $this->getFormatedAddress([
+                                'address' => $geores->results[0]->formatted_address,
+                            ], $parsedAddress, $formattedAddress, $lat, $lon, $corrected_query, $query, $filter);
+                            
+                            if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
+                                return redirect( getLangUrl($corrected_query).($_GET ? '?'.http_build_query($_GET) : '') );
+                            }
+                        } else {
                             return redirect( getLangUrl($corrected_query).($_GET ? '?'.http_build_query($_GET) : '') );
                         }
-                    } else {
-                        return redirect( getLangUrl($corrected_query).($_GET ? '?'.http_build_query($_GET) : '') );
                     }
                 }
-            }
 
-            if (
-                (empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) 
-                || $query == 'ireland' 
-                || (!empty($parsedAddress['country_name']) && $parsedAddress['country_name'] == 'North Macedonia')) {
-                //search only in country
+                if (
+                    (empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) 
+                    || $query == 'ireland' 
+                    || (!empty($parsedAddress['country_name']) && $parsedAddress['country_name'] == 'North Macedonia')) {
+                    //search only in country
 
-                $countriesWithDiffNames = [
-                    'North Macedonia' => 129,
-                    'South Korea' => 116,
-                    'North Korea' => 116,
-                    'Vietnam' => 238,
-                    'Czechia' => 58,
-                    'Syria' => 213,
-                    'Iran' => 103,
-                ];
-                
-                $country_n = $parsedAddress['country_name'] ?? $query;
-                if(array_key_exists($country_n, $countriesWithDiffNames)) {
-                    $country = Country::find($countriesWithDiffNames[$country_n]);
-                } else {
-                    $country = Country::with('translations')->whereHas('translations', function ($query) use ($country_n) {
-                        $query->where('name', 'LIKE', $country_n);
-                    })->first();
-                }
+                    $countriesWithDiffNames = [
+                        'North Macedonia' => 129,
+                        'South Korea' => 116,
+                        'North Korea' => 116,
+                        'Vietnam' => 238,
+                        'Czechia' => 58,
+                        'Syria' => 213,
+                        'Iran' => 103,
+                    ];
+                    
+                    $country_n = $parsedAddress['country_name'] ?? $query;
+                    if(array_key_exists($country_n, $countriesWithDiffNames)) {
+                        $country = Country::find($countriesWithDiffNames[$country_n]);
+                    } else {
+                        $country = Country::with('translations')->whereHas('translations', function ($query) use ($country_n) {
+                            $query->where('name', 'LIKE', $country_n);
+                        })->first();
+                    }
 
-                $items->where('country_id', $country->id);
+                    $items->where('country_id', $country->id);
 
-            } else if(!empty($parsedAddress['city_name']) && !empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) {
-                //search for city, state, country
-                $isValid = User::where('city_name', 'like', $parsedAddress['city_name'])
-                ->where('state_slug', 'like', $parsedAddress['state_slug'])
-                ->count();
+                } else if(!empty($parsedAddress['city_name']) && !empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) {
+                    //search for city, state, country
+                    $isValid = User::where('city_name', 'like', $parsedAddress['city_name'])
+                    ->where('state_slug', 'like', $parsedAddress['state_slug'])
+                    ->count();
 
-                $searchOnlyState = false;
-                if(!$isValid) {
-                    $isValid = User::where('state_slug', 'like', $parsedAddress['state_slug'])->get();
+                    $searchOnlyState = false;
+                    if(!$isValid) {
+                        $isValid = User::where('state_slug', 'like', $parsedAddress['state_slug'])->get();
+
+                        if($isValid) {
+                            $searchOnlyState = true;
+                        }
+                    }
 
                     if($isValid) {
-                        $searchOnlyState = true;
+                        $nonCannonicalUrl = false;
+
+                        if($searchOnlyState) {
+                            $items->where('state_slug', 'like', $parsedAddress['state_slug']);
+                        } else {
+                            $items->where('city_name', 'like', $parsedAddress['city_name'])
+                            ->where('state_slug', 'like', $parsedAddress['state_slug']);
+                        }
                     }
-                }
-
-                if($isValid) {
-                    $nonCannonicalUrl = false;
-
-                    if($searchOnlyState) {
+                } else if(!empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) {
+                    //search for state, country
+                    $isValid = User::where('state_slug', 'like', $parsedAddress['state_slug'])->count();
+                    if($isValid) {
                         $items->where('state_slug', 'like', $parsedAddress['state_slug']);
-                    } else {
-                        $items->where('city_name', 'like', $parsedAddress['city_name'])
-                        ->where('state_slug', 'like', $parsedAddress['state_slug']);
-                    }
-                }
-            } else if(!empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) {
-                //search for state, country
-                $isValid = User::where('state_slug', 'like', $parsedAddress['state_slug'])->count();
-                if($isValid) {
-                    $items->where('state_slug', 'like', $parsedAddress['state_slug']);
 
-                    $nonCannonicalUrl = false;
+                        $nonCannonicalUrl = false;
+                    }
+                } else {
+                    //if empty city, state, country
+                    list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
+                    $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
+                    $items->whereBetween('lon', [$lon-$range_lon, $lon+$range_lon]);
                 }
             } else {
-                //if empty city, state, country
-                list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
-                $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
-                $items->whereBetween('lon', [$lon-$range_lon, $lon+$range_lon]);
+
+                $searchedParamsArr = str_replace(' ', '-', $query);
+                $foundedCountryId = '';
+
+                foreach(Country::get() as $countriesObj) {
+                    if(str_contains($searchedParamsArr, $countriesObj->slug)) {
+                        $searchedParams = str_replace($countriesObj->slug, '', $searchedParamsArr);
+                        $foundedCountryId = $countriesObj->id;
+                        $items->where('country_id', $countriesObj->id);
+                        break;
+                    }
+                }
+
+                if($foundedCountryId) {                    
+                    foreach(City::where('country_id', $foundedCountryId)->get() as $citiesObj) {
+                        foreach(explode('-', $searchedParamsArr) as $sp) {
+                            if($sp) {
+                                if($sp == $citiesObj->slug) {
+                                    $searchedParamsArr = str_replace($citiesObj->slug, '', $searchedParamsArr);
+                                    $items->where('city_name', 'LIKE', '%'.$citiesObj->name.'%');
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    return redirect('page-not-found');
+                }
             }
         }
 
-        
 
         //------ FILTERS ----------
         $requestTypes = Request::input('types');
@@ -531,15 +562,17 @@ class DentistsController extends FrontController {
             $items = $items->where('city_name', 'LIKE', '%'.$searchCity.'%');
         }
 
-        //set map bounds
-        $geores = \GoogleMaps::load('geocoding')
-        ->setParam(['address' => ($searchCity ?? '').'-'.($searchCountry ?? $searchCountry)])
-        ->get();
-        $geores = json_decode($geores);
-        
-        if(!empty($geores->results[0]->geometry->location)) {
-            $lat = $geores->results[0]->geometry->location->lat;
-            $lon = $geores->results[0]->geometry->location->lng;
+        if(config('trp.using_google_maps')) {
+            //set map bounds
+            $geores = \GoogleMaps::load('geocoding')
+            ->setParam(['address' => ($searchCity ?? '').'-'.($searchCountry ?? $searchCountry)])
+            ->get();
+            $geores = json_decode($geores);
+            
+            if(!empty($geores->results[0]->geometry->location)) {
+                $lat = $geores->results[0]->geometry->location->lat;
+                $lon = $geores->results[0]->geometry->location->lng;
+            }
         }
     }
 

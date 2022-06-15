@@ -1,9 +1,7 @@
 var videoStart, videoLength;
-var slider = null;
 var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
-var galleryFlickty;
 var suggestClinic;
 var suggestedDentistClick;
 var suggestClinicClick;
@@ -59,7 +57,7 @@ $(document).ready(function() {
         });
     }
     verifyReview();
-
+    
     showFullReview = function(id, d_id) {
         showPopup('view-review-popup');
 
@@ -89,7 +87,7 @@ $(document).ready(function() {
     var flickityFunctions = function() {
 
         if($('.gallery-flickity').length) {
-            var galleryFlickty = $('.gallery-flickity').flickity({
+            $('.gallery-flickity').flickity({
                 autoPlay: false,
                 wrapAround: true,
                 cellAlign: 'left',
@@ -229,6 +227,7 @@ $(document).ready(function() {
         }
     }
 
+    //user sections
     var fixedTabs = function() {
         
         if(!$('.tab-title.patients-tab.active').length) {
@@ -464,7 +463,7 @@ $(document).ready(function() {
                                 $('#append-section-reviews').addClass('appended');
 
                                 handleReviewEvents();
-                                handlePopups();
+                                handleClickToOpenPopups();
                                 attachTooltips();
                             }
                         }

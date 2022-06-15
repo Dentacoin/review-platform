@@ -238,8 +238,6 @@
 			<div id="stats-png-imgs"></div> 
 		</div>
 
-		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
-
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js/dom-to-image.min.js') }}"></script>

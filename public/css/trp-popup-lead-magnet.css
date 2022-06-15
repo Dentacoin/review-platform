@@ -1,6 +1,77 @@
+@charset "UTF-8";
 .site-content {
   min-height: calc(100vh - 127px);
   background-color: #e2ebff; }
+
+.step-tabs {
+  margin-bottom: 25px; }
+  .step-tabs .step {
+    text-align: center;
+    margin-right: 110px; }
+    @media screen and (max-width: 768px) {
+      .step-tabs .step {
+        margin-right: 40px; } }
+    .step-tabs .step .border {
+      position: relative;
+      background: #bebebe;
+      width: 40px;
+      height: 40px;
+      display: inline-block;
+      border: none;
+      border-radius: 50%; }
+      .step-tabs .step .border:after {
+        content: '';
+        width: 151px;
+        height: 2px;
+        background-color: #bebebe;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 100%; }
+        @media screen and (max-width: 768px) {
+          .step-tabs .step .border:after {
+            width: 80px; } }
+      .step-tabs .step .border span {
+        width: 36px;
+        height: 36px;
+        display: inline-block;
+        border-radius: 50%;
+        margin-top: 2px;
+        margin-right: 0px;
+        background-color: white;
+        line-height: 36px;
+        font-size: 18px;
+        color: #bebebe;
+        font-weight: 900; }
+    .step-tabs .step p {
+      font-size: 14px;
+      color: #bebebe;
+      margin-top: 5px; }
+    .step-tabs .step.active .border {
+      background: #14cab8;
+      background: linear-gradient(156deg, #14cab8 0%, #0564c6 100%); }
+      .step-tabs .step.active .border span {
+        color: #14cab8; }
+    .step-tabs .step.active p {
+      color: #14cab8; }
+    .step-tabs .step.completed .border {
+      background: #14cab8;
+      background: linear-gradient(156deg, #14cab8 0%, #0564c6 100%); }
+      .step-tabs .step.completed .border::before {
+        content: '✓';
+        color: white;
+        font-size: 18px;
+        line-height: 38px; }
+      .step-tabs .step.completed .border::after {
+        background-color: #14cab8; }
+      .step-tabs .step.completed .border span {
+        display: none; }
+    .step-tabs .step.completed p {
+      color: #4b607d; }
+    .step-tabs .step:last-child {
+      margin-right: 0px; }
+      .step-tabs .step:last-child .border:after {
+        display: none; }
 
 .lead-magnet-questions-wrapper {
   display: flex;
@@ -151,43 +222,6 @@
               background-color: white; } }
         .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label input {
           display: none; }
-        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label .checkbox-square {
-          width: 17px;
-          height: 17px;
-          border: 1px solid #dddddd;
-          display: inline-block;
-          background-color: white;
-          color: #126585;
-          line-height: 26px;
-          text-align: center;
-          border-radius: 20%;
-          font-weight: bold;
-          margin-right: 5px;
-          font-size: 0px; }
-          @media screen and (max-width: 768px) {
-            .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label .checkbox-square {
-              width: 14px;
-              height: 14px;
-              line-height: 23px; } }
-        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label i {
-          font-size: 23px;
-          vertical-align: middle;
-          margin-right: 6px;
-          color: #dddddd; }
-          @media screen and (max-width: 768px) {
-            .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label i {
-              font-size: 19px; } }
-        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.active .checkbox-square {
-          border-color: #126585;
-          font-size: 13px;
-          line-height: 18px; }
-          @media screen and (max-width: 768px) {
-            .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.active .checkbox-square {
-              line-height: 13px; } }
-        .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.active i {
-          color: #126585; }
-          .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-radios-magnet label.active i:before {
-            content: '\f14a'; }
     .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .answer-question {
       margin-bottom: 45px; }
       @media screen and (max-width: 768px) {
@@ -209,8 +243,6 @@
         .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .buttons-list {
           width: 100%;
           margin-top: 0px; } }
-    .lead-magnet-questions-wrapper .flickity-magnet .flickity-viewport .button {
-      margin-top: 20px; }
     .lead-magnet-questions-wrapper .flickity-magnet .alert {
       margin: 0px 130px 20px; }
       @media screen and (max-width: 768px) {

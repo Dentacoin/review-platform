@@ -2,56 +2,50 @@
 
 @section('content')
 
-	<div class="blue-background"></div>
+	<div class="container">
+		<h2 class="page-title">
+			<img src="{{ url('new-vox-img/profile-trp.png') }}" />
+			{!! nl2br(trans('trp.page.profile.trp.title')) !!}
+		</h2>
 
-	<div class="container flex break-tablet">
-		<div class="flex-3">
-
-			<h2 class="page-title" style="margin-bottom: 30px;">
-				<img src="{{ url('new-vox-img/profile-trp.png') }}" />
-				{!! nl2br(trans('trp.page.profile.trp.title')) !!}
-			</h2>
-
-			@if($reviews->isEmpty())
+		@if($reviews->isEmpty())
+			@if(!$user->is_dentist)
 				<div class="alert alert-info">
 					{!! nl2br(trans('trp.page.profile.trp.no-reviews')) !!}
 				</div>
 
-				<a href="https://reviews.dentacoin.com" class="button" style="color: white;">
+				<a href="https://reviews.dentacoin.com" class="blue-button">
 					{!! nl2br(trans('trp.page.profile.trp.find-dentist-button')) !!}
 				</a>
-			@else
-			    <div class="details-wrapper profile-reviews-space">
-					@foreach($reviews as $review)
-						@if($review->user)
-							@include('trp.parts.reviews', [
-								'review' => $review,
-								'is_dentist' => $is_dentist,
-								'hidden' => 0,
-								'for_profile' => true,
-								'current_dentist' => $review->getDentist(),
-							])
-						@endif
-					@endforeach
-				</div>
 			@endif
-		</div>
+		@else
+			<div class="details-wrapper">
+				@foreach($reviews as $review)
+					@if($review->user)
+						@include('trp.parts.reviews', [
+							'review' => $review,
+							'is_dentist' => $is_dentist,
+							'hidden' => 0,
+							'for_profile' => true,
+							'current_dentist' => $review->getDentist(),
+						])
+					@endif
+				@endforeach
+			</div>
+		@endif
 	</div>
 
 	@if(!empty($current_ban))
-		<div class="popup fixed-popup popup-with-background active" id="banned-popup">
+		<div class="popup no-image dont-close-popup active" id="banned-popup">
 			<div class="popup-inner inner-white">
-				<div class="flex flex-mobile flex-center break-tablet">
-					<div class="icon">
-						<img src="{{ url('img-trp/big-x.png') }}">
-					</div>
+				<h2 class="mont">
+					{!! nl2br(trans('trp.page.profile.trp.ban-title')) !!}
+				</h2>
+				<div class="flex flex-mobile">
 					<div class="content">
-						<p class="h1">
-							{!! nl2br(trans('trp.page.profile.trp.ban-title')) !!}
-						</p>
-						<h3>
+						<h4 class="tac">
 							{!! nl2br(trans('trp.page.profile.trp.ban-subtitle')) !!}
-						</h3>
+						</h4>
 					</div>
 				</div>
 			</div>

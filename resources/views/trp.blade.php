@@ -186,7 +186,7 @@
 			@yield('content')
 		</div>
 
-		<footer class="{{ !empty($gray_footer) ? 'gray-footer' : '' }}">
+		<footer>
 			<div class="container clearfix">
 				<a href="https://dentacoin.com/" target="_blank" class="footer-logo flex flex-mobile flex-center">
 					<img src="{{ url('img-trp/mini-logo-white.svg') }}" alt="Dentacoin logo">
@@ -417,6 +417,15 @@
 		@if(!empty( $markLogin )) 
 			@include('sso')
 		@endif
+        
+        <script type="text/javascript">
+        	var lang = '{{ App::getLocale() }}';
+        	var user_id = {{ !empty($user) ? $user->id : 'null' }};
+        	var images_path = '{{ url('img-trp') }}';
+        	var all_images_path = '{{ url('img') }}';
+        	var lead_magnet_url = '{{ getLangUrl('review-score-test') }}';
+        	var using_google_maps = {{ config("trp.using_google_maps") ? 1 : 0 }};
+        </script>
 		
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>
@@ -440,13 +449,5 @@
 				@endif
             @endforeach
         @endif
-        
-        <script type="text/javascript">
-        	var lang = '{{ App::getLocale() }}';
-        	var user_id = {{ !empty($user) ? $user->id : 'null' }};
-        	var images_path = '{{ url('img-trp') }}';
-        	var all_images_path = '{{ url('img') }}';
-        	var lead_magnet_url = '{{ getLangUrl('review-score-test') }}';
-        </script>
     </body>
 </html>

@@ -363,4 +363,10 @@ $(document).ready(function() {
 		$('body').removeClass('popup-visible');
 		showPopup( 'popup-widget' );
     });
+
+    $('.type-radio').change( function(e) {
+        $(this).closest('.mobile-radios').find('label').removeClass('active');
+        $(this).closest('label').addClass('active');
+        $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
+    });
 });

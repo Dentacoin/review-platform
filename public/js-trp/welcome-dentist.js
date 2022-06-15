@@ -34,6 +34,17 @@ jQuery(document).ready(function($){
     	}
     });
 
+	var handleButtons = function() {
+		$('.button-sign-up-dentist').click( function() {
+			fbq('track', 'DentistInitiateRegistration');
+			gtag('event', 'ClickSignup', {
+				'event_category': 'DentistRegistration',
+				'event_label': 'InitiateDentistRegistration',
+			});
+		});
+	}
+	handleButtons();
+
 	//load page down sections on sroll (google page speed)
 	$(window).scroll( function() {
 		if (!$('#to-append').hasClass('appended')) {
@@ -49,7 +60,8 @@ jQuery(document).ready(function($){
 					$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
 					$('#to-append').append(ret);
 					
-					handlePopups();
+					handleClickToOpenPopups();
+					handleButtons();
 					
 					var $carousel = $('.flickity-testimonial');
 

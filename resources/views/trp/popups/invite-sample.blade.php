@@ -46,7 +46,7 @@
 			                                                         <tbody>
 			                                                            <tr>
 			                                                               <td style="font-size:6px; line-height:10px; padding:0px 0px 0px 0px;" valign="top" align="left">
-			                                                                  <a href="https://reviews.dentacoin.com/"><img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;" src="https://marketing-image-production.s3.amazonaws.com/uploads/093fe7b441b483cbc57ee2e1bd52dc55bc54ca6b3cd635a3718d1345d4350b9ee9e155779afb597cff06ad8fe45296b9dd9c0e033da0ddf544b814be194b4729.png" alt="" width="180" height="" data-proportionally-constrained="false" data-responsive="false"></a>
+			                                                                  <a href="javascript:;"><img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;" src="https://marketing-image-production.s3.amazonaws.com/uploads/093fe7b441b483cbc57ee2e1bd52dc55bc54ca6b3cd635a3718d1345d4350b9ee9e155779afb597cff06ad8fe45296b9dd9c0e033da0ddf544b814be194b4729.png" alt="" width="180" height="" data-proportionally-constrained="false" data-responsive="false"></a>
 			                                                               </td>
 			                                                            </tr>
 			                                                         </tbody>
@@ -86,7 +86,7 @@
 			                                                            <tr>
 			                                                               <td style="padding:18px 0px 18px 0px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="">
 			                                                                  <div>
-			                                                                     <div color="rgb(0, 0, 0)" style="font-family: arial; text-align: inherit; color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 14px">You can use your Dentacoin (DCN) rewards to: cover your dental expenses within <a href="https://dentacoin.com/users#section-google-map">our global partner network</a>, buy various <a href="https://dentacoin.com/bidali-gift-cards">gift cards</a>, or exchange it to any crypto or national currency.</div>
+			                                                                     <div color="rgb(0, 0, 0)" style="font-family: arial; text-align: inherit; color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 14px">You can use your Dentacoin (DCN) rewards to: cover your dental expenses within <a href="javascript:;">our global partner network</a>, buy various <a href="javascript:;">gift cards</a>, or exchange it to any crypto or national currency.</div>
 			                                                                     <div color="rgb(0, 0, 0)" style="font-family: arial; text-align: inherit; color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 14px">Greetings,</div>
 			                                                                     <div color="rgb(0, 0, 0)" style="font-family: arial; text-align: inherit; color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 14px">Dentacoin Trusted Reviews Team</div>
 			                                                                     <div></div>
@@ -134,7 +134,7 @@
 			                                                                                 <tbody>
 			                                                                                    <tr>
 			                                                                                       <td style="font-size:6px; line-height:10px; padding:0px 0px 0px 0px;" valign="top" align="center">
-			                                                                                          <a href="https://dentavox.dentacoin.com/"><img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;" src="https://marketing-image-production.s3.amazonaws.com/uploads/42be2f149bde87eac5df71b090fcabbf53aeefce8283986594f8ef6575a9e67456c5277d6dc229bd2ac8ae15c3af6cbd5559aa62f0c6f649512a7444b8007522.png" alt="" width="76" height="" data-proportionally-constrained="false" data-responsive="false"></a>
+			                                                                                          <a href="javascript:;"><img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;" src="https://marketing-image-production.s3.amazonaws.com/uploads/42be2f149bde87eac5df71b090fcabbf53aeefce8283986594f8ef6575a9e67456c5277d6dc229bd2ac8ae15c3af6cbd5559aa62f0c6f649512a7444b8007522.png" alt="" width="76" height="" data-proportionally-constrained="false" data-responsive="false"></a>
 			                                                                                       </td>
 			                                                                                    </tr>
 			                                                                                 </tbody>
@@ -144,7 +144,7 @@
 			                                                                                    <tr>
 			                                                                                       <td style="padding:0px 0px 18px 0px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="">
 			                                                                                          <div>
-			                                                                                             <div style="font-family: inherit; text-align: center"><a href="https://dentavox.dentacoin.com/"><strong>DentaVox Surveys</strong></a></div>
+			                                                                                             <div style="font-family: inherit; text-align: center"><a href="javascript:;"><strong>DentaVox Surveys</strong></a></div>
 			                                                                                             <div style="font-family: inherit; text-align: center">Get paid for taking surveys on dental health topics!</div>
 			                                                                                             <div></div>
 			                                                                                          </div>
@@ -164,7 +164,7 @@
 			                                                                                 <tbody>
 			                                                                                    <tr>
 			                                                                                       <td style="font-size:6px; line-height:10px; padding:0px 0px 0px 0px;" valign="top" align="center">
-			                                                                                          <a href="https://dentacare.dentacoin.com/"><img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;" src="https://marketing-image-production.s3.amazonaws.com/uploads/df63b9559dd4e62bf0eff09326c7c2158a03c2ed08e1b2416ff3b8bcf273e2604b1c29874c14bcc622c705f2e107d77e3943f9f5a59d8bef78fd6cd01e6a8807.png" alt="" width="40" height="" data-proportionally-constrained="false" data-responsive="false"></a>
+			                                                                                          <a href="javascript:;"><img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;" src="https://marketing-image-production.s3.amazonaws.com/uploads/df63b9559dd4e62bf0eff09326c7c2158a03c2ed08e1b2416ff3b8bcf273e2604b1c29874c14bcc622c705f2e107d77e3943f9f5a59d8bef78fd6cd01e6a8807.png" alt="" width="40" height="" data-proportionally-constrained="false" data-responsive="false"></a>
 			                                                                                       </td>
 			                                                                                    </tr>
 			                                                                                 </tbody>
@@ -174,7 +174,7 @@
 			                                                                                    <tr>
 			                                                                                       <td style="padding:0px 0px 18px 0px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="">
 			                                                                                          <div>
-			                                                                                             <div style="font-family: inherit; text-align: center"><a href="https://dentacare.dentacoin.com/"><strong>Dentacare App</strong></a></div>
+			                                                                                             <div style="font-family: inherit; text-align: center"><a href="javascript:;"><strong>Dentacare App</strong></a></div>
 			                                                                                             <div style="font-family: inherit; text-align: center">Start your 90-day journey towards better oral hygiene!</div>
 			                                                                                             <div></div>
 			                                                                                          </div>
@@ -194,7 +194,7 @@
 			                                                                                 <tbody>
 			                                                                                    <tr>
 			                                                                                       <td style="font-size:6px; line-height:10px; padding:0px 0px 0px 0px;" valign="top" align="center">
-			                                                                                          <a href="https://assurance.dentacoin.com/patient"><img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;" src="https://marketing-image-production.s3.amazonaws.com/uploads/c4b105242566d95a773d3c06536a32bd24e241b13d8e1b4ff5dcb6f45bbb9f4cc337c5779e0134b33860baf8a7235618c113dbb65af1887ad4c8f2467297c182.png" alt="" width="36" height="" data-proportionally-constrained="false" data-responsive="false"></a>
+			                                                                                          <a href="javascript:;"><img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;" src="https://marketing-image-production.s3.amazonaws.com/uploads/c4b105242566d95a773d3c06536a32bd24e241b13d8e1b4ff5dcb6f45bbb9f4cc337c5779e0134b33860baf8a7235618c113dbb65af1887ad4c8f2467297c182.png" alt="" width="36" height="" data-proportionally-constrained="false" data-responsive="false"></a>
 			                                                                                       </td>
 			                                                                                    </tr>
 			                                                                                 </tbody>
@@ -204,7 +204,7 @@
 			                                                                                    <tr>
 			                                                                                       <td style="padding:0px 0px 18px 0px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="">
 			                                                                                          <div>
-			                                                                                             <div style="font-family: inherit; text-align: center"><a href="https://assurance.dentacoin.com/patient"><strong>Dentacoin Assurance</strong></a></div>
+			                                                                                             <div style="font-family: inherit; text-align: center"><a href="javascript:;"><strong>Dentacoin Assurance</strong></a></div>
 			                                                                                             <div style="font-family: inherit; text-align: center">Get lifelong preventive care against monthly fees in DCN!</div>
 			                                                                                             <div></div>
 			                                                                                          </div>

@@ -78,8 +78,10 @@
                     </div>
                     <div class="panel-body">
                         <div class="row table-responsive">
-                            <form method="post" action="{{ url('cms/vox/list') }}" id="translate-voxes">
-                                {!! csrf_field() !!}
+                            @if(config('trp.use_deepl'))
+                                <form method="post" action="{{ url('cms/vox/list') }}" id="translate-voxes">
+                                    {!! csrf_field() !!}
+                            @endif
         
                                 @include('admin.parts.table', [
                                     'table_id' => 'voxs',
@@ -89,22 +91,24 @@
                                     'pagination_link' => array()
                                 ])
                                 
-                                <div style="display: none;">
-                                    @foreach(config('langs-to-translate') as $code => $name)
-                                        <label for="lang-{{ $code }}-2" style="display: block;">
-                                            <input type="checkbox" name="languages[]" id="lang-{{ $code }}-2" value="{{ $code }}">
-                                            {{ strtoupper($code) }}
-                                        </label>
-                                    @endforeach
-                                    <button type="submit" name="mass-translate" value="1" class="btn btn-info" style="flex: 1" id="mass-translate-button">Translate selected voxes</button>
-                                </div>
-        
-                                <div style="display: flex">
-                                    <a class="btn btn-info translate-voxes-button" style="flex: 1" href="javascript:;" data-toggle="modal" data-target="#translateModal">
-                                        Translate selected voxes
-                                    </a>
-                                </div>
-                            </form>
+                                @if(config('trp.use_deepl'))
+                                    <div style="display: none;">
+                                        @foreach(config('langs-to-translate') as $code => $name)
+                                            <label for="lang-{{ $code }}-2" style="display: block;">
+                                                <input type="checkbox" name="languages[]" id="lang-{{ $code }}-2" value="{{ $code }}">
+                                                {{ strtoupper($code) }}
+                                            </label>
+                                        @endforeach
+                                        <button type="submit" name="mass-translate" value="1" class="btn btn-info" style="flex: 1" id="mass-translate-button">Translate selected voxes</button>
+                                    </div>
+                                
+                                    <div style="display: flex">
+                                        <a class="btn btn-info translate-voxes-button" style="flex: 1" href="javascript:;" data-toggle="modal" data-target="#translateModal">
+                                            Translate selected voxes
+                                        </a>
+                                    </div>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>

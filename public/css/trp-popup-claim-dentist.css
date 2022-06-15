@@ -3,9 +3,6 @@
   @media screen and (max-width: 768px) {
     .claim-popup .popup-inner {
       padding: 22px 20px 50px; } }
-  .claim-popup .popup-inner .claim-success,
-  .claim-popup .popup-inner .claim-details {
-    background-color: transparent; }
   .claim-popup .popup-inner .claim-success {
     display: none; }
     .claim-popup .popup-inner .claim-success .step-info {
@@ -17,23 +14,15 @@
       @media screen and (max-width: 768px) {
         .claim-popup .popup-inner .claim-success .button {
           padding: 9px 70px; } }
-  .claim-popup .popup-inner .header-claim {
-    background-color: transparent; }
-    .claim-popup .popup-inner .header-claim img {
-      max-width: 120px;
-      margin-bottom: 10px; }
-      @media screen and (max-width: 768px) {
-        .claim-popup .popup-inner .header-claim img {
-          max-width: 60px; } }
-    .claim-popup .popup-inner .header-claim h2 {
-      font-weight: 800;
-      margin-left: -30px;
-      margin-right: -30px;
-      margin-bottom: 15px; }
-    .claim-popup .popup-inner .header-claim h5 {
-      font-size: 18px;
-      color: #332255;
-      font-weight: normal; }
+  .claim-popup .popup-inner .header-claim h2 {
+    font-weight: 800;
+    margin-left: -30px;
+    margin-right: -30px;
+    margin-bottom: 15px; }
+  .claim-popup .popup-inner .header-claim h5 {
+    font-size: 18px;
+    color: #332255;
+    font-weight: normal; }
   .claim-popup .popup-inner .blue-button {
     text-transform: none; }
   @media screen and (max-width: 998px) {

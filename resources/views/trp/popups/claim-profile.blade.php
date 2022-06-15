@@ -1,24 +1,14 @@
-<div class="popup claim-popup no-image" id="claim-popup" scss-load="trp-popup-claim-dentist">
+<div class="popup claim-popup no-image" id="claim-popup" scss-load="trp-popup-claim-dentist" js-load="claim-dentist">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
 			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>
 		<div class="claim-details">
 			<div class="header-claim tac">
-				{{-- <img src="{{ url('img-trp/verification-check.png') }}"> --}}
 				<h2 class="mont">
-					{{-- {!! !empty(request()->input('old-dentist')) ? nl2br(trans('trp.popup.popup-claim-profile.old-dentist.title')) : nl2br(trans('trp.popup.popup-claim-profile.title')) !!} --}}
 					Claim your Trusted Reviews profile
 				</h2>
-				<h5>Just enter the details below so that we can verify  your relation to the clinic.</h5>
-				{{-- <h3>
-					{!! !empty(request()->input('old-dentist')) ? nl2br(trans('trp.popup.popup-claim-profile.old-dentist.subtitle')) : nl2br(trans('trp.popup.popup-claim-profile.subtitle')) !!}
-				</h3>
-				@if(!empty(request()->input('old-dentist')))
-					<h4></h4>
-				@else
-					<h4>{!! nl2br(trans('trp.popup.popup-claim-profile.trustest-dentists')) !!}</h4>
-				@endif --}}
+				<h5>Just enter the details below so that we can verify your relation to the clinic.</h5>
 			</div>
 
 			<form class="claim-profile-form" id="claim-profile-form" enctype="multipart/form-data" method="post" action="{{ getLangUrl('dentist/'.$item->slug.'/claim/'.$item->id) }}">

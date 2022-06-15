@@ -18,7 +18,7 @@
 			<a href="javascript:;" class="{{ !empty(session('reviews_guided_tour')) ? 'skip-reviews-tour' : 'skip-first-tour' }} tour-button">
 				{{ trans('trp.guided-tour.popup.skip-tour') }}
 			</a>
-			<a href="javascript:;" class="{{ !empty(session('reviews_guided_tour')) ? 'go-reviews-tour' : 'go-first-tour go-login-tour' }} button-white tour-button">
+			<a href="javascript:;" class="{{ !empty(session('reviews_guided_tour')) ? 'go-reviews-tour' : 'go-first-tour go-login-tour' }} white-button tour-button">
 				{{ trans('trp.guided-tour.popup.lets-go') }} >>
 			</a>
 		</div>

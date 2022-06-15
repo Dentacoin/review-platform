@@ -54,8 +54,14 @@
                     </div>
                 </div>
             @else
-            
-                @if( ($item->lat && $item->lon) || $loggedUserAllowEdit )
+                @if(!config('trp.using_google_maps') && $item->lat && $item->lon)
+                    <div class="edit-field">
+                        <p class="edited-field" style="display: inline-block; margin-bottom: 10px;">
+                            {{ $item->address ? $item->address.', ' : '' }} {{ $item->country_id ? $item->country->name : '' }}
+                        </p>
+                        <div class="map-container profile-map" id="profile-map-0" lat="{{ $item->lat }}" lon="{{ $item->lon }}"></div>
+                    </div>
+                @elseif( ($item->lat && $item->lon) || $loggedUserAllowEdit )
                     <div class="edit-field map-address">
                         <p class="edited-field" id="value-address-map" style="display: inline-block;">
                             {{ $item->address ? $item->address.', ' : '' }} {{ $item->country_id ? $item->country->name : '' }}

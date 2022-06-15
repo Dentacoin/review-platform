@@ -6,7 +6,6 @@ use Illuminate\Routing\Controller as BaseController;
 
 use App\Helpers\TrpHelper;
 
-use App\Models\VoxAnswer;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\City;
@@ -220,7 +219,7 @@ class CitiesController extends BaseController {
 		} else {
 			$ret['alert'] = 'Sorry, we couldn’t find any matches. Check your search query for typos and try again.';
 		}
-
+		
 		return Response::json($ret);
 	}
 
@@ -324,6 +323,28 @@ class CitiesController extends BaseController {
 				'code' => '+'.$country->phone_code
 			]);
 		}
+	}
+
+	public function getDentistsCities() {
+
+		$ret = [];
+		$city = trim(Request::input('city_name'));
+
+		$cities = City::whereHas('translations', function ($query) use ($city) {
+            $query->where('name', 'LIKE', $city.'%');
+        })->take(10)->get();
+
+        if($cities->isNotEmpty()) {
+        	foreach ($cities as $c) {
+        		$ret[] = [
+					'name' => str_replace($city, '<span>'.$city.'</span>', strtolower($c->name).', '.strtolower($c->country->name)),
+					'key_name' => $c->name,
+					'input' => $city,
+				];
+        	}
+        }
+
+    	return Response::json($ret);
 	}
 
 	public function getLocation() {

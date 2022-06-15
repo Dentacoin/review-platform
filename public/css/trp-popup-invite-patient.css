@@ -247,23 +247,6 @@
     align-items: center; }
     #popup-invite .invite-content .info img {
       margin-right: 5px; }
-  #popup-invite .invite-content .button {
-    padding: 12px 49px;
-    background-color: #0cafd4;
-    -webkit-appearance: none; }
-    @media screen and (max-width: 768px) {
-      #popup-invite .invite-content .button {
-        width: 100%;
-        text-align: center; } }
-    #popup-invite .invite-content .button i {
-      color: white; }
-    #popup-invite .invite-content .button.button-inner-white {
-      background-color: white;
-      border-color: #0cafd4;
-      color: #0cafd4;
-      padding: 11px 77px; }
-    #popup-invite .invite-content .button[disabled="disabled"] {
-      background-color: #aaaaaa; }
   #popup-invite .invite-content .whatsapp-button {
     padding: 14px 29px;
     padding-left: 70px;
@@ -318,105 +301,6 @@
         border-bottom: 3px solid white;
         border-left: 3px solid white;
         animation: load8 1.1s infinite linear; }
-  #popup-invite .invite-content .chosen-patient-info {
-    height: 62px;
-    border: 1px solid #d6d6d7;
-    border-radius: 8px;
-    margin-top: 25px; }
-    @media screen and (max-width: 768px) {
-      #popup-invite .invite-content .chosen-patient-info {
-        height: auto; } }
-    #popup-invite .invite-content .chosen-patient-info .patient-info-label {
-      height: 100%;
-      min-width: 160px;
-      text-align: center;
-      align-items: center;
-      line-height: 60px;
-      text-transform: uppercase;
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
-      background-color: #eeeeee; }
-      @media screen and (max-width: 768px) {
-        #popup-invite .invite-content .chosen-patient-info .patient-info-label {
-          line-height: 40px;
-          border-top-right-radius: 8px;
-          border-bottom-left-radius: 0px; } }
-    #popup-invite .invite-content .chosen-patient-info .patient-info-value {
-      height: 100%;
-      line-height: 60px;
-      margin: 0px 23px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px; }
-      @media screen and (max-width: 768px) {
-        #popup-invite .invite-content .chosen-patient-info .patient-info-value {
-          line-height: 50px;
-          margin: 0px 10px; } }
-  #popup-invite .invite-content form .input-flex {
-    align-items: center; }
-    @media screen and (max-width: 768px) {
-      #popup-invite .invite-content form .input-flex {
-        display: flex; } }
-    #popup-invite .invite-content form .input-flex .code-wrapper {
-      flex: 1;
-      max-width: 68px;
-      text-align: center;
-      height: 58px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #eeeeee;
-      border: 1px solid #cccccc;
-      border-radius: 8px;
-      border-right: none;
-      border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px; }
-      @media screen and (max-width: 998px) {
-        #popup-invite .invite-content form .input-flex .code-wrapper {
-          height: 45px; } }
-      @media screen and (max-width: 768px) {
-        #popup-invite .invite-content form .input-flex .code-wrapper {
-          max-width: 58px; } }
-    #popup-invite .invite-content form .input-flex .modern-field {
-      margin-bottom: 0px; }
-      #popup-invite .invite-content form .input-flex .modern-field .modern-input + label {
-        height: 0px; }
-      #popup-invite .invite-content form .input-flex .modern-field .modern-input {
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px; }
-  #popup-invite .invite-content form #add-invite-image {
-    opacity: 0;
-    position: absolute;
-    z-index: -1; }
-  #popup-invite .invite-content form label[for="add-invite-image"] {
-    position: relative;
-    width: 100%;
-    height: 41px;
-    background-color: #126585;
-    display: block;
-    border-radius: 5px;
-    color: white;
-    text-align: center;
-    line-height: 41px;
-    cursor: pointer; }
-  #popup-invite .invite-content form .col:first-child {
-    margin-left: 0px; }
-    @media screen and (max-width: 768px) {
-      #popup-invite .invite-content form .col:first-child {
-        margin-right: 0px; } }
-  #popup-invite .invite-content form .col {
-    margin-left: 15px; }
-    @media screen and (max-width: 768px) {
-      #popup-invite .invite-content form .col {
-        margin-left: 0px; } }
-  #popup-invite .invite-content form .add-dentist,
-  #popup-invite .invite-content form .add-patient {
-    color: #126585; }
-  #popup-invite .invite-content form .button {
-    margin-top: 25px;
-    padding: 12px 49px; }
 #popup-invite .first-alert {
   margin-top: -110px; }
   @media screen and (max-width: 768px) {
