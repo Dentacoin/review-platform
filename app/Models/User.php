@@ -810,6 +810,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if(!StopEmailValidation::find(1)->stopped) {
 
             $email_validation = EmailValidation::where('email', 'like', $email)->first();
+
             if(empty($email_validation)) {
                 $query_params = new \stdClass();
                 $query_params->email = $email;
@@ -915,12 +916,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         $this->attributes['socials'] = $value ? json_encode($value) : '';
     }
-
-    // public function setNameAttribute($value) {
-    //     $this->attributes['name'] = $value;
-    //     //$this->attributes['slug'] = $this->makeSlug();
-    //     //
-    // }
+    
     public function setAddressAttribute($newvalue) {
         $this->attributes['address'] = $newvalue;
         if(!$this->custom_lat_lon) {
@@ -977,35 +973,28 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getImageUrl($thumb = false) {
-        // if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
-        //     return $this->id == 37530 ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
-        // } else {
-            // $avatar = $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
-
-            if (!file_exists($this->getImagePath(storage_path().'/app/public/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg'))) {
-                $avatar = url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
-            } else {
-                $avatar = url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp;
-            }
-            return $avatar;
-        // }
+        if (!file_exists($this->getImagePath(storage_path().'/app/public/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg'))) {
+            $avatar = url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+        } else {
+            $avatar = url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp;
+        }
+        return $avatar;
     }
+
     public function getImagePath($thumb = false) {
-        // if(Request::getHost() == 'urgent.reviews.dentacoin.com') {
-        //     return '/var/www/html/trp-urgent/public/new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png';
-        // } else {
-            $folder = storage_path().'/app/public/avatars/'.($this->id%100);
-            if(!is_dir($folder)) {
-                mkdir($folder);
-            }
-            return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.jpg';
-        // }
+        $folder = storage_path().'/app/public/avatars/'.($this->id%100);
+        if(!is_dir($folder)) {
+            mkdir($folder);
+        }
+        return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.jpg';
     }
 
     public function addImage($img) {
+
         $extensions = ['image/jpeg', 'image/png'];
 
         if (in_array($img->mime(), $extensions)) {
+            
             $to = $this->getImagePath();
             $to_thumb = $this->getImagePath(true);
     
@@ -1498,18 +1487,18 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         if (!empty($is_whitelist_ip)) {
             return false;
         } else {
-            $users_with_same_ip = UserLogin::where('ip', 'like', $ip)
+            $similar_users = UserLogin::where('ip', 'like', $ip)
             ->where('user_id', '!=', $this->id)
             ->groupBy('user_id')
-            ->get()
-            ->count();
+            ->get();
 
-            if ($users_with_same_ip >=2 && !$this->ip_protected && !$this->allow_withdraw && !$this->is_dentist && $this::getRealIp() != '213.91.254.194' ) {
-
-                $similar_users = UserLogin::where('ip', 'like', $ip)
-                ->where('user_id', '!=', $this->id)
-                ->groupBy('user_id')
-                ->get();
+            if (
+                $similar_users->count() > 5 
+                && !$this->ip_protected 
+                && !$this->allow_withdraw 
+                && !$this->is_dentist 
+                && $this::getRealIp() != '213.91.254.194' 
+            ) {
 
                 foreach ($similar_users as $su) {
                     

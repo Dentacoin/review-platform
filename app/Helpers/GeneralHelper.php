@@ -81,11 +81,11 @@ class GeneralHelper {
 
             $email->setTemplateId($item->template->sendgrid_template_id);
 
-            if($user->is_dentist && $template_id != 58 && $template_id != 59 && $template_id != 60 && $template_id != 61 && $template_id != 62 && $template_id != 106) {
+            if($user->is_dentist && !in_array($template_id, [58, 59, 60, 61, 62, 106])) {
                 $email->addBcc("4097841@bcc.hubspot.com");
             }
 
-            if($user->id == 3 && ($item->template->id == 84 || $item->template->id == 26 || $item->template->id == 83 || $item->template->id == 85 ) ) {
+            if($user->id == 3 && in_array($item->template->id, [84, 26, 83, 85])) {
 
             } else {
                 if ($item->template->category) {
@@ -105,7 +105,7 @@ class GeneralHelper {
                 "lead-magnet-link" => getLangUrl('review-score-test'),
                 "homepage" => getLangUrl('/', null, $domain),
                 "trp_profile" => $user->getLink(),
-                "town" => $user->city_name ? $user->city_name : 'your town',
+                "town" => $user->city_name ?? 'your town',
                 "country" => $user->country_id ? Country::find($user->country_id)->name : 'your country',
                 "unsubscribe" => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query([
                     'fields' => urlencode(self::encrypt(json_encode([
