@@ -854,528 +854,528 @@ UNCONFIRMED TRANSACTIONS
         })->cron("30 7 * * *");
 
 
-        $schedule->call(function () {
-            echo 'First 3 weeks engagement email 2 START'.PHP_EOL.PHP_EOL.PHP_EOL;
+        // $schedule->call(function () {
+        //     echo 'First 3 weeks engagement email 2 START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            //First 3 weeks engagement      
+        //     //First 3 weeks engagement      
 
-            //Email 2
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    emails 
-                WHERE 
-                    template_id = 26
-                    AND `user_id` NOT IN ( 
-                        SELECT 
-                            `user_id`
-                        FROM 
-                            emails 
-                        WHERE template_id = 44
-                    )
-                    AND `user_id` IN ( 
-                        SELECT 
-                            `id` 
-                        FROM 
-                            users 
-                        WHERE 
-                            is_dentist = 1 
-                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
-                            AND `self_deleted` is null 
-                            AND `platform` = 'trp'
-                    )
-                    AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
-                    AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
-                    AND `deleted_at` is null
-                GROUP BY 
-                    `user_id`
-            ";
+        //     //Email 2
+        //     $query = "
+        //         SELECT 
+        //             * 
+        //         FROM 
+        //             emails 
+        //         WHERE 
+        //             template_id = 26
+        //             AND `user_id` NOT IN ( 
+        //                 SELECT 
+        //                     `user_id`
+        //                 FROM 
+        //                     emails 
+        //                 WHERE template_id = 44
+        //             )
+        //             AND `user_id` IN ( 
+        //                 SELECT 
+        //                     `id` 
+        //                 FROM 
+        //                     users 
+        //                 WHERE 
+        //                     is_dentist = 1 
+        //                     AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+        //                     AND `self_deleted` is null 
+        //                     AND `platform` = 'trp'
+        //             )
+        //             AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
+        //             AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
+        //             AND `deleted_at` is null
+        //         GROUP BY 
+        //             `user_id`
+        //     ";
 
-            $emails = DB::select(
-                DB::raw($query), []
-            );
+        //     $emails = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            if (!empty($emails)) {
-                foreach ($emails as $e) {                
-                    $user = User::find($e->user_id);
-                    if (!empty($user)) {
-                        $user->sendGridTemplate(44, null, 'trp');
-                    }
-                }
-            }
+        //     if (!empty($emails)) {
+        //         foreach ($emails as $e) {                
+        //             $user = User::find($e->user_id);
+        //             if (!empty($user)) {
+        //                 $user->sendGridTemplate(44, null, 'trp');
+        //             }
+        //         }
+        //     }
 
-            echo 'First 3 weeks engagement email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     echo 'First 3 weeks engagement email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            //Email 3
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    emails 
-                WHERE 
-                    template_id = 44
-                    AND `user_id` NOT IN ( 
-                        SELECT 
-                            `user_id` 
-                        FROM 
-                            emails 
-                        WHERE template_id = 45
-                    )
-                    AND `user_id` IN ( 
-                        SELECT 
-                            `id` 
-                        FROM 
-                            users 
-                        WHERE 
-                            is_dentist = 1 
-                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
-                            AND `self_deleted` is null 
-                            AND `platform` = 'trp'
-                    )
-                    AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
-            ";
+        //     //Email 3
+        //     $query = "
+        //         SELECT 
+        //             * 
+        //         FROM 
+        //             emails 
+        //         WHERE 
+        //             template_id = 44
+        //             AND `user_id` NOT IN ( 
+        //                 SELECT 
+        //                     `user_id` 
+        //                 FROM 
+        //                     emails 
+        //                 WHERE template_id = 45
+        //             )
+        //             AND `user_id` IN ( 
+        //                 SELECT 
+        //                     `id` 
+        //                 FROM 
+        //                     users 
+        //                 WHERE 
+        //                     is_dentist = 1 
+        //                     AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+        //                     AND `self_deleted` is null 
+        //                     AND `platform` = 'trp'
+        //             )
+        //             AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
+        //     ";
 
-            $emails = DB::select(
-                DB::raw($query), []
-            );
+        //     $emails = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            if (!empty($emails)) {
-                foreach ($emails as $e) {
-                    $user = User::find($e->user_id);
+        //     if (!empty($emails)) {
+        //         foreach ($emails as $e) {
+        //             $user = User::find($e->user_id);
 
-                    if (!empty($user)) {
-                        $missingInfo = [];
+        //             if (!empty($user)) {
+        //                 $missingInfo = [];
 
-                        if(empty($user->short_description)) {
-                            $missingInfo[] = 'a short intro';
-                        }
+        //                 if(empty($user->short_description)) {
+        //                     $missingInfo[] = 'a short intro';
+        //                 }
 
-                        if(empty($user->work_hours)) {
-                            $missingInfo[] = 'opening hours';
-                        }
+        //                 if(empty($user->work_hours)) {
+        //                     $missingInfo[] = 'opening hours';
+        //                 }
 
-                        if(empty($user->socials)) {
-                            $missingInfo[] = 'social media pages';
-                        }
+        //                 if(empty($user->socials)) {
+        //                     $missingInfo[] = 'social media pages';
+        //                 }
 
-                        if(empty($user->description)) {
-                            $missingInfo[] = 'a description';
-                        }
+        //                 if(empty($user->description)) {
+        //                     $missingInfo[] = 'a description';
+        //                 }
 
-                        if($user->photos->isEmpty()) {
-                            $missingInfo[] = 'more photos';
-                        }
+        //                 if($user->photos->isEmpty()) {
+        //                     $missingInfo[] = 'more photos';
+        //                 }
 
-                        if (!empty($missingInfo)) {
+        //                 if (!empty($missingInfo)) {
 
-                            $substitutions = [
-                                'profile_missing_info' => $missingInfo[0],
-                            ];
+        //                     $substitutions = [
+        //                         'profile_missing_info' => $missingInfo[0],
+        //                     ];
 
-                            $user->sendGridTemplate(45, $substitutions, 'trp');
-                        } else {
-                            $user->sendGridTemplate(45, null, 'trp', 1);
-                        }
-                    }           
-                }
-            }
-            echo 'First 3 weeks engagement email 3 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //                     $user->sendGridTemplate(45, $substitutions, 'trp');
+        //                 } else {
+        //                     $user->sendGridTemplate(45, null, 'trp', 1);
+        //                 }
+        //             }           
+        //         }
+        //     }
+        //     echo 'First 3 weeks engagement email 3 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
 
-            //Email 4
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    emails 
-                WHERE 
-                    template_id = 45
-                    AND `user_id` NOT IN ( 
-                        SELECT 
-                            `user_id` 
-                        FROM 
-                            emails 
-                        WHERE template_id IN ( 46, 47)
-                    )
-                    AND `user_id` IN ( 
-                        SELECT 
-                            `id` 
-                        FROM 
-                            users 
-                        WHERE 
-                            is_dentist = 1 
-                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
-                            AND `self_deleted` is null 
-                            AND `platform` = 'trp'
-                    )
-                    AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
-            ";
+        //     //Email 4
+        //     $query = "
+        //         SELECT 
+        //             * 
+        //         FROM 
+        //             emails 
+        //         WHERE 
+        //             template_id = 45
+        //             AND `user_id` NOT IN ( 
+        //                 SELECT 
+        //                     `user_id` 
+        //                 FROM 
+        //                     emails 
+        //                 WHERE template_id IN ( 46, 47)
+        //             )
+        //             AND `user_id` IN ( 
+        //                 SELECT 
+        //                     `id` 
+        //                 FROM 
+        //                     users 
+        //                 WHERE 
+        //                     is_dentist = 1 
+        //                     AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+        //                     AND `self_deleted` is null 
+        //                     AND `platform` = 'trp'
+        //             )
+        //             AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
+        //     ";
 
-            $emails = DB::select(
-                DB::raw($query), []
-            );
+        //     $emails = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            if (!empty($emails)) {
-                foreach ($emails as $e) {
-                    $user = User::find($e->user_id);
-                    if (!empty($user) && $user->invites->isNotEmpty()) {
-                        $user->sendGridTemplate(46, null, 'trp');
-                    } else {
-                        $user->sendGridTemplate(47, null, 'trp');
-                    }       
-                }
-            }
-            echo 'First 3 weeks engagement email 4 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     if (!empty($emails)) {
+        //         foreach ($emails as $e) {
+        //             $user = User::find($e->user_id);
+        //             if (!empty($user) && $user->invites->isNotEmpty()) {
+        //                 $user->sendGridTemplate(46, null, 'trp');
+        //             } else {
+        //                 $user->sendGridTemplate(47, null, 'trp');
+        //             }       
+        //         }
+        //     }
+        //     echo 'First 3 weeks engagement email 4 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
             
 
-            //Email 5
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    emails 
-                WHERE 
-                    template_id IN ( 46, 47)
-                    AND `user_id` NOT IN ( 
-                        SELECT 
-                            `user_id` 
-                        FROM 
-                            emails 
-                        WHERE template_id = 48
-                    )                    
-                    AND `user_id` IN ( 
-                        SELECT 
-                            `id` 
-                        FROM 
-                            users 
-                        WHERE 
-                            is_dentist = 1 
-                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
-                            AND `self_deleted` is null 
-                            AND `platform` = 'trp'
-                    )
-                    AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
-            ";
+        //     //Email 5
+        //     $query = "
+        //         SELECT 
+        //             * 
+        //         FROM 
+        //             emails 
+        //         WHERE 
+        //             template_id IN ( 46, 47)
+        //             AND `user_id` NOT IN ( 
+        //                 SELECT 
+        //                     `user_id` 
+        //                 FROM 
+        //                     emails 
+        //                 WHERE template_id = 48
+        //             )                    
+        //             AND `user_id` IN ( 
+        //                 SELECT 
+        //                     `id` 
+        //                 FROM 
+        //                     users 
+        //                 WHERE 
+        //                     is_dentist = 1 
+        //                     AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+        //                     AND `self_deleted` is null 
+        //                     AND `platform` = 'trp'
+        //             )
+        //             AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
+        //     ";
 
-            $emails = DB::select(
-                DB::raw($query), []
-            );
+        //     $emails = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            if (!empty($emails)) {
-                foreach ($emails as $e) {
-                    $user = User::find($e->user_id);
-                    if (!empty($user) && $user->reviews_in()->isNotEmpty()) {
+        //     if (!empty($emails)) {
+        //         foreach ($emails as $e) {
+        //             $user = User::find($e->user_id);
+        //             if (!empty($user) && $user->reviews_in()->isNotEmpty()) {
 
-                        $substitutions = [
-                            'score_last_month_aver' => number_format($user->avg_rating,2),
-                            'reviews_last_month_num' => $user->reviews_in()->count().($user->reviews_in()->count() > 1 ? ' reviews' : ' review'),
-                        ];
+        //                 $substitutions = [
+        //                     'score_last_month_aver' => number_format($user->avg_rating,2),
+        //                     'reviews_last_month_num' => $user->reviews_in()->count().($user->reviews_in()->count() > 1 ? ' reviews' : ' review'),
+        //                 ];
 
-                        $user->sendGridTemplate(48, $substitutions, 'trp');
-                    }
-                }
-            }
-            echo 'First 3 weeks engagement email 5 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //                 $user->sendGridTemplate(48, $substitutions, 'trp');
+        //             }
+        //         }
+        //     }
+        //     echo 'First 3 weeks engagement email 5 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            //Create a Wallet
-            //!!!!!! (repeates for six months) !!!!!!!!!!
+        //     //Create a Wallet
+        //     //!!!!!! (repeates for six months) !!!!!!!!!!
 
-            $query = "
-                SELECT 
-                    `rewards`.`user_id`
-                FROM
-                    (
-                        SELECT 
-                            `user_id`, 
-                            sum(reward) as `rewards_total` 
-                        FROM 
-                            dcn_rewards 
-                        GROUP BY 
-                            `user_id`
-                    ) `rewards`
-                    left OUTER JOIN
-                    (
-                        SELECT 
-                            `user_id`, 
-                            sum(reward) as `withdraws_total` 
-                        FROM 
-                            dcn_cashouts 
-                        GROUP BY 
-                            `user_id`
-                    ) `cashouts`
-                    ON
-                        `rewards`.user_id = `cashouts`.user_id  
-                    LEFT JOIN 
-                        `users` `u`
-                    ON
-                        `u`.`id` = `rewards`.`user_id`
-                    WHERE
-                        `is_dentist` = 1
-                        AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed')
-                        AND `self_deleted` is null
-                        AND `id` NOT IN ( 
-                            SELECT `user_id` FROM wallet_addresses
-                        )
-                        AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > ".WithdrawalsCondition::find(1)->min_vox_amount."
-                        AND `deleted_at` is null
-                        AND `id` NOT IN ( 
-                            SELECT 
-                                `user_id`
-                            FROM 
-                                emails 
-                            WHERE 
-                                template_id = 57 
-                                AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
-                        )
-                        AND `id` NOT IN ( 
-                            SELECT 
-                                `user_id` 
-                            FROM 
-                                emails 
-                            WHERE 
-                                template_id = 57 
-                                AND `created_at` < '".date('Y-m-d', time() - 86400*31*6)." 00:00:00'
-                        )
-                LIMIT 100
-            ";
+        //     $query = "
+        //         SELECT 
+        //             `rewards`.`user_id`
+        //         FROM
+        //             (
+        //                 SELECT 
+        //                     `user_id`, 
+        //                     sum(reward) as `rewards_total` 
+        //                 FROM 
+        //                     dcn_rewards 
+        //                 GROUP BY 
+        //                     `user_id`
+        //             ) `rewards`
+        //             left OUTER JOIN
+        //             (
+        //                 SELECT 
+        //                     `user_id`, 
+        //                     sum(reward) as `withdraws_total` 
+        //                 FROM 
+        //                     dcn_cashouts 
+        //                 GROUP BY 
+        //                     `user_id`
+        //             ) `cashouts`
+        //             ON
+        //                 `rewards`.user_id = `cashouts`.user_id  
+        //             LEFT JOIN 
+        //                 `users` `u`
+        //             ON
+        //                 `u`.`id` = `rewards`.`user_id`
+        //             WHERE
+        //                 `is_dentist` = 1
+        //                 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed')
+        //                 AND `self_deleted` is null
+        //                 AND `id` NOT IN ( 
+        //                     SELECT `user_id` FROM wallet_addresses
+        //                 )
+        //                 AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > ".WithdrawalsCondition::find(1)->min_vox_amount."
+        //                 AND `deleted_at` is null
+        //                 AND `id` NOT IN ( 
+        //                     SELECT 
+        //                         `user_id`
+        //                     FROM 
+        //                         emails 
+        //                     WHERE 
+        //                         template_id = 57 
+        //                         AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+        //                 )
+        //                 AND `id` NOT IN ( 
+        //                     SELECT 
+        //                         `user_id` 
+        //                     FROM 
+        //                         emails 
+        //                     WHERE 
+        //                         template_id = 57 
+        //                         AND `created_at` < '".date('Y-m-d', time() - 86400*31*6)." 00:00:00'
+        //                 )
+        //         LIMIT 100
+        //     ";
 
-            $users = DB::select(
-                DB::raw($query), []
-            );
+        //     $users = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            if(!empty($users)) {
+        //     if(!empty($users)) {
 
-                foreach ($users as $u) {
-                    $user = User::find($u->user_id);
+        //         foreach ($users as $u) {
+        //             $user = User::find($u->user_id);
 
-                    if (!empty($user)) {
-                        $user->sendGridTemplate(57);
-                    }
-                }
-            }
+        //             if (!empty($user)) {
+        //                 $user->sendGridTemplate(57);
+        //             }
+        //         }
+        //     }
 
-            echo 'Create Wallet Email DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     echo 'Create Wallet Email DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            //No reviews last 30 days
-            //Email2
+        //     //No reviews last 30 days
+        //     //Email2
 
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    emails 
-                WHERE 
-                    template_id = 49
-                    AND `user_id` NOT IN ( 
-                        SELECT 
-                            `user_id` 
-                        FROM 
-                            emails 
-                        WHERE 
-                            template_id = 50 
-                            AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
-                    )
-                    AND `user_id` IN ( 
-                        SELECT 
-                            `id` 
-                        FROM 
-                            users 
-                        WHERE 
-                            is_dentist = 1 
-                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
-                            AND `self_deleted` is null
-                    )
-                    AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
-            ";
+        //     $query = "
+        //         SELECT 
+        //             * 
+        //         FROM 
+        //             emails 
+        //         WHERE 
+        //             template_id = 49
+        //             AND `user_id` NOT IN ( 
+        //                 SELECT 
+        //                     `user_id` 
+        //                 FROM 
+        //                     emails 
+        //                 WHERE 
+        //                     template_id = 50 
+        //                     AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+        //             )
+        //             AND `user_id` IN ( 
+        //                 SELECT 
+        //                     `id` 
+        //                 FROM 
+        //                     users 
+        //                 WHERE 
+        //                     is_dentist = 1 
+        //                     AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+        //                     AND `self_deleted` is null
+        //             )
+        //             AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
+        //     ";
 
-            $emails = DB::select(
-                DB::raw($query), []
-            );
+        //     $emails = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            if (!empty($emails)) {
-                foreach ($emails as $e) {
-                    $user = User::find($e->user_id);
-                    if (!empty($user)) {
-                        $user->sendGridTemplate(50, null, 'trp');
-                    }
-                }
-            }
-            echo 'No reviews last 30 days Email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     if (!empty($emails)) {
+        //         foreach ($emails as $e) {
+        //             $user = User::find($e->user_id);
+        //             if (!empty($user)) {
+        //                 $user->sendGridTemplate(50, null, 'trp');
+        //             }
+        //         }
+        //     }
+        //     echo 'No reviews last 30 days Email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            //Email3
+        //     //Email3
 
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    emails 
-                WHERE 
-                    template_id = 50
-                    AND `user_id` NOT IN ( 
-                        SELECT 
-                            `user_id` 
-                        FROM 
-                            emails 
-                        WHERE 
-                            template_id IN ( 51, 52) 
-                            AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
-                    )
-                    AND `user_id` IN ( 
-                        SELECT 
-                            `user_id` 
-                        FROM 
-                            emails 
-                        WHERE 
-                            template_id = 49 
-                            AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
-                    )                    
-                    AND `user_id` IN ( 
-                        SELECT 
-                            `id` 
-                        FROM 
-                            users 
-                        WHERE 
-                            is_dentist = 1 
-                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
-                            AND `self_deleted` is null
-                    )
-                    AND `created_at` < '".date('Y-m-d', time() - 86400*7)." 00:00:00'
-            ";
+        //     $query = "
+        //         SELECT 
+        //             * 
+        //         FROM 
+        //             emails 
+        //         WHERE 
+        //             template_id = 50
+        //             AND `user_id` NOT IN ( 
+        //                 SELECT 
+        //                     `user_id` 
+        //                 FROM 
+        //                     emails 
+        //                 WHERE 
+        //                     template_id IN ( 51, 52) 
+        //                     AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+        //             )
+        //             AND `user_id` IN ( 
+        //                 SELECT 
+        //                     `user_id` 
+        //                 FROM 
+        //                     emails 
+        //                 WHERE 
+        //                     template_id = 49 
+        //                     AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+        //             )                    
+        //             AND `user_id` IN ( 
+        //                 SELECT 
+        //                     `id` 
+        //                 FROM 
+        //                     users 
+        //                 WHERE 
+        //                     is_dentist = 1 
+        //                     AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+        //                     AND `self_deleted` is null
+        //             )
+        //             AND `created_at` < '".date('Y-m-d', time() - 86400*7)." 00:00:00'
+        //     ";
 
-            $emails = DB::select(
-                DB::raw($query), []
-            );
+        //     $emails = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            if (!empty($emails)) {
-                foreach ($emails as $e) {
-                    $user = User::find($e->user_id);
-                    if (!empty($user) && $user->invites->isNotEmpty()) {
+        //     if (!empty($emails)) {
+        //         foreach ($emails as $e) {
+        //             $user = User::find($e->user_id);
+        //             if (!empty($user) && $user->invites->isNotEmpty()) {
 
-                        if ( $user->reviews_in()->isNotEmpty()) {
-                            $id = $user->id;
-                            $from_day = Carbon::now()->subDays(11);
+        //                 if ( $user->reviews_in()->isNotEmpty()) {
+        //                     $id = $user->id;
+        //                     $from_day = Carbon::now()->subDays(11);
 
-                            $prev_reviews = Review::where(function($query) use ($id) {
-                                $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
-                            })->where('created_at', '>=', $from_day)
-                            ->get();
+        //                     $prev_reviews = Review::where(function($query) use ($id) {
+        //                         $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+        //                     })->where('created_at', '>=', $from_day)
+        //                     ->get();
 
-                            $rating = 0;
-                            foreach($prev_reviews as $reviews) {
-                                if (!empty($reviews->team_doctor_rating) && ($user->id == $reviews->dentist_id)) {
-                                    $rating += $reviews->team_doctor_rating;
-                                } else {
-                                    $rating += $reviews->rating;
-                                }
-                            }
+        //                     $rating = 0;
+        //                     foreach($prev_reviews as $reviews) {
+        //                         if (!empty($reviews->team_doctor_rating) && ($user->id == $reviews->dentist_id)) {
+        //                             $rating += $reviews->team_doctor_rating;
+        //                         } else {
+        //                             $rating += $reviews->rating;
+        //                         }
+        //                     }
 
-                            $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
-                            $results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';                   
-                        } else {
-                            $invites_text = $user->invites->count() > 1 ? "invites" : "invite";
-                            $results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
-                        }
+        //                     $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
+        //                     $results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';                   
+        //                 } else {
+        //                     $invites_text = $user->invites->count() > 1 ? "invites" : "invite";
+        //                     $results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
+        //                 }
 
-                        $substitutions = [
-                            'results_sentence' => $results_sentence
-                        ];
+        //                 $substitutions = [
+        //                     'results_sentence' => $results_sentence
+        //                 ];
 
-                        $user->sendGridTemplate(51, $substitutions, 'trp');
-                    } else {
-                        $user->sendGridTemplate(52, null, 'trp');
-                    }   
-                }
-            }
-            echo 'No reviews last 30 days Email 3 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //                 $user->sendGridTemplate(51, $substitutions, 'trp');
+        //             } else {
+        //                 $user->sendGridTemplate(52, null, 'trp');
+        //             }   
+        //         }
+        //     }
+        //     echo 'No reviews last 30 days Email 3 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            //Email4
+        //     //Email4
 
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    emails 
-                WHERE 
-                    template_id = 52
-                    AND `user_id` NOT IN ( 
-                        SELECT 
-                            `user_id` 
-                        FROM 
-                            emails 
-                        WHERE 
-                            template_id IN ( 53, 54) 
-                            AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
-                    )
-                    AND `user_id` IN ( 
-                        SELECT 
-                            `user_id` 
-                        FROM 
-                            emails 
-                        WHERE 
-                            template_id = 49 
-                            AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
-                    )                    
-                    AND `user_id` IN ( 
-                        SELECT 
-                            `id` 
-                        FROM 
-                            users 
-                        WHERE 
-                            is_dentist = 1 
-                            AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
-                            AND `self_deleted` is null
-                    )
-                    AND `created_at` < '".date('Y-m-d', time() - 86400*14)." 00:00:00'
-            ";
+        //     $query = "
+        //         SELECT 
+        //             * 
+        //         FROM 
+        //             emails 
+        //         WHERE 
+        //             template_id = 52
+        //             AND `user_id` NOT IN ( 
+        //                 SELECT 
+        //                     `user_id` 
+        //                 FROM 
+        //                     emails 
+        //                 WHERE 
+        //                     template_id IN ( 53, 54) 
+        //                     AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+        //             )
+        //             AND `user_id` IN ( 
+        //                 SELECT 
+        //                     `user_id` 
+        //                 FROM 
+        //                     emails 
+        //                 WHERE 
+        //                     template_id = 49 
+        //                     AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+        //             )                    
+        //             AND `user_id` IN ( 
+        //                 SELECT 
+        //                     `id` 
+        //                 FROM 
+        //                     users 
+        //                 WHERE 
+        //                     is_dentist = 1 
+        //                     AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') 
+        //                     AND `self_deleted` is null
+        //             )
+        //             AND `created_at` < '".date('Y-m-d', time() - 86400*14)." 00:00:00'
+        //     ";
 
-            $emails = DB::select(
-                DB::raw($query), []
-            );
+        //     $emails = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            if (!empty($emails)) {
-                foreach ($emails as $e) {
-                    $user = User::find($e->user_id);
-                    if (!empty($user) && $user->invites->isNotEmpty()) {
+        //     if (!empty($emails)) {
+        //         foreach ($emails as $e) {
+        //             $user = User::find($e->user_id);
+        //             if (!empty($user) && $user->invites->isNotEmpty()) {
 
-                        if ( $user->reviews_in()->isNotEmpty()) {
-                            $id = $user->id;
-                            $from_day = Carbon::now()->subDays(25);
+        //                 if ( $user->reviews_in()->isNotEmpty()) {
+        //                     $id = $user->id;
+        //                     $from_day = Carbon::now()->subDays(25);
 
-                            $prev_reviews = Review::where(function($query) use ($id) {
-                                $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
-                            })->where('created_at', '>=', $from_day)
-                            ->get();
+        //                     $prev_reviews = Review::where(function($query) use ($id) {
+        //                         $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+        //                     })->where('created_at', '>=', $from_day)
+        //                     ->get();
 
-                            $rating = 0;
-                            foreach($prev_reviews as $reviews) {
-                                if (!empty($reviews->team_doctor_rating) && ($user->id == $reviews->dentist_id)) {
-                                    $rating += $reviews->team_doctor_rating;
-                                } else {
-                                    $rating += $reviews->rating;
-                                }
-                            }
+        //                     $rating = 0;
+        //                     foreach($prev_reviews as $reviews) {
+        //                         if (!empty($reviews->team_doctor_rating) && ($user->id == $reviews->dentist_id)) {
+        //                             $rating += $reviews->team_doctor_rating;
+        //                         } else {
+        //                             $rating += $reviews->rating;
+        //                         }
+        //                     }
 
-                            $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
-                            $results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';                   
-                        } else {
-                            $invites_text = $user->invites->count() > 1 ? "invites" : "invite";
-                            $results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
-                        }
+        //                     $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
+        //                     $results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';                   
+        //                 } else {
+        //                     $invites_text = $user->invites->count() > 1 ? "invites" : "invite";
+        //                     $results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
+        //                 }
 
-                        $substitutions = [
-                            'results_sentence' => $results_sentence
-                        ];
+        //                 $substitutions = [
+        //                     'results_sentence' => $results_sentence
+        //                 ];
 
-                        $user->sendGridTemplate(53, $substitutions, 'trp');
-                    } else {
-                        $user->sendGridTemplate(54, null, 'trp');
-                    }   
-                }
-            }
-            echo 'No reviews last 30 days Email 4 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //                 $user->sendGridTemplate(53, $substitutions, 'trp');
+        //             } else {
+        //                 $user->sendGridTemplate(54, null, 'trp');
+        //             }   
+        //         }
+        //     }
+        //     echo 'No reviews last 30 days Email 4 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron("15 */6 * * *"); //05:00h
+        // })->cron("15 */6 * * *"); //At minute 15 past every 6th hour.
 
         //
         //Monthly score
