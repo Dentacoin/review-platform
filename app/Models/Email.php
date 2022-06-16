@@ -51,7 +51,7 @@ class Email extends Model {
         return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();		
 	}
 
-	private $button_style = 'style="text-decoration:none;background:#126585;color:#FFFFFF;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-weight:normal;line-height:120%;text-transform:none;margin:0px;border:none;border-radius:5px;color:#FFFFFF;cursor:auto;padding:10px 30px;"';
+	private $button_style = 'style="text-decoration: none;background: #0084d1;font-family: Ubuntu,Helvetica,Arial,sans-serif;font-size: 15px;font-weight: normal;line-height: 120%;text-transform: none;margin: 0px;border: none;border-radius: 25px;color: #ffffff;padding: 10px 30px;"';
 	private $text_style = 'style="text-decoration:underline; color: #38a2e5;"';																			
 
 	public function send($anonymous_email=null) {
@@ -194,44 +194,11 @@ class Email extends Model {
 
 	private function addPlaceholders($content, $domain) {
 
-		if($this->template->id==4) { //Reward
-			$content = str_replace(array(
-				'[register_reward]',
-				'[rewardlink]',
-				'[/rewardlink]',
-			), array(
-				Reward::getReward('reward_register'),
-				'<a '.$this->button_style.' href="https://account.dentacoin.com/">',
-				'</a>',
-			), $content);
-		}
-
-		if($this->template->id==10) { //Share
-			$content = str_replace(array(
-				'[link]',
-				'[/link]',
-			), array(
-				'<a '.$this->button_style.' href="'.$this->meta['link'].'">',
-				'</a>',
-			), $content);
-		}
-
-		if($this->template->id==13) { //Recover
-			$content = str_replace(array(
-				'[recoverlink]',
-				'[/recoverlink]',
-			), array(
-				'<a '.$this->button_style.' href="'.getLangUrl('recover/'.$this->user->id.'/'.$this->user->get_token(), null, $domain).'">',
-				'</a>',
-			), $content);
-		}
-
-		if($this->template->id==6 || $this->template->id==8 || $this->template->id==21) { //New review & review reply
+		if(in_array($this->template->id, [6, 8, 21])) { //New review & review reply
 			$review = Review::find($this->meta['review_id']);
 
 			if($review) {
 				$dentist_id = $this->meta['dentist_id'];
-
 				$dentist = User::find($dentist_id);
 
 				$content = str_replace(array(
@@ -250,37 +217,13 @@ class Email extends Model {
 			}
 		}
 
-		if($this->template->id==1 ) { //Invite
-			$content = str_replace(array(
-				'[clinic_name]',
-				'[invitelink]',
-				'[/invitelink]',
-			), array(
-				$this->meta['clinic_name'] ?? '',
-				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => GeneralHelper::encrypt($this->user->id) ]).'">',
-				'</a>',
-			), $content);
-		}
-
-		if($this->template->id==7 || $this->template->id==17 || $this->template->id==25 || $this->template->id==27) { //Invite
-			$content = str_replace(array(
-				'[friend_name]',
-				'[invitelink]',
-				'[/invitelink]',
-			), array(
-				$this->meta['friend_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => GeneralHelper::encrypt($this->user->id) ]).'">',
-				'</a>',
-			), $content);
-		}
-
 		if($this->template->id==15) { //Ban
 			$content = str_replace('[expires]', $this->meta['expires'], $content);
 			$content = str_replace('[ban_days]', $this->meta['ban_days'], $content);
 			$content = str_replace('[ban_hours]', $this->meta['ban_hours'], $content);
 		}
 
-		if($this->template->id==18 || $this->template->id==19 || $this->template->id==22 || $this->template->id==27) { //Invitation accepted
+		if($this->template->id==22) { //Invitation accepted
 			$content = str_replace(array(
 				'[who_joined_name]',
 			), array(
@@ -299,20 +242,6 @@ class Email extends Model {
 				$this->meta['transaction_address'],
 				'<a href="'.$this->meta['transaction_link'].'" target="_blank">',
 				'</a>',
-			), $content);
-		}
-
-		if($this->template->id==26) { //Dentist approved
-			$content = str_replace(array(
-				'[welcome_link]',
-				'[/welcome_link]',
-				'[become_dcn_dentist]',
-				'[/become_dcn_dentist]',
-			), array(
-				'<a '.$this->text_style.' href="'.getLangUrl('/', null, $domain).'">',
-				'</a>',		
-				'<a '.$this->button_style.' target="_blank" href="https://dentists.dentacoin.com/#contacts">',
-				'</a>',				
 			), $content);
 		}
 
@@ -340,30 +269,6 @@ class Email extends Model {
 			), $content);
 		}
 
-		if($this->template->id==28) { //Civic
-			$content = str_replace(array(
-				'[reward]',
-				'[/reward]',
-			), array(
-				'<a '.$this->button_style.' href="https://account.dentacoin.com/">',
-				'</a>',
-			), $content);
-		}
-
-		if($this->template->id==31 || $this->template->id==32) { //Transaction completed
-			$content = str_replace(array(
-				'[agree]',
-				'[/agree]',
-				'[privacy]',
-				'[/privacy]',
-			), array(
-				'<a '.$this->button_style.' href="https://dentacoin.com/privacy-policy" target="_blank">',
-				'</a>',
-				'<a href="https://dentacoin.com/privacy/" target="_blank">',
-				'</a>',
-			), $content);
-		}
-
 		if($this->template->id==33) { //Invite Dentist to Join Clinic
 			$content = str_replace(array(
 				'[clinic-name]',
@@ -377,18 +282,6 @@ class Email extends Model {
 		}
 
 		if($this->template->id==34) { //Dentist Wants to Join Clinic
-			$content = str_replace(array(
-				'[dentist-name]',
-				'[profile-link]',
-				'[/profile-link]',
-			), array(
-				$this->meta['dentist-name'],
-				'<a '.$this->button_style.' href="'.$this->user->getLink().'?tab=about">',
-				'</a>',
-			), $content);
-		}
-
-		if($this->template->id==34 || $this->template->id==2) { //Dentist Wants to Join Clinic
 			if(!empty( $this->meta['profile-link'] )) {
 				$content = str_replace(array(
 					'[dentist-name]',
@@ -396,13 +289,23 @@ class Email extends Model {
 					'[/profile-link]',
 				), array(
 					$this->meta['dentist-name'],
-					'<a '.$this->button_style.' href="'.$this->meta['profile-link'].'?tab=about">',
+					'<a '.$this->button_style.' href="'.$this->meta['profile-link'].'">',
+					'</a>',
+				), $content);
+			} else {
+				$content = str_replace(array(
+					'[dentist-name]',
+					'[profile-link]',
+					'[/profile-link]',
+				), array(
+					$this->meta['dentist-name'],
+					'<a '.$this->button_style.' href="'.$this->user->getLink().'">',
 					'</a>',
 				), $content);
 			}
 		}
 
-		if($this->template->id==35 || $this->template->id==36 || $this->template->id==37) { //Clinic Accepts Dentist Request
+		if($this->template->id==35 || $this->template->id==36) { //Clinic Accepts Dentist Request
 			$content = str_replace(array(
 				'[clinic-name]',
 			), array(
@@ -417,86 +320,6 @@ class Email extends Model {
 				$this->meta['dentist-name'],
 			), $content);
 		}
-
-		if($this->template->id==11 || $this->template->id==39) { //New Auth
-			$content = str_replace(array(
-				'[grace_expiration_date]',
-				'[login]',
-				'[/login]',
-			), array(
-				date('d F Y', time()+86400*7),
-				'<a '.$this->text_style.' href="'.getLangUrl( ( $this->template->id==11 ? 'login' : '/' ) , null, $domain).'">',
-				'</a>',
-			), $content);
-		}
-
-		if( $this->template->id==3 || $this->template->id==5 || $this->template->id==41 ) { //Unfinished registrations
-			$content = str_replace(array(
-				'[button]',
-				'[/button]',
-				'[missing-info]',
-			), array(
-				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist/'.$this->meta['link'], null, $domain).'">',
-				'</a>',
-				!empty($this->meta['missing-info']) ? $this->meta['missing-info'] : '',
-			), $content);
-        }
-
-		if($this->template->id==42 ) { // Invite Clinic After Dentist Registration
-			$content = str_replace(array(
-				'[dentist-name]',
-				'[button]',
-				'[/button]',
-			), array(
-				$this->meta['dentist_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist' , null, $domain).'">',
-				'</a>',
-			), $content);
-		}
-
-		// if($this->template->id==43 ) { // Patient Invites Dentist To Register
-		// 	$content = str_replace(array(
-		// 		'[patient-name]',
-		// 		'[dentist-name]',
-		// 		'[button]',
-		// 		'[/button]',
-		// 	), array(
-		// 		$this->meta['patient_name'],
-		// 		$this->meta['dentist_name'],
-		// 		'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist/claim/'.$this->user_id.'/'.$this->user->get_invite_token() , null, $domain).'?'. http_build_query(['popup'=>'claim-popup']).'">',
-		// 		'</a>',
-		// 	), $content);
-		// }
-
-		if( $this->template->id==45 ) { //Dentist First 3 weeks engagement Email 3
-			$content = str_replace(array(
-				'[missing-info]',
-			), array(
-				!empty($this->meta['missing-info']) ? $this->meta['missing-info'] : '',
-			), $content);
-        }
-
-		if( $this->template->id==48 ) { //Dentist First 3 weeks engagement Email 5
-			$content = str_replace(array(
-				'[rating]',
-				'[reviews]',
-			), array(
-				$this->meta['rating'],
-				$this->meta['reviews'],
-			), $content);
-        }
-
-		if( $this->template->id==55 ) { //Dentist Monthly reminders
-			$content = str_replace(array(
-				'[cur-month-rating]',
-				'[cur-month-rating-percent]',
-				'[top3-dentists]',
-			), array(
-				$this->meta['cur-month-rating'],
-				$this->meta['cur-month-rating-percent'],
-				$this->meta['top3-dentists'],
-			), $content);
-        }
 
 		if($this->template->id==63) { //user asks Dentist
 			$content = str_replace(array(

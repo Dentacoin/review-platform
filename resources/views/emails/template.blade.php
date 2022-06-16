@@ -74,7 +74,7 @@
 																<tbody>
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
-																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;"><img src="{{ url('/img-emails/'.$platform.'.png') }}"></div>
+																			<div style="cursor:auto;color: #332255;font-family: Ubuntu,Helvetica,Arial,sans-serif;font-size: 15px;line-height: 22px;text-align:center;"><img src="{{ url('/img-emails/'.$platform.'.png') }}"></div>
 																		</td>
 																	</tr>
 																</tbody>
@@ -117,19 +117,19 @@
 																<tbody>
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
-																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
-																					@if($title)
-																						<h1 style="font-size: 16px;">{{ $title }}</h1>
-																					@endif
-																					@if($subtitle)
-																						<h2 style="font-size: 14px;">{{ $subtitle }}</h2>
-																					@endif
+																			<div style="cursor:auto;color: #332255;font-family: Ubuntu,Helvetica,Arial,sans-serif;font-size: 15px;line-height: 22px;text-align:center;">
+																				@if($title)
+																					<h1 style="font-size: 20px; font-weight: 800; color: #332255;">{{ $title }}</h1>
+																				@endif
+																				@if($subtitle)
+																					<h2 style="font-size: 17px; color: #332255;">{{ $subtitle }}</h2>
+																				@endif
 																			</div>
 																		</td>
 																	</tr>
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
-																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:left;">
+																			<div style="cursor:auto;color: #332255;font-family: Ubuntu,Helvetica,Arial,sans-serif;font-size: 15px;line-height: 22px;text-align:left;">
 																					{!! stripslashes(nl2br($content)) !!}
 																			</div>
 																		</td>
@@ -173,7 +173,7 @@
 																<tbody>
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
-																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">Follow us on:
+																			<div style="cursor:auto;color: #332255;font-family: Ubuntu,Helvetica,Arial,sans-serif;font-size: 15px;line-height: 22px;text-align:center;">Follow us on:
 																				<a href="https://www.facebook.com/DentaVox-1578351428897849/">Facebook</a> |
 																				<a href="https://t.me/dentacoin">Telegram</a>
 																			</div>
@@ -218,7 +218,7 @@
 																	<tbody>
 																		<tr>
 																			<td style="word-wrap:break-word;font-size:0px;" align="center">
-																				<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
+																				<div style="cursor:auto;color: #332255;font-family: Ubuntu,Helvetica,Arial,sans-serif;font-size: 15px;line-height: 22px;text-align:center;">
 																					<a href="{{ $unsubscribe }}">{{ trans('trp.page.emails.unsubscribe') }}</a>
 																				</div>
 																			</td>
@@ -262,7 +262,7 @@
 																<tbody>
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
-																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
+																			<div style="cursor:auto;color: #332255;font-family: Ubuntu,Helvetica,Arial,sans-serif;font-size: 15px;line-height: 22px;text-align:center;">
 																				{{ trans('trp.page.emails.footer') }}
 																			</div>
 																		</td>
@@ -305,7 +305,7 @@
 																<tbody>
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
-																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
+																			<div style="cursor:auto;color: #332255;font-family: Ubuntu,Helvetica,Arial,sans-serif;font-size: 15px;line-height: 22px;text-align:center;">
 																				{!! nl2br(trans('trp.page.emails.copyrights')) !!}
 																			</div>
 																		</td>

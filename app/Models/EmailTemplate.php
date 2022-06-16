@@ -63,34 +63,11 @@ class EmailTemplate extends Model {
             ];
         }
 
-        if($this->id==4) {
-            $codes[] = '[register_reward]';
-            $codes[] = '[rewardlink]Click here[/rewardlink]';            
-        }
-
-        if($this->id==13) {
-            $codes[] = '[recoverlink]Click here[/recoverlink]';
-        } 
-
-        if($this->id==6 || $this->id==8 || $this->id==21) {
+        if(in_array($this->id, [6, 8, 21])) {
             $codes[] = '[reviewlink]Click here[/reviewlink]';
             $codes[] = '[author_name]';
             $codes[] = '[dentist_name]';
             $codes[] = '[rating]';
-        } 
-
-        if($this->id==1) {
-            $codes[] = '[clinic_name]';
-            $codes[] = '[invitelink]Click here[/invitelink]';
-
-        }
-        if($this->id==7 || $this->id==17 || $this->id==25 || $this->id==27) {
-            $codes[] = '[friend_name]';
-            $codes[] = '[invitelink]Click here[/invitelink]';
-        } 
-
-        if($this->id==10) {
-            $codes[] = '[link]Click here[/link]';
         }
         
         if($this->id==15) {
@@ -99,12 +76,12 @@ class EmailTemplate extends Model {
             $codes[] = '[ban_days]';
         }
         
-        if($this->id==14 || $this->id==26 || $this->id==40) {
+        if($this->id==14 || $this->id==40) {
             $codes[] = '[welcome_link]Click here[/welcome_link]';
             $codes[] = '[become_dcn_dentist]Click here[/become_dcn_dentist]';
         }
 
-        if($this->id==18 || $this->id==19 || $this->id==22) {
+        if($this->id==22) {
             $codes[] = '[who_joined_name]';
         } 
         
@@ -124,26 +101,17 @@ class EmailTemplate extends Model {
             $codes[] = '[dentist_link]Click here[/dentist_link]';
         }
 
-        if($this->id==28) {
-            $codes[] = '[reward]Claim your reward[/reward]';
-        }
-
-        if($this->id==31 || $this->id==32) {
-            $codes[] = '[agree] agree button text [/agree]';
-            $codes[] = '[privacy] privacy link text [/privacy]';
-        }
-
         if($this->id==33) {
             $codes[] = '[clinic-name]';
             $codes[] = '[profile-link]Click here[/profile-link]';
         }
 
-        if($this->id==34 || $this->id==2) {
+        if($this->id==34) {
             $codes[] = '[dentist-name]';
             $codes[] = '[profile-link]Click here[/profile-link]';
         }
 
-        if($this->id==35 || $this->id==36 || $this->id==37) {
+        if($this->id==35 || $this->id==36) {
             $codes[] = '[clinic-name]';
         }
 
@@ -151,54 +119,9 @@ class EmailTemplate extends Model {
             $codes[] = '[dentist-name]';
         }
 
-        if($this->id==11 || $this->id==39) {
-            $codes[] = '[grace_expiration_date]';
-            $codes[] = '[login]Click here[/login]';
-        }
-
-        if( $this->id==3 || $this->id==5 || $this->id==41 ) { //Unfinished registrations
-            $codes[] = '[button]Click here to finish the registration[/button]';
-            $codes[] = '[missing-info]';
-        }
-
-        if( $this->id==42 ) { // Invite Clinic After Dentist Registration
-            $codes[] = '[button]Click here to register[/button]';
-            $codes[] = '[dentist-name]';
-        }
-
-        // if( $this->id==43 ) { // Patient Invites Dentist To Register
-        //     $codes[] = '[button]Click here to register[/button]';
-        //     $codes[] = '[dentist-name]';
-        //     $codes[] = '[patient-name]';
-        // }
-
-        if( $this->id==45 ) { //Dentist First 3 weeks engagement Email 3
-            $codes[] = '[missing-info]';
-        }
-
-        if( $this->id==48 ) { //Dentist First 3 weeks engagement Email 5
-            $codes[] = '[rating]';
-            $codes[] = '[reviews]';
-        }
-
-        if( $this->id==55 ) { //Dentist Monthly reminders
-            $codes[] = '[cur-month-rating]';
-            $codes[] = '[cur-month-rating-percent]';
-            $codes[] = '[top3-dentists]';
-        }
-
         if($this->id==64) {
             $codes[] = '[dentist_name]';
             $codes[] = '[rewardlink]Check Your Reward[/rewardlink]';
-        }
-
-        if( $this->id==109 || $this->id==110 ) { // Patient Status from Deleted to Suspicious
-            $codes[] = '[login-button] LOG IN [/login-button]';
-        }
-
-        if( $this->id==111 || $this->id==112 ) { // Patient Status from Deleted to Verified
-            $codes[] = '[login-button] LOG IN [/login-button]';
-            $codes[] = '[faq-link] Link to FAQ [/faq-link]';
         }
 
         if( $this->id==109 || $this->id==110 ) { // Patient Status from Deleted to Suspicious
