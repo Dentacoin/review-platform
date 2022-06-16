@@ -1469,19 +1469,6 @@ body {
     display: block;
     z-index: 123; }
 
-.civic-download {
-  height: 50px;
-  width: 168px;
-  display: inline-block;
-  margin: 0px 10px;
-  background: url("../img-vox/download-android.png") 50% 50% no-repeat;
-  opacity: 0.9;
-  background-size: contain; }
-  .civic-download:hover {
-    opacity: 1; }
-  .civic-download.civic-ios {
-    background-image: url("../img-vox/download-itunes.png"); }
-
 .main-title {
   text-align: center;
   background-color: #136584;

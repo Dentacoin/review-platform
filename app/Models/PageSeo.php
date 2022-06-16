@@ -31,7 +31,7 @@ class PageSeo extends Model {
     ];
 
     public function getImageUrl($thumb = false) {
-        return $this->hasimage ? url('/storage/pagesseo/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : ( $this->platform == 'vox' ? url('img-vox/logo-text.png') : url('img-trp/socials-cover.jpg'));
+        return $this->hasimage ? url('/storage/pagesseo/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : ( $this->platform == 'vox' ? url('new-vox-img/logo-text.png') : url('img-trp/socials-cover.jpg'));
     }
     
     public function getImagePath($thumb = false) {

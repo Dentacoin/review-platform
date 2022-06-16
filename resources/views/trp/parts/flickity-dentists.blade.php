@@ -41,7 +41,7 @@
                         <div class="slider-container">
                             <h4>{{ $dentist->getNames() }}</h4>
                             <div class="p flex flex-center">
-                                <img src="img-trp/pin-gray.svg" width="20" height="25">
+                                <img src="{{ url('img-trp/pin-gray.svg') }}" width="20" height="25">
                                 {{ $dentist->getLocation() }}
                             </div>
                             <div class="ratings">

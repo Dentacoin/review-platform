@@ -96,7 +96,7 @@
 				                            @endif
 				                        </div>
 				                    </div>
-				                    <p>* If social image is empty, by default it shows {{ $item->platform == 'vox' ? 'https://dentavox.dentacoin.com/img-vox/logo-text.png' : 'https://reviews.dentacoin.com/img-trp/socials-cover.jpg' }}</p>
+				                    <p>* If social image is empty, by default it shows {{ $item->platform == 'vox' ? 'https://dentavox.dentacoin.com/new-vox-img/logo-text.png' : 'https://reviews.dentacoin.com/img-trp/socials-cover.jpg' }}</p>
 				                @endif
 			                </div>
 

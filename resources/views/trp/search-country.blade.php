@@ -13,7 +13,7 @@
 	<div class="search-filters">
 		<div class="container">
 			<div class="quick-search-country-wrapper">
-				<img src="{{ url('img-trp/img-trp/black-search.svg') }}" width="17" height="18"/>
+				<img src="{{ url('img-trp/black-search.svg') }}" width="17" height="18"/>
 				<input type="text" name="quick-search-country" id="quick-search-country" placeholder="Quick search"/>
 			</div>
 			<div class="hidden-mobile-filters">

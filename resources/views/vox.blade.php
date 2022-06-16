@@ -256,7 +256,7 @@
 				<div class="flex flex-end">
 					<div class="footer-logo flex-3 flex flex-center">
 						<a href="https://dentacoin.com/" target="_blank" class="flex flex-center">
-							<img src="{{ url('img-vox/dc-logo.png') }}" alt="Dentacoin logo" width="37" height="37">
+							<img src="{{ url('new-vox-img/dc-logo.png') }}" alt="Dentacoin logo" width="37" height="37">
 							<p class="bold">
 								{{ trans('vox.footer.company-name') }}
 							</p>
