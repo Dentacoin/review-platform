@@ -38,7 +38,6 @@ class TrpHelper {
 		}
 
 		return false;
-        
     }
 
 	public static function filterDentists(&$items, $requestTypes, $filter, $forBranch=false) {

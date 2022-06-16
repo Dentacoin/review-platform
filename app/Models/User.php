@@ -285,9 +285,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return !$item->youtube_id;
         });
     }
-    public function upvotes() {
-        return $this->hasMany('App\Models\ReviewUpvote', 'user_id', 'id');
-    }
     public function photos() {
         return $this->hasMany('App\Models\UserPhoto', 'user_id', 'id');
     }
@@ -671,29 +668,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return false;
         }
     }
-
-    public function usefulVotesForDenist($dentist_id) {
-        $myid = $this->id;
-        return Review::where([
-            ['dentist_id', $dentist_id],
-        ])->whereHas('upvotes', function ($query) use ($myid) {
-            $query->where('user_id', $myid);
-        })->get()
-        ->pluck('id')
-        ->toArray();
-    }
-
-    public function unusefulVotesForDenist($dentist_id) {
-        $myid = $this->id;
-        return Review::where([
-            ['dentist_id', $dentist_id],
-        ])->whereHas('downvotes', function ($query) use ($myid) {
-            $query->where('user_id', $myid);
-        })->get()
-        ->pluck('id')
-        ->toArray();
-    }
-
+    
     public function get_token() {
         //dd($this->email.$this->id);
         $email = $this->email ? $this->email : $this->mainBranchEmail();

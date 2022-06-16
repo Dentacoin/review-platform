@@ -7,10 +7,8 @@ use App\Http\Controllers\FrontController;
 use App\Models\DentistRecommendation;
 use App\Models\StopVideoReview;
 use App\Models\DentistPageview;
-use App\Models\ReviewDownvote;
 use App\Models\DentistFbPage;
 use App\Models\AnonymousUser;
-use App\Models\ReviewUpvote;
 use App\Models\ReviewAnswer;
 use App\Models\DentistClaim;
 use App\Models\UserStrength;
@@ -1222,110 +1220,6 @@ class DentistController extends FrontController {
         return Response::json([
             'success' => false
         ]);
-    }
-
-    /**
-     * review upvote
-     */
-    public function useful($locale=null, $review_id) {
-        $review = Review::find($review_id);
-        if(!empty($review) && !empty($this->user)) {
-            $myvotes = $this->user->usefulVotesForDenist($review->dentist_id);
-            $mydownvotes = $this->user->unusefulVotesForDenist($review->dentist_id);
-
-            $ret = [
-                'success' => true,
-                'downvote_image' => url('img-trp/thumbs-down.png'),
-                'upvote_image' => url('img-trp/thumbs-up.png'),
-                'downvote_status' => false,
-                'upvote_status' => false,
-            ];
-
-            if(!in_array($review_id, $myvotes)) {
-                $review->upvotes++;
-                $review->save();
-                $uv = new ReviewUpvote;
-                $uv->review_id = $review_id;
-                $uv->user_id = $this->user->id;
-                $uv->save();
-
-                $ret['upvote_image'] = url('img-trp/thumbs-up-color.png');
-                $ret['upvote_status'] = true;
-
-                if(in_array($review_id, $mydownvotes)) {
-
-                    $review->downvotes--;
-                    $review->save();
-
-                    ReviewDownvote::where('review_id', $review_id )->where('user_id', $this->user->id )->delete();
-                }
-            } else {
-                $review->upvotes--;
-                $review->save();
-
-                ReviewUpvote::where('review_id', $review_id )->where('user_id', $this->user->id )->delete();
-            }
-
-            $ret['downvotes'] = $review->downvotes;
-            $ret['upvotes'] = $review->upvotes;
-            return Response::json( $ret );
-        }
-
-        return Response::json( [
-            'success' => false,
-        ] );
-    }
-
-    /**
-     * review downvote
-     */
-    public function unuseful($locale=null, $review_id) {
-        $review = Review::find($review_id);
-        if(!empty($review)) {
-            $myvotes = $this->user->unusefulVotesForDenist($review->dentist_id);
-            $myupvotes = $this->user->usefulVotesForDenist($review->dentist_id);
-
-            $ret = [
-                'success' => true,
-                'downvote_image' => url('img-trp/thumbs-down.png'),
-                'upvote_image' => url('img-trp/thumbs-up.png'),
-                'downvote_status' => false,
-                'upvote_status' => false,
-            ];
-
-            if(!in_array($review_id, $myvotes)) {
-                $review->downvotes++;
-                $review->save();
-                $uv = new ReviewDownvote;
-                $uv->review_id = $review_id;
-                $uv->user_id = $this->user->id;
-                $uv->save();
-
-                $ret['downvote_image'] = url('img-trp/thumbs-down-color.png');
-                $ret['downvote_status'] = true;
-
-                if(in_array($review_id, $myupvotes)) {
-                    
-                    $review->upvotes--;
-                    $review->save();
-
-                    ReviewUpvote::where('review_id', $review_id )->where('user_id', $this->user->id )->delete();
-                }
-            } else {
-                $review->downvotes--;
-                $review->save();
-
-                ReviewDownvote::where('review_id', $review_id )->where('user_id', $this->user->id )->delete();
-            }
-
-            $ret['downvotes'] = $review->downvotes;
-            $ret['upvotes'] = $review->upvotes;
-            return Response::json( $ret );
-        }
-
-        return Response::json( [
-            'success' => false,
-        ] );
     }
 
     /**

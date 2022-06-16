@@ -40,7 +40,8 @@ class WidgetController extends BaseController {
             }
 
             $params['user'] = $user;
-            $params['reviews'] = intval($mode) ? $user->reviews_in()->where('verified', 1) : $user->reviews_in();
+            $params['reviews'] = intval($mode) ? $user->reviews_in_standard()->where('verified', 1) : $user->reviews_in_standard();
+            
             return response()->view('widget.widget', $params)
             ->header('Access-Control-Allow-Origin', '*');
         }
@@ -117,7 +118,7 @@ class WidgetController extends BaseController {
             return response()->view('widget.new-widget', $params)
             ->header('Access-Control-Allow-Origin', '*');
         } else {
-            dd( $user->get_widget_token() );
+            dd( 'user not found' );
         }
 
         return null;

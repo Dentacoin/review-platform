@@ -419,8 +419,6 @@ $reviewRoutes = function() {
 				Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
 				Route::get('dentist/{slug}/ask/{verification?}',	'DentistController@ask');
 				Route::any('youtube', 								'DentistController@youtube');
-				Route::get('useful/{id}', 							'DentistController@useful');
-				Route::get('unuseful/{id}', 						'DentistController@unuseful');
 				Route::post('recommend-dentist', 					'DentistController@recommend_dentist');
 				Route::post('reorder-teams', 						'DentistController@reorderTeams');
 

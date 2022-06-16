@@ -1,174 +1,255 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
 <style type="text/css">
 	#trp-widget {
 		box-sizing: border-box;
 		font-family: sans-serif;
 		font-size: 14px;
 	}
+
 	#trp-widget * {
 		box-sizing: inherit;
-		font-family: inherit;
+		font-family: 'Lato', sans-serif;
 		font-size: inherit;
 	}
-	#trp-widget i {
-		font-family: 'FontAwesome';
-	}
+
 	#trp-widget h2 {
-		box-sizing: border-box;
-	    box-shadow: 0px 0px 5px 0px rgba(18, 101, 133, 0.5);
-	    border: none;
-	    background-image: none;
-	    background: #126585;
-	    color: white;
-	    padding: 10px 15px;
-	    border-top-right-radius: 5px;
-	    border-top-left-radius: 5px;
-	    margin-bottom: 0px;
-	    font-size: 24px;
+		font-family: 'Montserrat', sans-serif;
+		border: none;
+		background-image: none;
+		padding: 10px 0px;
+		margin-bottom: 30px;
+		font-size: 24px;
+		color: #0564c6;
+		font-weight: 900;
 	}
+
 	#trp-widget h2 a {
+		font-family: 'Montserrat', sans-serif;
 		text-decoration: underline;
+		color: #0564c6;
+		font-weight: 900;
+	}
+
+	#trp-widget .alert {
+		border-radius: 30px;
+		background: white;
+		border: 2px solid #bbe6ff;
+		font-size: 18px;
+		padding: 25px 20px 25px 110px;
+		text-align: left;
+		position: relative;
+	    word-break: break-word;
+	    margin-top: 20px;
+	    background: white;
+		color: #332255;
+		width: 100%;
+	}
+
+	#trp-widget .alert a {
+		font-size: 18px;
+		color: #332255;
+	}
+
+	#trp-widget .alert:before {
+		content: "";
+		display: inline-block;
+		font-style: normal;
+		font-variant: normal;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		position: absolute;
+		left: 20px;
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 40px;
+		z-index: 10;
+
+		width: 44px;
+		height: 24px;
+		background: url('https://reviews.dentacoin.com/img/new-alert-info.svg') no-repeat 0px 0px;
+	}
+
+	#trp-widget .alert:after {
+		content: "";
+		position: absolute;
+		left: 0px;
+		width: 82px;
+		top: 0;
+		bottom: 0;
+		font-size: 40px;
+		border-top-left-radius: 26px;
+		border-bottom-left-radius: 26px;
+		background-color: #bbe6ff;
+	}
+
+	#trp-widget .written-review {
+    	margin-bottom: 60px;
+	}
+
+    #trp-widget .review-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+	}
+
+	#trp-widget .review-header .review-avatar {
+		max-width: 50px;
+		border-radius: 50%;
+		margin-right: 9px;
+	}
+
+    #trp-widget .review-header .review-name {
+		font-size: 18px;
+		color: #332255;
+		font-weight: bold;
+		display: block;
+		margin-bottom: 10px;
+	}
+
+	#trp-widget .review-header .review-title {
+		font-size: 20px;
+		color: #332255;
+		font-weight: 900;
+		display: block;
+	}
+
+    #trp-widget .review-header>div {
+		flex: 1;
+	}
+
+    #trp-widget .review-rating {
+        display: flex;
+        align-items: center;
+        margin-bottom: 18px;
+	}
+
+    #trp-widget .review-rating .verify-review {
+		padding: 2px 14px 4px;
+		font-size: 15px;
+		color: #14cab8;
+		background-color: white;
+		font-weight: normal;
+		border-width: 1px;
+		margin-right: 5px;
+	}
+
+    #trp-widget .review-rating .verify-review:hover {
+		background-color: #14cab8;
 		color: white;
 	}
 
-	#trp-widget .review-list {
-		padding: 15px;
-	    border: 1px solid rgba(18, 101, 133, 0.5);
-	    border-bottom-right-radius: 5px;
-	    border-bottom-left-radius: 5px;
-	    border-top: none;
+    #trp-widget .review-rating .trusted-sticker {
+		display: inline-flex;
+		align-items: center;
+		font-size: 14px;
+		color: white;
+		background-color: #14cab8;
+		padding: 3px 7px;
+		border-radius: 5px;
+		margin-left: 0px;
+		margin-right: 12px;
 	}
 
-	#trp-widget .panel-default {
-	    margin-bottom: 20px;
-	    margin-top: 0px;
-		box-shadow: 0px 0px 5px 0px rgba(18, 101, 133, 0.5);
-	    background: white;
-	    border-radius: 5px;
-	    border: none;
+    #trp-widget .review-rating .trusted-sticker img {
+		width: 15px;
+		height: auto;
+		margin-left: 5px;
 	}
 
-	#trp-widget .panel-default:last-child {
-		margin-bottom: 0px;
+    #trp-widget .review-rating .ratings {
+		display: flex;
+		align-items: center;
 	}
 
-	#trp-widget .panel-body {
-	    position: relative;
-	    box-shadow: 0px 5px 5px -5px rgba(18, 101, 133, 0.5);
-    	padding: 15px;
+    #trp-widget .review-rating .ratings .stars {
+		display: inline-block;
+		margin-right: 5px;
+		width: 124px;
+		height: 22px;
+		background: url('https://reviews.dentacoin.com/img-trp/stars-gray-average.png') 50% 50% no-repeat;
+		background-size: contain;
 	}
 
-	#trp-widget .panel-body:last-child {
-		box-shadow: none;
+    #trp-widget .review-rating .ratings .stars .bar {
+		background: url('https://reviews.dentacoin.com/img-trp/stars-blue-average.png') 0% 50% no-repeat;
+		background-size: cover;
+		height: 22px;
 	}
 
-	#trp-widget .media-left {
-		display: table-cell;
-    	vertical-align: top;
-    	padding-right: 10px;
-	}
-	
-	#trp-widget .media-left img {
-		width: 120px;
+    #trp-widget .review-rating .ratings .rating {
+		font-size: 16px;
+		color: #332255;
+		margin-right: 10px;
+		font-weight: normal;
 	}
 
-	#trp-widget .media-left .label {
-		text-decoration: none;
-		display: block;
-	    margin-top: 5px;
-	    padding: 5px 0px;
-		background-color: #2ab27b;
-		font-size: 75%;
-	    font-weight: 700;
-	    line-height: 1;
-	    color: #fff;
-	    text-align: center;
-	    white-space: nowrap;
-	    vertical-align: baseline;
-	    border-radius: .25em;
+    #trp-widget .review-rating .review-date {
+		font-size: 14px;
+		color: #888888;
 	}
 
-	#trp-widget .media-body {
-		display: table-cell;
-    	vertical-align: top;
+    #trp-widget .review-content {
+        font-size: 18px;
+        color: #332255;
 	}
 
-	#trp-widget .media-body p {
-		margin: 0 0 5px;
-	}
+    #trp-widget .btn-show-review {
+		color: #0084d1;
+		font-weight: 700;
+		font-size: 18px;
+		text-decoration: underline;
+		text-transform: lowercase;
+    }
 
-	#trp-widget .media-heading {
-		margin-top: 0;
-    	margin-bottom: 5px;
-    	font-size: 30px;
-	    font-weight: 500;
-	    line-height: 1.1;
-	}
+	@media (max-width: 768px) {
 
-	#trp-widget .ratings {
-		text-align: center;
-		margin-top: 10px;
-	}
-
-	#trp-widget .ratings .stars {
-	    width: 222px;
-	    height: 30px;
-	    display: inline-block;
-	    background: url('https://reviews.dentacoin.com/img/star-empty.png') 50% 50% no-repeat;
-	    margin-bottom: 10px;
-	}
-	
-	#trp-widget .ratings .stars .bar {
-		background: url('https://reviews.dentacoin.com/img/star-full.png') 0% 50% no-repeat;
-    	height: 30px;
-	}
-
-	#trp-widget .ratings .rating {
-		text-align: left;
-		margin-bottom: 5px;
-	}
-
-	#trp-widget .btn-primary {
-		display: block;
-		text-align: center;
-		text-decoration: none;
-		color: #fff;
-	    background-color: #126585;
-	    border-color: #126585;
-		box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 1px rgba(0,0,0,.075);
-	    text-shadow: 0 -1px 0 rgba(0,0,0,.2);
-	    touch-action: manipulation;
-	    cursor: pointer;
-	    background-image: none;
-	    border: 1px solid transparent;
-	    white-space: nowrap;
-	    padding: 6px 12px;
-	    font-size: 14px;
-	    line-height: 1.6;
-	    border-radius: 4px;
-        margin-bottom: 0;
-	    font-weight: 400;
-	    text-align: center;
-	    vertical-align: middle;
-	}
-	#trp-widget .btn-primary:hover {
-		background-color: #2a88bd;
-    	border-color: #2a88bd;
-	}
-
-	@media (max-width: 480px) {
-
-		#trp-widget .media-left {
-		    width: 100%;
-		    margin: 0px 0px 10px 0px;
-		    display: block;
+		#trp-widget .written-review {
+			margin-bottom: 40px;
+			position: relative;
 		}
 
-		#trp-widget .media-left img {
-			width: 100%;
+		#trp-widget .review-header .review-name {
+			margin-bottom: 5px;
+		}
+
+		#trp-widget .review-header .review-title {
+			font-size: 18px;
+		}
+
+		#trp-widget .review-rating {
+			flex-flow: row wrap;
+		}
+
+		#trp-widget .review-content {
+			line-height: 29px;
+		}
+		
+		#trp-widget .alert {
+			padding: 10px 10px 10px 60px;
+			border-radius: 16px;
+			font-size: 14px;
+		}
+
+		#trp-widget .alert a {
+			font-size: 14px;
+		}
+
+		#trp-widget .alert:before {
+			left: 9px;
+			width: 24px;
+			height: 14px;
+		}
+
+		#trp-widget .alert:after {
+			border-top-left-radius: 13px;
+			border-bottom-left-radius: 13px;
+			width: 44px;
 		}
 	}
 </style>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
 <div id="trp-widget">
 	<h2>
 		{!! trans('trp.page.widget.title', [
@@ -188,78 +269,45 @@
 			</div>
 		@else
 			@foreach($reviews as $review)
-				<div class="panel panel-default">
-					<div class="panel-body review" >
-						<div class="media">
-							<div class="media-left">
-								<img src="{{ $review->user->getImageUrl(true) }}" />
-								@if($review->verified)
-									<a target="_top" href="javascript:;" class="label label-success label-trusted" title="{{ trans('trp.common.trusted-review') }}">
-										{{ trans('trp.common.trusted-review') }}
-									</a>
-								@endif
-							</div>
-							<div class="media-body">
-								<div class="media-heading">
-									{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}
-								</div>
 
-								@if($review->user->country_id)
-									<p>
-										<i class="fa fa-map-marker fa-fw"></i> 
-										{{ $review->user->city_name ? $review->user->city_name.', ' : '' }}, 
-										{{ $review->user->state_name ? $review->user->state_name.', ' : '' }}, 
-										{{ $review->user->country->name }}
-									</p>
-								@endif
-								<p>
-									<i class="fa fa-calendar fa-fw"></i> 
-									{{ $review->created_at ? trans('trp.common.date-on', ['date' => $review->created_at->toFormattedDateString() ]) : '-' }}
-								</p>
+				<div class="written-review">
 
-								@if($review->upvotes)
-									<p class="upvote-wrpapper">
-										<i class="fa fa-heart fa-fw"></i> 
-										{!! trans('trp.page.dentist.people-find-useful', [ 'count' => '<span class="upvote-count">'.intval($review->upvotes).'</span>' ]) !!}
-									</p>
-								@endif
-							</div>
+					<div class="review-header">
+						<img class="review-avatar" src="{{ $review->user->getImageUrl(true) }}"/>
+						<div>
+							<span class="review-name">
+								{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: 
+							</span>
 
+							@if($review->title)
+								<span class="review-title">
+									“{{ $review->title }}”
+								</span>
+							@endif
 						</div>
 					</div>
-					<div class="panel-body review" >
-						<div class="ratings">
+					<div class="review-rating">
+						<div class="trusted-sticker" {!! $review->verified ? '' : 'style="display:none;"' !!}>
+							{!! nl2br(trans('trp.common.trusted')) !!}
+							<img src="{{ url('img/info-white.svg') }}" width="15" height="15"/>
+						</div>
+						<div class="ratings average">
 							<div class="stars">
-								<div class="bar" style="width: {{ getStarWidth($review->rating) }}px;">
+								<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($review->review_to_id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
 								</div>
 							</div>
-							<div class="rating">
-								<b>
-									{{ trans('trp.page.dentist.review-comment', ['name' => $review->user->getNames()]) }}:
-								</b> 
-								{!! nl2br($review->answer) !!}
-							</div>
+							<span class="rating">
+								({{ !empty($review->team_doctor_rating) && ($review->review_to_id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating }})
+							</span>
 						</div>
+						<span class="review-date">
+							{{ $review->created_at ? $review->created_at->toFormattedDateString() : '-' }}
+						</span>
 					</div>
-					@if($review->reply)
-						<div class="panel-body review" >
-							<div class="ratings">
-								<div class="rating">
-									<div class="the-reply" {!! !$review->reply ? 'style="display: none;"' : '' !!} >
-										<b>
-											{{ trans('trp.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getNames() : $review->clinic->getNames() ]) }}:
-										</b> 
-										<span class="reply-content">
-											{!! nl2br($review->reply) !!}
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					@endif
-					<div class="panel-body review" >
-						<a target="_top" href="{{ $user->getLink() }}" class="btn btn-primary btn-block btn-show-review">
-							{{ trans('trp.page.dentist.review-show-all') }}
+					<div class="review-content">
+						{!! nl2br($review->answer) !!}...
+						<a target="_top" href="{{ $user->getLink().'?review_id='.$review->id }}" class="btn-show-review">
+							show full review
 						</a>
 					</div>
 				</div>
