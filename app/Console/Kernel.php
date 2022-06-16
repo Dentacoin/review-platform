@@ -2178,28 +2178,28 @@ UNCONFIRMED TRANSACTIONS
         })->cron("*/15 * * * *");
 
 
-        $schedule->call(function () {
-            echo 'Video reviews cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+        // $schedule->call(function () {
+        //     echo 'Video reviews cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $video_reviews = Review::where('youtube_id', '!=', '')
-            ->where('created_at', '>=', Carbon::now()->addDays(-1))
-            ->count();
+        //     $video_reviews = Review::where('youtube_id', '!=', '')
+        //     ->where('created_at', '>=', Carbon::now()->addDays(-1))
+        //     ->count();
 
-            if($video_reviews >= 5) {
-                echo 'Stop video reviews'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     if($video_reviews >= 5) {
+        //         echo 'Stop video reviews'.PHP_EOL.PHP_EOL.PHP_EOL;
                 
-                $stop_video_reviews = StopVideoReview::find(1);
-                $stop_video_reviews->stopped = true;
-                $stop_video_reviews->save();
-            } else {
-                $stop_video_reviews = StopVideoReview::find(1);
-                $stop_video_reviews->stopped = false;
-                $stop_video_reviews->save();
-            }
+        //         $stop_video_reviews = StopVideoReview::find(1);
+        //         $stop_video_reviews->stopped = true;
+        //         $stop_video_reviews->save();
+        //     } else {
+        //         $stop_video_reviews = StopVideoReview::find(1);
+        //         $stop_video_reviews->stopped = false;
+        //         $stop_video_reviews->save();
+        //     }
 
-            echo 'Video reviews cron - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     echo 'Video reviews cron - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron('*/5 * * * *');
+        // })->cron('*/5 * * * *');
 
 
         $schedule->call(function () {

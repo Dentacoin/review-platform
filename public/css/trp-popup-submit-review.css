@@ -311,7 +311,8 @@
       padding-left: 14px;
       color: #332255;
       font-weight: normal;
-      margin-bottom: 5px; }
+      margin-bottom: 5px;
+      display: block; }
       #submit-review-popup .reviews-wrapper .review-video-info .option-span:before {
         content: '';
         width: 8px;
