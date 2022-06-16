@@ -169,6 +169,12 @@ $phone: "screen and (max-width: 768px)";
         }
     }
 
+    .reply-review {
+        font-size: 16px;
+        padding: 5px 32px 7px;
+        margin-top: 10px;
+    }
+
     .review-replied-wrapper {
         display: flex;
         align-items: center;
@@ -196,6 +202,18 @@ $phone: "screen and (max-width: 768px)";
                 max-width: 15px;
                 margin-right: 3px;
             }
+        }
+
+        .review-name {
+            margin-bottom: 0px;
+        }
+
+        .blue-button {
+            padding: 5px 32px 7px;
+        }
+
+        textarea {
+            height: 120px;
         }
     }
 }

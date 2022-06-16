@@ -728,7 +728,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function sendGridTemplate($template_id, $substitutions=null, $platform=null, $is_skipped=null, $anonymous_email=null) {
         if(!empty($this->email) || !empty($this->mainBranchEmail())) {
             $email = $this->email ? $this->email : $this->mainBranchEmail();
-            return GeneralHelper::unregisteredSendGridTemplate($this, $email, $this->getNameSendGrid(), $template_id, $substitutions, $platform, $is_skipped, $anonymous_email);
+            return GeneralHelper::unregisteredSendGridTemplate(
+                $this, 
+                $email, 
+                $this->getNameSendGrid(), 
+                $template_id, 
+                $substitutions, 
+                $platform, 
+                $is_skipped, 
+                $anonymous_email
+            );
         }
 
         return null;

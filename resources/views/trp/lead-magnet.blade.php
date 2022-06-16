@@ -242,9 +242,6 @@
 										<input id="answer-5-4" type="radio" name="answer-5" class="lead-magnet-radio" ans-text="No" value="4">
 										{!! trans('trp.popup.popup-lead-magnet.question5.asnwer4') !!}
 									</label>
-								</div> 
-								<div class="tac" style="display: none;">
-									<button class="button" id="magnet-submit" type="submit">{!! trans('trp.popup.popup-lead-magnet.second-step-submit') !!}</button>
 								</div>
 							</div>
 						</div>

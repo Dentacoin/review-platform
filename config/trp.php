@@ -15,6 +15,8 @@ return [
 		'youtube' => 'youtube',
 		'vkontakte' => 'vkontakte',
 		'wechat' => 'wechat',
+		'tiktok' => 'tiktok',
+		'whatsapp' => 'whatsapp',
 	],
 	'accepted_payment' => [
 		'dentacoin',

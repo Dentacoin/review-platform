@@ -153,7 +153,7 @@ class Kernel extends ConsoleKernel {
                                 if(empty($user)) {
 
                                     echo 'USER: '.$notify->id;
-                                    $u = User::find(113928);
+                                    $fakeAnonymousUser = User::find(113928);
 
                                     echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
 
@@ -185,7 +185,16 @@ class Kernel extends ConsoleKernel {
                                     $content['active-surveys'] = $active_voxes_count;
 
                                     $unsubscribed = User::isUnsubscribedAnonymous($v['tempalte_id'], 'trp', $notify->email);
-                                    $mail = GeneralHelper::unregisteredSendGridTemplate($u, $notify->email, $notify->name, $v['tempalte_id'], $content, $platform, $unsubscribed, $notify->email);
+                                    $mail = GeneralHelper::unregisteredSendGridTemplate(
+                                        $fakeAnonymousUser, 
+                                        $notify->email, 
+                                        $notify->name, 
+                                        $v['tempalte_id'], 
+                                        $content, 
+                                        $platform, 
+                                        $unsubscribed, 
+                                        $notify->email
+                                    );
 
                                     $notify->$field = true;
                                     $notify->save();
@@ -237,7 +246,16 @@ class Kernel extends ConsoleKernel {
 
                         $user = User::find(113928);
                         $unsubscribed = User::isUnsubscribedAnonymous($time['tempalte_id'], 'trp', $notify->email);
-                        $mail = GeneralHelper::unregisteredSendGridTemplate($user, $notify->email, $notify->name, $time['tempalte_id'], null, 'trp', $unsubscribed, $notify->email);
+                        $mail = GeneralHelper::unregisteredSendGridTemplate(
+                            $user, 
+                            $notify->email, 
+                            $notify->name, 
+                            $time['tempalte_id'], 
+                            null, 
+                            'trp', 
+                            $unsubscribed, 
+                            $notify->email
+                        );
 
                         $notify->$field = true;
                         $notify->save();

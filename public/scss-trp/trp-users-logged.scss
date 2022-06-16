@@ -725,7 +725,10 @@ body.edit-dentist-profile-mode {
 
 	.save-field {
 		height: auto;
-		margin-bottom: 32px;
+		
+		&.with-margin {
+			margin-bottom: 32px;
+		}
 	}
 }
 

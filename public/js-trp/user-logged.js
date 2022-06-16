@@ -1079,15 +1079,18 @@ $(document).ready(function() {
 
     $('.add-social-profile').click( function() {
 
-        var social_wrapper = $(this).closest('.socials-wrapper').find('.social-wrap');
+        var social_wrapper = $('.socials-wrapper').find('.social-wrap');
         var cloned = social_wrapper.first().clone(true).insertAfter( $(this).closest('.socials-wrapper').find('.social-wrap').last() );
 
         cloned.addClass('new');
         cloned.find('.social-link-input').val('');
         cloned.find('.social-dropdown .social-link:not(.inactive)').first().trigger('click');
 
-        if((social_wrapper.length +1) == social_wrapper.first().find('.social-dropdown a').length ) {
+        if((social_wrapper.length +1) == 9 ) {
             $(this).hide();
+            $('.socials-wrapper').find('.save-field').removeClass('with-margin');
+        } else {
+            $('.socials-wrapper').find('.save-field').addClass('with-margin');
         }
 
         if($('body').hasClass('guided-tour')) {

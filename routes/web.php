@@ -420,7 +420,6 @@ $reviewRoutes = function() {
 				Route::get('dentist/{slug}/ask/{verification?}',	'DentistController@ask');
 				Route::any('youtube', 								'DentistController@youtube');
 				Route::post('recommend-dentist', 					'DentistController@recommend_dentist');
-				Route::post('reorder-teams', 						'DentistController@reorderTeams');
 
 				Route::get('{slug}/branches', 						'BranchesController@branchesPage');	
 	

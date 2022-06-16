@@ -610,8 +610,9 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
   color: #0084d1;
   margin-top: 10px; }
 .socials-wrapper .save-field {
-  height: auto;
-  margin-bottom: 32px; }
+  height: auto; }
+  .socials-wrapper .save-field.with-margin {
+    margin-bottom: 32px; }
 
 #team h2 span {
   display: inline-block;

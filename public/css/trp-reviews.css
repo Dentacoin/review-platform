@@ -109,6 +109,10 @@
       font-size: 18px;
       text-decoration: underline;
       text-transform: lowercase; }
+  .written-review .reply-review {
+    font-size: 16px;
+    padding: 5px 32px 7px;
+    margin-top: 10px; }
   .written-review .review-replied-wrapper {
     display: flex;
     align-items: center;
@@ -129,3 +133,9 @@
       .written-review .review-replied-wrapper .replied-info img {
         max-width: 15px;
         margin-right: 3px; }
+    .written-review .review-replied-wrapper .review-name {
+      margin-bottom: 0px; }
+    .written-review .review-replied-wrapper .blue-button {
+      padding: 5px 32px 7px; }
+    .written-review .review-replied-wrapper textarea {
+      height: 120px; }

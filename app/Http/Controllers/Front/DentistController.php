@@ -1244,7 +1244,9 @@ class DentistController extends FrontController {
 
         return Response::json([
             'success' => true, 
-            'reply' => nl2br( $review->reply )
+            'reply' => nl2br( $review->reply ),
+            'dentist_name' => $this->user->getNames(),
+            'dentist_avatar' => $this->user->getImageUrl(true),
         ]);
     }
 
@@ -1690,27 +1692,6 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                 'link' => 'https://www.facebook.com/dialog/pagetab?app_id='.request('page').'&redirect_uri='.$this->user->getLink().'?popup=facebook-tab-success',
             ]);
         }
-    }
-
-    /**
-     * clinic's team reorder
-     */
-    public function reorderTeams() {
-
-        $list = Request::input('list');
-        $i=1;
-        foreach ($list as $qid) {
-            $user_team = UserTeam::find($qid);
-            if( $user_team ) {
-                $user_team->team_order = $i;
-                $user_team->save();
-                $i++;
-            }
-        }
-
-        return Response::json([
-            'success' => true
-        ]);
     }
 
     /**

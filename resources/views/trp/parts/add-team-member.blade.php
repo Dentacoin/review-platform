@@ -155,7 +155,7 @@
             @if($withoutUser)
                 <a href="javascript:;" class="invite-existing-dentist">Cancel</a>
             @endif
-            {{-- <input type="submit" class="button" value="{{ trans('trp.popup.verification-popup.add-team-button') }}"> --}}
+            {{-- {{ trans('trp.popup.verification-popup.add-team-button') }} --}}
             <input type="submit" class="green-button" value="Invite dentist">
         </div>
     {!! Form::close() !!}

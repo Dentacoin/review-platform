@@ -302,8 +302,19 @@ $(document).ready(function() {
                 $(this).attr('action'), 
                 $(this).serialize() , 
                 (function( data ) {
-                    if(data.success) {
-                        that.closest('.review-content').html(data.reply);
+                    if(data.success) {                
+                        that.closest('.reply-form').after('<div class="review-replied-wrapper">\
+                            <img class="review-avatar" src="'+data.dentist_avatar+'"/>\
+                            <div>\
+                                <p class="replied-info">\
+                                    <img src="'+images_path+'/reply-icon.svg" />Replied by '+data.dentist_name+'\
+                                </p>\
+                                <p class="review-content">'+data.reply+'</p>\
+                            </div>\
+                        </div>');
+
+                        that.closest('.written-review').find('.reply-review').remove();
+                        that.closest('.reply-form').remove();
                     } else {
                         that.find('.alert').show();
 

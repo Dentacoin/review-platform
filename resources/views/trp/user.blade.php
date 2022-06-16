@@ -688,7 +688,7 @@
 													</div>
 												@endforeach
 											@else
-												<div class="flex social-wrap flexed-wrap">
+												<div class="flex flex-mobile social-wrap flexed-wrap">
 													<div class="col social-networks">
 														<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
 															<img src="{{ url('img-trp/social-network/'.array_values(config('trp.social_network'))[0].'.svg') }}" src-attr="{{ url('img-trp/social-network/') }}"/>
@@ -710,16 +710,14 @@
 												</div>
 											@endif
 											
-											@if(!$user->socials || count($user->socials) != count(config('trp.social_network')))
-												<a href="javascript:;" class="add-social-profile">
-													+ Add another social link
-													{{-- {!! nl2br(trans('trp.page.user.add-social-profile')) !!} --}}
-												</a>
-											@endif
+											<a href="javascript:;" class="add-social-profile" style="{{ !$user->socials || count($user->socials) != count(config('trp.social_network')) ? '' : 'display:none;' }}">
+												+ Add another social link
+												{{-- {!! nl2br(trans('trp.page.user.add-social-profile')) !!} --}}
+											</a>
 										</div>
 									</div>
 
-									<button type="submit" class="save-field">
+									<button type="submit" class="save-field {{ !$user->socials || count($user->socials) != count(config('trp.social_network')) ? 'with-margin' : '' }}">
 										<img src="{{ url('img-trp/white-check.svg') }}" width="20" height="15"/>
 									</button>
 								</div>

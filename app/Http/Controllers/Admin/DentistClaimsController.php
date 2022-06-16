@@ -69,9 +69,9 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
                     $dk->status = 'rejected';
                     $dk->save();
 
-                    $u = User::find(113928);
+                    $fakeAnonymousUser = User::find(113928);
                     $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $dk->email);
-                    $mail = GeneralHelper::unregisteredSendGridTemplate($u, $dk->email, $dk->name, 66, null, 'trp', $unsubscribed, $dk->email);
+                    $mail = GeneralHelper::unregisteredSendGridTemplate($fakeAnonymousUser, $dk->email, $dk->name, 66, null, 'trp', $unsubscribed, $dk->email);
                     $mail->delete();
                 }
             }
@@ -116,9 +116,18 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
 
         $user = User::find($item->dentist_id);
 
-        $u = User::find(113928);
+        $fakeAnonymousUser = User::find(113928);
         $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $item->email);
-        $mail = GeneralHelper::unregisteredSendGridTemplate($u, $item->email, $item->name, 66, null, 'trp', $unsubscribed, $item->email);
+        $mail = GeneralHelper::unregisteredSendGridTemplate(
+            $fakeAnonymousUser, 
+            $item->email, 
+            $item->name, 
+            66, 
+            null, 
+            'trp', 
+            $unsubscribed, 
+            $item->email
+        );
         $mail->delete();
 
         $mtext = 'Dentist claim request was rejected<br/>
@@ -151,9 +160,18 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users
 
         $user = User::find($item->dentist_id);
 
-        $u = User::find(113928);
+        $fakeAnonymousUser = User::find(113928);
         $unsubscribed = User::isUnsubscribedAnonymous(67, 'trp', $item->email);
-        $mail = GeneralHelper::unregisteredSendGridTemplate($u, $item->email, $item->name, 67, null, 'trp', $unsubscribed, $item->email);
+        $mail = GeneralHelper::unregisteredSendGridTemplate(
+            $fakeAnonymousUser, 
+            $item->email, 
+            $item->name, 
+            67, 
+            null, 
+            'trp', 
+            $unsubscribed, 
+            $item->email
+        );
         $mail->delete();
 
         $mtext = 'Dentist claim request was suspicious<br/>

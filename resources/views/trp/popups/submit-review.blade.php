@@ -123,6 +123,7 @@
 										class="modern-input" 
 										id="review-answer" 
 										name="answer" 
+										maxlength="1500"
 										text="{{ nl2br(trans('trp.popup.submit-review-popup.last-question-tooltip')) }}"
 										placeholder="Share more details of your experience at this dental practice"
 										{{-- placeholder="{{ trans('trp.popup.submit-review-popup.last-question-placeholder') }}" --}}

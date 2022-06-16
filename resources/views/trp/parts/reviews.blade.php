@@ -87,18 +87,16 @@
                 </a>
             </div>
 
-            {{-- <div class="review-footer flex flex-mobile break-mobile">
+            <div class="review-footer flex flex-mobile break-mobile">
                 <div class="col">
 
                     @if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
-                        <a class="reply-review" href="javascript:;">
-                            <span>
-                                {!! nl2br(trans('trp.page.user.reply')) !!}
-                            </span>
+                        <a class="blue-button reply-review" href="javascript:;">
+                            {!! nl2br(trans('trp.page.user.reply')) !!}
                         </a>
                     @endif
                 </div>
-            </div> --}}
+            </div>
 
             @if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
                 <div class="review-replied-wrapper reply-form" style="display: none;">
@@ -111,7 +109,7 @@
                             <form method="post" action="{{ $current_dentist->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
                                 {!! csrf_field() !!}
                                 <textarea class="input" name="reply" placeholder="{!! nl2br(trans('trp.page.user.reply-enter')) !!}"></textarea>
-                                <button class="button" type="submit" name="">{!! nl2br(trans('trp.page.user.reply-submit')) !!}</button>
+                                <button class="blue-button" type="submit" name="">{!! nl2br(trans('trp.page.user.reply-submit')) !!}</button>
                                 <div class="alert alert-warning" style="display: none;">
                                     {!! nl2br(trans('trp.page.user.reply-error')) !!}
                                 </div>
