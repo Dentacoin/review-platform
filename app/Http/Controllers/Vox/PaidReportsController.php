@@ -256,7 +256,6 @@ class PaidReportsController extends FrontController {
 
 						$message->from($sender, $sender_name);
 						$message->to( 'dentavox@dentacoin.com' );
-						$message->to( 'donika.kraeva@dentacoin.com' );
 						$message->to( 'petya.ivanova@dentacoin.com' );
 						$message->subject('New Paid Report Order');
 						$message->setBody($mtext, 'text/html'); // for HTML rich messages

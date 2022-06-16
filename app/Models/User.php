@@ -15,7 +15,6 @@ use Illuminate\Support\Str;
 use App\Models\DcnTransactionHistory;
 use App\Models\StopEmailValidation;
 use App\Models\EmailValidation;
-use App\Models\BlacklistBlock;
 use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
 use App\Models\WalletAddress;
@@ -31,7 +30,6 @@ use App\Models\DcnCashout;
 use App\Models\UserInvite;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
-use App\Models\Blacklist;
 use App\Models\VoxAnswer;
 use App\Models\UserTeam;
 use App\Models\UserBan;
@@ -48,7 +46,6 @@ use Carbon\Carbon;
 use Request;
 use Cookie;
 use Image;
-use Auth;
 use Mail;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
@@ -157,10 +154,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'education_info' => 'array',
     ];
 
-
-    public function had_first_transaction() {
-        return $this->hasOne('App\Models\DcnTransaction', 'user_id', 'id')->oldest();
-    }
     public function firstTransaction() {
         return $this->hasOne('App\Models\DcnTransaction', 'user_id', 'id')->where('status', 'first');
     }
@@ -475,10 +468,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
-    public function getNameShort() {
-        return explode(' ', $this->name)[0];
-    }
-
     public function getFormattedPhone($forlink=false) {
         if($this->country_id) {
             $ret = '+'.$this->country->phone_code.' '.$this->phone;
@@ -489,15 +478,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $ret = $this->phone;
         }
         return $ret;
-    }
-
-    public function getMaskedPhone() {
-        return '0'.substr($this->phone, 0, 3).' **** '.substr($this->phone, mb_strlen($this->phone)-2, 2);
-    }
-
-    public function getMaskedEmail() {
-        $mail_arr = explode('@', $this->email);
-        return substr($mail_arr[0], 0, 3).'****@'.$mail_arr[1];
     }
 
     public function canAskDentist($dentist_id) {
@@ -713,13 +693,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         ->pluck('id')
         ->toArray();
     }
-    
-    public function get_invite_token() {
-        //dd($this->email.$this->id);
-        $token = md5($this->id.env('SALT_INVITE'));
-        $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
-        return $token;
-    }
 
     public function get_token() {
         //dd($this->email.$this->id);
@@ -873,25 +846,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->attributes['email_clean'] = str_replace('.', '', $value);
         $this->attributes['email'] = $value;
         $this->save();
-    }
-
-    public function validateMyEmail() {
-
-        if($this->status == 'clinic_branch') {
-            return false;
-        }
-
-        $result = false;
-        $clean_email = str_replace('.', '', $this->email);
-        $found_email = self::where('email_clean', 'LIKE', $clean_email)
-        ->where('id', '!=', $this->id)
-        ->first();
-     
-        if ($found_email) {
-            $result = true;
-        }
-     
-        return $result;
     }
 
     public function getWorkHoursAttribute() {
@@ -1125,19 +1079,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         ->whereHas('vox', function ($query) {
             $query->where('type', 'normal');
         })->count();
-    }
-
-    public function filledFeaturedVoxes() {
-        return DcnReward::where('user_id', $this->id)
-        ->where('platform', 'vox')
-        ->where('type', 'survey')
-        ->with('vox')
-        ->whereHas('vox', function ($query) {
-            $query->where('type', 'normal')
-            ->where('featured', 1);
-        })->get()
-        ->pluck('reference_id')
-        ->toArray();
     }
 
     public function countAllSurveysRewards() {
@@ -1600,41 +1541,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         }
     }
 
-    public static function checkForBlockedIP() {
-        include_once("/var/www/html/blocked/blockscript/detector.php");
-        return !empty($_SERVER['blockscript_blocked']) && $_SERVER['blockscript_blocked']=='YES';
-    }
-
-    public static function checkBlocks($name, $email) {
-        foreach (Blacklist::get() as $b) {
-            if ($b['field'] == 'name') {
-                if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($name)) == true) {
-
-                    $new_blacklist_block = new BlacklistBlock;
-                    $new_blacklist_block->blacklist_id = $b['id'];
-                    $new_blacklist_block->name = $name;
-                    $new_blacklist_block->email = $email;
-                    $new_blacklist_block->save();
-
-                    return trans('trp.page.login.blocked-name');
-                }
-            } else {
-                if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($email)) == true) {
-
-                    $new_blacklist_block = new BlacklistBlock;
-                    $new_blacklist_block->blacklist_id = $b['id'];
-                    $new_blacklist_block->name = $name;
-                    $new_blacklist_block->email = $email;
-                    $new_blacklist_block->save();
-                    
-                    return trans('trp.page.login.blocked-email');
-                }
-            }
-        }
-
-        return null;
-    }
-
     public function getWorkHoursText() {
         $dows = [
             1=> trans('trp.page.index.monday'),
@@ -1836,16 +1742,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         }
     }
 
-    // public function getSlugAttribute($value) {
-
-
-    //     if(empty($this->attributes['slug'])) {
-    //         $this->attributes['slug'] = $this->makeSlug();
-    //         $this->save();
-    //     }
-    //     return $this->attributes['slug'];
-    // }
-
     public function getAcceptedPaymentAttribute($value) {
         if(!empty($value)) {
             return explode(',', $value);            
@@ -1911,19 +1807,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
         ->get();
 
         return $prev_reviews;        
-    }
-
-    public function getMonthlyInvites($month=0) {
-
-        $to_month = Carbon::now()->modify('-'.$month.' months');
-        $from_month = Carbon::now()->modify('-'.($month+1).' months');
-
-        $prev_invites = UserInvite::where( 'user_id', $this->id)
-        ->where('created_at', '>=', $from_month)
-        ->where('created_at', '<=', $to_month)
-        ->get();
-
-        return $prev_invites;        
     }
 
     public function convertForResponse() {
@@ -2241,8 +2124,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/ed
 
         $all_surveys_count = Vox::where('type', 'normal')->count();
         $all_done_surveys_count = count($this->filledVoxes());
-
         $percentage = ceil($all_done_surveys_count / $all_surveys_count * 100);
+        $level_name = '';
 
         foreach (config('vox-levels-names') as $name => $value) {
             if($percentage <= $value) {

@@ -1991,7 +1991,6 @@ UNCONFIRMED TRANSACTIONS
 
                     $message->from($sender, $sender_name);
                     $message->to( 'petya.ivanova@dentacoin.com' );
-                    $message->to( 'donika.kraeva@dentacoin.com' );
                     $message->subject('Dentist with ?? symbols in address');
                     $message->setBody($mtext, 'text/html'); // for HTML rich messages
                 });

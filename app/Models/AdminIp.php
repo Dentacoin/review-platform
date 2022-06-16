@@ -30,7 +30,6 @@ class AdminIp extends Model {
             cache([
             	'admin-ips' => $ips
             ], 86400);
-
 		}
 
 		return $ips;
