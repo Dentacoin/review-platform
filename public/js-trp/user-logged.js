@@ -112,9 +112,9 @@ $(document).ready(function() {
             $('.'+cls+'[role="editor"]').show();
             $('.'+cls+'[role="presenter"]').hide();
         } else if($(this).hasClass('scroll-to')) {
-            
+
             $('html, body').animate({
-                scrollTop: $('.'+$(this).attr('scroll')).offset().top - $('header').height()
+                scrollTop: $('.'+$(this).attr('scroll')).offset().top - $('header').outerHeight() - $('.tab-titles').outerHeight()
             }, 500);
             
         } else {
