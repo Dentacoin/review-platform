@@ -235,7 +235,7 @@ class AdminController extends BaseController {
 			->orWhereNull('is_partner');
 		})->where('accepted_payment', 'LIKE', '%dentacoin%')->count();
 
-        $params['cache_version'] = '20220606';
+        $params['cache_version'] = '20220620';
         
         if($this->current_page == 'admins' && $this->current_subpage == 'admins') {
         } else if($this->current_page!='home' && !isset($menu[$this->current_page])) {
