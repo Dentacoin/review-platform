@@ -136,16 +136,18 @@
 										<img class="fa-search" src="{{ url('img-trp/white-search.svg') }}" width="16" height="15"/>
 									</a>
 								@endif
-								<a href="javascript:;" class="user-profile-info">
-									<span>Rewards: </span>
-									<span class="user-balance-dcn">{{ number_format($user_total_balance) }} DCN</span>
-									<span class="user-balance-usd">{{ sprintf('%.2F', $user_total_balance * $dcn_price) }} USD</span>
-									<img class="caret-switch" src="{{ url('img-trp/caret-white-down.svg') }}"/>
+								<div class="user-profile-info">
+									<a target="_blank" href="https://account.dentacoin.com?platform=trusted-reviews">
+										<span>Rewards: </span>
+										<span class="user-balance-dcn">{{ number_format($user_total_balance) }} DCN</span>
+										<span class="user-balance-usd">{{ sprintf('%.2F', $user_total_balance * $dcn_price) }} USD</span>
+										<img class="caret-switch" src="{{ url('img-trp/caret-white-down.svg') }}"/>
+									</a>
 									<img class="header-avatar {!! $user->hasimage ? '' : 'default-avatar' !!}" id="header-avatar" src="{{ $user_avatar }}"/>
 									@if(!empty($has_review_notification))
 										<div class="notification"></div>
 									@endif
-								</a>
+								</div>
 	                        @else
 								@include('trp.parts.header-buttons')
 	                        @endif

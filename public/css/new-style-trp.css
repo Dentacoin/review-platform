@@ -1115,6 +1115,9 @@ header {
       border-radius: 4px;
       display: flex;
       align-items: center; }
+      header .header-info .user-profile-info a {
+        display: flex;
+        align-items: center; }
       header .header-info .user-profile-info span {
         font-size: 18px;
         color: #0564c6;
