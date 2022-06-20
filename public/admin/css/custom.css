@@ -239,27 +239,9 @@ table .order.desc::after {
 .ratings {
     color: black;
     position: absolute;
-    bottom: 30px;
+    bottom: 50px;
     left: 50%;
-    margin-left: -148px;
-}
-
-.ratings .stars {
-    width: 74px;
-    height: 14px;
-    display: inline-block;
-    background: url('../../img-trp/stars-gray.png') 50% 50% no-repeat;
-    background-size: contain;
-    vertical-align: middle;
-}
-.ratings .stars .bar {
-    background: url('../../img-trp/stars-blue.png') 0% 50% no-repeat;
-    background-size: cover;
-    height: 14px;
-}
-
-.ratings .rating {
-    vertical-align: middle;
+    margin-left: -178px;
 }
 
 .avatar-group {

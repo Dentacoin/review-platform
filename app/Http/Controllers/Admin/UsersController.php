@@ -796,7 +796,6 @@ class UsersController extends AdminController {
             'without_permaban' => request('without-permaban'),
             'with_permaban' => request('with-permaban'),
             'vip_access' => request('vip-access'),
-            'test_now' => request('test-now'),
             'show_website' => request('show-website'),
             'civic_kyc_hash' => request('civic-kyc-hash'),
             'fb_tab' => request('fb-tab'),

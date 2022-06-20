@@ -978,13 +978,7 @@
 
                                     @if($item->is_dentist)
                                         <div class="ratings">
-                                            <div class="stars">
-                                                <div class="bar" style="width: {{ $item->avg_rating/5*100 }}%;"></div>
-                                            </div>
-                                            <span class="rating">
-                                                ({{ intval($item->ratings) }} reviews)
-                                            </span>
-                                            <div style="margin-top: 10px;">Average rating: {{ !empty($item->avg_rating) ? $item->avg_rating : 'N/A' }}</div>
+                                            <div style="margin-top: 10px;">Average rating: {{ !empty($item->avg_rating) ? $item->avg_rating : 'N/A' }} ({{ intval($item->ratings) }} reviews)</div>
                                             @if(!empty($item->self_deleted ) && $item->name == 'Anonymous')
                                             @else
                                                 <a class="open-trp-link" target="_blank" href="{{ 'https://reviews.dentacoin.com'.explode('.com', $item->getLink())[1]}}">Open TRP Profile</a>
