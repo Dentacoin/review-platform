@@ -9,7 +9,6 @@ use App\Models\UserSurveyWarning;
 use App\Models\Recommendation;
 use App\Models\VoxCrossCheck;
 use App\Models\VoxAnswerOld;
-use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
 use App\Models\UserAction;
 use App\Models\PollAnswer;
@@ -2731,7 +2730,7 @@ class VoxService {
 
                 return Response::json( [
                     'success' => true,
-                ] );
+                ]);
             }
         }
     }

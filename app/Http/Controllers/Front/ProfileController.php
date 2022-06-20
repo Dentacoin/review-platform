@@ -66,11 +66,6 @@ class ProfileController extends FrontController {
                 'type' => 'array',
                 'required' => false,
             ],
-            // 'email' => [
-            //     'type' => 'text',
-            //     'required' => true,
-            //     'is_email' => true,
-            // ],
             'phone' => [
                 'type' => 'text',
                 'required' => true,
@@ -1480,7 +1475,7 @@ class ProfileController extends FrontController {
     }
     
     /**
-     * clinic accepts team member
+     * clinic delete team member
      */
     public function clinics_delete( $locale=null, $id ) {
         $res = UserTeam::where('dentist_id', $this->user->id)

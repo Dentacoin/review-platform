@@ -79,13 +79,6 @@
                                 </label>
                             </div>
 
-                            <div class="col-md-2">
-                                <label for="test-now" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
-                                    <input id="test-now" type="checkbox" name="test-now" value="1" {!! !empty($test_now) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
-                                    with bug Rejected to Added Rejected
-                                </label>
-                            </div>
-
                             <style type="text/css">
                                 .select2-container--default .select2-selection--multiple {
                                     height: auto !important;

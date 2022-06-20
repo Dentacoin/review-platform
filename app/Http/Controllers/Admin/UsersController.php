@@ -539,10 +539,6 @@ class UsersController extends AdminController {
             $users = $users->where('vip_access', 1);
         }
 
-        if(!empty(request('test-now'))) {
-            $users = $users->where('test_now', 1);
-        }
-
         if(!empty(request('fb-tab'))) {
             $users = $users->has('dentist_fb_page');
         }
