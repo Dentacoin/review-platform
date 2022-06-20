@@ -114,7 +114,7 @@ class VoxesController extends AdminController {
             'selector'          => array('format' => 'selector'),
             'id'                => array(),
             'title'             => array(),
-            'category'          => array('template' => 'admin.parts.table-voxes-category', 'label' => 'Cat'),
+            // 'category'          => array('template' => 'admin.parts.table-voxes-category', 'label' => 'Cat'),
             'count'             => array('template' => 'admin.parts.table-voxes-count'),
             'reward'            => array('template' => 'admin.parts.table-voxs-reward'),
             'duration'          => array('template' => 'admin.parts.table-voxs-duration'),
@@ -135,12 +135,12 @@ class VoxesController extends AdminController {
             $table_fields['update'] = array('template' => 'admin.parts.table-voxes-edit', 'label' => 'View');
         }
 
-        $voxes_with_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])
+        $voxes_with_launched = Vox::with(['translations', 'processingForTranslations'])
         ->whereNotNull('launched_at')
         ->orderBy('launched_at', 'desc')
         ->get();
 
-        $voxes_without_launched = Vox::with(['translations', 'categories.category', 'categories.category.translations', 'questions'])
+        $voxes_without_launched = Vox::with(['translations', 'processingForTranslations'])
         ->whereNull('launched_at')
         ->orderBy('id', 'desc')
         ->whereNotIn('id', [48,80])
