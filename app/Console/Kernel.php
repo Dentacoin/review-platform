@@ -2002,110 +2002,110 @@ UNCONFIRMED TRANSACTIONS
         })->cron("30 7 * * *"); //10:30h BG Time
 
 
-        $schedule->call(function () {
-            echo 'Dentists with ?? in address Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+        // $schedule->call(function () {
+        //     echo 'Dentists with ?? in address Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $users = User::where('is_dentist', 1)->where(function ($query) {
-                $query->where('city_name', 'LIKE', '%??%')
-                ->orWhere('state_name', 'LIKE', '%??%');
-            })->whereNotIn('status', ['rejected', 'test', 'added_by_clinic_rejected', 'added_by_dentist_rejected'])
-            ->get();
+        //     $users = User::where('is_dentist', 1)->where(function ($query) {
+        //         $query->where('city_name', 'LIKE', '%??%')
+        //         ->orWhere('state_name', 'LIKE', '%??%');
+        //     })->whereNotIn('status', ['rejected', 'test', 'added_by_clinic_rejected', 'added_by_dentist_rejected'])
+        //     ->get();
 
-            $user_links = [];
+        //     $user_links = [];
 
-            if ($users->isNotEmpty()) {
-                foreach ($users as $user) {
-                    $user_links[] = [
-                        'link' => 'https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id,
-                        'name' => $user->name,
-                    ];
-                }
-            }
+        //     if ($users->isNotEmpty()) {
+        //         foreach ($users as $user) {
+        //             $user_links[] = [
+        //                 'link' => 'https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id,
+        //                 'name' => $user->name,
+        //             ];
+        //         }
+        //     }
 
-            if (!empty($user_links)) {
-                $mtext = 'Dentist with ?? symbols in address.
+        //     if (!empty($user_links)) {
+        //         $mtext = 'Dentist with ?? symbols in address.
                 
-                Link to profiles in CMS:  
+        //         Link to profiles in CMS:  
 
-                ';
+        //         ';
 
-                foreach ($user_links as $ul) {
-                    $mtext .= '<a href="'.$ul['link'].'">'.$ul['name'].'</a> , ';
-                }
+        //         foreach ($user_links as $ul) {
+        //             $mtext .= '<a href="'.$ul['link'].'">'.$ul['name'].'</a> , ';
+        //         }
 
-                Mail::send([], [], function ($message) use ($mtext) {
-                    $sender = config('mail.from.address');
-                    $sender_name = config('mail.from.name');
+        //         Mail::send([], [], function ($message) use ($mtext) {
+        //             $sender = config('mail.from.address');
+        //             $sender_name = config('mail.from.name');
 
-                    $message->from($sender, $sender_name);
-                    $message->to( 'petya.ivanova@dentacoin.com' );
-                    $message->subject('Dentist with ?? symbols in address');
-                    $message->setBody($mtext, 'text/html'); // for HTML rich messages
-                });
-            }
+        //             $message->from($sender, $sender_name);
+        //             $message->to( 'petya.ivanova@dentacoin.com' );
+        //             $message->subject('Dentist with ?? symbols in address');
+        //             $message->setBody($mtext, 'text/html'); // for HTML rich messages
+        //         });
+        //     }
 
-            echo 'Dentists with ?? in address Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     echo 'Dentists with ?? in address Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->cron("30 7 * * *"); //10:30h BG Time
+        // })->cron("30 7 * * *"); //10:30h BG Time
 
 
-        $schedule->call(function () {
-            echo 'Count Unknown Countries from UserLogin Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+        // $schedule->call(function () {
+        //     echo 'Count Unknown Countries from UserLogin Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    user_logins 
-                WHERE 
-                    country LIKE 'Unknown'
-                GROUP BY 
-                    `user_id`
-            ";
+        //     $query = "
+        //         SELECT 
+        //             * 
+        //         FROM 
+        //             user_logins 
+        //         WHERE 
+        //             country LIKE 'Unknown'
+        //         GROUP BY 
+        //             `user_id`
+        //     ";
 
-            $uknown_by_user = DB::select(
-                DB::raw($query), []
-            );
+        //     $uknown_by_user = DB::select(
+        //         DB::raw($query), []
+        //     );
 
-            $query2 = "
-                SELECT 
-                    * 
-                FROM 
-                    user_logins 
-                WHERE 
-                    country LIKE 'Unknown'
-            ";
+        //     $query2 = "
+        //         SELECT 
+        //             * 
+        //         FROM 
+        //             user_logins 
+        //         WHERE 
+        //             country LIKE 'Unknown'
+        //     ";
 
-            $uknown = DB::select(
-                DB::raw($query2), []
-            );
+        //     $uknown = DB::select(
+        //         DB::raw($query2), []
+        //     );
 
-            $mtext = 'There are '.count($uknown).' results from Unknown country by '.count($uknown_by_user).' users
+        //     $mtext = 'There are '.count($uknown).' results from Unknown country by '.count($uknown_by_user).' users
                 
-            Link to profiles in CMS:  <br/><br/>
+        //     Link to profiles in CMS:  <br/><br/>
 
-            ';
+        //     ';
 
-            if (!empty($uknown_by_user)) {
-                foreach ($uknown_by_user as $u) {
-                    $user = User::where('id', $u->user_id)->withTrashed()->first();
-                    $mtext .= '<a href="https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id.'">'.$user->name.'</a><br/>';
-                }
-            }
+        //     if (!empty($uknown_by_user)) {
+        //         foreach ($uknown_by_user as $u) {
+        //             $user = User::where('id', $u->user_id)->withTrashed()->first();
+        //             $mtext .= '<a href="https://reviews.dentacoin.com/cms/users/users/edit/'.$user->id.'">'.$user->name.'</a><br/>';
+        //         }
+        //     }
 
-            Mail::send([], [], function ($message) use ($mtext) {
-                $sender = config('mail.from.address');
-                $sender_name = config('mail.from.name');
+        //     Mail::send([], [], function ($message) use ($mtext) {
+        //         $sender = config('mail.from.address');
+        //         $sender_name = config('mail.from.name');
 
-                $message->from($sender, $sender_name);
-                $message->to( 'petya.ivanova@dentacoin.com' );
-                $message->subject('Unknown countries count');
-                $message->setBody($mtext, 'text/html'); // for HTML rich messages
-            });
+        //         $message->from($sender, $sender_name);
+        //         $message->to( 'petya.ivanova@dentacoin.com' );
+        //         $message->subject('Unknown countries count');
+        //         $message->setBody($mtext, 'text/html'); // for HTML rich messages
+        //     });
 
-            echo 'Count Unknown Countries from UserLogin Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     echo 'Count Unknown Countries from UserLogin Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->cron('0 0 */14 * *'); //10:30h BG Time
+        // })->cron('0 0 */14 * *'); //10:30h BG Time
 
 
         $schedule->call(function () {

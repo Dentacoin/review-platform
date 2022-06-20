@@ -662,24 +662,24 @@ class ProfileController extends FrontController {
                                 ], 'trp');
                             }
 
-                            if($existing_dentist->status == 'test') {
-                                $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is with status Test.
-                                Link to dentist\'s profile:
-                                '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$existing_dentist->id).'
-                                Link to clinic\'s profile: 
-                                '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$current_user->id).'
-                                '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-                                ';
+                            // if($existing_dentist->status == 'test') {
+                            //     $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is with status Test.
+                            //     Link to dentist\'s profile:
+                            //     '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$existing_dentist->id).'
+                            //     Link to clinic\'s profile: 
+                            //     '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$current_user->id).'
+                            //     '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                            //     ';
 
-                                Mail::raw($mtext, function ($message) use ($current_user) {
-                                    $sender = config('mail.from.address');
-                                    $sender_name = config('mail.from.name');
+                            //     Mail::raw($mtext, function ($message) use ($current_user) {
+                            //         $sender = config('mail.from.address');
+                            //         $sender_name = config('mail.from.name');
 
-                                    $message->from($sender, $sender_name);
-                                    $message->to( 'petya.ivanova@dentacoin.com' );
-                                    $message->subject('Clinic '.$current_user->getNames().' added a new team member that is with status Test');
-                                });
-                            }
+                            //         $message->from($sender, $sender_name);
+                            //         $message->to( 'petya.ivanova@dentacoin.com' );
+                            //         $message->subject('Clinic '.$current_user->getNames().' added a new team member that is with status Test');
+                            //     });
+                            // }
 
                             return Response::json([
                                 'success' => true, 
@@ -726,21 +726,21 @@ class ProfileController extends FrontController {
 
                         } else if(!empty($existing_dentist->self_deleted) || !empty($existing_dentist->deleted_at) || in_array($existing_dentist->status, ['rejected', 'added_by_clinic_rejected', 'added_rejected', 'pending'])) {
 
-                            $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
-                            '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$existing_dentist->id).'
-                            Link to clinic\'s profile: 
-                            '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$current_user->id).'
-                            '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-                            ';
+                            // $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
+                            // '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$existing_dentist->id).'
+                            // Link to clinic\'s profile: 
+                            // '.url('https://reviews.dentacoin.com/cms/users/users/edit/'.$current_user->id).'
+                            // '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                            // ';
 
-                            Mail::raw($mtext, function ($message) use ($current_user) {
-                                $sender = config('mail.from.address');
-                                $sender_name = config('mail.from.name');
+                            // Mail::raw($mtext, function ($message) use ($current_user) {
+                            //     $sender = config('mail.from.address');
+                            //     $sender_name = config('mail.from.name');
 
-                                $message->from($sender, $sender_name);
-                                $message->to( 'petya.ivanova@dentacoin.com' );
-                                $message->subject('Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious');
-                            });
+                            //     $message->from($sender, $sender_name);
+                            //     $message->to( 'petya.ivanova@dentacoin.com' );
+                            //     $message->subject('Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious');
+                            // });
 
                             return Response::json([
                                 'success' => false, 

@@ -1167,16 +1167,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
-        if($this->reviews_out->isNotEmpty()) {
-            $mtext = 'User with reviews was deleted.
-Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$this->id;
+//         if($this->reviews_out->isNotEmpty()) {
+//             $mtext = 'User with reviews was deleted.
+// Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/users/edit/'.$this->id;
 
-            Mail::raw($mtext, function ($message) {
-                $message->from(config('mail.from.address'), config('mail.from.name'));
-                $message->to( 'petya.ivanova@dentacoin.com' );
-                $message->subject('Patient Who Submitted Reviews Was Deleted');
-            });
-        }
+//             Mail::raw($mtext, function ($message) {
+//                 $message->from(config('mail.from.address'), config('mail.from.name'));
+//                 $message->to( 'petya.ivanova@dentacoin.com' );
+//                 $message->subject('Patient Who Submitted Reviews Was Deleted');
+//             });
+//         }
 
         $transactions = DcnTransaction::where('user_id', $this->id)
         ->whereIn('status', ['new', 'failed', 'first', 'not_sent'])
