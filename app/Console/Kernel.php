@@ -1972,6 +1972,7 @@ UNCONFIRMED TRANSACTIONS
         
                     if($phone != $user->phone) {
                         $user->phone = $phone;
+                        $user->convert_phone_cron = 1;
                         $user->save();
 
                         // echo 'User ID: '.$user->id.'; User\'s country: '.$user->country->name. ' | Phone code by user\'s country: +'.$user->country->phone_code.' | Current phone: '.$user->phone.' | Converted phone '.$phone.' | How it will be shown in their profile: +'.$user->country->phone_code.' '.$phone.'<br/>';
