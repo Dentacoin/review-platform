@@ -53,6 +53,7 @@
                                 'placeholder' => 'MM',
                             ) 
                         ) }}
+                        <div class="line-break"></div>
                         {{ Form::select( 
                             'work_hours['.$w.'][1][0]', 
                             $hours,

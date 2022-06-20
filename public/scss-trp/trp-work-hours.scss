@@ -42,6 +42,7 @@ $phone: "screen and (max-width: 768px)";
 
             .col {
                 max-width: 25%;
+
                 .edit-working-hours-wrapper {
                     .edit-working-hours-wrap {
                         select {
@@ -127,6 +128,15 @@ $phone: "screen and (max-width: 768px)";
                 display: block;
                 padding-left: 26px;
                 margin-bottom: 15px;
+
+                @media #{$pc} {
+                    padding-left: 12px;
+                }
+
+                @media #{$phone} {
+                    text-align: center;
+                    padding-left: 0px;
+                }
             }
 
             .edit-working-hours-wrapper {
@@ -150,7 +160,8 @@ $phone: "screen and (max-width: 768px)";
                             width: 65px;
                         }
 
-                        &:nth-child(2n) {
+                        &:nth-child(5),
+                        &:nth-child(2) {
                             margin-right: 0px;
                         }
         

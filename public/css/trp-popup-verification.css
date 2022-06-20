@@ -75,6 +75,13 @@
       display: block;
       padding-left: 26px;
       margin-bottom: 15px; }
+      @media screen and (max-width: 1200px) {
+        .open-hours-section .work-hours .col label {
+          padding-left: 12px; } }
+      @media screen and (max-width: 768px) {
+        .open-hours-section .work-hours .col label {
+          text-align: center;
+          padding-left: 0px; } }
     .open-hours-section .work-hours .col .edit-working-hours-wrapper {
       display: none; }
       .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap {
@@ -92,7 +99,7 @@
           @media screen and (max-width: 768px) {
             .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select {
               width: 65px; } }
-          .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select:nth-child(2n) {
+          .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select:nth-child(5), .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select:nth-child(2) {
             margin-right: 0px; }
           .open-hours-section .work-hours .col .edit-working-hours-wrapper .edit-working-hours-wrap select.grayed {
             background-color: #eee; }
