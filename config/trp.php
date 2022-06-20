@@ -4,8 +4,11 @@ return [
 	
 	'add_to_sendgrid_list' => false, //false from 09.06.22
 	'using_google_maps' => false, //false from 15.06.22
-	'use_deepl' => false, //false from 15.06.22
 	'without_admins_check' => true, //true from 16.06.22
+	// 'deepl_url' => 'https://api.deepl.com/v2/translate',
+	// 'deepl_key' => env('DEEPL_AUTH_KEY'),
+	'deepl_url' => 'https://api-free.deepl.com/v2/translate',
+	'deepl_key' => env('DEEPL_AUTH_KEY_FREE'),
 	
 	'social_network' => [
 		'facebook' => 'facebook',

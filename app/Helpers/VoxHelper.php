@@ -16,121 +16,116 @@ use DB;
 class VoxHelper {
 
     public static function translateVoxInfo($lang_code, $vox) {
-        if(config('trp.use_deepl')) {
 
-            $ch = curl_init();
+        $ch = curl_init();
 
-            curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,
-                        "auth_key=".env('DEEPL_AUTH_KEY')."&text=".$vox->slug."&target_lang=".strtoupper($lang_code));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL,config('trp.deepl_url'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,
+                    "auth_key=".config('trp.deepl_key')."&text=".$vox->slug."&target_lang=".strtoupper($lang_code));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-            $slug = curl_exec ($ch);
-            curl_close ($ch);
+        $slug = curl_exec ($ch);
+        curl_close ($ch);
 
-            $ch = curl_init();
+        $ch = curl_init();
 
-            curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,
-                        "auth_key=".env('DEEPL_AUTH_KEY')."&text=".$vox->title."&target_lang=".strtoupper($lang_code));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL,config('trp.deepl_url'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,
+                    "auth_key=".config('trp.deepl_key')."&text=".$vox->title."&target_lang=".strtoupper($lang_code));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-            $title = curl_exec ($ch);
-            curl_close ($ch);
+        $title = curl_exec ($ch);
+        curl_close ($ch);
 
-            $ch = curl_init();
+        $ch = curl_init();
 
-            curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,
-                        "auth_key=".env('DEEPL_AUTH_KEY')."&text=".$vox->description."&target_lang=".strtoupper($lang_code));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL,config('trp.deepl_url'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,
+                    "auth_key=".config('trp.deepl_key')."&text=".$vox->description."&target_lang=".strtoupper($lang_code));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-            $description = curl_exec ($ch);
-            curl_close ($ch);
+        $description = curl_exec ($ch);
+        curl_close ($ch);
 
-            $translation = $vox->translateOrNew($lang_code);
-            $translation->vox_id = $vox->id;
-            $translation->slug = json_decode($slug, true)['translations'][0]['text'];
-            $translation->title = json_decode($title, true)['translations'][0]['text'];
-            $translation->description = json_decode($description, true)['translations'][0]['text'];
-            $translation->save();
-        }
+        $translation = $vox->translateOrNew($lang_code);
+        $translation->vox_id = $vox->id;
+        $translation->slug = json_decode($slug, true)['translations'][0]['text'];
+        $translation->title = json_decode($title, true)['translations'][0]['text'];
+        $translation->description = json_decode($description, true)['translations'][0]['text'];
+        $translation->save();
     }
 
     public static function translateQuestionWithAnswers($lang_code, $question) {
+        
+        $translation = $question->translateOrNew($lang_code);
+        $translation->vox_question_id = $question->id;
+        $translation->vox_id = $question->vox_id;
 
-        if(config('trp.use_deepl')) {
+        $ch = curl_init();
 
-            $translation = $question->translateOrNew($lang_code);
-            $translation->vox_question_id = $question->id;
-            $translation->vox_id = $question->vox_id;
+        curl_setopt($ch, CURLOPT_URL,config('trp.deepl_url'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,
+                    "auth_key=".config('trp.deepl_key')."&text=".$question->question."&target_lang=".strtoupper($lang_code));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-            $ch = curl_init();
+        $server_output = curl_exec ($ch);
+        curl_close ($ch);
 
-            curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,
-                        "auth_key=".env('DEEPL_AUTH_KEY')."&text=".$question->question."&target_lang=".strtoupper($lang_code));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $translation->question = isset(json_decode($server_output, true)['translations']) ? json_decode($server_output, true)['translations'][0]['text'] : '';
 
-            $server_output = curl_exec ($ch);
-            curl_close ($ch);
+        if(!empty($question->answers) && !empty(json_decode($question->answers, true))) {
 
-            $translation->question = isset(json_decode($server_output, true)['translations']) ? json_decode($server_output, true)['translations'][0]['text'] : '';
+            $answers = json_decode($question->answers, true);
+            if($answers) {
+                $translated_answers = [];
 
-            if(!empty($question->answers) && !empty(json_decode($question->answers, true))) {
+                foreach($answers as $a) {
+                    if(mb_substr($a, 0, 1)=='!') {
+                        $ch = curl_init();
 
-                $answers = json_decode($question->answers, true);
-                if($answers) {
-                    $translated_answers = [];
+                        curl_setopt($ch, CURLOPT_URL,config('trp.deepl_url'));
+                        curl_setopt($ch, CURLOPT_POST, 1);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".config('trp.deepl_key')."&text=".mb_substr($a, 1)."&target_lang=".strtoupper($lang_code));
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-                    foreach($answers as $a) {
-                        if(mb_substr($a, 0, 1)=='!') {
-                            $ch = curl_init();
+                        $server_output = curl_exec ($ch);
+                        curl_close ($ch);
 
-                            curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
-                            curl_setopt($ch, CURLOPT_POST, 1);
-                            curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".env('DEEPL_AUTH_KEY')."&text=".mb_substr($a, 1)."&target_lang=".strtoupper($lang_code));
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $translated_answers[] = isset(json_decode($server_output, true)['translations']) ? '!'.json_decode($server_output, true)['translations'][0]['text'] : $a;
+                    } else {
+                        $ch = curl_init();
 
-                            $server_output = curl_exec ($ch);
-                            curl_close ($ch);
+                        curl_setopt($ch, CURLOPT_URL,config('trp.deepl_url'));
+                        curl_setopt($ch, CURLOPT_POST, 1);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".config('trp.deepl_key')."&text=".$a."&target_lang=".strtoupper($lang_code));
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-                            $translated_answers[] = isset(json_decode($server_output, true)['translations']) ? '!'.json_decode($server_output, true)['translations'][0]['text'] : $a;
-                        } else {
-                            $ch = curl_init();
+                        $server_output = curl_exec ($ch);
+                        curl_close ($ch);
 
-                            curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
-                            curl_setopt($ch, CURLOPT_POST, 1);
-                            curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".env('DEEPL_AUTH_KEY')."&text=".$a."&target_lang=".strtoupper($lang_code));
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                            $server_output = curl_exec ($ch);
-                            curl_close ($ch);
-
-                            $translated_answers[] = isset(json_decode($server_output, true)['translations']) ? json_decode($server_output, true)['translations'][0]['text'] : $a;
-                        }                    
-                    }
-
-                    $translation->answers = json_encode( $translated_answers, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE );
-                } else {
-                    $translation->answers = '';                            
+                        $translated_answers[] = isset(json_decode($server_output, true)['translations']) ? json_decode($server_output, true)['translations'][0]['text'] : $a;
+                    }                    
                 }
-            } else {
-                $translation->answers = '';                            
-            }
 
-            $translation->save();
+                $translation->answers = json_encode( $translated_answers, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE );
+            } else {
+                $translation->answers = '';
+            }
+        } else {
+            $translation->answers = '';
         }
+
+        $translation->save();
     }
 
     public static function translateSurvey($lang_code, $vox) {

@@ -110,44 +110,23 @@ class VoxesController extends AdminController {
             return redirect('cms/vox/list');
         }
 
-        if(config('trp.use_deepl')) {
-            $table_fields = [
-                'selector'          => array('format' => 'selector'),
-                'id'                => array(),
-                'title'             => array(),
-                'category'          => array('template' => 'admin.parts.table-voxes-category', 'label' => 'Cat'),
-                'count'             => array('template' => 'admin.parts.table-voxes-count'),
-                'reward'            => array('template' => 'admin.parts.table-voxs-reward'),
-                'duration'          => array('template' => 'admin.parts.table-voxs-duration'),
-                'respondents'       => array('template' => 'admin.parts.table-voxs-respondents'),
-                'featured'          => array('template' => 'admin.parts.table-voxes-featured', 'label' => 'Featured'),
-                'type'              => array('template' => 'admin.parts.table-voxes-type'),
-                'stats'             => array('template' => 'admin.parts.table-voxes-stats'),
-                'stats_featured'    => array('template' => 'admin.parts.table-voxes-stats-featured'),
-                'langs'             => array('template' => 'admin.parts.table-voxes-langs', 'label' => 'Langs'),
-                'date'              => array('template' => 'admin.parts.table-voxes-date'),
-                'launched_date'     => array('template' => 'admin.parts.table-voxes-launched-date'),
-            ];
-        } else {
-
-            $table_fields = [
-                'id'                => array(),
-                'title'             => array(),
-                'category'          => array('template' => 'admin.parts.table-voxes-category', 'label' => 'Cat'),
-                'count'             => array('template' => 'admin.parts.table-voxes-count'),
-                'reward'            => array('template' => 'admin.parts.table-voxs-reward'),
-                'duration'          => array('template' => 'admin.parts.table-voxs-duration'),
-                'respondents'       => array('template' => 'admin.parts.table-voxs-respondents'),
-                'featured'          => array('template' => 'admin.parts.table-voxes-featured', 'label' => 'Featured'),
-                'type'              => array('template' => 'admin.parts.table-voxes-type'),
-                'stats'             => array('template' => 'admin.parts.table-voxes-stats'),
-                'stats_featured'    => array('template' => 'admin.parts.table-voxes-stats-featured'),
-                'langs'             => array('template' => 'admin.parts.table-voxes-langs', 'label' => 'Langs'),
-                'date'              => array('template' => 'admin.parts.table-voxes-date'),
-                'launched_date'     => array('template' => 'admin.parts.table-voxes-launched-date'),
-            ];
-        }
-
+        $table_fields = [
+            'selector'          => array('format' => 'selector'),
+            'id'                => array(),
+            'title'             => array(),
+            'category'          => array('template' => 'admin.parts.table-voxes-category', 'label' => 'Cat'),
+            'count'             => array('template' => 'admin.parts.table-voxes-count'),
+            'reward'            => array('template' => 'admin.parts.table-voxs-reward'),
+            'duration'          => array('template' => 'admin.parts.table-voxs-duration'),
+            'respondents'       => array('template' => 'admin.parts.table-voxs-respondents'),
+            'featured'          => array('template' => 'admin.parts.table-voxes-featured', 'label' => 'Featured'),
+            'type'              => array('template' => 'admin.parts.table-voxes-type'),
+            'stats'             => array('template' => 'admin.parts.table-voxes-stats'),
+            'stats_featured'    => array('template' => 'admin.parts.table-voxes-stats-featured'),
+            'langs'             => array('template' => 'admin.parts.table-voxes-langs', 'label' => 'Langs'),
+            'date'              => array('template' => 'admin.parts.table-voxes-date'),
+            'launched_date'     => array('template' => 'admin.parts.table-voxes-launched-date'),
+        ];
 
         if(Auth::guard('admin')->user()->role != 'support') {
             $table_fields['update'] = array('template' => 'admin.parts.table-voxes-edit');
@@ -2207,25 +2186,23 @@ class VoxesController extends AdminController {
             $item = new VoxScale;
             $this->saveOrUpdateScale($item);
 
-            if(config('trp.use_deepl')) {
-                foreach (config('langs-to-translate') as $lang_code => $value) {
-                    if($lang_code != 'en') {
-                        $ch = curl_init();
+            foreach (config('langs-to-translate') as $lang_code => $value) {
+                if($lang_code != 'en') {
+                    $ch = curl_init();
 
-                        curl_setopt($ch, CURLOPT_URL,"https://api.deepl.com/v2/translate");
-                        curl_setopt($ch, CURLOPT_POST, 1);
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".env('DEEPL_AUTH_KEY')."&text=".$item->translateOrNew('en')->answers."&target_lang=".strtoupper($lang_code));
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_URL,config('trp.deepl_url'));
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".config('trp.deepl_key')."&text=".$item->translateOrNew('en')->answers."&target_lang=".strtoupper($lang_code));
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-                        $answers = curl_exec ($ch);
-                        curl_close ($ch);
+                    $answers = curl_exec ($ch);
+                    curl_close ($ch);
 
-                        $translation = $item->translateOrNew($lang_code);
-                        $translation->vox_scale_id = $item->id;
-                        $translation->answers = isset(json_decode($answers, true)['translations']) ? json_decode($answers, true)['translations'][0]['text'] : '';
-                        $translation->save();
-                    }
+                    $translation = $item->translateOrNew($lang_code);
+                    $translation->vox_scale_id = $item->id;
+                    $translation->answers = isset(json_decode($answers, true)['translations']) ? json_decode($answers, true)['translations'][0]['text'] : '';
+                    $translation->save();
                 }
             }
 
