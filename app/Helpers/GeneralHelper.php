@@ -193,15 +193,17 @@ class GeneralHelper {
     public static function validatePhone($countryCode, $phone) {
 
         $phone = trim(str_replace(['(', ')', ' ', '.', '-'], ['', '', '', '', ''], $phone));
+        
+        if($phone[0] == 0 || $phone[0] == '+') {
+            do {
+                $phone = mb_substr($phone, 1);
+    
+            } while ($phone[0] == 0 || $phone[0] == '+');
+        }
 
         //remove country code
-        do {
-            $phone = mb_substr($phone, 1);
-
-        } while (in_array(mb_substr($phone, 0, 1), [0, '+']));
-        // dd(mb_strpos($countryCode, $phone, 0));
-        if(mb_strpos($phone, $countryCode, 0) !== false) {
-            $phone = str_replace($countryCode, '', $phone);
+        if($countryCode == mb_substr($phone, 0, strlen($countryCode))) {
+            $phone = mb_substr($phone, strlen($countryCode));
         }
      
         return $phone;

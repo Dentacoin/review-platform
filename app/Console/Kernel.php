@@ -1953,6 +1953,36 @@ UNCONFIRMED TRANSACTIONS
             echo 'Convert avatar to webp cron end'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->everyFiveMinutes();
+        
+
+        $schedule->call(function () {
+            echo 'Convert users phone cron start'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $users = User::whereNotNull('country_id')
+            ->with('country')
+            ->whereNotNull('phone')
+            ->where('convert_phone_cron', 0)
+            ->take(5000)
+            ->get();
+
+            foreach($users as $user) {
+                if(!empty($user->phone)) {
+
+                    $phone = GeneralHelper::validatePhone($user->country->phone_code, $user->phone);
+        
+                    if($phone != $user->phone) {
+                        $user->phone = $phone;
+                        $user->save();
+
+                        // echo 'User ID: '.$user->id.'; User\'s country: '.$user->country->name. ' | Phone code by user\'s country: +'.$user->country->phone_code.' | Current phone: '.$user->phone.' | Converted phone '.$phone.' | How it will be shown in their profile: +'.$user->country->phone_code.' '.$phone.'<br/>';
+                    }
+                }
+
+            }
+
+            echo 'Convert users phone cron end'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+        })->everyFiveMinutes();
 
 
         $schedule->call(function () {

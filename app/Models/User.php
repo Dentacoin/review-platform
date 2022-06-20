@@ -135,6 +135,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'review_notification',
         'update_vox_scales',
         'optimism_popup',
+        'convert_phone_cron',
     ];
     protected $dates = [
         'verified_on',
