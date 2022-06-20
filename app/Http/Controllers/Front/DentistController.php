@@ -220,7 +220,7 @@ class DentistController extends FrontController {
 
         if (!empty($this->user) && $this->user->asks->isNotEmpty()) {
             foreach ($this->user->asks as $p_ask) {
-                if ($p_ask->status == 'waiting') {
+                if ($p_ask->status == 'waiting' && !$p_ask->hidden && $p_ask->user) {
                     $patient_asks++;
                 }
             }
