@@ -66,7 +66,9 @@
                 <div class="container-fluid">
                     <!-- begin mobile sidebar expand / collapse button -->
                     <div class="navbar-header">
-                        <a href="{{ url('cms') }}" class="navbar-brand"><span class="navbar-logo"></span>Admin</a>
+                        <a href="{{ url('cms') }}" class="navbar-brand">
+                            <img src="{{ url('img/dc-logo.png') }}" width="30" style="display: inline-block;margin-top: -4px;margin-right:10px"/>Admin
+                        </a>
                         <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>

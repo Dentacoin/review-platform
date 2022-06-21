@@ -1991,10 +1991,10 @@ UNCONFIRMED TRANSACTIONS
         //     echo 'Alert to generate youtube access token for video reviews Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         //     if(!StopVideoReview::find(1)->stopped) {
-        //         $newadmin = new AdminMessage;
-        //         $newadmin->admin_id = 14;
-        //         $newadmin->message = 'Generate access token for video reviews';
-        //         $newadmin->save();
+        //         $newAdminMessage = new AdminMessage;
+        //         $newAdminMessage->admin_id = 14;
+        //         $newAdminMessage->message = 'Generate access token for video reviews';
+        //         $newAdminMessage->save();
         //     }
 
         //     echo 'Alert to generate youtube access token for video reviews Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -2285,9 +2285,21 @@ UNCONFIRMED TRANSACTIONS
                            $scammer = new TransactionScammersByDay;
                            $scammer->user_id = $user_t->user_id;
                            $scammer->save();
-                       }
-                   }
-               }
+
+                           $mtext = 'New scammer attack by day - User ID: '.$user_t->user_id;
+
+                            Mail::raw($mtext, function ($message) {
+                                $sender = config('mail.from.address');
+                                $sender_name = config('mail.from.name');
+
+                                $message->from($sender, $sender_name);
+                                $message->to('petya.ivanova@dentacoin.com');
+                                $message->to('gergana@youpluswe.com');
+                                $message->subject('New scammer attack by day');
+                            });
+                        }
+                    }
+                }
             }
 
             $transactions = DcnTransaction::where('created_at', '>', Carbon::now()->addDays(-30))
@@ -2303,6 +2315,18 @@ UNCONFIRMED TRANSACTIONS
                     $scammer = new TransactionScammersByBalance;
                     $scammer->user_id = $user->id;
                     $scammer->save();
+                    
+                    $mtext = 'New scammer attack by ballance - User ID: '.$user->user_id;
+
+                    Mail::raw($mtext, function ($message) {
+                        $sender = config('mail.from.address');
+                        $sender_name = config('mail.from.name');
+
+                        $message->from($sender, $sender_name);
+                        $message->to('petya.ivanova@dentacoin.com');
+                        $message->to('gergana@youpluswe.com');
+                        $message->subject('New scammer attack by ballance');
+                    });
                 }
             }
 
