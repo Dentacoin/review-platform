@@ -97,7 +97,7 @@ class Review extends Model {
         if($current_dentist) {
             return $current_dentist;
         } else {
-            return !empty($this->review_to_id) ? $this->original_dentist : ($this->dentist ? $review->dentist : $this->clinic);
+            return !empty($this->review_to_id) ? $this->original_dentist : ($this->dentist ?? $this->clinic);
         }
     }
 

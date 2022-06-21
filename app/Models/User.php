@@ -393,7 +393,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserHistory', 'user_id', 'id')->where('history', '!=', '');
     }
     public function orders() {
-        return $this->hasMany('App\Models\Order', 'user_id', 'id')->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\Order', 'user_id', 'id')->with(['report', 'report.translations'])->orderBy('id', 'DESC');
     }
     public function wasInvitedBy($user_id) {
         return $this->hasMany('App\Models\UserInvite', 'invited_id', 'id')->where('user_id', $user_id)->first();

@@ -103,6 +103,7 @@ class ProfileController extends FrontController {
 
             $more_surveys = false;
             $rewards = DcnReward::where('user_id', $user->id)
+            ->with('vox.translations')
             ->where('platform', 'vox')
             ->where('type', 'survey')
             ->where('reference_id', '!=', 34)
