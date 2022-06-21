@@ -80,11 +80,6 @@ class ProfileController extends FrontController {
                 'required' => false,
                 'hide' => true
             ],
-            'short_description' => [
-                'type' => 'textarea',
-                'required' => false,
-                'max' => 150
-            ],
             'email_public' => [
                 'type' => 'text',
                 'required' => false,
@@ -107,59 +102,6 @@ class ProfileController extends FrontController {
                 'required' => false,
             ],
         ];
-    }
-
-    /**
-     * dentist uploads a profile photo
-     */
-    public function upload($locale=null) {
-
-        if(
-            empty($this->user) 
-            || !$this->user->is_dentist 
-            || ($this->user->is_dentist && !in_array($this->user->status, config('dentist-statuses.approved_test')))) {
-            return Response::json([
-                'success' => false 
-            ]);
-        }
-
-        if( Request::file('image') && Request::file('image')->isValid() ) {
-
-            $extensions = ['image/jpeg', 'image/png'];
-
-            if (!in_array(Input::file('image')->getMimeType(), $extensions)) {
-                return Response::json( [
-                    'success' => false,
-                ]);
-            }
-
-            $img = Image::make( Input::file('image') )->orientate();
-            $this->user->addImage($img);
-
-            $this->user->hasimage_social = false;
-            $this->user->save();
-
-            foreach ($this->user->reviews_out as $review_out) {
-                $review_out->hasimage_social = false;
-                $review_out->save();
-            }
-
-            foreach ($this->user->reviews_in_dentist as $review_in_dentist) {
-                $review_in_dentist->hasimage_social = false;
-                $review_in_dentist->save();
-            }
-
-            foreach ($this->user->reviews_in_clinic as $review_in_clinic) {
-                $review_in_clinic->hasimage_social = false;
-                $review_in_clinic->save();
-            }
-
-            return Response::json([
-                'success' => true, 
-                'thumb' => $this->user->getImageUrl(true), 
-                'name' => '' 
-            ]);
-        }
     }
     
     /**
@@ -254,33 +196,37 @@ class ProfileController extends FrontController {
             return Response::json($ret);
         } else {
 
-            $checkAddress = GeneralHelper::validateAddress( $this->user->country_id, request('address') );
+            if(config('trp.using_google_maps')) {
 
-            if(
-                is_numeric(request('country_id')) 
-                && empty(Request::input('field')) 
-                && $this->user->is_dentist 
-                && !$checkAddress 
-            ) {
-                return Response::json([
-                    'success' => false,
-                    'messages' => [
-                        'address' => trans('trp.common.invalid-address')
-                    ]
-                ]);
-            }
+                $checkAddress = GeneralHelper::validateAddress( $this->user->country_id, request('address') );
 
-            if(
-                !empty($checkAddress) 
-                && isset($checkAddress['country_name']) 
-                && $checkAddress['country_name'] != $this->user->country->name) {
-                    
-                return Response::json([
-                    'success' => false,
-                    'messages' => [
-                        'address' => trans('trp.page.user.invalid-country')
-                    ]
-                ]);
+                if(
+                    is_numeric(request('country_id')) 
+                    && empty(Request::input('field')) 
+                    && $this->user->is_dentist 
+                    && !$checkAddress 
+                ) {
+                    return Response::json([
+                        'success' => false,
+                        'messages' => [
+                            'address' => trans('trp.common.invalid-address')
+                        ]
+                    ]);
+                }
+
+                if(
+                    !empty($checkAddress) 
+                    && isset($checkAddress['country_name']) 
+                    && $checkAddress['country_name'] != $this->user->country->name
+                ) {
+                        
+                    return Response::json([
+                        'success' => false,
+                        'messages' => [
+                            'address' => trans('trp.page.user.invalid-country')
+                        ]
+                    ]);
+                }
             }
 
             if (!empty(Request::input('description')) && mb_strlen(Request::input('description')) > 512) {
@@ -288,16 +234,6 @@ class ProfileController extends FrontController {
                     'success' => false,
                     'messages' => [
                         'description' => trans('trp.common.invalid-description')
-                    ]
-                ]);
-            }
-
-            if (!empty(Request::input('short_description')) && mb_strlen(json_encode(Request::input('short_description'))) > 150) {
-                
-                return Response::json([
-                    'success' => false,
-                    'messages' => [
-                        'short_description' => trans('trp.common.invalid-short-description')
                     ]
                 ]);
             }

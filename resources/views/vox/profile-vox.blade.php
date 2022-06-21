@@ -57,7 +57,7 @@
 	                	{{ trans('vox.page.profile.vox.list-title') }}
 	                </h4>
 	            </div>
-            	<table class="table paging" num-paging="10">
+            	<table class="table paging" num-paging="30">
             		<thead>
             			<tr>
 	            			<th style="width: 25%;">

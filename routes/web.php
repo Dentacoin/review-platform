@@ -472,7 +472,6 @@ $reviewRoutes = function() {
 				Route::get('profile/clinics/delete/{id}', 			'InvitationsController@clinicDeletesTeamMember');
 				Route::post('profile/clinics/invite', 				'InvitationsController@inviteClinic');
 
-				Route::post('profile/info/upload', 					'ProfileController@upload');
 				Route::post('profile/gallery/{id?}', 				'ProfileController@gallery');
 				Route::get('profile/gallery/delete/{id}', 			'ProfileController@gallery_delete');
 				Route::post('profile/info/{id?}', 					'ProfileController@editUser');
