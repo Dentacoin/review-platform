@@ -43,56 +43,53 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach( $user->asks->sortBy(function ($elm, $key) {
+                                @foreach( $user->asksWithoutHidden->sortBy(function ($elm, $key) {
                                     return $elm['status']=='waiting' ? -1 : 1;
                                 }) as $ask )
-
-                                    @if(!$ask->hidden && $ask->user)
-                                        @php
-                                            $askReview = \App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first();	
-                                        @endphp
-                                        <tr>
-                                            <td>
-                                                {{ date('d.m.Y', $ask->created_at->timestamp) }}
-                                            </td>
-                                            <td>
-                                                {{ $ask->user ? $ask->user->name : "deleted user" }}
-                                            </td>
-                                            <td>
-                                                {{ $ask->user? $ask->user->email : 'deleted user' }}
-                                            </td>
-                                            <td>
-                                                @if(!empty($ask->review_id) || ($ask->on_review && !empty($ask->user) && !empty($askReview)))
-                                                    Verification request
-                                                @else
-                                                    Invite Request
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($ask->status=='yes' && (!empty($ask->review_id) || ($ask->on_review && !empty($ask->user) && !empty($askReview))))
-                                                    {{ $ask->review ? $ask->review->rewardForReview() : $askReview->rewardForReview() }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($ask->status=='waiting')
-                                                    <div class="action-buttons flex">
-                                                        <a href="javascript:;" class="accept-button handle-asks" link-form="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
-                                                            {{ trans('trp.page.profile.asks.accept') }}
-                                                        </a>
-                                                        <a href="javascript:;" class="reject-button handle-asks" link-form="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
-                                                            Decline
-                                                            {{-- {{ trans('trp.page.profile.asks.deny') }} --}}
-                                                        </a>
-                                                    </div>
-                                                @else
-                                                    <span class="{{ $ask->status=='yes' ? 'accepted-text' : 'declined-text' }}">
-                                                        {{ $ask->status=='yes' ? 'Accepted' : 'Declined' }}
-                                                        {{-- {{ trans('trp.page.profile.asks.status-'.$ask->status) }} --}}
-                                                    </span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endif
+                                    @php
+                                        $askReview = \App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first();	
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            {{ date('d.m.Y', $ask->created_at->timestamp) }}
+                                        </td>
+                                        <td>
+                                            {{ $ask->user ? $ask->user->name : "deleted user" }}
+                                        </td>
+                                        <td>
+                                            {{ $ask->user? $ask->user->email : 'deleted user' }}
+                                        </td>
+                                        <td>
+                                            @if(!empty($ask->review_id) || ($ask->on_review && !empty($ask->user) && !empty($askReview)))
+                                                Verification request
+                                            @else
+                                                Invite Request
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($ask->status=='yes' && (!empty($ask->review_id) || ($ask->on_review && !empty($ask->user) && !empty($askReview))))
+                                                {{ $ask->review ? $ask->review->rewardForReview() : $askReview->rewardForReview() }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($ask->status=='waiting')
+                                                <div class="action-buttons flex">
+                                                    <a href="javascript:;" class="accept-button handle-asks" link-form="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
+                                                        {{ trans('trp.page.profile.asks.accept') }}
+                                                    </a>
+                                                    <a href="javascript:;" class="reject-button handle-asks" link-form="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
+                                                        Decline
+                                                        {{-- {{ trans('trp.page.profile.asks.deny') }} --}}
+                                                    </a>
+                                                </div>
+                                            @else
+                                                <span class="{{ $ask->status=='yes' ? 'accepted-text' : 'declined-text' }}">
+                                                    {{ $ask->status=='yes' ? 'Accepted' : 'Declined' }}
+                                                    {{-- {{ trans('trp.page.profile.asks.status-'.$ask->status) }} --}}
+                                                </span>
+                                            @endif
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>

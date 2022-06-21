@@ -10,7 +10,7 @@
 	$videoReviewsCount = $item->reviews_in_video()->count();
 	$regularReviewsCount = $item->reviews_in_standard()->count();
 	$hasPatientInvites = $loggedUserAllowEdit && $user->patients_invites->isNotEmpty();
-	$hasPatientAsks = $loggedUserAllowEdit && $user->asks->isNotEmpty();
+	$hasPatientAsks = $loggedUserAllowEdit && $user->asksWithoutHidden->isNotEmpty();
 
 	$hasTeamApproved = $item->teamApproved->isNotEmpty();
 	$hasNotVerifiedTeamFromInvitation = $item->notVerifiedTeamFromInvitation->isNotEmpty();
@@ -910,7 +910,7 @@
 		@endif
 
 		@if($loggedUserAllowEdit && ($hasPatientInvites || $hasPatientAsks))
-			<a class="tab-title {!! $patient_asks ? 'force-active' : '' !!} patients-tab" data-tab="asks" href="javascript:;">
+			<a class="tab-title patients-tab" data-tab="asks" href="javascript:;">
 				{!! nl2br(trans('trp.page.user.my-patients')) !!}
 
 				@if($patient_asks)

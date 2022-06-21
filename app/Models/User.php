@@ -341,6 +341,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function asks() {
         return $this->hasMany('App\Models\UserAsk', 'dentist_id', 'id')->orderBy('id', 'DESC');
     }
+    public function asksWithoutHidden() {
+        return $this->hasMany('App\Models\UserAsk', 'dentist_id', 'id')->has('user')->where('hidden', '!=', 1)->orderBy('id', 'DESC');
+    }
     public function history() {
         return $this->hasMany('App\Models\DcnTransaction', 'user_id', 'id')->orderBy('id', 'DESC');
     }

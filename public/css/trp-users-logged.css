@@ -521,6 +521,9 @@ body.edit-dentist-profile-mode .turn-on-edit-mode.white-button {
   .socials-wrapper .email-wrapper .social-wrap:first-child,
   .socials-wrapper .social-wrapper .social-wrap:first-child {
     margin-top: 0px; }
+    .socials-wrapper .email-wrapper .social-wrap:first-child .remove-social,
+    .socials-wrapper .social-wrapper .social-wrap:first-child .remove-social {
+      display: none; }
   .socials-wrapper .email-wrapper .social-wrap.new .social-networks,
   .socials-wrapper .social-wrapper .social-wrap.new .social-networks {
     border-right: 2px solid #cccccc;

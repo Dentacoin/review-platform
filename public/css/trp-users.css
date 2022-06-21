@@ -671,7 +671,8 @@
       transition: all 0.3s ease; }
       @media screen and (max-width: 768px) {
         .tab-titles .tab-title:hover {
-          transition: all 0.3s ease; } }
+          transition: all 0.3s ease;
+          color: #332255; } }
     .tab-titles .tab-title.active {
       color: #0084d1;
       border-bottom-color: #0084d1;

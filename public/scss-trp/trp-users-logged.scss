@@ -614,6 +614,10 @@ body.edit-dentist-profile-mode {
 
 			&:first-child {
 				margin-top: 0px;
+
+				.remove-social {
+					display: none;
+				}
 			}
 
 			&.new {

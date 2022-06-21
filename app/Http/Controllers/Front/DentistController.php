@@ -215,17 +215,6 @@ class DentistController extends FrontController {
             $is_review = true;
         }
 
-        //patients ask dentist for verification
-        $patient_asks = 0;
-
-        if (!empty($this->user) && $this->user->asks->isNotEmpty()) {
-            foreach ($this->user->asks as $p_ask) {
-                if ($p_ask->status == 'waiting' && !$p_ask->hidden && $p_ask->user) {
-                    $patient_asks++;
-                }
-            }
-        }
-
         $strength_arr = null;
         $completed_strength = null;
         // if ($this->user) {
@@ -263,7 +252,6 @@ class DentistController extends FrontController {
             'has_asked_dentist' => $has_asked_dentist,
             'countries' => !empty($this->user) ? Country::with('translations')->get() : [],
             'is_trusted' => !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false,
-            'patient_asks' => $patient_asks,
             'aggregatedRating' => $aggregatedRating,
             'social_image' => $social_image,
             'canonical' => $item->getLink(),
@@ -287,6 +275,10 @@ class DentistController extends FrontController {
             $view_params['js'][] = 'user-logged.js';
             $view_params['css'][] = 'trp-users-logged.css';
         }
+        
+
+        //patients ask dentist for verification
+        $patient_asks = 0;
 
         //logged dentist in his profile
         if(!empty($this->user) && ($this->user->id == $item->id || $editing_branch_clinic)) {
@@ -302,7 +294,17 @@ class DentistController extends FrontController {
 
             $item->review_notification = false;
             $item->save();
+
+            if ($this->user->asks->isNotEmpty()) {
+                foreach ($this->user->asks as $p_ask) {
+                    if ($p_ask->status == 'waiting' && !$p_ask->hidden && $p_ask->user) {
+                        $patient_asks++;
+                    }
+                }
+            }
         }
+
+        $view_params['patient_asks'] = $patient_asks;
 
         if( $is_review ) {
             $seos = PageSeo::find(33);
