@@ -914,7 +914,7 @@
 				{!! nl2br(trans('trp.page.user.my-patients')) !!}
 
 				@if($patient_asks)
-					<span class="{!! $patient_asks ? 'active' : ''  !!}">{{ $patient_asks }}</span>
+					<span class="patientAsksPendingCount {!! $patient_asks ? 'active' : ''  !!}">{{ $patient_asks }}</span>
 				@endif
 			</a>
 		@endif

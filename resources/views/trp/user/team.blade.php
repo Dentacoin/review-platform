@@ -41,9 +41,9 @@
         @if($hasNotVerifiedTeamFromInvitation)
             @foreach( $item->notVerifiedTeamFromInvitation as $invite)
                 @if($invite)
-                    <a class="team" href="javascript:;" invite-id="{{ $invite->id }}">
+                    <a class="team {{ !empty($invite->job) ? 'not-registered-team' : '' }}" href="javascript:;" invite-id="{{ $invite->id }}">
                         <div class="team-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
-                            @if( ($loggedUserAllowEdit) )
+                            @if($loggedUserAllowEdit)
                                 <div class="delete-invite" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
                                     <img class="close-icon" src="{{ url('img-trp/close-icon-blue.png') }}"/>
                                 </div>
@@ -55,8 +55,7 @@
                                 <p>{!! trans('trp.team-jobs.dentist') !!}</p>
                                 <div class="ratings">
                                     <div class="stars">
-                                        <div class="bar" style="width: 0%;">
-                                        </div>
+                                        <div class="bar" style="width: 0%;"></div>
                                     </div>
                                     <span class="rating">
                                         ({{ trans('trp.common.reviews-count', [ 'count' => '0']) }})

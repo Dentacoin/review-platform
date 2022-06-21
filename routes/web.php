@@ -448,9 +448,9 @@ $reviewRoutes = function() {
 			Route::any('facebook-tab-reviews', 						'DentistController@dentist_fb_tab_reviews');
 			Route::post('dentist-fb-tab', 							'DentistController@fb_tab');
 	
-			Route::post('profile/invite-new', 						'ProfileController@invite_team_member');
-			Route::post('profile/add-existing-dentist-team', 		'ProfileController@invite_existing_team_member');
-			Route::any('profile/dentists/invite', 					'ProfileController@inviteDentist');
+			Route::post('profile/invite-new', 						'InvitationsController@inviteTeamMember');
+			Route::post('profile/add-existing-dentist-team', 		'InvitationsController@inviteExistingTeamMember');
+			Route::any('profile/dentists/invite', 					'InvitationsController@inviteDentist');
 
 			Route::any('invite-new-dentist', 						'AddDentistController@invite_new_dentist');
 	
@@ -459,27 +459,26 @@ $reviewRoutes = function() {
 			Route::group(['middleware' => 'auth:web'], function() {
 
 				Route::post('write-review/{step?}', 				'DentistController@writeReview');
+                Route::post('verify-review', 						'DentistController@verifyReview');
+
+				Route::post('invite-patient-again',					'InvitationsController@invitePatientAgain');
+				Route::post('profile/invite-whatsapp', 				'InvitationsController@inviteWhatsapp');
+				Route::post('profile/invite-copypaste', 			'InvitationsController@inviteCopypaste');
+				Route::post('profile/invite-copypaste-final', 		'InvitationsController@inviteCopypasteFinal');
+				Route::post('profile/invite-file',			 		'InvitationsController@inviteFile');
+				Route::any('profile/invites/delete/{id}', 			'InvitationsController@invitesDelete');
+				Route::post('profile/asks/{type}/{id}', 			'InvitationsController@asksActions');
+				Route::any('profile/dentists/{type}/{id}', 			'InvitationsController@teamMemberActions');
+				Route::any('profile/clinics/delete/{id}', 			'InvitationsController@clinicDeletesTeamMember');
+				Route::any('profile/clinics/invite', 				'InvitationsController@inviteClinic');
 
 				Route::post('profile/info/upload', 					'ProfileController@upload');
 				Route::post('profile/gallery/{id?}', 				'ProfileController@gallery');
 				Route::any('profile/gallery/delete/{id}', 			'ProfileController@gallery_delete');
-				Route::post('profile/info/{id?}', 					'ProfileController@info');
+				Route::post('profile/info/{id?}', 					'ProfileController@editUser');
 				Route::post('profile/lang-delete/{id?}', 			'ProfileController@deleteLanguage');
 				Route::post('profile/add-announcement/{id?}', 		'ProfileController@addAnnouncement');
 				Route::get('profile/trp-iframe', 					'ProfileController@trp');
-				Route::post('invite-patient-again',					'ProfileController@invite_patient_again');
-				Route::post('profile/invite-whatsapp', 				'ProfileController@invite_whatsapp');
-				Route::post('profile/invite-copypaste', 			'ProfileController@invite_copypaste');
-				Route::post('profile/invite-copypaste-final', 		'ProfileController@invite_copypaste_final');
-				Route::post('profile/invite-file',			 		'ProfileController@invite_file');
-				Route::any('profile/invites/delete/{id}', 			'ProfileController@invites_delete');
-				Route::get('profile/asks/accept/{id}', 				'ProfileController@asks_accept');
-				Route::get('profile/asks/deny/{id}', 				'ProfileController@asks_deny');
-				Route::any('profile/dentists/reject/{id}', 			'ProfileController@dentists_reject');
-				Route::any('profile/dentists/delete/{id}', 			'ProfileController@dentists_delete');
-				Route::any('profile/dentists/accept/{id}', 			'ProfileController@dentists_accept');
-				Route::any('profile/clinics/delete/{id}', 			'ProfileController@clinics_delete');
-				Route::any('profile/clinics/invite', 				'ProfileController@inviteClinic');
 				Route::get('profile/check-assurance', 				'ProfileController@checkAssurance');
 				Route::get('profile/check-dentacare', 				'ProfileController@checkDentacare');
 				Route::get('profile/check-reviews', 				'ProfileController@checkReviews');
@@ -487,11 +486,8 @@ $reviewRoutes = function() {
 				Route::get('profile/first-guided-tour-remove', 		'ProfileController@removeFirstGuidedTour');
 				Route::get('profile/reviews-guided-tour-remove', 	'ProfileController@removeReviewsGuidedTour');
 				Route::get('profile/reviews-guided-tour/{layout?}', 'ProfileController@reviewsGuidedTour');
-
 				Route::post('add-wallet-address', 					'ProfileController@addWalletAddress');
 				Route::post('close-partner-wallet-popup', 			'ProfileController@closePartnerWalletPopup');
-
-                Route::post('verify-review', 						'DentistController@verifyReview');
 
 				Route::post('profile/add-new-branch/{step?}', 		'BranchesController@addNewBranch');
 				Route::post('delete-branch', 						'BranchesController@deleteBranch');				

@@ -634,6 +634,12 @@ $phone: "screen and (max-width: 768px)";
 		&.grayed {
 			color: #ccc;
 			border-color: transparent;
+
+			span {
+				&.active {
+					opacity: 0.5;
+				}
+			}
 		}
 
 		&.pending-team-tab-title {
@@ -1494,6 +1500,14 @@ $phone: "screen and (max-width: 768px)";
 					margin-right: 0px;
 					padding: 20px 15px;
 				}
+
+				&.not-registered-team {
+					.team-info {
+						p {
+							margin-bottom: 0px;
+						}
+					}
+				}
 	
 				&:hover {
 					transition: all 0.3s ease;
@@ -1562,7 +1576,7 @@ $phone: "screen and (max-width: 768px)";
 					p {
 						font-weight: bold;
 						color: #0084d1;
-						margin-bottom: 30px;
+						margin-bottom: 20px;
 
 						@media #{$phone} {
 							margin-bottom: 0px;

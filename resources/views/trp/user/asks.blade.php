@@ -12,7 +12,7 @@
 
                 @if($hasPatientAsks)
 
-                    <h3>Patient requests received {!! $patient_asks ? '<span>'.$patient_asks.'</span>' : '' !!}</h3>
+                    <h3>Patient requests received {!! $patient_asks ? '<span class="patientAsksPendingCount">'.$patient_asks.'</span>' : '' !!}</h3>
 
                     <div class="asks-container">
                         <table class="table paging" num-paging="10">
@@ -76,10 +76,10 @@
                                             <td>
                                                 @if($ask->status=='waiting')
                                                     <div class="action-buttons flex">
-                                                        <a class="accept-button" href="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
+                                                        <a href="javascript:;" class="accept-button handle-asks" link-form="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
                                                             {{ trans('trp.page.profile.asks.accept') }}
                                                         </a>
-                                                        <a class="reject-button"  href="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
+                                                        <a href="javascript:;" class="reject-button handle-asks" link-form="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
                                                             Decline
                                                             {{-- {{ trans('trp.page.profile.asks.deny') }} --}}
                                                         </a>

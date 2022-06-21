@@ -96,7 +96,7 @@ class SuspiciousFiles extends Command{
     
                 $message->from($sender, $sender_name);
                 $message->to('gergana@youpluswe.com');
-                $message->to('miroslav.nedelchev@dentacoin.com');
+                // $message->to('miroslav.nedelchev@dentacoin.com');
                 $message->subject('Suspicious files uploaded in TRP server');
             });
         }

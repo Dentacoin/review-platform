@@ -27,6 +27,11 @@ $(document).ready(function() {
             $('[data-popup-logged="popup-widget"]').addClass('disabled-button');
             $('.add-branch').addClass('disabled-button');
 
+            //if my patients tab is active -> deactivate
+            $('.tab-title.patients-tab').removeClass('active');
+            $('.tab-sections').show();
+            $('.asks-section').hide();
+
         } else {
             $(this).find('span').html($(this).attr('to-edit'));
             $('.edit-mode').removeClass('edit-mode');
@@ -1021,7 +1026,6 @@ $(document).ready(function() {
             (function( data ) {
                 if( that.hasClass('accept-button') ) {
                     that.closest('.team').find('.action-buttons').remove();
-
                 } else {
                     that.remove();
                 }
@@ -1043,6 +1047,40 @@ $(document).ready(function() {
             }
         })
         elem.toggleClass('active');
+    });
+
+    $('.handle-asks').click( function() {
+        var that = $(this);
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.ajax( {
+            url: that.attr('link-form'),
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: (function( data ) {
+                if(data.success) {
+                    that.closest('td').html('\
+                        <span class="'+data.class+'">\
+                            '+data.text+'\
+                        </span>\
+                    ');
+
+                    if(!data.patientAsksPendingCount) {
+                        $('.patientAsksPendingCount').remove();
+                    }
+                }
+
+                ajax_is_running = false;
+
+            }).bind(this)
+        });
     });
 
     $('body').click( function(e) {
@@ -1182,6 +1220,7 @@ $(document).ready(function() {
     $('.invite-again').click( function(e) {
         e.preventDefault();
 
+        var that = $(this);
         var invite_url = $(this).attr('data-href');
         var invitation_id = $(this).attr('inv-id');
 
@@ -1195,7 +1234,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(ret) {
                 if(ret.success) {
-                    window.location.href = ret.url;
+                    that.remove();
                 } else {
                     console.log('error');
                 }

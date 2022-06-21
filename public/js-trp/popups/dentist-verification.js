@@ -240,8 +240,7 @@ $(document).ready(function() {
                     } else {                		
                         that.find('.check-for-same').val('');
                         that.find('.photo-name-team').val('');
-                        that.find('.image-label').css('background-image', 'none');
-                        that.find('.image-label').find('.centered-hack').show();
+                        that.find('.destroy-croppie').trigger('click')
                         that.find('.team-member-email').val('');
                         that.find('.team-member-name').val('').focus();
                         that.find('.member-alert').show().addClass('alert-success').html(data.message);
