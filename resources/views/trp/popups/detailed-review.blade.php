@@ -1,5 +1,5 @@
 <div class="popup no-image" id="view-review-popup" scss-load="trp-popup-detailed-review">
-	<div class="popup-inner inner-white">
+	<div class="popup-inner">
 		<a href="javascript:;" class="close-popup">
 			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>

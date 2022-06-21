@@ -1,5 +1,5 @@
-<div class="popup fixed-popup popup-existing-dentist no-image active removable" id="popup-existing-dentist">
-	<div class="popup-inner inner-white">
+<div class="popup popup-existing-dentist no-image active removable" id="popup-existing-dentist">
+	<div class="popup-inner">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">
 				<img src="{{ url('img/close-icon.png') }}"/>

@@ -191,7 +191,7 @@
             <h3>
                 Open hours
                 @if($loggedUserAllowEdit)
-                    <a class="edit-field-button tooltip-text" text="{{ $workingTime ? 'Edit' : 'Add' }} open hours">
+                    <a class="edit-field-button tooltip-text toggle-section" toggle-section="open-hours-section" text="{{ $workingTime ? 'Edit' : 'Add' }} open hours">
                         <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17"/>
                     </a>
                 @endif

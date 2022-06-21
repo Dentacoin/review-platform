@@ -1,5 +1,5 @@
 <div class="popup no-image" id="popup-branch" scss-load="trp-popup-branch" js-load="branch">
-	<div class="popup-inner inner-white">
+	<div class="popup-inner">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">
 				<img src="{{ url('img/close-icon.png') }}"/>

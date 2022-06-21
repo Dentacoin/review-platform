@@ -10,6 +10,7 @@ $(document).ready(function(){
 	}
 
 	ssoTotal = $('.sso img').length;
+	
 	$('.sso img').each( function() {
 		if( $(this)[0].complete ) {
 			ssoLoaded++;		
@@ -17,9 +18,9 @@ $(document).ready(function(){
 				redirectToAccount();
 			}	
 		}
-	} );
+	});
+
 	$('.sso img').on('load error', function() {
-			console.log( $(this).attr('src') );
 		ssoLoaded++;		
 		if(ssoLoaded==ssoTotal) {
 			redirectToAccount();

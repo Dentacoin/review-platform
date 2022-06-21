@@ -1,5 +1,5 @@
-<div class="popup fixed-popup active no-image removable" id="popup-share" scss-load="trp-popup-share">
-	<div class="popup-inner inner-white">
+<div class="popup active no-image removable" id="popup-share" scss-load="trp-popup-share">
+	<div class="popup-inner">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup">
 				<img src="{{ url('img/close-icon.png') }}"/>

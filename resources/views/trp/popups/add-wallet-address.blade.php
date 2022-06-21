@@ -1,5 +1,5 @@
 <div class="popup add-wallet-address-popup no-image" id="add-wallet-address" scss-load="trp-popup-add-wallet-address" js-load="wallet-address">
-	<div class="popup-inner inner-white">
+	<div class="popup-inner">
 		<h2 class="mont">
 			Add your wallet address
 		</h2>

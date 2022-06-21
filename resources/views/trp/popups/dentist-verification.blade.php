@@ -1,5 +1,5 @@
 <div class="popup verification-popup no-image active removable" id="verification-popup" scss-load="trp-popup-verification" js-load="dentist-verification">
-	<div class="popup-inner inner-white">
+	<div class="popup-inner">
 		<a href="javascript:;" class="close-popup">
 			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>

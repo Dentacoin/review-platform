@@ -1,4 +1,4 @@
-<div class="popup fixed-popup first-guided-tour-popup active removable tour-popup" id="first-guided-tour">
+<div class="popup first-guided-tour-popup active removable tour-popup" id="first-guided-tour">
 	<div class="popup-inner-tour tac">
 		<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');">
 			<img 

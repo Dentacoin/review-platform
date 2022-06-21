@@ -97,7 +97,6 @@ $(document).ready(function() {
                 $('.country-button[continent-id="'+$(this).attr('id')+'"]').show();
 
                 $('.letters-country-section').each( function() {
-                    // console.log($(this).find('.country-button:visible').length);
                     if($(this).find('.country-button:visible').length == 0) {
 						$(this).hide();
                         $('.countries-letter[letter="'+$(this).attr('letter')+'"]').hide();

@@ -18,7 +18,7 @@ var loadPopupFiles;
 var handleTooltip;
 var attachTooltips;
 var modernFieldsUpdate;
-var dentacoin_down = false; //check if there is connection with DCN for login/reg popup
+var dentacoin_down = false; //check if there is connection with dentacoin.com for login/reg popup
 var handleActivePopupFunctions;
 
 jQuery(document).ready(function($) {
@@ -859,11 +859,9 @@ initMap = function () {
 
 	$('.map').each( function(){
 		var address = $(this).attr('data-address') ;
-
 		var geocoder = new google.maps.Geocoder();
+
 		geocoder.geocode( { 'address': address}, (function(results, status) {
-			console.log(address);
-			console.log(status);
 	        if (status == google.maps.GeocoderStatus.OK) {
 				if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
 					var position = {
@@ -884,15 +882,12 @@ initMap = function () {
 					});
 
 				} else {
-					console.log('456');
 					$(this).remove();
 				}
 			} else {
-				console.log('123');
 				$(this).remove();
 			}
-		}).bind( $(this) )  );
-
+		}).bind( $(this) ));
 	});
 }
 

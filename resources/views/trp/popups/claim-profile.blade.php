@@ -1,5 +1,5 @@
 <div class="popup claim-popup no-image" id="claim-popup" scss-load="trp-popup-claim-dentist" js-load="claim-dentist">
-	<div class="popup-inner inner-white">
+	<div class="popup-inner">
 		<a href="javascript:;" class="close-popup">
 			<img src="{{ url('img/close-icon.png') }}"/>
 		</a>

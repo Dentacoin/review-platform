@@ -361,7 +361,7 @@
 													Add workplace
 												</span>
 											@endif
-											<a class="edit-field-button edit-workplace {{ $workplace ? 'tooltip-text' : ''}}" text="Edit workplace">
+											<a class="edit-field-button {{ $workplace ? 'tooltip-text' : ''}} toggle-section" toggle-section="workplace-wrapper" text="Edit workplace">
 												<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 											</a>
 										</div>
@@ -738,7 +738,7 @@
 										<img src="{{ url('img-trp/announcement.svg') }}" width="16"/>
 										<span>{{ $item->announcement ? $item->announcement->title : 'Add office update' }}</span>
 										@if($loggedUserAllowEdit)
-											<a class="edit-field-button edit-announcement {{ $item->announcement ? 'tooltip-text' : '' }}" text="Edit office update">
+											<a class="edit-field-button {{ $item->announcement ? 'tooltip-text' : '' }} toggle-section" toggle-section="announcement-wrapper" text="Edit office update">
 												<img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
 											</a>
 										@endif
@@ -1015,7 +1015,7 @@
 @endif
 @include('trp.popups.detailed-review')
 
-{{-- <div class="popup fixed-popup first-guided-tour-done-popup tour-popup" id="first-guided-tour-done">
+{{-- <div class="popup first-guided-tour-done-popup tour-popup" id="first-guided-tour-done">
 	<div class="popup-inner-tour tac">
 
 		<h2>{{ trans('trp.guided-tour.well-done') }}</h2>

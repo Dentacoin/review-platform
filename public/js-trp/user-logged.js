@@ -16,6 +16,7 @@ $(document).ready(function() {
         showPopup('add-wallet-address');
     }
 
+    //button Edit Mode
     $('.turn-on-edit-mode').click( function() {
         $('body').toggleClass('edit-dentist-profile-mode');
 
@@ -58,13 +59,9 @@ $(document).ready(function() {
             editWrap.find('.socials').hide();
             editWrap.find('.edit-field').css('display', 'flex');
 
-        } else if($(this).closest('#team').length) {
+        } else if($(this).hasClass('toggle-section')) {
 
-            $(this).closest('#team').find('.team-container').toggleClass('edit-mode');
-
-        } else if($(this).closest('.open-hours-section').length) {
-
-            $(this).closest('.open-hours-section').toggleClass('edit-mode');
+            $('.'+$(this).attr('toggle-section')).toggleClass('edit-mode');
 
         } else if($(this).hasClass('edit-locations')) {
 
@@ -77,45 +74,14 @@ $(document).ready(function() {
             let editWrap = $('#locations').find('.edit-field');
             editWrap.find('.edited-field').hide();
             editWrap.find('.edit-field-button').hide();
-            console.log(editWrap.find('.edit-wrapper'));
             editWrap.find('.edit-wrapper').show();
 
-        } else if($(this).hasClass('edit-specializations')) {
-
-            $('.specializations-section').toggleClass('edit-mode');
-
-        } else if($(this).hasClass('edit-languages-button')) {
-
-            $('.languages-wrapper').toggleClass('edit-mode');
-
-        } else if($(this).hasClass('edit-experience-button')) {
-
-            $('.experience-wrapper').toggleClass('edit-mode');
-
-        } else if($(this).hasClass('edit-founded-button')) {
-
-            $('.founded-wrapper').toggleClass('edit-mode');
-
-        } else if($(this).hasClass('edit-payments')) {
-
-            $('.payments-section').toggleClass('edit-mode');
-
-        } else if($(this).hasClass('edit-announcement')) {
-
-            $('.announcement-wrapper').toggleClass('edit-mode');
-
-        } else if($(this).hasClass('edit-education-button')) {
-
-            $('.education-wrapper').toggleClass('edit-mode');
-
-        } else if($(this).hasClass('edit-workplace')) {
-
-            $('.workplace-wrapper').toggleClass('edit-mode');
-
         } else if($(this).hasClass('edit-description-button')) {
+
             var cls = $(this).closest('.tab-inner-section').find('[role="presenter"]').attr('class');
             $('.'+cls+'[role="editor"]').show();
             $('.'+cls+'[role="presenter"]').hide();
+
         } else if($(this).hasClass('scroll-to')) {
 
             $('html, body').animate({
@@ -127,7 +93,6 @@ $(document).ready(function() {
             let editWrap = $(this).closest('.edit-field');
             editWrap.find('.edited-field').hide();
             editWrap.find('.edit-field-button').hide();
-            console.log(editWrap.find('.edit-wrapper'));
             editWrap.find('.edit-wrapper').show();
         }
     });
@@ -145,7 +110,6 @@ $(document).ready(function() {
             $(this).serialize() , 
             (function( data ) {
                 if(data.success) {
-                    console.log('sdfdf');
                     var cls = $(this).closest('[role="editor"]').attr('class');
                     $('.'+cls+'[role="editor"]').hide();
                     $('.'+cls+'[role="presenter"]').show();
@@ -329,13 +293,11 @@ $(document).ready(function() {
             $(this).attr('action'), 
             $(this).serialize() , 
             (function( data ) {
-                console.log(data);
                 if(data.success) {
                     that.closest('.open-hours-section').removeClass('edit-mode');
 
                     var wh = data.inputs.work_hours;
                     for(var i in wh) {
-                        console.log(data.inputs['day_'+i]);
                         if(!data.inputs['day_'+i] && wh[i][0][0] != null && wh[i][0][1] != null && wh[i][1][0] != null && wh[i][1][1] != null) {
                             $('.open-hours-section .col-'+i+' .working-hours-wrap p').html(wh[i][0][0]+':'+wh[i][0][1]+' - '+wh[i][1][0]+':'+wh[i][1][1]);
                         } else {
@@ -484,7 +446,6 @@ $(document).ready(function() {
             $(this).attr('action'), 
             $(this).serialize() , 
             (function( data ) {
-                console.log(data);
                 if(data.success) {
                     if($('.chosen-founded').length) {
                         $('.chosen-founded').html(data.inputs.founded_at);
@@ -517,7 +478,6 @@ $(document).ready(function() {
             $(this).attr('action'), 
             $(this).serialize() , 
             (function( data ) {
-                console.log(data);
                 if(data.success) {
                     
                     if(data.inputs.announcement_title) {
@@ -588,7 +548,6 @@ $(document).ready(function() {
             $(this).attr('action'), 
             $(this).serialize(), 
             (function( data ) {
-                console.log(data);
                 if(data.success) {
 
                     if(data.inputs.education_info[0] !== null) {

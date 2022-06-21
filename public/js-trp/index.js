@@ -53,7 +53,6 @@ jQuery(document).ready(function($){
 			var left = parseFloat( scroll.css('left') ) - place;
 			var newleft = Math.ceil(left / place) * place;
 
-			console.log(scroll.offset().left);
 			if(scroll.offset().left < -2800) {
 				$(this).removeClass('active');
 			}

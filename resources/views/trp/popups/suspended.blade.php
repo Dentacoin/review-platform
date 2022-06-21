@@ -1,5 +1,5 @@
-<div class="popup fixed-popup popup-with-background no-image active" id="suspended-popup">
-	<div class="popup-inner inner-white">
+<div class="popup no-image active" id="suspended-popup">
+	<div class="popup-inner">
 		<div class="flex flex-mobile flex-center break-tablet">
 			<div class="icon">
 				<img src="{{ url('img-trp/big-x.png') }}">

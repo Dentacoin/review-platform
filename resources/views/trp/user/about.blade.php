@@ -12,7 +12,7 @@
                 Specialities
 
                 @if($loggedUserAllowEdit)
-                    <a class="edit-field-button edit-specializations tooltip-text" text="{{ $item->categories->isNotEmpty() ? 'Edit' : 'Add' }} specialities">
+                    <a class="edit-field-button tooltip-text toggle-section" toggle-section="specializations-section" text="{{ $item->categories->isNotEmpty() ? 'Edit' : 'Add' }} specialities">
                         <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
                     </a>
                 @endif
@@ -128,7 +128,7 @@
                 Payment methods
 
                 @if($loggedUserAllowEdit)
-                    <a class="edit-field-button edit-payments tooltip-text" text="{{ $item->accepted_payment ? 'Edit' : 'Add' }} payment methods">
+                    <a class="edit-field-button tooltip-text toggle-section" toggle-section="payments-section" text="{{ $item->accepted_payment ? 'Edit' : 'Add' }} payment methods">
                         <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
                     </a>
                 @endif

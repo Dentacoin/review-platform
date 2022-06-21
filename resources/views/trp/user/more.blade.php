@@ -13,7 +13,7 @@
                 <h3>
                     Education and background
                     @if($loggedUserAllowEdit)
-                        <a href="javascript:;" class="edit-field-button edit-education-button tooltip-text" text="{{ $item->education_info ? 'Edit' : 'Add' }} your education and background">
+                        <a href="javascript:;" class="edit-field-button tooltip-text toggle-section" toggle-section="education-wrapper" text="{{ $item->education_info ? 'Edit' : 'Add' }} your education and background">
                             <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
                         </a>
                     @endif
@@ -82,7 +82,7 @@
                         <h3>
                             Founded
                             @if($loggedUserAllowEdit)
-                                <a href="javascript:;" class="edit-field-button edit-founded-button tooltip-text" text="{{ $item->founded_at ? 'Edit' : 'Add' }} foundation date">
+                                <a href="javascript:;" class="edit-field-button tooltip-text toggle-section" toggle-section="founded-wrapper" text="{{ $item->founded_at ? 'Edit' : 'Add' }} foundation date">
                                     <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
                                 </a>
                             @endif
@@ -120,7 +120,7 @@
                         <h3>
                             Experience
                             @if($loggedUserAllowEdit)
-                                <a href="javascript:;" class="edit-field-button edit-experience-button tooltip-text" text="{{ $item->experience ? 'Edit' : 'Add' }} experience">
+                                <a href="javascript:;" class="edit-field-button tooltip-text toggle-section" toggle-section="experience-wrapper" text="{{ $item->experience ? 'Edit' : 'Add' }} experience">
                                     <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
                                 </a>
                             @endif
@@ -169,7 +169,7 @@
                         Languages spoken <img src="{{ url('img-trp/info-dark-gray.png') }}" class="tooltip-text" text="{!! $item->is_clinic ? 'Languages spoken in the dental practice.' : 'Languages spoken by the dentist.' !!}"/>
 
                         @if($loggedUserAllowEdit)
-                            <a href="javascript:;" class="edit-field-button edit-languages-button tooltip-text" text="{{ $item->languages ? 'Edit' : 'Add' }} languages">
+                            <a href="javascript:;" class="edit-field-button tooltip-text toggle-section" toggle-section="languages-wrapper" text="{{ $item->languages ? 'Edit' : 'Add' }} languages">
                                 <img src="{{ url('img-trp/pencil.svg') }}" width="20" height="17">
                             </a>
                         @endif

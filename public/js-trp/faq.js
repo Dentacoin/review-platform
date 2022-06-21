@@ -23,7 +23,6 @@ jQuery(document).ready(function($){
             let left = 0;
             let prev = $(this).prev();
             while(prev.length) {
-                console.log('sasa');
                 left += prev.outerWidth();
                 prev = prev.prev();
             }

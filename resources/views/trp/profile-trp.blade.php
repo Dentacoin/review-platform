@@ -37,7 +37,7 @@
 
 	@if(!empty($current_ban))
 		<div class="popup no-image dont-close-popup active" id="banned-popup">
-			<div class="popup-inner inner-white">
+			<div class="popup-inner">
 				<h2 class="mont">
 					{!! nl2br(trans('trp.page.profile.trp.ban-title')) !!}
 				</h2>
