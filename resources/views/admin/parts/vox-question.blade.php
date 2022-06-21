@@ -517,7 +517,7 @@
                         <div class="col-md-10">
                             @foreach( config('vox.stats_scales') as $k => $v)
                                 <label for="stats_fields-{{ $k }}">
-                                    <input type="checkbox" name="stats_fields[]" value="{{ $k }}" id="stats_fields-{{ $k }}" style="vertical-align: sub;" {!! !empty($question) && in_array($k, $question->stats_fields) ? 'checked="checked"' : '' !!} />
+                                    <input type="checkbox" name="stats_fields[]" value="{{ $k }}" id="stats_fields-{{ $k }}" style="vertical-align: sub;" {!! !empty($question) && $question->stats_fields ? (in_array($k, $question->stats_fields) ? 'checked="checked"' : '') : (in_array($k, ['gender', 'age', 'education', 'income' ]) ? 'checked="checked"' : '' ) !!} />
                                     {{ trans('vox.page.stats.group-by-'.$k) }} &nbsp;&nbsp;&nbsp;&nbsp;
                                 </label>
                             @endforeach
