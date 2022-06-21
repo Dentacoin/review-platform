@@ -1987,19 +1987,19 @@ UNCONFIRMED TRANSACTIONS
         })->everyFiveMinutes();
 
 
-        $schedule->call(function () {
-            echo 'Alert to generate youtube access token for video reviews Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+        // $schedule->call(function () {
+        //     echo 'Alert to generate youtube access token for video reviews Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-            if(!StopVideoReview::find(1)->stopped) {
-                $newadmin = new AdminMessage;
-                $newadmin->admin_id = 14;
-                $newadmin->message = 'Generate access token for video reviews';
-                $newadmin->save();
-            }
+        //     if(!StopVideoReview::find(1)->stopped) {
+        //         $newadmin = new AdminMessage;
+        //         $newadmin->admin_id = 14;
+        //         $newadmin->message = 'Generate access token for video reviews';
+        //         $newadmin->save();
+        //     }
 
-            echo 'Alert to generate youtube access token for video reviews Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     echo 'Alert to generate youtube access token for video reviews Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
-        })->twiceMonthly(1, 16, '13:00');
+        // })->twiceMonthly(1, 16, '13:00');
 
 
         $schedule->call(function () {
