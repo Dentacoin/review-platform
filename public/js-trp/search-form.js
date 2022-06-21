@@ -147,6 +147,10 @@ jQuery(document).ready(function($) {
 		let formData = null;
 		if(forForm) {
 			formData = new FormData($('.search-form')[0]);
+			$('.dentists-names-results').hide();
+			$('.dentists-countries-results').hide();
+			$('.dentists-cities-results').hide();
+			$('.search-form .loader').show();
 		} else {
 			formData = {
 				dentist_name: $('#search-dentist-name').val(),
@@ -168,66 +172,66 @@ jQuery(document).ready(function($) {
 			success: function( data ) {
 				
 				if(data.success && data.redirect) {
-					console.log(data.redirect);
 					window.location.href = data.redirect;
-				}
-				
-				$('.dentists-names-results').show();
-				$('.dentists-names-results .dentists-results').show();
-				$('.dentists-names-results .dentists-results .list').html('');
-				$('.dentists-names-results .dentists-results .info').remove();
-
-				if(data.dentists) {
-					if(data.alert) {
-						$('.dentists-results').prepend('<p class="info">'+data.alert+'</p>');
+				} else {
+					
+					$('.dentists-names-results').show();
+					$('.dentists-names-results .dentists-results').show();
+					$('.dentists-names-results .dentists-results .list').html('');
+					$('.dentists-names-results .dentists-results .info').remove();
+	
+					if(data.dentists) {
+						if(data.alert) {
+							$('.dentists-results').prepend('<p class="info">'+data.alert+'</p>');
+						}
+	
+						var dentists = data.dentists;
+	
+						for(var i in dentists) {
+							var u_name = dentists[i].status == 'dentist_no_email' ? dentists[i].team_clinic_name : dentists[i].name;
+							var attr_name = dentists[i].status == 'dentist_no_email' ? dentists[i].team_clinic_name : dentists[i].pure_name;
+	
+							var is_partner = dentists[i].is_partner ? '\
+								<div class="result-partner-dentist">\
+									<div class="result-partner-dentist-wrapper">\
+										<img src="'+images_path+'/mini-logo-white.svg">\
+										<span>Dentacoin</span> Partner\
+									</div>\
+								</div>\
+							' : '';
+	
+							var isTeamDentist = dentists[i].status == 'dentist_no_email' ? '\
+								<div class="team-dentist">\
+									<div class="flex flex-mobile flex-center">\
+										<div class="result-image-dentist">\
+											<img src="'+dentists[i].team_clinic_avatar+'"/>\
+										</div>\
+										<div class="result-name-dentist">\
+											<p>'+dentists[i].name+'</p>\
+										</div>\
+									</div>\
+								</div>\
+							' : '';
+	
+							$('.dentists-names-results .dentists-results .list').append('\
+								<a class="dentist-button '+(dentists[i].status == 'dentist_no_email' ? 'with-team-member' : '')+'" dentist-id="'+dentists[i].id+'" dentist-name="'+attr_name+'" href="'+dentists[i].link+'">\
+									<div class="flex flex-mobile">\
+										<div class="result-image-dentist">\
+											<img src="'+(dentists[i].team_clinic_avatar ? dentists[i].team_clinic_avatar : dentists[i].avatar)+'"/>\
+										</div>\
+										<div class="result-name-dentist">\
+											<p>'+u_name+'</p>\
+											<span>'+(dentists[i].team_clinic_location ? dentists[i].team_clinic_location : dentists[i].location)+'</span>\
+										</div>\
+										'+is_partner+'\
+									</div>\
+									'+isTeamDentist+'\
+								</a>\
+							');
+						}
+					} else if(data.alert) {
+						$('.dentists-results').prepend('<p class="info error">'+data.alert+'</p>');
 					}
-
-					var dentists = data.dentists;
-
-					for(var i in dentists) {
-						var u_name = dentists[i].status == 'dentist_no_email' ? dentists[i].team_clinic_name : dentists[i].name;
-						var attr_name = dentists[i].status == 'dentist_no_email' ? dentists[i].team_clinic_name : dentists[i].pure_name;
-
-						var is_partner = dentists[i].is_partner ? '\
-							<div class="result-partner-dentist">\
-								<div class="result-partner-dentist-wrapper">\
-									<img src="'+images_path+'/mini-logo-white.svg">\
-									<span>Dentacoin</span> Partner\
-								</div>\
-							</div>\
-						' : '';
-
-						var isTeamDentist = dentists[i].status == 'dentist_no_email' ? '\
-							<div class="team-dentist">\
-								<div class="flex flex-mobile flex-center">\
-									<div class="result-image-dentist">\
-										<img src="'+dentists[i].team_clinic_avatar+'"/>\
-									</div>\
-									<div class="result-name-dentist">\
-										<p>'+dentists[i].name+'</p>\
-									</div>\
-								</div>\
-							</div>\
-						' : '';
-
-						$('.dentists-names-results .dentists-results .list').append('\
-							<a class="dentist-button '+(dentists[i].status == 'dentist_no_email' ? 'with-team-member' : '')+'" dentist-id="'+dentists[i].id+'" dentist-name="'+attr_name+'" href="'+dentists[i].link+'">\
-								<div class="flex flex-mobile">\
-									<div class="result-image-dentist">\
-										<img src="'+(dentists[i].team_clinic_avatar ? dentists[i].team_clinic_avatar : dentists[i].avatar)+'"/>\
-									</div>\
-									<div class="result-name-dentist">\
-										<p>'+u_name+'</p>\
-										<span>'+(dentists[i].team_clinic_location ? dentists[i].team_clinic_location : dentists[i].location)+'</span>\
-									</div>\
-									'+is_partner+'\
-								</div>\
-								'+isTeamDentist+'\
-							</a>\
-						');
-					}
-				} else if(data.alert) {
-					$('.dentists-results').prepend('<p class="info error">'+data.alert+'</p>');
 				}
 			},
 			error: function(data) {

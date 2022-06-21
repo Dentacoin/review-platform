@@ -450,9 +450,9 @@ $reviewRoutes = function() {
 	
 			Route::post('profile/invite-new', 						'InvitationsController@inviteTeamMember');
 			Route::post('profile/add-existing-dentist-team', 		'InvitationsController@inviteExistingTeamMember');
-			Route::any('profile/dentists/invite', 					'InvitationsController@inviteDentist');
+			Route::post('profile/dentists/invite', 					'InvitationsController@inviteDentist');
 
-			Route::any('invite-new-dentist', 						'AddDentistController@invite_new_dentist');
+			Route::post('invite-new-dentist', 						'AddDentistController@invite_new_dentist');
 	
 			Route::get('faq', 										'FaqController@home');
 
@@ -466,15 +466,15 @@ $reviewRoutes = function() {
 				Route::post('profile/invite-copypaste', 			'InvitationsController@inviteCopypaste');
 				Route::post('profile/invite-copypaste-final', 		'InvitationsController@inviteCopypasteFinal');
 				Route::post('profile/invite-file',			 		'InvitationsController@inviteFile');
-				Route::any('profile/invites/delete/{id}', 			'InvitationsController@invitesDelete');
+				Route::get('profile/invites/delete/{id}', 			'InvitationsController@invitesDelete');
 				Route::post('profile/asks/{type}/{id}', 			'InvitationsController@asksActions');
-				Route::any('profile/dentists/{type}/{id}', 			'InvitationsController@teamMemberActions');
-				Route::any('profile/clinics/delete/{id}', 			'InvitationsController@clinicDeletesTeamMember');
-				Route::any('profile/clinics/invite', 				'InvitationsController@inviteClinic');
+				Route::get('profile/dentists/{type}/{id}', 			'InvitationsController@teamMemberActions');
+				Route::get('profile/clinics/delete/{id}', 			'InvitationsController@clinicDeletesTeamMember');
+				Route::post('profile/clinics/invite', 				'InvitationsController@inviteClinic');
 
 				Route::post('profile/info/upload', 					'ProfileController@upload');
 				Route::post('profile/gallery/{id?}', 				'ProfileController@gallery');
-				Route::any('profile/gallery/delete/{id}', 			'ProfileController@gallery_delete');
+				Route::get('profile/gallery/delete/{id}', 			'ProfileController@gallery_delete');
 				Route::post('profile/info/{id?}', 					'ProfileController@editUser');
 				Route::post('profile/lang-delete/{id?}', 			'ProfileController@deleteLanguage');
 				Route::post('profile/add-announcement/{id?}', 		'ProfileController@addAnnouncement');

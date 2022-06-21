@@ -102,4 +102,5 @@
 			Browse providers by city >
 		</a> --}}
 	</div>
-</form>	
+	<div class="loader"><i></i></div>
+</form>

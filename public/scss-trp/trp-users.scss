@@ -1297,13 +1297,7 @@ $phone: "screen and (max-width: 768px)";
 					}
 		
 					.flickity-prev-next-button.previous {
-						transform: rotate(180deg);
-						transform-origin: 50% 18px;
-						background: url('../img-trp/slider-arrow-left-white.svg') 50% 50% no-repeat;
-
-						@media #{$phone} {
-							transform-origin: 50% 15px;
-						}
+						background: url('../img-trp/gallery-arrow-left.png') 50% 50% no-repeat;
 		
 						svg {
 							display: none;
@@ -1311,7 +1305,7 @@ $phone: "screen and (max-width: 768px)";
 					}
 		
 					.flickity-prev-next-button.next {
-						background: url('../img-trp/slider-arrow-right-white.svg') 50% 50% no-repeat;
+						background: url('../img-trp/gallery-arrow-right.png') 50% 50% no-repeat;
 		
 						svg {
 							display: none;
