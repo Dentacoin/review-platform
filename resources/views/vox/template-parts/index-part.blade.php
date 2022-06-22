@@ -34,7 +34,7 @@
 	<div class="container">
 		<p class="h2-bold">{!! nl2br(trans('vox.page.index.dcn-price.title')) !!}</p>
 		<h2>{!! nl2br(trans('vox.page.index.dcn-price.subtitle')) !!}</h2>
-		<span>{!! nl2br(trans('vox.page.index.dcn-price.todays-price', ['dcn_price' => sprintf('%.2F', 10000 * $dcn_original_price)])) !!}</span>
+		<span>{!! nl2br(trans('vox.page.index.dcn-price.todays-price', ['dcn_price' => number_format((float)10000 * $dcn_original_price, 2, '.', '')])) !!}</span>
 	</div>
 </div>
 

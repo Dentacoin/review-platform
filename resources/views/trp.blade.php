@@ -140,7 +140,7 @@
 									<a target="_blank" href="https://account.dentacoin.com?platform=trusted-reviews">
 										<span>Rewards: </span>
 										<span class="user-balance-dcn">{{ number_format($user_total_balance) }} DCN</span>
-										<span class="user-balance-usd">{{ sprintf('%.2F', $user_total_balance * $dcn_price) }} USD</span>
+										<span class="user-balance-usd">{{ number_format((float)$user_total_balance * $dcn_original_price, 2, '.', '') }} USD</span>
 										<img class="caret-switch" src="{{ url('img-trp/caret-white-down.svg') }}"/>
 									</a>
 									<img class="header-avatar {!! $user->hasimage ? '' : 'default-avatar' !!}" id="header-avatar" src="{{ $user_avatar }}"/>
