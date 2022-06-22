@@ -144,13 +144,13 @@
 								<div class="user-and-price header-a">
 									@if( $user->platform=='external' )
 										<r style="display: block; color: #38ace5;">{!! trans('vox.header.username', ['username' => $user->getNames() ]) !!}</r>
-										<span id="header-balance">{{ $user_total_balance }}</span> DCN  | <span id="header-usd">${{ number_format((float)$user_total_balance * $dcn_original_price) }}</span>
+										<span id="header-balance">{{ $user_total_balance }}</span> DCN  | <span id="header-usd">${{ number_format((float)$user_total_balance * $dcn_original_price, 2, '.', '') }}</span>
 									@else
 										<a class="my-name" href="javascript:;">
 											{!! trans('vox.header.username', ['username' => $user->getNames() ]) !!}
 										</a>
 										<a href="javascript:;">
-											<span id="header-balance">{{ $user_total_balance }}</span> DCN  | <span id="header-usd">${{ number_format((float)$user_total_balance * $dcn_original_price) }}</span>
+											<span id="header-balance">{{ $user_total_balance }}</span> DCN  | <span id="header-usd">${{ number_format((float)$user_total_balance * $dcn_original_price, 2, '.', '') }}</span>
 										</a>
 									@endif
 								</div>
@@ -180,7 +180,7 @@
 								@endif
 							@elseif( $current_page!='register' || (!empty($session_polls) && $current_page=='register') )
 								<span class="dcn-rate">
-									10000 DCN = $<span id="header-rate">{{ number_format((float)10000 * $dcn_original_price) }}</span>
+									10000 DCN = $<span id="header-rate">{{ number_format((float)10000 * $dcn_original_price, 2, '.', '') }}</span>
 									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
 								<a href="javascript:;" class="start-button open-dentacoin-gateway patient-login">
