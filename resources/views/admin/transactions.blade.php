@@ -219,9 +219,15 @@
     <br/>
     <br/>
     <br/>
+
+    @php
+        $gas_price = App\Models\GasPrice::find(1);
+    @endphp
     
-    Current gas price: <b>{{ App\Models\GasPrice::find(1)->gas_price }}</b> <br/>
-    Max gas price: <b>{{ App\Models\GasPrice::find(1)->max_gas_price }}</b> <br/>
+    Current gas price: <b>{{ $gas_price->gas_price }}</b> <br/>
+    Max gas price for normal transactions: <b>{{ $gas_price->max_gas_price }}</b> <br/>
+    Max gas price for staking transactions: <b>{{ $gas_price->max_staking_gas_price }}</b> <br/>
+    <br/>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
