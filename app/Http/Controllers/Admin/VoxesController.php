@@ -573,11 +573,11 @@ class VoxesController extends AdminController {
                     if(!empty($duplicatedQuestion)) {
                         if($duplicatedQuestion > 1) {
                             $questions_order_bug = true;
-                            $questions_order_bug_message .= 'Duplicated order number - '.$i.'<br/>';  //diplicated order
+                            $questions_order_bug_message .= 'Duplicated order number: '.$i.'<br/>';  //diplicated order
                         }
                     } else {
                         $questions_order_bug = true;
-                        $questions_order_bug_message .= 'Missing order number - '.$i.'<br/>';  //missing order
+                        $questions_order_bug_message .= 'Missing order number: '.$i.'<br/>';  //missing order
                     }
                 }
             }

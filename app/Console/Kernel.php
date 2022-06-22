@@ -42,6 +42,7 @@ use App\Models\Vox;
 
 use App\Helpers\GeneralHelper;
 use WebPConvert\WebPConvert;
+use App\Helpers\AdminHelper;
 use App\Helpers\VoxHelper;
 use Carbon\Carbon;
 
@@ -553,6 +554,29 @@ NEW & NOT SENT TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo '
+Don\'t Retry TRANSACTIONS
+
+========================
+
+';
+
+            $transactions = DcnTransaction::where('status', 'dont_retry')
+            ->where('updated_at', '<=', Carbon::now()->subDays(2) )
+            ->orderBy('id', 'asc')
+            ->take(50)
+            ->get();
+
+            if($transactions->isNotEmpty()) {
+                foreach ($transactions as $trans) {
+                    AdminHelper::bumpTransaction($trans);
+                }
+            }
+            
+        })->cron("*/30 * * * *");
+
+
+        $schedule->call(function () {
 
             $cron_running = CronjobSecondRun::first();
 
@@ -766,8 +790,7 @@ UNCONFIRMED TRANSACTIONS
 
             $users = User::where('is_dentist', '1')
             ->where('status', 'pending')
-            ->where('updated_at', '<', Carbon::now()
-            ->subDays(7) )
+            ->where('updated_at', '<', Carbon::now()->subDays(7) )
             ->get();
 
             if ($users->isNotEmpty()) {
@@ -2528,10 +2551,10 @@ UNCONFIRMED TRANSACTIONS
 
                         if(!empty($voxQuestionsCount)) {
                             if($voxQuestionsCount > 1) {
-                                $questions_order_bugs[$survey->id][] = 'Duplicated order number - '.$i.'<br/>';  //diplicated order
+                                $questions_order_bugs[$survey->id][] = 'Duplicated order number: '.$i.'<br/>';  //diplicated order
                             }
                         } else {
-                            $questions_order_bugs[$survey->id][] = 'Missing order number - '.$i.'<br/>';  //missing order
+                            $questions_order_bugs[$survey->id][] = 'Missing order number: '.$i.'<br/>';  //missing order
                         }
                     }
                 }

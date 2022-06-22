@@ -211,7 +211,7 @@ class TransactionsController extends AdminController {
 
         $item = DcnTransaction::find($id);
         if(!empty($item)) {
-            $this->bumpTransaction($item);
+            AdminHelper::bumpTransaction($item, $this->user->id);
         }
 
         $this->request->session()->flash('success-message', 'Transaction bumped' );
@@ -313,39 +313,12 @@ class TransactionsController extends AdminController {
         if( Request::input('ids') ) {
             $bumptrans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($bumptrans as $bt) {
-                $this->bumpTransaction($bt);
+                AdminHelper::bumpTransaction($bt, $this->user->id);
             }
         }
 
         $this->request->session()->flash('success-message', 'All selected transactions are bumped' );
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
-    }
-
-    private function bumpTransaction($transaction) {
-
-        if($transaction->status == 'first' && !empty($transaction->user) && !$transaction->user->is_dentist) {
-            $user_history = new UserHistory;
-            $user_history->admin_id = $this->user->id;
-            $user_history->user_id = $transaction->user->id;
-            $user_history->patient_status = $transaction->user->patient_status;
-            $user_history->save();
-
-            $transaction->user->patient_status = 'new_verified';
-            $transaction->user->save();
-        }
-
-        $dcn_history = new DcnTransactionHistory;
-        $dcn_history->transaction_id = $transaction->id;
-        $dcn_history->admin_id = $this->user->id;
-        $dcn_history->status = 'new';
-        $dcn_history->old_status = $transaction->status;
-        $dcn_history->history_message = 'Bumped by admin';
-        $dcn_history->save();
-
-        $transaction->status = 'new';
-        $transaction->processing = 0;
-        $transaction->retries = 0;
-        $transaction->save();
     }
 
     public function massstop() {

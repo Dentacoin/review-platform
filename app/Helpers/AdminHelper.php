@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Models\DcnTransactionHistory;
+use App\Models\UserHistory;
+
 class AdminHelper {
 
     public static function paginationsFunction($total_pages, $adjacents, $page) {
@@ -35,5 +38,36 @@ class AdminHelper {
             'start' => $start,
             'end' => $end,
         ];
+    }
+
+    public static function bumpTransaction($transaction, $admin_id=null) {
+
+        if($transaction->status == 'first' && !empty($transaction->user) && !$transaction->user->is_dentist) {
+            $user_history = new UserHistory;
+            if($admin_id) {
+                $user_history->admin_id = $admin_id;
+            }
+            $user_history->user_id = $transaction->user->id;
+            $user_history->patient_status = $transaction->user->patient_status;
+            $user_history->save();
+
+            $transaction->user->patient_status = 'new_verified';
+            $transaction->user->save();
+        }
+
+        $dcn_history = new DcnTransactionHistory;
+        $dcn_history->transaction_id = $transaction->id;
+        if($admin_id) {
+            $dcn_history->admin_id = $admin_id;
+        }
+        $dcn_history->status = 'new';
+        $dcn_history->old_status = $transaction->status;
+        $dcn_history->history_message = $admin_id ? 'Bumped by admin' : 'Bumped automatically';
+        $dcn_history->save();
+
+        $transaction->status = 'new';
+        $transaction->processing = 0;
+        $transaction->retries = 0;
+        $transaction->save();
     }
 }
