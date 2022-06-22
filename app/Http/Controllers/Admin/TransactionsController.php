@@ -164,7 +164,7 @@ class TransactionsController extends AdminController {
             $table_fields['nonce'] = array();
             $table_fields['message'] = array();
             // $table_fields['retries'] = array();
-            // $table_fields['sended_at'] = array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sended at');
+            // $table_fields['sended_at'] = array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Sent on');
         }
         $table_fields['bump'] = array('template' => 'admin.parts.table-transactions-bump', 'label' => "Actions");
 

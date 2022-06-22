@@ -12,7 +12,7 @@
 				@foreach($item->history as $history)
 					<div>
 						@if(!empty($history->sended_at))
-							- Sended at: {{ $history->sended_at }} <br/>
+							- Sent on: {{ $history->sended_at }} <br/>
 						@endif
 						@if(!empty($history->address))
 							- Address: {{ $history->address }} <br/>

@@ -102,7 +102,7 @@ class VoxesController extends AdminController {
                     }
                 }
 
-                $this->request->session()->flash('success-message', 'The chosen voxes are sended for translations' );
+                $this->request->session()->flash('success-message', 'The chosen voxes are sent for translations' );
                 return redirect('cms/vox/list');
             }
 

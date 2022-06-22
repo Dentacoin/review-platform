@@ -140,7 +140,7 @@ $(document).ready(function(){
 
 			if(data.success) {
 				$('.modal').modal('hide');
-				$('tr[contact-id="'+$(this).attr('contact-id')+'"]').find('.actions').html('Sended');
+				$('tr[contact-id="'+$(this).attr('contact-id')+'"]').find('.actions').html('Sent');
 			} else {
 				$(this).find('.contact-error').html(data.message);
 				$(this).find('.contact-error').show();

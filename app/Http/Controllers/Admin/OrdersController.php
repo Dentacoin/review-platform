@@ -68,7 +68,7 @@ class OrdersController extends AdminController {
         $order->is_send = true;
         $order->save();
 
-        $this->request->session()->flash('success-message', 'Order Sended' );
+        $this->request->session()->flash('success-message', 'Order Sent' );
         return redirect('cms/orders/');
     }
 
