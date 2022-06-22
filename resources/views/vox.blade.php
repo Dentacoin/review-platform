@@ -180,7 +180,7 @@
 								@endif
 							@elseif( $current_page!='register' || (!empty($session_polls) && $current_page=='register') )
 								<span class="dcn-rate">
-									10000 DCN = $<span id="header-rate">{{ sprintf('%.2F', 10000 * $dcn_original_price) }}</span>
+									10000 DCN = $<span id="header-rate">{{ number_format((float)10000 * $dcn_original_price) }}</span>
 									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
 								<a href="javascript:;" class="start-button open-dentacoin-gateway patient-login">
