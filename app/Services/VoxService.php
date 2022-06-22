@@ -2500,6 +2500,7 @@ class VoxService {
                                     VoxAnswerOld::where('vox_id', $vox->id)
                                     ->where('user_id', $user->id)
                                     ->delete();
+                                    
                                     return Response::json( $ret );
                                 }
                             }

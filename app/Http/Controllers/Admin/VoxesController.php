@@ -426,9 +426,9 @@ class VoxesController extends AdminController {
                             if(!empty($q)) {
                                 if (!empty(explode(':',$v)[1])) {
                                     $answ = explode(':',$v)[1];
-                                    $triggers[$question->id] .= $q->order.'. '.$q->question.': '.$answ.'<br/>';
+                                    $triggers[$question->id] .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().': '.$answ.'<br/>';
                                 } else {
-                                    $triggers[$question->id] .= $q->order.'. '.$q->question.'<br/>';
+                                    $triggers[$question->id] .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().'<br/>';
                                 }                            
                             }
                         }                        
@@ -568,7 +568,7 @@ class VoxesController extends AdminController {
 
                 $count_qs = $item->questionsCount();
 
-                for ($i=1; $i <= $count_qs ; $i++) { 
+                for ($i=1; $i <= $count_qs; $i++) {
                     $duplicatedQuestion = VoxQuestion::with('translations')->where('vox_id', $item->id)->where('order', $i)->count();
                     if(!empty($duplicatedQuestion)) {
                         if($duplicatedQuestion > 1) {
@@ -637,7 +637,7 @@ class VoxesController extends AdminController {
                         $frow = [];
                         $frow['Number'] = $question->order;
                         $frow['Type'] = $question->type;
-                        $frow['Question'] = $question->{'question:'.$code};
+                        $frow['Question'] = $question->questionWithTooltips();
                         $frow['Valid answer'] = $question->is_control;
                         $a = json_decode($question->{'answers:'.$code});
                         foreach ($a as $i => $ans) {
@@ -938,9 +938,9 @@ class VoxesController extends AdminController {
                         if(!empty($q)) {
                             if (!empty(explode(':',$v)[1])) {
                                 $answ = explode(':',$v)[1];
-                                $trigger .= $q->order.'. '.$q->question.': '.$answ.'<br/>';
+                                $trigger .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().': '.$answ.'<br/>';
                             } else {
-                                $trigger .= $q->order.'. '.$q->question.'<br/>';
+                                $trigger .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().'<br/>';
                             }                            
                         }
                     }
@@ -950,7 +950,7 @@ class VoxesController extends AdminController {
             return Response::json([
                 'success' => true,
                 'question' => $question,
-                'realted_question' => $question->related ? $question->related->question : '',
+                'realted_question' => $question->related ? $question->related->questionWithTooltips() : '',
                 'trigger' => $trigger,
                 'trigger_same_as_prev' => $trigger_same_as_prev,
                 'question_type' => $this->question_types[$question->type],
@@ -1060,9 +1060,9 @@ class VoxesController extends AdminController {
                                 if(!empty($q)) {
                                     if (!empty(explode(':',$v)[1])) {
                                         $answ = explode(':',$v)[1];
-                                        $trigger .= $q->order.'. '.$q->question.': '.$answ.'<br/>';
+                                        $trigger .= $q->order.'. '.$q->questionWithTooltips().': '.$answ.'<br/>';
                                     } else {
-                                        $trigger .= $q->order.'. '.$q->question.'<br/>';
+                                        $trigger .= $q->order.'. '.$q->questionWithTooltips().'<br/>';
                                     }                            
                                 }
                             }
@@ -1072,7 +1072,7 @@ class VoxesController extends AdminController {
                     return Response::json([
                         'success' => true,
                         'question' => $question,
-                        'realted_question' => $question->related ? $question->related->question : '',
+                        'realted_question' => $question->related ? $question->related->questionWithTooltips() : '',
                         'trigger' => $trigger,
                         'trigger_same_as_prev' => $trigger_same_as_prev,
                         'question_type' => $this->question_types[$question->type],
@@ -1152,7 +1152,7 @@ class VoxesController extends AdminController {
 
         if($question->vox->type == 'normal' && Auth::guard('admin')->user()->role=='voxer') {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/'.$this->current_page.'/edit/'.$id);
+            return redirect('cms/home');
         }
 
         if(!empty($question)) {
@@ -1163,43 +1163,25 @@ class VoxesController extends AdminController {
             $vox_history->info = 'Question Deleted with order '.$question->order;
             $vox_history->save();
 
+            $q_order = $question->order;
+            $q_vox_id = $question->vox_id;
+
             $question->delete();
             $question->vox->checkComplex();
 
-            return Response::json([
-                'success' => true
-            ]);
+            $next_questions = VoxQuestion::where('vox_id', $q_vox_id)->where('order', '>', $q_order)->get();
 
-        } else {
-            return Response::json([
-                'success' => false
-            ]);
-        }
-    }
-
-    public function order_question( $id, $question_id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $question = VoxQuestion::find($question_id);
-
-        if(!empty($question) && $question->vox_id==$id) {
-            $vox_history = new VoxHistory;
-            $vox_history->admin_id = $this->user->id;
-            $vox_history->vox_id = $question->vox_id;
-            $vox_history->question_id = $question_id;
-            $vox_history->info = 'Old Question Order: '.$question->order.'<br/> New Question Order: '.Request::input('val');
-            $vox_history->save();
-
-            $question->order = Request::input('val');
-            $question->save();
+            if($next_questions->isNotEmpty()) {
+                foreach($next_questions as $next_q) {
+                    $next_q->order = $next_q->order-1;
+                    $next_q->save();
+                }
+            }
 
             return Response::json([
                 'success' => true
             ]);
+
         } else {
             return Response::json([
                 'success' => false
@@ -1236,46 +1218,6 @@ class VoxesController extends AdminController {
         return Response::json([
             'success' => true
         ]);
-    }
-
-    public function change_question_text( $id, $question_id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        $question = VoxQuestion::find($question_id);
-        $lang = request('code');
-
-        if(!empty($question) && $question->vox_id==$id) {
-            $translation = $question->translateOrNew($lang);
-
-            $vox_history = new VoxHistory;
-            $vox_history->admin_id = $this->user->id;
-            $vox_history->vox_id = $question->vox_id;
-            $vox_history->question_id = $question->id;
-            $vox_history->info = 'Old Question Title '.$lang.': '.$translation->question.'<br/> New Question Title: '.Request::input('val');
-            $vox_history->save();
-
-            $translation->question = Request::input('val');
-            $translation->save();
-
-            if($question->vox->type == 'normal') {
-                foreach (config('langs-to-translate') as $lang_code => $value) {
-                    if($lang_code != 'en') {
-                        VoxHelper::translateQuestionWithAnswers($lang_code, $question);
-                    }
-                }
-            }
-            return Response::json([
-                'success' => true
-            ]);
-        } else {
-            return Response::json([
-                'success' => false
-            ]);
-        }
     }
 
     private function saveOrUpdate($item) {

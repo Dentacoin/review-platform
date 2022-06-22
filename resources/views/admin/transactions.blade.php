@@ -10,7 +10,7 @@
             <a href="{{ $are_transactions_hash_check_stopped ? url('cms/transactions/start-hash-check') : url('cms/transactions/stop-hash-check') }}" class="btn btn-{{ $are_transactions_hash_check_stopped ? 'success' : 'info' }} pull-right" style="margin-left: 10px;">{{ $are_transactions_hash_check_stopped ? 'Enable hash check' : 'Disable hash check' }}</a>
 
             @if($admin->role!='support')
-                @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
+                @if($dont_retry_trans)
                     <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right" style="margin-left: 10px;">Bump trans with status 'DONT RETRY'</a>
                 @endif
             @endif
@@ -43,7 +43,7 @@
         </div>
     @endif
 
-    @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
+    @if($dont_retry_trans)
         <!-- <div>
             <label class="alert alert-warning">After refill, please click on "Bump all transactions with status 'DONT RETRY'" button</label>
         </div> -->
@@ -156,8 +156,8 @@
                             Sum: {{ $total_dcn_price }} DCN
                         </div>
                         <div>
-                            <a href="{{ url('cms/transactions/scammers') }}" class="btn btn-{{ App\Models\TransactionScammersByDay::where('checked', '!=', 1)->count() ? 'danger' : 'info' }} pull-right" style="margin-left: 10px;">Scammers by days ({{ App\Models\TransactionScammersByDay::where('checked', '!=', 1)->count() }})</a>
-                            <a href="{{ url('cms/transactions/scammers-balance') }}" class="btn btn-{{ App\Models\TransactionScammersByBalance::where('checked', '!=', 1)->count() ? 'danger' : 'info' }} pull-right" style="margin-left: 10px;">Scammers by balance ({{ App\Models\TransactionScammersByBalance::where('checked', '!=', 1)->count() }})</a>
+                            <a href="{{ url('cms/transactions/scammers') }}" class="btn btn-{{ $scamByDay ? 'danger' : 'info' }} pull-right" style="margin-left: 10px;">Scammers by days ({{ $scamByDay }})</a>
+                            <a href="{{ url('cms/transactions/scammers-balance') }}" class="btn btn-{{ $scamByBallance ? 'danger' : 'info' }} pull-right" style="margin-left: 10px;">Scammers by balance ({{ $scamByBallance }})</a>
                         </div>
                     </div>
             		<div class="panel-body">
@@ -219,10 +219,6 @@
     <br/>
     <br/>
     <br/>
-
-    @php
-        $gas_price = App\Models\GasPrice::find(1);
-    @endphp
     
     Current gas price: <b>{{ $gas_price->gas_price }}</b> <br/>
     Max gas price for normal transactions: <b>{{ $gas_price->max_gas_price }}</b> <br/>

@@ -176,12 +176,10 @@
 											<img class="header-avatar" id="header-avatar" src="{{ $prev_user->getImageUrl(true) }}" width="46" height="46">
 										</a>
 									</div>
-
 								@endif
 							@elseif( $current_page!='register' || (!empty($session_polls) && $current_page=='register') )
 								<span class="dcn-rate">
 									10000 DCN = $<span id="header-rate">{{ number_format((float)10000 * $dcn_original_price, 2, '.', '') }}</span>
-									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
 								<a href="javascript:;" class="start-button open-dentacoin-gateway patient-login">
 									{{ trans('vox.common.sign-in') }}

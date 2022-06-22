@@ -22,7 +22,7 @@
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-2">
                                 <select name="search-admin-id" class="form-control">
-                                    <option value="">Search admin id</option>
+                                    <option value="">Search admin</option>
                                     @foreach($admins as $admin)
                                         <option value="{{ $admin->id }}" {!! $search_admin_id == $admin->id ? 'selected="selected"' : '' !!}>{{ $admin->name ?? $admin->username }}</option>
                                     @endforeach

@@ -479,23 +479,26 @@
                                     <table class="table table-striped table-question-list">
                                         <thead>
                                             <tr>
-                                                <th><a href="javascript:;" class="table-select-all">All / None</a></th>
-                                                @if($admin->id == 1)
+                                                <th>
+                                                    <a href="javascript:;" class="table-select-all">#</a>
+                                                </th>
+                                                {{-- @if($admin->id == 1)
                                                     <th>ID</th>
-                                                @endif
-                                                <th>{{ trans('admin.page.'.$current_page.'.question-num') }}</th>
-                                                <th>{{ trans('admin.page.'.$current_page.'.question-title') }}</th>
-                                                <th>{{ trans('admin.page.'.$current_page.'.question-control') }}</th>
-                                                <th>{{ trans('admin.page.'.$current_page.'.question-stats') }}</th>
-                                                <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
-                                                <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
-                                                <th>Respondents</th>
-                                                <th>Test question</th>
-                                                <th>Duplicate</th>
-                                                <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
-                                                <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
+                                                @endif --}}
+                                                <th>№</th>
+                                                <th>Question</th>
+                                                <th>Control?</th>
+                                                <th>Stats?</th>
+                                                <th>Type</th>
+                                                <th>Trigger</th>
+                                                <th>Resp.</th>
+                                                <th>Test</th>
+                                                <th>Copy</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
                                             </tr>
                                         </thead>
+                                        
                                         <tbody class="questions-draggable" lang-code="{{ $code }}">
                                             @if($item->questions->isNotEmpty())
                                                 @foreach($item->questions as $question)
@@ -503,16 +506,16 @@
                                                         <td>
                                                             <input type="checkbox" name="ids[]" value="{{ $question->id }}" />
                                                         </td>
-                                                        @if($admin->id == 1)
+                                                        {{-- @if($admin->id == 1)
                                                             <td>
                                                                 {{ $question->id }}
                                                             </td>
-                                                        @endif
+                                                        @endif --}}
                                                         <td>
-                                                            <input type="text" class="form-control question-number" style="width: 60px;" data-qid="{{ $question->id }}" value="{{ $question->order }}" {{ $code != 'en' ? 'disabled="disabled"' : '' }} />
+                                                            <span class="question-number" q-n="{{ $question->order }}">{{ $question->order }}</span>
                                                         </td>
-                                                        <td>
-                                                            <textarea style="min-width: 360px;" class="form-control question-question" data-qid="{{ $question->id }}" lang-code="{{ $code }}">{{ $question->translateOrNew($code)->question }}</textarea>
+                                                        <td style="width: 340px;">
+                                                            <span class="question-question">{!! $question->questionWithTooltips() !!}</span>
                                                         </td>
                                                         <td class="is-control">
                                                             {!! $question->is_control ? '<b>'.trans( 'admin.common.yes' ).'</b>' : trans( 'admin.common.no' ) !!}

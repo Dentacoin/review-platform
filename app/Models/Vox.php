@@ -274,6 +274,7 @@ class Vox extends Model {
             if($q->question_trigger) {
                 $this->complex = 1;
                 $this->save();
+                break;
             }
         }
     }
