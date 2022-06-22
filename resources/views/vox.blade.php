@@ -144,13 +144,13 @@
 								<div class="user-and-price header-a">
 									@if( $user->platform=='external' )
 										<r style="display: block; color: #38ace5;">{!! trans('vox.header.username', ['username' => $user->getNames() ]) !!}</r>
-										<span id="header-balance">{{ $user_total_balance }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user_total_balance * $dcn_price) }}</span>
+										<span id="header-balance">{{ $user_total_balance }}</span> DCN  | <span id="header-usd">${{ number_format((float)$user_total_balance * $dcn_original_price) }}</span>
 									@else
 										<a class="my-name" href="javascript:;">
 											{!! trans('vox.header.username', ['username' => $user->getNames() ]) !!}
 										</a>
 										<a href="javascript:;">
-											<span id="header-balance">{{ $user_total_balance }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user_total_balance * $dcn_price) }}</span>
+											<span id="header-balance">{{ $user_total_balance }}</span> DCN  | <span id="header-usd">${{ number_format((float)$user_total_balance * $dcn_original_price) }}</span>
 										</a>
 									@endif
 								</div>
