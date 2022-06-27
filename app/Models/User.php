@@ -868,27 +868,31 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->attributes['city_name'] = null;
         $this->attributes['state_name'] = null;
         $this->attributes['state_slug'] = null;
-        if( $this->country_id) {
-            $info = GeneralHelper::validateAddress($this->country->name, $newvalue);
-            if(!empty($info)) {
-                foreach ($info as $key => $value) {
-                    
-                    if( in_array($key, $this->fillable) ) {
-                        if(($key == 'lat' || $key == 'lon') && $this->custom_lat_lon) {
 
-                        } else {
-                            $this->attributes[$key] = $value;                        
+        if(config('trp.using_google_maps')) {
+
+            if( $this->country_id) {
+                $info = GeneralHelper::validateAddress($this->country->name, $newvalue);
+                if(!empty($info)) {
+                    foreach ($info as $key => $value) {
+                        
+                        if( in_array($key, $this->fillable) ) {
+                            if(($key == 'lat' || $key == 'lon') && $this->custom_lat_lon) {
+    
+                            } else {
+                                $this->attributes[$key] = $value;                        
+                            }
                         }
                     }
+                    if(empty($this->attributes['state_name'])) {
+                        $this->attributes['state_name'] = $this->attributes['city_name'];
+                    }
+                } else {
+                    $this->attributes['address'] = null;
                 }
-                if(empty($this->attributes['state_name'])) {
-                    $this->attributes['state_name'] = $this->attributes['city_name'];
-                }
-            } else {
-                $this->attributes['address'] = null;
             }
+            $this->save();
         }
-        $this->save();
     }
 
     public function makeSlug() {
