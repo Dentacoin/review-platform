@@ -286,6 +286,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return !$item->youtube_id;
         });
     }
+    public function lastReview() {
+        return $this->hasOne('App\Models\Review', 'review_to_id', 'id')
+        ->whereNull('youtube_id')
+        ->where('status', 'accepted')
+        ->with(['answers'])
+        ->orderBy('id', 'desc');
+    }
     public function photos() {
         return $this->hasMany('App\Models\UserPhoto', 'user_id', 'id');
     }
@@ -982,8 +989,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
-        $this->avg_rating = $this->reviews_in()->count() ? $rating / $this->reviews_in()->count() : 0;
-        $this->ratings = $this->reviews_in()->count();
+        $reviewsInCount = $this->reviews_in()->count();
+
+        $this->avg_rating = $reviewsInCount ? $rating / $reviewsInCount : 0;
+        $this->ratings = $reviewsInCount;
         $this->save();
     }
 

@@ -534,9 +534,9 @@
                                                 <th>
                                                     <a href="javascript:;" class="table-select-all">#</a>
                                                 </th>
-                                                {{-- @if($admin->id == 1)
+                                                @if($admin->id == 1)
                                                     <th>ID</th>
-                                                @endif --}}
+                                                @endif
                                                 <th>№</th>
                                                 <th>Question</th>
                                                 <th>Control?</th>
@@ -558,11 +558,11 @@
                                                         <td>
                                                             <input type="checkbox" name="ids[]" value="{{ $question->id }}" />
                                                         </td>
-                                                        {{-- @if($admin->id == 1)
+                                                        @if($admin->id == 1)
                                                             <td>
                                                                 {{ $question->id }}
                                                             </td>
-                                                        @endif --}}
+                                                        @endif
                                                         <td>
                                                             <b class="question-number" q-n="{{ $question->order }}">{{ $question->order }}</b>
                                                         </td>

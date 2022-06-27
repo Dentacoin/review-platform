@@ -21,6 +21,7 @@ class NotFoundController extends FrontController {
 		$featured = User::where('is_dentist', 1)
 		->whereIn('status', config('dentist-statuses.shown_with_link'))
 		->orderBy('avg_rating', 'DESC')
+		->with(['country', 'country.translations', 'lastReview'])
 		->whereNull('self_deleted');
 		
 		$homeDentists = collect();

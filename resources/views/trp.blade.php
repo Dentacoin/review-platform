@@ -118,6 +118,15 @@
 		<meta name="msapplication-TileImage" content="{{ url('trp-fav/ms-icon-144x144.png') }}">
 		<meta name="theme-color" content="#ffffff">
 		<meta name="google-site-verification" content="EYJZsVUi75Q_McP0FuWfCOqc09pAzItF084_LvsRkcY" />
+		
+		@if(strpos($_SERVER['HTTP_HOST'], 'urgent') !== false) 
+			<style type="text/css">
+				
+				div.phpdebugbar-widgets-sqlqueries li.phpdebugbar-widgets-list-item.phpdebugbar-widgets-sql-duplicate {
+					background-color: yellow !important;
+				}
+			</style>
+		@endif
 
     </head>
 

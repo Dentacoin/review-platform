@@ -857,7 +857,7 @@ class VoxService {
         }
 
         // dd($lastkey->id);
-        if(!empty($lastkey) && $lastkey->is_skipped) {
+        if(!empty($lastkey) && ($lastkey->is_skipped || $lastkey->question->prev_q_id_answers)) {
             
             // echo 'skipped: '.$lastkey->question_id.'<br/>';
             self::goBack($user_id, $list, $vox);

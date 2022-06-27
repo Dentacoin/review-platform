@@ -53,12 +53,9 @@
                                     ({{ trans('trp.common.reviews-count', [ 'count' => intval($dentist->ratings)]) }})
                                 </span>
                             </div>
-                            @php
-                                $review = $dentist->reviews_in_standard()->first();
-                            @endphp
-                            @if( $review)
+                            @if( $dentist->lastReview )
                                 <p class="review-content">
-                                    “{{ mb_substr($review->answer, 0, 75) }}..”
+                                    “{{ mb_substr($dentist->lastReview->answer, 0, 75) }}..”
                                 </p>
                             @endif
                         </div>

@@ -44,7 +44,7 @@ class IndexController extends FrontController {
 		->whereIn('status', config('dentist-statuses.shown_with_link'))
 		->whereNull('self_deleted')
 		->has('country')
-		->with('country')
+		->with(['country', 'country.translations', 'lastReview'])
 		->orderBy('avg_rating', 'DESC');
 
 		$homeDentists = collect();
