@@ -322,7 +322,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserAsk', 'dentist_id', 'id')->orderBy('id', 'DESC');
     }
     public function asksWithoutHidden() {
-        return $this->hasMany('App\Models\UserAsk', 'dentist_id', 'id')->has('user')->where('hidden', '!=', 1)->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\UserAsk', 'dentist_id', 'id')->has('user')->with('user')->where('hidden', '!=', 1)->orderBy('id', 'DESC');
     }
     public function history() {
         return $this->hasMany('App\Models\DcnTransaction', 'user_id', 'id')->orderBy('id', 'DESC');
@@ -628,9 +628,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function cantSubmitReviewToSameDentist($dentist_id) {
 
-        if ($this->hasReviewTo($dentist_id)) {
-
-            $review = $this->hasReviewTo($dentist_id);
+        if ($review = $this->hasReviewTo($dentist_id)) {
             $days = $review->created_at->diffInDays( Carbon::now() );
 
             if($days > config('trp.limits_days.review')) {
@@ -1748,7 +1746,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getMontlyRating($month=0) {
-        
+
         $to_month = Carbon::now()->modify('-'.$month.' months');
         $from_month = Carbon::now()->modify('-'.($month+1).' months');
 

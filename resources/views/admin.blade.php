@@ -41,6 +41,15 @@
 
         <link href="admin/plugins/isotope/isotope.css" rel="stylesheet" />
         <link href="admin/plugins/lightbox/css/lightbox.css" rel="stylesheet" />
+		
+		@if(strpos($_SERVER['HTTP_HOST'], 'urgent') !== false) 
+			<style type="text/css">
+				
+				div.phpdebugbar-widgets-sqlqueries li.phpdebugbar-widgets-list-item.phpdebugbar-widgets-sql-duplicate {
+					background-color: yellow !important;
+				}
+			</style>
+		@endif
         
 
         <!-- ================== END PAGE LEVEL STYLE ================== -->

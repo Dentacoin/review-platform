@@ -50,9 +50,9 @@ class PollsController extends AdminController {
 
         if (!empty($this->request->input('date' ))) {
             $order = $this->request->input( 'date' );
-            $polls = Poll::with(['translations', 'pollCategory', 'pollCategory.translations'])->orderBy('launched_at', $order);
+            $polls = Poll::with(['translations', 'pollCategory', 'pollCategory.translations', 'getUsersAnswers'])->orderBy('launched_at', $order);
         } else {
-            $polls = Poll::with(['translations', 'pollCategory', 'pollCategory.translations'])->orderBy('launched_at', 'desc');
+            $polls = Poll::with(['translations', 'pollCategory', 'pollCategory.translations', 'getUsersAnswers'])->orderBy('launched_at', 'desc');
         }
 
         if(!empty($this->request->input('search-polls-from'))) {

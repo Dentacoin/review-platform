@@ -3137,22 +3137,23 @@ class VoxesController extends AdminController {
             return redirect('cms/home');            
         }
 
-        $questions_single = VoxQuestion::where('type', 'single_choice')->whereNull('vox_scale_id')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_multiple = VoxQuestion::where('type', 'multiple_choice')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_scale = VoxQuestion::where('type', 'scale')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_number = VoxQuestion::where('type', 'number')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_rank = VoxQuestion::where('type', 'rank')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_cross_check = VoxQuestion::whereNotNull('cross_check')->orderBy('id', 'DESC')->take(15)->get();
-        $questions_prev_q_answer = VoxQuestion::whereNotNull('prev_q_id_answers')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_with_scale_answers = VoxQuestion::where('type', 'single_choice')->whereNotNull('vox_scale_id')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_with_image_tooltip = VoxQuestion::whereNotNull('has_image')->whereNotNull('image_in_tooltip')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_with_image_question = VoxQuestion::whereNotNull('has_image')->whereNotNull('image_in_question')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_with_image_answers = VoxQuestion::whereNotNull('answers_images_filename')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_control = VoxQuestion::whereNotNull('is_control')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_control_trigger_and = VoxQuestion::where('trigger_type', 'and')->orderBy('id', 'DESC')->take(3)->get();
-        $questions_control_trigger_or = VoxQuestion::where('trigger_type', 'or')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_single = VoxQuestion::with(['vox', 'vox.translations'])->where('type', 'single_choice')->whereNull('vox_scale_id')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_multiple = VoxQuestion::with(['vox', 'vox.translations'])->where('type', 'multiple_choice')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_scale = VoxQuestion::with(['vox', 'vox.translations'])->where('type', 'scale')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_number = VoxQuestion::with(['vox', 'vox.translations'])->where('type', 'number')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_rank = VoxQuestion::with(['vox', 'vox.translations'])->where('type', 'rank')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_cross_check = VoxQuestion::with(['vox', 'vox.translations'])->whereNotNull('cross_check')->orderBy('id', 'DESC')->take(15)->get();
+        $questions_prev_q_answer = VoxQuestion::with(['vox', 'vox.translations'])->whereNotNull('prev_q_id_answers')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_with_scale_answers = VoxQuestion::with(['vox', 'vox.translations'])->where('type', 'single_choice')->whereNotNull('vox_scale_id')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_with_image_tooltip = VoxQuestion::with(['vox', 'vox.translations'])->whereNotNull('has_image')->whereNotNull('image_in_tooltip')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_with_image_question = VoxQuestion::with(['vox', 'vox.translations'])->whereNotNull('has_image')->whereNotNull('image_in_question')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_with_image_answers = VoxQuestion::with(['vox', 'vox.translations'])->whereNotNull('answers_images_filename')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_control = VoxQuestion::with(['vox', 'vox.translations'])->whereNotNull('is_control')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_control_trigger_and = VoxQuestion::with(['vox', 'vox.translations'])->where('trigger_type', 'and')->orderBy('id', 'DESC')->take(3)->get();
+        $questions_control_trigger_or = VoxQuestion::with(['vox', 'vox.translations'])->where('trigger_type', 'or')->orderBy('id', 'DESC')->take(3)->get();
 
-        $questions_stats_multiple = VoxQuestion::where('used_for_stats', 'standard')
+        $questions_stats_multiple = VoxQuestion::with(['vox', 'vox.translations'])->
+        where('used_for_stats', 'standard')
         ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->where('type', 'multiple_choice')
@@ -3160,7 +3161,8 @@ class VoxesController extends AdminController {
         ->take(3)
         ->get();
 
-        $questions_stats_scale = VoxQuestion::where('used_for_stats', 'standard')
+        $questions_stats_scale = VoxQuestion::with(['vox', 'vox.translations'])->
+        where('used_for_stats', 'standard')
         ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->where('type', 'scale')
@@ -3168,7 +3170,8 @@ class VoxesController extends AdminController {
         ->take(3)
         ->get();
 
-        $questions_stats_number = VoxQuestion::where('used_for_stats', 'standard')
+        $questions_stats_number = VoxQuestion::with(['vox', 'vox.translations'])->
+        where('used_for_stats', 'standard')
         ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->where('type', 'number')
@@ -3176,7 +3179,8 @@ class VoxesController extends AdminController {
         ->take(3)
         ->get();
 
-        $questions_stats_rank = VoxQuestion::where('used_for_stats', 'standard')
+        $questions_stats_rank = VoxQuestion::with(['vox', 'vox.translations'])->
+        where('used_for_stats', 'standard')
         ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->where('type', 'rank')
@@ -3184,7 +3188,8 @@ class VoxesController extends AdminController {
         ->take(3)
         ->get();
 
-        $questions_stats_dependency_single = VoxQuestion::where('used_for_stats', 'dependency')
+        $questions_stats_dependency_single = VoxQuestion::with(['vox', 'vox.translations'])->
+        where('used_for_stats', 'dependency')
         ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->whereHas('related', function($query) {
@@ -3193,7 +3198,8 @@ class VoxesController extends AdminController {
         ->take(3)
         ->get();
 
-        $questions_stats_dependency_multiple = VoxQuestion::where('used_for_stats', 'dependency')
+        $questions_stats_dependency_multiple = VoxQuestion::with(['vox', 'vox.translations'])->
+        where('used_for_stats', 'dependency')
         ->whereHas('vox', function($query) {
             $query->where('has_stats', 1);
         })->whereHas('related', function($query) {

@@ -137,7 +137,9 @@ class TransactionsController extends AdminController {
         $is_warning_message_shown = $transactionsStopped->show_warning_text;
         $are_transactions_hash_check_stopped = $transactionsStopped->stop_check_for_hash;
 
-        $is_retry_stopped = GasPrice::find(1)->cron_new_trans > Carbon::now();
+        $gasPriceObject = GasPrice::find(1);
+
+        $is_retry_stopped = $gasPriceObject->cron_new_trans > Carbon::now();
 
         $table_fields = [
             'checkboxes' => array('format' => 'checkboxes'),
@@ -177,7 +179,7 @@ class TransactionsController extends AdminController {
             'dont_retry_trans' => DcnTransaction::where('status', 'dont_retry')->count(),
             'scamByBallance' => TransactionScammersByBalance::where('checked', '!=', 1)->count(),
             'scamByDay' => TransactionScammersByDay::where('checked', '!=', 1)->count(),
-            'gas_price' => GasPrice::find(1),
+            'gas_price' => $gasPriceObject,
             'transactions' => $transactions,
             'total_count' => $total_count,
             'search_address' => $this->request->input('search-address'),

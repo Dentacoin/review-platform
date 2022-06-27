@@ -47,7 +47,7 @@
                                     return $elm['status']=='waiting' ? -1 : 1;
                                 }) as $ask )
                                     @php
-                                        $askReview = \App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $item->id)->orderBy('id', 'desc')->first();	
+                                        $askReview = \App\Models\Review::where('user_id', $ask->user->id)->where('review_to_id', $item->id)->orderBy('id', 'desc')->first();	
                                     @endphp
                                     <tr>
                                         <td>

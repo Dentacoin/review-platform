@@ -39,7 +39,7 @@ class Vox extends Model {
         'reward_usd',
         'duration',
         'type',
-        'complex',
+        'complex', //if there is questions with triggers
         'translation_langs',
         'featured',
         'stats_featured',

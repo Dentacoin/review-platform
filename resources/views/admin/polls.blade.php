@@ -71,7 +71,7 @@
 		                                </td>
                                         <td>
                                             <a href="{{ url('cms/vox/polls-explorer/'.$poll->id) }}" target="_blank">
-                                                {!! $poll->respondentsCount() !!}
+                                                {!! $poll->getUsersAnswers->count() !!}
                                             </a>
                                         </td>
 		                                <td>
