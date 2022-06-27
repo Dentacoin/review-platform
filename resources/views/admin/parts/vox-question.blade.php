@@ -615,8 +615,8 @@
                         </div>
                     </div>
 
-                    <div class="alert alert-danger" id="q-err" style="display: none;"></div>
-                    <div class="alert alert-success" id="q-succ" style="display: none;">Question Saved</div>
+                    <div class="alert alert-danger" id="form-err" style="display: none;"></div>
+                    <div class="alert alert-success" id="form-succ" style="display: none;">Question Saved</div>
 
                 </div>
             </div>

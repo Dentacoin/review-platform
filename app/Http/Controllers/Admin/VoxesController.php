@@ -228,13 +228,13 @@ class VoxesController extends AdminController {
         return $this->showView('voxes-form', array(
             'types' => $this->types,
             'scales' => $this->scales_arr,
-            'category_list' => VoxCategory::get(),
+            'category_list' => VoxCategory::with('translations')->get(),
             'question_types' => $this->question_types,
             'stat_types' => $this->stat_types,
             'stat_top_answers' => $this->stat_top_answers,
             'countries' => $countries,
             'countriesArray' => $countries->pluck('name', 'id')->toArray(),
-            'all_voxes' => Vox::orderBy('launched_at', 'desc')->get(),
+            'all_voxes' => Vox::with('translations')->orderBy('launched_at', 'desc')->get(),
         ));
     }
 
@@ -1973,7 +1973,7 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('vox-categories', array(
-            'categories' => VoxCategory::with(['voxes', 'voxes.vox.translations', 'translations'])->orderBy('id', 'ASC')->get()
+            'categories' => VoxCategory::with(['voxes', 'polls', 'voxes.vox.translations', 'translations'])->orderBy('id', 'ASC')->get()
         ));
     }
 
@@ -2019,19 +2019,6 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('vox-categories-form');
-    }
-
-    public function delete_category( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
-        }
-
-        VoxCategory::destroy( $id );
-
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.category.deleted') );
-        return redirect('cms/vox/categories');
     }
 
     public function delete_cat_image( $id ) {
@@ -2116,47 +2103,42 @@ class VoxesController extends AdminController {
         ));
     }
 
-    public function add_scale( ) {
+    public function addScale( ) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
             return redirect('cms/home');            
         }
 
-        if(Request::isMethod('post')) {
+        $item = new VoxScale;
+        $this->saveOrUpdateScale($item);
 
-            $item = new VoxScale;
-            $this->saveOrUpdateScale($item);
+        foreach (config('langs-to-translate') as $lang_code => $value) {
+            if($lang_code != 'en') {
+                $ch = curl_init();
 
-            foreach (config('langs-to-translate') as $lang_code => $value) {
-                if($lang_code != 'en') {
-                    $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL,config('trp.deepl_url'));
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".config('trp.deepl_key')."&text=".$item->translateOrNew('en')->answers."&target_lang=".strtoupper($lang_code));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-                    curl_setopt($ch, CURLOPT_URL,config('trp.deepl_url'));
-                    curl_setopt($ch, CURLOPT_POST, 1);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, "auth_key=".config('trp.deepl_key')."&text=".$item->translateOrNew('en')->answers."&target_lang=".strtoupper($lang_code));
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $answers = curl_exec ($ch);
+                curl_close ($ch);
 
-                    $answers = curl_exec ($ch);
-                    curl_close ($ch);
-
-                    $translation = $item->translateOrNew($lang_code);
-                    $translation->vox_scale_id = $item->id;
-                    $translation->answers = isset(json_decode($answers, true)['translations']) ? json_decode($answers, true)['translations'][0]['text'] : '';
-                    $translation->save();
-                }
+                $translation = $item->translateOrNew($lang_code);
+                $translation->vox_scale_id = $item->id;
+                $translation->answers = isset(json_decode($answers, true)['translations']) ? json_decode($answers, true)['translations'][0]['text'] : '';
+                $translation->save();
             }
-
-            $item->save();
-
-            Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.'.$this->current_subpage.'.added'));
-            return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/edit/'.$item->id);
         }
 
-        return $this->showView('voxes-scale-form', array(
-            'scales' => $this->scales_arr,
-        ));
+        $item->save();
+
+        return Response::json([
+            'success' => true,
+            'scale' => $item,
+        ]);
     }
 
     private function saveOrUpdateScale($item) {
@@ -2178,10 +2160,13 @@ class VoxesController extends AdminController {
             }
         }
 
-        User::whereNull('deleted_at')->update(['update_vox_scales' => 1]);
+        //scales are loaded from session, so if there is a new change -> to load scales from query
+        User::whereNull('deleted_at')
+        ->whereNull('self_deleted')
+        ->update(['update_vox_scales' => 1]);
     }
 
-    public function edit_scale( $id ) {
+    public function editScale( $id ) {
 
         if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
             $this->request->session()->flash('error-message', 'You don\'t have permissions' );
@@ -2192,35 +2177,17 @@ class VoxesController extends AdminController {
 
         if( $item ) {
 
-            if(Request::isMethod('post')) {
-                $this->saveOrUpdateScale($item);
+            $this->saveOrUpdateScale($item);
 
-                Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.'.$this->current_subpage.'.updated'));
-                return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/edit/'.$item->id);
-            }
-
-            return $this->showView('voxes-scale-form', array(
-                'item' => $item,
-                'scales' => $this->scales_arr,
-            ));
-        }
-    }
-
-    public function delete_scale( $id ) {
-
-        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
-            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
-            return redirect('cms/home');            
+            return Response::json([
+                'success' => true,
+                'scale' => $item,
+            ]);
         }
 
-        $item = VoxScale::find($id);
-
-        if( $item ) {
-            $item->delete();
-            Request::session()->flash('success-message', 'Scale deleted');
-        }
-
-        return redirect('cms/'.$this->current_page.'/'.$this->current_subpage);
+        return Response::json([
+            'success' => false,
+        ]);
     }
 
     public function faq() {
@@ -3422,6 +3389,21 @@ class VoxesController extends AdminController {
 
         $this->request->session()->flash('error-message', 'Survey not found' );
         return redirect('cms/vox/list');
+    }
+
+    public function getScaleContent($scale_id=null) {
+
+        if( !in_array(Auth::guard('admin')->user()->role, ['super_admin', 'admin', 'voxer'])) {
+            $this->request->session()->flash('error-message', 'You don\'t have permissions' );
+            return redirect('cms/home');            
+        }
+
+        $scale = VoxScale::find($scale_id);
+
+        return response()->view('admin.voxes-scale-form', array(
+            'langs' => config('langs')['admin'],
+            'item' => $scale ?? null,
+        ), 200)->header('X-Frame-Options', 'DENY');
     }
 
     public function getQuestionContent($q_id) {

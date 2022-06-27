@@ -133,7 +133,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'is_logout',
         'vip_access',
         'review_notification',
-        'update_vox_scales',
+        'update_vox_scales', //scales are loaded from session, so if there is a new change -> to load scales from query
         'optimism_popup',
         'convert_phone_cron',
     ];

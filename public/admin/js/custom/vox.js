@@ -674,7 +674,7 @@ $(document).ready(function(){
 				processData: false
 			}).done( (function (data) {
 				if(data.success) {
-					$('#q-succ').show();
+					$('#form-succ').show();
 
 					$('.questions-draggable').find('tr[question-id="'+data.question.id+'"]').find('.is-control').html(data.question.is_control ? 'Yes' : 'No');
 					$('.questions-draggable').find('tr[question-id="'+data.question.id+'"]').find('.for-stats').html(data.question.used_for_stats == 'standard' ? 'Yes' : (data.question.used_for_stats == 'dependency' ? 'Related to: '+data.realted_question : '' ));
@@ -692,7 +692,7 @@ $(document).ready(function(){
 
 				} else {
 					if(data.message) {
-						$('#q-err').html(data.message).show();
+						$('#form-err').html(data.message).show();
 					}
 				}
 
@@ -718,7 +718,7 @@ $(document).ready(function(){
 				processData: false
 			}).done( (function (data) {
 				if(data.success) {
-					$('#q-succ').show();
+					$('#form-succ').show();
 
 					for(var i in data.question.translations) {
 						var code = data.question.translations[i].locale;
@@ -765,7 +765,7 @@ $(document).ready(function(){
 					}
 				} else {
 					if(data.message) {
-						$('#q-err').html(data.message).show();
+						$('#form-err').html(data.message).show();
 					}
 				}
 			}).bind(this) ).fail(function (data) {
@@ -902,4 +902,107 @@ $(document).ready(function(){
 			});
 		}, 5000);
 	}
+
+	$('.edit-scale-button').click( function() {
+		$('#editScaleModal').attr('scale-id', $(this).attr('scale-id'));
+	});
+
+	$('#editScaleModal').on('shown.bs.modal', function (e) {
+		console.log('sasasa');
+		$.ajax( {
+			url: window.location.origin+'/cms/vox/get-scale-content/'+$(this).attr('scale-id'),
+			type: 'POST',
+			success: function( data ) {
+				$('#addScaleModal').find('.modal-body').html('');
+				$('#editScaleModal').find('.modal-body').html(data);
+
+				$('#scale-edit').submit( function(e) {
+					e.preventDefault();
+
+					$(this).find('.alert').hide();
+					var formData = new FormData(this);
+
+					$.ajax({
+						url: $(this).attr('action'),
+						type: 'POST',
+						data: formData,
+						cache: false,
+						contentType: false,
+						processData: false
+					}).done( (function (data) {
+						if(data.success) {
+							$('#form-succ').show();
+
+							$('tr[q-scale-id="'+data.scale.id+'"]').find('.scale-title').html(data.scale.title);
+						} else {
+							if(data.message) {
+								$('#form-err').html(data.message).show();
+							}
+						}
+					}).bind(this) ).fail(function (data) {
+						console.log('ERROR');
+						console.log(data);
+					});
+				});
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+	});
+
+	$('#addScaleModal').on('shown.bs.modal', function (e) {
+		$.ajax( {
+			url: window.location.origin+'/cms/vox/get-scale-content/',
+			type: 'POST',
+			success: function( data ) {
+				$('#editScaleModal').find('.modal-body').html('');
+				$('#addScaleModal').find('.modal-body').html(data);
+
+				$('#scale-add').submit( function(e) {
+					e.preventDefault();
+
+					$(this).find('.alert').hide();
+					var formData = new FormData(this);
+
+					$.ajax({
+						url: $(this).attr('action'),
+						type: 'POST',
+						data: formData,
+						cache: false,
+						contentType: false,
+						processData: false
+					}).done( (function (data) {
+						if(data.success) {
+							$('#form-succ').show();
+
+							var tr = '<tr q-scale-id="'+data.scale.id+'">\
+								<td class="scale-title">'+data.scale.title+'</td>\
+								<td>'+data.scale.answers.length+'</td>\
+								<td>\
+									<a class="btn btn-sm btn-success edit-scale-button" href="javascript:;" data-toggle="modal" data-target="#editScaleModal" scale-id="'+data.scale.id+'" >\
+										<i class="fa fa-pencil"></i>\
+									</a>\
+								</td>\
+							</tr>';
+
+							$('tbody').prepend(tr);
+
+							$('#addScaleModal').modal('hide');
+						} else {
+							if(data.message) {
+								$('#form-err').html(data.message).show();
+							}
+						}
+					}).bind(this) ).fail(function (data) {
+						console.log('ERROR');
+						console.log(data);
+					});
+				});
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
+	});
 });

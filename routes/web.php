@@ -198,11 +198,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/categories/add', 								'VoxesController@add_category');
 	Route::any('vox/categories/edit/{id}', 							'VoxesController@edit_category');
 	Route::any('vox/categories/edit/{id}/delpic',   				'VoxesController@delete_cat_image');
-	Route::any('vox/categories/delete/{id}', 						'VoxesController@delete_category');
 	Route::get('vox/scales', 										'VoxesController@scales');
-	Route::any('vox/scales/add', 									'VoxesController@add_scale');
-	Route::any('vox/scales/edit/{id}', 								'VoxesController@edit_scale');
-	Route::any('vox/scales/delete/{id}', 							'VoxesController@delete_scale');
+	Route::post('vox/scales/add', 									'VoxesController@addScale');
+	Route::post('vox/scales/edit/{id}', 							'VoxesController@editScale');
 	Route::any('vox/faq', 											'VoxesController@faq');
 	Route::any('vox/faq-ios', 										'VoxesController@faqiOS');
 	Route::any('vox/tests', 										'VoxesController@test');
@@ -218,6 +216,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('vox/get-reward/{id}', 								'VoxesController@getReward');
 	Route::post('vox/get-duration/{id}', 							'VoxesController@getDuration');
 	Route::post('vox/hide-survey/{id}', 							'VoxesController@hideSurvey');
+	Route::post('vox/get-scale-content/{id?}', 						'VoxesController@getScaleContent');
 	Route::post('vox/get-question-content/{id}', 					'VoxesController@getQuestionContent');
 	Route::post('vox/add-question-content/{id}', 					'VoxesController@addQuestionContent');
 	Route::any('vox/history', 										'VoxesController@voxesHistory');

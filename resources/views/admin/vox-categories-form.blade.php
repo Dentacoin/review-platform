@@ -28,57 +28,56 @@
                         </ul>
                     </div>
                 </div>
-                <div class="tab-content">
-                    @foreach($langs as $code => $lang_info)
-                        <div class="lang-tab tab-pane fade{{ $loop->first ? ' active in' : '' }}" data-lang="{{ $code }}" id="nav-tab-{{ $code }}">
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.category.name') }}</label>
-                                <div class="col-md-9">
-                                    {{ Form::text('category-name-'.$code, !empty($item) ? $item->{'name:'.$code} : null, array('maxlength' => 128, 'class' => 'form-control')) }}
+                <div class="tab-content clearfix">
+                    <div class="col-md-6">
+                        @foreach($langs as $code => $lang_info)
+                            <div class="lang-tab tab-pane fade{{ $loop->first ? ' active in' : '' }}" data-lang="{{ $code }}" id="nav-tab-{{ $code }}">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.category.name') }}</label>
+                                    <div class="col-md-10">
+                                        {{ Form::text('category-name-'.$code, !empty($item) ? $item->{'name:'.$code} : null, array('maxlength' => 128, 'class' => 'form-control')) }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
 
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Color</label>
-                        <div class="col-md-9">
-                            {{ Form::text('color', !empty($item) ? $item->color : null, array('class' => 'form-control')) }}
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px; max-width: 200px;">Icon</label>
-                        <div class="col-md-9">
-                            {{ Form::file('icon', ['id' => 'icon', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
-                            * Square PNG Image, Min Width 50px, up to 2 MB<br/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px; max-width: 200px;">&nbsp;</label>
-                        @if(!empty($item) && $item->hasimage)
-                            <div class="col-md-9">
-                                <a target="_blank" href="{{ $item->getImageUrl() }}">
-                                    <img src="{{ $item->getImageUrl(true) }}" style="background: #2f7de1; width: 50px;" />
-                                </a>
-                                <br/>
-                                <a href="{{ url('cms/vox/categories/edit/'.$item->id.'/delpic') }}">Delete photo</a>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Color</label>
+                            <div class="col-md-10">
+                                {{ Form::text('color', !empty($item) ? $item->color : null, array('class' => 'form-control')) }}
                             </div>
-                        @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">Icon</label>
+                            <div class="col-md-10">
+                                {{ Form::file('icon', ['id' => 'icon', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                                * Square PNG Image, Min Width 50px, up to 2 MB<br/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">&nbsp;</label>
+                            @if(!empty($item) && $item->hasimage)
+                                <div class="col-md-10">
+                                    <a target="_blank" href="{{ $item->getImageUrl() }}">
+                                        <img src="{{ $item->getImageUrl(true) }}" style="background: #2f7de1; width: 50px;" />
+                                    </a>
+                                    <br/>
+                                    <a href="{{ url('cms/vox/categories/edit/'.$item->id.'/delpic') }}">Delete photo</a>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-block btn-success">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.category.submit') : trans('admin.page.'.$current_page.'.edit.category.submit') }}</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="col-md-10 control-label"></label>
-                <div class="col-md-1">
-                    <button type="submit" class="btn btn-block btn-sm btn-success">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.category.submit') : trans('admin.page.'.$current_page.'.edit.category.submit') }}</button>
-                </div>
-            </div>
-
         </form>
-
     </div>
 </div>
 

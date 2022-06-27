@@ -33,7 +33,12 @@
 
     <div class="row">
         <div class="col-md-12 ui-sortable">
-            {{ Form::open(array('id' => 'page-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true)) }}
+            {{ Form::open(array(
+                'id' => 'page-add', 
+                'class' => 'form-horizontal', 
+                'method' => 'post', 
+                'files' => true
+            )) }}
 
                 <div class="panel panel-inverse panel-with-tabs custom-tabs">
                     <div class="panel-heading p-0">
@@ -53,11 +58,13 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.lang-slug') }}</label>
                                     <div class="col-md-{{ !empty($item) ? '4' : '10' }}">
-                                        {{ Form::text('slug-'.$code, !empty($item) ? $item->translateOrNew($code)->slug : null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                                        {{ Form::text('slug-'.$code, !empty($item) ? $item->translateOrNew($code)->slug : null, array(
+                                            'maxlength' => 256, 
+                                            'class' => 'form-control'
+                                        )) }}
                                     </div>
                                     @if(!empty($item))
                                         <div class="col-md-2">
-                                            <!-- <a href="{{ $item->getLink().'?testmode=0' }}" target="_blank" class="btn btn-primary btn-block">Preview Survey</a> -->
                                             <a href="{{ $item->getStatsList() }}" target="_blank" class="btn btn-primary btn-block">Preview Stats</a>
                                         </div>
                                         <div class="col-md-2">
@@ -82,14 +89,27 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-4">
-                                        {{ Form::text('title-'.$code, !empty($item) ? $item->{'title:'.$code} : null, array('maxlength' => 256, 'class' => 'form-control input-title', 'placeholder' => 'Title for Survey page - Website')) }}
+                                        {{ Form::text('title-'.$code, !empty($item) ? $item->{'title:'.$code} : null, array(
+                                            'maxlength' => 256, 
+                                            'class' => 'form-control input-title', 
+                                            'placeholder' => 'Title for Survey page - Website'
+                                        )) }}
                                     </div>
                                     <div class="col-md-4" max-symb="244">
-                                        {{ Form::textarea('description-'.$code, !empty($item) ? $item->{'description:'.$code} : null, array('maxlength' => 2048, 'class' => 'form-control input-description', 'placeholder' => 'Description for Survey page - Website', 'id' => 'surv-desc')) }}
+                                        {{ Form::textarea('description-'.$code, !empty($item) ? $item->{'description:'.$code} : null, array(
+                                            'maxlength' => 2048, 
+                                            'class' => 'form-control input-description', 
+                                            'placeholder' => 'Description for Survey page - Website', 
+                                            'id' => 'surv-desc'
+                                        )) }}
                                         <p class="textarea-symbols"><span class="symbol-count">0</span>/244 (Maximum symbols count)</p>
                                     </div>
                                     <div class="col-md-4">
-                                        {{ Form::textarea('stats_description-'.$code, !empty($item) ? $item->translateOrNew($code)->stats_description : null, array('maxlength' => 2048, 'class' => 'form-control input-stats_description', 'placeholder' => 'Description for Stats page - Website')) }}
+                                        {{ Form::textarea('stats_description-'.$code, !empty($item) ? $item->translateOrNew($code)->stats_description : null, array(
+                                            'maxlength' => 2048, 
+                                            'class' => 'form-control input-stats_description', 
+                                            'placeholder' => 'Description for Stats page - Website'
+                                        )) }}
                                     </div>
                                 </div>
                             </div>
@@ -132,21 +152,29 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">Scheduled at</label>
                             <div class="col-md-2">
-                                {{ Form::text('scheduled_at', !empty($item) ? $item->scheduled_at : null, array('class' => 'form-control datetimepicker', 'autocomplete' => 'off')) }}
+                                {{ Form::text('scheduled_at', !empty($item) ? $item->scheduled_at : null, array(
+                                    'class' => 'form-control datetimepicker', 
+                                    'autocomplete' => 'off'
+                                )) }}
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">Sort order</label>
                             <div class="col-md-2">
-                                {{ Form::number('sort_order', !empty($item) ? $item->sort_order : null, array('class' => 'form-control')) }}
+                                {{ Form::number('sort_order', !empty($item) ? $item->sort_order : null, array(
+                                    'class' => 'form-control'
+                                )) }}
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.type') }}</label>
                             <div class="col-md-2">
-                                {{ Form::select('type', $types, !empty($item) ? $item->type : null, array('class' => 'form-control vox-type-input', 'current-type' => !empty($item) ? $item->type : '')) }}
+                                {{ Form::select('type', $types, !empty($item) ? $item->type : null, array(
+                                    'class' => 'form-control vox-type-input', 
+                                    'current-type' => !empty($item) ? $item->type : ''
+                                )) }}
                                 <input type="hidden" name="hide-survey" id="hide-survey" value=""/>
                             </div>
                         </div>
@@ -187,16 +215,21 @@
                         <div class="form-group">
                             <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">Thumb</label>
                             <div class="col-md-10">
-                                {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                                {{ Form::file('photo', [
+                                    'id' => 'photo', 
+                                    'accept' => 'image/gif, image/jpg, image/jpeg, image/png'
+                                ]) }}<br/>
                                 * Size: 520х352px, up to 2 MB<br/>
-                                
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px">Social Image</label>
                             <div class="col-md-10">
-                                {{ Form::file('photo-social', ['id' => 'photo-social', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                                {{ Form::file('photo-social', [
+                                    'id' => 'photo-social', 
+                                    'accept' => 'image/gif, image/jpg, image/jpeg, image/png'
+                                ]) }}<br/>
                                 * Size: 1200x628, up to 2 MB<br/>
                             </div>
                         </div>
@@ -204,7 +237,10 @@
                         <div class="form-group">
                             <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px">Stats Image</label>
                             <div class="col-md-10">
-                                {{ Form::file('photo-stats', ['id' => 'photo-stats', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                                {{ Form::file('photo-stats', [
+                                    'id' => 'photo-stats', 
+                                    'accept' => 'image/gif, image/jpg, image/jpeg, image/png'
+                                ]) }}<br/>
                                 * Size: 1200x628, up to 2 MB<br/>
                             </div>
                         </div>
@@ -278,7 +314,8 @@
                         </style>
 
                         <div class="form-group col-md-12">
-                            <h3 style="display: inline-block; margin-right: 20px;">TARGETING</h3> <a href="javascript:;" class="btn btn-primary target-button">Show target groups</a>
+                            <h3 style="display: inline-block; margin-right: 20px;">TARGETING</h3> 
+                            <a href="javascript:;" class="btn btn-primary target-button">Show target groups</a>
                             @if(empty($item->country_percentage))
                                 <div class="alert alert-danger" style="display: inline-block;">Missing Country Percentage</div>
                             @endif
@@ -290,7 +327,12 @@
                                             <div class="col-md-11">
                                                 @foreach($value['values'] as $k => $v)
                                                     <label class="col-md-3" for="{{ $k }}">
-                                                        <input type="checkbox" name="{{ $key }}[]" value="{{ $k }}" id="{{ $k }}" {!! !empty($item) && !empty($item->$key) && in_array($k, $item->$key) ? 'checked="checked"' : '' !!}>
+                                                        <input 
+                                                        type="checkbox" 
+                                                        name="{{ $key }}[]" 
+                                                        value="{{ $k }}" 
+                                                        id="{{ $k }}" 
+                                                        {!! !empty($item) && !empty($item->$key) && in_array($k, $item->$key) ? 'checked="checked"' : '' !!}>
                                                         {{ $v }}
                                                     </label>
                                                 @endforeach
@@ -357,7 +399,7 @@
                                         </div>
                                         <label class="col-md-1 control-label">
                                             Max percentage of users from one country
-                                            <!-- <br/> (this will not apply if there is only one selected country) -->
+                                            <br/> (this will not apply if there is only one selected country)
                                         </label>
                                         <div class="col-md-2">
                                             <style type="text/css">
@@ -372,7 +414,10 @@
                                                     -moz-appearance: textfield;
                                                 }
                                             </style>
-                                            {{ Form::number( 'country_percentage', !empty($item) ? $item->country_percentage : '' , array('class' => 'form-control', 'placeholder' => 'Number from 1 to 100') ) }}
+                                            {{ Form::number( 'country_percentage', !empty($item) ? $item->country_percentage : '' , array(
+                                                'class' => 'form-control', 
+                                                'placeholder' => 'Number from 1 to 100'
+                                            )) }}
                                         </div>
                                         @if(!empty($item) && !empty($item->users_percentage) && !empty($item->country_percentage))
                                             <div class="col-md-3" style="border: 1px solid black;padding-top: 10px;padding-bottom: 10px;">
@@ -389,7 +434,10 @@
 
                         @if(!empty($item->complex))
                             <div class="form-group triggers-wrapper col-md-12">
-                                <h3 style="display: inline-block; margin-right: 20px;">Calculating survey max DCN reward <input type="checkbox" name="manually_calc_reward" id="manually-calc-reward" value="1" {!! !empty($item->manually_calc_reward) ? 'checked="checked"' : '' !!}></h3> <a href="javascript:;" class="btn btn-primary triggers-button">Show triggers</a>
+                                <h3 style="display: inline-block; margin-right: 20px;">Calculating survey max DCN reward 
+                                    <input type="checkbox" name="manually_calc_reward" id="manually-calc-reward" value="1" {!! !empty($item->manually_calc_reward) ? 'checked="checked"' : '' !!}>
+                                </h3> 
+                                <a href="javascript:;" class="btn btn-primary triggers-button">Show triggers</a>
 
                                 @if(empty($item->manually_calc_reward))
                                     <div class="alert alert-danger" style="display: inline-block;">Not calculated reward</div>
@@ -451,8 +499,12 @@
 
                         <div class="form-group">
                             <div class="col-md-12">
-                                <a href="javascript:;" id="generate-stats" class="btn btn-primary btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }} </a>
-                                <button type="submit" class="btn btn-primary btn-block" style="display: none;">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>
+                                <a href="javascript:;" id="generate-stats" class="btn btn-primary btn-block">
+                                    {{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-block" style="display: none;">
+                                    {{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -743,7 +795,6 @@
 
     <div id="hideSurveyModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -751,10 +802,11 @@
                 </div>
                 <div class="modal-body">
                     <form id="hide-survey-form" method="post">
-                        {{ Form::text('hide-survey-confirm', null, array('class' => 'form-control input-title', 'placeholder' => 'Type HIDE to confirm')) }}
-                        
+                        {{ Form::text('hide-survey-confirm', null, array(
+                            'class' => 'form-control input-title', 
+                            'placeholder' => 'Type HIDE to confirm'
+                        )) }}
                         <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Submit</button>
-
                         <label class="alert alert-danger" style="display: none;margin-top: 10px;">If you want to hide the survey, please type HIDE</label>
                     </form>
                 </div>
@@ -768,7 +820,6 @@
     @if(!empty($item) && $item->questions->isNotEmpty())
         <div id="editQuestionModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
-                <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -781,7 +832,6 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-
             </div>
         </div>
     @endif
@@ -789,7 +839,6 @@
     @if(!empty($item))
         <div id="addQuestionModal" class="modal fade" role="dialog" v-id="{{ $item->id }}">
             <div class="modal-dialog">
-                <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -802,7 +851,6 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-
             </div>
         </div>
     @endif
