@@ -105,7 +105,7 @@ class DentistController extends FrontController {
             ]);
         }
 
-        $reviews = $item->is_clinic ? $item->clinicReviews() : $item->dentistReviews();
+        $reviews = $item->reviews_in();
         if($review_id) {
             $review = Review::find($review_id);
             if(!empty($review) && !empty($reviews)) {
@@ -1573,21 +1573,22 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
             $dentist = User::find($dentist_page->dentist_id);
 
             if (!empty($dentist)) {
+                $dentistReviewsIn = $dentist->reviews_in();
 
                 if ($dentist_page->reviews_type == 'all') {
-                    $reviews_obj = $dentist->reviews_in();
+                    $reviews_obj = $dentistReviewsIn;
 
                     if ($dentist_page->reviews_count != 'all') {
                         $all_count = intval($dentist_page->reviews_count);
-                        $reviews_obj = $dentist->reviews_in()->take($all_count);
+                        $reviews_obj = $dentistReviewsIn->take($all_count);
                     }
                 } else if ($dentist_page->reviews_type == 'trusted') {
 
                     if ($dentist_page->reviews_count != 'all') {
                         $trusted_count = intval($dentist_page->reviews_count);
-                        $reviews_obj = $dentist->reviews_in()->where('verified', 1)->take($trusted_count);
+                        $reviews_obj = $dentistReviewsIn->where('verified', 1)->take($trusted_count);
                     } else {
-                        $reviews_obj = $dentist->reviews_in()->where('verified', 1);
+                        $reviews_obj = $dentistReviewsIn->where('verified', 1);
                     }
                     
                 } else if($dentist_page->reviews_type == 'custom') {

@@ -328,14 +328,9 @@ class ProfileController extends FrontController {
                 $review_out->save();
             }
 
-            foreach ($this->user->reviews_in_dentist as $review_in_dentist) {
-                $review_in_dentist->hasimage_social = false;
-                $review_in_dentist->save();
-            }
-
-            foreach ($this->user->reviews_in_clinic as $review_in_clinic) {
-                $review_in_clinic->hasimage_social = false;
-                $review_in_clinic->save();
+            foreach ($this->user->reviews_in() as $review_in) {
+                $review_in->hasimage_social = false;
+                $review_in->save();
             }
             
             $inputs = Request::all();

@@ -255,9 +255,11 @@ class EmailsController extends AdminController {
 
         ///with reviews
         $user = User::find(68690);
+        $userReviewsIn = $user->reviews_in();
+        $userReviewsInCount = $userReviewsIn->count();
     
         $avg_rating = 0;
-        foreach($user->reviews_in() as $cur_month_reviews) {
+        foreach($userReviewsIn as $cur_month_reviews) {
 
             if (!empty($cur_month_reviews->team_doctor_rating) && ($user->id == $cur_month_reviews->dentist_id)) {
                 $avg_rating += $cur_month_reviews->team_doctor_rating;
@@ -266,11 +268,11 @@ class EmailsController extends AdminController {
             }
         }
 
-        $cur_month_rating = number_format($avg_rating / $user->reviews_in()->count(), 2);
-        $cur_month_reviews_num = $user->reviews_in()->count();
+        $cur_month_rating = number_format($avg_rating / $userReviewsInCount, 2);
+        $cur_month_reviews_num = $userReviewsInCount;
 
         $prev_avg_rating = 0;
-        foreach($user->reviews_in() as $prev_month_reviews) {
+        foreach($userReviewsIn as $prev_month_reviews) {
             if (!empty($prev_month_reviews->team_doctor_rating) && ($user->id == $prev_month_reviews->dentist_id)) {
                 $prev_avg_rating += $prev_month_reviews->team_doctor_rating;
             } else {
@@ -278,8 +280,8 @@ class EmailsController extends AdminController {
             }
         }
 
-        $prev_month_rating = !empty($prev_avg_rating) ? $prev_avg_rating / $user->reviews_in()->count() : 0;
-        $prev_month_reviews_num = $user->reviews_in()->count();
+        $prev_month_rating = !empty($prev_avg_rating) ? $prev_avg_rating / $userReviewsInCount : 0;
+        $prev_month_reviews_num = $userReviewsInCount;
 
         if (!empty($prev_month_rating)) {
             

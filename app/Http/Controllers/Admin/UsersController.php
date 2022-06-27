@@ -412,7 +412,7 @@ class UsersController extends AdminController {
             $users = $users->where('country_id', request('search-country') );
         }
         if(!empty(request('search-review'))) {
-            $users = $users->has('reviews_in_dentist', '=', request('search-review'));
+            $users = $users->has('reviews_in', '=', request('search-review'));
         }
         if(!empty(request('search-surveys-taken'))) {
             $users = $users->whereHas('surveys_rewards', function ($query) {
@@ -1245,14 +1245,9 @@ class UsersController extends AdminController {
                     $review_out->save();
                 }
 
-                foreach ($item->reviews_in_dentist as $review_in_dentist) {
-                    $review_in_dentist->hasimage_social = false;
-                    $review_in_dentist->save();
-                }
-
-                foreach ($item->reviews_in_clinic as $review_in_clinic) {
-                    $review_in_clinic->hasimage_social = false;
-                    $review_in_clinic->save();
+                foreach ($item->reviews_in() as $review_in) {
+                    $review_in->hasimage_social = false;
+                    $review_in->save();
                 }
 
                 if(in_array($item->status, ['rejected', 'added_rejected', 'added_by_dentist_rejected', 'added_by_clinic_rejected']) && empty($item->deleted_at)) {

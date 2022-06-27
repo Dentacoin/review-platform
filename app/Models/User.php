@@ -225,18 +225,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         ->where('status', 'accepted')
         ->orderBy('id', "DESC");
     }
-    public function reviews_in_dentist() {
-        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')
-        ->where('status', 'accepted')
-        ->with(['user', 'answers'])
-        ->orderBy('id', 'desc');
-    }
-    public function reviews_in_clinic() {
-        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')
-        ->where('status', 'accepted')
-        ->with(['user', 'answers'])
-        ->orderBy('id', 'desc');
-    }
     public function reviews_out_standard() {
         return $this->reviews_out->reject(function($item) {
             return $item->youtube_id;
@@ -248,27 +236,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         });
     }
     public function reviews_in() {
-        return $this->reviews_in_dentist
-        ->merge($this->reviews_in_clinic)
+        return $this->hasMany('App\Models\Review', 'review_to_id', 'id')
+        ->where('status', 'accepted')
+        ->with(['user', 'answers'])
+        ->orderBy('id', 'desc')
+        ->get()
         ->sortByDesc(function ($review, $key) {
-            if($review->verified) {
-                return 1000000 + $review->id;
-            } else {
-                return $review->id;
-            }
-        });
-    }
-    public function dentistReviews() {
-        return $this->reviews_in_dentist->sortByDesc(function ($review, $key) {
-            if($review->verified) {
-                return 1000000 + $review->id;
-            } else {
-                return $review->id;
-            }
-        });
-    }
-    public function clinicReviews() {
-        return $this->reviews_in_clinic->sortByDesc(function ($review, $key) {
             if($review->verified) {
                 return 1000000 + $review->id;
             } else {

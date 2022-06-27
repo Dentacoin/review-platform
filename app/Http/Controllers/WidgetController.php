@@ -65,22 +65,21 @@ class WidgetController extends BaseController {
             $layout = request('layout');
 
             if(!empty(request('review-type'))) {
-                if (request('review-type') == 'all') {
-                    $reviews = $user->reviews_in();
+                $reviews = $user->reviews_in();
 
+                if (request('review-type') == 'all') {
                     if(empty(request('review-all-count')) || (request('review-all-count') == 'all')) {
-                        $reviews = $user->reviews_in();
                     } else {
                         $all_count = intval(request('review-all-count'));
-                        $reviews = $user->reviews_in()->take($all_count);
+                        $reviews = $reviews->take($all_count);
                     }
                 } else if (request('review-type') == 'trusted') {
 
                     if(empty(request('review-trusted-count')) || (request('review-trusted-count') == 'all')) {
-                        $reviews = $user->reviews_in()->where('verified', 1);
+                        $reviews = $reviews->where('verified', 1);
                     } else {
                         $trusted_count = intval(request('review-trusted-count'));
-                        $reviews = $user->reviews_in()->where('verified', 1)->take($trusted_count);
+                        $reviews = $reviews->where('verified', 1)->take($trusted_count);
                     }
                     
                 } else if(request('review-type') == 'custom') {
