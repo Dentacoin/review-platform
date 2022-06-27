@@ -1214,4 +1214,8 @@ class VoxHelper {
 
         return $results;
     }
+
+    public static function getQuestionAnswerText($questionAnswers, $answerNumber) {
+        return VoxQuestion::handleAnswerTooltip( mb_substr($questionAnswers[intval($answerNumber)-1], 0, 1)=='!' || mb_substr($questionAnswers[intval($answerNumber)-1], 0, 1)=='#' ? mb_substr($questionAnswers[intval($answerNumber)-1], 1) : $questionAnswers[intval($answerNumber)-1]);
+    }
 }

@@ -404,35 +404,20 @@ class VoxesController extends AdminController {
 
         if(!empty($item)) {
 
+            $scales = [];
+            foreach (VoxScale::get() as $sitem) {
+                $scales[$sitem->id] = $sitem;
+            }
+
             $triggers = [];
             $linked_triggers = [];
 
             foreach($item->questions as $question) {
                 $triggers[$question->id] = '';
                 if ($question->question_trigger) {
-
-                    foreach (explode(';', $question->question_trigger) as $v) {
-                        $question_id = explode(':',$v)[0];
-
-                        if($question_id==-1) {
-                            $triggers[$question->id] .= 'Same as previous<br/>';
-                            $linked_triggers[] = $question->id;
-                        } else if(!is_numeric($question_id)) {
-                            $triggers[$question->id] .= ($question_id == 'age_groups' ? 'Age groups' : ($question_id == 'gender' ? 'Gender' : config('vox.details_fields.'.$question_id)['label'])).' : '.explode(':',$v)[1];
-                        } else {
-
-                            $q = VoxQuestion::find($question_id);
-
-                            if(!empty($q)) {
-                                if (!empty(explode(':',$v)[1])) {
-                                    $answ = explode(':',$v)[1];
-                                    $triggers[$question->id] .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().': '.$answ.'<br/>';
-                                } else {
-                                    $triggers[$question->id] .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().'<br/>';
-                                }                            
-                            }
-                        }                        
-                    }
+                    $triggersView = AdminHelper::getQuestionTriggers($question, $scales);
+                    $triggers[$question->id] = $triggersView['trigger'];
+                    $linked_triggers[] = $triggersView['trigger_same_as_prev'];
                 }
             }
 
@@ -525,12 +510,6 @@ class VoxesController extends AdminController {
                     }
                     $q_trigger_multiple_answ[$key] = implode(',', $answe);
                 }
-            }
-
-            $slist = VoxScale::get();
-            $scales = [];
-            foreach ($slist as $sitem) {
-                $scales[$sitem->id] = $sitem;
             }
 
             $error = false;
@@ -919,40 +898,19 @@ class VoxesController extends AdminController {
                 ]);
             }
 
-            $trigger = '';
-            $trigger_same_as_prev = false;
-
-            if($question->question_trigger) {
-
-                foreach (explode(';', $question->question_trigger) as $v) {
-                    $question_id = explode(':',$v)[0];
-
-                    if($question_id==-1) {
-                        $trigger .= 'Same as previous<br/>';
-                        $trigger_same_as_prev = true;
-                    } else if(!is_numeric($question_id)) {
-                        $trigger .= ($question_id == 'age_groups' ? 'Age groups' : ($question_id == 'gender' ? 'Gender' : config('vox.details_fields.'.$question_id)['label'])).' : '.explode(':',$v)[1];
-                    } else {
-                        $q = VoxQuestion::find($question_id);
-
-                        if(!empty($q)) {
-                            if (!empty(explode(':',$v)[1])) {
-                                $answ = explode(':',$v)[1];
-                                $trigger .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().': '.$answ.'<br/>';
-                            } else {
-                                $trigger .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().'<br/>';
-                            }                            
-                        }
-                    }
-                }
+            $scales = [];
+            foreach (VoxScale::get() as $sitem) {
+                $scales[$sitem->id] = $sitem;
             }
+
+            $triggersView = AdminHelper::getQuestionTriggers($question, $scales);
             
             return Response::json([
                 'success' => true,
                 'question' => $question,
                 'realted_question' => $question->related ? $question->related->questionWithTooltips() : '',
-                'trigger' => $trigger,
-                'trigger_same_as_prev' => $trigger_same_as_prev,
+                'trigger' => $triggersView['trigger'],
+                'trigger_same_as_prev' => $triggersView['trigger_same_as_prev'],
                 'question_type' => $this->question_types[$question->type],
             ]);
         }
@@ -1041,40 +999,19 @@ class VoxesController extends AdminController {
                     ]);
                 } else {
 
-                    $trigger = '';
-                    $trigger_same_as_prev = false;
-
-                    if($question->question_trigger) {
-
-                        foreach (explode(';', $question->question_trigger) as $v) {
-                            $question_id = explode(':',$v)[0];
-
-                            if($question_id==-1) {
-                                $trigger .= 'Same as previous<br/>';
-                                $trigger_same_as_prev = true;
-                            } else if(!is_numeric($question_id)) {
-                                $trigger .= ($question_id == 'age_groups' ? 'Age groups' : ($question_id == 'gender' ? 'Gender' : config('vox.details_fields.'.$question_id)['label'])).' : '.explode(':',$v)[1];
-                            } else {
-                                $q = VoxQuestion::find($question_id);
-
-                                if(!empty($q)) {
-                                    if (!empty(explode(':',$v)[1])) {
-                                        $answ = explode(':',$v)[1];
-                                        $trigger .= $q->order.'. '.$q->questionWithTooltips().': '.$answ.'<br/>';
-                                    } else {
-                                        $trigger .= $q->order.'. '.$q->questionWithTooltips().'<br/>';
-                                    }                            
-                                }
-                            }
-                        }
+                    $scales = [];
+                    foreach (VoxScale::get() as $sitem) {
+                        $scales[$sitem->id] = $sitem;
                     }
+
+                    $triggersView = AdminHelper::getQuestionTriggers($question, $scales);
                     
                     return Response::json([
                         'success' => true,
                         'question' => $question,
                         'realted_question' => $question->related ? $question->related->questionWithTooltips() : '',
-                        'trigger' => $trigger,
-                        'trigger_same_as_prev' => $trigger_same_as_prev,
+                        'trigger' => $triggersView['trigger'],
+                        'trigger_same_as_prev' => $triggersView['trigger_same_as_prev'],
                         'question_type' => $this->question_types[$question->type],
                     ]);
                 }

@@ -4,6 +4,9 @@ namespace App\Helpers;
 
 use App\Models\DcnTransactionHistory;
 use App\Models\UserHistory;
+use App\Models\VoxQuestion;
+
+use App\Helpers\VoxHelper;
 
 class AdminHelper {
 
@@ -69,5 +72,117 @@ class AdminHelper {
         $transaction->processing = 0;
         $transaction->retries = 0;
         $transaction->save();
+    }
+
+    public static function getQuestionTriggers($question, $scales) {
+        $trigger = '';
+        $trigger_same_as_prev = false;
+
+        if($question->question_trigger) {
+
+            foreach (explode(';', $question->question_trigger) as $v) {
+                $question_id = explode(':',$v)[0];
+
+                if($question_id==-1) {
+                    $trigger .= 'Same as previous<br/>';
+                    $trigger_same_as_prev = $question->id;
+                } else if(!is_numeric($question_id)) {
+                    $trigger .= ($question_id == 'age_groups' ? 'Age groups' : ($question_id == 'gender' ? 'Gender' : config('vox.details_fields.'.$question_id)['label'])).' : '.explode(':',$v)[1];
+                } else {
+                    $q = VoxQuestion::find($question_id);
+
+                    if(!empty($q)) {
+                        if (!empty(explode(':',$v)[1])) {
+                            $answ = explode(':',$v)[1];
+
+                            $questionAnswers = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) : json_decode($q->answers, true);
+
+                            if (str_contains($answ, '-')) {
+
+                                if(str_contains($answ, ',')) {
+
+                                    $answerText = [];
+        
+                                    foreach (explode(',', $answ) as $ar) {
+                                        if(mb_strpos($ar, '-')!==false) {
+                                            list($from, $to) = explode('-', $answ);
+
+                                            for ($i=$from; $i <= $to ; $i++) {
+                                                // dd($questionAnswers, $i);
+                                                
+                                                try {
+                                                    $answerText[] = VoxHelper::getQuestionAnswerText($questionAnswers, $i);
+                                                } catch (\Exception $e) {
+                                                    $answerText[] = $i;
+                                                }
+                                            }
+                                        } else {
+                                            $answerText[] = VoxHelper::getQuestionAnswerText($questionAnswers, $ar);
+                                        }
+                                    }
+
+                                    $answerText = implode('; ',$answerText);
+                                } else {
+
+                                    $answerText = [];
+                                    list($from, $to) = explode('-', $answ);
+
+                                    for ($i=$from; $i <= $to ; $i++) {
+                                        // dd($questionAnswers, $i);
+                                        
+                                        try {
+                                            $answerText[] = VoxHelper::getQuestionAnswerText($questionAnswers, $i);
+                                        } catch (\Exception $e) {
+                                            $answerText[] = $i;
+                                        }
+                                    }
+
+                                    $answerText = implode('; ',$answerText);
+                                    // dd($answerText);
+                                }
+                            } else {
+
+                                if(str_contains($answ, ',')) {
+
+                                    $answerText = [];
+        
+                                    foreach (explode(',', $answ) as $ar) {
+                                        if(mb_strpos($ar, '-')!==false) {
+                                            list($from, $to) = explode('-', $answ);
+
+                                            for ($i=$from; $i <= $to ; $i++) {
+                                                // dd($questionAnswers, $i);
+                                                
+                                                try {
+                                                    $answerText[] = VoxHelper::getQuestionAnswerText($questionAnswers, $i);
+                                                } catch (\Exception $e) {
+                                                    $answerText[] = $i;
+                                                }
+                                            }
+                                        } else {
+                                            $answerText[] = VoxHelper::getQuestionAnswerText($questionAnswers, $ar);
+                                        }
+                                    }
+
+                                    $answerText = implode('; ',$answerText);
+                                } else {
+                                    $answerText = VoxHelper::getQuestionAnswerText($questionAnswers, $answ);
+                                }
+                            }
+                            // dd($questionAnswers, $answ);
+
+                            $trigger .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().': <b>'.$answ.'</b> ( Answer Texts: '.$answerText.' )<br/>';
+                        } else {
+                            $trigger .= '<b>'.$q->order.'</b>. '.$q->questionWithTooltips().'<br/>';
+                        }                            
+                    }
+                }
+            }
+        }
+
+        return [
+            'trigger' => $trigger,
+            'trigger_same_as_prev' => $trigger_same_as_prev,
+        ];
     }
 }

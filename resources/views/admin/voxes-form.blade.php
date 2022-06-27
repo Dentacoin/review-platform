@@ -564,7 +564,7 @@
                                                             </td>
                                                         @endif --}}
                                                         <td>
-                                                            <span class="question-number" q-n="{{ $question->order }}">{{ $question->order }}</span>
+                                                            <b class="question-number" q-n="{{ $question->order }}">{{ $question->order }}</b>
                                                         </td>
                                                         <td style="width: 340px;">
                                                             <span class="question-question">{!! $question->questionWithTooltips() !!}</span>
