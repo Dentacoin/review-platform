@@ -2099,7 +2099,7 @@ class VoxesController extends AdminController {
         }
 
         return $this->showView('vox-scales', array(
-            'scales' => VoxScale::with('translations')->orderBy('id', 'DESC')->get()
+            'scales' => VoxScale::with('translations')->orderBy('title', 'ASC')->get()
         ));
     }
 
