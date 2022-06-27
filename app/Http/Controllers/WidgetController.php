@@ -86,9 +86,9 @@ class WidgetController extends BaseController {
                     $reviews = [];
                     if (!empty(request('review-custom'))) {
                         foreach (request('review-custom') as $k => $cr) {
-                            $reviews[] = Review::where('id', $cr)->where(function($query) use ($user_id) {
-                                $query->where( 'dentist_id', $user_id)->orWhere('clinic_id', $user_id);
-                            })->first();
+                            $reviews[] = Review::where('id', $cr)
+                            ->where( 'review_to_id', $user_id)
+                            ->first();
                         }
                     }
                 }

@@ -483,10 +483,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function approvedPatientcanAskDentistForReview($dentist_id) {
 
         $lastReview = Review::where('user_id', $this->id)
-        ->where(function($query) use ($dentist_id) {
-            $query->where( 'dentist_id', $dentist_id)
-            ->orWhere('clinic_id', $dentist_id);
-        })->orderBy('id', 'desc')
+        ->where( 'review_to_id', $dentist_id)
+        ->orderBy('id', 'desc')
         ->first();
 
         if($lastReview) {
@@ -621,10 +619,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function hasReviewTo($id) {
 
         $review = Review::where('user_id', $this->id)
-        ->where( function($query) use ($id) {
-            $query->where('dentist_id', $id)
-            ->orWhere('clinic_id', $id);
-        })->orderBy('id', 'desc')->first();
+        ->where('review_to_id', $id)
+        ->orderBy('id', 'desc')
+        ->first();
 
         return $review ?? null;
     }
@@ -983,12 +980,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $nonverified = [];
         foreach ($this->reviews_out as $review) {
             if(!$review->verified) {
-                if($review->dentist_id) {
-                    $nonverified[$review->dentist_id] = $review->dentist_id;
-                }
-                if($review->clinic_id) {
-                    $nonverified[$review->clinic_id] = $review->clinic_id;
-                }
+                $nonverified[$review->review_to_id] = $review->review_to_id;
             }
         }
 
@@ -1066,16 +1058,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function deleteActions() {
-
-        // foreach ($this->reviews_out as $r) {
-        //     if (!empty($r->dentist_id)) {
-        //         $dentist = self::find($r->dentist_id);
-        //     } else if(!empty($r->clinic_id)) {
-        //         $dentist = self::find($r->clinic_id);
-        //     }
-        //     $r->delete();
-        //     $dentist->recalculateRating();
-        // }
 
         $id = $this->id;
         $teams = UserTeam::where(function($query) use ($id) {
@@ -1766,16 +1748,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getMontlyRating($month=0) {
-
-        $id = $this->id;
-
+        
         $to_month = Carbon::now()->modify('-'.$month.' months');
         $from_month = Carbon::now()->modify('-'.($month+1).' months');
 
-        $prev_reviews = Review::where(function($query) use ($id) {
-            $query->where( 'dentist_id', $id)
-            ->orWhere('clinic_id', $id);
-        })
+        $prev_reviews = Review::where( 'review_to_id', $this->id)
         ->where('created_at', '>=', $from_month)
         ->where('created_at', '<=', $to_month)
         ->get();

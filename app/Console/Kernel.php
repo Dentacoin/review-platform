@@ -1298,9 +1298,7 @@ UNCONFIRMED TRANSACTIONS
         //                     $id = $user->id;
         //                     $from_day = Carbon::now()->subDays(11);
 
-        //                     $prev_reviews = Review::where(function($query) use ($id) {
-        //                         $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
-        //                     })->where('created_at', '>=', $from_day)
+        //                     $prev_reviews = Review::where( 'review_to_id', $id)->where('created_at', '>=', $from_day)
         //                     ->get();
 
         //                     $rating = 0;
@@ -1384,9 +1382,7 @@ UNCONFIRMED TRANSACTIONS
         //                     $id = $user->id;
         //                     $from_day = Carbon::now()->subDays(25);
 
-        //                     $prev_reviews = Review::where(function($query) use ($id) {
-        //                         $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
-        //                     })->where('created_at', '>=', $from_day)
+        //                     $prev_reviews = Review::where( 'review_to_id', $id)->where('created_at', '>=', $from_day)
         //                     ->get();
 
         //                     $rating = 0;

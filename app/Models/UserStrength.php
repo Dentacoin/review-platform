@@ -87,14 +87,10 @@ class UserStrength extends Model {
 
                 if ($today < $five_day && !$new_user) {
 
-                    $id = $user->id;
-
                     $first_day_of_last_month = new Carbon('first day of last month');
                     $last_day_of_last_month = new Carbon('last day of last month');
 
-                    $last_month_reviews = Review::where(function($query) use ($id) {
-                        $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
-                    })
+                    $last_month_reviews = Review::where( 'review_to_id', $user->id)
                     ->where('created_at', '>=', $first_day_of_last_month)
                     ->where('created_at', '<=', $last_day_of_last_month)
                     ->get();   
@@ -249,12 +245,7 @@ class UserStrength extends Model {
 
                     if ($current_month_invitations->count()) {
 
-                        $id = $user->id;
-
-                        $current_month_reviews = Review::where(function($query) use ($id) {
-                            $query->where( 'dentist_id', $id)
-                            ->orWhere('clinic_id', $id);
-                        })
+                        $current_month_reviews = Review::where( 'review_to_id', $user->id)
                         ->where('created_at', '>=', $first_day_of_month)
                         ->get();
 

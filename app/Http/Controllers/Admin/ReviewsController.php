@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use App\Models\ReviewAnswer;
-use App\Models\DcnReward;
-use App\Models\UserBan;
 use App\Models\Review;
-use App\Models\User;
 
+use App\Services\TrpService;
 use App\Helpers\AdminHelper;
 use Carbon\Carbon;
 
@@ -109,11 +107,12 @@ class ReviewsController extends AdminController {
         $item = Review::find($id);
         
         if(!empty($item)) {
-            $this->deleteReview($item);
+            TrpService::deleteReview($item);
             $this->request->session()->flash('success-message', 'Review deleted' );
+        } else {
+            $this->request->session()->flash('error-message', 'Review not found' );
         }
 
-        $this->request->session()->flash('error-message', 'Review not found' );
         return redirect('cms/trp/'.$this->current_subpage);
     }
 
@@ -129,7 +128,7 @@ class ReviewsController extends AdminController {
                 $item = Review::find($r_id);
                 
                 if(!empty($item)) {
-                    $this->deleteReview($item);
+                    TrpService::deleteReview($item);
                 }
             }
         }
@@ -154,102 +153,10 @@ class ReviewsController extends AdminController {
                 ['review_id', $item->id],
             ])->restore();
 
-            $dentist = null;
-            $clinic = null;
-
-            if($item->dentist_id) {
-                $dentist = User::find($item->dentist_id);
-            }
-
-            if($item->clinic_id) {
-                $clinic = User::find($item->clinic_id);
-            }
-            
-            if( !empty($dentist) ) {
-                $dentist->recalculateRating();
-            }
-            
-            if( !empty($clinic) ) {
-                $clinic->recalculateRating();
-            }
+            $item->original_dentist->recalculateRating();
         }
 
         $this->request->session()->flash('success-message', 'Review restored' );
         return redirect('cms/trp/'.$this->current_subpage);
-    }
-
-    private function deleteReview($item) {
-        $uid = $item->user_id;
-        $patient = User::where('id', $uid)->withTrashed()->first();
-
-        ReviewAnswer::where([
-            ['review_id', $item->id],
-        ])->delete();
-
-        $dentist = null;
-        $clinic = null;
-
-        if($item->dentist_id) {
-            $dentist = User::find($item->dentist_id);
-        }
-
-        if($item->clinic_id) {
-            $clinic = User::find($item->clinic_id);
-        }
-
-        $reward_for_review = DcnReward::where('user_id', $patient->id)
-        ->where('platform', 'trp')
-        ->where('type', 'review')
-        ->where('reference_id', $item->id)
-        ->first();
-
-        if (!empty($reward_for_review)) {
-            $reward_for_review->delete();
-        }
-
-        Review::destroy( $item->id );
-
-        if( !empty($dentist) ) {
-            $dentist->recalculateRating();
-            $substitutions = [
-                'spam_author_name' => $patient->name,
-            ];
-            
-            $dentist->sendGridTemplate(87, $substitutions, 'trp');
-        }
-
-        if( !empty($clinic) ) {
-            $clinic->recalculateRating();
-            $substitutions = [
-                'spam_author_name' => $patient->name,
-            ];
-            
-            $clinic->sendGridTemplate(87, $substitutions, 'trp');
-        }
-
-        $ban = new UserBan;
-        $ban->user_id = $patient->id;
-        $ban->domain = 'trp';
-        $ban->type = 'spam-review';
-        $ban->save();
-
-        $notifications = $patient->website_notifications;
-        if(!empty($notifications)) {
-            if(($key = array_search('trp', $notifications)) !== false) {
-                unset($notifications[$key]);
-            }
-
-            $patient->website_notifications = $notifications;
-            $patient->save();
-        }
-
-        $request_body = new \stdClass();
-        $request_body->recipient_emails = [$patient->email];
-        $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
-
-        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-        $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
-
-        $patient->sendGridTemplate(86, null,'trp');
     }
 }

@@ -852,10 +852,8 @@ class InvitationsController extends FrontController {
                     ], 'trp');
                 }
     
-                $d_id = $this->user->id;
-                $reviews = Review::where(function($query) use ($d_id) {
-                    $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
-                })->where('user_id', $ask->user->id)
+                $reviews = Review::where( 'review_to_id', $this->user->id)
+                ->where('user_id', $ask->user->id)
                 ->get();
     
                 if ($reviews->count()) {

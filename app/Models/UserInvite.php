@@ -87,9 +87,10 @@ class UserInvite extends Model {
     }
 
     public function hasReview($id) {
-        $review = Review::where('user_id', $this->invited_id)->where(function($query) use ($id) {
-            $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
-        })->orderby('id', 'desc')->first();
+        $review = Review::where('user_id', $this->invited_id)
+        ->where( 'review_to_id', $id)
+        ->orderby('id', 'desc')
+        ->first();
 
         if(!empty($review)) {
             return $review;

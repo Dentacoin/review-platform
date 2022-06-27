@@ -112,7 +112,7 @@
 
         @if($regularReviewsCount)
             <div class="written-reviews regular-review-tab">
-                @foreach($item->reviews_in_standard() as $review)
+                @foreach($dentistReviewsIn as $review)
                     @if($review->user)
                         @include('trp.parts.reviews', [
                             'review' => $review,

@@ -223,13 +223,9 @@ class DentistController extends FrontController {
         // }
 
         if(!empty($this->user)) {
-            
-            $dent_id = $item->id;
-
-            $reviews = Review::where(function($query) use ($dent_id) {
-                $query->where( 'dentist_id', $dent_id)
-                ->orWhere('clinic_id', $dent_id);
-            })->where('user_id', $this->user->id)->first();
+            $reviews = Review::where('review_to_id', $item->id)
+            ->where('user_id', $this->user->id)
+            ->first();
 
             if (!empty($reviews)) {
                 $writes_review = true;
@@ -304,6 +300,9 @@ class DentistController extends FrontController {
             }
         }
 
+        $dentistReviewsIn = $item->reviews_in_standard();
+
+        $view_params['dentistReviewsIn'] = $dentistReviewsIn;
         $view_params['patient_asks'] = $patient_asks;
 
         if( $is_review ) {
@@ -413,7 +412,7 @@ class DentistController extends FrontController {
             $view_params['schema']["sameAs"] = array_values($item->socials);
         }
 
-        if($item->reviews_in_standard()->isNotEmpty() ) {
+        if($dentistReviewsIn->isNotEmpty() ) {
             $view_params['schema']["aggregateRating"] = [
                 "@type" => "AggregateRating",
                 "ratingCount" => intval($item->ratings),
@@ -421,7 +420,7 @@ class DentistController extends FrontController {
             ];
             
             $item_reviews = [];
-            foreach($item->reviews_in_standard() as $review) {
+            foreach($dentistReviewsIn as $review) {
                 $item_reviews[] = [
                     "@type" => "Review",
                     "author" => [
@@ -516,7 +515,7 @@ class DentistController extends FrontController {
 
             $item = User::find(Request::input('d_id'));
             if(empty($item)) {
-                $item = $review->dentist_id ? User::find($review->dentist_id) : User::find($review->clinic_id);
+                $item = $review->original_dentist;
             }           
 
             return $this->ShowView('popups.detailed-review-content', [
@@ -780,19 +779,10 @@ class DentistController extends FrontController {
                             $review->team_doctor_rating = !empty($reviewDentistThatWorksForClinic) || !empty($reviewDentistFromClinic) ? array_sum($answer_dentist_rated) / count($ratingForDentistQuestions) : null;
                             $review->save();
                             
-                            if (!empty($review->dentist_id)) {
-                                $the_dentist = User::find($review->dentist_id);
-                                $the_dentist->recalculateRating();
-                                $the_dentist->hasimage_social = false;
-                                $the_dentist->save();
-                            }
-
-                            if (!empty($review->clinic_id)) {
-                                $the_clinic = User::find($review->clinic_id);
-                                $the_clinic->recalculateRating();
-                                $the_clinic->hasimage_social = false;
-                                $the_clinic->save();
-                            }
+                            $reviewTo = User::find($review->review_to_id);
+                            $reviewTo->recalculateRating();
+                            $reviewTo->hasimage_social = false;
+                            $reviewTo->save();
                             
                             //Send & confirm
                             $is_video = $review->youtube_id ? '_video' : '';
@@ -1232,7 +1222,7 @@ class DentistController extends FrontController {
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
         $review = Review::find($review_id);
 
-        if(!empty($review) && ($this->user->id==$review->clinic_id || $this->user->id==$review->dentist_id ) ) {
+        if(!empty($review) && $this->user->id==$review->review_to_id ) {
 
             $review->reply = strip_tags(Request::input( 'reply' ));
             $review->replied_at = Carbon::now();
@@ -1595,9 +1585,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                     $reviews_obj = [];
                     $d_id = $dentist->id;
                     foreach (json_decode($dentist_page->reviews_count, true) as $k => $cr) {
-                        $reviews_obj[] = Review::where('id', $cr)->where(function($query) use ($d_id) {
-                            $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
-                        })->first();
+                        $reviews_obj[] = Review::where('id', $cr)
+                        ->where( 'review_to_id', $d_id)
+                        ->first();
                     }
                 }
 
@@ -1708,7 +1698,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
                 $review->verified = true;
                 $review->save();
 
-                $main_dentist_id = $review->review_to_id ? $review->review_to_id : ($review->dentist_id ? $review->dentist_id : $review->clinic_id);
+                $main_dentist_id = $review->review_to_id;
 
                 $last_ask = UserAsk::where('dentist_id', $main_dentist_id)
                 ->where('user_id', $review->user_id)

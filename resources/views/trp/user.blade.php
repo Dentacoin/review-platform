@@ -8,7 +8,7 @@
 	$user = !empty($editing_branch_clinic) ? $editing_branch_clinic : (!empty($user) ? $user : null);
 	
 	$videoReviewsCount = $item->reviews_in_video()->count();
-	$regularReviewsCount = $item->reviews_in_standard()->count();
+	$regularReviewsCount = $dentistReviewsIn->count();
 	$hasPatientInvites = $loggedUserAllowEdit && $user->patients_invites->isNotEmpty();
 	$hasPatientAsks = $loggedUserAllowEdit && $user->asksWithoutHidden->isNotEmpty();
 

@@ -103,7 +103,7 @@ class Review extends Model {
 
     public function rewardForReview($withCurrency=true) {
         $dcnReward = DcnReward::where('reference_id', $this->id)
-        ->where('user_id', $this->review_to_id ? $this->review_to_id : ($this->dentist_id ?? $this->clinic_id))
+        ->where('user_id', $this->review_to_id)
         ->where('type', 'dentist-review')
         ->first();
         return $dcnReward ? $dcnReward->reward.($withCurrency ? ' DCN' : '') : '';
@@ -126,10 +126,8 @@ class Review extends Model {
             GeneralHelper::deviceDetector($reward);
             $reward->save();
 
-            $dent_id = $this->review_to_id;
-            $reviews = self::where(function($query) use ($dent_id) {
-                $query->where( 'dentist_id', $dent_id)->orWhere('clinic_id', $dent_id);
-            })->where('user_id', $this->user_id)
+            $reviews = self::where( 'review_to_id', $this->review_to_id)
+            ->where('user_id', $this->user_id)
             ->get();
 
             if ($reviews->count()) {

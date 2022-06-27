@@ -222,8 +222,7 @@ class EmailsController extends AdminController {
                 users
             WHERE 
                 `is_dentist` = 1
-                AND `id` NOT IN ( SELECT `dentist_id` FROM `reviews` WHERE `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
-                AND `id` NOT IN ( SELECT `clinic_id` FROM `reviews` WHERE `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
+                AND `id` NOT IN ( SELECT `review_to_id` FROM `reviews` WHERE `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
                 AND `id` NOT IN ( SELECT `user_id` FROM `emails` WHERE `template_id` = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00' )
                 AND `created_at` < '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed')
