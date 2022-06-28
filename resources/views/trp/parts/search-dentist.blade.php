@@ -98,7 +98,7 @@
                 <div class="socials">
                     @foreach($dentist->socials as $k => $v)
                         <a class="social" href="{{ $v }}" target="_blank">
-                            <img src="{{ url('img-trp/social-network/'.$k.'.svg') }}" height="24"/>
+                            <img src="{{ url('img-trp/social-network/'.$k.'.svg') }}" height="24" width="25"/>
                         </a>
                     @endforeach
                 </div>

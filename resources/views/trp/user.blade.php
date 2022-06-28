@@ -591,12 +591,12 @@
 
 								@if(!empty($item->email))
 									<a class="social email-social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
-										<img src="{{ url('img-trp/social-network/email.svg') }}" height="26"/>
+										<img src="{{ url('img-trp/social-network/email.svg') }}" height="26" width="25"/>
 									</a>
 								@else
 									@if($item->branches->isNotEmpty())
 										<a class="social email-social" href="mailto:{{ $item->email_public ? $item->email_public : ($item->mainBranchClinic->email_public ?? $item->mainBranchClinic->email) }}">
-											<img src="{{ url('img-trp/social-network/email.svg') }}" height="26"/>
+											<img src="{{ url('img-trp/social-network/email.svg') }}" height="26" width="25"/>
 										</a>
 									@endif
 								@endif
@@ -604,7 +604,7 @@
 								@if( $item->socials)
 									@foreach($item->socials as $k => $v)
 										<a class="social {{ $k }}" href="{{ $v }}" target="_blank">
-											<img src="{{ url('img-trp/social-network/'.$k.'.svg') }}" height="26"/>
+											<img src="{{ url('img-trp/social-network/'.$k.'.svg') }}" height="26" width="25"/>
 										</a>
 									@endforeach
 								@endif
