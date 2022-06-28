@@ -31,7 +31,7 @@
         </div>
 
         <a href="javascript:;" class="share-button" data-popup="popup-share" share-href="{{ $current_dentist->getLink() }}?review_id={{ $review->id }}">
-            <img src="{{ url('img-trp/share-arrow-gray.svg') }}">
+            <img src="{{ url('img-trp/share-arrow-gray.svg') }}" width="25" height="16">
             {!! nl2br(trans('trp.common.share')) !!}
         </a>
     </div>
