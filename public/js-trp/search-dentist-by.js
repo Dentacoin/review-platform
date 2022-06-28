@@ -43,11 +43,6 @@ $(document).ready(function() {
                 }
             });
 
-            // if($('.dentists-countries-results-wrapper').children('.letters-country-section:visible').length == 0) {
-            //     $('.dentists-countries-results .info').show();
-            // } else {
-            //     $('.dentists-countries-results .info').hide();
-            // }
         } else {
             $('.letters-country-section').show();
             $('.letters-country-section .country').show();

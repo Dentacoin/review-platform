@@ -147,6 +147,7 @@ class RegisterController extends FrontController {
      * after register popup - add a description
      */
     public function verificationDentistShortDescription($locale=null) {
+        
         if (request('user_id') && !empty(User::find(request('user_id'))) && !empty(request('user_hash'))) {
 
             $user = User::find(request('user_id'));

@@ -4,11 +4,13 @@ var redirectToAccount;
 var getUrlParameter;
 
 $(document).ready(function(){
+
 	redirectToAccount = function() {
 		console.log('redirect!!!');
 		window.location.href = 'https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews';
 	}
 
+	//redirect after logout images are loaded
 	ssoTotal = $('.sso img').length;
 	
 	$('.sso img').each( function() {

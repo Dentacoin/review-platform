@@ -1,28 +1,28 @@
-var showPopup = null;
-var closePopup = null;
 var handleClickToOpenPopups = null;
-var ajax_is_running = false;
-var loadedJS = {};
-var prepareMapFunction;
-var mapsLoaded = false;
-var mapsWaiting = [];
-var initMap;
 var chooseExistingDentistActions;
 var refreshOnClosePopup = false;
-var editWorkingHours;
-var map_loaded = false;
-var upload_loaded = false;
-var croppie_loaded = false;
-var loadPopupFiles;
-
-var handleTooltip;
-var attachTooltips;
-var modernFieldsUpdate;
-var dentacoin_down = false; //check if there is connection with dentacoin.com for login/reg popup
 var handleActivePopupFunctions;
+var ajax_is_running = false;
+var croppie_loaded = false;
+var dentacoin_down = false; //check if there is connection with dentacoin.com for login/reg popup
+var upload_loaded = false;
+var prepareMapFunction;
+var modernFieldsUpdate;
+var map_loaded = false;
+var mapsLoaded = false;
+var closePopup = null;
+var showPopup = null;
+var mapsWaiting = [];
+var editWorkingHours;
+var loadPopupFiles;
+var attachTooltips;
+var handleTooltip;
+var loadedJS = {};
+var initMap;
 
 jQuery(document).ready(function($) {
 
+	//for login/register popup
     $.ajax( {
 		url: 'https://dentacoin.com',
 		type: 'GET',
@@ -36,6 +36,7 @@ jQuery(document).ready(function($) {
 		timeout: 5000
 	});
 
+	//for login/register popup
     $.ajax( {
 		url: 'https://api.dentacoin.com/api/enums/',
 		type: 'GET',
@@ -151,6 +152,7 @@ jQuery(document).ready(function($) {
 		}
 	}
 
+	//load js and css after open popup
 	loadPopupFiles = function(poppup_id) {
 		if ($('#'+poppup_id+'.active').length) {
 
@@ -209,10 +211,10 @@ jQuery(document).ready(function($) {
 				}, 500);
 			}
 		} else if(
-			id == 'popup-share' 
-			|| id == 'verification-popup'
-			|| id == 'failed-popup' 
-			|| id == 'popup-existing-dentist' 
+			id == 'popup-share' || 
+			id == 'verification-popup' || 
+			id == 'failed-popup' || 
+			id == 'popup-existing-dentist' 
 		) {
 			$.ajax({
 	            type: "POST",
@@ -520,11 +522,6 @@ jQuery(document).ready(function($) {
 	$(window).scroll(fix_header);
 	fix_header();
 
-
-	//
-	//Flickty fixes
-	//
-
 	var fixFlickty = function() {
 		$('.flickity-slider').each( function() {
 			var mh = 0;
@@ -539,12 +536,6 @@ jQuery(document).ready(function($) {
 	}
 	$(window).resize( fixFlickty );
 	fixFlickty();
-
-	$('.slider-wrapper [href]').click( function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		window.location.href = $(this).attr('href');
-	});
 
 	handleTooltip = function(e) {
         $('.tooltip-window').html($(this).attr('text'));

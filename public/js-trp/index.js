@@ -69,7 +69,7 @@ jQuery(document).ready(function($){
 		}, 500);
 	});
 
-	//load page down sections on sroll (google page speed)
+	//load page down sections on scroll (google page speed)
 	if($('#to-append').length) {
 
 		$(window).scroll( function() {

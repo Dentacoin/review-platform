@@ -5,13 +5,18 @@ var setupMap;
 jQuery(document).ready(function($){
 
     setupMap = function(conatiner, coords) {
+
         conatiner.find('.suggester-map-div').show();
+
         if( !conatiner.find('.suggester-map-div').attr('inited') ) {
+            //init map
             var profile_address_map = new google.maps.Map( conatiner.find('.suggester-map-div')[0], {
                 center: coords,
                 zoom: 14,
                 backgroundColor: 'none'
             });
+
+            //add map pin
             var marker = new google.maps.Marker({
                 map: profile_address_map,
                 icon: images_path+'/map-pin-inactive.png',
@@ -20,17 +25,15 @@ jQuery(document).ready(function($){
             });
 
             marker.addListener('dragend', function(e) {
+                //on changing address
                 this.map.panTo( this.getPosition() );
-                var container = $(this.map.getDiv()).closest('.address-suggester-wrapper-input');
                 
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({'location': this.getPosition()}, (function(results, status) {
                     if (status == 'OK') {
-
                         var gstring = results[0].formatted_address;
                         var country_name = this.find('.country-select option:selected').text();
                         gstring = gstring.replace(', '+country_name, '');
-                        // console.log( gstring );
 
                         this.find('.address-suggester-input').val(gstring).blur();
                     } else {
@@ -54,10 +57,11 @@ jQuery(document).ready(function($){
             $('.address-suggester-input').each( function() {
             	var conatiner = $(this).closest('.address-suggester-wrapper-input');
 	            
+                //get addresses only from chosen country
 	            conatiner.find('.country-select').change( function() {
-	                var cc = $(this).find('option:selected').attr('code');
+	                var country_code = $(this).find('option:selected').attr('code');
 	                GMautocomplete.setComponentRestrictions({
-	                    'country': cc
+	                    'country': country_code
 	                });
 	            });
 
@@ -70,10 +74,10 @@ jQuery(document).ready(function($){
 	            }
 
 	            var input = $(this)[0];
-	            var cc = conatiner.find('.country-select option:selected').attr('code');
+	            var country_code = conatiner.find('.country-select option:selected').attr('code');
 	            var options = {
 	                componentRestrictions: {
-	                    country: cc
+	                    country: country_code
 	                },
 	                types: $(this).hasClass('city-dentist') ? ['(cities)'] : ['address']              
 	            };
@@ -87,7 +91,6 @@ jQuery(document).ready(function($){
 
                 $(this).blur( function(e) {
                     var conatiner = $(this).closest('.address-suggester-wrapper-input');
-                    var country_name = conatiner.find('.country-select option:selected').text();
                     var country_code = conatiner.find('.country-select option:selected').attr('code');
 
                     var geocoder = new google.maps.Geocoder();
@@ -116,25 +119,20 @@ jQuery(document).ready(function($){
 	}
 
 	checkAddress = function(place, conatiner) {
-        //conatiner.find('.address-suggester-input').blur();
         conatiner.find('.geoip-hint').hide();
         conatiner.find('.different-country-hint').hide();
         conatiner.find('.geoip-confirmation').hide();
         conatiner.find('.suggester-map-div').hide();
         
-        console.log(conatiner);
-            //console.log('Geocoding result: ', place);
-        
     	if( place && typeof place.geometry !== null) {
-      //    && place.types && (place.types.indexOf('street_address') != -1 || place.types.indexOf('establishment') != -1 || place.types.indexOf('point_of_interest') != -1 || place.types.indexOf('premise') != -1) ) {
-    		// //address_components
-    		if(conatiner.find('.country-select').length) {
 
+    		if(conatiner.find('.country-select').length) {
                 var gstring = conatiner.find('.address-suggester-input').val();
                 var country_name = conatiner.find('.country-select option:selected').text();
                 var country_code_name = conatiner.find('.country-select option:selected').attr('code').toUpperCase();
-
                 var address_country;
+
+                //get address -> country
                 for (var i in place.address_components) {
                     for( var t in place.address_components[i].types) {
                         if (place.address_components[i].types[t] == 'country') {
@@ -144,35 +142,34 @@ jQuery(document).ready(function($){
                     }
                 }
 
-                if ( (country_code_name == 'XK' && (address_country == 'XK' || typeof address_country === 'undefined') ) || (address_country == country_code_name) ) {
-
+                if ( 
+                    //kosovo
+                    (country_code_name == 'XK' && (address_country == 'XK' || typeof address_country === 'undefined')) 
+                    || (address_country == country_code_name) 
+                ) {
                     gstring = gstring.replace(', '+country_name, '');
                     conatiner.find('.address-suggester-input').val(gstring);
 
-                    var coords = {
+                    setupMap(conatiner, {
                         lat: place.geometry.location.lat(), 
                         lng: place.geometry.location.lng()
-                    };
-                    setupMap(conatiner, coords);
+                    });
 
                     conatiner.find('.geoip-confirmation').show();
                 } else {
-
                     conatiner.find('.different-country-hint').show();
                 }
             } else {
                 var gstring = conatiner.find('.address-suggester-input').val();
 
-                var coords = {
+                setupMap(conatiner, {
                     lat: place.geometry.location.lat(), 
                     lng: place.geometry.location.lng()
-                };
-                setupMap(conatiner, coords);
+                });
 
                 conatiner.find('.geoip-confirmation').show();
             }       
         } else {
-
             conatiner.find('.geoip-hint').show();
         }
 	}
@@ -184,9 +181,9 @@ jQuery(document).ready(function($){
 
 
 function trimChar (str, c) {
-  if (c === "]") c = "\\]";
-  if (c === "\\") c = "\\\\";
-  return str.replace(new RegExp(
-    "^[" + c + "]+|[" + c + "]+$", "g"
-  ), "");
+    if (c === "]") c = "\\]";
+    if (c === "\\") c = "\\\\";
+    return str.replace(new RegExp(
+        "^[" + c + "]+|[" + c + "]+$", "g"
+    ), "");
 }

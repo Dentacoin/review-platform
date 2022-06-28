@@ -9,7 +9,7 @@ jQuery(document).ready(function($){
 			$('.search-results-popup').removeClass('active');
 		}
 	});
-
+    
     $('.caret-switch').click( function(e) {
         e.preventDefault();
         e.stopPropagation();
