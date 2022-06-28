@@ -60,10 +60,10 @@
 
 		@if($review->reply)
 			<div class="review-replied-wrapper">
-				<img class="review-avatar" src="{{ $item->getImageUrl(true) }}"/>
+				<img class="review-avatar" src="{{ $item->getImageUrl(true) }}" width="33" height="33"/>
 				<div>
 					<p class="replied-info">
-						<img src="{{ url('img-trp/reply-icon.svg') }}" />Replied by {{ $item->getNames() }} {{ $review->replied_at ? 'on '.$review->replied_at->toFormattedDateString() : '' }}
+						<img src="{{ url('img-trp/reply-icon.svg') }}" width="15" height="13"/>Replied by {{ $item->getNames() }} {{ $review->replied_at ? 'on '.$review->replied_at->toFormattedDateString() : '' }}
 					</p>
 					<p class="review-content">{!! nl2br($review->reply) !!}</p>
 				</div>

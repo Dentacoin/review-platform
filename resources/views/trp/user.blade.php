@@ -153,7 +153,7 @@
 							</a>
 						@else
 							<a class="clinic-branches mont" href="{{ getLangUrl($item->slug.'/branches') }}">
-								<img src="{{ url('img-trp/branches.svg') }}" width="24"/>
+								<img src="{{ url('img-trp/branches.svg') }}" width="24" height="25"/>
 								Manage branches
 							</a>
 						@endif
@@ -735,7 +735,7 @@
 
 								<div class="announcement-wrap">
 									<h4>
-										<img src="{{ url('img-trp/announcement.svg') }}" width="16"/>
+										<img src="{{ url('img-trp/announcement.svg') }}" width="16" height="13"/>
 										<span>{{ $item->announcement ? $item->announcement->title : 'Add office update' }}</span>
 										@if($loggedUserAllowEdit)
 											<a class="edit-field-button {{ $item->announcement ? 'tooltip-text' : '' }} toggle-section" toggle-section="announcement-wrapper" text="Edit office update">
