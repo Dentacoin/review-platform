@@ -444,6 +444,7 @@ $phone: "screen and (max-width: 768px)";
 	opacity: 0;
 	transition: all 0.3s ease;
 	z-index: 10;
+	height: auto;
 
 	@media #{$phone} {
 		width: 50px;

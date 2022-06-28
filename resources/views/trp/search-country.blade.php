@@ -87,7 +87,7 @@
 	</div>
 
 	<a href="javascript:;" class="scroll-up">
-		<img src="{{ url('img-trp/arrow-up.svg') }}"/>
+		<img src="{{ url('img-trp/arrow-up.svg') }}" width="28" height="49"/>
 	</a>
 
 @endsection
