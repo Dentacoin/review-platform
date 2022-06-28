@@ -146,11 +146,6 @@
                         <div>
                             Transactions count: {{ $total_count }} <br/>
                             Sum: {{ $total_dcn_price }} DCN
-
-                            <br/><br/>
-                            @foreach(config('transaction-statuses') as $key => $transactionStatus)
-                                {{ $transactionStatus }}: {{ $transactions->where('status', $key)->count() }}<br/>
-                            @endforeach
                         </div>
                         <div>
                             <a href="{{ url('cms/transactions/scammers') }}" class="btn btn-{{ $scamByDay ? 'danger' : 'info' }} pull-right" style="margin-left: 10px;">Scammers by days ({{ $scamByDay }})</a>
