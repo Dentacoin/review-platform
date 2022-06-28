@@ -160,7 +160,7 @@
 					@else
 						@if($item->branches->isNotEmpty())
 							<a class="clinic-branches mont" href="{{ getLangUrl($item->slug.'/branches') }}">
-								<img src="{{ url('img-trp/branches.svg') }}" width="24"/>
+								<img src="{{ url('img-trp/branches.svg') }}" width="24" height="25"/>
 								Check branches
 							</a>
 						@endif

@@ -145,7 +145,7 @@
                 @foreach(config('trp.accepted_payment') as $acceptedPayment)
                     @if(in_array($acceptedPayment, $item->accepted_payment))
                         <label class="payment {{ $item->wallet_addresses->isNotEmpty() && $item->is_partner && $acceptedPayment == 'dentacoin' ? 'open-my-account' : '' }}" for="payment-{{ $acceptedPayment }}">
-                            <img src="{{ url('img-trp/payment-methods/'.$acceptedPayment.'.svg') }}"/>
+                            <img src="{{ url('img-trp/payment-methods/'.$acceptedPayment.'.svg') }}" width="25" height="25"/>
                             {!! trans('trp.accepted-payments.'.$acceptedPayment) !!}
                             @if($loggedUserAllowEdit)
                                 <input 
