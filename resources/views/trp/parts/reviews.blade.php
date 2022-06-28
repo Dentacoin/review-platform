@@ -13,7 +13,7 @@
     @endif
 
     <div class="review-header">
-        <img class="review-avatar" src="{{ $review->user->getImageUrl(true) }}"/>
+        <img class="review-avatar" src="{{ $review->user->getImageUrl(true) }}" width="50" height="50"/>
         <div>
             @if($is_dentist)
                 <span class="review-name">

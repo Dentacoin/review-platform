@@ -854,7 +854,7 @@
 					
 					@if($item->golden_partner)
 						<div class="top-dentist">
-							<img src="{{ url('img-trp/golden-partner.png') }}">
+							<img src="{{ url('img-trp/golden-partner.png') }}" width="25" height="25">
 							<span>
 								Golden Partner
 							</span>
@@ -862,7 +862,7 @@
 					@endif
 					@if($item->top_dentist_month)
 						<div class="top-dentist">
-							<img src="{{ url('img-trp/top-dentist-month.png') }}">
+							<img src="{{ url('img-trp/top-dentist-month.png') }}" width="25" height="25">
 							<span>
 								{!! trans('trp.common.top-dentist') !!}: {{ $item->getLastTopDentistBadge() }}
 							</span>
@@ -870,7 +870,7 @@
 					@endif
 					@if($item->top_dentist_year)
 						<div class="top-dentist">
-							<img src="{{ url('img-trp/top-dentist-year.png') }}">
+							<img src="{{ url('img-trp/top-dentist-year.png') }}" width="25" height="25">
 							<span>
 								{!! trans('trp.common.top-dentist') !!}: {{ $item->getLastTopDentistYearBadge() }}
 							</span>
