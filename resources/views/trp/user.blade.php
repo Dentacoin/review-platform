@@ -209,7 +209,7 @@
 					<div class="partner-wrapper flex flex-center {{ $item->is_partner ? 'space-between' : 'flex-text-end' }}">
 						@if($item->is_partner)
 							<div class="partner">
-								<img src="{{ url('img-trp/mini-logo-white.svg') }}">
+								<img src="{{ url('img-trp/mini-logo-white.svg') }}" width="17" height="17"/>
 								Dentacoin Partner
 							</div>
 						@endif
@@ -372,7 +372,7 @@
 								@if($workingTime)
 									@if(str_contains($workingTime, 'Open now'))
 										<div class="working-time open {{ $loggedUserAllowEdit ? 'wider' : '' }}">
-											<img src="{{ url('img-trp/clock-blue.svg') }}">
+											<img src="{{ url('img-trp/clock-blue.svg') }}" width="18" height="16"/>
 											Open now
 											<div class="work-hours">
 												@foreach($week_days as $w => $week_day)
@@ -401,7 +401,7 @@
 										</div>
 									@else
 										<div class="working-time closed {{ $loggedUserAllowEdit ? 'wider' : '' }}">
-											<img src="{{ url('img-trp/clock-red.svg') }}"/>
+											<img src="{{ url('img-trp/clock-red.svg') }}" width="18" height="16"/>
 											Closed now
 
 											@if($loggedUserAllowEdit)

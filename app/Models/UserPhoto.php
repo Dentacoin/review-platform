@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use WebPConvert\WebPConvert;
 
 class UserPhoto extends Model {
 
     protected $fillable = [
         'user_id',
+        'haswebp',
     ];
 
     protected $dates = [
@@ -59,6 +61,12 @@ class UserPhoto extends Model {
             // });
             $img->save($to_thumb);
             $this->save();
+    
+            $destination = self::getImagePath().'.webp';
+            WebPConvert::convert(self::getImagePath(), $destination, []);
+    
+            $destination_thumb = self::getImagePath(true).'.webp';
+            WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
         }
     }
 }

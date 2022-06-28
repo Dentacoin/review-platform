@@ -30,6 +30,7 @@ use App\Models\VoxAnswer;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\BanAppeal;
+use App\Models\UserPhoto;
 use App\Models\GasPrice;
 use App\Models\VoxError;
 use App\Models\Country;
@@ -1970,9 +1971,28 @@ UNCONFIRMED TRANSACTIONS
                 }
             }
 
+            $photos = UserPhoto::whereNull('haswebp')->take(100)->get();
+
+            if($photos->isNotEmpty()) {
+                foreach($photos as $photo) {
+                    if (file_exists($photo->getImagePath())) {
+                        $destination = $photo->getImagePath().'.webp';
+                        WebPConvert::convert($photo->getImagePath(), $destination, []);
+                    }
+                    
+                    if (file_exists($photo->getImagePath(true))) {
+                        $destination_thumb = $photo->getImagePath(true).'.webp';
+                        WebPConvert::convert($photo->getImagePath(true), $destination_thumb, []);
+                    }
+
+                    $photo->haswebp = true;
+                    $photo->save();
+                }
+            }
+
             echo 'Convert avatar to webp cron end'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->everyFiveMinutes();
+        })->cron('*/10 * * * *'); //every 10 min
         
 
         $schedule->call(function () {
