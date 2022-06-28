@@ -316,13 +316,24 @@
                                 @endif
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Name</label>
-                                    <div class="col-md-10">
+                                    <div class="col-md-10 }}">
                                         @include('admin.parts.user-field',[
                                             'key' => 'name',
                                             'info' => $fields['name']
                                         ])
                                     </div>
-                                </div>
+                                </div>                                
+                                @if(!empty($item->is_dentist))
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Alternative Name</label>
+                                        <div class="col-md-10">
+                                            @include('admin.parts.user-field',[
+                                                'key' => 'name_alternative',
+                                                'info' => $fields['name_alternative']
+                                            ])
+                                        </div>
+                                    </div>
+                                @endif
                                 @if($duplicated_names->isNotEmpty())
                                     <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this name already exists:</p>
                                     @foreach($duplicated_names as $dn)
@@ -898,7 +909,13 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-md-9 control-label"></label>
+                                    <label class="col-md-2 control-label user-l" style="padding-left: 0px; padding-top: 6px !important;">Withdrawed at</label>
+                                    <div class="col-md-7" style="padding-left: 0px;">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'withdraw_at',
+                                            'info' => $fields['withdraw_at'],
+                                        ])
+                                    </div>
                                     <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Bad IP Protected</label>
                                     <div class="col-md-1" style="padding-left: 0px;">
                                         @include('admin.parts.user-field',[
@@ -910,7 +927,18 @@
 
                                 @if($item->is_dentist)
                                     <div class="form-group">
-                                        <label class="col-md-9 control-label"></label>
+                                        @if($item->widget_site)
+                                            <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Widget in site</label>
+                                            <div class="col-md-7" style="padding-left: 0px;">
+                                                @include('admin.parts.user-field',[
+                                                    'key' => 'widget_site',
+                                                    'info' => $fields['widget_site']
+                                                ])
+                                            </div>
+                                        @else
+                                            <label class="col-md-9 control-label"></label>
+                                        @endif
+                                        
                                         <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Trusted Dentist</label>
                                         <div class="col-md-1" style="padding-left: 0px;">
                                             @include('admin.parts.user-field',[
@@ -933,7 +961,6 @@
                                         </div>
                                     </div>
                                 @endif
-
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group avatar-group">
@@ -1078,6 +1105,13 @@
                                         </div>
                                     </div>
                                 @endif
+                                @if(!$item->is_dentist && $item->patient_of)
+                                    <div class="form-group" style="text-align: right;">
+                                        <div class="col-md-12">
+                                            Patient of <a target="_blank" href="{{ url('cms/users/users/edit/'.$item->patient_of) }}">{{ $item->patientDentist->getNames() }}</a>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="form-group">
                                     <div class="col-md-6"></div>
                                     <div class="col-md-6">
@@ -1152,6 +1186,78 @@
                                                     <p>{!! nl2br($history->history) !!}</p>
                                                 @endforeach
                                             </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                @if($item->is_dentist)
+                                    @if($item->categories)
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Specialities</label>
+                                            <div class="col-md-10" style="padding-left: 0px;margin-top: 12px;">
+                                                @foreach($item->categories as $specialization)
+                                                    {{ trans('trp.categories.'.config('categories.'.$specialization->category_id)) }}, 
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if($item->accepted_payment)
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Accepted payments</label>
+                                            <div class="col-md-10" style="padding-left: 0px;margin-top: 12px;">
+                                                @foreach(config('trp.accepted_payment') as $acceptedPayment)
+                                                    @if(in_array($acceptedPayment, $item->accepted_payment))
+                                                        {!! trans('trp.accepted-payments.'.$acceptedPayment) !!}, 
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if($item->experience)
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Experience</label>
+                                            <div class="col-md-10" style="padding-left: 0px;margin-top: 12px;">
+                                                {{ config('trp.experience')[$item->experience] }}
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if($item->languages)
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Languages spoken</label>
+                                            <div class="col-md-10" style="padding-left: 0px;margin-top: 12px;">
+                                                @foreach(config('trp.languages') as $language)
+                                                    @if(in_array(strtolower($language), $item->languages))
+                                                        {{ $language }},
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if($item->education_info)
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Education info</label>
+                                            <div class="col-md-10" style="padding-left: 0px;margin-top: 12px;">
+                                                @foreach($item->education_info as $educationInfo)
+                                                    •&nbsp;&nbsp;&nbsp;{{ $educationInfo }} <br/>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Short Description</label>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            @include('admin.parts.user-field',[
+                                                'key' => 'short_description',
+                                                'info' => $fields['short_description']
+                                            ])
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Description</label>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            @include('admin.parts.user-field',[
+                                                'key' => 'description',
+                                                'info' => $fields['description']
+                                            ])
                                         </div>
                                     </div>
                                 @endif
@@ -1328,91 +1434,7 @@
         </div>
     @endif
 
-    @if($item->photos->isNotEmpty())
-        <div id="gallery-photos" class="row with-dropdown">
-            <div class="col-md-12">
-                <div class="panel panel-inverse">
-                    <div class="panel-heading toggle-button">
-                        <div class="panel-heading-btn">
-                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                        </div>
-                        <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-photos') }}</h4>
-                    </div>
-                    <div class="panel-body toggled-area">
-                        <div class="row">
-                            @foreach($item->photos as $photo)
-                                <div class="col-md-3">
-                                    <div class="thumbnail">
-                                        <img src="{{ $photo->getImageUrl(true) }} ">
-                                    </div>
-                                    <a class="btn btn-primary" href="{{ url('cms/users/users/edit/'.$item->id.'/deletephoto/'.$loop->index) }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
-                                        <i class="fa fa-remove"></i> {{ trans('admin.page.'.$current_page.'.delete-photo') }}
-                                    </a>
-                                </div>
-                                @if($loop->index==3 && !$loop->last)
-                                    </div>
-                                    <div class="row">
-                                @endif
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    @endif
-
     <h4 style="margin-bottom: 20px;">TRUSTED REVIEWS</h4>
-
-    @if($item->is_dentist)
-        <div id="highlights" class="row">
-            <div class="col-md-12">
-                <div class="panel panel-inverse">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">Highlights</h4>
-                    </div>
-                    <div class="panel-body">
-                        
-                        <div class="form-group">
-                            <div class="col-md-12 highlists-list hightlights-draggable" style="margin-bottom: 10px;" reorder-action="{{ url('cms/users/users/edit/'.$item->id.'/highlights-reorder') }}">
-                                @if($item->highlights->isNotEmpty())
-                                    @foreach($item->highlights as $highlight)
-                                        <div class="input-group clearfix" hightlight-id="{{ $highlight->id }}">
-                                            <div class="row template-box clearfix">
-                                                <div class="col-md-1">
-                                                    <div class="image-label" style="background-image: url('{{ $highlight->getImageUrl(true)}}');"></div>
-                                                </div>
-                                                <div class="col-md-11" style="margin-top: 14px;">
-                                                    <div>{{ $highlight->title }}</div>
-                                                    <div>{{ $highlight->link }}</div>
-                                                </div>
-                                            </div>
-                                            <div class="input-group-btn">
-                                                <a class="btn btn-sm btn-primary" href="{{ url('cms/users/users/edit/'.$item->id.'/add-edit-highlight/'.$highlight->id) }}" style="padding: 7px 14px; border-top-left-radius: 3px; border-bottom-left-radius: 3px;">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                                <a class="btn btn-default" type="button" href="{{ url('cms/users/users/edit/'.$item->id.'/remove-highlight/'.$highlight->id) }}">
-                                                    <i class="glyphicon glyphicon-remove"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <a href="{{ url('cms/users/users/edit/'.$item->id.'/add-edit-highlight') }}" class="btn btn-primary btn-block">
-                                        Аdd highlight
-                                    </a>
-                                </div>
-                            </div>
-                            <label class="alert alert-danger appeal-error" style="display: none;margin-top: 10px;"></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
 
     @if($item->is_clinic && $item->branches->isNotEmpty())
         <div id="clinic-branches" class="row">
@@ -1634,7 +1656,91 @@
                 </div>
             </div>
         @endif
+    @endif
 
+    @if($item->is_dentist)
+        <div id="highlights" class="row with-dropdown">
+            <div class="col-md-12">
+                <div class="panel panel-inverse">
+                    <div class="panel-heading toggle-button">
+                        <div class="panel-heading-btn">
+                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        </div>
+                        <h4 class="panel-title">Highlights</h4>
+                    </div>
+                    <div class="panel-body toggled-area">
+                        <div class="form-group">
+                            <div class="col-md-12 highlists-list hightlights-draggable" style="margin-bottom: 10px;" reorder-action="{{ url('cms/users/users/edit/'.$item->id.'/highlights-reorder') }}">
+                                @if($item->highlights->isNotEmpty())
+                                    @foreach($item->highlights as $highlight)
+                                        <div class="input-group clearfix" hightlight-id="{{ $highlight->id }}">
+                                            <div class="row template-box clearfix">
+                                                <div class="col-md-1">
+                                                    <div class="image-label" style="background-image: url('{{ $highlight->getImageUrl(true)}}');"></div>
+                                                </div>
+                                                <div class="col-md-11" style="margin-top: 14px;">
+                                                    <div>{{ $highlight->title }}</div>
+                                                    <div>{{ $highlight->link }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <a class="btn btn-sm btn-primary" href="{{ url('cms/users/users/edit/'.$item->id.'/add-edit-highlight/'.$highlight->id) }}" style="padding: 7px 14px; border-top-left-radius: 3px; border-bottom-left-radius: 3px;">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a class="btn btn-default" type="button" href="{{ url('cms/users/users/edit/'.$item->id.'/remove-highlight/'.$highlight->id) }}">
+                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="{{ url('cms/users/users/edit/'.$item->id.'/add-edit-highlight') }}" class="btn btn-primary btn-block">
+                                        Аdd highlight
+                                    </a>
+                                </div>
+                            </div>
+                            <label class="alert alert-danger appeal-error" style="display: none;margin-top: 10px;"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if($item->photos->isNotEmpty())
+        <div id="gallery-photos" class="row with-dropdown">
+            <div class="col-md-12">
+                <div class="panel panel-inverse">
+                    <div class="panel-heading toggle-button">
+                        <div class="panel-heading-btn">
+                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        </div>
+                        <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-photos') }}</h4>
+                    </div>
+                    <div class="panel-body toggled-area">
+                        <div class="row">
+                            @foreach($item->photos as $photo)
+                                <div class="col-md-3">
+                                    <div class="thumbnail">
+                                        <img src="{{ $photo->getImageUrl(true) }} ">
+                                    </div>
+                                    <a class="btn btn-primary" href="{{ url('cms/users/users/edit/'.$item->id.'/deletephoto/'.$loop->index) }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
+                                        <i class="fa fa-remove"></i> {{ trans('admin.page.'.$current_page.'.delete-photo') }}
+                                    </a>
+                                </div>
+                                @if($loop->index==3 && !$loop->last)
+                                    </div>
+                                    <div class="row">
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 
     @if($item->vox_surveys_and_polls->isNotEmpty())

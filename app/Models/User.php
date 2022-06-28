@@ -206,6 +206,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function dentist_fb_page() {
         return $this->hasMany('App\Models\DentistFbPage', 'dentist_id', 'id');
     }
+    public function patientDentist() {
+        return $this->hasOne('App\Models\User', 'id', 'patient_of')->withTrashed();
+    }
     public function invitor() {
         return $this->hasOne('App\Models\User', 'id', 'invited_by');
     }

@@ -81,6 +81,9 @@ class UsersController extends AdminController {
             'name' => [
                 'type' => 'text',
             ],
+            'name_alternative' => [
+                'type' => 'text',
+            ],
             'slug' => [
                 'type' => 'text',
             ],
@@ -190,6 +193,9 @@ class UsersController extends AdminController {
     		'avatar' => [
     			'type' => 'avatar'
     		],
+            'widget_site' => [
+                'type' => 'text',
+            ],
             'civic_id' => [
                 'type' => 'text',
             ],
@@ -234,6 +240,9 @@ class UsersController extends AdminController {
             'vip_access_until' => [
                 'type' => 'datetimepicker',
             ],
+            'withdraw_at' => [
+                'type' => 'datetimepicker',
+            ],
             'trusted' => [
                 'type' => 'bool',
             ],
@@ -242,6 +251,12 @@ class UsersController extends AdminController {
             ],
             'skip_civic_kyc_country' => [
                 'type' => 'bool',
+            ],
+            'short_description' => [
+                'type' => 'textarea',
+            ],
+            'description' => [
+                'type' => 'textarea',
             ],
         ];
 
