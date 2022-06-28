@@ -32,7 +32,7 @@
 					@endforeach
 				</div>
 			</div>
-			<a href="javascript:;" class="open-country-filters"><img src="{{ url('img-trp/filters.svg') }}" />Filters</a>
+			<a href="javascript:;" class="open-country-filters"><img src="{{ url('img-trp/filters.svg') }}" width="20" height="15"/>Filters</a>
 		</div>
 	</div>
 

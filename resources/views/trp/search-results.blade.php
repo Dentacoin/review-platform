@@ -62,7 +62,7 @@
 						<img src="{{ url('img-trp/blue-arrow-left.png') }}"/>
 					</a>
 					<h3>
-						<img src="{{ url('img-trp/filters-blue.svg') }}"/>Filters
+						<img src="{{ url('img-trp/filters-blue.svg') }}" width="20" height="15"/>Filters
 					</h3>
 				</div>
 				@include('trp.parts.search-dentist-filters', [
