@@ -70,7 +70,9 @@ class RegisterController extends FrontController {
                 $clinic = User::find( request('clinic_id') );
 
                 if(!empty($clinic)) {
-                    $team = UserTeam::where('dentist_id', $user->id)->where('user_id', $clinic->id)->first();
+                    $team = UserTeam::where('dentist_id', $user->id)
+                    ->where('user_id', $clinic->id)
+                    ->first();
 
                     if (!$team) {
                         $newclinic = new UserTeam;
@@ -87,7 +89,9 @@ class RegisterController extends FrontController {
 
                     return Response::json( [
                         'success' => true,
-                        'message' => trans('trp.popup.verification-popup.join-workplace.success', ['clinic-name' => request('clinic_name')]),
+                        'message' => trans('trp.popup.verification-popup.join-workplace.success', [
+                            'clinic-name' => request('clinic_name')
+                        ]),
                     ]);
                 }
             }
@@ -111,7 +115,9 @@ class RegisterController extends FrontController {
                 $dentist = User::find( request('dentist_id') );
 
                 if(!empty($dentist)) {
-                    $team = UserTeam::where('dentist_id', $dentist->id)->where('user_id', $user->id)->first();
+                    $team = UserTeam::where('dentist_id', $dentist->id)
+                    ->where('user_id', $user->id)
+                    ->first();
 
                     if (!$team) {
                         $newdentist = new UserTeam;
@@ -124,7 +130,9 @@ class RegisterController extends FrontController {
 
                     return Response::json( [
                         'success' => true,
-                        'message' => trans('trp.popup.verification-popup.dentist-invite.success', ['dentist-name' => $dentist->getNames()]),
+                        'message' => trans('trp.popup.verification-popup.dentist-invite.success', [
+                            'dentist-name' => $dentist->getNames()
+                        ]),
                     ]);
                 }
             }

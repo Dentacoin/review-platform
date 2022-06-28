@@ -119,7 +119,7 @@ class ProfileController extends FrontController {
             ]);
         }
 
-        if($branch_id) {
+        if($branch_id) { //if is fake logged branch
             $branchClinic = User::find($branch_id);
     
             if(
@@ -174,6 +174,7 @@ class ProfileController extends FrontController {
             }
         }
 
+		//add https in website if missing
         if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
             request()->merge([
                 'website' => 'http://'.request('website')
@@ -431,7 +432,7 @@ class ProfileController extends FrontController {
                 ]);
             }
 
-            if($branch_id) {
+            if($branch_id) { //if is fake logged branch
                 $branchClinic = User::find($branch_id);
     
                 if(
@@ -445,16 +446,15 @@ class ProfileController extends FrontController {
                 }
             }
 
-            $dapic = new UserPhoto;
-            $dapic->user_id = $this->user->id;
-            $dapic->save();
-            $img = Image::make( Input::file('image') )->orientate();
-            $dapic->addImage($img);
+            $gallery = new UserPhoto;
+            $gallery->user_id = $this->user->id;
+            $gallery->save();
+            $gallery->addImage(Image::make( Input::file('image') )->orientate());
 
             return Response::json([
                 'success' => true,
-                'url' => $dapic->getImageUrl(true),
-                'original' => $dapic->getImageUrl(),
+                'url' => $gallery->getImageUrl(true),
+                'original' => $gallery->getImageUrl(),
             ]);
         }
         
@@ -467,7 +467,12 @@ class ProfileController extends FrontController {
      * dentist deletes a gallery photo
      */
     public function gallery_delete($locale=null, $id) {
-        UserPhoto::destroy($id);
+
+        $galleryImage = UserPhoto::find($id);
+
+        if($galleryImage->user_id == $this->user->id) {
+            $galleryImage->delete();
+        }
 
         return Response::json( [
             'success' => true,
@@ -822,10 +827,16 @@ class ProfileController extends FrontController {
      */
     public function deleteLanguage($locale=null, $branch_id = null) {
 
-        if($branch_id) {
+        if($branch_id) { //if is fake logged branch
             $branchClinic = User::find($branch_id);
     
-            if(!empty($branchClinic) && $this->user->is_clinic && $branchClinic->is_clinic && $this->user->branches->isNotEmpty() && in_array($branchClinic->id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+            if(
+                !empty($branchClinic) 
+                && $this->user->is_clinic 
+                && $branchClinic->is_clinic 
+                && $this->user->branches->isNotEmpty() 
+                && in_array($branchClinic->id, $this->user->branches->pluck('branch_clinic_id')->toArray())
+            ) {
                 $this->user = $branchClinic;
             }
         }
@@ -855,10 +866,16 @@ class ProfileController extends FrontController {
      */
     public function addAnnouncement($locale=null, $branch_id = null) {
 
-        if($branch_id) {
+        if($branch_id) { //if is fake logged branch
             $branchClinic = User::find($branch_id);
     
-            if(!empty($branchClinic) && $this->user->is_clinic && $branchClinic->is_clinic && $this->user->branches->isNotEmpty() && in_array($branchClinic->id, $this->user->branches->pluck('branch_clinic_id')->toArray())) {
+            if(
+                !empty($branchClinic) 
+                && $this->user->is_clinic 
+                && $branchClinic->is_clinic 
+                && $this->user->branches->isNotEmpty() 
+                && in_array($branchClinic->id, $this->user->branches->pluck('branch_clinic_id')->toArray())
+            ) {
                 $this->user = $branchClinic;
             }
         }

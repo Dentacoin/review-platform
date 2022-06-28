@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\User;
+use App\Models\City;
 
 use Request;
 
@@ -298,5 +299,76 @@ class TrpHelper {
 			'orders' => $orders,
 			'types' => $types,
 		];
+	}
+
+	public static function getFlickityDentists($user, $city_id, $country_id) {
+
+		$featured = User::where('is_dentist', 1)
+		->whereIn('status', config('dentist-statuses.shown_with_link'))
+		->whereNull('self_deleted')
+		->has('country')
+		->with(['country', 'country.translations', 'lastReview'])
+		->orderBy('avg_rating', 'DESC');
+
+		$homeDentists = collect();
+
+		$city = null;
+		if(!empty($city_id)) {
+			$city = City::find($city_id);
+		}
+
+		if( !empty($user) ) {
+			if( $homeDentists->count() < 12 && $user->city_name ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('city_name', 'LIKE', $user->city_name)
+				->take( 12 - $homeDentists->count() )
+				->get();
+				$homeDentists = $homeDentists->concat($addMore);
+			}
+
+			if( $homeDentists->count() < 12 && $user->state_name ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('state_name', 'LIKE', $user->state_name)
+				->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+				->take( 12 - $homeDentists->count() )
+				->get();
+				$homeDentists = $homeDentists->concat($addMore);
+			}
+
+			if( $homeDentists->count() < 12 && $user->country_id ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('country_id', $user->country_id)
+				->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+				->take( 12 - $homeDentists->count() )
+				->get();
+				$homeDentists = $homeDentists->concat($addMore);
+			}
+		}
+
+		if( $homeDentists->count() < 12 && $city ) {
+			$addMore = clone $featured;
+			$addMore = $addMore->where('city_name', 'LIKE', $city->name)
+			->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+			->take( 12 - $homeDentists->count() )
+			->get();
+			$homeDentists = $homeDentists->concat($addMore);
+		}
+
+		if( $homeDentists->count() < 12 && $country_id ) {
+			$addMore = clone $featured;
+			$addMore = $addMore->where('country_id', $country_id)
+			->whereNotIn('id', $homeDentists->pluck('id')->toArray())
+			->take( 12 - $homeDentists->count() )
+			->get();
+			$homeDentists = $homeDentists->concat($addMore);				
+		}
+
+		if( $homeDentists->count() <= 2) {
+			$addMore = clone $featured;
+			$addMore = $addMore->take( 12 - $homeDentists->count() )->get();
+			$homeDentists = $homeDentists->concat($addMore);	
+		}
+
+		return $homeDentists;
 	}
 }

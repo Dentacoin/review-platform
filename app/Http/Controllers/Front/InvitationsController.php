@@ -149,7 +149,6 @@ class InvitationsController extends FrontController {
             if(Request::Input('patient-emails')) {
 
                 if(Request::Input('patient-emails') == '1') {
-
                     $emails = session('bulk_invites')[0];
                     $names = session('bulk_invites')[1];
                 } else {
@@ -717,6 +716,7 @@ class InvitationsController extends FrontController {
                 if(!empty(Request::input('email'))) {
 
                     if(!empty(Request::input('team-speciality')) || Request::input('team-speciality') == 0) {
+                        //add speciality
                         $newc = new UserCategory;
                         $newc->user_id = $newuser->id;
                         $newc->category_id = Request::input('team-speciality');
@@ -752,8 +752,7 @@ class InvitationsController extends FrontController {
 
         if(
             (!empty($this->user) && $this->user->canInvite('trp')) 
-            || 
-            (
+            || (
                 empty($this->user) 
                 && !empty(request('ex_d_id')) 
                 && !empty(User::find(request('ex_d_id')) ) 

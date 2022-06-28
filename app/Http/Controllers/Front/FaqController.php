@@ -14,7 +14,6 @@ class FaqController extends FrontController {
 
         $pathToFile = base_path().'/resources/lang/en/faq-trp.php';
         $content = json_decode( file_get_contents($pathToFile), true );
-
 		$seos = PageSeo::find(22);
 
 		return $this->ShowView('faq', array(
@@ -31,7 +30,5 @@ class FaqController extends FrontController {
 				'faq.js'
 			]
         ));
-
 	}
-
 }

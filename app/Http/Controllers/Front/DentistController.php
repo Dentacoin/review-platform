@@ -92,7 +92,7 @@ class DentistController extends FrontController {
         }
 
         if (!empty($this->user) && ($this->user->id != $item->id) && !$editing_branch_clinic) {
-
+            //profile views count
             if (!session('pageview-'.$item->id)) {
                 $pageview = new DentistPageview;
                 $pageview->dentist_id = $item->id;

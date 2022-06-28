@@ -21,25 +21,26 @@ class DentistsController extends FrontController {
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
         parent::__construct($request, $route, $locale);
 
-        // Argentina - 1
-        // Austria - 15
-        // Belgium - 22
-        // Brazil - 31
-        // Canada - 39
-        // China - 45
-        // Ethiopia - 69
-        // Germany - 81
-        // India - 101
-        // Malaysia - 132
-        // Mexico - 141
-        // Nigeria - 160
-        // Pakistan - 166
-        // Russia - 181
-        // Switzerland - 212
-        // United Arab Emirates - 230
-        // USA - 232
-        // Venezuela - 237
-        $this->countriesWithStates = [1, 15, 22, 31, 39, 45, 69, 81, 101, 132, 141, 160, 166, 181, 212, 230, 232, 237];
+        $this->countriesWithStates = [
+            1, // Argentina
+            15, // Austria
+            22, // Belgium
+            31, // Brazil
+            39, // Canada
+            45, // China
+            69, // Ethiopia
+            81, // Germany
+            101, // India
+            132, // Malaysia
+            141, // Mexico
+            160, // Nigeria
+            166, // Pakistan
+            181, // Russia
+            212, // Switzerland
+            230, // United Arab Emirates
+            232, // USA
+            237 // Venezuela
+        ];
     }
 
     private function getCorrectedQuery($query, $filter) {

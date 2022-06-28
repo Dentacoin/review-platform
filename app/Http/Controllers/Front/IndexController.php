@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
 
 use App\Models\DentistTestimonial;
@@ -11,7 +12,8 @@ use App\Models\PageSeo;
 use App\Models\Country;
 use App\Models\Review;
 use App\Models\User;
-use App\Models\City;
+
+use App\Helpers\TrpHelper;
 
 use Carbon\Carbon;
 
@@ -25,6 +27,7 @@ class IndexController extends FrontController {
      * Index page view for not logged users and for patients
      */
 	public function home($locale=null) {
+
 		if(!empty($this->user)) {
 			if($this->user->isBanned('trp')) {
 				return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
@@ -39,72 +42,7 @@ class IndexController extends FrontController {
 			'results-url' => null
 		]);
 
-		//get all dentists and clinics
-		$featured = User::where('is_dentist', 1)
-		->whereIn('status', config('dentist-statuses.shown_with_link'))
-		->whereNull('self_deleted')
-		->has('country')
-		->with(['country', 'country.translations', 'lastReview'])
-		->orderBy('avg_rating', 'DESC');
-
-		$homeDentists = collect();
-
-		$city_id = null;
-		if(!empty($this->city_id)) {
-			$city_id = City::find($this->city_id);
-		}
-
-		if( !empty($this->user) ) {
-			if( $homeDentists->count() < 12 && $this->user->city_name ) {
-				$addMore = clone $featured;
-				$addMore = $addMore->where('city_name', 'LIKE', $this->user->city_name)
-				->take( 12 - $homeDentists->count() )
-				->get();
-				$homeDentists = $homeDentists->concat($addMore);
-			}
-
-			if( $homeDentists->count() < 12 && $this->user->state_name ) {
-				$addMore = clone $featured;
-				$addMore = $addMore->where('state_name', 'LIKE', $this->user->state_name)
-				->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-				->take( 12 - $homeDentists->count() )
-				->get();
-				$homeDentists = $homeDentists->concat($addMore);
-			}
-
-			if( $homeDentists->count() < 12 && $this->user->country_id ) {
-				$addMore = clone $featured;
-				$addMore = $addMore->where('country_id', $this->user->country_id)
-				->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-				->take( 12 - $homeDentists->count() )
-				->get();
-				$homeDentists = $homeDentists->concat($addMore);
-			}
-		}
-
-		if( $homeDentists->count() < 12 && $city_id ) {
-			$addMore = clone $featured;
-			$addMore = $addMore->where('city_name', 'LIKE', $city_id->name)
-			->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-			->take( 12 - $homeDentists->count() )
-			->get();
-			$homeDentists = $homeDentists->concat($addMore);
-		}
-
-		if( $homeDentists->count() < 12 && $this->country_id ) {
-			$addMore = clone $featured;
-			$addMore = $addMore->where('country_id', $this->country_id)
-			->whereNotIn('id', $homeDentists->pluck('id')->toArray())
-			->take( 12 - $homeDentists->count() )
-			->get();
-			$homeDentists = $homeDentists->concat($addMore);				
-		}
-
-		if( $homeDentists->count() <= 2) {
-			$addMore = clone $featured;
-			$addMore = $addMore->take( 12 - $homeDentists->count() )->get();
-			$homeDentists = $homeDentists->concat($addMore);	
-		}
+		$homeDentists = TrpHelper::getFlickityDentists($this->user, $this->city_id, $this->country_id);
 
 		$strength_arr = null;
 		$completed_strength = null;
@@ -174,10 +112,10 @@ class IndexController extends FrontController {
 
 		$strength_arr = null;
 		$completed_strength = null;
-		if ($this->user) {
-			$strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
-			$completed_strength = $this->user->getStrengthCompleted('trp');
-		}
+		// if ($this->user) {
+		// 	$strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
+		// 	$completed_strength = $this->user->getStrengthCompleted('trp');
+		// }
 
 		$params = [
 			'strength_arr' => $strength_arr,
@@ -206,11 +144,8 @@ class IndexController extends FrontController {
 
 		$seos = PageSeo::find(23);
 
-		$claim_user = !empty($claim_id) ? User::find($claim_id) : null;
-
 		return $this->ShowView('welcome-dentist', [
 			'extra_body_class' => 'white-header',
-			'claim_user' => $claim_user,
 			'js' => [
 				'address.js',
 				'welcome-dentist.js',
@@ -383,7 +318,6 @@ class IndexController extends FrontController {
 				} else {
 					$total_points += $points[$key][$value];
 				}
-				
 			}
 		}	
 		$review_collection = intval($points['answer-2'][Request::input('answer-2')]) + (!empty(Request::input('answer-4')) ? intval($points['answer-4'][Request::input('answer-4')]) : 0);
@@ -599,7 +533,6 @@ class IndexController extends FrontController {
      */
 	public function getPopup() {
 
-		//dd(request('id'));
 		if(request('id') == 'popup-share') {
 
 			return $this->ShowView('popups/share');

@@ -22,7 +22,6 @@ class AddDentistController extends FrontController {
 
         if(Request::isMethod('post')) {
 
-            
 		    //add https in website if missing
             if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
                 request()->merge([

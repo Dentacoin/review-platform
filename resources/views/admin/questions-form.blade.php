@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-12 ui-sortable">
             {{ Form::open(array(
-                'id' => 'page-add', 
+                'id' => 'quest-add', 
                 'class' => 'form-horizontal', 
                 'method' => 'post', 
                 'files' => true
@@ -16,7 +16,6 @@
                 
                 <div class="panel panel-inverse panel-with-tabs" data-sortable-id="ui-unlimited-tabs-1">
                     <div class="panel-heading p-0">
-                        <!-- begin nav-tabs -->
                         <div class="tab-overflow overflow-right">
                             <ul class="nav nav-tabs nav-tabs-inverse">
                                 @foreach($langs as $code => $lang_info)
@@ -26,50 +25,17 @@
                         </div>
                     </div>
                     <div class="tab-content">
-                        {{-- <div class="form-group">
-                            <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.order') }}</label>
-                            <div class="col-md-10">
-                                {{ Form::text('order', !empty($item) ? $item->order : null, array('class' => 'form-control')) }}
-                            </div>
-                        </div> --}}
                         <div style="display: none">
                             {{ Form::text('type', !empty($item) ? $item->type : 'new', array('class' => 'form-control')) }}
                         </div>
                         @foreach($langs as $code => $lang_info)
                             <div class="lang-tab tab-pane fade{{ $loop->first ? ' active in' : '' }}" data-lang="{{ $code }}" id="nav-tab-{{ $code }}">
-                                {{-- <div class="form-group">
-                                    <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question') }}</label>
-                                    <div class="col-md-9">
-                                        {{ Form::text('question-'.$code, !empty($item) ? $item->{'question:'.$code} : null, array('maxlength' => 256, 'class' => 'form-control')) }}
-                                    </div>
-                                </div> --}}
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.label') }}</label>
                                     <div class="col-md-10">
                                         {{ Form::text('label-'.$code, !empty($item) ? $item->{'label:'.$code} : null, array('maxlength' => 256, 'class' => 'form-control')) }}
                                     </div>
                                 </div>
-                                {{-- <div class="form-group">
-                                    <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.answers') }}</label>
-                                    <div class="col-md-9 answers-div">
-                                        @if(!empty($item) && !empty($item->{'options:'.$code}))
-                                            @foreach(json_decode( $item->{'options:'.$code}, true ) as $answer)
-                                                <div class="form-group">
-                                                    <div class="col-md-5">
-                                                        {{ Form::text('options-1-'.$code.'[]', $answer[0], array('maxlength' => 256, 'class' => 'form-control')) }}
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        {{ Form::text('options-2-'.$code.'[]', $answer[1], array('maxlength' => 256, 'class' => 'form-control')) }}
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <a class="btn btn-sm btn-default remove-answer" href="javascript:;"><i class="fa fa-remove"> </i></a>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                        <a class="btn btn-sm btn-primary add-answer" href="javascript:;"><i class="fa fa-plus"> </i></a>
-                                    </div>
-                                </div> --}}
                             </div>
                         @endforeach
                         <div class="form-group">
@@ -81,20 +47,6 @@
                     </div>
                 </div>
             </form>
-
-            {{-- <div id="answer-template" style="display: none;">
-                <div class="form-group">
-                    <div class="col-md-5">
-                        {{ Form::text('options-1-code[]', '', array('maxlength' => 256, 'class' => 'form-control')) }}
-                    </div>
-                    <div class="col-md-5">
-                        {{ Form::text('options-2-code[]', '', array('maxlength' => 256, 'class' => 'form-control')) }}
-                    </div>
-                    <div class="col-md-2">
-                        <a class="btn btn-sm btn-default remove-answer" href="javascript:;"><i class="fa fa-remove"> </i></a>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </div>
 

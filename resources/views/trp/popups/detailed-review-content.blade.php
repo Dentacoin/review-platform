@@ -98,7 +98,7 @@
 
 		<div class="overview-wrapper">
 			@php
-				$reviewQuestions = App\Models\Question::orderBy('order', 'asc')->get();
+				$reviewQuestions = App\Models\Question::with('translations')->orderBy('order', 'asc')->get();
 				$ratingForDentistQuestions = App\Models\Review::$ratingForDentistQuestions;
 				$oldRatingForDentistQuestions = App\Models\Review::$oldRatingForDentistQuestions;
 				$oldReview = $review->answers->first()->rating ? false : true; //old reviews had options, new have rating

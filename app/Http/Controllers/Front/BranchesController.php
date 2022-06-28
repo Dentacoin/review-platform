@@ -335,6 +335,7 @@ class BranchesController extends FrontController {
 
         $ret['success'] = false;
 
+        //if can delete branch
         if(
             !empty($this->user) 
             && !empty(request('branch_id')) 
