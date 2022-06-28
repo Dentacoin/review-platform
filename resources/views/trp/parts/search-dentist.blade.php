@@ -21,7 +21,7 @@
 
     @if($dentist->is_partner)
         <div class="partner">
-            <img class="tooltip-text" width="18" src="{{ url('img-trp/mini-logo-white.svg') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}"/>
+            <img class="tooltip-text" width="17" height="17" src="{{ url('img-trp/mini-logo-white.svg') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}"/>
             DCN Accepted
         </div>
     @endif

@@ -75,7 +75,7 @@
 			</div>
 			<div class="mobile-filters-wrapper {{ $items->isEmpty() ? 'smaller' : '' }}">
 				<a href="javascript:;" class="open-filters">
-					<img src="{{ url('img-trp/filters.svg') }}"/>Filters
+					<img src="{{ url('img-trp/filters.svg') }}" width="20" height="15"/>Filters
 				</a>
 				@if($items->isNotEmpty() && config('trp.using_google_maps'))
 					<a href="javascript:;" class="open-map">
