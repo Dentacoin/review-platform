@@ -12,7 +12,12 @@
 	<div class="row">
 	    <!-- begin col-6 -->
 	    <div class="col-md-12 ui-sortable">
-	        {{ Form::open(array('class' => 'form-horizontal', 'method' => 'post', 'files' => true, 'class' => 'form-horizontal reports-form')) }}
+	        {{ Form::open(array(
+                'class' => 'form-horizontal', 
+                'method' => 'post', 
+                'files' => true, 
+                'class' => 'form-horizontal reports-form'
+            )) }}
 	            {!! csrf_field() !!}
 
 	            <div class="panel panel-inverse">
@@ -22,21 +27,31 @@
                             <div class="form-group clearfix">
                                 <label class="col-md-2 control-label">Seo/Social Title</label>
                                 <div class="col-md-10" style="display: flex;"> 
-                                    {{ Form::text('seo_title', $item->seo_title, array('maxlength' => 128, 'class' => 'form-control input-title')) }}
+                                    {{ Form::text('seo_title', $item->seo_title, array(
+                                        'maxlength' => 128, 
+                                        'class' => 'form-control input-title'
+                                    )) }}
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Seo/Social description</label>
                                 <div class="col-md-10">
-                                    {{ Form::textarea('seo_description', $item->seo_description, array('maxlength' => 1024, 'class' => 'form-control input-title', 'style' => 'max-height: 114px;')) }}
+                                    {{ Form::textarea('seo_description', $item->seo_description, array(
+                                        'maxlength' => 1024, 
+                                        'class' => 'form-control input-title', 
+                                        'style' => 'max-height: 114px;'
+                                    )) }}
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">Add Social image</label>
                                 <div class="col-md-10">
-                                    {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
+                                    {{ Form::file('photo', [
+                                        'id' => 'photo', 
+                                        'accept' => 'image/jpg, image/jpeg, image/png'
+                                    ]) }}
                                 </div>
                             </div>
 
@@ -92,7 +107,10 @@
                             <div class="form-group">
                                 <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">Website image</label>
                                 <div class="col-md-10">
-                                    {{ Form::file('website-photo', ['id' => 'website-photo', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
+                                    {{ Form::file('website-photo', [
+                                        'id' => 'website-photo', 
+                                        'accept' => 'image/jpg, image/jpeg, image/png'
+                                    ]) }}
                                 </div>
                             </div>
 
@@ -187,7 +205,6 @@
                         </div>
 	                </div>
 	            </div>
-
 	        {{ Form::close() }}
 	    </div>
 	</div>
@@ -195,7 +212,11 @@
 	<div style="display: none;">
         <div class="input-group first-group" id="input-group-template" style="display: flex; align-items: center;">
             <img class="check" src="{{ url('new-vox-img/green-check.png') }}" style="max-width: 20px; margin-right: 5px;"/>
-	        {{ Form::text('something', '', array('maxlength' => 1024, 'class' => 'form-control meeting-checklist', 'placeholder' => 'Checklist')) }}
+	        {{ Form::text('something', '', array(
+                'maxlength' => 1024, 
+                'class' => 'form-control meeting-checklist', 
+                'placeholder' => 'Checklist'
+            )) }}
             
             <div class="input-group-btn" style="width: auto;">
                 <button class="btn btn-default btn-remove-checklist" type="button" style="height: 34px;">
@@ -205,7 +226,11 @@
         </div>
 
         <div class="input-group first-group" id="input-group-template-afterlist" style="display: flex; align-items: center;">
-	        {{ Form::text('something', '', array('maxlength' => 1024, 'class' => 'form-control meeting-after-checklist', 'placeholder' => 'After Checklists Info')) }}
+	        {{ Form::text('something', '', array(
+                'maxlength' => 1024, 
+                'class' => 'form-control meeting-after-checklist', 
+                'placeholder' => 'After Checklists Info'
+            )) }}
             
             <div class="input-group-btn" style="width: auto;">
                 <button class="btn btn-default btn-remove-checklist" type="button" style="height: 34px;">

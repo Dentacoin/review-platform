@@ -5,8 +5,6 @@
     <h1 class="page-header"> 
         Add Dentist
     </h1>
-    <!-- end page-header -->
-
 
     <div class="row">
         <div class="col-md-12">
@@ -18,7 +16,12 @@
                     <h4 class="panel-title">Add Dentist</h4>
                 </div>
                 <div class="panel-body">
-                    {!! Form::open(array('url' => url('cms/users/users/add'), 'method' => 'post', 'class' => 'form-horizontal','files' => true)) !!}
+                    {!! Form::open(array(
+                        'url' => url('cms/users/users/add'), 
+                        'method' => 'post', 
+                        'class' => 'form-horizontal',
+                        'files' => true
+                    )) !!}
                         {!! csrf_field() !!}
 
                         <div class="row">
@@ -28,7 +31,7 @@
                                     <div class="col-md-10">
                                         <div class="flex" style="align-items: baseline;justify-content: space-between;">
                                             <div>
-                                                {{ Form::select( 'type' , ['dentist' => 'Dentist', 'clinic' => 'Clinic'] , old('type') , array('class' => 'form-control')) }}
+                                                {{ Form::select( 'type', ['dentist' => 'Dentist', 'clinic' => 'Clinic'] , old('type') , array('class' => 'form-control')) }}
                                             </div>
                                             <div>
                                                 <label class="control-label" style="padding-right: 10px;">Partner</label>
@@ -107,7 +110,6 @@
                                         <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control"> {{ trans('admin.common.save') }} </button>
                                     </div>
                                 </div>
-                                
                             </div>
                             <div class="col-md-6">
                                 <label class="col-md-6 control-label">Add avatar</label>
@@ -134,13 +136,10 @@
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
-
                     {!! Form::close() !!}
                 </div>
             </div>
-            <!-- end panel -->
         </div>
     </div>
 

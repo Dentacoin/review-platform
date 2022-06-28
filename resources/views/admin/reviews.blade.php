@@ -63,14 +63,14 @@
     				@include('admin.parts.table', [
     					'table_id' => 'users',
     					'table_fields' => [
-                            'selector'                => array('format' => 'selector'),
+                            'selector'          => array('format' => 'selector'),
                             'created_at'        => array('format' => 'datetime'),
                             'user'              => array('template' => 'admin.parts.table-reviews-user'),
                             'dentist'           => array('template' => 'admin.parts.table-reviews-dentist'),
                             'rating'            => array(),
-                            'verified'              => array('format' => 'bool'),
-                            'answer'              => array('format' => 'break-word'),
-                            'status'              => array(),
+                            'verified'          => array('format' => 'bool'),
+                            'answer'            => array('format' => 'break-word'),
+                            'status'            => array(),
     						'delete'			=> array('format' => 'delete'),
     					],
                         'table_data' => $reviews,

@@ -15,7 +15,13 @@
 	<div class="row">
 	    <!-- begin col-6 -->
 	    <div class="col-md-12 ui-sortable">
-	        {{ Form::open(array('id' => 'poll-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true, 'class' => 'form-horizontal polls-form')) }}
+	        {{ Form::open(array(
+				'id' => 'poll-add', 
+				'class' => 'form-horizontal', 
+				'method' => 'post', 
+				'files' => true, 
+				'class' => 'form-horizontal polls-form'
+			)) }}
 	            {!! csrf_field() !!}
 
 	            <div class="panel panel-inverse panel-with-tabs custom-tabs">
@@ -37,7 +43,11 @@
 	                        <div class="col-md-5" style="display: flex;"> 
 	                            @foreach($langs as $code => $lang_info)
 	                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-	                                    {{ Form::textarea('question-'.$code, !empty($item) ? $item->{'question:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title', 'style' => 'max-height: 34px;')) }}
+	                                    {{ Form::textarea('question-'.$code, !empty($item) ? $item->{'question:'.$code} : '', array(
+											'maxlength' => 2048, 
+											'class' => 'form-control input-title', 
+											'style' => 'max-height: 34px;'
+										)) }}
 	                                </div>
 	                            @endforeach
 	                        </div>
@@ -51,7 +61,10 @@
 	                	<div class="form-group">
 	                       	<label class="col-md-2 control-label">Calendar date</label>
 			                <div class="col-md-5">
-			                    {{ Form::text('launched_at', !empty($item) && $item->launched_at ? date('Y-m-d', $item->launched_at->timestamp ) : date('Y-m-d', \App\Models\Poll::orderby('id','desc')->first()->launched_at->timestamp + 86400), array('class' => 'form-control polldatepicker', 'autocomplete' => 'off')) }}
+			                    {{ Form::text('launched_at', !empty($item) && $item->launched_at ? date('Y-m-d', $item->launched_at->timestamp ) : date('Y-m-d', \App\Models\Poll::orderby('id','desc')->first()->launched_at->timestamp + 86400), array(
+									'class' => 'form-control polldatepicker', 
+									'autocomplete' => 'off'
+								)) }}
 			                </div>
 			            </div>
 	                        
@@ -99,7 +112,12 @@
 	                                        @foreach(json_decode($item->{'answers:'.$code}, true) as $key => $ans)
 	                                            <div class="flex input-group first-group">
 	                                                <div class="col">
-	                                                    {{ Form::textarea('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control poll-answers', 'placeholder' => 'Answer', 'style' => 'display: inline-block; width: calc(100% - 60px);max-height: 34px;')) }}
+	                                                    {{ Form::textarea('answers-'.$code.'[]', $ans, array(
+															'maxlength' => 2048, 
+															'class' => 'form-control poll-answers', 
+															'placeholder' => 'Answer', 
+															'style' => 'display: inline-block; width: calc(100% - 60px);max-height: 34px;'
+														)) }}
 	                                                    
 	                                                    <div class="input-group-btn" style="display: inline-block;">
 	                                                        <button class="btn btn-default btn-remove-answer" type="button" style="height: 34px;">
@@ -111,7 +129,12 @@
 	                                        @endforeach
 	                                    @else
 	                                        <div class="input-group first-group">
-	                                            {{ Form::textarea('answers-'.$code.'[]', '', array('maxlength' => 2048, 'class' => 'form-control poll-answers', 'placeholder' => 'Answer', 'style' => 'max-height: 34px;')) }}
+	                                            {{ Form::textarea('answers-'.$code.'[]', '', array(
+													'maxlength' => 2048, 
+													'class' => 'form-control poll-answers', 
+													'placeholder' => 'Answer', 
+													'style' => 'max-height: 34px;'
+												)) }}
 	                                            <div class="input-group-btn">
 	                                                <button class="btn btn-default btn-remove-answer" type="button" style="height: 34px;">
 	                                                    <i class="glyphicon glyphicon-remove"></i>
@@ -142,7 +165,6 @@
 								<a href="javascript:;" class="btn btn-block btn-success" id="stay-on-same-page">Save and stay on this page</a>
 							</div>
 						</div>
-
 	                </div>
 	            </div>
 
@@ -185,7 +207,12 @@
 	<div style="display: none;">
 	    <div class="flex input-group ui-sortable-handle" id="input-group-template">
 	        <div class="col">
-	            {{ Form::textarea('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name poll-answers', 'placeholder' => 'Answer', 'style' => 'display: inline-block; width: calc(100% - 60px);max-height: 34px;')) }}
+	            {{ Form::textarea('something', '', array(
+					'maxlength' => 2048, 
+					'class' => 'form-control answer-name poll-answers', 
+					'placeholder' => 'Answer', 
+					'style' => 'display: inline-block; width: calc(100% - 60px);max-height: 34px;'
+				)) }}
 	            <div class="input-group-btn" style="display: inline-block;">
 	                <button class="btn btn-default btn-remove-answer" type="button" style="height: 34px;">
 	                    <i class="glyphicon glyphicon-remove"></i>
@@ -213,7 +240,6 @@
 		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		            </div>
 		        </div>
-
 		    </div>
 		</div>
 	@endif

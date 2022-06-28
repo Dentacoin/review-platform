@@ -5,7 +5,6 @@
     <h1 class="page-header"> 
         {{ $highlight ? 'Edit' : 'Add' }} Highlight to {{ $item->getNames() }}
     </h1>
-    <!-- end page-header -->
 
     <div class="row">
         <div class="col-md-12">
@@ -17,7 +16,12 @@
                     <h4 class="panel-title">{{ $highlight ? 'Edit' : 'Add' }} Highlight to {{ $item->getNames() }}</h4>
                 </div>
                 <div class="panel-body">
-                    {!! Form::open(array('url' => url('cms/users/users/edit/'.$item->id.'/add-edit-highlight/'.($highlight ? $highlight->id : '')), 'method' => 'post', 'class' => 'form-horizontal','files' => true)) !!}
+                    {!! Form::open(array(
+                        'url' => url('cms/users/users/edit/'.$item->id.'/add-edit-highlight/'.($highlight ? $highlight->id : '')), 
+                        'method' => 'post', 
+                        'class' => 'form-horizontal',
+                        'files' => true
+                    )) !!}
                         {!! csrf_field() !!}
 
                         <div class="form-group">
@@ -48,7 +52,6 @@
                     {!! Form::close() !!}
                 </div>
             </div>
-            <!-- end panel -->
         </div>
     </div>
 

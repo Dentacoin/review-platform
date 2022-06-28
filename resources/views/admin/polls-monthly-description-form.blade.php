@@ -7,17 +7,19 @@
 	    {{ empty($item) ? 'Add new Daily Poll Monthly Description' : 'Edit Daily Poll Monthly Description' }}
 	</h1>
 
-	<!-- end page-header -->
-
 	<div class="row">
-	    <!-- begin col-6 -->
 	    <div class="col-md-12 ui-sortable">
-	        {{ Form::open(array('id' => 'poll-month-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true, 'class' => 'form-horizontal')) }}
+	        {{ Form::open(array(
+				'id' => 'poll-month-add', 
+				'class' => 'form-horizontal', 
+				'method' => 'post', 
+				'files' => true, 
+				'class' => 'form-horizontal'
+			)) }}
 	            {!! csrf_field() !!}
 
 	            <div class="panel panel-inverse panel-with-tabs custom-tabs">
 	                <div class="panel-heading p-0">
-	                    <!-- begin nav-tabs -->
 	                    <div class="tab-overflow overflow-right">
 	                        <ul class="nav nav-tabs nav-tabs-inverse">
 	                            @foreach($langs as $code => $lang_info)
@@ -29,7 +31,6 @@
 	                    </div>
 	                </div>
 	                <div class="tab-content">
-
 	                	<div class="form-group">
 	                       	<label class="col-md-2 control-label">Calendar date</label>
 			                <div class="col-md-5">
@@ -50,7 +51,10 @@
 	                        <div class="col-md-5" style="display: flex;"> 
 	                            @foreach($langs as $code => $lang_info)
 	                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-	                                    {{ Form::textarea('description-'.$code, !empty($item) ? $item->{'description:'.$code} : '', array('maxlength' => 1024, 'class' => 'form-control input-title')) }}
+	                                    {{ Form::textarea('description-'.$code, !empty($item) ? $item->{'description:'.$code} : '', array(
+											'maxlength' => 1024, 
+											'class' => 'form-control input-title'
+										)) }}
 	                                </div>
 	                            @endforeach
 	                        </div>
@@ -61,10 +65,8 @@
 	                            <button type="submit" class="btn btn-block btn-success">Save</button>
 	                        </div>
 	                    </div>
-
 	                </div>
 	            </div>
-
 	        {{ Form::close() }}
 	    </div>
 	</div>

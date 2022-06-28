@@ -41,42 +41,59 @@
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.edit.subject') }}</label>
                                         <div class="col-md-10">
-                                            {{ Form::text('subject_'.$code, !empty($item) ? stripslashes($item->{'subject:'.$code}) : null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                                            {{ Form::text('subject_'.$code, !empty($item) ? stripslashes($item->{'subject:'.$code}) : null, array(
+                                                'maxlength' => 256, 
+                                                'class' => 'form-control'
+                                            )) }}
                                         </div>
                                     </div>
         
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.edit.title') }}</label>
                                         <div class="col-md-10">
-                                            {{ Form::text('title_'.$code, !empty($item) ? stripslashes($item->{'title:'.$code}) : null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                                            {{ Form::text('title_'.$code, !empty($item) ? stripslashes($item->{'title:'.$code}) : null, array(
+                                                'maxlength' => 256, 
+                                                'class' => 'form-control'
+                                            )) }}
                                         </div>
                                     </div>
         
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.edit.subtitle') }}</label>
                                         <div class="col-md-10">
-                                            {{ Form::text('subtitle_'.$code, !empty($item) ? stripslashes($item->{'subtitle:'.$code}) : null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                                            {{ Form::text('subtitle_'.$code, !empty($item) ? stripslashes($item->{'subtitle:'.$code}) : null, array(
+                                                'maxlength' => 256, 
+                                                'class' => 'form-control'
+                                            )) }}
                                         </div>
                                     </div>
                                     
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.edit.content') }}</label>
                                         <div class="col-md-10">
-                                            {{ Form::textarea('content_'.$code, !empty($item) ? stripslashes($item->{'content:'.$code}) : null, array('class' => 'form-control')) }}
+                                            {{ Form::textarea('content_'.$code, !empty($item) ? stripslashes($item->{'content:'.$code}) : null, array(
+                                                'class' => 'form-control'
+                                            )) }}
                                         </div>
                                     </div>
         
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">Category</label>
                                         <div class="col-md-10">
-                                            {{ Form::text('category_'.$code, !empty($item) ? stripslashes($item->{'category:'.$code}) : null, array('maxlength' => 512, 'class' => 'form-control')) }}
+                                            {{ Form::text('category_'.$code, !empty($item) ? stripslashes($item->{'category:'.$code}) : null, array(
+                                                'maxlength' => 512, 
+                                                'class' => 'form-control'
+                                            )) }}
                                         </div>
                                     </div>
         
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">SendGrid Template ID</label>
                                         <div class="col-md-10">
-                                            {{ Form::text('sendgrid_template_id_'.$code, !empty($item) ? stripslashes($item->{'sendgrid_template_id:'.$code}) : null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                                            {{ Form::text('sendgrid_template_id_'.$code, !empty($item) ? stripslashes($item->{'sendgrid_template_id:'.$code}) : null, array(
+                                                'maxlength' => 256, 
+                                                'class' => 'form-control'
+                                            )) }}
                                         </div>
                                     </div>
                                 </fieldset>
@@ -93,13 +110,18 @@
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Subscribe Category</label>
                                 <div class="col-md-10">
-                                    {{ Form::select('subscribe_category', ['' => '-'] + config('email-categories'), !empty($item) ? $item->subscribe_category : '', array('class' => 'form-control')) }}
+                                    {{ Form::select('subscribe_category', ['' => '-'] + config('email-categories'), !empty($item) ? $item->subscribe_category : '', array(
+                                        'class' => 'form-control'
+                                    )) }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Note</label>
                                 <div class="col-md-10">
-                                    {{ Form::textarea('note', !empty($item) ? $item->note : null, array('maxlength' => 255, 'class' => 'form-control')) }}
+                                    {{ Form::textarea('note', !empty($item) ? $item->note : null, array(
+                                        'maxlength' => 255, 
+                                        'class' => 'form-control'
+                                    )) }}
                                 </div>
                             </div>
 

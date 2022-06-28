@@ -20,7 +20,13 @@
 
 <div class="row">
     <div class="col-md-12">
-        {{ Form::open(array('id' => 'question-'.( !empty($question) ? 'edit' : 'add') , 'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 'class' => 'form-horizontal questions-form questions-form-new', 'method' => 'post', 'files' => true)) }}
+        {{ Form::open(array(
+            'id' => 'question-'.( !empty($question) ? 'edit' : 'add'), 
+            'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 
+            'class' => 'form-horizontal questions-form questions-form-new', 
+            'method' => 'post', 
+            'files' => true
+        )) }}
 
             <div class="panel panel-inverse panel-with-tabs custom-tabs">
                 <div class="panel-heading p-0">
@@ -40,10 +46,18 @@
                         <h3 class="col-md-1" style="margin-top: 0px;">{{ trans('admin.page.'.$current_page.'.question-question') }}</h3>
                         <label class="col-md-1 control-label">{{ trans('admin.page.'.$current_page.'.question-order') }}</label>
                         <div class="col-md-5" style="display: flex;"> 
-                            {{ Form::text('order', !empty($question) ? $question->order : (!empty($next) ? $next : ''), array('maxlength' => 256, 'class' => 'form-control input-title', 'style' => 'width: 50px;' )) }}
+                            {{ Form::text('order', !empty($question) ? $question->order : (!empty($next) ? $next : ''), array(
+                                'maxlength' => 256, 
+                                'class' => 'form-control input-title', 
+                                'style' => 'width: 50px;'
+                            )) }}
                             @foreach($langs as $code => $lang_info)
                                 <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-                                    {{ Form::textarea('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title question-main-title', 'style' => 'height: 34px;')) }}
+                                    {{ Form::textarea('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array(
+                                        'maxlength' => 2048, 
+                                        'class' => 'form-control input-title question-main-title', 
+                                        'style' => 'height: 34px;'
+                                    )) }}
                                 </div>
                             @endforeach
                         </div>
@@ -60,7 +74,10 @@
                         <div class="col-md-3 question-scale-wrapper">
                             <label class="col-md-4 control-label">{{ trans('admin.page.'.$current_page.'.question-scale') }}</label>
                             <div class="col-md-8" style="padding-right: 0px;">
-                                {{ Form::select('question_scale', ['' => '-'] + $scales, !empty($question) ? $question->vox_scale_id : '', array('class' => 'form-control question-scale-input select2', 'style' => 'width: 100%')) }}
+                                {{ Form::select('question_scale', ['' => '-'] + $scales, !empty($question) ? $question->vox_scale_id : '', array(
+                                    'class' => 'form-control question-scale-input select2', 
+                                    'style' => 'width: 100%'
+                                )) }}
                             </div>
                         </div>
                         <div class="col-md-3 question-number-wrapper">
@@ -133,7 +150,12 @@
                                                         {{ $question_answers_count[$key+1] ?? '' }}
                                                     </div>
                                                     <div class="col" style="display: flex; align-items: center;">
-                                                        {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control answer-content', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
+                                                        {{ Form::text('answers-'.$code.'[]', $ans, array(
+                                                            'maxlength' => 2048, 
+                                                            'class' => 'form-control answer-content', 
+                                                            'placeholder' => 'Answer or name of the scale:weak,medium,strong', 
+                                                            'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;'
+                                                        )) }}
 
                                                         @if($question->answers_images_filename && !empty(json_decode($question->answers_images_filename, true)[$key]) )
                                                             <div class="answer-image-wrap">
@@ -161,7 +183,11 @@
                                         <div class="flex">
                                             <div class="answer-order-number"></div>
                                             <div class="flex input-group" style="width: 100%;">
-                                                {{ Form::text('answers-'.$code.'[]', '', array('maxlength' => 2048, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
+                                                {{ Form::text('answers-'.$code.'[]', '', array(
+                                                    'maxlength' => 2048, 
+                                                    'class' => 'form-control', 
+                                                    'placeholder' => 'Answer or name of the scale:weak,medium,strong'
+                                                )) }}
 
                                                 <input type="hidden" name="filename[]" value="">
                                                 {{ Form::file('answer-photos[]', ['accept' => 'image/gif, image/jpg, image/jpeg, image/png', 'style' => 'width: 100px;']) }}
@@ -378,7 +404,12 @@
                                                         <option value="gender" demographic-ans >Gender</option>
                                                     </optgroup>
                                                 </select>
-                                                {{ Form::text('answers-number[]', null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}                                                       
+                                                {{ Form::text('answers-number[]', null, array(
+                                                    'maxlength' => 256, 
+                                                    'class' => 'form-control', 
+                                                    'style' => 'width: 50%; float: left;', 
+                                                    'placeholder' => 'Answer numbers'
+                                                )) }}                                                       
                                             </div>
                                             <div class="input-group-btn">
                                                 <button class="btn btn-default btn-remove-trigger" type="button">
@@ -465,7 +496,11 @@
                             <div class="form-group clearfix">
                                 @foreach($langs as $code => $lang_info)
                                     <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} col-md-12">
-                                        {{ Form::text('stats_title-'.$code, !empty($question) ? $question->translateorNew($code)->stats_title : old('stats_title-'.$code), array('maxlength' => 256, 'class' => 'form-control input-title stats-title', 'placeholder' => 'Statistics title in '.$lang_info['name'])) }}
+                                        {{ Form::text('stats_title-'.$code, !empty($question) ? $question->translateorNew($code)->stats_title : old('stats_title-'.$code), array(
+                                            'maxlength' => 256, 
+                                            'class' => 'form-control input-title stats-title', 
+                                            'placeholder' => 'Statistics title in '.$lang_info['name']
+                                        )) }}
                                     </div>
                                 @endforeach
                             </div>
@@ -575,7 +610,11 @@
                     <div class="form-group clearfix">
                         <label class="col-md-2 control-label">Welcome questions</label>
                         <div class="col-md-4">
-                            {{ Form::select('cross_check', ['' => '-'] + VoxHelper::getDemographicQuestions(), !empty($question) ? $question->cross_check : '', array('class' => 'form-control question-scale-input select2', 'style' => 'width: 100%', 'id' => 'select-cross')) }}
+                            {{ Form::select('cross_check', ['' => '-'] + VoxHelper::getDemographicQuestions(), !empty($question) ? $question->cross_check : '', array(
+                                'class' => 'form-control question-scale-input select2', 
+                                'style' => 'width: 100%', 
+                                'id' => 'select-cross'
+                            )) }}
                         </div>
                     </div>
 
@@ -633,10 +672,18 @@
 
             </div>
             <div class="col" style="display: flex; align-items: center;">
-                {{ Form::text('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
+                {{ Form::text('something', '', array(
+                    'maxlength' => 2048, 
+                    'class' => 'form-control answer-name', 
+                    'placeholder' => 'Answer or name of the scale:weak,medium,strong', 
+                    'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;'
+                )) }}
 
                 <input type="hidden" name="filename[]" value="">
-                {{ Form::file('answer-photos[]', ['accept' => 'image/gif, image/jpg, image/jpeg, image/png', 'style' => 'width: 100px; display: inline-block;']) }}
+                {{ Form::file('answer-photos[]', [
+                    'accept' => 'image/gif, image/jpg, image/jpeg, image/png', 
+                    'style' => 'width: 100px; display: inline-block;'
+                ]) }}
                 
                 <div class="input-group-btn" style="display: inline-block;width: auto;">
                     <button class="btn btn-default btn-remove-answer" type="button">
@@ -686,7 +733,12 @@
                                 <option value="gender" demographic-ans {{ $q == 'gender' ? 'selected="selected"' : '' }}>Gender</option>
                             </optgroup>
                         </select>
-                        {{ Form::text('answers-number[]', !empty($a) ? $a : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
+                        {{ Form::text('answers-number[]', !empty($a) ? $a : null, array(
+                            'maxlength' => 256, 
+                            'class' => 'form-control', 
+                            'style' => 'width: 50%; float: left;', 
+                            'placeholder' => 'Answer numbers'
+                        )) }}
                     </div>
                     <div class="input-group-btn">
                         <button class="btn btn-default btn-remove-trigger" type="button">
@@ -755,7 +807,12 @@
                     <option value="gender" demographic-ans>Gender</option>
                 </optgroup>
             </select>
-            {{ Form::text('answers-number[]', null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
+            {{ Form::text('answers-number[]', null, array(
+                'maxlength' => 256, 
+                'class' => 'form-control', 
+                'style' => 'width: 50%; float: left;', 
+                'placeholder' => 'Answer numbers'
+            )) }}
         </div>
         <div class="input-group-btn">
             <button class="btn btn-default btn-remove-trigger" type="button">

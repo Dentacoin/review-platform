@@ -1,6 +1,5 @@
 @extends('admin')
 
-
 @section('content')
 
 	<h1 class="page-header">
@@ -13,7 +12,12 @@
 			<div class="row">
 			    <!-- begin col-6 -->
 			    <div class="col-md-12">
-			        {{ Form::open(array('id' => 'pageseo-add', 'class' => 'form-horizontal', 'method' => 'post', 'class' => 'form-horizontal')) }}
+			        {{ Form::open([
+						'id' => 'pageseo-add', 
+						'class' => 'form-horizontal', 
+						'method' => 'post', 
+						'class' => 'form-horizontal'
+					]) }}
 			            {!! csrf_field() !!}
 			                        
 		            	<div class="form-group">

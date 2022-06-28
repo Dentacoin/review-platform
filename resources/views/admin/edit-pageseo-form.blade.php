@@ -1,6 +1,5 @@
 @extends('admin')
 
-
 @section('content')
 
 	<h1 class="page-header">
@@ -12,7 +11,13 @@
 		<div class="row">
 		    <!-- begin col-6 -->
 		    <div class="col-md-12">
-		        {{ Form::open(array('id' => 'pageseo-edit', 'class' => 'form-horizontal', 'method' => 'post', 'class' => 'form-horizontal', 'files' => true)) }}
+		        {{ Form::open(array(
+					'id' => 'pageseo-edit', 
+					'class' => 'form-horizontal', 
+					'method' => 'post', 
+					'class' => 'form-horizontal', 
+					'files' => true
+				)) }}
 		            {!! csrf_field() !!}
 		                        
 	            	<div class="panel panel-inverse panel-with-tabs custom-tabs">
@@ -35,7 +40,10 @@
 			                        <div class="col-md-7" style="display: flex;"> 
 			                            @foreach($langs as $code => $lang_info)
 			                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-			                                    {{ Form::text('seo-title-'.$code, !empty($item) ? $item->{'seo_title:'.$code} : '', array('maxlength' => 128, 'class' => 'form-control input-title')) }}
+			                                    {{ Form::text('seo-title-'.$code, !empty($item) ? $item->{'seo_title:'.$code} : '', array(
+													'maxlength' => 128, 
+													'class' => 'form-control input-title'
+												)) }}
 			                                </div>
 			                            @endforeach
 			                        </div>
@@ -45,7 +53,11 @@
 			                        <div class="col-md-7" style="display: flex;"> 
 			                            @foreach($langs as $code => $lang_info)
 			                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-			                                    {{ Form::textarea('seo-description-'.$code, !empty($item) ? $item->{'seo_description:'.$code} : '', array('maxlength' => 516, 'class' => 'form-control input-title', 'style' => 'max-height: 68px;')) }}
+			                                    {{ Form::textarea('seo-description-'.$code, !empty($item) ? $item->{'seo_description:'.$code} : '', array(
+													'maxlength' => 516, 
+													'class' => 'form-control input-title', 
+													'style' => 'max-height: 68px;'
+												)) }}
 			                                </div>
 			                            @endforeach
 			                        </div>
@@ -55,7 +67,10 @@
 			                        <div class="col-md-7" style="display: flex;"> 
 			                            @foreach($langs as $code => $lang_info)
 			                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-			                                    {{ Form::text('social-title-'.$code, !empty($item) ? $item->{'social_title:'.$code} : '', array('maxlength' => 128, 'class' => 'form-control input-title')) }}
+			                                    {{ Form::text('social-title-'.$code, !empty($item) ? $item->{'social_title:'.$code} : '', array(
+													'maxlength' => 128, 
+													'class' => 'form-control input-title'
+												)) }}
 			                                </div>
 			                            @endforeach
 			                        </div>
@@ -65,7 +80,11 @@
 			                        <div class="col-md-7" style="display: flex;"> 
 			                            @foreach($langs as $code => $lang_info)
 			                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-			                                    {{ Form::textarea('social-description-'.$code, !empty($item) ? $item->{'social_description:'.$code} : '', array('maxlength' => 516, 'class' => 'form-control input-title', 'style' => 'max-height: 68px;')) }}
+			                                    {{ Form::textarea('social-description-'.$code, !empty($item) ? $item->{'social_description:'.$code} : '', array(
+													'maxlength' => 516, 
+													'class' => 'form-control input-title', 
+													'style' => 'max-height: 68px;'
+												)) }}
 			                                </div>
 			                            @endforeach
 			                        </div>
@@ -78,13 +97,16 @@
 			                    </div>
 			                </div>
 			                <div class="col-md-4">
-			                	@if($item->id == 12 || $item->id == 15 || $item->id == 16 || $item->id == 17 || $item->id == 18 || $item->id == 19 || $item->id == 32 || $item->id == 33 )
+			                	@if(in_array($item->id, [12, 15, 16, 17, 18, 19, 32, 33]) )
 			                		* Social image is shown dynamically
 			                	@else
 				                    <div class="form-group">
 				                        <label class="col-md-3 control-label">Social Image</label>
 				                        <div class="col-md-9">
-				                            {{ Form::file('image', ['id' => 'image-input', 'accept' => 'image/jpg, image/jpeg, image/png']) }}<br/>
+				                            {{ Form::file('image', [
+												'id' => 'image-input', 
+												'accept' => 'image/jpg, image/jpeg, image/png'
+											]) }}<br/>
 				                            * PNG, JPG до 2MB<br/>
 				                            @if(!empty($item) && $item->hasimage)
 				                                <a target="_blank" href="{{ $item->getImageUrl() }}">
@@ -99,10 +121,8 @@
 				                    <p>* If social image is empty, by default it shows {{ $item->platform == 'vox' ? 'https://dentavox.dentacoin.com/new-vox-img/logo-text.png' : 'https://reviews.dentacoin.com/img-trp/socials-cover.jpg' }}</p>
 				                @endif
 			                </div>
-
 		                </div>
 		            </div>
-
 		        {{ Form::close() }}
 		    </div>
 		</div>

@@ -594,11 +594,21 @@
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">Lat</label>
                                         <div class="col-md-3">
-                                            {{ Form::text( 'lat', $item->lat, array('class' => 'form-control', 'id' => 'lat', 'autocomplete' => 'off', $item->custom_lat_lon ? 'something' : 'disabled' => 'disabled' )) }}
+                                            {{ Form::text( 'lat', $item->lat, array(
+                                                'class' => 'form-control', 
+                                                'id' => 'lat', 
+                                                'autocomplete' => 'off', 
+                                                $item->custom_lat_lon ? 'something' : 'disabled' => 'disabled' 
+                                            )) }}
                                         </div>
                                         <label class="col-md-1 control-label">Lng</label>
                                         <div class="col-md-3">
-                                            {{ Form::text( 'lon', $item->lon, array('class' => 'form-control', 'id' => 'lon', 'autocomplete' => 'off', $item->custom_lat_lon ? 'something' : 'disabled' => 'disabled' )) }}
+                                            {{ Form::text( 'lon', $item->lon, array(
+                                                'class' => 'form-control', 
+                                                'id' => 'lon', 
+                                                'autocomplete' => 'off', 
+                                                $item->custom_lat_lon ? 'something' : 'disabled' => 'disabled' 
+                                            )) }}
                                         </div>
                                         <label class="col-md-2 control-label user-l" style="padding-left: 0px; margin-top: -10px;">Custom <br/> Lat/Lng</label>
                                         <div class="col-md-1" style="padding-left: 0px;">

@@ -12,7 +12,12 @@
 	<div class="row">
 	    <!-- begin col-6 -->
 	    <div class="col-md-12 ui-sortable">
-	        {{ Form::open(array('class' => 'form-horizontal', 'method' => 'post', 'files' => true, 'class' => 'form-horizontal reports-form')) }}
+	        {{ Form::open(array(
+                'class' => 'form-horizontal', 
+                'method' => 'post', 
+                'files' => true, 
+                'class' => 'form-horizontal reports-form'
+            )) }}
 	            {!! csrf_field() !!}
 
 	            <div class="panel panel-inverse panel-with-tabs custom-tabs">
@@ -35,7 +40,11 @@
                                 <div class="col-md-10" style="display: flex;"> 
                                     @foreach($langs as $code => $lang_info)
                                         <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-                                            {{ Form::text('main-title-'.$code, !empty($item) ? $item->{'main_title:'.$code} : '', array('maxlength' => 1024, 'class' => 'form-control input-title', 'id' => 'edit-main-title')) }}
+                                            {{ Form::text('main-title-'.$code, !empty($item) ? $item->{'main_title:'.$code} : '', array(
+                                                'maxlength' => 1024, 
+                                                'class' => 'form-control input-title', 
+                                                'id' => 'edit-main-title'
+                                            )) }}
                                         </div>
                                     @endforeach
                                 </div>
@@ -45,7 +54,11 @@
                                 <div class="col-md-10" style="display: flex;"> 
                                     @foreach($langs as $code => $lang_info)
                                         <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-                                            {{ Form::text('title-'.$code, !empty($item) ? $item->{'title:'.$code} : '', array('maxlength' => 1024, 'class' => 'form-control input-title', 'id' => 'edit-title')) }}
+                                            {{ Form::text('title-'.$code, !empty($item) ? $item->{'title:'.$code} : '', array(
+                                                'maxlength' => 1024, 
+                                                'class' => 'form-control input-title', 
+                                                'id' => 'edit-title'
+                                            )) }}
                                         </div>
                                     @endforeach
                                 </div>
@@ -56,7 +69,11 @@
                                 <div class="col-md-8">
                                     @foreach($langs as $code => $lang_info)
                                         <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-                                            {{ Form::text('slug-'.$code, !empty($item) ? $item->{'slug:'.$code} : '', array('maxlength' => 1024, 'class' => 'form-control input-title', 'id' => 'edit-slug')) }}
+                                            {{ Form::text('slug-'.$code, !empty($item) ? $item->{'slug:'.$code} : '', array(
+                                                'maxlength' => 1024, 
+                                                'class' => 'form-control input-title', 
+                                                'id' => 'edit-slug'
+                                            )) }}
                                         </div>
                                     @endforeach
                                 </div>
@@ -147,21 +164,30 @@
                             <div class="form-group">
                                 <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">Single page image</label>
                                 <div class="col-md-10">
-                                    {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
+                                    {{ Form::file('photo', [
+                                        'id' => 'photo', 
+                                        'accept' => 'image/jpg, image/jpeg, image/png'
+                                    ]) }}
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">All reports page image</label>
                                 <div class="col-md-10">
-                                    {{ Form::file('photo-all-reports', ['id' => 'photo-all-reports', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
+                                    {{ Form::file('photo-all-reports', [
+                                        'id' => 'photo-all-reports', 
+                                        'accept' => 'image/jpg, image/jpeg, image/png'
+                                    ]) }}
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="featured" class="col-md-2 control-label" style="padding-top: 0px;">Social image</label>
                                 <div class="col-md-10">
-                                    {{ Form::file('photo-social', ['id' => 'photo-social', 'accept' => 'image/jpg, image/jpeg, image/png']) }}
+                                    {{ Form::file('photo-social', [
+                                        'id' => 'photo-social', 
+                                        'accept' => 'image/jpg, image/jpeg, image/png'
+                                    ]) }}
                                 </div>
                             </div>
 
@@ -230,7 +256,12 @@
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">Short description</label>
                                         <div class="col-md-10">
-                                            {{ Form::textarea('short-description-'.$code, !empty($item) ? $item->{'short_description:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title', 'style' => 'max-height: 114px;', 'id' => 'paid-report-short-descr')) }}
+                                            {{ Form::textarea('short-description-'.$code, !empty($item) ? $item->{'short_description:'.$code} : '', array(
+                                                'maxlength' => 2048, 
+                                                'class' => 'form-control input-title', 
+                                                'style' => 'max-height: 114px;', 
+                                                'id' => 'paid-report-short-descr'
+                                            )) }}
                                         </div>
                                     </div>
                                     <div class="form-group answers-group-poll">
@@ -277,19 +308,26 @@
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">Methodology</label>
                                         <div class="col-md-10">
-                                            {{ Form::textarea('methodology-'.$code, !empty($item) ? $item->{'methodology:'.$code} : '', array('class' => 'form-control input-title', 'style' => 'max-height: 114px;', 'id' => 'methodology')) }}
+                                            {{ Form::textarea('methodology-'.$code, !empty($item) ? $item->{'methodology:'.$code} : '', array(
+                                                'class' => 'form-control input-title', 
+                                                'style' => 'max-height: 114px;', 
+                                                'id' => 'methodology'
+                                            )) }}
                                         </div>
                                     </div>
         
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">Summary</label>
                                         <div class="col-md-10">
-                                            {{ Form::textarea('summary-'.$code, !empty($item) ? $item->{'summary:'.$code} : '', array('class' => 'form-control input-title', 'style' => 'max-height: 114px;', 'id' => 'summary')) }}
+                                            {{ Form::textarea('summary-'.$code, !empty($item) ? $item->{'summary:'.$code} : '', array(
+                                                'class' => 'form-control input-title', 
+                                                'style' => 'max-height: 114px;', 
+                                                'id' => 'summary'
+                                            )) }}
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
-                            
                         </div>
 
                         <div class="form-group" style="margin-top: 60px;">

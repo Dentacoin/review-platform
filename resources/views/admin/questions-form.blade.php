@@ -3,12 +3,15 @@
 @section('content')
 
     <h1 class="page-header">{{ empty($item) ? 'Add question' : 'Edit question' }}</h1>
-    <!-- end page-header -->
 
     <div class="row">
-        <!-- begin col-6 -->
         <div class="col-md-12 ui-sortable">
-            {{ Form::open(array('id' => 'page-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true)) }}
+            {{ Form::open(array(
+                'id' => 'page-add', 
+                'class' => 'form-horizontal', 
+                'method' => 'post', 
+                'files' => true
+            )) }}
                 {!! csrf_field() !!}
                 
                 <div class="panel panel-inverse panel-with-tabs" data-sortable-id="ui-unlimited-tabs-1">

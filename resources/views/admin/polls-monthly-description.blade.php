@@ -2,12 +2,11 @@
 
 @section('content')
 
-<h1 class="page-header">
-    Daily Polls Monthly Descriptions
-    
-    <a class="btn btn-primary pull-right" href="{{ url('cms/vox/polls-monthly-description/add') }}">Add new monthly description</a>
-</h1>
-<!-- end page-header -->
+	<h1 class="page-header">
+		Daily Polls Monthly Descriptions
+		
+		<a class="btn btn-primary pull-right" href="{{ url('cms/vox/polls-monthly-description/add') }}">Add new monthly description</a>
+	</h1>
 
 	<form method="get" action="{{ url('cms/vox/polls-monthly-description') }}">
         <div class="row custom-row" style="margin-bottom: 10px;">

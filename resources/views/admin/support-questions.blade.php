@@ -7,20 +7,22 @@
 
 	    <!-- <a href="{{ url('cms/'.$current_page.'/content/add') }}" class="btn btn-sm btn-success pull-right">Add question</a> -->
 	</h1>
-	<!-- end page-header -->
 
 	@if($categories->isNotEmpty()) 
 		<div class="row">
-		    <!-- begin col-6 -->
 		    <div class="ui-sortable">
-		        {{ Form::open(array('id' => 'page-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true)) }}
+		        {{ Form::open(array(
+					'id' => 'page-add', 
+					'class' => 'form-horizontal', 
+					'method' => 'post', 
+					'files' => true
+				)) }}
 
 		            <div class="panel panel-inverse panel-with-tabs" data-sortable-id="ui-unlimited-tabs-1">
 		                <div class="panel-heading p-0">
 		                    <div class="panel-heading-btn m-r-10 m-t-10">
 		                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-expand" data-original-title="" title=""><i class="fa fa-expand"></i></a>
 		                    </div>
-		                    <!-- begin nav-tabs -->
 		                    <div class="tab-overflow overflow-right">
 		                        <ul class="nav nav-tabs nav-tabs-inverse">
 		                            <li class="prev-button"><a href="javascript:;" data-click="prev-tab" class="text-success"><i class="fa fa-arrow-left"></i></a></li>
@@ -97,9 +99,7 @@
 		    </div>
 
 		    <div class="row">
-		    <!-- begin col-6 -->
 			    <div class="col-md-12">
-			        <!-- begin panel -->
 			        <form id="add-support-question" method="post" action="{{ url('cms/support/content/add/') }}" edit-url="{{ url('cms/support/content/edit/') }}" delete-url="{{ url('cms/support/content/delete/') }}">
 				        <div class="panel panel-inverse">
 				            <div class="panel-heading">
@@ -144,7 +144,10 @@
 			                    <div class="form-group clearfix">
 			                        <label class="col-md-1 control-label">Category</label>
 			                        <div class="col-md-11">
-			                            {{ Form::select('category_id', $categories->pluck('name', 'id')->toArray(), $categories->first()->name, array('class' => 'form-control', 'id' => 'question-category')) }}
+			                            {{ Form::select('category_id', $categories->pluck('name', 'id')->toArray(), $categories->first()->name, array(
+											'class' => 'form-control', 
+											'id' => 'question-category'
+										)) }}
 			                        </div>
 			                    </div>
 			                    <div class="form-group clearfix">
@@ -166,7 +169,6 @@
 			            </div>
 			        </form>
 		        </div>
-
 		    </div>
 		</div>
 
@@ -199,11 +201,9 @@
 
 		</style>
 	@else 
-		
 		<div>
 	        <label class="alert alert-warning">First you need to add categories from <a href="{{ url('cms/support/categories') }}">here</a></label>
 	    </div>
-
 	@endif
 
 @endsection

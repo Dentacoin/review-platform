@@ -9,7 +9,6 @@
             <a href="{{ url('cms/emails/trp/send-engagement-email') }}" onclick="return confirm('Are you sure you want to send this email?');" class="btn btn-primary pull-right">Send Re-engagament dentists without reviews last 30 days</a>
             <a href="{{ url('cms/emails/trp/send-monthly-email') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Send Monthly Email To Petya</a>
         @endif
-        
     </h1>
 
     @if($admin->role == 'super_admin')
@@ -87,12 +86,12 @@
                         @include('admin.parts.table', [
                             'table_id' => 'emails-system',
                             'table_fields' => [
-                                'name'              => array(),
-                                'email_categories'  => array('template' => 'admin.parts.table-emails-categories'),
+                                'name'                  => array(),
+                                'email_categories'      => array('template' => 'admin.parts.table-emails-categories'),
                                 'sendgrid_template_id'  => array(),
-                                'validate_email'  => array('template' => 'admin.parts.table-emails-validate'),
-                                'note'  => array(),
-                                'update'            => array('template' => 'admin.parts.table-emails-edit'),
+                                'validate_email'        => array('template' => 'admin.parts.table-emails-validate'),
+                                'note'                  => array(),
+                                'update'                => array('template' => 'admin.parts.table-emails-edit'),
                             ],
                             'table_data' => $templates,
                             'table_pagination' => false,

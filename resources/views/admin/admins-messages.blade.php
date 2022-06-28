@@ -3,7 +3,6 @@
 @section('content')
 
     <h1 class="page-header">Admins Messages</h1>
-    <!-- end page-header -->
     
     <div class="row">
         <div class="col-md-12">
@@ -44,9 +43,7 @@
     </div>
 
     <div class="row">
-        <!-- begin col-6 -->
         <div class="col-md-12">
-            <!-- begin panel -->
             <div class="panel panel-inverse">
                 <div class="panel-heading">
                     <div class="panel-heading-btn">
@@ -86,7 +83,6 @@
                     </form>
                 </div>
             </div>
-            <!-- end panel -->
         </div>
     </div>
 
