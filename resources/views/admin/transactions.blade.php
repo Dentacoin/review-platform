@@ -43,14 +43,6 @@
         </div>
     @endif
 
-    @if($dont_retry_trans)
-        <!-- <div>
-            <label class="alert alert-warning">After refill, please click on "Bump all transactions with status 'DONT RETRY'" button</label>
-        </div> -->
-    @endif
-
-    <!-- end page-header -->
-
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
@@ -154,6 +146,11 @@
                         <div>
                             Transactions count: {{ $total_count }} <br/>
                             Sum: {{ $total_dcn_price }} DCN
+
+                            <br/><br/>
+                            @foreach(config('transaction-statuses') as $key => $transactionStatus)
+                                {{ $transactionStatus }}: {{ $transactions->where('status', $key)->count() }}<br/>
+                            @endforeach
                         </div>
                         <div>
                             <a href="{{ url('cms/transactions/scammers') }}" class="btn btn-{{ $scamByDay ? 'danger' : 'info' }} pull-right" style="margin-left: 10px;">Scammers by days ({{ $scamByDay }})</a>
@@ -163,14 +160,280 @@
             		<div class="panel-body">
                         <form method="post" action="{{ url('cms/transactions') }}" original-action="{{ url('cms/transactions') }}">
                             {!! csrf_field() !!}
-                            <div class="table-responsive">
-            					@include('admin.parts.table', [
-            						'table_id' => 'transactions',
-            						'table_fields' => $table_fields,
-                                    'table_data' => $transactions,
-            						'table_pagination' => false,
-                                    'pagination_link' => array()
-            					])
+                            <div class="row table-responsive-md">
+                                <table class="table table-striped table-question-list">
+                                    <thead>
+                                        <tr>
+                                            <th><a href="javascript:;" class="table-select-all">All / None</a></th>
+                                            <th>ID</th>
+                                            <th>Date</th>
+                                            <th>User</th>
+                                            <th>Amount</th>
+                                            <th>Address</th>
+                                            @if(request('search-status') != 'first')
+                                                <th>TX hash</th>
+                                            @endif
+                                            <th>Status</th>
+                                            <th>Type</th>
+                                            @if(request('search-status') != 'first')
+                                                <th>Nonce</th>
+                                                <th>Message</th>
+                                            @endif
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($transactions as $transaction)
+                                            <tr>
+                                                <td>
+                                                    {{-- ALL/NONE --}}
+                                                    <input type="checkbox" name="ids[]" value="{{ $transaction->id }}" />
+                                                </td>
+                                                <td>
+                                                    {{-- ID --}}
+                                                    {{$transaction->id}}
+
+                                                    @if($transaction->history->isNotEmpty())
+                                                        @if($transaction->history->count() == 1 && $transaction->history->first()->from_creating)
+
+                                                        @else
+                                                            <div class="trans-history-wrapper">
+                                                                <img src="{{ url('img/info.png') }}" style="max-width: 15px;">
+
+                                                                <div class="trans-history">
+                                                                    History: <br/>
+                                                                    @foreach($transaction->history as $history)
+                                                                        <div>
+                                                                            @if(!empty($history->sended_at))
+                                                                                - Sent on: {{ $history->sended_at }} <br/>
+                                                                            @endif
+                                                                            @if(!empty($history->address))
+                                                                                - Address: {{ $history->address }} <br/>
+                                                                            @endif
+                                                                            @if(!empty($history->tx_hash))
+                                                                                - Tx hash: {{ $history->tx_hash }} <br/>
+                                                                            @endif
+                                                                            @if(!empty($history->allowance_hash))
+                                                                                - Allowance hash: {{ $history->allowance_hash }} <br/>
+                                                                            @endif
+                                                                            @if(!empty($history->nonce))
+                                                                                - Nonce: {{ $history->nonce }} <br/>
+                                                                            @endif
+                                                                            @if(!empty($history->status))
+                                                                                - Status: {{ $history->status }} <br/>
+                                                                            @endif
+                                                                            @if(!empty($history->message))
+                                                                                - PS Message: {{ $history->message }} <br/>
+                                                                            @endif
+                                                                            @if(!empty($history->history_message))
+                                                                                {{ $history->history_message }} <br/>
+                                                                            @endif
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endif
+
+                                                    <br/>
+                                                    <br/>
+
+                                                    @if($transaction->for_staking)
+                                                        <p style="font-weight: bold; color: blue;">STAKING</p>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    {{-- Date --}}
+                                                    {{ date('d.m.Y', $transaction->created_at->timestamp) }}
+                                                    <br/>
+                                                    {{ date('H:i:s', $transaction->created_at->timestamp) }}
+                                                </td>
+                                                <td>
+                                                    {{-- User --}}
+                                                    @if($transaction->type=='mobident')
+                                                    @else
+                                                        <a href="{{ url('/cms/users/users/edit/'.$transaction->user_id) }}">
+                                                            {{ !empty($transaction->user) ? $transaction->user->name : ''  }}
+                                                        </a>
+
+                                                        @if($transaction->status == 'first')
+                                                            <div class="user-info-wrapper">
+                                                                <div class="img-wrap user-info" user-id="{{ $transaction->user_id }}">
+                                                                    <img src="{{ url('img/info-green.png') }}" style="max-width: 15px;">
+                                                                </div>
+
+                                                                <div class="user-info-tooltip">
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <br/>
+                                                        @endif
+                                                    @endif
+
+                                                    <br/>
+                                                    {{ !empty($transaction->user) ? $transaction->user->email : ''  }}
+                                                    <br/>
+                                                    <br/>
+                                                    @if(!empty($transaction->user))
+                                                        @if($transaction->user->is_dentist)
+                                                            <span class="label label-{{ config('user-statuses-classes')[$transaction->user->status] }}">{{ config('user-statuses')[$transaction->user->status] }}</span>
+                                                        @else
+                                                            @if(!empty($transaction->user->patient_status))
+                                                                <span class="label label-{{ config('user-statuses-classes')[$transaction->user->patient_status] }}">{{ config('patient-statuses')[$transaction->user->patient_status] }}</span>
+                                                            @endif
+                                                        @endif
+                                                    @else
+                                                        @if($transaction->is_dentist)
+                                                            <span class="label label-{{ config('user-statuses-classes')[$transaction->status] }}">{{ config('user-statuses')[$transaction->status] }}</span>
+                                                        @else
+                                                            @if(!empty($transaction->patient_status))
+                                                                <span class="label label-{{ config('user-statuses-classes')[$transaction->patient_status] }}">{{ config('patient-statuses')[$transaction->patient_status] }}</span>
+                                                            @endif
+                                                        @endif
+                                                    @endif
+                                                    <br/>
+                                                    <br/>
+                                                    
+                                                    @if(request('search-status') == 'first')
+                                                        @if($transaction->user->hasimage)
+                                                            <a href="{{ $transaction->user->getImageUrl() }}" data-lightbox="banappeal{{ $transaction->user->id }}">
+                                                                <img src="{{ $transaction->user->getImageUrl(true) }}" style="max-width: 30px;">
+                                                            </a>
+                                                        @else
+                                                            No image
+                                                        @endif
+                                                        <br/>
+                                                        <br/>
+                                                        @if($transaction->user->website)
+                                                            @if(filter_var($transaction->user->website, FILTER_VALIDATE_URL) === FALSE)
+                                                                {{ $transaction->user->website }}
+                                                            @else
+                                                                <a style="word-break: break-word;" href="{{ $transaction->user->website }}" target="_blank">{{ $transaction->user->website }}</a>
+                                                            @endif
+                                                        @else
+                                                            No website
+                                                        @endif
+                                                        <br/>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    {{-- Amount --}}
+                                                    {!! $transaction->amount !!}
+                                                </td>
+                                                <td>
+                                                    {{-- Address --}}
+                                                    <div style="display: flex;align-items: center;"> 
+                                                        {{ $transaction->address }} {!! $transaction->userWalletAddress ? ($transaction->userWalletAddress->is_deprecated ? '' : '<img title="confirmed by user" style="max-width: 13px;margin-left: 10px;" src="'.url('img/alert-small-success.png').'"/>') : '' !!}
+                                                    </div>
+                                                </td>
+                                                @if(request('search-status') != 'first')
+                                                    <td style="width: 200px;">
+                                                        {{-- TX hash --}}
+                                                        @if($transaction->is_paid_by_the_user)
+                                                            <div class="normal-mode" style="line-break: anywhere; width: 200px;">
+                                                                Approval: {!! $transaction->allowance_hash ? '<a href="'.config('transaction-links')[$transaction->layer_type].$transaction->allowance_hash.'" target="_blank">'.$transaction->allowance_hash.'</a>' : '-' !!} <br/>
+                                                                Funds sent: {!! $transaction->tx_hash ? '<a href="'.config('transaction-links')[$transaction->layer_type].$transaction->tx_hash.'" target="_blank">'.$transaction->tx_hash.'</a>' : '-' !!}
+                                                            </div>
+                                                        @else
+                                                            @if($transaction->tx_hash)
+                                                                <div class="normal-mode" style="line-break: anywhere; width: 200px;">
+                                                                    <a href="{{ config('transaction-links')[$transaction->layer_type].$transaction->tx_hash }}" target="_blank">
+                                                                        {{ $transaction->tx_hash }}
+                                                                    </a>
+                                                                </div>
+                                                            @else
+                                                                <div class="normal-mode" style="line-break: anywhere; width: 200px;">
+                                                                    -
+                                                                </div>
+                                                            @endif
+                                                        @endif
+                                                    </td>
+                                                @endif
+                                                <td>
+                                                    {{-- Status --}}
+                                                    {{ config('transaction-statuses')[$transaction->status] }}
+
+                                                    @if($transaction->is_paid_by_the_user)
+                                                        <br/>
+                                                        <b>Paid by the user</b>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    {{-- Type --}}
+                                                    {!! $transaction->type !!}
+                                                </td>
+                                                @if(request('search-status') != 'first')
+                                                    <td>
+                                                        {{-- Nonce --}}
+                                                        {!! $transaction->nonce !!}
+                                                    </td>
+                                                    <td>
+                                                        {{-- Message --}}
+                                                        {!! $transaction->message !!}
+                                                    </td>
+                                                @endif
+                                                <td>
+                                                    {{-- Actions --}}
+                                                    @if(request('search-status') == 'first')
+                                                        @if($transaction->status == 'first')
+                                                            <a class="btn btn-primary btn-sm" href="{{ url('cms/transactions/bump/'.$transaction->id) }}">
+                                                                Approve transaction
+                                                            </a>
+                                                            <br/>
+                                                            <a class="btn btn-danger btn-sm" href="{{ url('cms/transactions/stop/'.$transaction->id) }}" style="margin-top: 2px;">
+                                                                Reject transaction
+                                                            </a>
+                                                            <br/>
+                                                            @if($transaction->user && !$transaction->user->is_dentist && $transaction->user->patient_status != 'suspicious_admin' && $transaction->user->patient_status != 'suspicious_badip')
+                                                                <a class="btn btn-warning make-user-suspicious btn-sm" href="javascript:;" data-toggle="modal" data-target="#suspiciousUserModal" user-id="{{ $transaction->user_id }}" style="margin-top: 2px;">
+                                                                    Suspicious user
+                                                                </a>
+                                                            @endif
+                                                            <br/>
+                                                        @endif
+                                                    @endif
+                                                    @if($admin->role!='support')
+                                                        @if(in_array($transaction->status, ['stopped','dont_retry','pending']) )
+                                                            <a class="btn btn-primary btn-sm" href="{{ url('cms/transactions/bump/'.$transaction->id) }}" style="margin-top: 2px;">
+                                                                Bump
+                                                            </a>
+                                                            <br/>
+                                                        @endif
+                                                        @if(!in_array($transaction->status, ['completed','unconfirmed','stopped','dont_retry','failed','first']))
+                                                            <a class="btn btn-danger btn-sm" href="{{ url('cms/transactions/stop/'.$transaction->id) }}" style="margin-top: 2px;">
+                                                                Stop
+                                                            </a>
+                                                            <br/>
+                                                        @endif
+                                                        @if($transaction->status == 'unconfirmed')
+                                                            <a class="btn btn-warning btn-sm" href="{{ url('cms/transactions/pending/'.$transaction->id) }}" style="margin-top: 2px;">
+                                                                Pending
+                                                            </a>
+                                                            <br/>
+                                                        @endif
+                                                    @endif
+                                                    @if($admin->role='super_admin')
+                                                        @if(!in_array($transaction->status, ['completed','unconfirmed','pending','failed']))
+                                                            <a class="btn btn-info btn-sm" onclick="return confirm('Are you sure you want to DELETE this?');" href="{{ url('cms/transactions/delete/'.$transaction->id) }}" style="background: black;border-color: black;margin-top: 2px;">
+                                                                Delete
+                                                            </a>
+                                                            <br/>
+                                                        @endif
+                                                        <a class="btn btn-info btn-sm" href="{{ url('cms/transactions/edit/'.$transaction->id) }}" style="margin-top: 2px;">
+                                                            Edit
+                                                        </a>
+                                                        <br/>
+                                                        @if($transaction->manual_check_admin)
+                                                            <a class="btn btn-success btn-sm" href="{{ url('cms/transactions/checked-by-admin/'.$transaction->id) }}" style="margin-top: 2px;">
+                                                                Checked
+                                                            </a>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>                    
                             </div>
                             @if($admin->role!='support')
                                 <div style="display: flex">
