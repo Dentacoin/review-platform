@@ -16,7 +16,8 @@
       order: 2; } }
   .faq-title-wrapper .faq-image-wrapper .faq-image img {
     margin-right: 80px;
-    max-width: 220px; }
+    max-width: 220px;
+    height: auto; }
     @media screen and (max-width: 1200px) {
       .faq-title-wrapper .faq-image-wrapper .faq-image img {
         margin-right: 40px; } }

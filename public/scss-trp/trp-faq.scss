@@ -28,6 +28,7 @@ $phone: "screen and (max-width: 768px)";
             img {
                 margin-right: 80px;
                 max-width: 220px;
+                height: auto;
     
                 @media #{$pc} {
                     margin-right: 40px;

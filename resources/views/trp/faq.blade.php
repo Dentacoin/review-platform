@@ -6,7 +6,7 @@
 		<div class="container">
 			<div class="faq-image-wrapper flex flex-center">
 				<div class="faq-image">
-					<img src="{{ url('img-trp/faq-image.png') }}"/>
+					<img src="{{ url('img-trp/faq-image.png') }}" width="220" height="253"/>
 				</div>
 				<div>
 					<h1 class="mont">
@@ -17,7 +17,7 @@
 			<div class="faq-sections-title flex">
 				@foreach($content as $block)
 					<a class="faq-section col {{ $loop->index == 0 ? 'active' : '' }}" href="javascript:;" id="section-{{ $loop->iteration }}">
-						<img src="{{ url('img-trp/faq-'.strtolower(explode(' ',$block['title'])[0]).'.svg') }}"/>
+						<img src="{{ url('img-trp/faq-'.strtolower(explode(' ',$block['title'])[0]).'.svg') }}" width="62" height="60"/>
 						<p>{{ $block['title'] }}</p>
 					</a>
 				@endforeach
