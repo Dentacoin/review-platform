@@ -40,12 +40,12 @@
         @if( $time = $dentist->getWorkHoursText() )
             @if(str_contains($time, 'Open now'))
                 <div class="working-time open">
-                    <img src="{{ url('img-trp/clock-blue.svg') }}" width="19"/>
+                    <img src="{{ url('img-trp/clock-blue.svg') }}" width="19" height="17"/>
                     Open now
                 </div>
             @else
                 <div class="working-time closed">
-                    <img src="{{ url('img-trp/clock-red.svg') }}" width="19"/>
+                    <img src="{{ url('img-trp/clock-red.svg') }}" width="19" height="17"/>
                     Closed now
                 </div>
             @endif
@@ -68,12 +68,12 @@
                 @if( $time = $dentist->getWorkHoursText() )
                     @if(str_contains($time, 'Open now'))
                         <div class="working-time open">
-                            <img src="{{ url('img-trp/clock-blue.svg') }}">
+                            <img src="{{ url('img-trp/clock-blue.svg') }}" width="19" height="17"/>
                             Open now
                         </div>
                     @else
                         <div class="working-time closed">
-                            <img src="{{ url('img-trp/clock-red.svg') }}">
+                            <img src="{{ url('img-trp/clock-red.svg') }}" width="19" height="17"/>
                             Closed now
                         </div>
                     @endif
@@ -148,12 +148,12 @@
                     @if( $time = $dentist->getWorkHoursText() )
                         @if(str_contains($time, 'Open now'))
                             <div class="working-time open">
-                                <img src="{{ url('img-trp/clock-blue.svg') }}">
+                                <img src="{{ url('img-trp/clock-blue.svg') }}" width="19" height="17"/>
                                 Open now
                             </div>
                         @else
                             <div class="working-time closed">
-                                <img src="{{ url('img-trp/clock-red.svg') }}">
+                                <img src="{{ url('img-trp/clock-red.svg') }}" width="19" height="17"/>
                                 Closed now
                             </div>
                         @endif
