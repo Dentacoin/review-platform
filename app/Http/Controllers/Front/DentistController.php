@@ -117,7 +117,6 @@ class DentistController extends FrontController {
             }
         }
 
-        
         //<----------- Overall rating count --------------->
 
         $aggregatedRating = [];
@@ -190,7 +189,6 @@ class DentistController extends FrontController {
 
         //<----------- Overall rating count END --------------->
 
-
         $has_asked_dentist = $this->user ? $this->user->hasAskedDentist($item->id) : null;
 
         try {
@@ -238,20 +236,20 @@ class DentistController extends FrontController {
         }
 
         $view_params = [
-            'strength_arr' => $strength_arr,
-            'completed_strength' => $completed_strength,
-            'noIndex' => $item->status == 'test' || !$item->address ? true : false,
-            'item' => $item,
+            'strength_arr'          => $strength_arr,
+            'completed_strength'    => $completed_strength,
+            'noIndex'               => $item->status == 'test' || !$item->address ? true : false,
+            'item'                  => $item,
             'editing_branch_clinic' => $editing_branch_clinic,
-            'writes_review' => $writes_review,
-            'reviews' => $reviews,
-            'has_asked_dentist' => $has_asked_dentist,
-            'countries' => !empty($this->user) ? Country::with('translations')->get() : [],
-            'is_trusted' => !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false,
-            'aggregatedRating' => $aggregatedRating,
-            'social_image' => $social_image,
-            'canonical' => $item->getLink(),
-            'og_url' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
+            'writes_review'         => $writes_review,
+            'reviews'               => $reviews,
+            'has_asked_dentist'     => $has_asked_dentist,
+            'countries'             => !empty($this->user) ? Country::with('translations')->get() : [],
+            'is_trusted'            => !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false,
+            'aggregatedRating'      => $aggregatedRating,
+            'social_image'          => $social_image,
+            'canonical'             => $item->getLink(),
+            'og_url'                => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
             'js' => [
                 'user.js',
             ],
@@ -266,7 +264,7 @@ class DentistController extends FrontController {
                 $view_params['jscdn'][] = '//vjs.zencdn.net/6.4.0/video.min.js';
                 $view_params['jscdn'][] = '//cdn.WebRTC-Experiment.com/RecordRTC.js';
                 $view_params['jscdn'][] = '//webrtc.github.io/adapter/adapter-latest.js';
-                $view_params['js'][] = '../js/videojs.record.min.js';
+                $view_params['js'][]    = '../js/videojs.record.min.js';
             }
             $view_params['js'][] = 'user-logged.js';
             $view_params['css'][] = 'trp-users-logged.css';
@@ -1774,17 +1772,17 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
 
         $slug = request('slug');
 
-        if (!empty($this->admin)) {
-            $item = User::where('slug', 'LIKE', $slug)->first();
-        } else {
-            $item = User::where('slug', 'LIKE', $slug)->whereNull('self_deleted')->first();
+        $item = User::with('highlights')->where('slug', 'LIKE', $slug);
+        if (empty($this->admin)) { //show self deleted to admins
+            $item = $item->whereNull('self_deleted');
         }
+        $item = $item->first();
 
         if(empty($item)) {
             $old_slug = OldSlug::where('slug', 'LIKE', $slug)->first();
 
             if (!empty($old_slug)) {
-                $item = User::find($old_slug->user_id);
+                $item = User::with('highlights')->find($old_slug->user_id);
             }
         }
 
@@ -1792,8 +1790,108 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
             return '';
         }
 
+        $editing_branch_clinic = false;
+        if(
+            !empty($this->user)
+            && $this->user->is_clinic 
+            && $item->is_clinic 
+            && $this->user->branches->isNotEmpty() 
+            && in_array($item->id, $this->user->branches->pluck('branch_clinic_id')->toArray())
+        ) { //if main clinic has branches and whants to edit branch info -> fake log with branch
+            $editing_branch_clinic = $item;
+        }
+
+        $loggedUserAllowEdit = !empty($this->user) && ($this->user->id==$item->id || $editing_branch_clinic) ? true : false;
+        $hasNotVerifiedTeamFromInvitation = $item->notVerifiedTeamFromInvitation->isNotEmpty();
+        $hasTeamApproved = $item->teamApproved->isNotEmpty();
+        $dentistReviewsIn = $item->reviews_in_standard();
+        $reviews = $item->reviews_in();
+        
+        //<----------- Overall rating count --------------->
+
+        $aggregatedRating = [];
+        $hasNewReviews = false; //old reviews had options, new have rating
+
+        if (count($reviews)) {
+            foreach ($reviews as $rev) {
+                foreach($rev->answers as $answer) {
+                    if($answer->rating) {
+                        $hasNewReviews = true;
+                    }
+                }
+            }
+
+            $aggregatedCountAnswer = [];
+
+            foreach ($reviews as $rev) {
+                foreach($rev->answers as $answer) {
+
+                    if ( $item->my_workplace_approved->isEmpty() || ( in_array($answer->question_id, array_merge(Review::$ratingForDentistQuestions, Review::$oldRatingForDentistQuestions)))) {
+                        if(!isset($aggregatedRating[$answer->question['order']])) {
+                            $aggregatedRating[$answer->question['order']] = [
+                                'label' => $answer->question['label'],
+                                'type' => $answer->question['type'],
+                                'rating' => 0,
+                            ];
+                        }
+
+                        if(!isset($aggregatedCountAnswer[$answer->question['order']])) {
+                            $aggregatedCountAnswer[$answer->question['order']] = [
+                                'label' => $answer->question['label'],
+                                'type' => $answer->question['type'],
+                                'rating' => 0,
+                            ];
+                        }
+
+                        if($answer->options) {
+                            $arr_sum = array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                            if(!empty($arr_sum)) {
+                                $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
+                            }
+                        } else {
+                            $arr_sum = $answer->rating;
+                            $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
+                        }
+
+                        $aggregatedRating[$answer->question['order']]['rating'] += $arr_sum;
+                    }
+                }
+            }
+
+            foreach ($aggregatedCountAnswer as $key => $value) {
+                $aggregatedRating[$key]['rating'] /= $aggregatedCountAnswer[$key]['rating'];
+            }
+        }
+
+        if(!$hasNewReviews) {
+            $reviewQuestions = Question::with('translations')->whereIn('id', array_values(Review::$ratingForDentistQuestions))->get();
+
+            foreach($reviewQuestions as $reviewQuestion) {
+                $aggregatedRating[$reviewQuestion->order] = [
+                    'label' => $reviewQuestion->label,
+                    'type' => 'blue',
+                    'rating' => 0,
+                ];
+            }
+        }
+
+        ksort($aggregatedRating);
+
+        //<----------- Overall rating count END --------------->
+
 		return $this->ShowView('user-down', [
             'item' => $item,
+            'showTeamSection' => $item->is_clinic && ( $loggedUserAllowEdit || $hasTeamApproved || $hasNotVerifiedTeamFromInvitation ),
+            'videoReviewsCount' => $item->reviews_in_video()->count(),
+            'regularReviewsCount' => $dentistReviewsIn->count(),
+            'showLocationsSection' => ($item->lat && $item->lon) || $item->photos->isNotEmpty() || ( $loggedUserAllowEdit),
+            'showMoreInfoSection' => $item->education_info || $item->experience || $item->languages || $item->founded_at || $loggedUserAllowEdit,
+            'loggedUserAllowEdit' => $loggedUserAllowEdit,
+            'hasNotVerifiedTeamFromInvitation' => $hasNotVerifiedTeamFromInvitation,
+            'aggregatedRating' => $aggregatedRating,
+            'dentistReviewsIn' => $dentistReviewsIn,
+            'workingTime' => $item->getWorkHoursText(),
+            'dentistWorkHours' => $item->work_hours ? (is_array($item->work_hours) ? $item->work_hours : json_decode($item->work_hours, true)) : null,
         ]);	
 	}
 } ?>

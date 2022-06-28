@@ -84,6 +84,28 @@ $(document).ready(function() {
         });
     }
 
+    //load page down sections on scroll (google page speed)
+	// if($('#to-append').length) {
+
+	// 	$(window).scroll( function() {
+	// 		if (!$('#to-append').hasClass('appended')) {
+	// 			$('#to-append').addClass('appended');
+	// 			$.ajax({
+	// 				type: "POST",
+	// 				url: lang + '/dentist-down/',
+	// 				success: function(ret) {
+	// 					$('#to-append').append(ret);
+	
+	// 					handleClickToOpenPopups();	                
+	// 				},
+	// 				error: function(ret) {
+	// 					console.log('error');
+	// 				}
+	// 			});
+	// 		}
+	// 	});
+	// }
+
     var flickityFunctions = function() {
 
         if($('.gallery-flickity').length) {
