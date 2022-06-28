@@ -23,6 +23,7 @@ $phone: "screen and (max-width: 768px)";
         .faq-image {
             @media #{$phone} {
                 order: 2;
+                display: none;
             }
 
             img {
@@ -57,6 +58,7 @@ $phone: "screen and (max-width: 768px)";
         @media #{$phone} {
             display: flex;
             overflow-y: scroll;
+            margin-top: 5px;
         }
         
         a {
