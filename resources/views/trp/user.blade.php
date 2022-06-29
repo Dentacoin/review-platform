@@ -930,7 +930,46 @@
 
 		
 		{{-- @if($item->id == 37530) --}}
-			<div id="to-append"></div>
+			<div id="to-append">
+				@if(!$showAboutSection)
+					@if($showTeamSection)
+						@include('trp.user.team')
+					@else
+						@if($regularReviewsCount || $videoReviewsCount )
+							@include('trp.user.reviews')
+						@else
+							@if( $showLocationsSection )
+								@include('trp.user.location')
+							@else
+								@if($showMoreInfoSection)
+									@include('trp.user.more')
+								@else
+									@if($item->highlights->isNotEmpty())
+										<div class="tab-container">
+											<h2 class="mont">
+												Highlights
+											</h2>
+						
+											<div class="tab-inner-section">
+												<div class="hightlights-wrapper {{ $item->highlights->count() > 1 ? 'highlights-mobile-flickity' : '' }} {{ $item->highlights->count() > 3 ? 'highlights-flickity' : 'flex' }}">
+													@foreach($item->highlights as $highlight)
+														<a href="{{ $highlight->link }}" target="_blank" class="hightlight">
+															<div class="hightlight-image">
+																<img src="{{ $highlight->getImageUrl() }}"/>
+															</div>
+															<p>{{ $highlight->title }}</p>
+														</a>
+													@endforeach
+												</div>
+											</div>
+										</div>
+									@endif
+								@endif
+							@endif
+						@endif
+					@endif
+				@endif
+			</div>
 		{{-- @else
 			@if($showTeamSection)
 				@include('trp.user.team')

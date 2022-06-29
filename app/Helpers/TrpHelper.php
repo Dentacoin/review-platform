@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Models\Question;
+use App\Models\Review;
 use App\Models\User;
 use App\Models\City;
 
@@ -370,5 +372,83 @@ class TrpHelper {
 		}
 
 		return $homeDentists;
+	}
+
+	public static function getUserOverallRating($item) {
+
+		$reviews = $item->reviews_in();
+
+        $aggregatedRating = [];
+        $hasNewReviews = false; //old reviews had options, new have rating
+
+        if (count($reviews)) {
+            foreach ($reviews as $rev) {
+                foreach($rev->answers as $answer) {
+                    if($answer->rating) {
+                        $hasNewReviews = true;
+                    }
+                }
+            }
+
+            $aggregatedCountAnswer = [];
+
+            foreach ($reviews as $rev) {
+                foreach($rev->answers as $answer) {
+
+                    if ( 
+						$item->my_workplace_approved->isEmpty() || 
+						( in_array($answer->question_id, array_merge(Review::$ratingForDentistQuestions, Review::$oldRatingForDentistQuestions)))
+					) {
+                        if(!isset($aggregatedRating[$answer->question['order']])) {
+                            $aggregatedRating[$answer->question['order']] = [
+                                'label' => $answer->question['label'],
+                                'type' => $answer->question['type'],
+                                'rating' => 0,
+                            ];
+                        }
+
+                        if(!isset($aggregatedCountAnswer[$answer->question['order']])) {
+                            $aggregatedCountAnswer[$answer->question['order']] = [
+                                'label' => $answer->question['label'],
+                                'type' => $answer->question['type'],
+                                'rating' => 0,
+                            ];
+                        }
+
+                        if($answer->options) {
+                            $arr_sum = array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                            if(!empty($arr_sum)) {
+                                $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
+                            }
+                        } else {
+                            $arr_sum = $answer->rating;
+                            $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
+                        }
+
+                        $aggregatedRating[$answer->question['order']]['rating'] += $arr_sum;
+                    }
+                }
+            }
+
+            foreach ($aggregatedCountAnswer as $key => $value) {
+                $aggregatedRating[$key]['rating'] /= $aggregatedCountAnswer[$key]['rating'];
+            }
+        }
+
+        if(!$hasNewReviews) {
+            $reviewQuestions = Question::with('translations')->whereIn('id', array_values(Review::$ratingForDentistQuestions))->get();
+
+            foreach($reviewQuestions as $reviewQuestion) {
+                $aggregatedRating[$reviewQuestion->order] = [
+                    'label' => $reviewQuestion->label,
+                    'type' => 'blue',
+                    'rating' => 0,
+                ];
+            }
+        }
+
+        ksort($aggregatedRating);
+
+		return $aggregatedRating;
 	}
 }

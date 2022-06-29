@@ -28,6 +28,7 @@ use App\Models\Reward;
 use App\Models\User;
 
 use App\Helpers\GeneralHelper;
+use App\Helpers\TrpHelper;
 use Carbon\Carbon;
 
 use Validator;
@@ -142,6 +143,8 @@ class DentistController extends FrontController {
         if(!empty($this->user) && !empty(Review::where('review_to_id', $item->id)->where('user_id', $this->user->id)->first())) {
             $writes_review = true;
         }
+        
+        $aggregatedRating = TrpHelper::getUserOverallRating($item);
 
         $view_params = [
             'strength_arr'          => $strength_arr,
@@ -151,6 +154,7 @@ class DentistController extends FrontController {
             'editing_branch_clinic' => $editing_branch_clinic,
             'writes_review'         => $writes_review,
             'reviews'               => $reviews,
+            'aggregatedRating'      => $aggregatedRating,
             'has_asked_dentist'     => $has_asked_dentist,
             'countries'             => !empty($this->user) ? Country::with('translations')->get() : [],
             'is_trusted'            => !empty($this->user) && !$this->user->is_dentist ? $this->user->wasInvitedBy($item->id) : false,
@@ -1711,79 +1715,8 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
         $hasNotVerifiedTeamFromInvitation = $item->notVerifiedTeamFromInvitation->isNotEmpty();
         $hasTeamApproved = $item->teamApproved->isNotEmpty();
         $dentistReviewsIn = $item->reviews_in_standard();
-        $reviews = $item->reviews_in();
         
-        //<----------- Overall rating count --------------->
-
-        $aggregatedRating = [];
-        $hasNewReviews = false; //old reviews had options, new have rating
-
-        if (count($reviews)) {
-            foreach ($reviews as $rev) {
-                foreach($rev->answers as $answer) {
-                    if($answer->rating) {
-                        $hasNewReviews = true;
-                    }
-                }
-            }
-
-            $aggregatedCountAnswer = [];
-
-            foreach ($reviews as $rev) {
-                foreach($rev->answers as $answer) {
-
-                    if ( $item->my_workplace_approved->isEmpty() || ( in_array($answer->question_id, array_merge(Review::$ratingForDentistQuestions, Review::$oldRatingForDentistQuestions)))) {
-                        if(!isset($aggregatedRating[$answer->question['order']])) {
-                            $aggregatedRating[$answer->question['order']] = [
-                                'label' => $answer->question['label'],
-                                'type' => $answer->question['type'],
-                                'rating' => 0,
-                            ];
-                        }
-
-                        if(!isset($aggregatedCountAnswer[$answer->question['order']])) {
-                            $aggregatedCountAnswer[$answer->question['order']] = [
-                                'label' => $answer->question['label'],
-                                'type' => $answer->question['type'],
-                                'rating' => 0,
-                            ];
-                        }
-
-                        if($answer->options) {
-                            $arr_sum = array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
-                            if(!empty($arr_sum)) {
-                                $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
-                            }
-                        } else {
-                            $arr_sum = $answer->rating;
-                            $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
-                        }
-
-                        $aggregatedRating[$answer->question['order']]['rating'] += $arr_sum;
-                    }
-                }
-            }
-
-            foreach ($aggregatedCountAnswer as $key => $value) {
-                $aggregatedRating[$key]['rating'] /= $aggregatedCountAnswer[$key]['rating'];
-            }
-        }
-
-        if(!$hasNewReviews) {
-            $reviewQuestions = Question::with('translations')->whereIn('id', array_values(Review::$ratingForDentistQuestions))->get();
-
-            foreach($reviewQuestions as $reviewQuestion) {
-                $aggregatedRating[$reviewQuestion->order] = [
-                    'label' => $reviewQuestion->label,
-                    'type' => 'blue',
-                    'rating' => 0,
-                ];
-            }
-        }
-
-        ksort($aggregatedRating);
-
-        //<----------- Overall rating count END --------------->
+        $aggregatedRating = TrpHelper::getUserOverallRating($item);
 
 		return $this->ShowView('user-down', [
             'item' => $item,

@@ -296,7 +296,7 @@ $(document).ready(function() {
                     slug: window.location.pathname.split('/')[3],
                 },
                 success: function(ret) {
-                    $('#to-append').append(ret);
+                    $('#to-append').html(ret);
                     
                     handleActivePopupFunctions();
                     handleClickToOpenPopups();
@@ -306,8 +306,10 @@ $(document).ready(function() {
                     if(user_id) {
                         handleEdit();
                     }
-                    fixedTabs();
-                    initJS();
+                    $(window).on('scroll', function() {
+                        fixedTabs();
+                        initJS();
+                    });
                 },
                 error: function(ret) {
                     console.log('error');
