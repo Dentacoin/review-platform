@@ -12,7 +12,7 @@
 
                 @if($hasPatientAsks)
 
-                    <h3>Patient requests received {!! $patient_asks ? '<span class="patientAsksPendingCount">'.$patient_asks.'</span>' : '' !!}</h3>
+                    <h3>Patient requests received {!! $patientAsksCount ? '<span class="patientAsksPendingCount">'.$patientAsksCount.'</span>' : '' !!}</h3>
 
                     <div class="asks-container">
                         <table class="table paging" num-paging="10">

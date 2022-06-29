@@ -913,8 +913,8 @@
 			<a class="tab-title patients-tab" data-tab="asks" href="javascript:;">
 				{!! nl2br(trans('trp.page.user.my-patients')) !!}
 
-				@if($patient_asks)
-					<span class="patientAsksPendingCount {!! $patient_asks ? 'active' : ''  !!}">{{ $patient_asks }}</span>
+				@if($patientAsksCount)
+					<span class="patientAsksPendingCount {!! $patientAsksCount ? 'active' : ''  !!}">{{ $patientAsksCount }}</span>
 				@endif
 			</a>
 		@endif

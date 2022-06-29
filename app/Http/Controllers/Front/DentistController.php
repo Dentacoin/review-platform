@@ -106,89 +106,6 @@ class DentistController extends FrontController {
         }
 
         $reviews = $item->reviews_in();
-        if($review_id) {
-            $review = Review::find($review_id);
-            if(!empty($review) && !empty($reviews)) {
-                $rid = $review->id;
-                $reviews = $reviews->reject(function ($value, $key) use ($rid) {
-                    return $value->id == $rid;
-                });
-                $reviews = collect([$review])->merge($reviews);
-            }
-        }
-
-        //<----------- Overall rating count --------------->
-
-        $aggregatedRating = [];
-        $hasNewReviews = false; //old reviews had options, new have rating
-
-        if (count($reviews)) {
-            foreach ($reviews as $rev) {
-                foreach($rev->answers as $answer) {
-                    if($answer->rating) {
-                        $hasNewReviews = true;
-                    }
-                }
-            }
-
-            $aggregatedCountAnswer = [];
-
-            foreach ($reviews as $rev) {
-                foreach($rev->answers as $answer) {
-
-                    if ( $item->my_workplace_approved->isEmpty() || ( in_array($answer->question_id, array_merge(Review::$ratingForDentistQuestions, Review::$oldRatingForDentistQuestions)))) {
-                        if(!isset($aggregatedRating[$answer->question['order']])) {
-                            $aggregatedRating[$answer->question['order']] = [
-                                'label' => $answer->question['label'],
-                                'type' => $answer->question['type'],
-                                'rating' => 0,
-                            ];
-                        }
-
-                        if(!isset($aggregatedCountAnswer[$answer->question['order']])) {
-                            $aggregatedCountAnswer[$answer->question['order']] = [
-                                'label' => $answer->question['label'],
-                                'type' => $answer->question['type'],
-                                'rating' => 0,
-                            ];
-                        }
-
-                        if($answer->options) {
-                            $arr_sum = array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
-                            if(!empty($arr_sum)) {
-                                $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
-                            }
-                        } else {
-                            $arr_sum = $answer->rating;
-                            $aggregatedCountAnswer[$answer->question['order']]['rating'] += 1;
-                        }
-
-                        $aggregatedRating[$answer->question['order']]['rating'] += $arr_sum;
-                    }
-                }
-            }
-
-            foreach ($aggregatedCountAnswer as $key => $value) {
-                $aggregatedRating[$key]['rating'] /= $aggregatedCountAnswer[$key]['rating'];
-            }
-        }
-
-        if(!$hasNewReviews) {
-            $reviewQuestions = Question::with('translations')->whereIn('id', array_values(Review::$ratingForDentistQuestions))->get();
-
-            foreach($reviewQuestions as $reviewQuestion) {
-                $aggregatedRating[$reviewQuestion->order] = [
-                    'label' => $reviewQuestion->label,
-                    'type' => 'blue',
-                    'rating' => 0,
-                ];
-            }
-        }
-
-        ksort($aggregatedRating);
-
-        //<----------- Overall rating count END --------------->
-
         $has_asked_dentist = $this->user ? $this->user->hasAskedDentist($item->id) : null;
 
         try {
@@ -219,20 +136,11 @@ class DentistController extends FrontController {
         //     $strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
         //     $completed_strength = $this->user->getStrengthCompleted('trp');
         // }
-
-        if(!empty($this->user)) {
-            $reviews = Review::where('review_to_id', $item->id)
-            ->where('user_id', $this->user->id)
-            ->first();
-
-            if (!empty($reviews)) {
-                $writes_review = true;
-            } else {
-                $writes_review = false;
-            }
-            
-        } else {
-            $writes_review = false;
+        
+        //if logged patient writes review
+        $writes_review = false;
+        if(!empty($this->user) && !empty(Review::where('review_to_id', $item->id)->where('user_id', $this->user->id)->first())) {
+            $writes_review = true;
         }
 
         $view_params = [
@@ -245,8 +153,7 @@ class DentistController extends FrontController {
             'reviews'               => $reviews,
             'has_asked_dentist'     => $has_asked_dentist,
             'countries'             => !empty($this->user) ? Country::with('translations')->get() : [],
-            'is_trusted'            => !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false,
-            'aggregatedRating'      => $aggregatedRating,
+            'is_trusted'            => !empty($this->user) && !$this->user->is_dentist ? $this->user->wasInvitedBy($item->id) : false,
             'social_image'          => $social_image,
             'canonical'             => $item->getLink(),
             'og_url'                => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
@@ -270,9 +177,8 @@ class DentistController extends FrontController {
             $view_params['css'][] = 'trp-users-logged.css';
         }
         
-
         //patients ask dentist for verification
-        $patient_asks = 0;
+        $patientAsksCount = 0;
 
         //logged dentist in his profile
         if(!empty($this->user) && ($this->user->id == $item->id || $editing_branch_clinic)) {
@@ -292,7 +198,7 @@ class DentistController extends FrontController {
             if ($this->user->asks->isNotEmpty()) {
                 foreach ($this->user->asks as $p_ask) {
                     if ($p_ask->status == 'waiting' && !$p_ask->hidden && $p_ask->user) {
-                        $patient_asks++;
+                        $patientAsksCount++;
                     }
                 }
             }
@@ -301,7 +207,7 @@ class DentistController extends FrontController {
         $dentistReviewsIn = $item->reviews_in_standard();
 
         $view_params['dentistReviewsIn'] = $dentistReviewsIn;
-        $view_params['patient_asks'] = $patient_asks;
+        $view_params['patientAsksCount'] = $patientAsksCount;
 
         if( $is_review ) {
             $seos = PageSeo::find(33);
