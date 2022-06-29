@@ -929,9 +929,9 @@
 		@endif
 
 		
-		@if($item->id == 37530)
+		{{-- @if($item->id == 37530) --}}
 			<div id="to-append"></div>
-		@else
+		{{-- @else
 			@if($showTeamSection)
 				@include('trp.user.team')
 			@endif
@@ -968,7 +968,7 @@
 					</div>
 				</div>
 			@endif
-		@endif
+		@endif --}}
 
 		<input type="hidden" name="cur_dent_id" id="cur_dent_id" value="{{ $item->id }}">
 	</div>
