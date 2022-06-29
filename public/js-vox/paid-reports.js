@@ -40,24 +40,30 @@ $(document).ready(function(){
                         $('.company-form').removeClass('active');
                     }
                 } else {
-                    for(var i in data.messages) {
-                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+                    if(data.messages) {
 
-                        $('[name="'+i+'"]').addClass('has-error');
+                        for(var i in data.messages) {
+                            $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
 
-                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
-                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+                            $('[name="'+i+'"]').addClass('has-error');
+
+                            if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+                                $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+                            }
+                            
+                            if(i == 'agree') {
+                                $('.agree-error').show();
+                            }
                         }
-                        
-                        console.log(i);
-                        if(i == 'agree') {
-                            $('.agree-error').show();
+
+                        if($('.ajax-alert:visible').length) {
+                            $('html, body').animate({
+                                scrollTop: $('.ajax-alert:visible').first().offset().top - $('header').height() - 150
+                            }, 500);
                         }
+                    } else if(data.message) {
+                        $('.unavailable-error').show();
                     }
-
-                    $('html, body').animate({
-                        scrollTop: $('.ajax-alert:visible').first().offset().top - $('header').height() - 150
-                    }, 500);
                 }
                 ajax_is_running = false;
             }).bind(that), "json"

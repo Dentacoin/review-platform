@@ -150,7 +150,10 @@
                 </div>
             </div>
         @endif
-
+            
+        <div class="alert alert-warning unavailable-error" style="display: none;">
+            This feature is temporaty unavailable. For more information, get in touch with: <a href="mailto:admin@dentacoin.com">admin@dentacoin.com</a>
+        </div>
         <div class="tac">
             <button type="submit" href="javascript:;" class="blue-button new-style red-button">
                 {{ trans('vox.page.paid-reports.proceed-to-payment') }}

@@ -145,6 +145,14 @@ class PaidReportsController extends FrontController {
 		}
 		
 		if(Request::isMethod('post')) {
+
+			return Response::json([
+				'success' => false,
+				'message' => array(
+					'agree' => 'This feature is temporaty unavailable. For more information, get in touch with: admin@dentacoin.com'
+				)
+			]);
+
 			$validator = Validator::make(Request::all(), [
                 'name' => array('required', 'min:3'),
                 'invoice' => array('required'),
@@ -175,14 +183,12 @@ class PaidReportsController extends FrontController {
             } else {
 				
 				if(empty($this->user) && empty(request('agree'))) {
-					$ret = array(
+					return Response::json([
 						'success' => false,
 						'messages' => array(
 							'agree' => 'The agree field is required.'
 						)
-					);
-
-					return Response::json( $ret );
+					]);
 				}
 
 				
