@@ -224,7 +224,7 @@ $(document).ready(function() {
 
 
         //specializations & payment methods
-        $('.checkboxes-wrapper input').change( function() {
+        $('.checkboxes-wrapper input').off('change').change( function() {
             if($(this).closest('.edit-mode').length) {
                 if($(this).closest('.checkboxes-wrapper').hasClass('not-added')) {
                     $(this).closest('form').find('.checkboxes-wrapper:not(.not-added)').append($(this).closest('label'));
@@ -234,7 +234,7 @@ $(document).ready(function() {
             }
         });
 
-        $('.remove-checkbox').click( function() {
+        $('.remove-checkbox').off('click').click( function() {
             $(this).closest('label').find('input').prop('checked', false);
             $(this).closest('label').find('input').trigger('change');
         });
