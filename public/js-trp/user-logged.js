@@ -684,8 +684,10 @@ $(document).ready(function() {
                     var upload = new Upload(file, that.attr('upload-url'), function(data) {
                         
                         $('.add-gallery-image').removeClass('loading');
-            
-                        var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper added" photo-id="'+data.id+'">\
+                        
+                        console.log('addedd');
+                        
+                        var html = '<a href="'+data.original+'" photo-id="'+data.id+'" data-lightbox="user-gallery" class="slider-wrapper added">\
                             <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
                                 <div class="delete-gallery delete-button" sure="'+sure_text+'">\
                                     <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
