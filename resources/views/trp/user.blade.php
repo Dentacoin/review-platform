@@ -928,9 +928,10 @@
 			@include('trp.user.about')
 		@endif
 
-		{{-- <div id="to-append"></div> --}}
 		
-		@if($item->id != 37530)
+		@if($item->id == 37530)
+			<div id="to-append"></div>
+		@else
 			@if($showTeamSection)
 				@include('trp.user.team')
 			@endif
