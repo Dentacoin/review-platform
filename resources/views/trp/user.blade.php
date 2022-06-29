@@ -840,7 +840,7 @@
 							{{-- {!! nl2br(trans('trp.page.user.submit-review')) !!} --}}
 							Write a review
 						</a>
-						@if(empty($is_trusted) && !$has_asked_dentist)							
+						@if($user && empty($is_trusted) && !$has_asked_dentist)							
 							<a href="{{ $item->getLink().'ask/' }}" class="white-button ask-dentist tooltip-text" text="{!! nl2br(trans('trp.popup.popup-ask-dentist.hint', [ 'name' => $item->getNames() ])) !!}" style="margin-top: 10px">
 								{!! nl2br(trans('trp.page.user.request-invite')) !!}
 							</a>
