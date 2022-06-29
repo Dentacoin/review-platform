@@ -215,11 +215,10 @@ $phone: "screen and (max-width: 768px)";
 				font-size: 33px;
     			color: #332255;
 				margin-bottom: 20px;
-				font-weight: 900;
+				font-weight: 800;
 
 				@media #{$phone} {
 					font-size: 22px;
-					font-weight: 800;
 					margin-bottom: 10px;
 				}
 			}

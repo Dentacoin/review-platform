@@ -135,7 +135,7 @@
 
 			<div class="dont-count" reviews-guided-action="reviews_type">
 				<div class="select-reviews">
-					<h4 class="widget-subtitle">• {!! nl2br(trans('trp.popup.popup-widget.reviews')) !!}</h4>
+					<h4 class="widget-subtitle">{!! nl2br(trans('trp.popup.popup-widget.reviews')) !!}</h4>
 
 					<div class="mobile-radios modern-radios">
 						<div class="radio-label">
@@ -266,7 +266,7 @@
 
 			<div class="widget-last-step" style="display: none;">
 
-				<h4 class="widget-subtitle">• {!! nl2br(trans('trp.popup.popup-widget.widget-options.title')) !!}</h4>
+				<h4 class="widget-subtitle">{!! nl2br(trans('trp.popup.popup-widget.widget-options.title')) !!}</h4>
 				<div class="dont-count" reviews-guided-action="copy">
 					<div class="alert mobile-alert alert-warning widget-tab-alert" style="display: none;">
 						{!! nl2br(trans('trp.popup.popup-widget.widget-options.subtitle')) !!}
