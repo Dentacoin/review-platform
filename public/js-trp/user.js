@@ -2,9 +2,8 @@ var videoStart, videoLength;
 var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
-var suggestClinic;
+var handleActivePopupFunctions;
 var suggestedDentistClick;
-var suggestClinicClick;
 var editor;
 var fb_page_error;
 var load_lightbox;
@@ -12,6 +11,7 @@ var loadFlickityJS = false;
 var load_flickity = false;
 var loadMapsJS = false;
 var load_maps = false;
+var handleEdit;
 
 $(document).ready(function() {
 
@@ -85,26 +85,36 @@ $(document).ready(function() {
     }
 
     //load page down sections on scroll (google page speed)
-	// if($('#to-append').length) {
+	if($('#to-append').length) {
 
-	// 	$(window).scroll( function() {
-	// 		if (!$('#to-append').hasClass('appended')) {
-	// 			$('#to-append').addClass('appended');
-	// 			$.ajax({
-	// 				type: "POST",
-	// 				url: lang + '/dentist-down/',
-	// 				success: function(ret) {
-	// 					$('#to-append').append(ret);
-	
-	// 					handleClickToOpenPopups();	                
-	// 				},
-	// 				error: function(ret) {
-	// 					console.log('error');
-	// 				}
-	// 			});
-	// 		}
-	// 	});
-	// }
+		$(window).scroll( function() {
+			if (!$('#to-append').hasClass('appended')) {
+				$('#to-append').addClass('appended');
+				$.ajax({
+					type: "POST",
+					url: lang + '/dentist-down/',
+                    data: {
+                        slug: window.location.pathname.split('/')[3],
+                    },
+					success: function(ret) {
+						$('#to-append').append(ret);
+                        
+                        handleActivePopupFunctions();
+						handleClickToOpenPopups();
+                        handleReviewEvents();
+                        attachTooltips();
+                        verifyReview();
+                        handleEdit();
+                        fixedTabs();
+                        initJS();
+					},
+					error: function(ret) {
+						console.log('error');
+					}
+				});
+			}
+		});
+	}
 
     var flickityFunctions = function() {
 

@@ -1,14 +1,13 @@
 var videoStart, videoLength;
 var showFullReview;
 var handleDCNreward;
-var suggestClinic;
-var suggestClinicClick;
 var suggestTO;
 var editWorkingHours;
 var editor;
 var fb_page_error;
 var load_maps = false;
 var showPartnerWalletPopup;
+var handleEdit;
 
 $(document).ready(function() {
 
@@ -47,272 +46,296 @@ $(document).ready(function() {
         }
     });
 
-    $('.edit-field-button').click( function(e) {
-        e.preventDefault();
-        e.stopPropagation();
 
-        $('.tooltip-window').hide();
+    handleEdit = function() {
+        
+        $('.edit-field-button').off('click').click( function(e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-        if($(this).closest('.socials-wrapper').length) {
+            $('.tooltip-window').hide();
 
-            let editWrap = $(this).closest('.socials-wrapper');
-            editWrap.find('.socials').hide();
-            editWrap.find('.edit-field').css('display', 'flex');
+            if($(this).closest('.socials-wrapper').length) {
 
-        } else if($(this).hasClass('toggle-section')) {
+                let editWrap = $(this).closest('.socials-wrapper');
+                editWrap.find('.socials').hide();
+                editWrap.find('.edit-field').css('display', 'flex');
 
-            $('.'+$(this).attr('toggle-section')).toggleClass('edit-mode');
+            } else if($(this).hasClass('toggle-section')) {
 
-        } else if($(this).hasClass('edit-locations')) {
+                $('.'+$(this).attr('toggle-section')).toggleClass('edit-mode');
 
-            $('.location-section').toggleClass('edit-mode');
-            $('.gallery-flickity').flickity('resize');
+            } else if($(this).hasClass('edit-locations')) {
 
-            $('.map-container').hide();
-            $('.address-flickity').flickity('resize');
+                $('.location-section').toggleClass('edit-mode');
+                $('.gallery-flickity').flickity('resize');
 
-            let editWrap = $('#locations').find('.edit-field');
-            editWrap.find('.edited-field').hide();
-            editWrap.find('.edit-field-button').hide();
-            editWrap.find('.edit-wrapper').show();
+                $('.map-container').hide();
+                $('.address-flickity').flickity('resize');
 
-        } else if($(this).hasClass('edit-description-button')) {
+                let editWrap = $('#locations').find('.edit-field');
+                editWrap.find('.edited-field').hide();
+                editWrap.find('.edit-field-button').hide();
+                editWrap.find('.edit-wrapper').show();
 
-            var cls = $(this).closest('.tab-inner-section').find('[role="presenter"]').attr('class');
-            $('.'+cls+'[role="editor"]').show();
-            $('.'+cls+'[role="presenter"]').hide();
+            } else if($(this).hasClass('edit-description-button')) {
 
-        } else if($(this).hasClass('scroll-to')) {
+                var cls = $(this).closest('.tab-inner-section').find('[role="presenter"]').attr('class');
+                $('.'+cls+'[role="editor"]').show();
+                $('.'+cls+'[role="presenter"]').hide();
 
-            $('html, body').animate({
-                scrollTop: $('.'+$(this).attr('scroll')).offset().top - $('header').outerHeight() - $('.tab-titles').outerHeight()
-            }, 500);
-            
-        } else {
+            } else if($(this).hasClass('scroll-to')) {
 
-            let editWrap = $(this).closest('.edit-field');
-            editWrap.find('.edited-field').hide();
-            editWrap.find('.edit-field-button').hide();
-            editWrap.find('.edit-wrapper').show();
-        }
-    });
-
-    $('[role="editor"] form').off('submit').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                    var cls = $(this).closest('[role="editor"]').attr('class');
-                    $('.'+cls+'[role="editor"]').hide();
-                    $('.'+cls+'[role="presenter"]').show();
-
-                    var value_here = $('.'+cls+'[role="presenter"] .value-here');
-
-                    if(data.value.length) {
-                        value_here.html(data.value);
-                    } else {
-                        value_here.html(value_here.attr('empty-value'));
-                    }
-                    $(this).find('.alert').hide();
-                } else {
-                    $(this).find('.alert').show();
-                    $(this).find('.alert').html('');
-                    for(var i in data.messages) {
-                        $(this).find('.alert').append(data.messages[i]);
-                    }
-
-                    $('html, body').animate({
-                        scrollTop: $(this).offset().top - $('header').height()
-                    }, 500);
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
-
-    $('.edit-wrapper').off('submit').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-
-                    for(var i in data.inputs) {
-
-                        if(i == 'name' && typeof data.inputs['title'] != 'undefined') {
-                            $('#value-'+i).html(data.inputs['name']);
-                        } else {
-                            $('#value-'+i).html(data.inputs[i]);
-                            if(i == 'address') {
-                                $('#value-address-map').html(data.inputs[i]);
-                                // $('.map-container').show();
-                            }
-                        }
-                    }
-
-                    if(typeof data.inputs['avatar'] != 'undefined') {
-                        that.find('.image-label').css('background-image', 'url('+data.inputs['avatar']+')').show();
-                        that.find('.cropper-container').hide();
-                        that.find('.avatar-name-wrapper').hide();
-                        that.find('.save-avatar').hide();
-                    }
-
-                    if(typeof data.inputs['current-email'] != 'undefined') {
-                        that.closest('.socials-wrapper').find('.social.email-social').attr('href', 'mailto:'+data.inputs['current-email']);
-                    }
-
-                    if(typeof data.inputs['email_public'] != 'undefined') {
-                        that.closest('.socials-wrapper').find('.social.email-social').attr('href', 'mailto:'+data.inputs['email_public']);
-                    }
-
-                    if(typeof data.inputs['socials'] != 'undefined') {
-                        that.closest('.socials-wrapper').find('.socials').show();
-                        that.closest('.socials-wrapper').find('.edit-field').hide();
-                        that.closest('.socials-wrapper').find('.social:not(.email-social)').remove();
-
-                        for(var i in data.inputs['socials']) {
-                            if(data.inputs['socials'][i]) {
-                                that.closest('.socials-wrapper').find('.socials').append('<a class="social '+i+'" href="'+data.inputs['socials'][i]+'" target="_blank">\
-                                    <img src="'+images_path+'/social-network/'+i+'.svg" height="26"/>\
-                                </a>');
-                            }
-                        }
-
-                        that.closest('.socials-wrapper').find('.edit-field-button').insertAfter(that.closest('.socials-wrapper').find('.social').last());
-                    }
-
-                    if(!that.closest('#locations').length) {
-                        let editWrap = that.closest('.edit-field');
-                        editWrap.find('.edited-field').show();
-                        editWrap.find('.edit-field-button').show();
-                        editWrap.find('.edit-wrapper').hide();
-                    }
-
-                    that.find('.alert').hide();
-                } else {
-                    let alert = that.find('.alert:not(.secondary-info)')
-                    
-                    alert.html('');
-                    for(var i in data.messages) {
-                        alert.append(data.messages[i]);
-                    }
-                    alert.show();
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
-
-
-    //specializations & payment methods
-    $('.checkboxes-wrapper input').change( function() {
-        if($(this).closest('.edit-mode').length) {
-            if($(this).closest('.checkboxes-wrapper').hasClass('not-added')) {
-                $(this).closest('form').find('.checkboxes-wrapper:not(.not-added)').append($(this).closest('label'));
+                $('html, body').animate({
+                    scrollTop: $('.'+$(this).attr('scroll')).offset().top - $('header').outerHeight() - $('.tab-titles').outerHeight()
+                }, 500);
+                
             } else {
-                $(this).closest('form').find('.checkboxes-wrapper.not-added').append($(this).closest('label'));
+
+                let editWrap = $(this).closest('.edit-field');
+                editWrap.find('.edited-field').hide();
+                editWrap.find('.edit-field-button').hide();
+                editWrap.find('.edit-wrapper').show();
             }
-        }
-    });
+        });
 
-    $('.remove-checkbox').click( function() {
-        $(this).closest('label').find('input').prop('checked', false);
-        $(this).closest('label').find('input').trigger('change');
-    });
+        $('[role="editor"] form').off('submit').submit( function(e) {
+            e.preventDefault();
 
-    $('.edit-checkboxes-form').off('submit').submit( function(e) {
-        e.preventDefault();
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
 
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                (function( data ) {
+                    if(data.success) {
+                        var cls = $(this).closest('[role="editor"]').attr('class');
+                        $('.'+cls+'[role="editor"]').hide();
+                        $('.'+cls+'[role="presenter"]').show();
 
-        var that = $(this);
+                        var value_here = $('.'+cls+'[role="presenter"] .value-here');
 
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                    that.closest('.checkbox-section').removeClass('edit-mode');
-                } else {
-                    let alert = that.find('.alert')
-                    
-                    alert.html('');
-                    for(var i in data.messages) {
-                        alert.append(data.messages[i]);
-                    }
-                    alert.show();
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
-
-    $('.payments-section .open-my-account').click( function() {
-        if(!$('body').hasClass('edit-dentist-profile-mode')) {
-            window.location.href = 'https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews';
-        }
-    });
-    
-    //end specializations & payment methods
-
-
-    //working hours
-    editWorkingHours();
-
-    $('.edit-working-hours-form').off('submit').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                    that.closest('.open-hours-section').removeClass('edit-mode');
-
-                    var wh = data.inputs.work_hours;
-                    for(var i in wh) {
-                        if(!data.inputs['day_'+i] && wh[i][0][0] != null && wh[i][0][1] != null && wh[i][1][0] != null && wh[i][1][1] != null) {
-                            $('.open-hours-section .col-'+i+' .working-hours-wrap p').html(wh[i][0][0]+':'+wh[i][0][1]+' - '+wh[i][1][0]+':'+wh[i][1][1]);
+                        if(data.value.length) {
+                            value_here.html(data.value);
                         } else {
-                            $('.open-hours-section .col-'+i+' .working-hours-wrap p').html('Closed');
+                            value_here.html(value_here.attr('empty-value'));
                         }
-                    }
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
-    //end working hours
+                        $(this).find('.alert').hide();
+                    } else {
+                        $(this).find('.alert').show();
+                        $(this).find('.alert').html('');
+                        for(var i in data.messages) {
+                            $(this).find('.alert').append(data.messages[i]);
+                        }
 
-    var removeLanguages = function() {
-        $('.remove-lang').click( function() {
+                        $('html, body').animate({
+                            scrollTop: $(this).offset().top - $('header').height()
+                        }, 500);
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+
+        $('.edit-wrapper').off('submit').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var that = $(this);
+
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                (function( data ) {
+                    if(data.success) {
+
+                        for(var i in data.inputs) {
+
+                            if(i == 'name' && typeof data.inputs['title'] != 'undefined') {
+                                $('#value-'+i).html(data.inputs['name']);
+                            } else {
+                                $('#value-'+i).html(data.inputs[i]);
+                                if(i == 'address') {
+                                    $('#value-address-map').html(data.inputs[i]);
+                                    // $('.map-container').show();
+                                }
+                            }
+                        }
+
+                        if(typeof data.inputs['avatar'] != 'undefined') {
+                            that.find('.image-label').css('background-image', 'url('+data.inputs['avatar']+')').show();
+                            that.find('.cropper-container').hide();
+                            that.find('.avatar-name-wrapper').hide();
+                            that.find('.save-avatar').hide();
+                        }
+
+                        if(typeof data.inputs['current-email'] != 'undefined') {
+                            that.closest('.socials-wrapper').find('.social.email-social').attr('href', 'mailto:'+data.inputs['current-email']);
+                        }
+
+                        if(typeof data.inputs['email_public'] != 'undefined') {
+                            that.closest('.socials-wrapper').find('.social.email-social').attr('href', 'mailto:'+data.inputs['email_public']);
+                        }
+
+                        if(typeof data.inputs['socials'] != 'undefined') {
+                            that.closest('.socials-wrapper').find('.socials').show();
+                            that.closest('.socials-wrapper').find('.edit-field').hide();
+                            that.closest('.socials-wrapper').find('.social:not(.email-social)').remove();
+
+                            for(var i in data.inputs['socials']) {
+                                if(data.inputs['socials'][i]) {
+                                    that.closest('.socials-wrapper').find('.socials').append('<a class="social '+i+'" href="'+data.inputs['socials'][i]+'" target="_blank">\
+                                        <img src="'+images_path+'/social-network/'+i+'.svg" height="26"/>\
+                                    </a>');
+                                }
+                            }
+
+                            that.closest('.socials-wrapper').find('.edit-field-button').insertAfter(that.closest('.socials-wrapper').find('.social').last());
+                        }
+
+                        if(!that.closest('#locations').length) {
+                            let editWrap = that.closest('.edit-field');
+                            editWrap.find('.edited-field').show();
+                            editWrap.find('.edit-field-button').show();
+                            editWrap.find('.edit-wrapper').hide();
+                        }
+
+                        that.find('.alert').hide();
+                    } else {
+                        let alert = that.find('.alert:not(.secondary-info)')
+                        
+                        alert.html('');
+                        for(var i in data.messages) {
+                            alert.append(data.messages[i]);
+                        }
+                        alert.show();
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+
+
+        //specializations & payment methods
+        $('.checkboxes-wrapper input').change( function() {
+            if($(this).closest('.edit-mode').length) {
+                if($(this).closest('.checkboxes-wrapper').hasClass('not-added')) {
+                    $(this).closest('form').find('.checkboxes-wrapper:not(.not-added)').append($(this).closest('label'));
+                } else {
+                    $(this).closest('form').find('.checkboxes-wrapper.not-added').append($(this).closest('label'));
+                }
+            }
+        });
+
+        $('.remove-checkbox').click( function() {
+            $(this).closest('label').find('input').prop('checked', false);
+            $(this).closest('label').find('input').trigger('change');
+        });
+
+        $('.edit-checkboxes-form').off('submit').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var that = $(this);
+
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                (function( data ) {
+                    if(data.success) {
+                        that.closest('.checkbox-section').removeClass('edit-mode');
+                    } else {
+                        let alert = that.find('.alert')
+                        
+                        alert.html('');
+                        for(var i in data.messages) {
+                            alert.append(data.messages[i]);
+                        }
+                        alert.show();
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+
+        $('.payments-section .open-my-account').click( function() {
+            if(!$('body').hasClass('edit-dentist-profile-mode')) {
+                window.location.href = 'https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews';
+            }
+        });
+        
+        //end specializations & payment methods
+
+        $('.team-container .delete-invite').click( function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var that = $(this);
+
+            var r = confirm( that.attr('sure') );
+            if(!r) {
+                return;
+            }
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var id = that.closest('.team').attr('invite-id');
+            $.ajax( {
+                url: lang + '/profile/invites/delete/'+id,
+                type: 'GET',
+                dataType: 'json',
+                success: (function( data ) {
+                    ajax_is_running = false;
+                    that.closest('.team').remove();
+                }).bind(this)
+            });
+        });
+
+        //Remove team member
+        $('.team-container .deleter').click( function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var r = confirm( $(this).attr('sure') );
+            if(!r) {
+                return;
+            }
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var id = $(this).closest('.slider-wrapper').attr('dentist-id');
+            $.ajax( {
+                url: lang + '/profile/dentists/delete/'+id,
+                type: 'GET',
+                dataType: 'json',
+                success: (function( data ) {
+                    ajax_is_running = false;
+                    teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
+                }).bind(this)
+            });
+        });
+        
+        //working hours
+        editWorkingHours();
+
+        $('.edit-working-hours-form').off('submit').submit( function(e) {
+            e.preventDefault();
     
             if(ajax_is_running) {
                 return;
@@ -321,262 +344,621 @@ $(document).ready(function() {
     
             var that = $(this);
     
-            $.ajax( {
-                url: $('.edit-languages').attr('remove-url'),
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                (function( data ) {
+                    if(data.success) {
+                        that.closest('.open-hours-section').removeClass('edit-mode');
+    
+                        var wh = data.inputs.work_hours;
+                        for(var i in wh) {
+                            if(!data.inputs['day_'+i] && wh[i][0][0] != null && wh[i][0][1] != null && wh[i][1][0] != null && wh[i][1][1] != null) {
+                                $('.open-hours-section .col-'+i+' .working-hours-wrap p').html(wh[i][0][0]+':'+wh[i][0][1]+' - '+wh[i][1][0]+':'+wh[i][1][1]);
+                            } else {
+                                $('.open-hours-section .col-'+i+' .working-hours-wrap p').html('Closed');
+                            }
+                        }
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+        //end working hours
+
+        var removeLanguages = function() {
+            $('.remove-lang').click( function() {
+        
+                if(ajax_is_running) {
+                    return;
+                }
+                ajax_is_running = true;
+        
+                var that = $(this);
+        
+                $.ajax( {
+                    url: $('.edit-languages').attr('remove-url'),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        language: $(this).attr('language'),
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    success: (function( data ) {
+                        if(data.success) {
+                            if(that.closest('.languages-wrapper').find('option:not(.hidden-option)').length == 1) {
+                                that.closest('.languages-wrapper').find('select').show();
+                            }
+                            that.closest('.languages-wrapper').find('option[value="'+that.attr('language')+'"]').removeClass('hidden-option');
+                            that.closest('.bubble').remove();
+                        }
+        
+                        ajax_is_running = false;
+        
+                    }).bind(this)
+                });
+            });
+        }
+        removeLanguages();
+
+        $('#dentist-languages').change( function() {
+            $(this).closest('form').submit();
+        });
+
+        $('.edit-languages').off('submit').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var that = $(this);
+
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                (function( data ) {
+                    if(data.success) {
+                        that.find('select').val('');
+                        that.find('option[value="'+data.inputs.languages+'"]').addClass('hidden-option');
+                        $('<span class="bubble">\
+                            '+data.inputs.languages+'\
+                            <a href="javascript:;" class="remove-lang" language="'+data.inputs.languages+'">\
+                                <img class="close-icon" src="'+images_path+'/close-icon-blue.png" width="10"/>\
+                            </a>\
+                        </span>').insertBefore(that);
+                        removeLanguages();
+                        
+                        if(that.find('option:not(.hidden-option)').length == 1) {
+                            that.find('select').hide();
+                        }
+                    } else {
+                        console.log('error');
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+
+        $('[name="experience"]').change( function() {
+            $('.edit-experience-form').submit();
+        });
+
+        $('.edit-experience-form').off('submit').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var that = $(this);
+
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                (function( data ) {
+                    if(data.success) {
+                        if($('.chosen-experience').length) {
+                            $('.chosen-experience').find('.bubble').html(data.inputs.experience);
+                        } else {
+                            $('<div class="chosen-experience">\
+                                <span class="bubble">\
+                                    '+data.inputs.experience+'\
+                                </span>\
+                            </div>').insertBefore('.edit-experience-form');
+                        }
+                        that.closest('.experience-wrapper').removeClass('edit-mode');
+                    } else {
+                        console.log('error');
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+
+        if($('.datepicker').length) {
+            $('.datepicker').datepicker({
+                todayHighlight: true,
+                autoclose: true,
+                changeMonth: true,
+                changeYear: true,
+            });
+        }
+
+        $('.edit-founded-form').off('submit').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var that = $(this);
+
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                (function( data ) {
+                    if(data.success) {
+                        if($('.chosen-founded').length) {
+                            $('.chosen-founded').html(data.inputs.founded_at);
+                        } else {
+                            $('<div class="chosen-founded">\
+                                '+data.inputs.founded_at+'\
+                            </div>').insertBefore('.edit-founded-form');
+                        }
+                        that.closest('.founded-wrapper').removeClass('edit-mode');
+                    } else {
+                        console.log('error');
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+
+        $('.edit-announcement-form').off('submit').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var that = $(this);
+            that.find('.input').removeClass('has-error');
+
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                (function( data ) {
+                    if(data.success) {
+                        
+                        if(data.inputs.announcement_title) {
+                            $('.announcement-wrap h4 span').html(data.inputs.announcement_title);
+                        } else {
+                            $('.announcement-wrap h4 span').html('Add office update');
+                        }
+                        
+                        if(data.inputs.announcement_description) {
+                            $('.announcement-description').html(data.inputs.announcement_description.substring(0,150));
+                            $('.announcement-description').attr('short-text', data.inputs.announcement_description.substring(0,150));
+                            $('.announcement-description').attr('long-text', data.inputs.announcement_description);
+
+                            if(data.inputs.announcement_description.length >= 150) {
+                                $('.show-full-announcement').show();
+                            } else {
+                                $('.show-full-announcement').hide();
+                            }
+                            $('.announcement-subtitle').show();
+                            $('.announcement-wrapper').removeClass('show-on-edit-mode');
+
+                        } else {
+                            $('.announcement-description').html('');
+                            $('.show-full-announcement').hide();
+                            $('.announcement-subtitle').hide();
+                            $('.announcement-wrapper').addClass('show-on-edit-mode');
+                        }
+
+                        that.closest('.announcement-wrapper').removeClass('edit-mode');
+                    } else {
+                        if(data.messages) {
+                            for(var i in data.messages) {
+                                that.find('[name="'+i+'"]').addClass('has-error');
+                            }
+                        }
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+
+        var removeEducationBox = function() {
+            $('.remove-education-info').click( function() {
+                $(this).closest('.flex').remove();
+            });
+        }
+        removeEducationBox();
+
+        $('.add-education-info').click( function() {
+            var cloned = $(this).closest('.education-wrap').find('.flex').first().clone(true).insertBefore( $(this).closest('.education-wrap').find('.add-education-info') );
+
+            cloned.find('input').val('');
+
+            removeEducationBox();
+        });
+
+        $('.edit-education-info-form').off('submit').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var that = $(this);
+
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize(), 
+                (function( data ) {
+                    if(data.success) {
+
+                        if(data.inputs.education_info[0] !== null) {
+                            let chosenFounded = '';
+                            for(let i in data.inputs.education_info) {
+                                chosenFounded+= ('•&nbsp;&nbsp;&nbsp;'+data.inputs.education_info[i]+'<br/>');
+                            }
+
+                            if($('.chosen-education').length) {
+                                $('.chosen-education').html(chosenFounded);
+                            } else {
+                                $('<div class="chosen-education">\
+                                    '+chosenFounded+'\
+                                </div>').insertBefore('.edit-education-info-form');
+                            }
+                            $('.chosen-education').show();
+                        } else {
+                            $('.chosen-education').hide();
+                        }
+
+                        $('.education-wrapper').removeClass('edit-mode');
+                        
+                    } else {
+                        console.log('error');
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
+        });
+
+        
+
+        //<------------ GALLERY ------------>
+
+        var handleGalleryRemoved = function() {
+        
+            $('.delete-gallery').off('click').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var r = confirm( $(this).attr('sure') );
+                if(!r) {
+                    return;
+                }
+
+                if(ajax_is_running) {
+                    return;
+                }
+                ajax_is_running = true;
+
+                var id = $(this).closest('.slider-wrapper').attr('photo-id');
+                $.ajax( {
+                    url: lang + '/profile/gallery/delete/'+id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: (function( data ) {
+                        ajax_is_running = false;
+                        $('.gallery-flickity').flickity( 'remove', $(this).closest('.slider-wrapper') );
+                    }).bind(this)
+                });
+            });
+        }
+        handleGalleryRemoved();
+
+        if($(".add-gallery-image").length) {
+
+            $(".add-gallery-image").filedrop({
+                fallback_id: 'fallbackFileDrop',
+                url: '/api/upload.php',
+                paramname: 'fileUpload',
+                maxfilesize: 2,
+                allowedfiletypes: ['image/jpeg','image/png'],	// filetypes allowed by Content-Type.  Empty array means no restrictions
+                allowedfileextensions: ['.jpg','.jpeg','.png'], // file extensions allowed. Empty array means no restrictions
+                uploadFinished: function(index, file, json, timeDiff) {
+            
+                    $('.add-gallery-image').addClass('loading');
+            
+                    var sure_text = $('#add-gallery-photo').attr('sure-trans');
+                    var that = $('#add-gallery-photo');
+                    var upload = new Upload(file, that.attr('upload-url'), function(data) {
+                        
+                        $('.add-gallery-image').removeClass('loading');
+            
+                        var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
+                            <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
+                                <div class="delete-gallery delete-button" sure="'+sure_text+'">\
+                                    <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
+                                </div>\
+                            </div>\
+                        </a>\
+                        ';
+            
+                        $('.gallery-flickity').flickity({
+                            autoPlay: false,
+                            wrapAround: true,
+                            cellAlign: 'left',
+                            freeScroll: true,
+                            groupCells: 1,
+                            draggable: false,
+                        });
+            
+                        $('.gallery-flickity').flickity( 'insert', $(html), 1 );
+                        if($('.gallery-flickity .slider-wrapper').length > 2) {
+                            $('.gallery-flickity').flickity( 'selectCell', 1 );
+                        }
+                        handleGalleryRemoved();
+            
+                        if($('body').hasClass('guided-tour')) {
+                            $('.bubble-guided-tour .skip-step').trigger('click');
+                        }
+                        ajax_is_running = false;
+                    });
+                    upload.doUpload();
+                },
+            });
+        }
+
+        $('#add-gallery-photo').change( function() {
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            $('.add-gallery-image').addClass('loading');
+
+            var sure_text = $('#add-gallery-photo').attr('sure-trans');
+            var file = $(this)[0].files[0];
+            var that = $(this);
+
+            var fileExtension = ['jpeg', 'jpg', 'png'];
+            if ($.inArray(that.val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                console.log("Only formats are allowed : "+fileExtension.join(', '));
+            } else {
+                var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
+                    $('.add-gallery-image').removeClass('loading');
+
+                    var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
+                        <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
+                            <div class="delete-gallery delete-button" sure="'+sure_text+'">\
+                                <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
+                            </div>\
+                        </div>\
+                    </a>\
+                    ';
+
+                    $('.gallery-flickity').flickity({
+                        autoPlay: false,
+                        wrapAround: true,
+                        cellAlign: 'left',
+                        freeScroll: true,
+                        groupCells: 1,
+                        draggable: false,
+                    });
+
+                    $('.gallery-flickity').flickity( 'insert', $(html), 1 );
+                    if($('.gallery-flickity .slider-wrapper').length > 2) {
+                        $('.gallery-flickity').flickity( 'selectCell', 1 );
+                    }
+                    handleGalleryRemoved();
+
+                    if($('body').hasClass('guided-tour')) {
+                        $('.bubble-guided-tour .skip-step').trigger('click');
+                    }
+                    ajax_is_running = false;
+                });
+                upload.doUpload();
+            }
+        });
+
+        //<------------ END GALLERY ------------>
+
+        
+
+        var suggestClinicClick = function(elm) {
+            var id = $(elm).attr('data-id');
+
+            $(elm).closest('.suggest-results').hide();
+            $(elm).closest('.suggester-wrapper').find('.suggester-input').val('');
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            $.ajax({
+                url: lang + '/profile/clinics/invite',
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    language: $(this).attr('language'),
-                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    joinclinicid: $(elm).attr('data-id')
                 },
                 success: (function( data ) {
-                    if(data.success) {
-                        if(that.closest('.languages-wrapper').find('option:not(.hidden-option)').length == 1) {
-                            that.closest('.languages-wrapper').find('select').show();
-                        }
-                        that.closest('.languages-wrapper').find('option[value="'+that.attr('language')+'"]').removeClass('hidden-option');
-                        that.closest('.bubble').remove();
-                    }
-    
+                    $('#workplaces-list').prepend('\
+                        <span class="workplace-clinic">\
+                            <a href="'+data.clinic.link+'">'
+                                +data.clinic.name+
+                            '</a>\
+                            <a class="remove-dentist" href="'+window.location.origin+'/'+lang+'/profile/clinics/delete/'+data.clinic.id+'/">\
+                                <img class="close-icon" src="'+images_path+'/close-icon-blue.png" width="10">\
+                            </a>\
+                        </span>\
+                    ');
+
+                    $('#workplaces-list .show-on-edit-mode-inline').remove();
+
+                    removeWorkplace();
+
                     ajax_is_running = false;
-    
+
                 }).bind(this)
             });
+        }
+
+        var suggestClinic = function() {
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            $.ajax( {
+                url: 'suggest-clinic'+(user_id ? '/'+user_id : ''),
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    joinclinic: $(this).val()
+                },
+                success: (function( data ) {
+                    var container = $(this).closest('.clinic-suggester-wrapper').find('.suggest-results');
+                    
+                    if (data.length) {
+                        container.html('').show();
+                        for(var i in data) {
+
+                            var is_partner = data[i].is_partner ? '\
+                                <div class="result-partner-dentist">\
+                                    <div class="result-partner-dentist-wrapper">\
+                                        <img src="'+images_path+'/mini-logo-white.svg">\
+                                        <span>Dentacoin</span> Partner\
+                                    </div>\
+                                </div>\
+                            ' : '';
+
+                            container.append('<a href="javascript:;" data-id="'+data[i].id+'">\
+                                <div class="flex flex-mobile">\
+                                    <div class="result-image-dentist">\
+                                        <img src="'+data[i].avatar+'"/>\
+                                    </div>\
+                                    <div class="result-name-dentist">\
+                                        <p>'+data[i].name+'</p>\
+                                        <span>'+data[i].location+'</span>\
+                                    </div>\
+                                    '+is_partner+'\
+                                </div>\
+                            </a>')
+                        }
+
+                        container.find('a').click( function() {
+                            suggestClinicClick(this);
+                        });
+                    } else {
+                        container.hide();                    
+                    }
+
+                    ajax_is_running = false;
+
+                }).bind(this)
+            });
+        }
+
+        $('.clinic-suggester').closest('form').on('keyup keypress', function(e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) { 
+                e.preventDefault();
+                return false;
+            }
         });
-    }
-    removeLanguages();
 
-    $('#dentist-languages').change( function() {
-        $(this).closest('form').submit();
-    });
+        $('.clinic-suggester').on( 'keyup', function(e) {
+            
+            var container = $(this).closest('.clinic-suggester-wrapper').find('.suggest-results');
+            var keyCode = e.keyCode || e.which;
+            var activeLink = container.find('a.active');
 
-    $('.edit-languages').off('submit').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                    that.find('select').val('');
-                    that.find('option[value="'+data.inputs.languages+'"]').addClass('hidden-option');
-                    $('<span class="bubble">\
-                        '+data.inputs.languages+'\
-                        <a href="javascript:;" class="remove-lang" language="'+data.inputs.languages+'">\
-                            <img class="close-icon" src="'+images_path+'/close-icon-blue.png" width="10"/>\
-                        </a>\
-                    </span>').insertBefore(that);
-                    removeLanguages();
-                    
-                    if(that.find('option:not(.hidden-option)').length == 1) {
-                        that.find('select').hide();
-                    }
-                } else {
-                    console.log('error');
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
-
-    $('[name="experience"]').change( function() {
-        $('.edit-experience-form').submit();
-    });
-
-    $('.edit-experience-form').off('submit').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                    if($('.chosen-experience').length) {
-                        $('.chosen-experience').find('.bubble').html(data.inputs.experience);
-                    } else {
-                        $('<div class="chosen-experience">\
-                            <span class="bubble">\
-                                '+data.inputs.experience+'\
-                            </span>\
-                        </div>').insertBefore('.edit-experience-form');
-                    }
-                    that.closest('.experience-wrapper').removeClass('edit-mode');
-                } else {
-                    console.log('error');
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
-
-    if($('.datepicker').length) {
-        $('.datepicker').datepicker({
-            todayHighlight: true,
-            autoclose: true,
-            changeMonth: true,
-            changeYear: true,
-        });
-    }
-
-    $('.edit-founded-form').off('submit').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                    if($('.chosen-founded').length) {
-                        $('.chosen-founded').html(data.inputs.founded_at);
-                    } else {
-                        $('<div class="chosen-founded">\
-                            '+data.inputs.founded_at+'\
-                        </div>').insertBefore('.edit-founded-form');
-                    }
-                    that.closest('.founded-wrapper').removeClass('edit-mode');
-                } else {
-                    console.log('error');
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
-
-    $('.edit-announcement-form').off('submit').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var that = $(this);
-        that.find('.input').removeClass('has-error');
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                    
-                    if(data.inputs.announcement_title) {
-                        $('.announcement-wrap h4 span').html(data.inputs.announcement_title);
-                    } else {
-                        $('.announcement-wrap h4 span').html('Add office update');
-                    }
-                    
-                    if(data.inputs.announcement_description) {
-                        $('.announcement-description').html(data.inputs.announcement_description.substring(0,150));
-                        $('.announcement-description').attr('short-text', data.inputs.announcement_description.substring(0,150));
-                        $('.announcement-description').attr('long-text', data.inputs.announcement_description);
-
-                        if(data.inputs.announcement_description.length >= 150) {
-                            $('.show-full-announcement').show();
+            if (keyCode === 40 || keyCode === 38) { //Down / Up
+                if(activeLink.length) {
+                    activeLink.removeClass('active');
+                    if( keyCode === 40 ) { // Down
+                        if( activeLink.next().length ) {
+                            activeLink.next().addClass('active');
                         } else {
-                            $('.show-full-announcement').hide();
+                            container.find('a').first().addClass('active');
                         }
-                        $('.announcement-subtitle').show();
-                        $('.announcement-wrapper').removeClass('show-on-edit-mode');
-
-                    } else {
-                        $('.announcement-description').html('');
-                        $('.show-full-announcement').hide();
-                        $('.announcement-subtitle').hide();
-                        $('.announcement-wrapper').addClass('show-on-edit-mode');
+                    } else { // UP
+                        if( activeLink.prev().length ) {
+                            activeLink.prev().addClass('active');
+                        } else {
+                            container.find('a').last().addClass('active');
+                        }
                     }
-
-                    that.closest('.announcement-wrapper').removeClass('edit-mode');
                 } else {
-                    if(data.messages) {
-                        for(var i in data.messages) {
-                            that.find('[name="'+i+'"]').addClass('has-error');
-                        }
-                    }
+                    container.find('a').first().addClass('active');
                 }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
+            } else if (keyCode === 13) {
+                if( activeLink.length ) {
+                    suggestClinicClick(activeLink);
+                }
+            } else {
+                if( $(this).val().length > 3 ) {
+                    //Show Loding
+                    if(suggestTO) {
+                        clearTimeout(suggestTO);
+                    }
+                    suggestTO = setTimeout(suggestClinic.bind(this), 300);
+                } else {
+                    container.hide();
+                }
+            }
+        });
 
-    var removeEducationBox = function() {
-        $('.remove-education-info').click( function() {
-            $(this).closest('.flex').remove();
+
+        $('.team-container .action-buttons div').click( function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var that = $(this);
+
+            if( that.hasClass('reject-button') ) {
+                var r = confirm( that.attr('sure') );
+                if(!r) {
+                    return;
+                }
+            }
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            $.get( 
+                that.attr('action'),
+                (function( data ) {
+                    if( that.hasClass('accept-button') ) {
+                        that.closest('.team').find('.action-buttons').remove();
+                    } else {
+                        that.remove();
+                    }
+                    if(!$('.team-container .accept-button').length) {
+                        $('.pending-team').hide();
+                    }
+                    ajax_is_running = false;
+                }).bind(this), "json"
+            );
         });
     }
-    removeEducationBox();
 
-    $('.add-education-info').click( function() {
-        var cloned = $(this).closest('.education-wrap').find('.flex').first().clone(true).insertBefore( $(this).closest('.education-wrap').find('.add-education-info') );
-
-        cloned.find('input').val('');
-
-        removeEducationBox();
-    });
-
-    $('.edit-education-info-form').off('submit').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize(), 
-            (function( data ) {
-                if(data.success) {
-
-                    if(data.inputs.education_info[0] !== null) {
-                        let chosenFounded = '';
-                        for(let i in data.inputs.education_info) {
-                            chosenFounded+= ('•&nbsp;&nbsp;&nbsp;'+data.inputs.education_info[i]+'<br/>');
-                        }
-
-                        if($('.chosen-education').length) {
-                            $('.chosen-education').html(chosenFounded);
-                        } else {
-                            $('<div class="chosen-education">\
-                                '+chosenFounded+'\
-                            </div>').insertBefore('.edit-education-info-form');
-                        }
-                        $('.chosen-education').show();
-                    } else {
-                        $('.chosen-education').hide();
-                    }
-
-                    $('.education-wrapper').removeClass('edit-mode');
-                    
-                } else {
-                    console.log('error');
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
+    handleEdit();
 
 
     if($('.edit-mode-line').length) {
@@ -591,208 +973,6 @@ $(document).ready(function() {
             }
         });
     }
-
-
-
-
-    //<------------ GALLERY ------------>
-
-    var handleGalleryRemoved = function() {
-    
-        $('.delete-gallery').off('click').on('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var r = confirm( $(this).attr('sure') );
-            if(!r) {
-                return;
-            }
-
-            if(ajax_is_running) {
-                return;
-            }
-            ajax_is_running = true;
-
-            var id = $(this).closest('.slider-wrapper').attr('photo-id');
-            $.ajax( {
-                url: lang + '/profile/gallery/delete/'+id,
-                type: 'GET',
-                dataType: 'json',
-                success: (function( data ) {
-                    ajax_is_running = false;
-                    $('.gallery-flickity').flickity( 'remove', $(this).closest('.slider-wrapper') );
-                }).bind(this)
-            });
-        });
-    }
-    handleGalleryRemoved();
-
-    if($(".add-gallery-image").length) {
-
-        $(".add-gallery-image").filedrop({
-            fallback_id: 'fallbackFileDrop',
-            url: '/api/upload.php',
-            paramname: 'fileUpload',
-            maxfilesize: 2,
-            allowedfiletypes: ['image/jpeg','image/png'],	// filetypes allowed by Content-Type.  Empty array means no restrictions
-            allowedfileextensions: ['.jpg','.jpeg','.png'], // file extensions allowed. Empty array means no restrictions
-            uploadFinished: function(index, file, json, timeDiff) {
-        
-                $('.add-gallery-image').addClass('loading');
-        
-                var sure_text = $('#add-gallery-photo').attr('sure-trans');
-                var that = $('#add-gallery-photo');
-                var upload = new Upload(file, that.attr('upload-url'), function(data) {
-                    
-                    $('.add-gallery-image').removeClass('loading');
-        
-                    var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
-                        <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
-                            <div class="delete-gallery delete-button" sure="'+sure_text+'">\
-                                <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
-                            </div>\
-                        </div>\
-                    </a>\
-                    ';
-        
-                    $('.gallery-flickity').flickity({
-                        autoPlay: false,
-                        wrapAround: true,
-                        cellAlign: 'left',
-                        freeScroll: true,
-                        groupCells: 1,
-                        draggable: false,
-                    });
-        
-                    $('.gallery-flickity').flickity( 'insert', $(html), 1 );
-                    if($('.gallery-flickity .slider-wrapper').length > 2) {
-                        $('.gallery-flickity').flickity( 'selectCell', 1 );
-                    }
-                    handleGalleryRemoved();
-        
-                    if($('body').hasClass('guided-tour')) {
-                        $('.bubble-guided-tour .skip-step').trigger('click');
-                    }
-                    ajax_is_running = false;
-                });
-                upload.doUpload();
-            },
-        });
-    }
-
-    $('#add-gallery-photo').change( function() {
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        $('.add-gallery-image').addClass('loading');
-
-        var sure_text = $('#add-gallery-photo').attr('sure-trans');
-        var file = $(this)[0].files[0];
-        var that = $(this);
-
-        var fileExtension = ['jpeg', 'jpg', 'png'];
-        if ($.inArray(that.val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-            console.log("Only formats are allowed : "+fileExtension.join(', '));
-        } else {
-            var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
-                $('.add-gallery-image').removeClass('loading');
-
-                var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
-                    <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
-                        <div class="delete-gallery delete-button" sure="'+sure_text+'">\
-                            <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
-                        </div>\
-                    </div>\
-                </a>\
-                ';
-
-                $('.gallery-flickity').flickity({
-                    autoPlay: false,
-                    wrapAround: true,
-                    cellAlign: 'left',
-                    freeScroll: true,
-                    groupCells: 1,
-                    draggable: false,
-                });
-
-                $('.gallery-flickity').flickity( 'insert', $(html), 1 );
-                if($('.gallery-flickity .slider-wrapper').length > 2) {
-                    $('.gallery-flickity').flickity( 'selectCell', 1 );
-                }
-                handleGalleryRemoved();
-
-                if($('body').hasClass('guided-tour')) {
-                    $('.bubble-guided-tour .skip-step').trigger('click');
-                }
-                ajax_is_running = false;
-            });
-            upload.doUpload();
-        }
-    });
-
-    //<------------ END GALLERY ------------>
-
-
-
-
-    $('.team-container .delete-invite').click( function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        var that = $(this);
-
-        var r = confirm( that.attr('sure') );
-        if(!r) {
-            return;
-        }
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var id = that.closest('.team').attr('invite-id');
-        $.ajax( {
-            url: lang + '/profile/invites/delete/'+id,
-            type: 'GET',
-            dataType: 'json',
-            success: (function( data ) {
-                ajax_is_running = false;
-                that.closest('.team').remove();
-            }).bind(this)
-        });
-    });
-
-    //Remove team member
-    $('.team-container .deleter').click( function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var r = confirm( $(this).attr('sure') );
-        if(!r) {
-            return;
-        }
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var id = $(this).closest('.slider-wrapper').attr('dentist-id');
-        $.ajax( {
-            url: lang + '/profile/dentists/delete/'+id,
-            type: 'GET',
-            dataType: 'json',
-            success: (function( data ) {
-                ajax_is_running = false;
-                teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
-            }).bind(this)
-        });
-    });
-
-    //
-    //Ask clinic to join
-    //
 
     var removeWorkplace = function() {
         $('#workplaces-list .remove-dentist').click( function(e) {
@@ -813,188 +993,6 @@ $(document).ready(function() {
         });
     }
     removeWorkplace();
-
-    suggestClinicClick = function(elm) {
-        var id = $(elm).attr('data-id');
-
-        $(elm).closest('.suggest-results').hide();
-        $(elm).closest('.suggester-wrapper').find('.suggester-input').val('');
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        $.ajax({
-            url: lang + '/profile/clinics/invite',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                joinclinicid: $(elm).attr('data-id')
-            },
-            success: (function( data ) {
-                $('#workplaces-list').prepend('\
-                    <span class="workplace-clinic">\
-                        <a href="'+data.clinic.link+'">'
-                            +data.clinic.name+
-                        '</a>\
-                        <a class="remove-dentist" href="'+window.location.origin+'/'+lang+'/profile/clinics/delete/'+data.clinic.id+'/">\
-                            <img class="close-icon" src="'+images_path+'/close-icon-blue.png" width="10">\
-                        </a>\
-                    </span>\
-                ');
-
-                $('#workplaces-list .show-on-edit-mode-inline').remove();
-
-                removeWorkplace();
-
-                ajax_is_running = false;
-
-            }).bind(this)
-        });
-    }
-
-    suggestClinic = function() {
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        $.ajax( {
-            url: 'suggest-clinic'+(user_id ? '/'+user_id : ''),
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                joinclinic: $(this).val()
-            },
-            success: (function( data ) {
-                var container = $(this).closest('.clinic-suggester-wrapper').find('.suggest-results');
-                
-                if (data.length) {
-                    container.html('').show();
-                    for(var i in data) {
-
-                        var is_partner = data[i].is_partner ? '\
-							<div class="result-partner-dentist">\
-								<div class="result-partner-dentist-wrapper">\
-									<img src="'+images_path+'/mini-logo-white.svg">\
-									<span>Dentacoin</span> Partner\
-								</div>\
-							</div>\
-						' : '';
-
-                        container.append('<a href="javascript:;" data-id="'+data[i].id+'">\
-                            <div class="flex flex-mobile">\
-                                <div class="result-image-dentist">\
-                                    <img src="'+data[i].avatar+'"/>\
-                                </div>\
-                                <div class="result-name-dentist">\
-                                    <p>'+data[i].name+'</p>\
-                                    <span>'+data[i].location+'</span>\
-                                </div>\
-                                '+is_partner+'\
-                            </div>\
-                        </a>')
-                    }
-
-                    container.find('a').click( function() {
-                        suggestClinicClick(this);
-                    });
-                } else {
-                    container.hide();                    
-                }
-
-                ajax_is_running = false;
-
-            }).bind(this)
-        });
-    }
-
-    $('.clinic-suggester').closest('form').on('keyup keypress', function(e) {
-        var keyCode = e.keyCode || e.which;
-        if (keyCode === 13) { 
-            e.preventDefault();
-            return false;
-        }
-    });
-
-    $('.clinic-suggester').on( 'keyup', function(e) {
-        
-        var container = $(this).closest('.clinic-suggester-wrapper').find('.suggest-results');
-        var keyCode = e.keyCode || e.which;
-        var activeLink = container.find('a.active');
-
-        if (keyCode === 40 || keyCode === 38) { //Down / Up
-            if(activeLink.length) {
-                activeLink.removeClass('active');
-                if( keyCode === 40 ) { // Down
-                    if( activeLink.next().length ) {
-                        activeLink.next().addClass('active');
-                    } else {
-                        container.find('a').first().addClass('active');
-                    }
-                } else { // UP
-                    if( activeLink.prev().length ) {
-                        activeLink.prev().addClass('active');
-                    } else {
-                        container.find('a').last().addClass('active');
-                    }
-                }
-            } else {
-                container.find('a').first().addClass('active');
-            }
-        } else if (keyCode === 13) {
-            if( activeLink.length ) {
-                suggestClinicClick(activeLink);
-            }
-        } else {
-            if( $(this).val().length > 3 ) {
-                //Show Loding
-                if(suggestTO) {
-                    clearTimeout(suggestTO);
-                }
-                suggestTO = setTimeout(suggestClinic.bind(this), 300);
-            } else {
-                container.hide();
-            }
-        }
-    });
-
-
-    $('.team-container .action-buttons div').click( function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        var that = $(this);
-
-        if( that.hasClass('reject-button') ) {
-            var r = confirm( that.attr('sure') );
-            if(!r) {
-                return;
-            }
-        }
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        $.get( 
-            that.attr('action'),
-            (function( data ) {
-                if( that.hasClass('accept-button') ) {
-                    that.closest('.team').find('.action-buttons').remove();
-                } else {
-                    that.remove();
-                }
-                if(!$('.team-container .accept-button').length) {
-                    $('.pending-team').hide();
-                }
-                ajax_is_running = false;
-            }).bind(this), "json"
-        );
-    });
 
 
     //socials
@@ -1202,6 +1200,34 @@ $(document).ready(function() {
                 console.log('error');
             }
         });
+    });
+
+    
+    //clinic delete its branch
+    $('.delete-branch').click( function(e) {
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.ajax({
+            type: "POST",
+            url: that.attr('delete-url'),
+            data: {
+                branch_id: that.attr('branch-id'),
+                _token: $('input[name="_token"]').val(),
+            },
+            success: function(ret) {
+                window.location.href = ret.url;
+            },
+            error: function(ret) {
+                console.log('error');
+            }
+        });
+
+        ajax_is_running = false;
     });
 
 
@@ -1659,32 +1685,4 @@ $(document).ready(function() {
 
     
     // <------ END Guided TOUR ---------->
-
-    
-    //clinic delete its branch
-    $('.delete-branch').click( function(e) {
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-        var that = $(this);
-
-        $.ajax({
-            type: "POST",
-            url: that.attr('delete-url'),
-            data: {
-                branch_id: that.attr('branch-id'),
-                _token: $('input[name="_token"]').val(),
-            },
-            success: function(ret) {
-                window.location.href = ret.url;
-            },
-            error: function(ret) {
-                console.log('error');
-            }
-        });
-
-        ajax_is_running = false;
-    });
 });

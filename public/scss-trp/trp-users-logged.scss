@@ -1813,6 +1813,10 @@ select[name="languages"] {
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
 }
+.ui-datepicker .ui-datepicker-current-day a {
+	background-color: #0084d1;
+    color: white;
+}
 .ui-datepicker .ui-datepicker-header {
 	position: relative;
 	padding: .2em 0;

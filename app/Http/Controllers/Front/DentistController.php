@@ -1890,7 +1890,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/user
             'hasNotVerifiedTeamFromInvitation' => $hasNotVerifiedTeamFromInvitation,
             'aggregatedRating' => $aggregatedRating,
             'dentistReviewsIn' => $dentistReviewsIn,
+            'editing_branch_clinic' => $editing_branch_clinic,
             'workingTime' => $item->getWorkHoursText(),
+            'hasTeamApproved' => $item->teamApproved->isNotEmpty(),
             'dentistWorkHours' => $item->work_hours ? (is_array($item->work_hours) ? $item->work_hours : json_decode($item->work_hours, true)) : null,
         ]);	
 	}

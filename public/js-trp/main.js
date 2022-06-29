@@ -796,7 +796,11 @@ jQuery(document).ready(function($) {
 
 		$('.all-days-equal').click( function() {
 			for (var i = 2; i<6; i++) {
-				$('#day-'+i).click();
+
+				$('#day-'+i).prop('checked', false);
+				$('#day-'+i).closest('label').removeClass('active');
+				$('#day-'+i).closest('.edit-working-hours-wrapper').find('select').removeClass('grayed');
+				// $('#day-'+i).click();
 					
 				$('[name="work_hours['+i+'][0][0]"]').val($('[name="work_hours[1][0][0]"]').val());
 				$('[name="work_hours['+i+'][0][1]"]').val($('[name="work_hours[1][0][1]"]').val());

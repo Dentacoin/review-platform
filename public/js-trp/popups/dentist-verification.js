@@ -1,7 +1,6 @@
 
 var editWorkingHours;
 var ajax_is_running;
-var suggestClinic;
 var suggestTO;
 var refreshOnClosePopup;
 var chooseExistingDentistActions;

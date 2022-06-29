@@ -75,8 +75,12 @@
 
                     </div>
 
-                    <label class="checkbox-label {{ !$withoutUser || empty($user->work_hours[$w]) ? 'active' : '' }}" for="day-{{ $w }}"> 
-                        {{ Form::checkbox( 'day_'.$w, 1, '', array( 'id' => 'day-'.$w, 'class' => 'special-checkbox work-hour-cb', !$withoutUser || empty($user->work_hours[$w]) ? 'checked' : 'something' => 'checked' ) ) }}
+                    <label class="checkbox-label {{ !$withoutUser && empty($user->work_hours[$w]) ? 'active' : '' }}" for="day-{{ $w }}"> 
+                        {{ Form::checkbox( 'day_'.$w, 1, '', [
+                            'id' => 'day-'.$w, 
+                            'class' => 'special-checkbox work-hour-cb', 
+                            !$withoutUser && empty($user->work_hours[$w]) ? 'checked' : 'something' => 'checked'
+                        ]) }}
                         <div class="checkbox-square">✓</div>
                         Closed
                     </label>
