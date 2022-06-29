@@ -2,6 +2,7 @@ var videoStart, videoLength;
 var showFullReview;
 var handleDCNreward;
 var suggestTO;
+var loadBottomPageContent;
 var editWorkingHours;
 var editor;
 var fb_page_error;
@@ -85,7 +86,7 @@ $(document).ready(function() {
                 $('.'+cls+'[role="presenter"]').hide();
 
             } else if($(this).hasClass('scroll-to')) {
-
+                loadBottomPageContent();
                 $('html, body').animate({
                     scrollTop: $('.'+$(this).attr('scroll')).offset().top - $('header').outerHeight() - $('.tab-titles').outerHeight()
                 }, 500);

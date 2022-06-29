@@ -3,6 +3,7 @@ var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
 var handleActivePopupFunctions;
+var loadBottomPageContent;
 var suggestedDentistClick;
 var editor;
 var fb_page_error;
@@ -57,266 +58,7 @@ $(document).ready(function() {
         });
     }
     verifyReview();
-    
-    showFullReview = function(id, d_id) {
-        showPopup('view-review-popup');
 
-        $('#the-detailed-review').html('<div class="loader-mask">\
-            <div class="loader">\
-                "Loading..."\
-            </div>\
-        </div>');
-
-        $.ajax( {
-            url: '/'+lang+'/review/' + id,
-            type: 'GET',
-            data: {
-                d_id: d_id,
-            },
-            success: (function( data ) {
-                $('#the-detailed-review').html(data);
-                showPopup('view-review-popup');
-                handleReviewEvents();
-                attachTooltips();
-                $('#view-review-popup .share-popup').attr('share-href', window.location.href.split('?')[0] + '?review_id=' + this);
-                verifyReview();
-            }).bind(id)
-        });
-    }
-
-    //load page down sections on scroll (google page speed)
-	if($('#to-append').length) {
-
-		$(window).scroll( function() {
-			if (!$('#to-append').hasClass('appended')) {
-				$('#to-append').addClass('appended');
-				$.ajax({
-					type: "POST",
-					url: lang + '/dentist-down/',
-                    data: {
-                        slug: window.location.pathname.split('/')[3],
-                    },
-					success: function(ret) {
-						$('#to-append').append(ret);
-                        
-                        handleActivePopupFunctions();
-						handleClickToOpenPopups();
-                        handleReviewEvents();
-                        attachTooltips();
-                        verifyReview();
-                        if(user_id) {
-                            handleEdit();
-                        }
-                        fixedTabs();
-                        initJS();
-					},
-					error: function(ret) {
-						console.log('error');
-					}
-				});
-			}
-		});
-	} else {
-
-        if($(window).scrollTop() > 10) {
-            fixedTabs();
-            initJS();
-        }
-
-        $(window).on('scroll', function() {
-            fixedTabs();
-            initJS();
-        });
-    }
-
-    var flickityFunctions = function() {
-
-        if($('.gallery-flickity').length) {
-            $('.gallery-flickity').flickity({
-                autoPlay: false,
-                wrapAround: true,
-                cellAlign: 'left',
-                freeScroll: true,
-                groupCells: 1,
-                draggable: false,
-            });
-        }
-
-        if($('.video-reviews-flickity').length) {
-            $('.video-reviews-flickity').flickity({
-                autoPlay: false,
-                wrapAround: true,
-                cellAlign: 'left',
-                freeScroll: true,
-                groupCells: 1,
-                draggable: false,
-            });
-        }
-
-        if($('.highlights-flickity').length) {
-            $('.highlights-flickity').flickity({
-                autoPlay: false,
-                wrapAround: true,
-                cellAlign: 'center',
-                freeScroll: true,
-                groupCells: 1,
-                draggable: false,
-            });
-
-            $('.highlights-flickity').each( function() {
-                var mh = 0;
-                $(this).find('.hightlight').css('height', 'auto');
-                $(this).find('.hightlight').each( function() {
-                    if( $(this).outerHeight() > mh ) {
-                        mh = $(this).outerHeight();
-                    }
-                });
-                $(this).find('.hightlight').css('height', mh+'px');
-            });
-        } else {
-            if($('.highlights-mobile-flickity').length && $(window).outerWidth() <= 768) {
-                $('.highlights-mobile-flickity').flickity({
-                    autoPlay: false,
-                    wrapAround: true,
-                    cellAlign: 'center',
-                    freeScroll: true,
-                    groupCells: 1,
-                    draggable: false,
-                });
-            }
-        }
-        
-        if($('.address-flickity').length) {
-            $('.address-flickity').flickity({
-                autoPlay: false,
-                wrapAround: true,
-                cellAlign: 'left',
-                freeScroll: true,
-                groupCells: 1,
-                draggable: false,
-            });
-
-            $('.address-flickity').on( 'select.flickity', function( event, index ) {
-                $('.carousel-status').html(index+1+' of '+$('.address-slider').length);
-            });
-        }
-    }
-
-    var loadMap = function() {
-        if( $('.profile-map').length) {
-
-            $('.profile-map').each( function() {
-                var that = $(this);
-
-                if(!that.attr('inited') ) {
-
-                    that.attr('inited', 'done');
-                    $('.info-address').hide();
-        
-                    prepareMapFunction( function() {
-                        var profile_map = new google.maps.Map(document.getElementById(that.attr('id')), {
-                            center: {
-                                lat: parseFloat(that.attr('lat')), 
-                                lng: parseFloat(that.attr('lon'))
-                            },
-                            zoom: 15,
-                            backgroundColor: 'none'
-                        });
-        
-                        var mapMarker = new google.maps.Marker({
-                            position: {
-                                lat: parseFloat(that.attr('lat')), 
-                                lng: parseFloat(that.attr('lon'))
-                            },
-                            map: profile_map,
-                            icon: images_path+'/map-pin-active.png',
-                        });
-                    });
-                }
-            });
-        }
-    }
-
-    var initJS = function() {
-
-        if(!load_maps) {
-            load_maps = true;
-            if (!loadMapsJS && typeof google === 'undefined' ) {
-                loadMapsJS = true;
-                $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
-                    loadMap();
-                });
-            } else {
-                loadMap();
-            }
-        }
-
-        if (!load_flickity ) {
-            load_flickity = true;
-            if (!loadFlickityJS ) {
-                loadFlickityJS = true;
-                $.getScript(window.location.origin+'/js/flickity.min.js', function() {
-                    $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
-                    flickityFunctions();
-                });
-            } else {
-                flickityFunctions();
-            }
-        }
-
-        if (!load_lightbox ) {
-            load_lightbox = true;
-            $.getScript(window.location.origin+'/js/lightbox.js', function() {
-                $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/lightbox.css">');
-            });
-        }
-    }
-
-    //user sections
-    var fixedTabs = function() {
-        
-        if(!$('.tab-title.patients-tab.active').length) {
-            if($(window).scrollTop() > $('.tab-sections').offset().top - 100) {
-                if(!$('.tab-titles').hasClass('fixed-tabs')) {
-                    $('.tab-titles').addClass('fixed-tabs');
-                }
-            } else {
-                if($('.tab-titles').hasClass('fixed-tabs')) {
-                    $('.tab-titles').removeClass('fixed-tabs');
-                }
-            }
-    
-            var active_section = null;
-            $('.tab-title:not(.grayed):not(.patients-tab)').each( function() {
-                if($(this).offset().top > $('#'+$(this).attr('data-tab')).offset().top - 150) {
-                    active_section = $(this).attr('data-tab');
-                }
-            });
-    
-            if(active_section) {
-                $('.tab-title').removeClass('active');
-                $('.tab-title[data-tab="'+active_section+'"]').addClass('active');
-            }
-
-            if($(window).outerWidth() <= 768) {
-                let left = 0;
-                let prev = $('.tab-title[data-tab="'+active_section+'"]').prev();
-                
-                while(prev.length) {
-                    left += prev.outerWidth();
-                    prev = prev.prev();
-                }
-
-                $('.tab-titles .container').animate({
-                    scrollLeft: left
-                }, 10);
-            }
-        }
-    }
-
-    if(getUrlParameter('review_id')) {
-        showFullReview( getUrlParameter('review_id'), $('#cur_dent_id').val() );
-    }
 
     handleReviewEvents = function() {
         $('.reply-review').off('click').click( function() {
@@ -490,73 +232,254 @@ $(document).ready(function() {
                 $('.show-more-reviews').show();
             }
         });
+
+        $('.show-video-reviews').click( function() {
+            $('.reviews-type-buttons a').removeClass('active');
+            $(this).addClass('active');
+            $('.video-review-tab').show();
+            $('.regular-review-tab').hide();
+
+            if (!load_flickity ) {
+                load_flickity = true;
+                $.getScript(window.location.origin+'/js/flickity.min.js', function() {
+                    $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
+                    flickityFunctions();
+                });
+            } else {
+                flickityFunctions();
+            }
+        });
+
+        $('.show-written-reviews').click( function() {
+            $('.reviews-type-buttons a').removeClass('active');
+            $(this).addClass('active');
+            $('.video-review-tab').hide();
+            $('.regular-review-tab').show();
+        });
     }
     handleReviewEvents();
+    
+    showFullReview = function(id, d_id) {
+        showPopup('view-review-popup');
 
-    $('.show-review').click( function(e) {
-        var id = $(this).attr('review-id');
-        showFullReview(id, $('#cur_dent_id').val());
-    });
+        $('#the-detailed-review').html('<div class="loader-mask">\
+            <div class="loader">\
+                "Loading..."\
+            </div>\
+        </div>');
 
-    $('.scroll-to-map').click( function() {
-        $('.profile-tabs .tab[data-tab="about"]').trigger('click');
-        $('html, body').animate({
-            scrollTop: $('.map-container').offset().top - $('header').height() - 40
-        }, 500);        
-    });
-
-    if ($('#append-section-reviews').length) {
-        $(window).scroll( function() {
-            if (!$('#append-section-reviews').hasClass('appended')) {
-                $.ajax({
-                    type: "POST",
-                    url: lang + '/dentist-down/',
-                    data: {
-                        slug: window.location.pathname.split('/')[3],
-                    },
-                    success: function(ret) {
-                        if(ret) {
-                            if (!$('#append-section-reviews').hasClass('appended')) {
-                                $('#append-section-reviews').append(ret);
-                                $('#append-section-reviews').addClass('appended');
-
-                                handleReviewEvents();
-                                handleClickToOpenPopups();
-                                attachTooltips();
-                            }
-                        }
-                    },
-                    error: function(ret) {
-                        console.log('error');
-                    }
-                });
-            }
+        $.ajax( {
+            url: '/'+lang+'/review/' + id,
+            type: 'GET',
+            data: {
+                d_id: d_id,
+            },
+            success: (function( data ) {
+                $('#the-detailed-review').html(data);
+                showPopup('view-review-popup');
+                handleReviewEvents();
+                attachTooltips();
+                $('#view-review-popup .share-popup').attr('share-href', window.location.href.split('?')[0] + '?review_id=' + this);
+                verifyReview();
+            }).bind(id)
         });
     }
 
-    $('.show-full-announcement').click( function() {
-        let announcement = $('.announcement-description');
-
-        if(announcement.hasClass('active')) {
-            announcement.html(announcement.attr('short-text'));
-            $(this).html($(this).attr('short-text'));
-
-            announcement.removeClass('active');
-        } else {
-            announcement.html(announcement.attr('long-text'));
-            $(this).html($(this).attr('long-text'));
-            
-            announcement.addClass('active');
+    //for google page speed
+    loadBottomPageContent = function() {
+        if (!$('#to-append').hasClass('appended')) {
+            $('#to-append').addClass('appended');
+            $.ajax({
+                type: "POST",
+                url: lang + '/dentist-down/',
+                data: {
+                    slug: window.location.pathname.split('/')[3],
+                },
+                success: function(ret) {
+                    $('#to-append').append(ret);
+                    
+                    handleActivePopupFunctions();
+                    handleClickToOpenPopups();
+                    handleReviewEvents();
+                    attachTooltips();
+                    verifyReview();
+                    if(user_id) {
+                        handleEdit();
+                    }
+                    fixedTabs();
+                    initJS();
+                },
+                error: function(ret) {
+                    console.log('error');
+                }
+            });
         }
-    });
+    }
 
-    $('.dentist-address').click( function() {
-        $('body, html').animate({
-            scrollTop: $('#locations').offset().top - $('header').outerHeight()
-        }, 500);
-    });
+    //load page down sections on scroll (google page speed)
+	if($('#to-append').length) {
+        $(window).scroll( function() {
+            loadBottomPageContent();
+        });
+	} else {
+
+        if($(window).scrollTop() > 10) {
+            fixedTabs();
+            initJS();
+        }
+
+        $(window).on('scroll', function() {
+            fixedTabs();
+            initJS();
+        });
+    }
+
+    var flickityFunctions = function() {
+
+        if($('.gallery-flickity').length) {
+            $('.gallery-flickity').flickity({
+                autoPlay: false,
+                wrapAround: true,
+                cellAlign: 'left',
+                freeScroll: true,
+                groupCells: 1,
+                draggable: false,
+            });
+        }
+
+        if($('.video-reviews-flickity').length) {
+            $('.video-reviews-flickity').flickity({
+                autoPlay: false,
+                wrapAround: true,
+                cellAlign: 'left',
+                freeScroll: true,
+                groupCells: 1,
+                draggable: false,
+            });
+        }
+
+        if($('.highlights-flickity').length) {
+            $('.highlights-flickity').flickity({
+                autoPlay: false,
+                wrapAround: true,
+                cellAlign: 'center',
+                freeScroll: true,
+                groupCells: 1,
+                draggable: false,
+            });
+
+            $('.highlights-flickity').each( function() {
+                var mh = 0;
+                $(this).find('.hightlight').css('height', 'auto');
+                $(this).find('.hightlight').each( function() {
+                    if( $(this).outerHeight() > mh ) {
+                        mh = $(this).outerHeight();
+                    }
+                });
+                $(this).find('.hightlight').css('height', mh+'px');
+            });
+        } else {
+            if($('.highlights-mobile-flickity').length && $(window).outerWidth() <= 768) {
+                $('.highlights-mobile-flickity').flickity({
+                    autoPlay: false,
+                    wrapAround: true,
+                    cellAlign: 'center',
+                    freeScroll: true,
+                    groupCells: 1,
+                    draggable: false,
+                });
+            }
+        }
+        
+        if($('.address-flickity').length) {
+            $('.address-flickity').flickity({
+                autoPlay: false,
+                wrapAround: true,
+                cellAlign: 'left',
+                freeScroll: true,
+                groupCells: 1,
+                draggable: false,
+            });
+
+            $('.address-flickity').on( 'select.flickity', function( event, index ) {
+                $('.carousel-status').html(index+1+' of '+$('.address-slider').length);
+            });
+        }
+    }
+
+    var loadMap = function() {
+        if( $('.profile-map').length) {
+
+            $('.profile-map').each( function() {
+                var that = $(this);
+
+                if(!that.attr('inited') ) {
+
+                    that.attr('inited', 'done');
+                    $('.info-address').hide();
+        
+                    prepareMapFunction( function() {
+                        var profile_map = new google.maps.Map(document.getElementById(that.attr('id')), {
+                            center: {
+                                lat: parseFloat(that.attr('lat')), 
+                                lng: parseFloat(that.attr('lon'))
+                            },
+                            zoom: 15,
+                            backgroundColor: 'none'
+                        });
+        
+                        var mapMarker = new google.maps.Marker({
+                            position: {
+                                lat: parseFloat(that.attr('lat')), 
+                                lng: parseFloat(that.attr('lon'))
+                            },
+                            map: profile_map,
+                            icon: images_path+'/map-pin-active.png',
+                        });
+                    });
+                }
+            });
+        }
+    }
+
+    var initJS = function() {
+
+        if(!load_maps) {
+            load_maps = true;
+            if (!loadMapsJS && typeof google === 'undefined' ) {
+                loadMapsJS = true;
+                $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
+                    loadMap();
+                });
+            } else {
+                loadMap();
+            }
+        }
+
+        if (!load_flickity ) {
+            load_flickity = true;
+            if (!loadFlickityJS ) {
+                loadFlickityJS = true;
+                $.getScript(window.location.origin+'/js/flickity.min.js', function() {
+                    $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
+                    flickityFunctions();
+                });
+            } else {
+                flickityFunctions();
+            }
+        }
+
+        if (!load_lightbox ) {
+            load_lightbox = true;
+            $.getScript(window.location.origin+'/js/lightbox.js', function() {
+                $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/lightbox.css">');
+            });
+        }
+    }
 
     $('.tab-title').click( function() {
+
+        loadBottomPageContent();
 
         if($(this).hasClass('patients-tab')) {
             if(!$(this).hasClass('grayed')) {
@@ -582,28 +505,79 @@ $(document).ready(function() {
         }
     });
 
-    $('.show-video-reviews').click( function() {
-        $('.reviews-type-buttons a').removeClass('active');
-        $(this).addClass('active');
-        $('.video-review-tab').show();
-        $('.regular-review-tab').hide();
-
-        if (!load_flickity ) {
-            load_flickity = true;
-            $.getScript(window.location.origin+'/js/flickity.min.js', function() {
-                $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
-                flickityFunctions();
+    //user sections
+    var fixedTabs = function() {
+        
+        if(!$('.tab-title.patients-tab.active').length) {
+            if($(window).scrollTop() > $('.tab-sections').offset().top - 100) {
+                if(!$('.tab-titles').hasClass('fixed-tabs')) {
+                    $('.tab-titles').addClass('fixed-tabs');
+                }
+            } else {
+                if($('.tab-titles').hasClass('fixed-tabs')) {
+                    $('.tab-titles').removeClass('fixed-tabs');
+                }
+            }
+    
+            var active_section = null;
+            $('.tab-title:not(.grayed):not(.patients-tab)').each( function() {
+                if($(this).offset().top > $('#'+$(this).attr('data-tab')).offset().top - 150) {
+                    active_section = $(this).attr('data-tab');
+                }
             });
+    
+            if(active_section) {
+                $('.tab-title').removeClass('active');
+                $('.tab-title[data-tab="'+active_section+'"]').addClass('active');
+            }
+
+            if($(window).outerWidth() <= 768) {
+                let left = 0;
+                let prev = $('.tab-title[data-tab="'+active_section+'"]').prev();
+                
+                while(prev.length) {
+                    left += prev.outerWidth();
+                    prev = prev.prev();
+                }
+
+                $('.tab-titles .container').animate({
+                    scrollLeft: left
+                }, 10);
+            }
+        }
+    }
+
+    if(getUrlParameter('review_id')) {
+        showFullReview( getUrlParameter('review_id'), $('#cur_dent_id').val() );
+    }
+
+    $('.show-review').click( function(e) {
+        var id = $(this).attr('review-id');
+        showFullReview(id, $('#cur_dent_id').val());
+    });
+
+    $('.show-full-announcement').click( function() {
+        let announcement = $('.announcement-description');
+
+        if(announcement.hasClass('active')) {
+            announcement.html(announcement.attr('short-text'));
+            $(this).html($(this).attr('short-text'));
+
+            announcement.removeClass('active');
         } else {
-            flickityFunctions();
+            announcement.html(announcement.attr('long-text'));
+            $(this).html($(this).attr('long-text'));
+            
+            announcement.addClass('active');
         }
     });
 
-    $('.show-written-reviews').click( function() {
-        $('.reviews-type-buttons a').removeClass('active');
-        $(this).addClass('active');
-        $('.video-review-tab').hide();
-        $('.regular-review-tab').show();
+    $('.dentist-address').click( function() {
+        loadBottomPageContent();
+
+        $('body, html').animate({
+            scrollTop: $('#locations').offset().top - $('header').outerHeight()
+        }, 500);
     });
 
 });

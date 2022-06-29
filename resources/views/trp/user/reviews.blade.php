@@ -108,8 +108,6 @@
             </p>
         </div>
 
-        {{-- <div id="append-section-reviews"></div> --}}
-
         @if($regularReviewsCount)
             <div class="written-reviews regular-review-tab">
                 @foreach($dentistReviewsIn as $review)
