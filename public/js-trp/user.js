@@ -114,7 +114,18 @@ $(document).ready(function() {
 				});
 			}
 		});
-	}
+	} else {
+
+        if($(window).scrollTop() > 10) {
+            fixedTabs();
+            initJS();
+        }
+
+        $(window).on('scroll', function() {
+            fixedTabs();
+            initJS();
+        });
+    }
 
     var flickityFunctions = function() {
 
@@ -300,16 +311,6 @@ $(document).ready(function() {
             }
         }
     }
-
-    if($(window).scrollTop() > 10) {
-        fixedTabs();
-        initJS();
-    }
-
-    $(window).on('scroll', function() {
-        fixedTabs();
-        initJS();
-    });
 
     if(getUrlParameter('review_id')) {
         showFullReview( getUrlParameter('review_id'), $('#cur_dent_id').val() );
