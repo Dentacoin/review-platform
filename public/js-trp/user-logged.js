@@ -685,7 +685,7 @@ $(document).ready(function() {
                         
                         $('.add-gallery-image').removeClass('loading');
             
-                        var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper" photo-id="'+data.id+'">\
+                        var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper added" photo-id="'+data.id+'">\
                             <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
                                 <div class="delete-gallery delete-button" sure="'+sure_text+'">\
                                     <img class="close-icon" src="'+all_images_path+'/close-icon-white.png"/>\
