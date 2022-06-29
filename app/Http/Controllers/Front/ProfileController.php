@@ -455,6 +455,7 @@ class ProfileController extends FrontController {
                 'success' => true,
                 'url' => $gallery->getImageUrl(true),
                 'original' => $gallery->getImageUrl(),
+                'id' => $gallery->id,
             ]);
         }
         
