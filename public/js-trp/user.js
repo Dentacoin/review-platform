@@ -104,7 +104,9 @@ $(document).ready(function() {
                         handleReviewEvents();
                         attachTooltips();
                         verifyReview();
-                        handleEdit();
+                        if(user_id) {
+                            handleEdit();
+                        }
                         fixedTabs();
                         initJS();
 					},
