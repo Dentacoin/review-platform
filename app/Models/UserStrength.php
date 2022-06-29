@@ -70,7 +70,6 @@ class UserStrength extends Model {
                 $five_day = $first_day_of_month->addDays(4);
 
                 $today = Carbon::now();
-
                 $new_user = $user->created_at > Carbon::now()->subDays(30);
 
                 $current_month_invitations = UserInvite::where( 'user_id', $user->id)
@@ -97,74 +96,77 @@ class UserStrength extends Model {
 
                     //1.
 
-                    if ($last_month_reviews->count()) {
+                    // if ($last_month_reviews->count()) {
 
-                        foreach ($last_month_reviews as $rev) {
-                            foreach($rev->answers as $answer) {
-                                if(!$user->is_clinic && $user->my_workplace_approved->isNotEmpty()) {
-                                    if(in_array($answer->question['label'], ['Doctor', 'Treatment experience', 'Treatment quality'])) {
-                                        if(!isset($aggregated[$answer->question['label']])) {
-                                            $aggregated[$answer->question['label']] = 0;
-                                        }
+                    //     foreach ($last_month_reviews as $rev) {
+                    //         foreach($rev->answers as $answer) {
+                    //             if(!$user->is_clinic && $user->my_workplace_approved->isNotEmpty()) {
+                    //                 if(in_array($answer->question['label'], ['Doctor', 'Treatment experience', 'Treatment quality'])) {
+                    //                     if(!isset($aggregated[$answer->question['label']])) {
+                    //                         $aggregated[$answer->question['label']] = 0;
+                    //                     }
 
-                                        $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
-                                    }
-                                } else {
-                                    if(!isset($aggregated[$answer->question['label']])) {
-                                        $aggregated[$answer->question['label']] = 0;
-                                    }
+                    //                     $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                    //                 }
+                    //             } else {
+                    //                 if(!isset($aggregated[$answer->question['label']])) {
+                    //                     $aggregated[$answer->question['label']] = 0;
+                    //                 }
 
-                                    $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
-                                }
-                            }
-                        }
+                    //                 $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                    //             }
+                    //         }
+                    //     }
 
-                        foreach ($aggregated as $key => $value) {
-                            $aggregated[$key] /= $last_month_reviews->count();
-                        }
+                    //     foreach ($aggregated as $key => $value) {
+                    //         $aggregated[$key] /= $last_month_reviews->count();
+                    //     }
 
-                        $arrayIndex = (intval(date('Y')) - 2019)*12 + intval(date('n')); // + ....
-                        $arrayIndex = $arrayIndex % count($aggregated);
+                    //     $arrayIndex = (intval(date('Y')) - 2019)*12 + intval(date('n')); // + ....
+                    //     $arrayIndex = $arrayIndex % count($aggregated);
 
-                        $prev_month_rating = array_values($aggregated)[$arrayIndex];
-                        $prev_month_label = array_keys($aggregated)[$arrayIndex];
+                    //     $prev_month_rating = array_values($aggregated)[$arrayIndex];
+                    //     $prev_month_label = array_keys($aggregated)[$arrayIndex];
 
-                        $check_reviews = UserGuidedTour::where('user_id', $user->id)
-                        ->whereNotNull('check_reviews_on')
-                        ->where('check_reviews_on', '>', $first_day_of_month)
-                        ->first();
+                    //     $check_reviews = UserGuidedTour::where('user_id', $user->id)
+                    //     ->whereNotNull('check_reviews_on')
+                    //     ->where('check_reviews_on', '>', $first_day_of_month)
+                    //     ->first();
 
-                        if(!empty($check_reviews)) {
-                            $ret['completed_steps']++;
-                        }
+                    //     if(!empty($check_reviews)) {
+                    //         $ret['completed_steps']++;
+                    //     }
 
-                        $ret[] = [
-                            'title' => trans('trp.strength.dentist.invites.check-rating.title', ['month' => $prev_month]),
-                            'text' =>  trans('trp.strength.dentist.invites.check-rating.text', ['month_rating' => round($prev_month_rating, 2), 'prev_month_category' => $prev_month_label]),
-                            'image' => 'check-rating',
-                            'completed' => false,
-                            'buttonText' => trans('trp.strength.dentist.invites.check-rating.button-text'),
-                            'buttonjs' => 'str-see-reviews',
-                            'target' => false,
-                            'event_category' => 'ProfileStrengthDentist',
-                            'event_action' => 'Check',
-                            'event_label' => 'ReviewsLastMonth',
-                        ];
-                    } else {
-                        $ret[] = [
-                            'title' => trans('trp.strength.dentist.invites.check-no-rating.title', ['month' => $prev_month]),
-                            'text' => trans('trp.strength.dentist.invites.check-no-rating.text'),
-                            'image' => 'check-rating',
-                            'completed' => false,
-                            'buttonText' => trans('trp.strength.dentist.invites.check-no-rating.button-text'),
-                            'buttonjs' => 'str-invite',
-                            'target' => true,
-                            'event_category' => 'ProfileStrengthDentist',
-                            'event_action' => 'Invite',
-                            'event_label' => 'RatingInvite',
-                        ];
-                    }
-                    $array_number_shuffle['important']++;
+                    //     $ret[] = [
+                    //         'title' => trans('trp.strength.dentist.invites.check-rating.title', ['month' => $prev_month]),
+                    //         'text' =>  trans('trp.strength.dentist.invites.check-rating.text', [
+                    //             'month_rating' => round($prev_month_rating, 2), 
+                    //             'prev_month_category' => $prev_month_label
+                    //         ]),
+                    //         'image' => 'check-rating',
+                    //         'completed' => false,
+                    //         'buttonText' => trans('trp.strength.dentist.invites.check-rating.button-text'),
+                    //         'buttonjs' => 'str-see-reviews',
+                    //         'target' => false,
+                    //         'event_category' => 'ProfileStrengthDentist',
+                    //         'event_action' => 'Check',
+                    //         'event_label' => 'ReviewsLastMonth',
+                    //     ];
+                    // } else {
+                    //     $ret[] = [
+                    //         'title' => trans('trp.strength.dentist.invites.check-no-rating.title', ['month' => $prev_month]),
+                    //         'text' => trans('trp.strength.dentist.invites.check-no-rating.text'),
+                    //         'image' => 'check-rating',
+                    //         'completed' => false,
+                    //         'buttonText' => trans('trp.strength.dentist.invites.check-no-rating.button-text'),
+                    //         'buttonjs' => 'str-invite',
+                    //         'target' => true,
+                    //         'event_category' => 'ProfileStrengthDentist',
+                    //         'event_action' => 'Invite',
+                    //         'event_label' => 'RatingInvite',
+                    //     ];
+                    // }
+                    // $array_number_shuffle['important']++;
 
                     //2.
 
@@ -176,7 +178,9 @@ class UserStrength extends Model {
                     if($last_month_invitations->count() && $last_month_reviews->count()) {
 
                         $ret[] = [
-                            'title' => trans('trp.strength.dentist.invites.send-last-month.title', ['last_month_invitations' => $last_month_invitations->count()]),
+                            'title' => trans('trp.strength.dentist.invites.send-last-month.title', [
+                                'last_month_invitations' => $last_month_invitations->count()
+                            ]),
                             'text' => trans('trp.strength.dentist.invites.send-last-month.text'),
                             'image' => 'invite-patients',
                             'completed' => false,
@@ -225,8 +229,13 @@ class UserStrength extends Model {
                             $dentist_country = Country::find($user->country_id)->name;
 
                             $ret[] = [
-                                'title' => trans('trp.strength.dentist.invites.country-rating-last-month.title', ['dentist_country' => $dentist_country ]),
-                                'text' => trans('trp.strength.dentist.invites.country-rating-last-month.text', ['dentist_country' => $dentist_country, 'country_rating' => $avg_country_rating ]),
+                                'title' => trans('trp.strength.dentist.invites.country-rating-last-month.title', [
+                                    'dentist_country' => $dentist_country
+                                ]),
+                                'text' => trans('trp.strength.dentist.invites.country-rating-last-month.text', [
+                                    'dentist_country' => $dentist_country, 
+                                    'country_rating' => $avg_country_rating
+                                ]),
                                 'image' => 'outrank-dentists',
                                 'completed' => false,
                                 'buttonText' => trans('trp.strength.dentist.invites.country-rating-last-month.button-text'),
@@ -243,94 +252,94 @@ class UserStrength extends Model {
                 } else {
                     //2.
 
-                    if ($current_month_invitations->count()) {
+                    // if ($current_month_invitations->count()) {
 
-                        $current_month_reviews = Review::where( 'review_to_id', $user->id)
-                        ->where('created_at', '>=', $first_day_of_month)
-                        ->get();
+                    //     $current_month_reviews = Review::where( 'review_to_id', $user->id)
+                    //     ->where('created_at', '>=', $first_day_of_month)
+                    //     ->get();
 
-                        if ($current_month_reviews->count()) {
-                            foreach ($current_month_reviews as $rev) {
-                                foreach($rev->answers as $answer) {
-                                    if(!$user->is_clinic && $user->my_workplace_approved->isNotEmpty()) {
-                                        if(in_array($answer->question['label'], ['Doctor', 'Treatment experience', 'Treatment quality'])) {
-                                            if(!isset($aggregated[$answer->question['label']])) {
-                                                $aggregated[$answer->question['label']] = 0;
-                                            }
+                    //     if ($current_month_reviews->count()) {
+                    //         foreach ($current_month_reviews as $rev) {
+                    //             foreach($rev->answers as $answer) {
+                    //                 if(!$user->is_clinic && $user->my_workplace_approved->isNotEmpty()) {
+                    //                     if(in_array($answer->question['label'], ['Doctor', 'Treatment experience', 'Treatment quality'])) {
+                    //                         if(!isset($aggregated[$answer->question['label']])) {
+                    //                             $aggregated[$answer->question['label']] = 0;
+                    //                         }
 
-                                            $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
-                                        }
-                                    } else {
+                    //                         $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                    //                     }
+                    //                 } else {
 
-                                        //echo $answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
-                                        if(!isset($aggregated[$answer->question['label']])) {
-                                            $aggregated[$answer->question['label']] = 0;
-                                        }
+                    //                     //echo $answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
+                    //                     if(!isset($aggregated[$answer->question['label']])) {
+                    //                         $aggregated[$answer->question['label']] = 0;
+                    //                     }
 
-                                        $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
-                                    }
-                                }
-                            }
+                    //                     $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                    //                 }
+                    //             }
+                    //         }
 
-                            foreach ($aggregated as $key => $value) {
-                                $aggregated[$key] /= $current_month_reviews->count();
-                            }
+                    //         foreach ($aggregated as $key => $value) {
+                    //             $aggregated[$key] /= $current_month_reviews->count();
+                    //         }
 
-                            $arrayIndex = (intval(date('Y')) - 2019)*12 + intval(date('n')); // + ....
-                            $arrayIndex = $arrayIndex % count($aggregated);
+                    //         $arrayIndex = (intval(date('Y')) - 2019)*12 + intval(date('n')); // + ....
+                    //         $arrayIndex = $arrayIndex % count($aggregated);
 
-                            $cur_month_rating = array_values($aggregated)[$arrayIndex];
-                            $cur_month_label = array_keys($aggregated)[$arrayIndex];
+                    //         $cur_month_rating = array_values($aggregated)[$arrayIndex];
+                    //         $cur_month_label = array_keys($aggregated)[$arrayIndex];
 
-                            $check_reviews = UserGuidedTour::where('user_id', $user->id)
-                            ->whereNotNull('check_reviews_on')
-                            ->where('check_reviews_on', '>', $first_day_of_month)
-                            ->first();
+                    //         $check_reviews = UserGuidedTour::where('user_id', $user->id)
+                    //         ->whereNotNull('check_reviews_on')
+                    //         ->where('check_reviews_on', '>', $first_day_of_month)
+                    //         ->first();
 
-                            if(!empty($check_reviews)) {
-                                $ret['completed_steps']++;
-                            }
+                    //         if(!empty($check_reviews)) {
+                    //             $ret['completed_steps']++;
+                    //         }
 
-                            $ret[] = [
-                                'title' => trans('trp.strength.dentist.invites.rating-this-month.title'),
-                                'text' => trans('trp.strength.dentist.invites.rating-this-month.text', ['this_month_rating' => $cur_month_rating, 'this_month_category' => $cur_month_label ]),
-                                'image' => 'invite-patients',
-                                'completed' => false,
-                                'buttonText' => trans('trp.strength.dentist.invites.rating-this-month.button-text'),
-                                'buttonjs' => 'str-see-reviews',
-                                'event_category' => 'ProfileStrengthDentist',
-                                'event_action' => 'Check',
-                                'event_label' => 'ScoreRatingThisMonth',
-                            ];
-                        } else {
-                            $ret[] = [
-                                'title' => trans('trp.strength.dentist.invites.sent-this-month.title', ['invites_number' => $current_month_invitations->count() ]),
-                                'text' => trans('trp.strength.dentist.invites.sent-this-month.text'),
-                                'image' => 'invite-patients',
-                                'completed' => false,
-                                'buttonText' => trans('trp.strength.dentist.invites.sent-this-month.button-text'),
-                                'buttonjs' => 'str-invite',
-                                'event_category' => 'ProfileStrengthDentist',
-                                'event_action' => 'Invite',
-                                'event_label' => 'InvitesThisMonth',
-                            ];
-                        }
+                    //         $ret[] = [
+                    //             'title' => trans('trp.strength.dentist.invites.rating-this-month.title'),
+                    //             'text' => trans('trp.strength.dentist.invites.rating-this-month.text', ['this_month_rating' => $cur_month_rating, 'this_month_category' => $cur_month_label ]),
+                    //             'image' => 'invite-patients',
+                    //             'completed' => false,
+                    //             'buttonText' => trans('trp.strength.dentist.invites.rating-this-month.button-text'),
+                    //             'buttonjs' => 'str-see-reviews',
+                    //             'event_category' => 'ProfileStrengthDentist',
+                    //             'event_action' => 'Check',
+                    //             'event_label' => 'ScoreRatingThisMonth',
+                    //         ];
+                    //     } else {
+                    //         $ret[] = [
+                    //             'title' => trans('trp.strength.dentist.invites.sent-this-month.title', ['invites_number' => $current_month_invitations->count() ]),
+                    //             'text' => trans('trp.strength.dentist.invites.sent-this-month.text'),
+                    //             'image' => 'invite-patients',
+                    //             'completed' => false,
+                    //             'buttonText' => trans('trp.strength.dentist.invites.sent-this-month.button-text'),
+                    //             'buttonjs' => 'str-invite',
+                    //             'event_category' => 'ProfileStrengthDentist',
+                    //             'event_action' => 'Invite',
+                    //             'event_label' => 'InvitesThisMonth',
+                    //         ];
+                    //     }
 
-                    } else {
+                    // } else {
 
-                        $ret[] = [
-                            'title' => trans('trp.strength.dentist.invite-patients.title'),
-                            'text' => nl2br(trans('trp.strength.dentist.invite-patients.text')),
-                            'image' => 'invite-patients',
-                            'completed' => false,
-                            'buttonText' => trans('trp.strength.dentist.invite-patients.button-text'),
-                            'buttonjs' => 'str-invite',
-                            'event_category' => 'ProfileStrengthDentist',
-                            'event_action' => 'Invite',
-                            'event_label' => 'PatientInvites',
-                        ];
-                    }
-                    $array_number_shuffle['important']++;
+                    //     $ret[] = [
+                    //         'title' => trans('trp.strength.dentist.invite-patients.title'),
+                    //         'text' => nl2br(trans('trp.strength.dentist.invite-patients.text')),
+                    //         'image' => 'invite-patients',
+                    //         'completed' => false,
+                    //         'buttonText' => trans('trp.strength.dentist.invite-patients.button-text'),
+                    //         'buttonjs' => 'str-invite',
+                    //         'event_category' => 'ProfileStrengthDentist',
+                    //         'event_action' => 'Invite',
+                    //         'event_label' => 'PatientInvites',
+                    //     ];
+                    // }
+                    // $array_number_shuffle['important']++;
 
                     //3. DENTIST IN COUNTRY
 
@@ -353,8 +362,13 @@ class UserStrength extends Model {
                             $dentist_country = Country::find($user->country_id)->name;
 
                             $ret[] = [
-                                'title' => trans('trp.strength.dentist.invites.country-rating-this-month.title', ['dentist_country' => $dentist_country ]),
-                                'text' => trans('trp.strength.dentist.invites.country-rating-this-month.text', ['dentist_country' => $dentist_country, 'country_rating' => $avg_country_rating ]),
+                                'title' => trans('trp.strength.dentist.invites.country-rating-this-month.title', [
+                                    'dentist_country' => $dentist_country
+                                ]),
+                                'text' => trans('trp.strength.dentist.invites.country-rating-this-month.text', [
+                                    'dentist_country' => $dentist_country, 
+                                    'country_rating' => $avg_country_rating
+                                ]),
                                 'image' => 'outrank-dentists',
                                 'completed' => false,
                                 'buttonText' => trans('trp.strength.dentist.invites.country-rating-this-month.button-text'),
@@ -416,7 +430,10 @@ class UserStrength extends Model {
                 if ($total_balance > WithdrawalsCondition::find(1)->min_amount ) {
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.withdraw-rewards.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.withdraw-rewards.text', ['link' => '<span class="open-str-link" href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/">', 'endlink' => '</span>'])),
+                        'text' => nl2br(trans('trp.strength.dentist.withdraw-rewards.text', [
+                            'link' => '<span class="open-str-link" href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/">', 
+                            'endlink' => '</span>'
+                        ])),
                         'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.withdraw-rewards.button-text'),
@@ -636,7 +653,10 @@ class UserStrength extends Model {
                 if ($total_balance > WithdrawalsCondition::find(1)->min_amount ) {
                     $ret[] = [
                         'title' => trans('trp.strength.patient.withdraw-rewards.title'),
-                        'text' => nl2br(trans('trp.strength.patient.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>'])),
+                        'text' => nl2br(trans('trp.strength.patient.withdraw-rewards.text', [
+                            'link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 
+                            'endlink' => '</a>'
+                        ])),
                         'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.patient.withdraw-rewards.button-text'),
@@ -678,13 +698,15 @@ class UserStrength extends Model {
                     ->toArray();
                     
                     $filled_voxes = $user->filledVoxes();
-
                     $latest_voxes = array_diff($voxes, $filled_voxes);
                     $latest_vox = Vox::find(array_values($latest_voxes)[0]);
 
                     $ret[] = [
                         'title' => trans('trp.strength.patient.take-latest-survey.title'),
-                        'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text', ['name' => $latest_vox->title, 'reward' => $latest_vox->getRewardTotal() ])),
+                        'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text', [
+                            'name' => $latest_vox->title, 
+                            'reward' => $latest_vox->getRewardTotal()
+                        ])),
                         'image' => 'dentavox',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.patient.take-latest-survey.button-text'),

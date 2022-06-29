@@ -141,8 +141,8 @@ class Poll extends Model {
 
     public function recalculateUsersPercentage() {
 
-        $respondents_count = PollAnswer::where('poll_id', $this->id)->count();
         $respondents_users = PollAnswer::where('poll_id', $this->id)->get();
+        $respondents_count = $respondents_users->count();
 
         $arr = [];
         foreach ($respondents_users as $ru) {

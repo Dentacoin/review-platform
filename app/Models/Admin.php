@@ -41,7 +41,8 @@ class Admin extends Model implements AuthenticatableContract, CanResetPasswordCo
     }
     
     public function messages() {
-        return $this->hasMany('App\Models\AdminMessage', 'admin_id', 'id')->where(function($query) {
+        return $this->hasMany('App\Models\AdminMessage', 'admin_id', 'id')
+        ->where(function($query) {
 			$query->where('is_read', '=', 0 )
 			->orWhereNull('is_read');
 		});

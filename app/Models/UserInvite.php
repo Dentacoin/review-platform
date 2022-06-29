@@ -105,7 +105,11 @@ class UserInvite extends Model {
 
             $days = $this->hasReview($id)->created_at->diffInDays( Carbon::now() );
             $to_month = Carbon::now()->modify('-1 months');
-            $dentist_invites = self::where('user_id', $id)->where('invited_id', $this->invited_id)->where('created_at', '<=', $to_month)->first();
+            
+            $dentist_invites = self::where('user_id', $id)
+            ->where('invited_id', $this->invited_id)
+            ->where('created_at', '<=', $to_month)
+            ->first();
 
             if($days>30 && !empty($dentist_invites)) {
                 return true;

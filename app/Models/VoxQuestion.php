@@ -293,20 +293,20 @@ class VoxQuestion extends Model {
             $results = VoxHelper::prepareQuery($this->id, null,[
                 'dependency_answer' => $this->stats_answer_id,
                 'dependency_question' => $this->stats_relation_id,
-            ]);
-
-            $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->get();
+            ])->groupBy('answer')
+            ->selectRaw('answer, COUNT(*) as cnt')
+            ->get();
 
             $results_old = VoxHelper::prepareQueryOld($this->id, null,[
                 'dependency_answer' => $this->stats_answer_id,
                 'dependency_question' => $this->stats_relation_id,
-            ]);
+            ])->groupBy('answer')
+            ->selectRaw('answer, COUNT(*) as cnt')
+            ->get();
 
-            $results_old = $results_old->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->get();
+            $allResults = $results->concat($results_old);
 
-            $result = $results->concat($results_old);
-
-            foreach ($results as $result) {
+            foreach ($allResults as $result) {
 
                 $vda = new VoxAnswersDependency;
                 $vda->question_dependency_id = $this->stats_relation_id;
@@ -324,18 +324,18 @@ class VoxQuestion extends Model {
                 $results = VoxHelper::prepareQuery($this->id, null,[
                     'dependency_answer' => $answer_number,
                     'dependency_question' => $this->stats_relation_id,
-                ]);
-
-                $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->get();
+                ])->groupBy('answer')
+                ->selectRaw('answer, COUNT(*) as cnt')
+                ->get();
                 
                 $results_old = VoxHelper::prepareQuery($this->id, null,[
                     'dependency_answer' => $answer_number,
                     'dependency_question' => $this->stats_relation_id,
-                ]);
+                ])->groupBy('answer')
+                ->selectRaw('answer, COUNT(*) as cnt')
+                ->get();
 
-                $results_old = $results_old->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt')->get();
-
-                $results = $results->concat($results_old);
+                $allResults = $results->concat($results_old);
 
                 $existing = VoxAnswersDependency::where('question_id', $this->id)->first();
 
@@ -343,7 +343,7 @@ class VoxQuestion extends Model {
                     $existing->delete();
                 }
 
-                foreach ($results as $result) {
+                foreach ($allResults as $result) {
 
                     $vda = new VoxAnswersDependency;
                     $vda->question_dependency_id = $this->stats_relation_id;
