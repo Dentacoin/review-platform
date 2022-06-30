@@ -34,7 +34,6 @@
             @if($loggedUserAllowEdit)
                 <div class="edit-working-hours-wrapper">
                     <div class="edit-working-hours-wrap">
-                        {{-- <input type="text" class="input" style="width: 56px;padding: 0px 4px;text-align: center;"/> --}}
                         {{ Form::select( 
                             'work_hours['.$w.'][0][0]', 
                             $hours,
@@ -82,14 +81,14 @@
                             !$withoutUser && empty($user->work_hours[$w]) ? 'checked' : 'something' => 'checked'
                         ]) }}
                         <div class="checkbox-square">✓</div>
-                        Closed
+                        {{ trans('trp.open-hours.closed') }}
                     </label>
 
                     @if($w == 1)
                         <label class="checkbox-label" for="all-days-equal"> 
                             {{ Form::checkbox( 'all-days-equal', 1, '', array( 'id' => 'all-days-equal', 'class' => 'special-checkbox all-days-equal') ) }}
                             <div class="checkbox-square">✓</div>
-                            Apply to all
+                            {{ trans('trp.open-hours.apply') }}
                         </label>
                     @endif
                 </div>
@@ -103,7 +102,7 @@
                             @endforeach
                         </p>
                     @else
-                        <p>Closed</p>
+                        <p>{{ trans('trp.open-hours.closed') }}</p>
                     @endif    
                 @else
                     <p>HH:MM-HH:MM</p>

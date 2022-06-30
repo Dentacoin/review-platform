@@ -34,7 +34,7 @@
                             @if($dentist->is_partner)
                                 <div class="partner">
                                     <img src="{{ url('img-trp/mini-logo-white.svg') }}" width="20" height="20"/>
-                                    DCN Accepted
+                                    {{ trans('trp.common.dcn-accepted') }}
                                 </div>
                             @endif
                         </div>

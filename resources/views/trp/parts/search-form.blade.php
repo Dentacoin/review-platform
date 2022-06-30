@@ -6,8 +6,7 @@
 			id="search-dentist-name" 
 			type="text" 
 			name="dentist_name" 
-			{{-- value="{{ !empty($query) ? $formattedAddress : '' }}"  --}}
-			placeholder="Dentist / clinic name" 
+			placeholder="{{ trans('trp.page.search.by-name') }}" 
 			autocomplete="off"
 		/>
 		<input type="hidden" name="search-dentist-id" id="search-dentist-id"/>
@@ -18,8 +17,7 @@
 			id="search-dentist-country" 
 			type="text" 
 			name="dentist_country_name" 
-			{{-- value="{{ !empty($query) ? $formattedAddress : '' }}"  --}}
-			placeholder="Country" 
+			placeholder="{{ trans('trp.page.search.by-country') }}" 
 			autocomplete="off"
 		/>
 		<input type="hidden" name="dentist_country_id" id="search-country-id"/>
@@ -30,19 +28,18 @@
 			id="search-dentist-city" 
 			type="text" 
 			name="dentist_city" 
-			{{-- value="{{ !empty($query) ? $formattedAddress : '' }}"  --}}
-			placeholder="City, State" 
+			placeholder="{{ trans('trp.page.search.by-city') }}" 
 			autocomplete="off"
 		/>
 	</div>
 	<label class="green-checkbox" for="partner">
 		<img src="{{ url('img-trp/mini-logo-black.svg') }}" width="16" height="19"/>
-		DCN Accepted
+		{{ trans('trp.common.dcn-accepted') }}
 		<span class="checked-partner">✓</span>
 		<input class="checkbox" type="checkbox" name="is_partner" value="1" id="partner"/>
 	</label>
 	<button type="submit">
-		Search
+		{{ trans('trp.page.search.button') }}
 		<img src="{{ url('img-trp/white-search.svg') }}" width="30" height="29"/>
 	</button>
 	<input type="hidden" name="submit-form" value="1"/>
@@ -53,7 +50,7 @@
 		</div>
 	</div>
 	<div class="dentists-countries-results">
-		<p class="info">Sorry, we couldn’t find any matches. Check your search query for typos and try again.</p>
+		<p class="info">{{ trans('trp.page.search.no-results') }}</p>
 		<div class="dentists-countries-results-wrapper">
 			@foreach($countriesAlphabetically as $letter => $countryArray)
 				<div class="letters-country-section">
@@ -88,18 +85,17 @@
 			@endforeach
 		</div>
 		<a href="{{ getLangUrl('dentist-listings-by-country') }}" class="browse-country">
-			{{-- {!! nl2br(trans('trp.common.search-dentists-countries')) !!} --}}
-			Browse providers by country >
+			{!! nl2br(trans('trp.common.search-dentists-countries')) !!}
 		</a>
 	</div>
 	<div class="dentists-cities-results">
-		<p class="info">Sorry, we couldn’t find any matches. Check your search query for typos and try again.</p>
+		<p class="info">{{ trans('trp.page.search.no-results') }}</p>
 		<div class="dentists-cities-results-wrapper">
 			<div class="locations-results results-type">
 			</div>
 		</div>
 		{{-- <a href="{{ getLangUrl('dentist-listings-by-country') }}" class="browse-city">
-			Browse providers by city >
+			{!! nl2br(trans('trp.common.search-dentists-cities')) !!}
 		</a> --}}
 	</div>
 	<div class="loader"><i></i></div>

@@ -1,5 +1,5 @@
 <span href="javascript:;" class="filter {{ !empty($searchCategories) ? 'active' : '' }}">
-    Speciality
+    {{ trans('trp.search-filters.speciality') }}
     <div class="caret-down"></div>
 
     <div class="filter-options">
@@ -28,13 +28,13 @@
                                 <img class="" src="{{ url('img-trp/info-gray.svg') }}"/>
 
                                 @if($cat == 'orthodontists')
-                                    <p class="info-tooltip">Specialized in the prevention, diagnosis, and correction of mal-positioned teeth and misaligned bites.</p>
+                                    <p class="info-tooltip">{{ trans('trp.search-filters.speciality.info.orthodontists') }}</p>
                                 @elseif($cat == 'periodontists')
-                                    <p class="info-tooltip">Specialized in the prevention, diagnosis, and treatment of gum disease and the placement of dental implants.</p>
+                                    <p class="info-tooltip">{{ trans('trp.search-filters.speciality.info.periodontists') }}</p>
                                 @elseif($cat == 'pediatric-dentists')
-                                    <p class="info-tooltip short">Specialized in the prevention, diagnosis, and treatment of children’s dental issues.</p>
+                                    <p class="info-tooltip short">{{ trans('trp.search-filters.speciality.info.pediatric-dentists') }}</p>
                                 @elseif($cat == 'endodontists')
-                                    <p class="info-tooltip">Specialized in the prevention, diagnosis and treatment of diseases related to the pulp / root canal.</p>
+                                    <p class="info-tooltip">{{ trans('trp.search-filters.speciality.info.endodontists') }}</p>
                                 @endif
                             </div>
                         @endif
@@ -57,7 +57,7 @@
     </div>
 </span>
 <span href="javascript:;" class="filter active">
-    Type
+    {{ trans('trp.search-filters.type') }}
     <div class="caret-down"></div>
 
     <div class="filter-options">
@@ -101,7 +101,7 @@
     Insurance
 </a> --}}
 <span href="javascript:;" class="filter {{ !empty($requestRatings) ? 'active' : '' }}">
-    Rating
+    {{ trans('trp.search-filters.rating') }}
     <div class="caret-down"></div>
 
     <div class="filter-options">
@@ -145,26 +145,26 @@
 
 @if(false)
     <span href="javascript:;" class="filter {{ !empty($requestAvailability) ? 'active' : '' }}">
-        More filters
+        {{ trans('trp.search-filters.more') }}
         <div class="caret-down"></div>
 
         <div class="filter-options longer">
             <div class="filter-inner">
                 <div class="filter-title">
-                    Appointment types:
+                    {{ trans('trp.search-filters.more.appointment-types') }}:
                 </div>
                 <label class="checkbox-label disabled" for="virtual-visit">
                     <input type="checkbox" class="special-checkbox" name="visits[]" id="virtual-visit" value="virtual" disabled="disabled">
                     <div class="checkbox-square">✓</div>
-                    Virtual 
+                    {{ trans('trp.search-filters.more.appointment-types.virtual') }} 
                 </label>
                 <label class="checkbox-label disabled" for="on--visit">
                     <input type="checkbox" class="special-checkbox" name="visits[]" id="on--visit" value="on-site" disabled="disabled">
                     <div class="checkbox-square">✓</div>
-                    On-site visit
+                    {{ trans('trp.search-filters.more.appointment-types.on-site-visits') }} 
                 </label>
                 <div class="filter-title">
-                    Languages spoken:
+                    {{ trans('trp.search-filters.more.languages-spoken') }}:
                 </div>
                 @foreach($languages as $key => $l)
                     <label class="checkbox-label disabled" for="lang-{{$key}}">
@@ -174,7 +174,7 @@
                     </label>
                 @endforeach
                 <div class="filter-title">
-                    Experience:
+                    {{ trans('trp.search-filters.more.experience') }}:
                 </div>
                 @foreach($experiences as $key => $experience)
                     <label class="checkbox-label disabled" for="experience-{{$key}}">
@@ -184,7 +184,7 @@
                     </label>
                 @endforeach
                 <div class="filter-title">
-                    Availability:
+                    {{ trans('trp.search-filters.more.availability') }}:
                 </div>
                 @foreach($availabilities as $key => $availability)
                     @php
@@ -226,7 +226,7 @@
 
 <span class="break-mobile">
     <span class="sort-by-title">
-        Sort by:
+        {{ trans('trp.search-filters.sort-by') }}:
     </span>
     <span href="javascript:;" class="filter active">
         <span class="filter-order-active-text">{{ empty($requestOrder) ? 'Most reviews' : $orders[$requestOrder] }}</span>

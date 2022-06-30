@@ -17,7 +17,7 @@
         class="input dentist-suggester suggester-input" 
         value="" 
         autocomplete="off"
-        placeholder="Search for registered dental professionals">
+        placeholder="{!! nl2br(trans('trp.popup.add-team-popup.search-reg-dentist')) !!}">
 
         <div class="suggest-results"></div>
 
@@ -35,7 +35,7 @@
     @if($withoutUser)
         <a href="javascript:;" class="invite-manual">
             <img src="{{ url('img-trp/add-icon-in-button.png') }}" width="27"/>
-            Invite non-registered dentist via email
+            {!! nl2br(trans('trp.popup.add-team-popup.invite-non-reg-dentist')) !!}
         </a>
         
     {!! Form::close() !!}
@@ -71,19 +71,19 @@
                             
                             <img 
                             src="{{ url('img-trp/info-dark-gray.png') }}" 
-                            class="tooltip-text" text="Required resolution: 150x150px<br/> Max. image size: 2 MB"/>
+                            class="tooltip-text" text="{!! nl2br(trans('trp.popup.add-team-popup.add-avatar-tooltip')) !!}"/>
                         </span>
                     </div>
                     <div class="loader">
                         <i></i>
                     </div>
                     <input 
-                    type="file" 
-                    name="image" 
-                    class="add-avatar-member" 
-                    accept="image/png,image/jpeg,image/jpg" 
-                    id="add-avatar-member" 
-                    upload-url="{{ getLangUrl('register/upload') }}"/>
+                        type="file" 
+                        name="image" 
+                        class="add-avatar-member" 
+                        accept="image/png,image/jpeg,image/jpg" 
+                        id="add-avatar-member" 
+                        upload-url="{{ getLangUrl('register/upload') }}"/>
                     <input type="hidden" name="avatar" class="avatar"/>
                 </label>
                 
@@ -92,7 +92,7 @@
                     <span class="avatar-name"></span>
                     <button class="destroy-croppie" type="button">×</button>
                 </div>
-                <div class="alert alert-warning image-big-error" style="display: none; margin-top: 20px;">The file you selected is large. Max size: 2MB.</div>
+                <div class="alert alert-warning image-big-error" style="display: none; margin-top: 20px;">{!! nl2br(trans('trp.popup.add-team-popup.add-avatar-large')) !!}</div>
             </div>
             <div class="col">
                 <div class="modern-field">
@@ -140,7 +140,7 @@
                         @endforeach
                     </select>
                     <label for="team-member-speciality">
-                        <span>Select specialty:</span>
+                        <span>{{ trans('trp.popup.verification-popup.speciality') }}:</span>
                     </label>
                 </div>
             </div>
@@ -149,7 +149,7 @@
         <div class="alert member-alert" style="display: none; margin-top: 20px;"></div>
         <div class="tac">
             @if($withoutUser)
-                <a href="javascript:;" class="invite-existing-dentist">Cancel</a>
+                <a href="javascript:;" class="invite-existing-dentist">{{ trans('trp.common.cancel') }}</a>
             @endif
             <input type="submit" class="green-button" value="{{ trans('trp.popup.verification-popup.add-team-button') }}">
         </div>

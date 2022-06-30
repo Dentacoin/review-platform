@@ -47,7 +47,7 @@
         </div>
         @if(!$for_profile && !empty($user) && $user->id==$current_dentist->id && !$review->verified && !empty($user->trusted))
             <a class="green-button verify-review" href="javascript:;">
-                Verify patient
+                {{ trans('trp.common.verify-patient') }}
             </a>
         @endif
         <div class="ratings average">
@@ -115,7 +115,17 @@
                     <img class="review-avatar" src="{{ $current_dentist->getImageUrl(true) }}" width="33" height="33"/>
                     <div>
                         <p class="replied-info">
-                            <img src="{{ url('img-trp/reply-icon.svg') }}" width="15" height="13"/>Replied by {{ $current_dentist->getNames() }} {{ $review->replied_at ? 'on '.$review->replied_at->toFormattedDateString() : '' }}
+                            <img src="{{ url('img-trp/reply-icon.svg') }}" width="15" height="13"/>
+                            @if($review->replied_at)
+                                {{ trans('trp.popup.view-review-popup.replied-by-on', [
+                                    'name' => $current_dentist->getNames(),
+                                    'date' => $review->replied_at->toFormattedDateString()
+                                ]) }}
+                            @else
+                                {{ trans('trp.popup.view-review-popup.replied-by', [
+                                    'name' => $current_dentist->getNames(),
+                                ]) }}
+                            @endif
                         </p>
                         <p class="review-content">{!! nl2br($review->reply) !!}</p>
                     </div>

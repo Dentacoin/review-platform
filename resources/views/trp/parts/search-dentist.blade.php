@@ -22,7 +22,7 @@
     @if($dentist->is_partner)
         <div class="partner">
             <img class="tooltip-text" width="17" height="17" src="{{ url('img-trp/mini-logo-white.svg') }}" text="{!! nl2br(trans('trp.common.partner')) !!}"/>
-            DCN Accepted
+            {{ trans('trp.common.dcn-accepted') }}
         </div>
     @endif
     <div class="ratings">
@@ -105,13 +105,11 @@
 
             @if($for_branch && !empty($user) && $user->is_clinic && $dentist->is_clinic && $user->branches->isNotEmpty() && in_array($dentist->id, $user->branches->pluck('branch_clinic_id')->toArray()))
                 <a href="{{ $dentist->getLink() }}" class="button-submit">
-                    {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}
-                    Edit branch
+                    {{ trans('trp.page.branches.edit-branch') }}
                 </a>
             @elseif(!empty($user) && $user->is_dentist)
                 <a href="{{ $dentist->getLink() }}" class="button-submit">
-                    {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}
-                    Check Profile
+                    {{ trans('trp.page.branches.check-branch-profile') }}
                 </a>
             @else
                 <a href="{{ $dentist->getLink() }}?popup-loged=submit-review-popup" class="button-submit">
@@ -131,7 +129,7 @@
                     @if($dentist->is_partner)
                         <div class="partner">
                             <img class="tooltip-text" width="17" height="17" src="{{ url('img-trp/mini-logo-white.svg') }}" text="{!! nl2br(trans('trp.common.partner')) !!}"/>
-                            DCN Accepted
+                            {{ trans('trp.common.dcn-accepted') }}
                         </div>
                     @endif
                     <div class="ratings">
