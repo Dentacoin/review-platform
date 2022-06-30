@@ -4,7 +4,7 @@
 
 	<div class="welcome-dentist-title-section">
 		<h1 class="mont">
-			{{ trans('trp.page.index-dentist.title') }}
+			{!! nl2br(trans('trp.page.index-dentist.title')) !!}
 		</h1>
 	
 		<h3>
