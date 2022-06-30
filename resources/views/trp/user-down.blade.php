@@ -17,7 +17,7 @@
 @if($item->highlights->isNotEmpty())
     <div class="tab-container">
         <h2 class="mont">
-            Highlights
+            {{ trans('trp.page.user.highlights') }}
         </h2>
 
         <div class="tab-inner-section">

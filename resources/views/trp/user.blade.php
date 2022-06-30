@@ -337,7 +337,6 @@
 											class="input clinic-suggester suggester-input" 
 											name="search-clinic" 
 											autocomplete="off" 
-											{{-- placeholder="{!! nl2br(trans('trp.popup.popup-wokrplace.search')) !!}" --}}
 											placeholder="Start typing your workplace name"
 											/>
 											<div class="suggest-results"></div>
@@ -373,7 +372,7 @@
 									@if(str_contains($workingTime, 'Open now'))
 										<div class="working-time open {{ $loggedUserAllowEdit ? 'wider' : '' }}">
 											<img src="{{ url('img-trp/clock-blue.svg') }}" width="18" height="16"/>
-											Open now
+											{{ trans('trp.page.index.open-now') }}
 											<div class="work-hours">
 												@foreach($week_days as $w => $week_day)
 													<div class="flex {{ date('w') == $w ? 'active' : '' }}">
@@ -402,7 +401,7 @@
 									@else
 										<div class="working-time closed {{ $loggedUserAllowEdit ? 'wider' : '' }}">
 											<img src="{{ url('img-trp/clock-red.svg') }}" width="18" height="16"/>
-											Closed now
+											{{ trans('trp.page.index.closed-now') }}
 
 											@if($loggedUserAllowEdit)
 												<a class="edit-field-button scroll-to" scroll="open-hours-section">
@@ -971,42 +970,7 @@
 				@endif
 			</div>
 		{{-- @else
-			@if($showTeamSection)
-				@include('trp.user.team')
-			@endif
-			
-			@if($regularReviewsCount || $videoReviewsCount )
-				@include('trp.user.reviews')
-			@endif
-			
-			@if( $showLocationsSection )
-				@include('trp.user.location')
-			@endif
-			
-			@if($showMoreInfoSection)
-				@include('trp.user.more')
-			@endif
-
-			@if($item->highlights->isNotEmpty())
-				<div class="tab-container">
-					<h2 class="mont">
-						Highlights
-					</h2>
-
-					<div class="tab-inner-section">
-						<div class="hightlights-wrapper {{ $item->highlights->count() > 1 ? 'highlights-mobile-flickity' : '' }} {{ $item->highlights->count() > 3 ? 'highlights-flickity' : 'flex' }}">
-							@foreach($item->highlights as $highlight)
-								<a href="{{ $highlight->link }}" target="_blank" class="hightlight">
-									<div class="hightlight-image">
-										<img src="{{ $highlight->getImageUrl() }}"/>
-									</div>
-									<p>{{ $highlight->title }}</p>
-								</a>
-							@endforeach
-						</div>
-					</div>
-				</div>
-			@endif
+			@include('trp.user-down')
 		@endif --}}
 
 		<input type="hidden" name="cur_dent_id" id="cur_dent_id" value="{{ $item->id }}">

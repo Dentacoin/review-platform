@@ -928,11 +928,18 @@
       .how-works-section p {
         font-size: 20px; } }
     .how-works-section p a {
+      font-size: 20px;
       color: #14cab8;
       transition: all 0.3s ease; }
       .how-works-section p a:hover {
         color: #0564c6;
         transition: all 0.3s ease; }
+      @media screen and (max-width: 998px) {
+        .how-works-section p a {
+          font-size: 18px; } }
+      @media screen and (max-width: 768px) {
+        .how-works-section p a {
+          font-size: 20px; } }
   .how-works-section img {
     position: absolute;
     transform: scale(1.2);

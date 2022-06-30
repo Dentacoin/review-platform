@@ -416,12 +416,11 @@ class DentistsController extends FrontController {
             $social_description = str_replace(':results_number', $items->count(), $social_description);
 
             $social_image = $seos->getImageUrl();
-            $search_title = 'The Best '.implode(', ', $categoryNames).' in <span class="mont subtitle">'.$formattedAddress.'</span>';
 
-            // $search_title = trans('trp.page.search.location.category.title', [
-            //     'location' => '<span class="mont subtitle">'.$formattedAddress.'</span>',
-            //     'category' => implode(', ', $categoryNames),
-            // ]);
+            $search_title = trans('trp.page.search.location.category.title', [
+                'location' => '<span class="mont subtitle">'.$formattedAddress.'</span>',
+                'category' => implode(', ', $categoryNames),
+            ]);
         }
 
 		return $this->ShowView('search-results', [

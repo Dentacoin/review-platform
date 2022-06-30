@@ -6,13 +6,12 @@
 		
 		<div class="verification-content">
 			<h2 class="mont">
-				While waiting for verification, start completing your profile
-				{{-- {!! nl2br(trans('trp.popup.verification-popup.title')) !!} --}}
+				{!! nl2br(trans('trp.popup.verification-popup.title')) !!}
 			</h2>
 
 			<div class="step" step="1">
 				<p class="popup-desc">
-					<span>Step 1:</span> Add open hours to welcome new patients
+					{!! nl2br(trans('trp.popup.verification-popup.step1')) !!}
 				</p>
 
 				<div class="open-hours-section edit-mode">
@@ -34,10 +33,10 @@
 
 						<div class="step-buttons tac">
 							<a href="javascript:;" class="white-button skip" to-step="2">
-								Skip
+								{{ trans('trp.common.skip') }}
 							</a>
 							<button type="submit" class="blue-button">
-								Save Open hours
+								{!! nl2br(trans('trp.popup.verification-popup.save-open-hours')) !!}
 							</button>
 						</div>
 					{!! Form::close() !!}
@@ -47,8 +46,7 @@
 			<div class="step" step="2" style="display: none;">
 				<div id="clinic-add-team">
 					<p class="popup-desc">
-						<span>Step 2:</span> Add team members to your clinic profile
-						{{-- {{ trans('trp.popup.verification-popup.show-team') }} --}}
+						{!! nl2br(trans('trp.popup.verification-popup.step2')) !!}
 					</p>
 
 					@include('trp.parts.add-team-member', [
@@ -57,7 +55,7 @@
 
 					<div class="step-buttons tac">
 						<a href="javascript:;" class="white-button skip" to-step="3">
-							Skip
+							{{ trans('trp.common.skip') }}
 						</a>
 					</div>
 				</div>
@@ -65,8 +63,7 @@
 
 			<div class="step" step="3" style="display: none;">
 				<p class="popup-desc">
-					<span>Step 3:</span> Add a short description about your clinic
-					{{-- {{ trans('trp.popup.verification-popup.show-team') }} --}}
+					{!! nl2br(trans('trp.popup.verification-popup.step3')) !!}
 				</p>
 
 				{!! Form::open([
@@ -89,11 +86,10 @@
 					<div class="alert alert-success descr-success" style="display: none; margin-top: 20px;"></div>
 					<div class="tac step-buttons">
 						<a href="javascript:;" class="white-button close-popup">
-							Skip
+							{{ trans('trp.common.skip') }}
 						</a>
 						<button class="blue-button" type="submit">
-							Save description
-							{{-- {!! nl2br(trans('trp.popup.verification-popup.save')) !!} --}}
+							{!! nl2br(trans('trp.popup.verification-popup.save')) !!}
 						</button>
 					</div>
 

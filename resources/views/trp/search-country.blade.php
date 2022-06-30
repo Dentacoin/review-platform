@@ -4,8 +4,11 @@
 
 	<div class="search-title">
 		<div class="container">
-			<h1 class="mont">Find The Best Dental Providers <br/>
-				<span class="mont subtitle">Across The World</span>
+			<h1 class="mont">
+				{!! nl2br(trans('trp.search-country.title', [
+					'bold' => '<span class="mont subtitle">',
+					'endbold' => '</span>'
+				])) !!}
 			</h1>
 		</div>
 	</div>
@@ -14,35 +17,50 @@
 		<div class="container">
 			<div class="quick-search-country-wrapper">
 				<img src="{{ url('img-trp/black-search.svg') }}" width="17" height="18"/>
-				<input type="text" name="quick-search-country" id="quick-search-country" placeholder="Quick search"/>
+				<input type="text" name="quick-search-country" id="quick-search-country" placeholder="{{ trans('trp.search-country.search') }}"/>
 			</div>
 			<div class="hidden-mobile-filters">
-				<a href="javascript:;" class="close-filter"><img src="{{ url('img-trp/blue-arrow-left.png') }}" /></a>
-				<h3><img src="{{ url('img-trp/filters-blue.svg') }}" />Filters</h3>
+				<a href="javascript:;" class="close-filter">
+					<img src="{{ url('img-trp/blue-arrow-left.png') }}"/>
+				</a>
+				<h3>
+					<img src="{{ url('img-trp/filters-blue.svg') }}"/>
+					{{ trans('trp.common.filters') }}
+				</h3>
 				<div class="continents-filter">
-					<a href="javascript:;" class="continent all-continents active">All continents</a>
+					<a href="javascript:;" class="continent all-continents active">
+						{{ trans('trp.search-country.all-continents') }}
+					</a>
 					@foreach($continents as $continent)
-						<a href="javascript:;" class="continent" id="{{ $continent->id }}" dentists-count="{{ $continentDentists[$continent->id] }}">{{ $continent->name }}</a>
+						<a href="javascript:;" class="continent" id="{{ $continent->id }}" dentists-count="{{ $continentDentists[$continent->id] }}">
+							{{ $continent->name }}
+						</a>
 					@endforeach
 				</div>
 				<div class="countries-letters-wrapper">
-					<a href="javascript:;" class="countries-letter all-letters active">All</a>
+					<a href="javascript:;" class="countries-letter all-letters active">
+						{{ trans('trp.search-country.all') }}
+					</a>
 					@foreach($countriesAlphabetically as $letter => $countryArray)
 						<a href="javascript:;" class="countries-letter" letter="{{ $letter }}">{{ $letter }}</a>
 					@endforeach
 				</div>
 			</div>
-			<a href="javascript:;" class="open-country-filters"><img src="{{ url('img-trp/filters.svg') }}" width="20" height="15"/>Filters</a>
+			<a href="javascript:;" class="open-country-filters">
+				<img src="{{ url('img-trp/filters.svg') }}" width="20" height="15"/>
+				{{ trans('trp.common.filters') }}
+			</a>
 		</div>
 	</div>
 
 	<div class="countries-wrapper">
 		<div class="continent-title-wrapper">
 			<div class="container flex flex-center flex-mobile space-between">
-				<p class="continent-title">
-				</p>
+				<p class="continent-title"></p>
 				<p class="continent-dentists">
-					<span>103</span> dental practices
+					{!! trans('trp.search-country.count-dental-practices', [
+						'count' => '<span>103</span>'
+					]) !!}
 				</p>
 			</div>
 		</div>

@@ -73,8 +73,7 @@ class InvitationsController extends FrontController {
             if ($validator->fails()) {
                 $ret = array(
                     'success' => false,
-                    // 'message' => trans('trp.page.profile.invite.copypaste.error'),
-                    'message' => 'Please, paste names and emails separated by commas or tabs.',
+                    'message' => trans('trp.page.profile.invite.copypaste.error'),
                 );
 
                 return Response::json( $ret );
@@ -89,8 +88,7 @@ class InvitationsController extends FrontController {
                 if (count($rows[0]) <= 1) {
                     return Response::json([
                         'success' => false,
-                        // 'message' => trans('trp.page.profile.invite.copypaste.error'),
-                        'message' => 'Please, paste names and emails separated by commas or tabs.',
+                        'message' => trans('trp.page.profile.invite.copypaste.error'),
                     ]);
                 }
 
@@ -160,8 +158,7 @@ class InvitationsController extends FrontController {
             } else {
                 return Response::json([
                     'success' => false,
-                    // 'message' => trans('trp.page.profile.invite.copypaste.failed'),
-                    'message' => 'Something went wrong. Please, start over.',
+                    'message' => trans('trp.page.profile.invite.copypaste.failed'),
                 ]);
             }
         }
@@ -211,22 +208,18 @@ class InvitationsController extends FrontController {
             $gtag_tracking = false;
         } else if(!empty($invalid) && $invalid != count($emails)) {
             if (empty($already_invited)) {
-                // $final_message = trans('trp.page.profile.invite.copypaste.unvalid-emails').'<br/>'.implode(',', $invalid_emails);
-                $final_message = 'Your review invites have been sent successfully to patients with valid emails. There were some unvalid emails, however, which were skipped:'.'<br/>'.implode(',', $invalid_emails);
+                $final_message = trans('trp.page.profile.invite.copypaste.unvalid-emails').'<br/>'.implode(',', $invalid_emails);
                 $alert_color = 'orange';
             } else {
-                $final_message = 'Your review invites have been sent successfully to patients with valid emails. Some patients, however, were skipped either because they have already submitted feedback earlier this month or their emails were invalid:'.'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
-                // $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback').'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
+                $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback').'<br/>'.implode(',', $invalid_emails).(count($already_invited_emails) ? ','.implode(',', $already_invited_emails) : '');
                 $alert_color = 'orange';
             }
         } else if(!empty($already_invited) && ($already_invited == count($emails))) {
-            // $final_message = trans('trp.page.profile.invite.copypaste.all-submitted-feedback').'<br/>'.implode(',', $already_invited_emails);
-            $final_message = 'Sending your review invites has failed. You have already invited these patients to submit feedback earlier this month.'.'<br/>'.implode(',', $already_invited_emails);
+            $final_message = trans('trp.page.profile.invite.copypaste.all-submitted-feedback').'<br/>'.implode(',', $already_invited_emails);
             $alert_color = 'warning';
             $gtag_tracking = false;
         } else if(!empty($already_invited) && $already_invited != count($emails)) {
-            // $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback-invalid-emails').'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
-            $final_message = 'Your review invites have been sent successfully to patients with valid emails. Some patients, however, were skipped because they have already submitted feedback earlier this month:'.'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
+            $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback-invalid-emails').'<br/>'.implode(',', $invalid_emails).','.implode(',', $already_invited_emails);
             $alert_color = 'orange';
         }
 

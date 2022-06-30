@@ -13,8 +13,8 @@
 			@include('trp.parts.search-form')
 			
 			@include('trp.parts.flickity-dentists', [
-				'title' => 'Trusted Dentist Reviews from Real Patients',
-				'subtitle' => 'Check the latest dental reviews in your location'
+				'title' => trans('trp.page.index.flickity.title'),
+				'subtitle' => trans('trp.page.index.flickity.subtitle')
 			])
 		</div>
 	</div>
@@ -29,11 +29,12 @@
 						{!! csrf_field() !!}
 
 						<h2 class="mont">
-							Invite Your Dentist to Trusted Reviews
-							{{-- {!! trans('trp.page.invite.popup.title') !!} --}}
+							{!! trans('trp.page.invite.popup.title') !!}
 						</h2>
 						<h5>
-							All real entries will be rewarded with <b>{{ App\Models\Reward::getReward('patient_add_dentist') }} DCN</b>!
+							{!! trans('trp.page.invite.popup.subtitle', [
+								'reward' => '<b>'.App\Models\Reward::getReward('patient_add_dentist').' DCN</b>'
+							]) !!}
 						</h5>
 
 						<div class="mode-dentist-clinic alert-after flex flex-mobile">
@@ -109,7 +110,7 @@
 						<div class="modern-field alert-after">
 							<input type="text" name="website" id="dentist-website1" class="modern-input" autocomplete="off">
 							<label for="dentist-website1">
-								<span>Website / Facebook page:</span>
+								<span>{!! trans('trp.page.invite.popup.website') !!}</span>
 							</label>
 						</div>
 
@@ -123,8 +124,7 @@
 						<div class="tac">
 							<button type="submit" class="blue-button">
 								<div class="loader"><i></i></div>
-								Send Invite
-								{{-- {!! nl2br(trans('trp.page.invite.submit')) !!} --}}
+								{{ trans('trp.page.invite.submit') }}
 							</button>
 						</div>
 
@@ -135,17 +135,17 @@
 							<img src="{{ url('img-trp/check.png') }}" class="check-image"/>
 						</div>
 						<h2 class="mont">
-							Thanks for inviting your dentist!
+							{!! trans('trp.page.invite.popup.success.title') !!}
 						</h2>
 						<p class="step-info">
-							@php
-								$addDentistReward = App\Models\Reward::getReward('patient_add_dentist');	
-							@endphp
-							You have successfully invited <span class="d-name"></span> to join Dentacoin Trusted Reviews. Once we verify the details you have provided, you'll receive your <span>{{ $addDentistReward }} DCN</span> reward.
+							{!! trans('trp.page.invite.popup.success.text', [
+								'name' => '<span class="d-name"></span>',
+								'reward' => '<span>'.App\Models\Reward::getReward('patient_add_dentist').' DCN</span>'
+							]) !!}
 						</p>
 				
 						<div class="tac">
-							<a href="javascript:;" class="invite-new-dentist-again blue-button">Close</a>
+							<a href="javascript:;" class="invite-new-dentist-again blue-button">{!! trans('trp.page.invite.popup.success.button') !!}</a>
 						</div>
 					</div>
 				</div>
@@ -158,44 +158,35 @@
 	@else
 		<div class="info-section tac">
 			<div class="container">
-				<h2 class="mont">The First Blockchain Platform</h2>
-				<h3>For Dental Treatment Reviews Rewarding Your Feedback</h3>
+				<h2 class="mont">{!! nl2br(trans('trp.page.index.intro.title')) !!}</h2>
+				<h3>{!! nl2br(trans('trp.page.index.intro.subtitle')) !!}</h3>
 
 				<div class="flex flex-text-center">
 					<div class="info-box">
-						<div class="info-icon to-append-image" data-src="{{ url('img-trp/dentacoin-find-the-best-dentist-icon.png') }}" data-alt="Find the best dentist on Dentacoin Trusted Reviews icon">
-							{{-- {{ trans('trp.alt-tags.best-dentist') }} --}}
+						<div class="info-icon to-append-image" data-src="{{ url('img-trp/dentacoin-find-the-best-dentist-icon.png') }}" data-alt="{{ trans('trp.alt-tags.best-dentist') }}">
 						</div>
 						<div class="info-text">
-							{{-- <h3>{!! nl2br(trans('trp.page.index.intro-title-1')) !!}</h3> --}}
-							<h3>Find the best dentist</h3>
-							{{-- <p>{!! nl2br(trans('trp.page.index.intro-description-1')) !!}</p> --}}
-							<p>Browse dentist ratings and choose the best provider in your area.</p>
-							<a href="javascript:;" class="white-button scroll-to-search">Search now</a>
+							<h3>{!! nl2br(trans('trp.page.index.intro-title-1')) !!}</h3>
+							<p>{!! nl2br(trans('trp.page.index.intro-description-1')) !!}</p>
+							<a href="javascript:;" class="white-button scroll-to-search">{!! nl2br(trans('trp.page.index.intro-button-1')) !!}</a>
 						</div>
 					</div>
 					<div class="info-box">
-						<div class="info-icon to-append-image" data-src="{{ url('img-trp/dentacoin-make-your-voice-heard-icon.png') }}" data-alt="Review your dentist on Dentacoin Trusted Reviews icon">
-							{{-- {{ trans('trp.alt-tags.make-voice-heard') }} --}}
+						<div class="info-icon to-append-image" data-src="{{ url('img-trp/dentacoin-make-your-voice-heard-icon.png') }}" data-alt="{{ trans('trp.alt-tags.make-voice-heard') }}">
 						</div>
 						<div class="info-text">
-							{{-- <h3>{!! nl2br(trans('trp.page.index.intro-title-2')) !!}</h3> --}}
-							<h3>Review your dentist</h3>
-							{{-- <p>{!! nl2br(trans('trp.page.index.intro-description-2')) !!}</p> --}}
-							<p>Submit your feedback on your last dental appointment and help others.</p>
-							<a href="javascript:;" class="white-button {{ !empty($user) ? '' : 'open-dentacoin-gateway patient-login' }}">Write a review</a>
+							<h3>{!! nl2br(trans('trp.page.index.intro-title-2')) !!}</h3>
+							<p>{!! nl2br(trans('trp.page.index.intro-description-2')) !!}</p>
+							<a href="javascript:;" class="white-button {{ !empty($user) ? '' : 'open-dentacoin-gateway patient-login' }}">{!! nl2br(trans('trp.page.index.intro-button-2')) !!}</a>
 						</div>
 					</div>
 					<div class="info-box">
-						<div class="info-icon to-append-image" data-src="{{ url('img-trp/dentacoin-get-rewarded-icon.png') }}" data-alt="Get rewarded for your Dentacoin Trusted Reviews icon">
-							{{-- {{ trans('trp.alt-tags.get-rewarded') }} --}}
+						<div class="info-icon to-append-image" data-src="{{ url('img-trp/dentacoin-get-rewarded-icon.png') }}" data-alt="{{ trans('trp.alt-tags.get-rewarded') }}">
 						</div>
 						<div class="info-text">
-							{{-- <h3>{!! nl2br(trans('trp.page.index.intro-title-3')) !!}</h3> --}}
-							<h3>Get rewarded</h3>
-							{{-- <p>{!! nl2br(trans('trp.page.index.intro-description-3')) !!}</p> --}}
-							<p>Earn DCN for sharing your genuine opinion based on your experience.</p>
-							<a href="javascript:;" class="white-button {{ !empty($user) ? '' : 'open-dentacoin-gateway patient-login' }}">Start now</a>
+							<h3>{!! nl2br(trans('trp.page.index.intro-title-3')) !!}</h3>
+							<p>{!! nl2br(trans('trp.page.index.intro-description-3')) !!}</p>
+							<a href="javascript:;" class="white-button {{ !empty($user) ? '' : 'open-dentacoin-gateway patient-login' }}">{!! nl2br(trans('trp.page.index.intro-button-3')) !!}</a>
 						</div>
 					</div>
 				</div>
@@ -203,6 +194,5 @@
 		</div>
 		<div id="to-append"></div>
 	@endif
-
 
 @endsection

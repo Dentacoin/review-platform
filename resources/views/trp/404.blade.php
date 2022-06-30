@@ -9,20 +9,18 @@
 			</div>
 			<div>
 				<h1 class="mont">
-					{{-- {!! nl2br(trans('trp.page.404.title')) !!} --}}
-					Sorry! We couldn't find the page you requested.
+					{!! nl2br(trans('trp.page.404.title')) !!}
 				</h1>
 			</div>
 		</div>
 
 		<div class="error-container">
 			@include('trp.parts.flickity-dentists', [
-				'subtitle' => 'Were you looking for a dentist near you?',
+				'subtitle' => trans('trp.page.404.flickity.subtitle'),
 			])
 			<div class="tac">
 	    		<a href="{{ getLangUrl('/') }}" class="blue-button">
-					{{-- {!! nl2br(trans('trp.page.404.back')) !!} --}}
-					BACK TO HOME PAGE	
+					{!! nl2br(trans('trp.page.404.back')) !!}
 				</a>
 	    	</div>
 		</div>

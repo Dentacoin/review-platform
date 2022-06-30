@@ -4,16 +4,20 @@
 
 	<div class="search-title">
 		<div class="container">
-			<h1 class="mont">Find The Best Dental Care in
-				<span class="mont subtitle">{{ $state_slug ? $stateName.', ' : '' }}{{ $country->name }}</span>
+			<h1 class="mont">
+				{!! trans('trp.search-city.title', [
+					'state' => '<span class="mont subtitle">'.($state_slug ? $stateName.', ' : '').($country->name).'</span>'
+				]) !!}				
 			</h1>
 		</div>
 	</div>
 
 	<div class="country-all-practices">
 		<div class="container flex flex-center flex-mobile space-between">
-			<a href="{{ getLangUrl('dentists/'.($state_slug ? $state_slug.'-' : '').$country->slug) }}" class="show-all">SHOW ALL PRACTICES</a>
-			<p class="country-dentists">({{ $countryCount }} results)</p>
+			<a href="{{ getLangUrl('dentists/'.($state_slug ? $state_slug.'-' : '').$country->slug) }}" class="show-all">
+				{{ trans('trp.common.show-all-practices') }}
+			</a>
+			<p class="country-dentists">({{ trans('trp.common.results-count', ['count' => $countryCount]) }})</p>
 		</div>
 	</div>
 

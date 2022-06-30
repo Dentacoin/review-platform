@@ -84,10 +84,10 @@ return [
 		],
 		2 => [
 			1 => 'My website',
-			2 => 'Google',
+			2 => 'Google My Business',
 			3 => 'Facebook or other social media',
-			4 => 'General review platform (e.g. Trustpilot)',
-			5 => 'Specialized review platform (e.g. Dentacoin Trusted Reviews, Zocdoc.)',
+			4 => 'General review platform (e.g. Trustpilot, Yelp, etc.)',
+			5 => 'Specialized review platform (e.g. Trusted Reviews, Zocdoc)',
 			6 => 'I don’t use one',
 		],
 		3 => [

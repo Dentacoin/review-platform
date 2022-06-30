@@ -254,7 +254,7 @@
 				<div class="alert fbtab-alert" style="display: none; margin-top: 20px; margin-bottom: 20px;">{!! nl2br(trans('trp.popup.popup-widget.reviews.fb.error')) !!}</div>
 
 				<div class="tac get-widget-code-wrap step-buttons">
-					<a href="javascript:;" class="white-button widget-button back-widget" to-step="1">< {!! nl2br(trans('trp.page.invite.popup.success.button')) !!}</a>
+					<a href="javascript:;" class="white-button widget-button back-widget" to-step="1">< {!! trans('trp.popup.popup-widget.back') !!}</a>
 					<a href="javascript:;" class="blue-button get-widget-code hide-fb">{!! nl2br(trans('trp.popup.popup-widget.get-code')) !!}</a>
 					
 					@if(false)
@@ -351,7 +351,7 @@
 						</div>
 					</div>
 					<div class="tac step-buttons">
-						<a href="javascript:;" class="white-button widget-button back-widget" to-step="1">< {!! nl2br(trans('trp.page.invite.popup.success.button')) !!}</a>
+						<a href="javascript:;" class="white-button widget-button back-widget" to-step="1">< {!! trans('trp.popup.popup-widget.back') !!}</a>
 						<a href="javascript:;" class="blue-button close-popup done-widget with-layout">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
 					</div>
 				</div>
@@ -439,7 +439,7 @@
 				<img src="{{ url('img-trp/verification-check.png') }}">
 				<h2>{!! nl2br(trans('trp.popup.popup-widget.success.title')) !!}</h2>
 				<h4>{!! nl2br(trans('trp.popup.popup-widget.success.subtitle')) !!}</h4>
-				<a href="javascript:;" class="blue-button close-popup">{!! nl2br(trans('trp.popup.popup-claim-profile.thank-you.ok')) !!}</a>
+				<a href="javascript:;" class="blue-button close-popup">{!! nl2br(trans('trp.popup.popup-widget.success.ok')) !!}</a>
 			</div>
 		</div>
 	</div>

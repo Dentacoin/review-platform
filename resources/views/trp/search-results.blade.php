@@ -8,7 +8,9 @@
 
 			@if($dentistsFromDifferentCountry)
 				<h3>
-					Unfortunately, we couldn't find any dental practices containing your search term in {{ urldecode($searchCity ? (ucwords($searchCity).', ') : '')}}{{urldecode($searchCountry)}}. You might want to check these, too:
+					{{ trans('trp.search-results.results-from-other-countries', [
+						'country' => urldecode($searchCity ? (ucwords($searchCity).', ') : '').urldecode($searchCountry)
+					]) }}
 				</h3>
 			@endif
 		</div>
@@ -39,9 +41,7 @@
 			$specializationsHref = getLangUrl(str_replace('/all-results', '', $query));
 		} else {
 			$specializationsHref = str_replace('/dentists', '', 
-				!empty($searchCategories) ? 
-				getLangUrl(str_replace(' ', '-', explode('/', $query)[0] )) 
-				: getLangUrl(str_replace(' ', '-', $query ))
+				!empty($searchCategories) ? getLangUrl(str_replace(' ', '-', explode('/', $query)[0] )) : getLangUrl(str_replace(' ', '-', $query ))
 			);
 		}
 	@endphp
@@ -62,7 +62,8 @@
 						<img src="{{ url('img-trp/blue-arrow-left.png') }}"/>
 					</a>
 					<h3>
-						<img src="{{ url('img-trp/filters-blue.svg') }}" width="20" height="15"/>Filters
+						<img src="{{ url('img-trp/filters-blue.svg') }}" width="20" height="15"/>
+						{{ trans('trp.common.filters') }}
 					</h3>
 				</div>
 				@include('trp.parts.search-dentist-filters', [
@@ -70,16 +71,26 @@
 				])
 			</div>
 			<div class="results-count">
-				<h4 class="hidden-mobile">{{ $items->count() }} results found</h4>
-				<h4 class="show-mobile">{{ $items->count() }} results</h4>
+				<h4 class="hidden-mobile">
+					{{ trans('trp.common.results-count-desktop', [
+						'count' => $items->count()
+					]) }}
+				</h4>
+				<h4 class="show-mobile">
+					{{ trans('trp.common.results-count', [
+						'count' => $items->count()
+					]) }}
+				</h4>
 			</div>
 			<div class="mobile-filters-wrapper {{ $items->isEmpty() ? 'smaller' : '' }}">
 				<a href="javascript:;" class="open-filters">
-					<img src="{{ url('img-trp/filters.svg') }}" width="20" height="15"/>Filters
+					<img src="{{ url('img-trp/filters.svg') }}" width="20" height="15"/>
+					{{ trans('trp.common.filters') }}
 				</a>
 				@if($items->isNotEmpty() && config('trp.using_google_maps'))
 					<a href="javascript:;" class="open-map">
-						<img src="{{ url('img-trp/map.svg') }}"/>Map
+						<img src="{{ url('img-trp/map.svg') }}"/>
+						{{ trans('trp.common.map') }}
 					</a>
 				@endif
 			</div>
@@ -102,10 +113,10 @@
 					</div>
 					<div>
 						<p>
-							We couldn't find any dental practices matching your search criteria. Please, try to expand your search.
+							{{ trans('trp.common.filters-no-results') }}
 						</p>
 						<a href="javascript:;" class="text-link clear-all-filters">
-							Clear Filters
+							{{ trans('trp.common.clear-filters') }}
 						</a>
 					</div>
 				</div>
@@ -118,14 +129,14 @@
 		@endif
 	</div>
 	<div style="display: none;">
-		<input type="text" id="search-in-map" placeholder="Search in map"/>
+		<input type="text" id="search-in-map" placeholder="{{ trans('trp.search-results.search-in-map') }}"/>
 	</div>
 
 	@if($items->isNotEmpty())
 		<div id="map-results-popup">
 			<a href="javascript:;" class="close-map">
 				<img src="{{ url('img-trp/list.svg') }}" width="17"/>
-				List
+				{{ trans('trp.common.list') }}
 			</a>
 
 			<div class="maps-results-mobile" style="position: relative;">

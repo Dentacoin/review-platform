@@ -2333,6 +2333,7 @@ UNCONFIRMED TRANSACTIONS
 
                                 $message->from($sender, $sender_name);
                                 $message->to('petya.ivanova@dentacoin.com');
+                                $message->to('hristiyan.hristov@dentaprime.com');
                                 $message->to('gergana@youpluswe.com');
                                 $message->subject('New scammer attack by day');
                             });
@@ -2363,6 +2364,7 @@ UNCONFIRMED TRANSACTIONS
 
                         $message->from($sender, $sender_name);
                         $message->to('petya.ivanova@dentacoin.com');
+                        $message->to('hristiyan.hristov@dentaprime.com');
                         $message->to('gergana@youpluswe.com');
                         $message->subject('New scammer attack by ballance');
                     });

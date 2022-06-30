@@ -89,7 +89,6 @@
                         <label class="checkbox-label" for="all-days-equal"> 
                             {{ Form::checkbox( 'all-days-equal', 1, '', array( 'id' => 'all-days-equal', 'class' => 'special-checkbox all-days-equal') ) }}
                             <div class="checkbox-square">✓</div>
-                            {{-- {!! nl2br(trans('trp.popup.popup-wokring-time.user-same-hours')) !!} --}}
                             Apply to all
                         </label>
                     @endif

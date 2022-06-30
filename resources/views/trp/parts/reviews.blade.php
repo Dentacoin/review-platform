@@ -72,18 +72,11 @@
                     {!! nl2br(trans('trp.page.profile.trp.show-entire')) !!}
                 </a>
             </div>
-            {{-- @if(!$is_dentist)
-                <a href="{{ $current_dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">=
-                    <img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
-                    {!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
-                </a>
-            @endif --}}
         @else
             <div class="review-content">
                 {!! nl2br($review->answer) !!}...
                 <a href="javascript:;" class="more">
-                    show full review
-                    {{-- {!! nl2br(trans('trp.page.user.show-entire')) !!} --}}
+                    {!! nl2br(trans('trp.page.profile.trp.show-entire')) !!}
                 </a>
             </div>
 

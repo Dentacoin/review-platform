@@ -5,12 +5,11 @@
 		</a>
 
 		<h2 class="mont">
-			Add Team Member
-			{{-- {!! nl2br(trans('trp.popup.add-team-popup.title')) !!} --}}
+			{!! nl2br(trans('trp.popup.add-team-popup.title')) !!}
 		</h2>
 
 		<p class="popup-desc">
-			Add team member to your clinic profile:
+			{!! nl2br(trans('trp.popup.add-team-popup.description')) !!}
 		</p>
 
 		<div id="clinic-add-team">

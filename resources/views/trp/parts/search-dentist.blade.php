@@ -21,7 +21,7 @@
 
     @if($dentist->is_partner)
         <div class="partner">
-            <img class="tooltip-text" width="17" height="17" src="{{ url('img-trp/mini-logo-white.svg') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}"/>
+            <img class="tooltip-text" width="17" height="17" src="{{ url('img-trp/mini-logo-white.svg') }}" text="{!! nl2br(trans('trp.common.partner')) !!}"/>
             DCN Accepted
         </div>
     @endif
@@ -41,12 +41,12 @@
             @if(str_contains($time, 'Open now'))
                 <div class="working-time open">
                     <img src="{{ url('img-trp/clock-blue.svg') }}" width="19" height="17"/>
-                    Open now
+                    {{ trans('trp.page.index.open-now') }}
                 </div>
             @else
                 <div class="working-time closed">
                     <img src="{{ url('img-trp/clock-red.svg') }}" width="19" height="17"/>
-                    Closed now
+                    {{ trans('trp.page.index.closed-now') }}
                 </div>
             @endif
         @endif
@@ -69,12 +69,12 @@
                     @if(str_contains($time, 'Open now'))
                         <div class="working-time open">
                             <img src="{{ url('img-trp/clock-blue.svg') }}" width="19" height="17"/>
-                            Open now
+                            {{ trans('trp.page.index.open-now') }}
                         </div>
                     @else
                         <div class="working-time closed">
                             <img src="{{ url('img-trp/clock-red.svg') }}" width="19" height="17"/>
-                            Closed now
+                            {{ trans('trp.page.index.closed-now') }}
                         </div>
                     @endif
                 @endif
@@ -84,8 +84,7 @@
             <p>{{ $dentist->address }}, {{ $dentist->city_name }}{{ $dentist->country_id ? ', '.$dentist->country->name : '' }}</p>
 
             <a href="{{ $dentist->getLink() }}" class="button-submit">
-                {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}
-                Check full profile
+                {!! nl2br(trans('trp.common.see-profile')) !!}
                 <span>></span>
             </a>
         @else
@@ -116,8 +115,7 @@
                 </a>
             @else
                 <a href="{{ $dentist->getLink() }}?popup-loged=submit-review-popup" class="button-submit">
-                    {{-- {!! nl2br(trans('trp.common.submit-review')) !!} --}}
-                    Write a review
+                    {!! nl2br(trans('trp.common.submit-review')) !!}
                 </a>
             @endif
         @endif
@@ -132,7 +130,7 @@
                 <div class="info-dentist">
                     @if($dentist->is_partner)
                         <div class="partner">
-                            <img class="tooltip-text" width="17" height="17" src="{{ url('img-trp/mini-logo-white.svg') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}"/>
+                            <img class="tooltip-text" width="17" height="17" src="{{ url('img-trp/mini-logo-white.svg') }}" text="{!! nl2br(trans('trp.common.partner')) !!}"/>
                             DCN Accepted
                         </div>
                     @endif
@@ -149,12 +147,12 @@
                         @if(str_contains($time, 'Open now'))
                             <div class="working-time open">
                                 <img src="{{ url('img-trp/clock-blue.svg') }}" width="19" height="17"/>
-                                Open now
+                                {{ trans('trp.page.index.open-now') }}
                             </div>
                         @else
                             <div class="working-time closed">
                                 <img src="{{ url('img-trp/clock-red.svg') }}" width="19" height="17"/>
-                                Closed now
+                                {{ trans('trp.page.index.closed-now') }}
                             </div>
                         @endif
                     @endif
@@ -167,8 +165,7 @@
             <p>{{ $dentist->address }}, {{ $dentist->city_name }}{{ $dentist->country_id ? ', '.$dentist->country->name : '' }}</p>
 
             <a href="{{ $dentist->getLink() }}" class="button-submit">
-                {{-- {!! nl2br(trans('trp.common.see-profile')) !!} --}}
-                Check full profile
+                {!! nl2br(trans('trp.common.see-profile')) !!}
                 <span>></span>
             </a>
         </div>

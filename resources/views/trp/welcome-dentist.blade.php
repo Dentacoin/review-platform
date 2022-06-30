@@ -4,20 +4,16 @@
 
 	<div class="welcome-dentist-title-section">
 		<h1 class="mont">
-			{{-- {{ trans('trp.page.index-dentist.title') }} --}}
-			Grow Your Practice with <br/>
-			Trusted Reviews Dental Directory
+			{{ trans('trp.page.index-dentist.title') }}
 		</h1>
 	
 		<h3>
-			{{-- {!! nl2br(trans('trp.page.index-dentist.subtitle')) !!} --}}
-			Learn and earn from genuine reviews written by verified patients. <br/>Improve your dental services and get rewarded in Dentacoin (DCN).
+			{!! nl2br(trans('trp.page.index-dentist.subtitle')) !!}
 		</h3>
 
 		<div class="mobile-button tac">
 			<a href="javascript:;" class="blue-button open-dentacoin-gateway dentist-register">
-				List your practice
-				{{-- {{ trans('trp.page.index-dentist.signup') }} --}}
+				{{ trans('trp.page.index-dentist.signup') }}
 			</a>
 		</div>
 	</div>
@@ -50,8 +46,7 @@
 						</div>
 
 						<div class="tac">
-							<input type="submit" value="List your practice" class="blue-button button-sign-up-dentist">
-							{{-- {{ trans('trp.page.index-dentist.signup') }} --}}
+							<input type="submit" value="{{ trans('trp.page.index-dentist.signup') }}" class="blue-button button-sign-up-dentist">
 						</div>
 					</div>
 
@@ -69,8 +64,7 @@
 	<div class="section-dentist-info-wrap">
 	    <div class="container section-dentist-info">
 	    	<h2 class="mont tac">
-	    		{{-- {!! nl2br(trans('trp.page.index-dentist.usp-title')) !!} --}}
-				Why Join Dentacoin Trusted Reviews
+	    		{!! nl2br(trans('trp.page.index-dentist.usp-title')) !!}
 	    	</h2>
 		</div>
 	</div>

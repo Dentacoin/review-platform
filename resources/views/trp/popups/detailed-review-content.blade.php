@@ -1,14 +1,15 @@
 <div class="details-wrapper" review-id="{{ $review->id }}">
 	@if(!empty($user) && $user->id==$item->id && !$review->verified && !empty($user->trusted))
 		<a class="green-button verify-review" href="javascript:;">
-			Verify patient
+			{{ trans('trp.common.verify-patient') }}
 		</a>
 	@endif
 	<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 	<h2 class="mont">
-		{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}'s Review of 
-		{{ $item->getNames() }}
-		{{-- {!! nl2br(trans('trp.popup.view-review-popup.title', [ 'name' => $item->getNames() ])) !!} --}}
+		{!! nl2br(trans('trp.popup.view-review-popup.title', [
+			'patient_name' => !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name,
+			'dentist_name' => $item->getNames(),
+		])) !!}
 	</h2>
 
 	<div class="tac">
@@ -39,7 +40,7 @@
 			
 			<a href="javascript:;" class="share-button" data-popup="popup-share">
 				<img src="{{ url('img-trp/share-arrow.svg') }}"/>
-				Share
+				{{ trans('trp.common.share') }}
 			</a>
 		</div>
 		<p class="review-date">
@@ -63,7 +64,17 @@
 				<img class="review-avatar" src="{{ $item->getImageUrl(true) }}" width="33" height="33"/>
 				<div>
 					<p class="replied-info">
-						<img src="{{ url('img-trp/reply-icon.svg') }}" width="15" height="13"/>Replied by {{ $item->getNames() }} {{ $review->replied_at ? 'on '.$review->replied_at->toFormattedDateString() : '' }}
+						<img src="{{ url('img-trp/reply-icon.svg') }}" width="15" height="13"/>
+						@if($review->replied_at)
+							{{ trans('trp.popup.view-review-popup.replied-by-on', [
+								'name' => $item->getNames(),
+								'date' => $review->replied_at->toFormattedDateString()
+							]) }}
+						@else
+							{{ trans('trp.popup.view-review-popup.replied-by', [
+								'name' => $item->getNames(),
+							]) }}
+						@endif
 					</p>
 					<p class="review-content">{!! nl2br($review->reply) !!}</p>
 				</div>
@@ -85,7 +96,7 @@
 				<div class="review-dentist col">
 					<h4>{{ $review->dentist_id == $item->id ? 'Clinic' : 'Treating dentist' }}:</h4>
 					<a href="{{ $review->dentist_id == $item->id ? $review->clinic->getLink() : $review->dentist->getLink() }}" class="flex flex-mobile">
-						<div class="review-dentist-avatar" style="background-image: url('{{ $review->dentist->getImageUrl(true) }}');"></div>
+						<div class="review-dentist-avatar" style="background-image: url('{{ $review->dentist_id == $item->id ? $review->clinic->getImageUrl(true) : $review->dentist->getImageUrl(true) }}');"></div>
 						<p>{{ $review->dentist_id == $item->id ? $review->clinic->getNames() : $review->dentist->getNames() }}</p>
 					</a>
 				</div>
@@ -94,7 +105,7 @@
 	@endif
 
 	<div class="review-answers">
-		<h4>Rating breakdown:</h4>
+		<h4>{{ trans('trp.popup.view-review-popup.rating-breakdown') }}:</h4>
 
 		<div class="overview-wrapper">
 			@php
@@ -116,7 +127,7 @@
 						<div class="overview-column">
 							@if(!$answer)
 								<div class="new-question">
-									new
+									{{ trans('trp.common.new') }}
 								</div>
 							@endif
 							<p>
@@ -163,7 +174,7 @@
 						<div class="overview-column">
 							@if(!$answer)
 								<div class="new-question">
-									new
+									{{ trans('trp.common.new') }}
 								</div>
 							@endif
 							<p>
@@ -206,7 +217,7 @@
 
 	<div class="tac">
 		<a href="javascript:;" class="close-popup blue-button">
-			Close review
+			{{ trans('trp.popup.view-review-popup.close') }}
 		</a>
 	</div>
 </div>

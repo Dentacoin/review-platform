@@ -48,8 +48,7 @@
 
         <div class="filter-buttons">
             <a class="clear-filters clear-specializations" href="javascript:;">
-                {{-- {!! nl2br(trans('trp.page.search.reset')) !!} --}}
-                Clear
+                {!! nl2br(trans('trp.page.search.reset')) !!}
             </a>
             <button type="submit" href="javascript:;" class="blue-button">
                 {!! nl2br(trans('trp.page.search.apply')) !!}
@@ -90,8 +89,7 @@
 
         <div class="filter-buttons">
             <a class="clear-filters" href="javascript:;">
-                {{-- {!! nl2br(trans('trp.page.search.reset')) !!} --}}
-                Clear
+                {!! nl2br(trans('trp.page.search.reset')) !!}
             </a>
             <button type="submit" href="javascript:;" class="blue-button">
                 {!! nl2br(trans('trp.page.search.apply')) !!}
@@ -136,8 +134,7 @@
 
         <div class="filter-buttons">
             <a class="clear-filters" href="javascript:;">
-                {{-- {!! nl2br(trans('trp.page.search.reset')) !!} --}}
-                Clear
+                {!! nl2br(trans('trp.page.search.reset')) !!}
             </a>
             <button type="submit" href="javascript:;" class="blue-button">
                 {!! nl2br(trans('trp.page.search.apply')) !!}
@@ -216,8 +213,7 @@
             </div>
             <div class="filter-buttons">
                 <a class="clear-filters" href="javascript:;">
-                    {{-- {!! nl2br(trans('trp.page.search.reset')) !!} --}}
-                    Clear
+                    {!! nl2br(trans('trp.page.search.reset')) !!}
                 </a>
                 <button type="submit" href="javascript:;" class="blue-button">
                     {!! nl2br(trans('trp.page.search.apply')) !!}
@@ -258,8 +254,7 @@
 
             <div class="filter-buttons">
                 <a class="clear-filters" href="javascript:;">
-                    {{-- {!! nl2br(trans('trp.page.search.reset')) !!} --}}
-                    Clear
+                    {!! nl2br(trans('trp.page.search.reset')) !!}
                 </a>
                 <button type="submit" href="javascript:;" class="blue-button">
                     {!! nl2br(trans('trp.page.search.apply')) !!}
@@ -269,5 +264,5 @@
     </span>
 </span>
 <a href="javascript:;" class="filter clear-all-filters">
-    Clear Filters
+    {{ trans('trp.common.clear-filters') }}
 </a>

@@ -16,28 +16,23 @@
 			<div id="branch-option-1" class="branch-content">
 
 				<h2 class="mont">
-					{{-- {{ trans('trp.popup.add-branch.title') }} --}}
-					Add branch office
+					{{ trans('trp.popup.add-branch.title') }}
 				</h2>
 
 				<div class="modern-field alert-after">
 					<input type="text" name="clinic_name" id="clinic_name" class="modern-input clinic_name" autocomplete="off">
 					<label for="clinic_name">
-						{{-- <span>{{ trans('trp.popup.add-branch.clinic-name') }}</span> --}}
-						<span>Enter Clinic name:</span>
+						<span>{{ trans('trp.popup.add-branch.clinic-name') }}:</span>
 					</label>
-					{{-- <p>{{ trans('trp.popup.add-branch.clinic-name.description') }}</p> --}}
-					<p> Please, write the full name of the clinic to ensure that patients will find it easily.</p>
+					<p>{{ trans('trp.popup.add-branch.clinic-name.description') }}</p>
 				</div>
 
 				<div class="modern-field alert-after">
 					<input type="text" name="clinic_name_alternative" id="clinic_name_alternative" class="modern-input clinic_name_alternative" autocomplete="off" >
 					<label for="clinic_name_alternative">
-						{{-- <span>{{ trans('trp.popup.add-branch.clinic-name-alternative') }}:</span> --}}
-						<span>Enter Alternative spelling (optional):</span>
+						<span>{{ trans('trp.popup.add-branch.clinic-name-alternative') }}:</span>
 					</label>
-					{{-- <p>{{ trans('trp.popup.add-branch.clinic-name-alternative.description') }}</p> --}}
-					<p>For example, Дентална практика “ВитаДент”</p>
+					<p>{{ trans('trp.popup.add-branch.clinic-name-alternative.description') }}:</p>
 				</div>
 
 				<div class="address-suggester-wrapper-input">
@@ -47,7 +42,9 @@
 				  				<option>-</option>
 				  			@endif
 			  				@foreach( $countries as $country )
-			  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+			  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!}>
+									{{ $country->name }}
+								</option>
 			  				@endforeach
 			  			</select>
 					</div>
@@ -57,13 +54,11 @@
 						<label for="clinic_address">
 							<span>{{ trans('trp.popup.add-branch.address') }}:</span>
 						</label>
-						{{-- <p>{{ trans('trp.popup.add-branch.address.description') }}</p> --}}
-						<p>Please, enter the full address of your branch office as written on your website, Facebook or Google Business page.</p>
+						<p>{{ trans('trp.popup.add-branch.address.description') }}</p>
 					</div>
                     <div class="suggester-map-div" style="height: 222px; display: none; margin: 10px 0px;"></div>
                     <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px 20px;">
-						Please, check if we got the right address. If not, just drag the map to adjust it.
-                    	{{-- {!! nl2br(trans('trp.common.check-address')) !!} --}}
+                    	{!! nl2br(trans('trp.popup.add-branch.check-address')) !!}
                     </div>
                     <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
                     	{!! nl2br(trans('trp.common.invalid-address')) !!}
@@ -78,8 +73,7 @@
 			<div id="branch-option-2" class="branch-content" style="display: none;">
 
 				<h2 class="mont">
-					{{-- {{ trans('trp.popup.add-branch.title') }} --}}
-					Complete branch profile
+					{{ trans('trp.popup.add-branch.title-2') }}
 				</h2>
 
 				<div class="flex flex-mobile alert-after phone-code-holder-wrapper">
@@ -89,8 +83,7 @@
 					<div style="flex: 1;" class="modern-field">
 						<input type="text" name="clinic_phone" id="clinic_phone" class="modern-input clinic_phone" autocomplete="off"/>
 						<label for="clinic_phone">
-							{{-- <span>{{ trans('trp.popup.add-branch.phone') }}:</span> --}}
-							<span>Enter phone number without country code:</span>
+							<span>{{ trans('trp.popup.add-branch.phone') }}:</span>
 						</label>
 					</div>
 				</div>
@@ -98,22 +91,20 @@
                 <div class="modern-field alert-after">
 					<input type="text" name="clinic_website" id="clinic_website" class="modern-input clinic_website" autocomplete="off"/>
 					<label for="clinic_website">
-						{{-- <span>{{ trans('trp.popup.add-branch.website') }}</span> --}}
-						<span>Enter full website URL:</span>
+						<span>{{ trans('trp.popup.add-branch.website') }}:</span>
 					</label>
 					<p>{{ trans('trp.popup.add-branch.website.description') }}</p>
 				</div>
 
 				<div class="flex alert-after last-step-flex">
 					<div class="col">
-						<h4>Add branch profile image:</h4>
+						<h4>{{ trans('trp.popup.add-branch.profile-image') }}:</h4>
 						<div class="upload-image-wrapper">
 							<label for="add-avatar-clinic-branch" class="image-label">
 								<div class="plus-image">
-									<img src="{{ url('img-trp/add-icon.png') }}" class="tooltip-text" text="Required resolution: 200x200 px (max. 500x500 px) <br/> Max. image size: 2 MB"/>
+									<img src="{{ url('img-trp/add-icon.png') }}" class="tooltip-text" text="{{ trans('trp.popup.add-branch.profile-image.tooltip') }}"/>
 									<span>
-										Add image
-										{{-- {!! nl2br(trans('trp.page.user.reviews-image')) !!} --}}
+										{{ trans('trp.popup.add-branch.profile-image-add') }}
 									</span>
 								</div>
 								<div class="loader">
@@ -129,14 +120,15 @@
 								<button class="destroy-croppie" type="button">×</button>
 							</div>
 
-							<div class="alert alert-warning image-big-error" style="display: none; margin-top: 20px;">The file you selected is large. Max size: 2MB.</div>
+							<div class="alert alert-warning image-big-error" style="display: none; margin-top: 20px;">
+								{{ trans('trp.popup.add-branch.profile-image.large-file') }}
+							</div>
 						</div>
 					</div>
 					<div class="col">
-						<h4>Select branch’s specialties:</h4>
+						<h4>{{ trans('trp.popup.add-branch.specializations') }}:</h4>
 						
 						<div class="specializations">
-
 							@foreach($categories as $k => $v)
 								<label class="checkbox-label" for="checkbox-{{ $k }}-branch">
 									{{ $v }}

@@ -6,9 +6,9 @@
 		<div class="claim-details">
 			<div class="header-claim tac">
 				<h2 class="mont">
-					Claim your Trusted Reviews profile
+					{{ trans('trp.popup.popup-claim-profile.title') }}
 				</h2>
-				<h5>Just enter the details below so that we can verify your relation to the clinic.</h5>
+				<h5>{{ trans('trp.popup.popup-claim-profile.subtitle') }}</h5>
 			</div>
 
 			<form class="claim-profile-form" id="claim-profile-form" enctype="multipart/form-data" method="post" action="{{ getLangUrl('dentist/'.$item->slug.'/claim/'.$item->id) }}">
@@ -18,8 +18,7 @@
 					<div class="modern-field alert-after">
 						<input type="email" name="email" id="claim-email" value="{{ $claim_user->email }}" disabled="disabled" class="modern-input disabled" autocomplete="off">
 						<label for="claim-email">
-							<span>Email:</span>
-							{{-- <span>{!! nl2br(trans('trp.popup.popup-claim-profile.email')) !!}</span> --}}
+							<span>{!! nl2br(trans('trp.popup.popup-claim-profile.email')) !!}:</span>
 						</label>
 					</div>
 				@endif
@@ -27,8 +26,7 @@
 				<div class="modern-field alert-after">
 					<input type="text" name="name" id="claim-name" class="modern-input" autocomplete="off">
 					<label for="claim-name">
-						{{-- <span>{!! nl2br(trans('trp.popup.popup-claim-profile.name')) !!}</span> --}}
-						<span>Name:</span>
+						<span>{!! nl2br(trans('trp.popup.popup-claim-profile.name')) !!}:</span>
 					</label>
 				</div>
 
@@ -36,8 +34,7 @@
 					<div class="modern-field alert-after">
 						<input type="email" name="email" id="claim-email" class="modern-input" autocomplete="off">
 						<label for="claim-email">
-							<span>Email:</span>
-							{{-- <span>{!! nl2br(trans('trp.popup.popup-claim-profile.email')) !!}</span> --}}
+							<span>{!! nl2br(trans('trp.popup.popup-claim-profile.email')) !!}:</span>
 						</label>
 					</div>
 				@endif
@@ -46,8 +43,7 @@
 					<div class="modern-field alert-after">
 						<input type="text" name="phone" id="claim-tel" class="modern-input" autocomplete="off">
 						<label for="claim-tel">
-							{{-- <span>{!! nl2br(trans('trp.popup.popup-claim-profile.phone')) !!}</span> --}}
-							<span>Phone number:</span>
+							<span>{!! nl2br(trans('trp.popup.popup-claim-profile.phone')) !!}:</span>
 						</label>
 					</div>
 				@endif
@@ -57,8 +53,7 @@
 					<div class="modern-field alert-after">
 						<input type="text" name="job" id="claim-job" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 						<label for="claim-job">
-							<span>Job position:</span>
-							{{-- <span>{!! nl2br(trans('trp.popup.popup-claim-profile.job')) !!}</span> --}}
+							<span>{!! nl2br(trans('trp.popup.popup-claim-profile.job')) !!}:</span>
 						</label>
 					</div>
 
@@ -66,8 +61,7 @@
 						<div class="modern-field alert-after">
 							<textarea class="modern-input" id="claim-explain-related" name="explain-related"></textarea>
 							<label for="claim-explain-related">
-								{{-- <span>{!! nl2br(trans('trp.popup.popup-claim-profile.explain-related')) !!}</span> --}}
-								<span>Please explain how you are related to this clinic.</span>
+								<span>{!! nl2br(trans('trp.popup.popup-claim-profile.explain-related')) !!}</span>
 							</label>
 						</div>
 					@endif
@@ -91,16 +85,14 @@
 				<label class="checkbox-label agree-label" for="claim-agree" style="text-align: left; margin-bottom: 30px;">
 					<input type="checkbox" class="special-checkbox" id="claim-agree" name="agree" value="1">
 					<div class="checkbox-square">✓</div>
-					By submitting this form you agree to our <a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">Privacy Policy</a> and accept all cookies.
-					{{-- {!! trans('trp.popup.popup-lead-magnet.privacy', [
+					{!! nl2br(trans('trp.popup.popup-claim-profile.agree', [
 						'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
-						'endlink' => '</a>',
-					]) !!} --}}
+						'endlink' => '</a>'
+					])) !!}
 				</label>
 
 				<div class="tac">
-					{{-- <input type="submit" value="{!! !empty(request()->input('old-dentist')) ? trans('trp.popup.popup-claim-profile.old-dentist.submit') : trans('trp.popup.popup-claim-profile.submit') !!}" class="blue-button"/> --}}
-					<input type="submit" value="Claim your profile" class="blue-button"/>
+					<input type="submit" value="{!! trans('trp.popup.popup-claim-profile.submit') !!}" class="blue-button"/>
 				</div>
 
 				<div class="alert alert-success" style="display: none;"></div>
@@ -113,14 +105,14 @@
 					<img src="{{ url('img-trp/check.png') }}" class="check-image"/>
 				</div>
 				<h2 class="mont">
-					Thank you for claiming your profile!
+					{{ trans('trp.popup.popup-claim-profile.thank-you.title') }}
 				</h2>
 				<p class="step-info">
-					You will receive a confirmation email as soon as our Onboarding team has verified the identification details you have just provided.
+					{{ trans('trp.popup.popup-claim-profile.thank-you.subtitle') }}
 				</p>
 		
 				<div class="tac">
-					<a href="javascript:;" class="close-popup blue-button">Close</a>
+					<a href="javascript:;" class="close-popup blue-button">{{ trans('trp.common.close') }}</a>
 				</div>
 			</div>
 		</div>

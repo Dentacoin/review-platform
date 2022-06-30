@@ -1,7 +1,6 @@
 <div class="copypaste-wrapper step2" style="display: none;">
 	<p class="popup-desc">
-		Now let's match the patient names and emails.
-		{{-- • {!! nl2br(trans('trp.popup.popup-invite.step2.instructions')) !!} --}}
+		{!! nl2br(trans('trp.popup.popup-invite.step2.instructions')) !!}
 	</p>
 	<br/>
 	<br/>
@@ -25,7 +24,7 @@
 				<label class="checkbox-label invite-hubapp active" for="invite-hubapp-{{ $number }}" >
 					<input type="checkbox" class="special-checkbox" id="invite-hubapp-{{ $number }}" name="invite_hubapp" checked="checked"/>
 					<div class="checkbox-square">✓</div>
-					Invite them to Dentacoin HubApp, too?
+					{!! nl2br(trans('trp.popup.popup-invite.invite-to-hubapp')) !!}
 				</label>
 			@endif
 			@include('trp.parts.sample-invite')

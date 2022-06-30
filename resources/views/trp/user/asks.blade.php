@@ -25,20 +25,17 @@
                                         {{ trans('trp.page.profile.asks.list-name') }}
                                     </th>
                                     <th>
-                                        Email
-                                        {{-- {{ trans('trp.page.profile.asks.list-email') }} --}}
+                                        {{ trans('trp.page.profile.asks.list-email') }}
                                     </th>
                                     <th>
-                                        Type
-                                        {{-- {{ trans('trp.page.profile.asks.list-note') }} --}}
+                                        {{ trans('trp.page.profile.asks.list-note') }}
                                     </th>
                                     <th>
                                         Rewards
                                         <img class="tooltip-text" src="{{ url('img-trp/info-dark-gray.png') }}" width="15" height="15" text="Rewards received by you for Trusted Reviews submitted by verified patients."/>
                                     </th>
                                     <th>
-                                        Action/ Status
-                                        {{-- {{ trans('trp.page.profile.asks.list-status') }} --}}
+                                        {{ trans('trp.page.profile.asks.list-status') }}
                                     </th>
                                 </tr>
                             </thead>
@@ -78,14 +75,12 @@
                                                         {{ trans('trp.page.profile.asks.accept') }}
                                                     </a>
                                                     <a href="javascript:;" class="reject-button handle-asks" link-form="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
-                                                        Decline
-                                                        {{-- {{ trans('trp.page.profile.asks.deny') }} --}}
+                                                        {{ trans('trp.page.profile.asks.deny') }}
                                                     </a>
                                                 </div>
                                             @else
                                                 <span class="{{ $ask->status=='yes' ? 'accepted-text' : 'declined-text' }}">
-                                                    {{ $ask->status=='yes' ? 'Accepted' : 'Declined' }}
-                                                    {{-- {{ trans('trp.page.profile.asks.status-'.$ask->status) }} --}}
+                                                    {{ trans('trp.page.profile.asks.status-'.$ask->status) }}
                                                 </span>
                                             @endif
                                         </td>
@@ -111,8 +106,7 @@
                                         {{ trans('trp.page.profile.invite.list-name') }}
                                     </th>
                                     <th>
-                                        Email
-                                        {{-- {{ trans('trp.page.profile.invite.list-email') }} --}}
+                                        {{ trans('trp.page.profile.invite.list-email') }}
                                     </th>
                                     <th>
                                         Rewards
@@ -149,19 +143,16 @@
                                                             </a><br>
                                                         @endif
                                                         <a review-id="{{ $inv->hasReview($user->id)->id }}" href="javascript:;" class="ask-review check-review">
-                                                            {{-- {{ trans('trp.page.profile.invite.status-review') }} --}}
-                                                            Check review
+                                                            {{ trans('trp.page.profile.invite.status-review') }}
                                                         </a>
                                                     @else
                                                         <span class="gray-text">
-                                                            Pending
-                                                            {{-- {{ trans('trp.page.profile.invite.status-no-review') }} --}}
+                                                            {{ trans('trp.page.profile.invite.status-no-review') }}
                                                         </span>
                                                     @endif
                                                 @else
                                                     <span class="gray-text">
-                                                        Pending
-                                                        {{-- {{ trans('trp.page.profile.invite.status-no-review') }} --}}
+                                                        {{ trans('trp.page.profile.invite.status-no-review') }}
                                                     </span>
                                                 @endif
                                             </td>

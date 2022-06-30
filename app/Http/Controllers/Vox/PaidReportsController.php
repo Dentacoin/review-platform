@@ -146,12 +146,14 @@ class PaidReportsController extends FrontController {
 		
 		if(Request::isMethod('post')) {
 
-			return Response::json([
-				'success' => false,
-				'message' => array(
-					'agree' => 'This feature is temporaty unavailable. For more information, get in touch with: admin@dentacoin.com'
-				)
-			]);
+			if(config('trp.without_admins_check') && date('d.m.Y') > '28.06.2022') {
+				return Response::json([
+					'success' => false,
+					'message' => array(
+						'agree' => 'This feature is temporaty unavailable. For more information, get in touch with: admin@dentacoin.com'
+					)
+				]);
+			}
 
 			$validator = Validator::make(Request::all(), [
                 'name' => array('required', 'min:3'),

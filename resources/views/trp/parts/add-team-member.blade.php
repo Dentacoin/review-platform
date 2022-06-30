@@ -67,7 +67,7 @@
                     <div class="plus-gallery-image">
                         <img class="add-gallery-icon" src="{{ url('img-trp/add-icon.png') }}">
                         <span>
-                            Add image
+                            {{ trans('trp.popup.verification-popup.add-photo') }}
                             
                             <img 
                             src="{{ url('img-trp/info-dark-gray.png') }}" 
@@ -102,8 +102,7 @@
                     id="team-member-name" 
                     name="name"/>
                     <label for="team-member-name">
-                        {{-- <span>{{ trans('trp.popup.verification-popup.add-team-name') }}</span> --}}
-                        <span>Enter name</span>
+                        <span>{{ trans('trp.popup.verification-popup.add-team-name') }}</span>
                     </label>
                 </div>
                 
@@ -114,8 +113,7 @@
                         @endforeach
                     </select>
                     <label for="team-member-job">
-                        {{-- <span>{{ trans('trp.popup.verification-popup.add-team-position') }}:</span> --}}
-                        <span>Select Position:</span>
+                        <span>{{ trans('trp.popup.verification-popup.add-team-position') }}:</span>
                     </label>
                 </div>
             </div>
@@ -130,8 +128,7 @@
                 name="email" 
                 placeholder="{{ trans('trp.common.optional') }}"/>
                 <label for="team-member-email">
-                    {{-- <span>{{ trans('trp.popup.verification-popup.add-team-email') }}</span> --}}
-                    <span>Enter Email:</span>
+                    <span>{{ trans('trp.popup.verification-popup.add-team-email') }}:</span>
                 </label>
             </div>
             </div>
@@ -143,7 +140,6 @@
                         @endforeach
                     </select>
                     <label for="team-member-speciality">
-                        {{-- <span>{{ trans('trp.popup.verification-popup.add-team-position') }}:</span> --}}
                         <span>Select specialty:</span>
                     </label>
                 </div>
@@ -155,8 +151,7 @@
             @if($withoutUser)
                 <a href="javascript:;" class="invite-existing-dentist">Cancel</a>
             @endif
-            {{-- {{ trans('trp.popup.verification-popup.add-team-button') }} --}}
-            <input type="submit" class="green-button" value="Invite dentist">
+            <input type="submit" class="green-button" value="{{ trans('trp.popup.verification-popup.add-team-button') }}">
         </div>
     {!! Form::close() !!}
 </div>

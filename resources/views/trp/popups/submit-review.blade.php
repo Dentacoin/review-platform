@@ -44,14 +44,15 @@
 					</a>
 
 					<h2 class="mont">
-						Review {{ $item->getNames() }}
+						{!! nl2br(trans('trp.popup.submit-review-popup.title', [
+							'name' => $item->getNames()
+						])) !!}
 					</h2>
 
 					@if($alreadySubmitedReview)
 						@if($approvedPatientcanAskDentistForReview === true)
 							<div class="alert alert-info">
-								You've reached your monthly review limit for this dentist. Request a new review invite.
-								{{-- {!! nl2br(trans('trp.popup.submit-review-popup.already-left-review')) !!} --}}
+								{!! nl2br(trans('trp.popup.submit-review-popup.already-left-review')) !!}
 							</div>
 							<br><br>
 							<div class="tac">
@@ -61,8 +62,9 @@
 							</div>
 						@else
 							<div class="alert alert-info">
-								You've reached your monthly review limit for this dentist. You'll be able to request a new review invite in {{ $approvedPatientcanAskDentistForReview }} days.
-								{{-- {!! nl2br(trans('trp.popup.submit-review-popup.next-month')) !!} --}}
+								{!! nl2br(trans('trp.popup.submit-review-popup.next-month', [
+									'days_count' => $approvedPatientcanAskDentistForReview
+								])) !!}
 							</div>
 						@endif
 					@else
@@ -111,22 +113,18 @@
 									placeholder="Dr Jones helped me overcome my dental fear!"
 								/>
 								<label for="review-title">
-									{{-- <span>{!! nl2br(trans('trp.popup.submit-review-popup.title-placeholder')) !!}</span> --}}
-									<span>Put it short (max 50 characters):</span>
+									<span>{!! nl2br(trans('trp.popup.submit-review-popup.title-placeholder')) !!}:</span>
 								</label>
 							</div>
 
 							<div class="review-option-text review-type-content" style="">
 								<div class="modern-field active alert-after">
-									{{-- tooltip-text fixed-tooltip --}}
 									<textarea 
 										class="modern-input" 
 										id="review-answer" 
 										name="answer" 
 										maxlength="1500"
-										text="{{ nl2br(trans('trp.popup.submit-review-popup.last-question-tooltip')) }}"
-										placeholder="Share more details of your experience at this dental practice"
-										{{-- placeholder="{{ trans('trp.popup.submit-review-popup.last-question-placeholder') }}" --}}
+										placeholder="{{ trans('trp.popup.submit-review-popup.last-question-placeholder') }}"
 									></textarea>
 									<label for="review-answer">
 										<span>Tell us more (max 1500 characters):</span>
@@ -143,32 +141,25 @@
 										</p>
 									@else
 										<span class="option-span">
-											Click on the "Start your camera" button.
-											{{-- {!! nl2br(trans('trp.popup.submit-review-popup.video-widget-1')) !!} --}}
+											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-1')) !!}
 										</span>
 										<span class="option-span">
-											Record your video review (min. 15 sec).
-											{{-- {!! nl2br(trans('trp.popup.submit-review-popup.video-widget-2')) !!} --}}
+											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-2')) !!}
 										</span>
 										<span class="option-span">
-											It will be uploaded to our <a href="javascript:;">YouTube channel</a>.
-											{{-- {!! nl2br(trans('trp.popup.submit-review-popup.video-widget-3')) !!} --}}
+											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-3')) !!}
 										</span>
 										<span class="option-span">
-											We’ll verify its contents and make it visible.
-											{{-- {!! nl2br(trans('trp.popup.submit-review-popup.video-widget-4')) !!} --}}
+											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-4')) !!}
 										</span>
 										<span class="option-span">
-											Only legitimate videos will receive 2x rewards.
-											{{-- {!! nl2br(trans('trp.popup.submit-review-popup.video-widget-5')) !!} --}}
+											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-5')) !!}
 										</span>
 										<span class="option-span">
-											Your reward doesn’t depend on your YouTube activity.
-											{{-- {!! nl2br(trans('trp.popup.submit-review-popup.video-widget-5')) !!} --}}
+											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-6')) !!}
 										</span>
 										<span class="option-span">
-											In case of tech issues on mobile, record on your PC.
-											{{-- {!! nl2br(trans('trp.popup.submit-review-popup.video-widget-5')) !!} --}}
+											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-7')) !!}
 										</span>
 
 										<video id="myVideo" class="video-js vjs-default-skin"></video>
@@ -179,21 +170,18 @@
 												{{-- An error occurred. Please try again --}}
 											</div>
 											<div class="alert alert-warning video-alerts" style="display: none; margin-bottom:20px;" id="alert-video-denied">
-												{{-- {{ trans('trp.popup.submit-review-popup.video-denied') }} --}}
-												Please allow us to use your device camera.
+												{{ trans('trp.popup.submit-review-popup.video-denied') }}
 											</div>
 											<div class="alert alert-warning video-alerts" style="display: none; margin-bottom:20px;" id="alert-video-connect-camera">
 												Please connect your camera.
 											</div>
 											<div class="alert alert-warning video-alerts" style="display: none; margin-bottom:20px;" id="alert-video-short">
-												That was a bit too short. Please, try again but this time record at least 15 seconds.
-												{{-- {{ trans('trp.popup.submit-review-popup.video-short') }} --}}
+												{{ trans('trp.popup.submit-review-popup.video-short') }}
 											</div>
 
 											<a href="javascript:;" id="init-video-button" class="green-button video-buttons">
 												<img src="{{ url('img-trp/camera-white.svg') }}" width="30"/>
-												{{-- {{ trans('trp.popup.submit-review-popup.video-allow') }} --}}
-												Start your camera
+												{{ trans('trp.popup.submit-review-popup.video-allow') }}
 											</a>
 											
 											<a href="javascript:;" id="start-video-button" class="green-button video-buttons" style="display: none;">
@@ -207,31 +195,26 @@
 											</a>
 											
 											<div class="video-alerts" id="video-progress-loader" style="display: none;margin-top: 20%;">
-												{{-- {!! trans('trp.popup.submit-review-popup.video-processing',[
+												{!! trans('trp.popup.submit-review-popup.video-processing',[
 													'percent' => '<span id="video-progress-percent"></span>'
-												]) !!} --}}
-												Processing your video: <span id="video-progress-percent"></span>%
+												]) !!}
 											</div>
 											
 											<div class="alert alert-info video-alerts" id="alert-video-youtube-uploading" style="display: none;">
-												{{-- {{ trans('trp.popup.submit-review-popup.video-youtube') }} --}}
-												Uploading your video to YouTube... Please be patient.
+												{{ trans('trp.popup.submit-review-popup.video-youtube') }}
 											</div>
 
 											<div class="alert alert-success video-alerts" style="display: none;" id="alert-video-uploaded">
-												{{-- {{ trans('trp.popup.submit-review-popup.video-uploaded') }} --}}
-												Your video was uploaded successfully. You can now turn off your camera and proceed with your rating.
+												{{ trans('trp.popup.submit-review-popup.video-uploaded') }}
 											</div>
 
 											<p class="agree-text">
-												By submitting your video review, you agree that after approval it can be uploaded on <a target="_blank" href="https://reviews.dentacoin.com">reviews.dentacoin.com</a> and <a target="_blank" href="https://www.youtube.com">youtube.com</a>. You also agree to the <a target="_blank" href="https://www.youtube.com/t/terms">YouTube Terms of Service</a> and our <a target="_blank" href="https://dentacoin.com/privacy-policy">Privacy Policy</a>.
-
-
-												{{-- {!! nl2br(trans('trp.popup.submit-review-popup.video-widget-terms', [
-													'link' => '<a class="read-privacy" target="_blank" href="https://dentacoin.com/privacy-policy">',
-													'link_youtube' => '<a class="read-privacy" target="_blank" href="https://www.youtube.com/t/terms">',
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-terms', [
+													'link_privacy' => '<a target="_blank" href="https://dentacoin.com/privacy-policy">',
+													'link_youtube' => '<a target="_blank" href="https://www.youtube.com">',
+													'link_youtube_terms' => '<a target="_blank" href="https://www.youtube.com/t/terms">',
 													'endlink' => '</a>',												
-												])) !!} --}}
+												])) !!}
 											</p>
 										</div>								
 									@endif
@@ -255,13 +238,11 @@
 						@endif
 
 						<div class="alert alert-warning" id="review-answer-error" style="display: none;">
-							{{-- {{ trans( 'trp.popup.submit-review-popup.last-question-invalid' ) }} --}}
-							Please describe your experience by either writing a review or recording a video.
+							{{ trans( 'trp.popup.submit-review-popup.last-question-invalid' ) }}
 						</div>
 
 						<div class="alert alert-warning" id="review-short-text" style="display: none;">
-							{{-- {{ trans('trp.popup.submit-review-popup.text-short') }} --}}
-							Please describe your dental experience in more details.
+							{{ trans('trp.popup.submit-review-popup.text-short') }}
 						</div>
 					@endif
 				</div>
@@ -288,17 +269,22 @@
 
 								<div class="teams">
 									<input type="hidden" name="dentist_clinics" id="dentist_clinics" value="own"/>
-									{{-- {{ trans('trp.popup.submit-review-popup.select') }} --}}
+									
 									<div class="select-team-wrapper chosen">
-										<span class="select-team-chosen-label">I'd like to rate...</span>
-										<p>only the treatment by {{ $item->getNames() }}</p>
+										<span class="select-team-chosen-label">{{ trans('trp.popup.submit-review-popup.select') }}</span>
+										<p>
+											{{ trans('trp.popup.submit-review-popup.dentist-cabinet', [
+												'name' => $item->getNames()
+											]) }}
+										</p>
 										<div class="caret-down"></div>
 
 										<div class="select-team-options">
 											<a class="select-team" href="javascript:;" team-id="own">
 												<img src="{{ $item->getImageUrl('thumb') }}"/>
-												{{-- {{ trans('trp.popup.submit-review-popup.dentist-cabinet', [ 'name' => $item->getNames() ]) }} --}}
-												only the treatment by <b>{{ $item->getNames() }}</b>
+												{{ trans('trp.popup.submit-review-popup.dentist-cabinet', [
+													'name' => $item->getNames()
+												]) }}
 											</a>
 											@foreach($item->my_workplace_approved as $workplace)
 												<a class="select-team" href="javascript:;" team-id="{{ $workplace->clinic->id }}">
@@ -354,8 +340,7 @@
 									</div>
 								@endforeach
 								<div class="alert alert-warning rating-error" style="display: none;">
-									Please evaluate all rating factors.
-									{{-- {!! nl2br(trans('trp.popup.submit-review-popup.answer-all')) !!} --}}
+									{!! nl2br(trans('trp.popup.submit-review-popup.answer-all')) !!}
 								</div>
 							</div>
 						</div>
@@ -469,8 +454,7 @@
 						<div class="submit-review-buttons">
 							<a class="white-button review-prev-step" step="2"><</a>
 							<button type="submit" class="blue-button" id="review-submit-button">
-								{{-- {{ trans('trp.popup.submit-review-popup.submit') }} --}}
-								Submit your review
+								{{ trans('trp.popup.submit-review-popup.submit') }}
 							</button>
 						</div>
 					</div>
@@ -572,7 +556,6 @@
 							Verification request sent
 						</h2>
 						<p class="step-info">
-							{{-- {!! nl2br(trans('trp.popup.popup-ask-dentist.sent')) !!} --}}
 							You have successfully submitted your request for verification. We will let you know as soon as your dentist confirms that you are their patient.
 						</p>
 
